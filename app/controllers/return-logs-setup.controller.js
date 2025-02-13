@@ -145,6 +145,10 @@ async function submitMeterDetails(request, h) {
     return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
+  if (pageData.reported === 'abstraction-volumes') {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
+  }
+
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
 }
 
@@ -162,7 +166,7 @@ async function submitMeterProvided(request, h) {
   }
 
   if (pageData.meterProvided === 'no') {
-    if (pageData.checkPageVisited) {
+    if (pageData.checkPageVisited || pageData.reported === 'meter-readings') {
       return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
     }
 

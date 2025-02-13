@@ -23,7 +23,8 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
   beforeEach(async () => {
     sessionData = {
       data: {
-        returnReference: '12345'
+        returnReference: '12345',
+        reported: 'abstraction-volumes'
       }
     }
 
@@ -50,7 +51,11 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ checkPageVisited: undefined, meterProvided: 'yes' })
+          expect(result).to.equal({
+            checkPageVisited: undefined,
+            meterProvided: 'yes',
+            reported: 'abstraction-volumes'
+          })
         })
       })
 
@@ -63,7 +68,11 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           it('returns the correct details the controller needs to redirect the journey', async () => {
             const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ checkPageVisited: undefined, meterProvided: 'no' })
+            expect(result).to.equal({
+              checkPageVisited: undefined,
+              meterProvided: 'no',
+              reported: 'abstraction-volumes'
+            })
           })
 
           describe('and meter details had previously been saved to the session', () => {
@@ -75,7 +84,8 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
                   meterMake: 'Test Meter Make',
                   meterSerialNumber: 'TEST-9876543',
                   meter10TimesDisplay: 'no',
-                  returnReference: '12345'
+                  returnReference: '12345',
+                  reported: 'abstraction-volumes'
                 }
               }
 
@@ -103,7 +113,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           it('returns the correct details the controller needs to redirect the journey', async () => {
             const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ checkPageVisited: true, meterProvided: 'no' })
+            expect(result).to.equal({ checkPageVisited: true, meterProvided: 'no', reported: 'abstraction-volumes' })
           })
 
           it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {

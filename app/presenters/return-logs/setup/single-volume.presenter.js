@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/meter-provided`,
+    backLink: _backLink(session),
     pageTitle: 'Is it a single volume?',
     returnReference,
     sessionId,
@@ -24,6 +24,16 @@ function go(session) {
     singleVolumeQuantity: singleVolumeQuantity ?? null,
     units: units === 'cubic-metres' ? 'cubic metres' : units
   }
+}
+
+function _backLink(session) {
+  const { meterProvided, id } = session
+
+  if (meterProvided === 'yes') {
+    return `/system/return-logs/setup/${id}/meter-details`
+  }
+
+  return `/system/return-logs/setup/${id}/meter-provided`
 }
 
 module.exports = {

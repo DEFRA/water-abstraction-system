@@ -23,7 +23,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
   beforeEach(async () => {
     sessionData = {
       data: {
-        returnReference: '12345'
+        returnReference: '12345',
+        reported: 'meter-readings'
       }
     }
 
@@ -58,7 +59,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          checkPageVisited: undefined
+          checkPageVisited: undefined,
+          reported: 'meter-readings'
         })
       })
     })
@@ -72,7 +74,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          checkPageVisited: true
+          checkPageVisited: true,
+          reported: 'meter-readings'
         })
       })
 
