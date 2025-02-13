@@ -110,7 +110,7 @@ describe('Notifications Setup - Initiate Session service', () => {
 
         expect(result).to.equal({
           sessionId: result.sessionId,
-          path: 'licence'
+          path: 'ad-hoc-licence'
         })
       })
 

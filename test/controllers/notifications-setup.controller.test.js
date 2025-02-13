@@ -13,9 +13,11 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const DownloadRecipientsService = require('../../app/services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
+const LicenceService = require('../../app/services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../../app/services/notifications/setup/review.service.js')
+const SubmitLicenceService = require('../../app/services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
@@ -135,6 +137,70 @@ describe('Notifications Setup controller', () => {
           expect(response.headers['content-type']).to.equal('type/csv')
           expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
           expect(response.payload).to.equal('test')
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/{sessionId}/ad-hoc-licence', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/ad-hoc-licence`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(LicenceService, 'go').resolves({
+          pageTitle: 'Enter a licence number'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter a licence number')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '01/115' })
+
+          Sinon.stub(SubmitLicenceService, 'go').resolves({})
+        })
+
+        it('returns the same page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/review`)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '' })
+
+          Sinon.stub(SubmitLicenceService, 'go').resolves({
+            licenceRef: '01/115',
+            error: { text: 'Enter a Licence number' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter a Licence number')
+          expect(response.payload).to.contain('There is a problem')
         })
       })
     })
