@@ -99,13 +99,15 @@ describe('Ad-hoc Returns Licence service', () => {
           }
         })
 
-        it('returns page data needed to re-render the view including the notification message', async () => {
+        it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
+            error: {
+              text: 'There are no returns due for licence 01/145'
+            },
             licenceRef: '01/145',
-            notification: 'There are no returns due for licence 01/145',
             pageTitle: 'Enter a licence number'
           })
         })

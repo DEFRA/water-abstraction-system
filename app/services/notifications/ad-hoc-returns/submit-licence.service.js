@@ -40,16 +40,6 @@ async function go(sessionId, payload) {
     }
   }
 
-  const dueReturns = await _dueReturnsExist(payload.licenceRef)
-
-  if (!dueReturns) {
-    return {
-      activeNavBar: 'manage',
-      notification: `There are no returns due for licence ${payload.licenceRef}`,
-      ...formattedData
-    }
-  }
-
   await _save(session, payload)
 
   return {}
@@ -75,12 +65,14 @@ async function _save(session, payload) {
 
 async function _validate(payload) {
   let licenceExists = false
+  let dueReturns = false
 
   if (payload.licenceRef) {
     licenceExists = await _licenceExists(payload.licenceRef)
+    dueReturns = await _dueReturnsExist(payload.licenceRef)
   }
 
-  const validation = AdHocLicenceValidator.go(payload, licenceExists)
+  const validation = AdHocLicenceValidator.go(payload, licenceExists, dueReturns)
 
   if (!validation.error) {
     return null
