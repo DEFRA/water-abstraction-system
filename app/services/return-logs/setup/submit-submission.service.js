@@ -25,7 +25,7 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return { journey: session.journey }
   }
 
   const formattedData = SubmissionPresenter.go(session)
@@ -38,6 +38,10 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  // We set `checkPageVisited` to false here as it is possible that the user recorded a nil return in error and then
+  // selected "Change" from the "Check" page. This would have resulted in `checkPageVisited` being set to `true` which
+  // would cause issues with the flow of the journey if details were subsequently entered.
+  session.checkPageVisited = false
   session.journey = payload.journey
 
   return session.$update()
