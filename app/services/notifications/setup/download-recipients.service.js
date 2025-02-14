@@ -5,7 +5,6 @@
  * @module DownloadRecipientsService
  */
 
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notifications/setup/download-recipients.presenter.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -22,14 +21,10 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const { notificationType, referenceCode, returnsPeriod } = session
 
-  const determinedReturnsPeriod = DetermineReturnsPeriodService.go(returnsPeriod)
+  const { notificationType, referenceCode } = session
 
-  const recipients = await FetchDownloadRecipientsService.go(
-    determinedReturnsPeriod.returnsPeriod.dueDate,
-    determinedReturnsPeriod.summer
-  )
+  const recipients = await FetchDownloadRecipientsService.go(session)
 
   const formattedData = DownloadRecipientsPresenter.go(recipients)
 

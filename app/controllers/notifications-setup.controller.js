@@ -7,9 +7,11 @@
 
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
+const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../services/notifications/setup/review.service.js')
+const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
@@ -28,6 +30,14 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewLicence(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AdHocLicenceService.go(sessionId)
+
+  return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
 }
 
 async function viewRemoveLicences(request, h) {
@@ -61,10 +71,24 @@ async function viewReview(request, h) {
   return h.view(`${basePath}/review.njk`, pageData)
 }
 
-async function setup(_request, h) {
-  const session = await InitiateSessionService.go()
+async function setup(request, h) {
+  const { journey } = request.query
 
-  return h.redirect(`/system/${basePath}/${session.id}/returns-period`)
+  const { sessionId, path } = await InitiateSessionService.go(journey)
+
+  return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
+}
+
+async function submitLicence(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitAdHocLicenceService.go(sessionId, request.payload)
+
+  if (pageData.error || pageData.notification) {
+    return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
+  }
+
+  return h.redirect(`/system/${basePath}/${sessionId}/review`)
 }
 
 async function submitRemoveLicences(request, h) {
@@ -99,10 +123,12 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewLicence,
   viewRemoveLicences,
   viewReturnsPeriod,
   viewReview,
   setup,
+  submitLicence,
   submitRemoveLicences,
   submitReturnsPeriod
 }

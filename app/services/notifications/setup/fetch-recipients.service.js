@@ -5,7 +5,9 @@
  * @module FetchContactsService
  */
 
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const { db } = require('../../../../db/db.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
@@ -144,21 +146,34 @@ const { db } = require('../../../../db/db.js')
  * ]
  * ```
  *
- * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
- * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const { rows } = await _fetch(returnsPeriod.dueDate, summer, removeLicences)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
+async function _fetch(dueDate, summer, removeLicences) {
   const query = _query()
 
-  return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
+  return db.raw(query, [
+    dueDate,
+    summer,
+    removeLicences,
+    dueDate,
+    summer,
+    removeLicences,
+    dueDate,
+    summer,
+    removeLicences
+  ])
 }
 
 function _query() {
@@ -197,6 +212,7 @@ FROM (
         ler.company_entity_id = ldh.company_entity_id
         AND ler."role" IN ('primary_user', 'user_returns')
     )
+    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -216,6 +232,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -235,6 +252,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
 ) contacts
 GROUP BY
   contact_type,

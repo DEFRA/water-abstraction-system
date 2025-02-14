@@ -6,6 +6,8 @@
  */
 
 const { db } = require('../../../../db/db.js')
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats the contact data from which recipients will be determined for the `/notifications/setup/download` link
@@ -43,21 +45,24 @@ const { db } = require('../../../../db/db.js')
  * received from this query (For either registered to unregistered licence). We expect to see duplicate licences with
  * different contacts types (but still preferring the registered over unregistered licence).
  *
- * @param {Date} dueDate
- * @param {string} summer
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} - matching recipients
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const { rows } = await _fetch(returnsPeriod.dueDate, summer, removeLicences)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
+async function _fetch(dueDate, summer, removeLicences) {
   const query = _query()
 
-  return db.raw(query, [dueDate, summer, dueDate, summer])
+  return db.raw(query, [dueDate, summer, removeLicences, dueDate, summer, removeLicences])
 }
 
 function _query() {
@@ -91,6 +96,7 @@ FROM (
       AND rl.metadata->>'isCurrent' = 'true'
       AND rl.metadata->>'isSummer' = ?
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
+      AND NOT (ldh.licence_ref = ANY (?))
       AND NOT EXISTS (
         SELECT
             1
@@ -125,6 +131,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
 ) contacts
 ORDER BY
 contacts.licence_ref`

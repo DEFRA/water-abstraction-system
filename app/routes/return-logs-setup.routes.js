@@ -29,6 +29,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/cancel',
+    options: {
+      handler: ReturnLogsSetupController.cancel,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/cancel',
+    options: {
+      handler: ReturnLogsSetupController.submitCancel,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/check',
     options: {
       handler: ReturnLogsSetupController.check,

@@ -5,6 +5,7 @@
  * @module SubmitMeterProvidedService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
 const MeterProvidedValidator = require('../../../validators/return-logs/setup/meter-provided.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -20,10 +21,11 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} If no errors the page data for the meter-provided page else the validation error details
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -31,8 +33,14 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
+    if (session.checkPageVisited && payload.meterProvided === 'no') {
+      GeneralLib.flashNotification(yar)
+    }
+
     return {
-      meterProvided: session.meterProvided
+      checkPageVisited: session.checkPageVisited,
+      meterProvided: session.meterProvided,
+      reported: session.reported
     }
   }
 
@@ -46,6 +54,12 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  if (payload.meterProvided === 'no') {
+    session.meterMake = null
+    session.meterSerialNumber = null
+    session.meter10TimesDisplay = null
+  }
+
   session.meterProvided = payload.meterProvided
 
   return session.$update()

@@ -34,6 +34,28 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns a link back to the "check" page', () => {
+        const result = MeterProvidedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      })
+    })
+
+    describe('when the user has come from somewhere else', () => {
+      it('returns a link back to the "units" page on', () => {
+        const result = MeterProvidedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
+      })
+    })
+  })
+
   describe('the "meterProvided" property', () => {
     describe('when the user has previously selected "yes" to a meter being provided', () => {
       beforeEach(() => {

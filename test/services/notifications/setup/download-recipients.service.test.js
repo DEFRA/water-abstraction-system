@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, after } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,25 +17,20 @@ const DownloadRecipientsService = require('../../../../app/services/notification
 
 describe('Notifications Setup - Download recipients service', () => {
   const referenceCode = 'RINV-00R1MQ'
-  const year = 2025
 
-  let clock
+  let removeLicences
   let session
   let testRecipients
 
   before(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    removeLicences = ''
 
     session = await SessionHelper.add({
-      data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns invitation' }
+      data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns invitation', removeLicences }
     })
 
     testRecipients = _recipients()
     Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
-  })
-
-  after(() => {
-    clock.restore()
   })
 
   it('correctly returns the csv string, filename and type', async () => {
