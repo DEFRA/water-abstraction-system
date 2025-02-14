@@ -14,7 +14,7 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ReviewService = require('../../../../app/services/notifications/setup/review.service.js')
+const CheckService = require('../../../../app/services/notifications/setup/check.service.js')
 
 describe('Notifications Setup - Review service', () => {
   let removeLicences
@@ -34,7 +34,7 @@ describe('Notifications Setup - Review service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await ReviewService.go(session.id)
+    const result = await CheckService.go(session.id)
 
     expect(result).to.equal({
       activeNavBar: 'manage',
@@ -58,7 +58,7 @@ describe('Notifications Setup - Review service', () => {
       text: {
         continueButton: 'Send',
         readyToSend: 'Returns invitations are ready to send.',
-        title: 'Send returns invitations'
+        title: 'Check the recipients'
       }
     })
   })

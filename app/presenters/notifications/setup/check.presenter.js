@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
- * @module ReviewPresenter
+ * Formats data for the `/notifications/setup/check` page
+ * @module CheckPresenter
  */
 
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Formats data for the `/notifications/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
@@ -68,7 +68,7 @@ function _text(page, pagination, journey) {
     invitations: 'Returns invitations'
   }
 
-  let title = `Send ${type[journey].toLowerCase()}`
+  let title = `Check the recipients`
 
   if (pagination.numberOfPages > 1) {
     title += ` (page ${page} of ${pagination.numberOfPages})`
