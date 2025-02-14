@@ -4,35 +4,103 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+const Sinon = require('sinon')
 
 // Test helpers
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitSubmissionService = require('../../../../app/services/return-logs/setup/submit-submission.service.js')
 
-describe('Return Logs Setup - Submit Submission service', () => {
+describe('Return Logs - Setup - Submit Submission service', () => {
   let payload
+  let returnLog
+  let returnLogId
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { beenReceived: false, returnReference: '1234' } })
+    returnLogId = ReturnLogHelper.generateReturnLogId()
+
+    session = await SessionHelper.add({
+      data: {
+        beenReceived: false,
+        receivedDateOptions: 'today',
+        receivedDate: new Date('2025-02-14'),
+        returnLogId,
+        returnReference: ReturnRequirementHelper.generateLegacyId()
+      }
+    })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(() => {
-        payload = { journey: 'enter-return' }
+      describe('and the user has selected "Enter and submit"', () => {
+        beforeEach(async () => {
+          payload = { journey: 'enter-return' }
+        })
+
+        it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+          const result = await SubmitSubmissionService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.journey).to.equal('enter-return')
+          expect(result.redirect).to.equal('reported')
+        })
       })
 
-      it('saves and returns the submitted option', async () => {
-        await SubmitSubmissionService.go(session.id, payload)
+      describe('and the user has selected "Enter a nil return"', () => {
+        beforeEach(async () => {
+          payload = { journey: 'nil-return' }
+        })
 
-        const refreshedSession = await session.$query()
+        it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+          const result = await SubmitSubmissionService.go(session.id, payload)
 
-        expect(refreshedSession.journey).to.equal('enter-return')
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.journey).to.equal('nil-return')
+          expect(result.redirect).to.equal('reported')
+        })
+      })
+
+      describe('and the user has selected "Record receipt"', () => {
+        beforeEach(async () => {
+          payload = { journey: 'record-receipt' }
+
+          returnLog = await ReturnLogHelper.add({ id: returnLogId })
+        })
+
+        it('returns the redirect as "confirm-received", updates the return log as "received", deletes the session, and returns the redirect as "confirm-received"', async () => {
+          const result = await SubmitSubmissionService.go(session.id, payload)
+
+          const refreshedReturnLog = await returnLog.$query()
+
+          // Check the status has been set to received
+          expect(refreshedReturnLog.status).to.equal('received')
+
+          // Check the received date has been set to what was recorded in the session
+          expect(refreshedReturnLog.receivedDate).to.equal(new Date(session.data.receivedDate))
+
+          // Check the updated at timestamp has been set
+          expect(refreshedReturnLog.updatedAt).to.be.greaterThan(returnLog.updatedAt)
+
+          // Check the session got deleted
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession).not.to.exist()
+
+          // Check the redirect takes will tell the controller to redirect to the return received confirmation page
+          expect(result.redirect).to.equal('confirm-received')
+        })
       })
     })
 
@@ -57,7 +125,7 @@ describe('Return Logs Setup - Submit Submission service', () => {
           error: { text: 'Select what you want to do with this return' },
           journey: null,
           pageTitle: 'What do you want to do with this return?',
-          returnReference: '1234'
+          returnReference: session.data.returnReference
         })
       })
     })

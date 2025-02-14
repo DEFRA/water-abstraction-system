@@ -81,7 +81,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           periodStartMonth: returnLog.metadata.nald.periodStartMonth,
           periodEndDay: returnLog.metadata.nald.periodEndDay,
           periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-          purposes: 'Test description',
+          purposes: ['Test description'],
           receivedDate: returnLog.receivedDate,
           returnLogId: returnLog.id,
           returnReference: returnLog.returnReference,
