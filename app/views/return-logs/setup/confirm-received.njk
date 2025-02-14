@@ -9,7 +9,7 @@
     Site description <strong>{{ siteDescription }}</strong>
   </div>
   <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
-    {{ purpose.label }} <strong> {{ purpose.value }}</strong>
+    {{ purposeDetails.label }} <strong> {{ purposeDetails.value }}</strong>
   </div>
 {% endset %}
 
@@ -20,6 +20,6 @@
   }) }}
 
   <div>
-    <a class="govuk-body" href={{ backLink }}>View returns for {{ licenceRef }}</a>
+    <a class="govuk-body" href="/system/licences/{{ licenceId }}/returns">View returns for {{ licenceRef }}</a>
   </div>
 {% endblock %}
