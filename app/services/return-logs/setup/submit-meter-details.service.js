@@ -38,7 +38,8 @@ async function go(sessionId, payload, yar) {
     }
 
     return {
-      checkPageVisited: session.checkPageVisited
+      checkPageVisited: session.checkPageVisited,
+      reported: session.reported
     }
   }
 
