@@ -9,13 +9,15 @@
  * Formats data for the `/notifications/setup/{sessionId}/ad-hoc-licence` page
  *
  * @param {string} licenceRef
+ * @param {string} referenceCode - the unique generated reference code
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(licenceRef) {
+function go(licenceRef, referenceCode) {
   return {
     licenceRef: licenceRef || null,
-    pageTitle: 'Enter a licence number'
+    pageTitle: 'Enter a licence number',
+    referenceCode
   }
 }
 

@@ -31,7 +31,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add()
+        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234' } })
 
         payload = { returnsPeriod: 'quarterFour' }
       })
@@ -55,7 +55,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
 
     describe('fails validation', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add()
+        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234' } })
         payload = {}
       })
       it('correctly presents the data with the error', async () => {
@@ -68,6 +68,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
             text: 'Select the returns periods for the invitations'
           },
           pageTitle: 'Select the returns periods for the invitations',
+          referenceCode: 'RINV-1234',
           returnsPeriod: [
             {
               checked: false,

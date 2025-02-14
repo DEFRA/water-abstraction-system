@@ -25,15 +25,23 @@ describe('Notifications Setup - Returns Period presenter', () => {
     clock.restore()
   })
 
-  describe('the "backLink" property', () => {
+  describe('the data', () => {
     beforeEach(() => {
+      session = { referenceCode: 'RINV-123' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
+
     it('correctly presents the data', () => {
       const result = ReturnsPeriodPresenter.go(session)
 
-      expect(result).to.equal({ backLink: '/manage' }, { skip: ['returnsPeriod'] })
+      expect(result).to.equal(
+        {
+          backLink: '/manage',
+          referenceCode: 'RINV-123'
+        },
+        { skip: ['returnsPeriod'] }
+      )
     })
   })
 

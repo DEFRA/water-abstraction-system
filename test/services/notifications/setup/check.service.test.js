@@ -25,7 +25,7 @@ describe('Notifications Setup - Review service', () => {
     removeLicences = ''
 
     session = await SessionHelper.add({
-      data: { returnsPeriod: 'quarterFour', removeLicences, journey: 'invitations' }
+      data: { returnsPeriod: 'quarterFour', removeLicences, journey: 'invitations', referenceCode: 'RINV-123' }
     })
 
     testRecipients = RecipientsFixture.recipients()
@@ -55,6 +55,7 @@ describe('Notifications Setup - Review service', () => {
         }
       ],
       recipientsAmount: 1,
+      referenceCode: 'RINV-123',
       text: {
         continueButton: 'Send',
         readyToSend: 'Returns invitations are ready to send.',
