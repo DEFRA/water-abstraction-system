@@ -34,6 +34,22 @@ describe('Return Logs Setup - Submit Submission service', () => {
 
         expect(refreshedSession.journey).to.equal('enter-return')
       })
+
+      describe('and the check page had been visited previously', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: { beenReceived: false, checkPageVisited: true, returnReference: '1234' }
+          })
+        })
+
+        it('updates "checkPageVisited" to false in the session data', async () => {
+          await SubmitSubmissionService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.checkPageVisited).to.be.false()
+        })
+      })
     })
 
     describe('with an invalid payload because the user has not selected anything', () => {
