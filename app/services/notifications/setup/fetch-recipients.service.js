@@ -22,9 +22,9 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
  * returns period.
  *
- * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRe'.
+ * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRef'.
  *
- * For the 'ad-hoc' journey we start by determining which licence we need to send a notifications for, by
+ * We start by determining which licence we need to send notifications for, by
  * looking for return logs with a matching 'licenceRef' the user has entered.
  *
  * For the multiple recipients journey we start by determining which licences we need to send notifications for, by
