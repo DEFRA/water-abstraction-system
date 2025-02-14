@@ -29,7 +29,7 @@ async function go(sessionId, page = 1) {
   const pagination = PaginatorPresenter.go(
     recipients.length,
     Number(page),
-    `/system/notifications/setup/${sessionId}/review`
+    `/system/notifications/setup/${sessionId}/check`
   )
 
   const formattedData = CheckPresenter.go(recipients, page, pagination, session)
