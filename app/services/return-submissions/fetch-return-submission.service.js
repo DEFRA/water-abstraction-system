@@ -26,9 +26,9 @@ async function go(returnSubmissionId) {
 }
 
 async function _fetch(returnSubmissionId) {
-  // TODO: Select only required data
   const query = ReturnSubmissionModel.query()
     .findById(returnSubmissionId)
+    .select(['metadata'])
     .withGraphFetched('returnSubmissionLines')
     .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
       returnSubmissionLinesBuilder
