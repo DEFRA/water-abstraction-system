@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/check` page
  * @module FetchContactsService
  */
 
@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/check` page
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.

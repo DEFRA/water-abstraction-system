@@ -61,7 +61,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
         const result = await SubmitRemoveLicencesService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: `${session.id}/review`
+          redirect: `${session.id}/check`
         })
       })
     })
