@@ -5,6 +5,7 @@
  * @module SubmitSubmissionService
  */
 
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
@@ -45,15 +46,17 @@ async function go(sessionId, payload) {
   }
 }
 
+async function _confirmReceipt(session) {
+  await ReturnLogModel.query()
+    .findById(session.returnLogId)
+    .patch({ receivedDate: session.receivedDate, status: 'received', updatedAt: timestampForPostgres() })
+
+  await SessionModel.query().deleteById(session.id)
+}
+
 async function _redirect(journey, session) {
-  const { id, status } = session
-
-  if (journey === 'record-receipt' && status === 'due') {
-    await ReturnLogModel.query()
-      .findById(session.returnLogId)
-      .patch({ receivedDate: session.receivedDate, status: 'completed' })
-
-    await SessionModel.query().deleteById(id)
+  if (journey === 'record-receipt') {
+    await _confirmReceipt(session)
 
     return 'confirm-received'
   }
