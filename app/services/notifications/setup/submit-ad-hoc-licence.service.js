@@ -30,7 +30,7 @@ async function go(sessionId, payload) {
 
   const validationResult = await _validate(payload)
 
-  const formattedData = AdHocLicencePresenter.go(payload.licenceRef)
+  const formattedData = AdHocLicencePresenter.go(payload.licenceRef, session.referenceCode)
 
   if (validationResult) {
     return {

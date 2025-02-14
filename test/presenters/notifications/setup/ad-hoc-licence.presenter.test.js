@@ -11,14 +11,17 @@ const { expect } = Code
 const AdHocLicencePresenter = require('../../../../app/presenters/notifications/setup/ad-hoc-licence.presenter.js')
 
 describe('Notifications Setup - Ad Hoc Licence presenter', () => {
+  const referenceCode = 'ADHC-1234'
+
   let licenceRef
 
   it('correctly presents the data', () => {
-    const result = AdHocLicencePresenter.go(licenceRef)
+    const result = AdHocLicencePresenter.go(licenceRef, referenceCode)
 
     expect(result).to.equal({
       licenceRef: null,
-      pageTitle: 'Enter a licence number'
+      pageTitle: 'Enter a licence number',
+      referenceCode
     })
   })
 
@@ -28,11 +31,12 @@ describe('Notifications Setup - Ad Hoc Licence presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = AdHocLicencePresenter.go(licenceRef)
+      const result = AdHocLicencePresenter.go(licenceRef, referenceCode)
 
       expect(result).to.equal({
         licenceRef: '01/111',
-        pageTitle: 'Enter a licence number'
+        pageTitle: 'Enter a licence number',
+        referenceCode
       })
     })
   })
