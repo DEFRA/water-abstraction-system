@@ -637,11 +637,11 @@ describe('Return Logs Setup controller', () => {
             })
           })
 
-          it('redirects to the "meter readings" page', async () => {
+          it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-readings`)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
