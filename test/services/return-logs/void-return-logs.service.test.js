@@ -61,7 +61,7 @@ describe('Return Logs - Void Return Logs service', () => {
       })
     })
 
-    it('voids the return logs that are from the start date of the return version forward', async () => {
+    it('voids the return logs that are from the start date forward', async () => {
       await VoidNoReturnRequiredLicenceReturnLogsService.go(licenceRef, new Date('2022-04-01'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
