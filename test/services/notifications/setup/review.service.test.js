@@ -24,7 +24,9 @@ describe('Notifications Setup - Review service', () => {
   before(async () => {
     removeLicences = ''
 
-    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', removeLicences } })
+    session = await SessionHelper.add({
+      data: { returnsPeriod: 'quarterFour', removeLicences, journey: 'invitations' }
+    })
 
     testRecipients = RecipientsFixture.recipients()
 
@@ -41,7 +43,6 @@ describe('Notifications Setup - Review service', () => {
         download: `/system/notifications/setup/${session.id}/download`,
         removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
       },
-      pageTitle: 'Send returns invitations',
       page: 1,
       pagination: {
         numberOfPages: 1
@@ -53,7 +54,12 @@ describe('Notifications Setup - Review service', () => {
           method: 'Email - Primary user'
         }
       ],
-      recipientsAmount: 1
+      recipientsAmount: 1,
+      text: {
+        continueButton: 'Send invitations',
+        readyToSend: 'Returns invitations are ready to send.',
+        title: 'Send returns invitations'
+      }
     })
   })
 })
