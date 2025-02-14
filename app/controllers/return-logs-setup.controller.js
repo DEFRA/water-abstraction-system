@@ -141,11 +141,11 @@ async function submitMeterDetails(request, h) {
     return h.view('return-logs/setup/meter-details.njk', pageData)
   }
 
-  if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+  if (pageData.reported === 'abstraction-volumes' && !pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
 async function submitMeterProvided(request, h) {
@@ -162,7 +162,7 @@ async function submitMeterProvided(request, h) {
   }
 
   if (pageData.meterProvided === 'no') {
-    if (pageData.checkPageVisited) {
+    if (pageData.checkPageVisited || pageData.reported === 'meter-readings') {
       return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
     }
 

@@ -102,4 +102,32 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       })
     })
   })
+
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "meter-details" page', () => {
+      beforeEach(() => {
+        session.meterProvided = 'yes'
+      })
+
+      it('returns a link back to the "meter-details" page', () => {
+        const result = SingleVolumePresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-details')
+      })
+    })
+
+    describe('when the user has come from the meter-provided', () => {
+      beforeEach(() => {
+        session.meterProvided = 'no'
+      })
+
+      it('returns a link back to the "meter-provided" page', () => {
+        const result = SingleVolumePresenter.go(session)
+
+        expect(result.backLink).to.equal(
+          '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided'
+        )
+      })
+    })
+  })
 })
