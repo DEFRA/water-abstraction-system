@@ -17,6 +17,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/confirm-received',
+    options: {
+      handler: ReturnLogsSetupController.confirmReceived,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/guidance',
     options: {
       handler: ReturnLogsSetupController.guidance,
@@ -65,9 +77,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/confirm-received',
+    path: '/return-logs/setup/{sessionId}/delete-note',
     options: {
-      handler: ReturnLogsSetupController.confirmReceived,
+      handler: ReturnLogsSetupController.deleteNote,
       auth: {
         access: {
           scope: ['billing']
@@ -77,9 +89,45 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/{sessionId}/delete-note',
+    path: '/return-logs/setup/{sessionId}/meter-details',
     options: {
-      handler: ReturnLogsSetupController.deleteNote,
+      handler: ReturnLogsSetupController.meterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-details',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.meterProvided,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterProvided,
       auth: {
         access: {
           scope: ['billing']
@@ -104,6 +152,30 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/note',
     options: {
       handler: ReturnLogsSetupController.submitNote,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.periodUsed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.submitPeriodUsed,
       auth: {
         access: {
           scope: ['billing']
@@ -161,6 +233,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.singleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.submitSingleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/submission',
     options: {
       handler: ReturnLogsSetupController.submission,
@@ -200,102 +296,6 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/units',
     options: {
       handler: ReturnLogsSetupController.submitUnits,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-logs/setup/{sessionId}/meter-provided',
-    options: {
-      handler: ReturnLogsSetupController.meterProvided,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-logs/setup/{sessionId}/meter-provided',
-    options: {
-      handler: ReturnLogsSetupController.submitMeterProvided,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-logs/setup/{sessionId}/meter-details',
-    options: {
-      handler: ReturnLogsSetupController.meterDetails,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-logs/setup/{sessionId}/meter-details',
-    options: {
-      handler: ReturnLogsSetupController.submitMeterDetails,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-logs/setup/{sessionId}/single-volume',
-    options: {
-      handler: ReturnLogsSetupController.singleVolume,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-logs/setup/{sessionId}/single-volume',
-    options: {
-      handler: ReturnLogsSetupController.submitSingleVolume,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-logs/setup/{sessionId}/period-used',
-    options: {
-      handler: ReturnLogsSetupController.periodUsed,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-logs/setup/{sessionId}/period-used',
-    options: {
-      handler: ReturnLogsSetupController.submitPeriodUsed,
       auth: {
         access: {
           scope: ['billing']
