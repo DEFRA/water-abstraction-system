@@ -66,7 +66,8 @@ function _formatRecipients(recipients) {
 function _text(page, pagination, journey) {
   const type = {
     'ad-hoc': 'Ad-hoc notifications',
-    invitations: 'Returns invitations'
+    invitations: 'Returns invitations',
+    reminders: 'Returns reminders'
   }
 
   let title = `Check the recipients`
