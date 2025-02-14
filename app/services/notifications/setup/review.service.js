@@ -32,7 +32,7 @@ async function go(sessionId, page = 1) {
     `/system/notifications/setup/${sessionId}/review`
   )
 
-  const formattedData = ReviewPresenter.go(recipients, page, pagination, sessionId)
+  const formattedData = ReviewPresenter.go(recipients, page, pagination, session)
 
   return {
     activeNavBar: 'manage',

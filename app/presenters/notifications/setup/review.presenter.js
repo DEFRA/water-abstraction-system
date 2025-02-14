@@ -14,19 +14,21 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
  * @param {object} pagination - The result from `PaginatorPresenter`
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} session - The session instance
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page, pagination, sessionId) {
+function go(recipients, page, pagination, session) {
+  const { id: sessionId, journey } = session
+
   return {
     defaultPageSize,
-    pageTitle: _pageTitle(page, pagination),
+    text: _text(page, pagination, journey),
     recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length,
     links: {
       download: `/system/notifications/setup/${sessionId}/download`,
-      removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
+      removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
     }
   }
 }
@@ -60,12 +62,23 @@ function _formatRecipients(recipients) {
   })
 }
 
-function _pageTitle(page, pagination) {
-  if (pagination.numberOfPages > 1) {
-    return `Send returns invitations (page ${page} of ${pagination.numberOfPages})`
+function _text(page, pagination, journey) {
+  const type = {
+    'ad-hoc': 'Ad-hoc notifications',
+    invitations: 'Returns invitations'
   }
 
-  return 'Send returns invitations'
+  let title = `Send ${type[journey].toLowerCase()}`
+
+  if (pagination.numberOfPages > 1) {
+    title += ` (page ${page} of ${pagination.numberOfPages})`
+  }
+
+  return {
+    title,
+    readyToSend: `${type[journey]} are ready to send.`,
+    continueButton: 'Send'
+  }
 }
 
 /**
