@@ -5,8 +5,8 @@
  * @module ConfirmReceivedService
  */
 
-const FetchConfirmReceivedService = require('../../../services/return-logs/setup/fetch-confirm-received.service.js')
 const ConfirmReceivedPresenter = require('../../../presenters/return-logs/setup/confirm-received.presenter.js')
+const FetchReturnLogService = require('../../../services/return-logs/setup/fetch-return-log.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirm-received` page
@@ -16,7 +16,7 @@ const ConfirmReceivedPresenter = require('../../../presenters/return-logs/setup/
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(returnLogId) {
-  const returnLog = await FetchConfirmReceivedService.go(returnLogId)
+  const returnLog = await FetchReturnLogService.go(returnLogId)
 
   const formattedData = ConfirmReceivedPresenter.go(returnLog)
 

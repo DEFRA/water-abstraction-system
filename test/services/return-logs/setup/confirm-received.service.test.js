@@ -3,83 +3,66 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+// Things we need to stub
+const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
 
 // Thing under test
 const ConfirmReceivedService = require('../../../../app/services/return-logs/setup/confirm-received.service.js')
 
-describe('Return Logs Setup - Confirm Received service', () => {
-  let session
+describe('Return Logs - Setup - Confirm Received service', () => {
+  const returnLogId = 'v1:6:01/117:10032788:2019-04-01:2019-05-12'
 
-  before(async () => {
-    session = await SessionHelper.add({
-      data: {
-        status: 'due',
-        dueDate: '2019-06-09T00:00:00.000Z',
-        endDate: '2019-05-12T00:00:00.000Z',
-        journey: 'record-receipt',
-        purposes: ['Mineral Washing'],
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        startDate: '2019-04-01T00:00:00.000Z',
-        licenceRef: '01/117',
-        underQuery: false,
-        returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
-        beenReceived: false,
-        periodEndDay: 30,
-        receivedDate: '2025-02-05T00:00:00.000Z',
-        twoPartTariff: false,
-        periodEndMonth: 9,
-        periodStartDay: 1,
-        returnReference: '10032788',
-        siteDescription: 'Addington Sandpits',
-        periodStartMonth: 10,
-        receivedDateOptions: 'yesterday'
-      }
+  beforeEach(async () => {
+    Sinon.stub(FetchReturnLogService, 'go').resolves({
+      licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+      licenceRef: '01/117',
+      returnLogId,
+      returnReference: '10032788',
+      purposes: [
+        {
+          alias: 'SPRAY IRRIGATION',
+          primary: {
+            code: 'I',
+            description: 'Industrial, Commercial And Public Services'
+          },
+          tertiary: {
+            code: '400',
+            description: 'Spray Irrigation - Direct'
+          },
+          secondary: {
+            code: 'GOF',
+            description: 'Golf Courses'
+          }
+        }
+      ],
+      siteDescription: 'Addington Sandpits'
     })
+  })
 
-    await ReturnLogHelper.add({ id: session.data.returnLogId })
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmReceivedService.go(session.id)
+      const result = await ConfirmReceivedService.go(returnLogId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        backLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
+        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',
-        purpose: {
+        purposeDetails: {
           label: 'Purpose',
-          value: 'Mineral Washing'
+          value: 'Spray Irrigation - Direct'
         },
-        sessionId: session.id,
         siteDescription: 'Addington Sandpits'
       })
-    })
-
-    it('updates the session record to indicate user has visited the "confirm-received" page', async () => {
-      await ConfirmReceivedService.go(session.id)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.confirmReceivedPageVisited).to.be.true()
-    })
-
-    it('updates the return log record status to "completed" and receivedDate to the value in the session', async () => {
-      await ConfirmReceivedService.go(session.id)
-
-      const returnLog = await ReturnLogModel.query().findById(session.data.returnLogId)
-
-      expect(returnLog.status).to.equal('completed')
-      expect(returnLog.receivedDate).to.equal(new Date(session.data.receivedDate))
     })
   })
 })
