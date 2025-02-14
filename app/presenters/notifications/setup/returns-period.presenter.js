@@ -17,10 +17,13 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
+  const { referenceCode } = session
+
   const savedReturnsPeriod = session.returnsPeriod ?? null
 
   return {
     backLink: '/manage',
+    referenceCode,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
   }
 }

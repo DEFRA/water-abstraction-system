@@ -28,7 +28,7 @@ describe('Notifications Setup - Check presenter', () => {
       numberOfPages: 1
     }
 
-    session = { id: generateUUID(), journey: 'invitations' }
+    session = { id: generateUUID(), journey: 'invitations', referenceCode: 'RINV-123' }
 
     testRecipients = RecipientsFixture.recipients()
     // This data is used to ensure the recipients are grouped when they have the same licence ref / name.
@@ -112,6 +112,7 @@ describe('Notifications Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
+        referenceCode: 'RINV-123',
         text: {
           continueButton: 'Send',
           readyToSend: 'Returns invitations are ready to send.',
@@ -123,6 +124,7 @@ describe('Notifications Setup - Check presenter', () => {
     describe('when the journey is for "invitations"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
+        session.referenceCode = 'RINV-123'
       })
 
       describe('the "links" property', () => {
@@ -331,6 +333,7 @@ describe('Notifications Setup - Check presenter', () => {
     describe('when the journey is for "ad-hoc"', () => {
       beforeEach(() => {
         session.journey = 'ad-hoc'
+        session.referenceCode = 'ADHC-123'
       })
 
       describe('the "links" property', () => {

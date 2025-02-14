@@ -19,7 +19,7 @@ describe('Notifications Setup - Remove licences service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licences } })
+    session = await SessionHelper.add({ data: { licences, referenceCode: 'RINV-1234' } })
   })
 
   it('correctly presents the data', async () => {
@@ -29,6 +29,7 @@ describe('Notifications Setup - Remove licences service', () => {
       activeNavBar: 'manage',
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
+      referenceCode: 'RINV-1234',
       removeLicences: []
     })
   })
