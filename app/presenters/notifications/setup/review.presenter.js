@@ -77,7 +77,7 @@ function _text(page, pagination, journey) {
   return {
     title,
     readyToSend: `${type[journey]} are ready to send.`,
-    continueButton: 'Send invitations'
+    continueButton: 'Send'
   }
 }
 

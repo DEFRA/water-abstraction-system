@@ -113,7 +113,7 @@ describe('Notifications Setup - Review presenter', () => {
         ],
         recipientsAmount: 9,
         text: {
-          continueButton: 'Send invitations',
+          continueButton: 'Send',
           readyToSend: 'Returns invitations are ready to send.',
           title: 'Send returns invitations'
         }
@@ -296,7 +296,7 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination, session)
 
               expect(result.text).to.equal({
-                continueButton: 'Send invitations',
+                continueButton: 'Send',
                 readyToSend: 'Returns invitations are ready to send.',
                 title: 'Send returns invitations (page 1 of 2)'
               })
@@ -318,7 +318,7 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination, session)
 
               expect(result.text).to.equal({
-                continueButton: 'Send invitations',
+                continueButton: 'Send',
                 readyToSend: 'Returns invitations are ready to send.',
                 title: 'Send returns invitations (page 2 of 2)'
               })
@@ -504,7 +504,7 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination, session)
 
               expect(result.text).to.equal({
-                continueButton: 'Send invitations',
+                continueButton: 'Send',
                 readyToSend: 'Ad-hoc notifications are ready to send.',
                 title: 'Send ad-hoc notifications (page 1 of 2)'
               })
@@ -526,7 +526,7 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination, session)
 
               expect(result.text).to.equal({
-                continueButton: 'Send invitations',
+                continueButton: 'Send',
                 readyToSend: 'Ad-hoc notifications are ready to send.',
                 title: 'Send ad-hoc notifications (page 2 of 2)'
               })
