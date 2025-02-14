@@ -29,7 +29,6 @@ function go(returnSubmission, yearMonth) {
   const units = returnSubmission.$units()
 
   return {
-    rawData: JSON.stringify(returnSubmission, null, 2),
     backLink: _backLink(returnSubmission),
     displayReadings: method !== 'abstractionVolumes',
     displayUnits: units !== unitNames.CUBIC_METRES,
