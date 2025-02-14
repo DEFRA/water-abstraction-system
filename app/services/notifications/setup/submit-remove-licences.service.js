@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, validLicences)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences)
+    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode)
 
     return {
       activeNavBar: 'manage',
@@ -40,7 +40,7 @@ async function go(sessionId, payload) {
   await _save(session, payload)
 
   return {
-    redirect: `${sessionId}/review`
+    redirect: `${sessionId}/check`
   }
 }
 

@@ -9,13 +9,15 @@
  * Formats data for the `/notifications/setup/remove-licences` page
  *
  * @param {string[]} removeLicences - List of licences to remove from the recipients list
+ * @param {string} referenceCode - the unique generated reference code
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(removeLicences) {
+function go(removeLicences, referenceCode) {
   return {
-    pageTitle: 'Enter the licence numbers to remove from the mailing list',
     hint: 'Separate the licences numbers with a comma or new line.',
+    pageTitle: 'Enter the licence numbers to remove from the mailing list',
+    referenceCode,
     removeLicences
   }
 }

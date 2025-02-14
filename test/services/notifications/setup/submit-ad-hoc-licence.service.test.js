@@ -20,7 +20,7 @@ describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: {} })
+    session = await SessionHelper.add({ data: { referenceCode: 'ADHC-1234' } })
   })
 
   describe('when called', () => {
@@ -64,7 +64,8 @@ describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
             error: {
               text: 'Enter a licence number'
             },
-            pageTitle: 'Enter a licence number'
+            pageTitle: 'Enter a licence number',
+            referenceCode: 'ADHC-1234'
           })
         })
       })
@@ -85,7 +86,8 @@ describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
             error: {
               text: 'Enter a valid licence number'
             },
-            pageTitle: 'Enter a licence number'
+            pageTitle: 'Enter a licence number',
+            referenceCode: 'ADHC-1234'
           })
         })
       })
@@ -108,7 +110,8 @@ describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
               text: 'There are no returns due for licence 01/145'
             },
             licenceRef: '01/145',
-            pageTitle: 'Enter a licence number'
+            pageTitle: 'Enter a licence number',
+            referenceCode: 'ADHC-1234'
           })
         })
       })

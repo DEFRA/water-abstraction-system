@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup review page
- * @module ReviewService
+ * Orchestrates fetching and presenting the data needed for the notifications setup check page
+ * @module CheckService
  */
 
+const CheckPresenter = require('../../../presenters/notifications/setup/check.presenter.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
-const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup review page
+ * Orchestrates fetching and presenting the data needed for the notifications setup check page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  * @param {number|string} [page=1] - The currently selected page (if paginated)
@@ -29,10 +29,10 @@ async function go(sessionId, page = 1) {
   const pagination = PaginatorPresenter.go(
     recipients.length,
     Number(page),
-    `/system/notifications/setup/${sessionId}/review`
+    `/system/notifications/setup/${sessionId}/check`
   )
 
-  const formattedData = ReviewPresenter.go(recipients, page, pagination, sessionId)
+  const formattedData = CheckPresenter.go(recipients, page, pagination, session)
 
   return {
     activeNavBar: 'manage',

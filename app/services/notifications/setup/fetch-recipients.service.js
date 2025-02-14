@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/check` page
  * @module FetchContactsService
  */
 
@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/check` page
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.
@@ -18,8 +18,17 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
- * We start by determining which licences we need to send notifications for, by looking for 'due' return logs with a
- * matching 'due date' and cycle (summer or winter and all year).
+ * We have two mechanisms for returning a recipient. One is for the 'ad-hoc' journey which is for an individual licence
+ * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
+ * returns period.
+ *
+ * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRef'.
+ *
+ * We start by determining which licence we need to send notifications for, by
+ * looking for return logs with a matching 'licenceRef' the user has entered.
+ *
+ * For the multiple recipients journey we start by determining which licences we need to send notifications for, by
+ * looking for 'due' return logs with a matching 'due date' and cycle (summer or winter and all year).
  *
  * For each licence linked to one of these return logs, we extract the contact information. This is complicated by a
  * number of factors.
@@ -97,7 +106,11 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
  * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
  *
- * The end result is all the email, or letter contacts for each licence with a 'due' return for the period selected.
+ * For the 'ad-hoc' journey the end result is all the email, or letter contacts for that  licence with a 'due'
+ * return for any period.
+ *
+ * For the multiple recipient journeys the end result is all the email, or letter contacts for each licence with a 'due'
+ * return for the period selected.
  *
  * ```javascript
  * [
@@ -151,32 +164,53 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  if (session.journey === 'ad-hoc') {
+    return _fetchRecipient(session)
+  }
 
-  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+  return _fetchRecipients(session)
+}
 
-  const { rows } = await _fetch(returnsPeriod.dueDate, summer, removeLicences)
+async function _fetchRecipient(session) {
+  const { licenceRef } = session
+
+  const where = `
+    AND ldh.licence_ref = ?
+  `
+
+  const bindings = [licenceRef, licenceRef, licenceRef]
+
+  const { rows } = await _fetch(bindings, where)
 
   return rows
 }
 
-async function _fetch(dueDate, summer, removeLicences) {
-  const query = _query()
+async function _fetchRecipients(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  return db.raw(query, [
-    dueDate,
-    summer,
-    removeLicences,
-    dueDate,
-    summer,
-    removeLicences,
-    dueDate,
-    summer,
-    removeLicences
-  ])
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const dueDate = returnsPeriod.dueDate
+
+  const where = `
+    AND rl.due_date = ?
+    AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
+  `
+  const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences, dueDate, summer, removeLicences]
+
+  const { rows } = await _fetch(bindings, where)
+
+  return rows
 }
 
-function _query() {
+async function _fetch(bindings, where) {
+  const query = _query(where)
+
+  return db.raw(query, bindings)
+}
+
+function _query(additionalWhereClause) {
   return `SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
   contact_type,
@@ -200,9 +234,8 @@ FROM (
   INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
+    ${additionalWhereClause}
     AND contacts->>'role' IN ('Licence holder', 'Returns to')
     AND NOT EXISTS (
       SELECT
@@ -212,7 +245,6 @@ FROM (
         ler.company_entity_id = ldh.company_entity_id
         AND ler."role" IN ('primary_user', 'user_returns')
     )
-    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -229,10 +261,8 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
+    ${additionalWhereClause}
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -249,10 +279,8 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
+    ${additionalWhereClause}
 ) contacts
 GROUP BY
   contact_type,
