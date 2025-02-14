@@ -20,12 +20,12 @@ async function go(returnLogId) {
   return await ReturnLogModel.query()
     .findById(returnLogId)
     .select(
-      'licence.id as licenceId',
+      'licence.id AS licenceId',
       'licence.licenceRef',
       'returnLogs.id as returnLogId',
       'returnLogs.returnReference',
-      ref('returnLogs.metadata:description').as('siteDescription'),
-      ref('returnLogs.metadata:purposes').as('purposes')
+      ref('returnLogs.metadata:purposes').as('purposes'),
+      ref('returnLogs.metadata:description').as('siteDescription')
     )
     .innerJoinRelated('licence')
     .where('returnLogs.id', returnLogId)

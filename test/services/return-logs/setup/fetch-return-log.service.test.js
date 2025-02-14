@@ -8,13 +8,14 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchConfirmReceivedService = require('../../../../app/services/return-logs/setup/fetch-confirm-received.service.js')
+const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
 
-describe('Return Logs Setup - Fetch Confirm Received service', () => {
+describe('Return Logs - Setup - Fetch Return Log service', () => {
   let licence
   let returnLog
 
@@ -47,17 +48,25 @@ describe('Return Logs Setup - Fetch Confirm Received service', () => {
       })
     })
 
-    it('returns the related return log instance', async () => {
-      const result = await FetchConfirmReceivedService.go(returnLog.id)
+    it('returns the return log instance', async () => {
+      const result = await FetchReturnLogService.go(returnLog.id)
 
       expect(result).to.equal({
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
-        siteDescription: returnLog.metadata.description,
-        purposes: returnLog.metadata.purposes
+        purposes: returnLog.metadata.purposes,
+        siteDescription: returnLog.metadata.description
       })
+    })
+  })
+
+  describe('when a matching return log does not exist', () => {
+    it('returns undefined', async () => {
+      const result = await FetchReturnLogService.go(generateUUID())
+
+      expect(result).to.be.undefined()
     })
   })
 })
