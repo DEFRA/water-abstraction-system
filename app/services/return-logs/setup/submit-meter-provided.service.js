@@ -39,7 +39,8 @@ async function go(sessionId, payload, yar) {
 
     return {
       checkPageVisited: session.checkPageVisited,
-      meterProvided: session.meterProvided
+      meterProvided: session.meterProvided,
+      reported: session.reported
     }
   }
 

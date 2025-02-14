@@ -19,6 +19,7 @@ const InitiateSessionService = require('../../app/services/return-logs/setup/ini
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const NoteService = require('../../app/services/return-logs/setup/note.service.js')
+const PeriodUsedService = require('../../app/services/return-logs/setup/period-used.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
@@ -27,6 +28,7 @@ const SubmitCancelService = require('../../app/services/return-logs/setup/submit
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
+const SubmitPeriodUsedService = require('../../app/services/return-logs/setup/submit-period-used.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
@@ -533,7 +535,7 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'yes' })
           })
 
-          it('redirects to the "meter provided" page', async () => {
+          it('redirects to the "meter details" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(302)
@@ -558,6 +560,19 @@ describe('Return Logs Setup controller', () => {
           describe('and the page has been visited previously', () => {
             beforeEach(() => {
               Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ checkPageVisited: true, meterProvided: 'no' })
+            })
+
+            it('redirects to the "check" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            })
+          })
+
+          describe('and the reported type is "meter-readings"', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no', reported: 'meter-readings' })
             })
 
             it('redirects to the "check" page', async () => {
@@ -622,11 +637,11 @@ describe('Return Logs Setup controller', () => {
             })
           })
 
-          it('redirects to the "meter readings" page', async () => {
+          it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-readings`)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -645,6 +660,24 @@ describe('Return Logs Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the reporting type is "abstraction-volumes"', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              reported: 'abstraction-volumes',
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
+            })
+          })
+
+          it('redirects to the "single-volume" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
           })
         })
 
@@ -741,6 +774,65 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select which units were used')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/period-used', () => {
+    const path = 'period-used'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(PeriodUsedService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'What period was used for this volume?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('What period was used for this volume?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitPeriodUsedService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('and the validation fails', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitPeriodUsedService, 'go').resolves({
+            error: {
+              errorList: [{ href: '#period-date-used-options', text: 'Select what period was used for this volume' }],
+              meterMake: { message: 'Select what period was used for this volume' }
+            },
+            pageTitle: 'What period was used for this volume?',
+            sessionId
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(_postOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select what period was used for this volume')
           expect(response.payload).to.contain('There is a problem')
         })
       })
