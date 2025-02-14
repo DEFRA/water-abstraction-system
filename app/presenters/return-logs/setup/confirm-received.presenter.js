@@ -16,15 +16,15 @@ function go(returnLog) {
   const { licenceId, licenceRef, purposes, returnReference, siteDescription } = returnLog
 
   return {
-    backLink: `/system/licences/${licenceId}/returns`,
+    licenceId,
     licenceRef,
     pageTitle: `Return ${returnReference} received`,
-    purpose: _formatPurposes(purposes),
+    purposeDetails: purposeDetails(purposes),
     siteDescription
   }
 }
 
-function _formatPurposes(purposes) {
+function purposeDetails(purposes) {
   const formattedPurposes = purposes.map((purpose) => {
     return purpose.tertiary.description
   })
