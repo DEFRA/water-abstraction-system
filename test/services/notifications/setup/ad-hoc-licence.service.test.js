@@ -18,7 +18,7 @@ describe('Notifications Setup - Ad Hoc Licence service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111' } })
+    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'ADHC-1234' } })
   })
 
   afterEach(() => {
@@ -32,7 +32,8 @@ describe('Notifications Setup - Ad Hoc Licence service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         licenceRef: '01/111',
-        pageTitle: 'Enter a licence number'
+        pageTitle: 'Enter a licence number',
+        referenceCode: 'ADHC-1234'
       })
     })
   })

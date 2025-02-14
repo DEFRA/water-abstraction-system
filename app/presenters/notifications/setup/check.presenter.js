@@ -19,17 +19,18 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { id: sessionId, journey } = session
+  const { id: sessionId, journey, referenceCode } = session
 
   return {
     defaultPageSize,
-    text: _text(page, pagination, journey),
-    recipients: _recipients(recipients, page),
-    recipientsAmount: recipients.length,
     links: {
       download: `/system/notifications/setup/${sessionId}/download`,
       removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
-    }
+    },
+    recipients: _recipients(recipients, page),
+    recipientsAmount: recipients.length,
+    referenceCode,
+    text: _text(page, pagination, journey)
   }
 }
 
@@ -65,7 +66,8 @@ function _formatRecipients(recipients) {
 function _text(page, pagination, journey) {
   const type = {
     'ad-hoc': 'Ad-hoc notifications',
-    invitations: 'Returns invitations'
+    invitations: 'Returns invitations',
+    reminders: 'Returns reminders'
   }
 
   let title = `Check the recipients`

@@ -19,7 +19,7 @@ describe('Notifications Setup - Returns Period service', () => {
   let session
 
   before(async () => {
-    session = await SessionHelper.add()
+    session = await SessionHelper.add({ data: { referenceCode: 'RINV-123' } })
 
     const testDate = new Date('2024-12-01')
 
@@ -38,6 +38,7 @@ describe('Notifications Setup - Returns Period service', () => {
         activeNavBar: 'manage',
         backLink: '/manage',
         pageTitle: 'Select the returns periods for the invitations',
+        referenceCode: 'RINV-123',
         returnsPeriod: [
           {
             checked: false,
