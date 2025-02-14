@@ -115,7 +115,7 @@ describe('Notifications Setup - Check presenter', () => {
         text: {
           continueButton: 'Send',
           readyToSend: 'Returns invitations are ready to send.',
-          title: 'Check recipients'
+          title: 'Check the recipients'
         }
       })
     })
@@ -298,7 +298,7 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.text).to.equal({
                 continueButton: 'Send',
                 readyToSend: 'Returns invitations are ready to send.',
-                title: 'Check recipients (page 1 of 2)'
+                title: 'Check the recipients (page 1 of 2)'
               })
             })
           })
@@ -320,7 +320,7 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.text).to.equal({
                 continueButton: 'Send',
                 readyToSend: 'Returns invitations are ready to send.',
-                title: 'Check recipients (page 2 of 2)'
+                title: 'Check the recipients (page 2 of 2)'
               })
             })
           })
@@ -506,7 +506,7 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.text).to.equal({
                 continueButton: 'Send',
                 readyToSend: 'Ad-hoc notifications are ready to send.',
-                title: 'Check recipients (page 1 of 2)'
+                title: 'Check the recipients (page 1 of 2)'
               })
             })
           })
@@ -528,7 +528,7 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.text).to.equal({
                 continueButton: 'Send',
                 readyToSend: 'Ad-hoc notifications are ready to send.',
-                title: 'Check recipients (page 2 of 2)'
+                title: 'Check the recipients (page 2 of 2)'
               })
             })
           })

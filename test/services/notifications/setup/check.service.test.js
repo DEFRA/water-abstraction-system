@@ -58,7 +58,7 @@ describe('Notifications Setup - Review service', () => {
       text: {
         continueButton: 'Send',
         readyToSend: 'Returns invitations are ready to send.',
-        title: 'Check recipients'
+        title: 'Check the recipients'
       }
     })
   })

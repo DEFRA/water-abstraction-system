@@ -68,7 +68,7 @@ function _text(page, pagination, journey) {
     invitations: 'Returns invitations'
   }
 
-  let title = `Check recipients`
+  let title = `Check the recipients`
 
   if (pagination.numberOfPages > 1) {
     title += ` (page ${page} of ${pagination.numberOfPages})`

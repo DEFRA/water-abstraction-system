@@ -392,7 +392,7 @@ function _viewRemoveLicence() {
 
 function _viewCheck() {
   return {
-    pageTitle: 'Check recipients',
+    pageTitle: 'Check the recipients',
     activeNavBar: 'manage'
   }
 }
