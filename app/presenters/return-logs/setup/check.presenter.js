@@ -38,18 +38,24 @@ function go(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    links: {
+      cancel: `/system/return-logs/setup/${sessionId}/cancel`,
+      meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
+      received: `/system/return-logs/setup/${sessionId}/received`,
+      reported: `/system/return-logs/setup/${sessionId}/reported`,
+      units: `/system/return-logs/setup/${sessionId}/units`
+    },
     meterMake,
     meterProvided,
     meterSerialNumber,
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
     purposes,
-    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : sentenceCase(reported),
+    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
     returnReference,
     siteDescription,
-    sessionId,
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }

@@ -7,6 +7,8 @@
 
 const { ref } = require('objection')
 
+const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
+
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -35,11 +37,31 @@ async function go(returnLogId) {
 
 function _data(returnLog) {
   const formattedPurposes = _formatPurposes(returnLog.purposes)
+  const lines = _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
 
   returnLog.beenReceived = returnLog.receivedDate !== null
   returnLog.purposes = formattedPurposes
+  returnLog.lines = lines
 
   return returnLog
+}
+
+function _formatLines(frequency, startDate, endDate) {
+  let lines
+
+  if (frequency === 'day') {
+    lines = daysFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'week') {
+    lines = weeksFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'month') {
+    lines = monthsFromPeriod(startDate, endDate)
+  }
+
+  return lines
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -56,6 +78,7 @@ async function _fetchReturnLog(returnLogId) {
       'returnLogs.dueDate',
       'returnLogs.status',
       'returnLogs.underQuery',
+      'returnLogs.returnsFrequency',
       ref('returnLogs.metadata:nald.periodStartDay').castInt().as('periodStartDay'),
       ref('returnLogs.metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
       ref('returnLogs.metadata:nald.periodEndDay').castInt().as('periodEndDay'),

@@ -6,6 +6,8 @@
  */
 
 const { db } = require('../../../../db/db.js')
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats the contact data from which recipients will be determined for the `/notifications/setup/download` link
@@ -16,8 +18,14 @@ const { db } = require('../../../../db/db.js')
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
- * We start by determining which licences we need to send notifications for, by looking for 'due' return logs with a
- * matching 'due date' and cycle (summer or winter and all year).
+ * We have two mechanisms for returning a recipient. One is for the 'ad-hoc' journey which is for an individual licence
+ * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
+ * returns period.
+ *
+ * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRef'.
+ *
+ * We start by determining which licence we need to send notifications for, by
+ * looking for return logs with a matching 'licenceRef' the user has entered.
  *
  * For each licence linked to one of these return logs, we extract the contact information. This is complicated by a
  * number of factors.
@@ -43,24 +51,59 @@ const { db } = require('../../../../db/db.js')
  * received from this query (For either registered to unregistered licence). We expect to see duplicate licences with
  * different contacts types (but still preferring the registered over unregistered licence).
  *
- * @param {Date} dueDate
- * @param {boolean} summer
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} - matching recipients
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(session) {
+  if (session.journey === 'ad-hoc') {
+    return _fetchRecipient(session)
+  }
+
+  return _fetchRecipients(session)
+}
+
+async function _fetchRecipient(session) {
+  const { licenceRef } = session
+
+  const where = `
+    AND ldh.licence_ref = ?
+  `
+
+  const bindings = [licenceRef, licenceRef]
+
+  const { rows } = await _fetch(bindings, where)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
-  const query = _query()
+async function _fetchRecipients(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  return db.raw(query, [dueDate, summer, dueDate, summer])
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const dueDate = returnsPeriod.dueDate
+
+  const where = `
+    AND rl.due_date = ?
+    AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
+  `
+
+  const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences]
+
+  const { rows } = await _fetch(bindings, where)
+
+  return rows
 }
 
-function _query() {
+async function _fetch(bindings, where) {
+  const query = _query(where)
+
+  return db.raw(query, bindings)
+}
+
+function _query(additionalWhereClause) {
   return `
 SELECT
   contacts.licence_ref,
@@ -87,9 +130,8 @@ FROM (
         ON rl.licence_ref = ldh.licence_ref
     WHERE
       rl.status = 'due'
-      AND rl.due_date = ?
       AND rl.metadata->>'isCurrent' = 'true'
-      AND rl.metadata->>'isSummer' = ?
+      ${additionalWhereClause}
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
       AND NOT EXISTS (
         SELECT
@@ -122,9 +164,8 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
+    ${additionalWhereClause}
 ) contacts
 ORDER BY
 contacts.licence_ref`

@@ -29,6 +29,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/cancel',
+    options: {
+      handler: ReturnLogsSetupController.cancel,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/cancel',
+    options: {
+      handler: ReturnLogsSetupController.submitCancel,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/check',
     options: {
       handler: ReturnLogsSetupController.check,
@@ -236,6 +260,30 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/single-volume',
     options: {
       handler: ReturnLogsSetupController.submitSingleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.periodUsed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.submitPeriodUsed,
       auth: {
         access: {
           scope: ['billing']

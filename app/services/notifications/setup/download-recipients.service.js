@@ -5,6 +5,8 @@
  * @module DownloadRecipientsService
  */
 
+const DownloadRecipientsPresenter = require('../../../presenters/notifications/setup/download-recipients.presenter.js')
+const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -19,12 +21,15 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+
   const { notificationType, referenceCode } = session
 
-  const csv = 'Licences\n12234\n'
+  const recipients = await FetchDownloadRecipientsService.go(session)
+
+  const formattedData = DownloadRecipientsPresenter.go(recipients)
 
   return {
-    data: csv,
+    data: formattedData,
     type: 'text/csv',
     filename: `${notificationType} - ${referenceCode}.csv`
   }

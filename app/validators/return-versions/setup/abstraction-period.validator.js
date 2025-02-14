@@ -51,11 +51,11 @@ function _parsePayload(startDay, startMonth, endDay, endMonth) {
   const parsePayload = {
     startDate: {
       entry: `${parsedStartDay}${parsedStartMonth}`,
-      fullDate: `2023-${parsedStartMonth}-${parsedStartDay}`
+      fullDate: `1970-${parsedStartMonth}-${parsedStartDay}`
     },
     endDate: {
       entry: `${parsedEndDay}${parsedEndMonth}`,
-      fullDate: `2023-${parsedEndMonth}-${parsedEndDay}`
+      fullDate: `1970-${parsedEndMonth}-${parsedEndDay}`
     }
   }
 

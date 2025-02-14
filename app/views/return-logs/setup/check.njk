@@ -100,7 +100,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.received,
                 text: "Change",
                 visuallyHiddenText: "return received date"
               }
@@ -113,7 +113,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.reported,
                 text: "Change",
                 visuallyHiddenText: "reporting figures"
               }
@@ -126,7 +126,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.meterDetails,
                 text: "Change",
                 visuallyHiddenText: "meter details"
               }
@@ -139,7 +139,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.units,
                 text: "Change",
                 visuallyHiddenText: "unit of measure"
               }
@@ -191,7 +191,7 @@
       text: "Cancel",
       classes: "govuk-button--secondary",
       preventDoubleClick: true,
-      href: "/system/return-logs/setup/" + sessionId + "/cancel"
+      href: links.cancel
     }) }}
   </div>
 {% endblock %}
