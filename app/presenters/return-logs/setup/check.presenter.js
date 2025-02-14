@@ -21,18 +21,10 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { id: sessionId, meterMake, meterProvided, meterSerialNumber, reported, units } = session
+  const { meterMake, meterProvided, meterSerialNumber, reported, units } = session
 
   return {
     ...alwaysRequiredPageData,
-    links: {
-      cancel: `/system/return-logs/setup/${sessionId}/cancel`,
-      meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
-      nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
-      received: `/system/return-logs/setup/${sessionId}/received`,
-      reported: `/system/return-logs/setup/${sessionId}/reported`,
-      units: `/system/return-logs/setup/${sessionId}/units`
-    },
     meterMake,
     meterProvided,
     meterSerialNumber,
@@ -63,8 +55,11 @@ function _alwaysRequiredPageData(session) {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
+      meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
       nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
-      received: `/system/return-logs/setup/${sessionId}/received`
+      received: `/system/return-logs/setup/${sessionId}/received`,
+      reported: `/system/return-logs/setup/${sessionId}/reported`,
+      units: `/system/return-logs/setup/${sessionId}/units`
     },
     nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
     note: _note(note),
