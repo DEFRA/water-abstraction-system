@@ -13,9 +13,9 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  *
  * @param {string} licenceRef - The licenceRef of the licence
  * @param {Date} startDate - The start date of no returns required return version
- * @param {Date} endDate - The optional end date of no returns required return version
+ * @param {Date} [endDate=null] - The optional end date of no returns required return version
  */
-async function go(licenceRef, startDate, endDate) {
+async function go(licenceRef, startDate, endDate = null) {
   const query = ReturnLogModel.query()
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('licenceRef', licenceRef)

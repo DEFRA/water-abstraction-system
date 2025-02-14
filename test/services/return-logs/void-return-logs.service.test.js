@@ -8,46 +8,35 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../app/services/return-logs/void-no-return-required-licence-return-logs.service.js')
+const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../app/services/return-logs/void-return-logs.service.js')
 
-describe('Return Logs - Void No Return Required Licence Return Logs service', () => {
-  let licence
-  let returnVersion
+describe('Return Logs - Void Return Logs service', () => {
+  let licenceRef = 'return-logs'
   let returnLogMatchingVersion
   let returnLogNotMatchingVersion
   let returnLogBeingChecked
 
-  describe('when provided a licence version id that has an end date', () => {
+  describe('when provided a licence ref with an end date', () => {
     before(async () => {
-      licence = await LicenceHelper.add()
-      returnVersion = await ReturnVersionHelper.add({
-        licenceId: licence.id,
-        endDate: new Date('2023-03-31'),
-        startDate: new Date('2022-04-01')
-      })
+      licenceRef = 'return-logs-end-date'
       returnLogMatchingVersion = await ReturnLogHelper.add({
         endDate: new Date('2023-03-31'),
-        licenceRef: licence.licenceRef,
+        licenceRef,
         startDate: new Date('2022-04-01')
       })
       returnLogNotMatchingVersion = await ReturnLogHelper.add({
         endDate: new Date('2024-03-31'),
-        licenceRef: licence.licenceRef,
+        licenceRef,
         startDate: new Date('2023-04-01')
       })
     })
 
-    it('voids the return logs that are between the start and end dates of the no return required version', async () => {
-      await VoidNoReturnRequiredLicenceReturnLogsService.go(
-        licence.licenceRef,
-        returnVersion.startDate,
-        returnVersion.endDate
-      )
+    it('voids the return logs that are between the start and end dates', async () => {
+      await VoidNoReturnRequiredLicenceReturnLogsService.go(licenceRef, new Date('2022-04-01'), new Date('2023-03-31'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).to.equal('void')
@@ -59,28 +48,39 @@ describe('Return Logs - Void No Return Required Licence Return Logs service', ()
 
   describe('when provided a licence version id with no end date', () => {
     before(async () => {
-      licence = await LicenceHelper.add()
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
+      licenceRef = 'return-logs-no-end-date'
       returnLogBeingChecked = await ReturnLogHelper.add({
         endDate: new Date('2023-03-31'),
-        licenceRef: licence.licenceRef,
+        licenceRef,
         startDate: new Date('2022-04-01')
       })
       returnLogNotMatchingVersion = await ReturnLogHelper.add({
         endDate: new Date('2024-03-31'),
-        licenceRef: licence.licenceRef,
+        licenceRef,
         startDate: new Date('2023-04-01')
       })
     })
 
     it('voids the return logs that are from the start date of the return version forward', async () => {
-      await VoidNoReturnRequiredLicenceReturnLogsService.go(licence.licenceRef, returnVersion.startDate)
+      await VoidNoReturnRequiredLicenceReturnLogsService.go(licenceRef, new Date('2022-04-01'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).to.equal('void')
 
       returnLogBeingChecked = await returnLogNotMatchingVersion.$query()
       expect(returnLogBeingChecked.status).to.equal('void')
+    })
+  })
+
+  describe('when provided a licence ref with no return logs', () => {
+    it('does nothing', async () => {
+      returnLogBeingChecked = await VoidNoReturnRequiredLicenceReturnLogsService.go(
+        'no-return-logs',
+        new Date('2020-03-31')
+      )
+
+      returnLogBeingChecked = await ReturnLogModel.query().where('licenceRef', 'no-return-logs')
+      expect(returnLogBeingChecked).to.equal([])
     })
   })
 })

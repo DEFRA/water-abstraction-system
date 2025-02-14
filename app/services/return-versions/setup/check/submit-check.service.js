@@ -9,7 +9,7 @@ const GenerateReturnVersionService = require('./generate-return-version.service.
 const PersistReturnVersionService = require('./persist-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
 const SessionModel = require('../../../../models/session.model.js')
-const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../return-logs/void-no-return-required-licence-return-logs.service.js')
+const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed

@@ -15,7 +15,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/persist-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
-const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../../../app/services/return-logs/void-no-return-required-licence-return-logs.service.js')
+const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../../../app/services/return-logs/void-return-logs.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
