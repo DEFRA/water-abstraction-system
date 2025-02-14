@@ -5,10 +5,10 @@
  * @module CheckService
  */
 
+const CheckPresenter = require('../../../presenters/notifications/setup/check.presenter.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
-const CheckPresenter = require('../../../presenters/notifications/setup/check.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

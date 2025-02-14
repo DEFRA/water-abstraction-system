@@ -5,12 +5,12 @@
  * @module NotificationsSetupController
  */
 
+const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
+const CheckService = require('../services/notifications/setup/check.service.js')
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
-const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
-const CheckService = require('../services/notifications/setup/check.service.js')
 const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
