@@ -35,7 +35,7 @@ async function go(sessionId, payload) {
   await _save(session, payload)
 
   return {
-    redirect: `${sessionId}/review`
+    redirect: `${sessionId}/check`
   }
 }
 

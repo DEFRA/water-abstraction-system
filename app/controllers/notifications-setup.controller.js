@@ -10,7 +10,7 @@ const InitiateSessionService = require('../services/notifications/setup/initiate
 const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
-const ReviewService = require('../services/notifications/setup/review.service.js')
+const CheckService = require('../services/notifications/setup/check.service.js')
 const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
@@ -60,15 +60,15 @@ async function viewReturnsPeriod(request, h) {
   return h.view(`${basePath}/view-returns-period.njk`, pageData)
 }
 
-async function viewReview(request, h) {
+async function viewCheck(request, h) {
   const {
     params: { sessionId },
     query: { page }
   } = request
 
-  const pageData = await ReviewService.go(sessionId, page)
+  const pageData = await CheckService.go(sessionId, page)
 
-  return h.view(`${basePath}/review.njk`, pageData)
+  return h.view(`${basePath}/check.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -88,7 +88,7 @@ async function submitLicence(request, h) {
     return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
   }
 
-  return h.redirect(`/system/${basePath}/${sessionId}/review`)
+  return h.redirect(`/system/${basePath}/${sessionId}/check`)
 }
 
 async function submitRemoveLicences(request, h) {
@@ -124,9 +124,9 @@ async function submitReturnsPeriod(request, h) {
 module.exports = {
   downloadRecipients,
   viewLicence,
+  viewCheck,
   viewRemoveLicences,
   viewReturnsPeriod,
-  viewReview,
   setup,
   submitLicence,
   submitRemoveLicences,
