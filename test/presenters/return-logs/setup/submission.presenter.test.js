@@ -34,6 +34,28 @@ describe('Return Logs Setup - Submission presenter', () => {
       })
     })
 
+    describe('the "backLink" property', () => {
+      describe('when the user has come from the "check" page', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('returns a link back to the "check" page', () => {
+          const result = SubmissionPresenter.go(session)
+
+          expect(result.backLink).to.equal('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check')
+        })
+      })
+
+      describe('when the user has come from somewhere else', () => {
+        it('returns a link back to the "received" page on', () => {
+          const result = SubmissionPresenter.go(session)
+
+          expect(result.backLink).to.equal('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received')
+        })
+      })
+    })
+
     describe('the "journey" property', () => {
       describe('when an option has been selected and submitted', () => {
         beforeEach(() => {

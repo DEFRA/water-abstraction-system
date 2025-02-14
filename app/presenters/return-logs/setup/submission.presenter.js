@@ -13,15 +13,25 @@
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/submission` page
  */
 function go(session) {
-  const { id: sessionId, beenReceived, journey, returnReference } = session
+  const { beenReceived, journey, returnReference } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/received`,
+    backLink: _backLink(session),
     beenReceived,
     journey: journey ?? null,
     pageTitle: 'What do you want to do with this return?',
     returnReference
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/received`
 }
 
 module.exports = {

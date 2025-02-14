@@ -406,19 +406,32 @@ describe('Return Logs Setup controller', () => {
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitSubmissionService, 'go').resolves({})
+        describe('and "Enter and submit" has been selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ journey: 'enter-return' })
+          })
+
+          it('redirects to the "reported" page', async () => {
+            const response = await server.inject(_postOptions(path, { journey: 'enter-return' }))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
+          })
         })
 
-        it('redirects to the "reported" page', async () => {
-          const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
+        describe('and "Enter a nil return" has been selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ journey: 'nil-return' })
+          })
 
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, { journey: 'nil-return' }))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
         })
-      })
 
-      describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitSubmissionService, 'go').resolves({ error: {} })
