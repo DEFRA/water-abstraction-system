@@ -55,6 +55,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/check',
+    options: {
+      handler: NotificationsSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NotificationsSetupController.viewReturnsPeriod,
@@ -82,18 +94,6 @@ const routes = [
     path: basePath + '/{sessionId}/remove-licences',
     options: {
       handler: NotificationsSetupController.submitRemoveLicences,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: basePath + '/{sessionId}/review',
-    options: {
-      handler: NotificationsSetupController.viewReview,
       auth: {
         access: {
           scope: ['returns']

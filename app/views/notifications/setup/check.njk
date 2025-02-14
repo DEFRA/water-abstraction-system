@@ -47,11 +47,12 @@
 
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-l"> {{ pageTitle }} </h1>
+    <h1 class="govuk-heading-l"> {{ text.title }} </h1>
 
-    <p> Returns invitations are ready to send.</p>
+    <p> {{ text.readyToSend }}</p>
 
     <div class="govuk-button-group">
+
       {{ govukButton({
         text: "Download recipients",
         classes: "govuk-button--secondary",
@@ -59,12 +60,14 @@
         preventDoubleClick: true
       }) }}
 
+      {% if links.removeLicences %}
       {{ govukButton({
         text: "Remove licences",
         classes: "govuk-button--secondary",
         href: links.removeLicences,
         preventDoubleClick: true
       }) }}
+      {% endif %}
     </div>
 
     {% if pagination.numberOfPages > 1 %}
@@ -100,7 +103,7 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-      {{ govukButton({ text: "Send invitations", preventDoubleClick: true }) }}
+      {{ govukButton({ text: text.continueButton, preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}

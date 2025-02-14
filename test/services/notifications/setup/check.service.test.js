@@ -14,7 +14,7 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ReviewService = require('../../../../app/services/notifications/setup/review.service.js')
+const CheckService = require('../../../../app/services/notifications/setup/check.service.js')
 
 describe('Notifications Setup - Review service', () => {
   let removeLicences
@@ -24,7 +24,9 @@ describe('Notifications Setup - Review service', () => {
   before(async () => {
     removeLicences = ''
 
-    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', removeLicences } })
+    session = await SessionHelper.add({
+      data: { returnsPeriod: 'quarterFour', removeLicences, journey: 'invitations' }
+    })
 
     testRecipients = RecipientsFixture.recipients()
 
@@ -32,7 +34,7 @@ describe('Notifications Setup - Review service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await ReviewService.go(session.id)
+    const result = await CheckService.go(session.id)
 
     expect(result).to.equal({
       activeNavBar: 'manage',
@@ -41,7 +43,6 @@ describe('Notifications Setup - Review service', () => {
         download: `/system/notifications/setup/${session.id}/download`,
         removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
       },
-      pageTitle: 'Send returns invitations',
       page: 1,
       pagination: {
         numberOfPages: 1
@@ -53,7 +54,12 @@ describe('Notifications Setup - Review service', () => {
           method: 'Email - Primary user'
         }
       ],
-      recipientsAmount: 1
+      recipientsAmount: 1,
+      text: {
+        continueButton: 'Send',
+        readyToSend: 'Returns invitations are ready to send.',
+        title: 'Check the recipients'
+      }
     })
   })
 })
