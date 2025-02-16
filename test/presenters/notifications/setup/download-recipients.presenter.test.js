@@ -28,7 +28,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
       expect(result).to.equal(
         // Headers
-        'Licences,Return references,Returns period start date,Returns period end date,Returns due date,Message type,Message reference,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+        'Licence,Return reference,Return period start date,Return period end date,Return due date,Message type,Message reference,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
           // Row - Primary user
           '"123/46","2434","2018-01-01","2019-01-01","2021-01-01","email","invitations","primary.user@important.com",,,,,,,,\n' +
           // Row - Licence holder
@@ -48,11 +48,11 @@ describe('Notifications Setup - Download recipients presenter', () => {
       headers += '\n'
 
       expect(headers).to.equal(
-        'Licences,' +
-          'Return references,' +
-          'Returns period start date,' +
-          'Returns period end date,' +
-          'Returns due date,' +
+        'Licence,' +
+          'Return reference,' +
+          'Return period start date,' +
+          'Return period end date,' +
+          'Return due date,' +
           'Message type,' +
           'Message reference,' +
           'Email,' +
@@ -77,11 +77,11 @@ describe('Notifications Setup - Download recipients presenter', () => {
         row += '\n'
 
         expect(row).to.equal(
-          '"123/46",' + // Licences
-            '"2434",' + // 'Return references'
-            '"2018-01-01",' + // 'Returns period start date'
-            '"2019-01-01",' + // 'Returns period end date'
-            '"2021-01-01",' + // 'Returns due date'
+          '"123/46",' + // Licence
+            '"2434",' + // 'Return reference'
+            '"2018-01-01",' + // 'Return period start date'
+            '"2019-01-01",' + // 'Return period end date'
+            '"2021-01-01",' + // 'Return due date'
             '"email",' + // 'Message type'
             '"invitations",' + // 'Message reference'
             '"primary.user@important.com",' + // Email
@@ -108,11 +108,11 @@ describe('Notifications Setup - Download recipients presenter', () => {
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
-                '"376439279",' + // 'Return references'
-                '"2018-01-01",' + // 'Returns period start date'
-                '"2019-01-01",' + // 'Returns period end date'
-                '"2021-01-01",' + // 'Returns due date'
+              '"1/343/3",' + // Licence
+                '"376439279",' + // 'Return reference'
+                '"2018-01-01",' + // 'Return period start date'
+                '"2019-01-01",' + // 'Return period end date'
+                '"2021-01-01",' + // 'Return due date'
                 '"letter",' + // 'Message type'
                 '"invitations",' + // 'Message reference'
                 ',' + // Email
@@ -138,11 +138,11 @@ describe('Notifications Setup - Download recipients presenter', () => {
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
-                '"376439279",' + // 'Return references'
-                '"2018-01-01",' + // 'Returns period start date'
-                '"2019-01-01",' + // 'Returns period end date'
-                '"2021-01-01",' + // 'Returns due date'
+              '"1/343/3",' + // Licence
+                '"376439279",' + // 'Return reference'
+                '"2018-01-01",' + // 'Return period start date'
+                '"2019-01-01",' + // 'Return period end date'
+                '"2021-01-01",' + // 'Return due date'
                 '"letter",' + // 'Message type'
                 '"invitations",' + // 'Message reference'
                 ',' + // Email
@@ -169,11 +169,11 @@ describe('Notifications Setup - Download recipients presenter', () => {
           row += '\n'
 
           expect(row).to.equal(
-            '"1/343/3",' + // Licences
-              '"376439279",' + // 'Return references'
-              '"2018-01-01",' + // 'Returns period start date'
-              '"2019-01-01",' + // 'Returns period end date'
-              '"2021-01-01",' + // 'Returns due date'
+            '"1/343/3",' + // Licence
+              '"376439279",' + // 'Return reference'
+              '"2018-01-01",' + // 'Return period start date'
+              '"2019-01-01",' + // 'Return period end date'
+              '"2021-01-01",' + // 'Return due date'
               '"letter",' + // 'Message type'
               '"invitations",' + // 'Message reference'
               ',' + // Email
