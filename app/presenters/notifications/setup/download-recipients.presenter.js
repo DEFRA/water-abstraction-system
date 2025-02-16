@@ -10,7 +10,7 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
-  'Licences',
+  'Licence',
   'Return references',
   'Returns period start date',
   'Returns period end date',

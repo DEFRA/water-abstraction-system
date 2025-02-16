@@ -28,7 +28,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
       expect(result).to.equal(
         // Headers
-        'Licences,Return references,Returns period start date,Returns period end date,Returns due date,Message type,Message reference,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+        'Licence,Return references,Returns period start date,Returns period end date,Returns due date,Message type,Message reference,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
           // Row - Primary user
           '"123/46","2434","2018-01-01","2019-01-01","2021-01-01","email","invitations","primary.user@important.com",,,,,,,,\n' +
           // Row - Licence holder
@@ -48,7 +48,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
       headers += '\n'
 
       expect(headers).to.equal(
-        'Licences,' +
+        'Licence,' +
           'Return references,' +
           'Returns period start date,' +
           'Returns period end date,' +
