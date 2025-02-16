@@ -77,7 +77,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
         row += '\n'
 
         expect(row).to.equal(
-          '"123/46",' + // Licences
+          '"123/46",' + // Licence
             '"2434",' + // 'Return references'
             '"2018-01-01",' + // 'Returns period start date'
             '"2019-01-01",' + // 'Returns period end date'
@@ -108,7 +108,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
+              '"1/343/3",' + // Licence
                 '"376439279",' + // 'Return references'
                 '"2018-01-01",' + // 'Returns period start date'
                 '"2019-01-01",' + // 'Returns period end date'
@@ -138,7 +138,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
+              '"1/343/3",' + // Licence
                 '"376439279",' + // 'Return references'
                 '"2018-01-01",' + // 'Returns period start date'
                 '"2019-01-01",' + // 'Returns period end date'
@@ -169,7 +169,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
           row += '\n'
 
           expect(row).to.equal(
-            '"1/343/3",' + // Licences
+            '"1/343/3",' + // Licence
               '"376439279",' + // 'Return references'
               '"2018-01-01",' + // 'Returns period start date'
               '"2019-01-01",' + // 'Returns period end date'
