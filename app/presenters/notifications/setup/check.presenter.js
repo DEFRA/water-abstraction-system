@@ -8,6 +8,12 @@
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
+const NOTIFICATION_TYPES = {
+  'ad-hoc': 'Ad-hoc notifications',
+  invitations: 'Returns invitations',
+  reminders: 'Returns reminders'
+}
+
 /**
  * Formats data for the `/notifications/setup/check` page
  *
@@ -27,10 +33,11 @@ function go(recipients, page, pagination, session) {
       download: `/system/notifications/setup/${sessionId}/download`,
       removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
     },
+    pageTitle: _pageTitle(page, pagination),
+    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
     recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length,
-    referenceCode,
-    text: _text(page, pagination, journey)
+    referenceCode
   }
 }
 
@@ -63,24 +70,12 @@ function _formatRecipients(recipients) {
   })
 }
 
-function _text(page, pagination, journey) {
-  const type = {
-    'ad-hoc': 'Ad-hoc notifications',
-    invitations: 'Returns invitations',
-    reminders: 'Returns reminders'
-  }
-
-  let title = `Check the recipients`
-
+function _pageTitle(page, pagination) {
   if (pagination.numberOfPages > 1) {
-    title += ` (page ${page} of ${pagination.numberOfPages})`
+    return `Check the recipients (page ${page} of ${pagination.numberOfPages})`
   }
 
-  return {
-    title,
-    readyToSend: `${type[journey]} are ready to send.`,
-    continueButton: 'Send'
-  }
+  return `Check the recipients`
 }
 
 /**

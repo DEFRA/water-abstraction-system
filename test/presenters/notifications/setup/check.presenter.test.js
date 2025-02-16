@@ -57,6 +57,8 @@ describe('Notifications Setup - Check presenter', () => {
           download: `/system/notifications/setup/${session.id}/download`,
           removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
         },
+        pageTitle: 'Check the recipients',
+        readyToSend: 'Returns invitations are ready to send.',
         recipients: [
           {
             contact: ['Mr H J Duplicate Licence holder', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
@@ -112,12 +114,7 @@ describe('Notifications Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
-        referenceCode: 'RINV-123',
-        text: {
-          continueButton: 'Send',
-          readyToSend: 'Returns invitations are ready to send.',
-          title: 'Check the recipients'
-        }
+        referenceCode: 'RINV-123'
       })
     })
 
@@ -294,14 +291,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(25)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Returns invitations are ready to send.',
-                title: 'Check the recipients (page 1 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
             })
           })
 
@@ -316,14 +309,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(2)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Returns invitations are ready to send.',
-                title: 'Check the recipients (page 2 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
             })
           })
         })
@@ -503,14 +492,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(25)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Ad-hoc notifications are ready to send.',
-                title: 'Check the recipients (page 1 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
             })
           })
 
@@ -525,14 +510,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(2)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Ad-hoc notifications are ready to send.',
-                title: 'Check the recipients (page 2 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
             })
           })
         })
@@ -711,14 +692,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(25)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Returns reminders are ready to send.',
-                title: 'Check the recipients (page 1 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
             })
           })
 
@@ -733,14 +710,10 @@ describe('Notifications Setup - Check presenter', () => {
               expect(result.recipients.length).to.equal(2)
             })
 
-            it('returns the updated "text"', () => {
+            it('returns the updated "pageTitle"', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.text).to.equal({
-                continueButton: 'Send',
-                readyToSend: 'Returns reminders are ready to send.',
-                title: 'Check the recipients (page 2 of 2)'
-              })
+              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
             })
           })
         })

@@ -49,9 +49,9 @@
   <div class="govuk-body">
     <span class="govuk-caption-l"> Notification {{referenceCode}} </span>
 
-    <h1 class="govuk-heading-l"> {{ text.title }} </h1>
+    <h1 class="govuk-heading-l"> {{ pageTitle }} </h1>
 
-    <p> {{ text.readyToSend }}</p>
+    <p> {{ readyToSend }}</p>
 
     <div class="govuk-button-group">
 
@@ -105,7 +105,7 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-      {{ govukButton({ text: text.continueButton, preventDoubleClick: true }) }}
+      {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}
