@@ -17,6 +17,7 @@ const HEADERS = [
   'Return due date',
   'Notification type',
   'Message type',
+  'Contact type',
   'Email',
   'Recipient name',
   'Address line 1',
@@ -82,6 +83,7 @@ function _transformToCsv(recipients) {
       formatDateObjectToISO(recipient.due_date),
       'invitations',
       contact ? 'letter' : 'email',
+      recipient.contact_type,
       recipient.email || '',
       contact ? contactName(recipient.contact) : '',
       ..._address(contact)
