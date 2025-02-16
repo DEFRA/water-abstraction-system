@@ -11,10 +11,10 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
 
 const HEADERS = [
   'Licence',
-  'Return references',
-  'Returns period start date',
-  'Returns period end date',
-  'Returns due date',
+  'Return reference',
+  'Return period start date',
+  'Return period end date',
+  'Return due date',
   'Message type',
   'Message reference',
   'Email',
