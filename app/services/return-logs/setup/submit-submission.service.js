@@ -25,7 +25,7 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    const redirect = await _redirect(payload.journey, session)
+    const redirect = await _redirect(payload.journey)
 
     return { redirect }
   }
@@ -39,7 +39,7 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _redirect(journey, session) {
+async function _redirect(journey) {
   if (journey === 'nil-return') {
     return 'check'
   }
