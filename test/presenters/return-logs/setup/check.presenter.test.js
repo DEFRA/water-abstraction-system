@@ -25,7 +25,7 @@ describe('Return Logs Setup - Check presenter', () => {
       periodEndMonth: 12,
       periodStartDay: 1,
       periodStartMonth: 1,
-      purposes: 'Evaporative Cooling',
+      purposes: ['Evaporative Cooling'],
       receivedDate: '2025-01-31T00:00:00.000Z',
       reported: 'abstraction-volumes',
       returnReference: '1234',
@@ -155,6 +155,32 @@ describe('Return Logs Setup - Check presenter', () => {
           ],
           text: 'No notes added'
         })
+      })
+    })
+  })
+
+  describe('the "purposes" property', () => {
+    describe('when there is a single purpose', () => {
+      beforeEach(() => {
+        session.purposes = ['Evaporative Cooling']
+      })
+
+      it('returns the description of the purpose', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.purposes).to.equal('Evaporative Cooling')
+      })
+    })
+
+    describe('when there are multiple purposes', () => {
+      beforeEach(() => {
+        session.purposes = ['Evaporative Cooling', 'Trickle Irrigation - Storage']
+      })
+
+      it('returns the descriptions as a comma separated string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.purposes).to.equal('Evaporative Cooling', 'Trickle Irrigation - Storage')
       })
     })
   })
