@@ -5,8 +5,8 @@
  * @module CancelService
  */
 
-const SessionModel = require('../../../models/session.model.js')
 const CancelPresenter = require('../../../presenters/notifications/setup/cancel.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates presenting the data for `/notifications/setup/{sessionId}/cancel` page

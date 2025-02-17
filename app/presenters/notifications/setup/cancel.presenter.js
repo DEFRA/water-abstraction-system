@@ -5,8 +5,8 @@
  * @module CancelPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
 const DetermineReturnsPeriodService = require('../../../services/notifications/setup/determine-returns-period.service.js')
+const { formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/{sessionId}/cancel` page
