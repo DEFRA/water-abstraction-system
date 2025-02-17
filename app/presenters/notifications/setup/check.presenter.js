@@ -30,9 +30,9 @@ function go(recipients, page, pagination, session) {
   return {
     defaultPageSize,
     links: {
+      cancel: `/system/notifications/setup/${sessionId}/cancel`,
       download: `/system/notifications/setup/${sessionId}/download`,
-      removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : '',
-      cancel: `/system/notifications/setup/${sessionId}/cancel`
+      removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
     },
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
