@@ -20,7 +20,7 @@ async function view(request, h) {
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewReturnLogService.go(query.id, version, auth, request.yar)
+  const pageData = await ViewReturnLogService.go(query.id, version, auth)
 
   return h.view('return-logs/view.njk', pageData)
 }
@@ -28,7 +28,7 @@ async function view(request, h) {
 async function submitView(request, h) {
   const { id } = request.query
 
-  await SubmitViewReturnLogService.go(id, request.yar, request.payload)
+  await SubmitViewReturnLogService.go(id, request.payload)
 
   return h.redirect(`/system/return-logs?id=${id}`)
 }

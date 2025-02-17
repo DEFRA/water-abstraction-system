@@ -8,7 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
+const SubmitViewReturnLogService = require('../../app/services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../../app/services/return-logs/view-return-log.service.js')
 
 // For running our service
@@ -82,19 +86,26 @@ describe('Return Logs controller', () => {
         })
       })
     })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitViewReturnLogService, 'go').resolves()
+        })
+
+        it('redirects back to the "view return log" page', async () => {
+          const response = await server.inject(_postOptions({ returnLogId: 'RETURN_LOG_ID' }))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/return-logs?id=RETURN_LOG_ID')
+        })
+      })
+    })
   })
 })
 
-function _getOptions(id = true, version) {
-  const url = new URL('/return-logs', 'http://example.com')
-
-  if (id) {
-    url.searchParams.append('id', 'RETURN_LOG_ID')
-  }
-
-  if (version) {
-    url.searchParams.append('version', version)
-  }
+function _getOptions(includeReturnLogId = true, version) {
+  const url = _url(includeReturnLogId, version)
 
   return {
     method: 'GET',
@@ -104,4 +115,24 @@ function _getOptions(id = true, version) {
       credentials: { scope: ['billing'] }
     }
   }
+}
+
+function _postOptions(payload) {
+  const url = _url(true, null)
+
+  return postRequestOptions(`${url.pathname}${url.search}`, payload)
+}
+
+function _url(includeReturnLogId, version) {
+  const url = new URL('/return-logs', 'http://example.com')
+
+  if (includeReturnLogId) {
+    url.searchParams.append('id', 'RETURN_LOG_ID')
+  }
+
+  if (version) {
+    url.searchParams.append('version', version)
+  }
+
+  return url
 }

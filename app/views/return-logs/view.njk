@@ -20,9 +20,9 @@
 
 {% block content %}
   {# Notification banner #}
-  {% if notificationBannerMessage %}
+  {% if underQuery %}
     {{ govukNotificationBanner({
-      text: notificationBannerMessage
+      text: 'This return has been marked under query'
     }) }}
   {%endif%}
 

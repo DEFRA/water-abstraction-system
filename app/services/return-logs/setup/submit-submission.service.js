@@ -5,6 +5,8 @@
  * @module SubmitSubmissionService
  */
 
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
@@ -22,12 +24,17 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
+  const { returnLogId } = session
+
   if (!validationResult) {
     await _save(session, payload)
 
-    const redirect = await _redirect(payload.journey)
+    const redirect = await _redirect(payload.journey, session)
 
-    return { redirect }
+    return {
+      redirect,
+      returnLogId
+    }
   }
 
   const formattedData = SubmissionPresenter.go(session)
@@ -39,9 +46,23 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _redirect(journey) {
+async function _confirmReceipt(session) {
+  await ReturnLogModel.query()
+    .findById(session.returnLogId)
+    .patch({ receivedDate: session.receivedDate, status: 'received', updatedAt: timestampForPostgres() })
+
+  await SessionModel.query().deleteById(session.id)
+}
+
+async function _redirect(journey, session) {
   if (journey === 'nil-return') {
     return 'check'
+  }
+
+  if (journey === 'record-receipt') {
+    await _confirmReceipt(session)
+
+    return 'confirm-received'
   }
 
   return 'reported'

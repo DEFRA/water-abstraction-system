@@ -40,6 +40,7 @@ describe('Notifications Setup - Review service', () => {
       activeNavBar: 'manage',
       defaultPageSize: 25,
       links: {
+        cancel: `/system/notifications/setup/${session.id}/cancel`,
         download: `/system/notifications/setup/${session.id}/download`,
         removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
       },
@@ -47,6 +48,8 @@ describe('Notifications Setup - Review service', () => {
       pagination: {
         numberOfPages: 1
       },
+      pageTitle: 'Check the recipients',
+      readyToSend: 'Returns invitations are ready to send.',
       recipients: [
         {
           contact: ['primary.user@important.com'],
@@ -55,12 +58,7 @@ describe('Notifications Setup - Review service', () => {
         }
       ],
       recipientsAmount: 1,
-      referenceCode: 'RINV-123',
-      text: {
-        continueButton: 'Send',
-        readyToSend: 'Returns invitations are ready to send.',
-        title: 'Check the recipients'
-      }
+      referenceCode: 'RINV-123'
     })
   })
 })
