@@ -30,21 +30,21 @@ const HEADERS = [
 ]
 
 /**
- * Formats data for the `/notifications/setup/download` link.
+ * Formats data for the `/notifications/setup/download` link
  *
- * This function takes an array of recipient objects and transforms it into a CSV
- * string suitable for download.
+ * This function takes an array of recipient objects and transforms it into a CSV string suitable for download.
  *
  * The headers are fixed and in the correct order. If a value for a row does not match the header then it will default
  * to an empty string.
  *
  * @param {object[]} recipients - An array of recipients
+ * @param {string} notificationType - The selected notification type
  *
- * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first
- * row as column headers and subsequent rows corresponding to the recipient details.
+ * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
+ * and subsequent rows corresponding to the recipient details.
  */
-function go(recipients) {
-  const rows = _transformToCsv(recipients)
+function go(recipients, notificationType) {
+  const rows = _transformToCsv(recipients, notificationType)
 
   return [HEADERS + '\n', ...rows].join('')
 }
@@ -64,14 +64,15 @@ function _address(contact) {
     contact.postcode
   ]
 }
+
 /**
  * Transforms the recipients' data into a CSV-compatible format.
  *
- * The order of the object dictates the CSV header order.
+ * The order of the properties must match the CSV header order.
  *
  * @private
  */
-function _transformToCsv(recipients) {
+function _transformToCsv(recipients, notificationType) {
   return recipients.map((recipient) => {
     const { contact } = recipient
 
@@ -81,7 +82,7 @@ function _transformToCsv(recipients) {
       formatDateObjectToISO(recipient.start_date),
       formatDateObjectToISO(recipient.end_date),
       formatDateObjectToISO(recipient.due_date),
-      'invitations',
+      notificationType,
       contact ? 'letter' : 'email',
       recipient.contact_type,
       recipient.email || '',
