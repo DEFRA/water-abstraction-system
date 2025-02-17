@@ -102,10 +102,19 @@
       {{ govukPagination(pagination.component) }}
     {% endif %}
 
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
+    <div class="govuk-button-group">
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-      {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
-    </form>
+        {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: links.cancel,
+          preventDoubleClick: true
+        }) }}
+      </form>
+    </div>
   </div>
 {% endblock %}
