@@ -408,7 +408,7 @@ describe('Return Logs Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and "Enter and submit" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ journey: 'enter-return' })
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'reported' })
           })
 
           it('redirects to the "reported" page', async () => {
@@ -421,7 +421,7 @@ describe('Return Logs Setup controller', () => {
 
         describe('and "Enter a nil return" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ journey: 'nil-return' })
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'check' })
           })
 
           it('redirects to the "check" page', async () => {

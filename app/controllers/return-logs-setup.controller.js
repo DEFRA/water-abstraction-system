@@ -265,11 +265,7 @@ async function submitSubmission(request, h) {
     return h.view('return-logs/setup/submission.njk', pageData)
   }
 
-  if (pageData.journey === 'nil-return') {
-    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
-  }
-
-  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitUnits(request, h) {

@@ -25,7 +25,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return { journey: session.journey }
+    const redirect = await _redirect(payload.journey, session)
+
+    return { redirect }
   }
 
   const formattedData = SubmissionPresenter.go(session)
@@ -35,6 +37,14 @@ async function go(sessionId, payload) {
     error: validationResult,
     ...formattedData
   }
+}
+
+async function _redirect(journey, session) {
+  if (journey === 'nil-return') {
+    return 'check'
+  }
+
+  return 'reported'
 }
 
 async function _save(session, payload) {
