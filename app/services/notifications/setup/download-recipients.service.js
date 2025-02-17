@@ -26,7 +26,7 @@ async function go(sessionId) {
 
   const recipients = await FetchDownloadRecipientsService.go(session)
 
-  const formattedData = DownloadRecipientsPresenter.go(recipients)
+  const formattedData = DownloadRecipientsPresenter.go(recipients, session.notificationType)
 
   return {
     data: formattedData,
