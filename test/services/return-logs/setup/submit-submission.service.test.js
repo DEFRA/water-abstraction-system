@@ -62,13 +62,13 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           payload = { journey: 'nil-return' }
         })
 
-        it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+        it('saves the submitted option to the session and returns the redirect as "check"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.journey).to.equal('nil-return')
-          expect(result.redirect).to.equal('reported')
+          expect(result.redirect).to.equal('check')
         })
       })
 
@@ -105,8 +105,10 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
       describe('and the check page had been visited previously', () => {
         beforeEach(async () => {
+          payload = { journey: 'enter-return' }
+
           session = await SessionHelper.add({
-            data: { beenReceived: false, checkPageVisited: true, returnReference: '1234' }
+            data: { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
           })
         })
 
