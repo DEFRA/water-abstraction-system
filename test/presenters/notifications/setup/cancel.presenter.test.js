@@ -3,17 +3,21 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/notifications/setup/cancel.presenter.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
-describe('Notifications Setup - Cancel presenter', () => {
+describe.only('Notifications Setup - Cancel presenter', () => {
   const referenceCode = 'ADHC-1234'
 
+  let clock
   let licenceRef
   let session
 
@@ -25,6 +29,12 @@ describe('Notifications Setup - Cancel presenter', () => {
       licenceRef,
       referenceCode
     }
+
+    clock = Sinon.useFakeTimers(new Date('2025-01-15'))
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   it('correctly presents the data', () => {
@@ -54,6 +64,7 @@ describe('Notifications Setup - Cancel presenter', () => {
   describe('when the journey is "invitations"', () => {
     beforeEach(() => {
       session.journey = 'invitations'
+      session.returnsPeriod = 'quarterOne'
     })
 
     it('correctly formats the summary list', () => {
@@ -61,7 +72,7 @@ describe('Notifications Setup - Cancel presenter', () => {
 
       expect(result.summaryList).to.equal({
         text: 'Returns period',
-        value: 'wip'
+        value: 'Quarterly 1 April 2025 to 30 June 2025'
       })
     })
   })
@@ -69,6 +80,7 @@ describe('Notifications Setup - Cancel presenter', () => {
   describe('when the journey is "reminders"', () => {
     beforeEach(() => {
       session.journey = 'reminders'
+      session.returnsPeriod = 'quarterOne'
     })
 
     it('correctly formats the summary list', () => {
@@ -76,7 +88,7 @@ describe('Notifications Setup - Cancel presenter', () => {
 
       expect(result.summaryList).to.equal({
         text: 'Returns period',
-        value: 'wip'
+        value: 'Quarterly 1 April 2025 to 30 June 2025'
       })
     })
   })
