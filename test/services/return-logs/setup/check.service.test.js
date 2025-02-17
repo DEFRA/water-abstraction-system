@@ -27,7 +27,7 @@ describe('Return Logs Setup - Check service', () => {
         periodEndMonth: 12,
         periodStartDay: 1,
         periodStartMonth: 1,
-        purposes: 'Evaporative Cooling',
+        purposes: ['Evaporative Cooling'],
         receivedDate: '2025-01-31T00:00:00.000Z',
         reported: 'volumes',
         returnReference: '1234',
