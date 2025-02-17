@@ -14,7 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/notifications/setup/cancel.presenter.js')
 
-describe.only('Notifications Setup - Cancel presenter', () => {
+describe('Notifications Setup - Cancel presenter', () => {
   const referenceCode = 'ADHC-1234'
 
   let clock
@@ -61,7 +61,7 @@ describe.only('Notifications Setup - Cancel presenter', () => {
     })
   })
 
-  describe('when the journey is "invitations"', () => {
+  describe('and the journey is "invitations"', () => {
     beforeEach(() => {
       session.journey = 'invitations'
       session.returnsPeriod = 'quarterOne'
@@ -77,7 +77,7 @@ describe.only('Notifications Setup - Cancel presenter', () => {
     })
   })
 
-  describe('when the journey is "reminders"', () => {
+  describe('and the journey is "reminders"', () => {
     beforeEach(() => {
       session.journey = 'reminders'
       session.returnsPeriod = 'quarterOne'
@@ -89,6 +89,56 @@ describe.only('Notifications Setup - Cancel presenter', () => {
       expect(result.summaryList).to.equal({
         text: 'Returns period',
         value: 'Quarterly 1 April 2025 to 30 June 2025'
+      })
+    })
+  })
+
+  describe('when the journey has is for a "returnsPeriod"', () => {
+    describe('and the "returnsPeriod" is for a "quarter"', () => {
+      beforeEach(() => {
+        session.journey = 'invitations'
+        session.returnsPeriod = 'quarterOne'
+      })
+
+      it('correctly formats the summary list', () => {
+        const result = CancelPresenter.go(session)
+
+        expect(result.summaryList).to.equal({
+          text: 'Returns period',
+          value: 'Quarterly 1 April 2025 to 30 June 2025'
+        })
+      })
+    })
+
+    describe('and the "returnsPeriod" is "summer"', () => {
+      beforeEach(() => {
+        session.journey = 'invitations'
+        session.returnsPeriod = 'summer'
+      })
+
+      it('correctly formats the summary list', () => {
+        const result = CancelPresenter.go(session)
+
+        expect(result.summaryList).to.equal({
+          text: 'Returns period',
+          value: 'Summer annual 1 November 2024 to 31 October 2025'
+        })
+      })
+    })
+
+    describe('and the "returnsPeriod" is "allYear"', () => {
+      beforeEach(() => {
+        session.journey = 'invitations'
+        session.returnsPeriod = 'allYear'
+      })
+
+      it('correctly formats the summary list', () => {
+        const result = CancelPresenter.go(session)
+
+        expect(result.summaryList).to.equal({
+          text: 'Returns period',
+          value: 'Winter and all year annual 1 April 2024 to 31 March 2025'
+        })
       })
     })
   })
