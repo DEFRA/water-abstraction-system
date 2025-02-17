@@ -54,6 +54,7 @@ describe('Notifications Setup - Check presenter', () => {
       expect(result).to.equal({
         defaultPageSize: 25,
         links: {
+          cancel: `/system/notifications/setup/${session.id}/cancel`,
           download: `/system/notifications/setup/${session.id}/download`,
           removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
         },
@@ -128,6 +129,7 @@ describe('Notifications Setup - Check presenter', () => {
         it('should return the links for "invitations"', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
+            cancel: `/system/notifications/setup/${session.id}/cancel`,
             download: `/system/notifications/setup/${session.id}/download`,
             removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
           })
@@ -329,6 +331,7 @@ describe('Notifications Setup - Check presenter', () => {
         it('should return the links for "invitations"', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
+            cancel: `/system/notifications/setup/${session.id}/cancel`,
             download: `/system/notifications/setup/${session.id}/download`,
             removeLicences: ``
           })
@@ -529,6 +532,7 @@ describe('Notifications Setup - Check presenter', () => {
         it('should return the links for "invitations"', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
+            cancel: `/system/notifications/setup/${session.id}/cancel`,
             download: `/system/notifications/setup/${session.id}/download`,
             removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
           })

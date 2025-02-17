@@ -40,6 +40,7 @@ describe('Notifications Setup - Review service', () => {
       activeNavBar: 'manage',
       defaultPageSize: 25,
       links: {
+        cancel: `/system/notifications/setup/${session.id}/cancel`,
         download: `/system/notifications/setup/${session.id}/download`,
         removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
       },
