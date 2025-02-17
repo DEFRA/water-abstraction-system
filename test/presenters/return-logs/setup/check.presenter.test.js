@@ -180,7 +180,7 @@ describe('Return Logs Setup - Check presenter', () => {
       it('returns the descriptions as a comma separated string', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.purposes).to.equal('Evaporative Cooling', 'Trickle Irrigation - Storage')
+        expect(result.purposes).to.equal('Evaporative Cooling, Trickle Irrigation - Storage')
       })
     })
   })
