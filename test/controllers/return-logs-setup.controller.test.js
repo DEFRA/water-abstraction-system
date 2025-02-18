@@ -237,6 +237,456 @@ describe('Return Logs - Setup - Controller', () => {
     })
   })
 
+  describe('return-logs/setup/guidance', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/guidance',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        it('redirects to the "guidance" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+        })
+      })
+    })
+  })
+
+  describe('/return-logs/setup/{sessionId}/note', () => {
+    const path = 'note'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(NoteService, 'go').resolves({
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Add a note'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Add a note')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitNoteService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitNoteService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/received', () => {
+    const path = 'received'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ReceivedService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'When was the return received?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('When was the return received?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({})
+          })
+
+          it('redirects to the "submission" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/submission`)
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({
+              error: { message: 'Enter a real received date' },
+              pageTitle: 'When was the return received?',
+              sessionId
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Enter a real received date')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/reported', () => {
+    const path = 'reported'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ReportedService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'How was this return reported?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('How was this return reported?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({})
+          })
+
+          it('redirects to the "units" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({
+              error: { text: 'Select how this return was reported' },
+              pageTitle: 'How was this return reported?',
+              sessionId
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select how this return was reported')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('/return-logs/setup/{sessionId}/submission', () => {
+    const path = 'submission'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmissionService, 'go').resolves({ pageTitle: 'Abstraction return' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Abstraction return')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and "Enter and submit" has been selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'reported' })
+          })
+
+          it('redirects to the "reported" page', async () => {
+            const response = await server.inject(_postOptions(path, { journey: 'enter-return' }))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
+          })
+        })
+
+        describe('and "Enter a nil return" has been selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'check' })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, { journey: 'nil-return' }))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/units', () => {
+    const path = 'units'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(UnitsService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'Which units were used?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Which units were used?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({})
+          })
+
+          it('redirects to the "meter provided" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-provided`)
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({
+              error: { text: 'Select which units were used' },
+              pageTitle: 'Which units were used?',
+              sessionId
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select which units were used')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/meter-provided', () => {
+    const path = 'meter-provided'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(MeterProvidedService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'Have meter details been provided?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Have meter details been provided?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and a meter was provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'yes' })
+          })
+
+          it('redirects to the "meter details" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-details`)
+          })
+        })
+
+        describe('and a meter was not provided', () => {
+          describe('and the page has not been visited previously', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no' })
+            })
+
+            it('redirects to the "single volume" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
+            })
+          })
+
+          describe('and the page has been visited previously', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ checkPageVisited: true, meterProvided: 'no' })
+            })
+
+            it('redirects to the "check" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            })
+          })
+
+          describe('and the reported type is "meter-readings"', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no', reported: 'meter-readings' })
+            })
+
+            it('redirects to the "check" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            })
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitMeterProvidedService, 'go').resolves({
+            error: { text: 'Select if meter details have been provided' },
+            pageTitle: 'Have meter details been provided?',
+            sessionId
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(_postOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select if meter details have been provided')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
   describe('return-logs/setup/{sessionId}/meter-details', () => {
     beforeEach(() => {
       path = 'meter-details'

@@ -62,13 +62,13 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           payload = { journey: 'nil-return' }
         })
 
-        it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+        it('saves the submitted option to the session and returns the redirect as "check"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.journey).to.equal('nil-return')
-          expect(result.redirect).to.equal('reported')
+          expect(result.redirect).to.equal('check')
         })
       })
 
@@ -100,6 +100,24 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
           expect(result.redirect).to.equal('confirm-received')
+        })
+      })
+
+      describe('and the check page had been visited previously', () => {
+        beforeEach(async () => {
+          payload = { journey: 'enter-return' }
+
+          session = await SessionHelper.add({
+            data: { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
+          })
+        })
+
+        it('updates "checkPageVisited" to false in the session data', async () => {
+          await SubmitSubmissionService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.checkPageVisited).to.be.false()
         })
       })
     })

@@ -55,6 +55,10 @@ async function _confirmReceipt(session) {
 }
 
 async function _redirect(journey, session) {
+  if (journey === 'nil-return') {
+    return 'check'
+  }
+
   if (journey === 'record-receipt') {
     await _confirmReceipt(session)
 
@@ -65,6 +69,10 @@ async function _redirect(journey, session) {
 }
 
 async function _save(session, payload) {
+  // We set `checkPageVisited` to false here as it is possible that the user recorded a nil return in error and then
+  // selected "Change" from the "Check" page. This would have resulted in `checkPageVisited` being set to `true` which
+  // would cause issues with the flow of the journey if details were subsequently entered.
+  session.checkPageVisited = false
   session.journey = payload.journey
 
   return session.$update()

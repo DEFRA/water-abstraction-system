@@ -17,6 +17,7 @@ describe('Return Logs Setup - Check presenter', () => {
     session = {
       endDate: '2005-03-31T00:00:00.000Z',
       id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
+      journey: 'enter-return',
       meterMake: 'Test meter make',
       meterProvided: 'yes',
       meterSerialNumber: '098765',
@@ -24,7 +25,7 @@ describe('Return Logs Setup - Check presenter', () => {
       periodEndMonth: 12,
       periodStartDay: 1,
       periodStartMonth: 1,
-      purposes: 'Evaporative Cooling',
+      purposes: ['Evaporative Cooling'],
       receivedDate: '2025-01-31T00:00:00.000Z',
       reported: 'abstraction-volumes',
       returnReference: '1234',
@@ -44,6 +45,7 @@ describe('Return Logs Setup - Check presenter', () => {
         links: {
           cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
           meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
+          nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
           received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
           reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
           units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
@@ -51,6 +53,7 @@ describe('Return Logs Setup - Check presenter', () => {
         meterMake: 'Test meter make',
         meterProvided: 'yes',
         meterSerialNumber: '098765',
+        nilReturn: 'No',
         note: {
           actions: [
             {
@@ -69,6 +72,45 @@ describe('Return Logs Setup - Check presenter', () => {
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         tariff: 'Standard',
         units: 'Megalitres'
+      })
+    })
+
+    describe('and the "Enter a nil return" route has been selected', () => {
+      beforeEach(() => {
+        session.journey = 'nil-return'
+      })
+
+      it('correctly presents the data', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result).to.equal({
+          abstractionPeriod: '1 January to 31 December',
+          links: {
+            cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
+            meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
+            nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
+            received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
+            reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+            units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
+          },
+          nilReturn: 'Yes',
+          note: {
+            actions: [
+              {
+                href: 'note',
+                text: 'Add a note'
+              }
+            ],
+            text: 'No notes added'
+          },
+          pageTitle: 'Check details and enter new volumes or readings',
+          purposes: 'Evaporative Cooling',
+          returnReceivedDate: '31 January 2025',
+          returnPeriod: '1 April 2004 to 31 March 2005',
+          returnReference: '1234',
+          siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+          tariff: 'Standard'
+        })
       })
     })
   })
@@ -113,6 +155,32 @@ describe('Return Logs Setup - Check presenter', () => {
           ],
           text: 'No notes added'
         })
+      })
+    })
+  })
+
+  describe('the "purposes" property', () => {
+    describe('when there is a single purpose', () => {
+      beforeEach(() => {
+        session.purposes = ['Evaporative Cooling']
+      })
+
+      it('returns the description of the purpose', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.purposes).to.equal('Evaporative Cooling')
+      })
+    })
+
+    describe('when there are multiple purposes', () => {
+      beforeEach(() => {
+        session.purposes = ['Evaporative Cooling', 'Trickle Irrigation - Storage']
+      })
+
+      it('returns the descriptions as a comma separated string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.purposes).to.equal('Evaporative Cooling, Trickle Irrigation - Storage')
       })
     })
   })
