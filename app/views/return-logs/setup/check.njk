@@ -108,6 +108,19 @@
           }
         },
         {
+          key: { text: "Nil return" },
+          value: { text: nilReturn },
+          actions: {
+            items: [
+              {
+                href: links.nilReturn,
+                text: "Change",
+                visuallyHiddenText: "nil return"
+              }
+            ]
+          }
+        },
+        {
           key: { text: "Reporting figures" },
           value: { text: reportingFigures },
           actions: {
@@ -119,7 +132,7 @@
               }
             ]
           }
-        },
+        } if nilReturn === "No",
         {
           key: { text: "Meter details" },
           value: { html: meterDetails },
@@ -132,7 +145,7 @@
               }
             ]
           }
-        },
+        } if nilReturn === "No",
         {
           key: { text: "Units" },
           value: { text: units },
@@ -145,40 +158,43 @@
               }
             ]
           }
-        }  ]
-    }) }}
-  </div>
-
-  {# Summary of daily volumes #}
-  <div class="govuk-!-margin-bottom-9">
-    {{ govukTable({
-      caption: "Summary of daily volumes",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: false,
-      head: [
-        { text: "Month" },
-        { text: "Total cubic metres", format: "numeric" },
-        { text: "Details", format: "numeric" }
-      ],
-      rows: [
-        [
-          { text: "April 2024" },
-          { text: "150.388", format: "numeric" },
-          { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-        ],
-        [
-          { text: "May 2024" },
-          { text: "155.403", format: "numeric" },
-          { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-        ],
-        [
-          { text: "Total volume of water abstracted", classes: "govuk-table__header" },
-          { html: "<strong>305.791</strong>", format: "numeric" },
-          { text: "" }
-        ]
+        } if nilReturn === "No"
       ]
     }) }}
   </div>
+
+  {% if nilReturn === "No" %}
+    {# Summary of daily volumes #}
+    <div class="govuk-!-margin-bottom-9">
+      {{ govukTable({
+        caption: "Summary of daily volumes",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: false,
+        head: [
+          { text: "Month" },
+          { text: "Total cubic metres", format: "numeric" },
+          { text: "Details", format: "numeric" }
+        ],
+        rows: [
+          [
+            { text: "April 2024" },
+            { text: "150.388", format: "numeric" },
+            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
+          ],
+          [
+            { text: "May 2024" },
+            { text: "155.403", format: "numeric" },
+            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
+          ],
+          [
+            { text: "Total volume of water abstracted", classes: "govuk-table__header" },
+            { html: "<strong>305.791</strong>", format: "numeric" },
+            { text: "" }
+          ]
+        ]
+      }) }}
+    </div>
+  {% endif %}
 
   {# "Confirm" & "Cancel" buttons #}
   <div class="govuk-button-group">
