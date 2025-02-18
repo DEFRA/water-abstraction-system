@@ -9,6 +9,7 @@ const GenerateReturnVersionService = require('./generate-return-version.service.
 const PersistReturnVersionService = require('./persist-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
 const SessionModel = require('../../../../models/session.model.js')
+const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
@@ -33,6 +34,14 @@ async function go(sessionId, userId) {
   const oneDayInMilliseconds = 24 * 60 * 60 * 1000
   const changeDate = new Date(returnVersionData.returnVersion.startDate)
   changeDate.setTime(changeDate.getTime() - oneDayInMilliseconds)
+
+  if (session.data.journey === 'no-returns-required') {
+    await VoidReturnLogsService.go(
+      session.data.licence.licenceRef,
+      returnVersionData.returnVersion.startDate,
+      returnVersionData.returnVersion.endDate
+    )
+  }
 
   await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
 

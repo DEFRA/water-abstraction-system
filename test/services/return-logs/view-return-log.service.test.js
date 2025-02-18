@@ -21,8 +21,6 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ViewReturnLogService = require('../../../app/services/return-logs/view-return-log.service.js')
 
 describe('View Return Log service', () => {
-  let yarStub
-
   beforeEach(() => {
     const mockReturnLog = ReturnLogModel.fromJson({
       ...ReturnLogHelper.defaults({
@@ -32,10 +30,6 @@ describe('View Return Log service', () => {
     })
 
     Sinon.stub(FetchReturnLogService, 'go').resolves(mockReturnLog)
-
-    yarStub = {
-      flash: Sinon.stub().returns(['NOTIFICATION_BANNER_MESSAGE'])
-    }
   })
 
   afterEach(() => {
@@ -43,13 +37,12 @@ describe('View Return Log service', () => {
   })
 
   it('correctly fetches return log and transforms it via the presenter', async () => {
-    const result = await ViewReturnLogService.go('RETURN_ID', 0, { credentials: { scope: ['returns'] } }, yarStub)
+    const result = await ViewReturnLogService.go('RETURN_ID', 0, { credentials: { scope: ['returns'] } })
 
     // We only check a couple of items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter
     expect(result).to.include({
       activeNavBar: 'search',
-      notificationBannerMessage: 'NOTIFICATION_BANNER_MESSAGE',
       pageTitle: 'Abstraction return'
     })
   })

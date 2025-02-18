@@ -11,6 +11,8 @@ const { expect } = Code
 const DownloadRecipientsPresenter = require('../../../../app/presenters/notifications/setup/download-recipients.presenter.js')
 
 describe('Notifications Setup - Download recipients presenter', () => {
+  const notificationType = 'Returns invitation'
+
   let recipients
 
   beforeEach(() => {
@@ -19,42 +21,41 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRecipientsPresenter.go([
-        recipients.primaryUser,
-        recipients.licenceHolder,
-        recipients.returnsTo,
-        recipients.organisation
-      ])
+      const result = DownloadRecipientsPresenter.go(
+        [recipients.primaryUser, recipients.licenceHolder, recipients.returnsTo, recipients.organisation],
+        notificationType
+      )
 
       expect(result).to.equal(
         // Headers
-        'Licences,Return references,Returns period start date,Returns period end date,Returns due date,Message type,Message reference,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+        'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
           // Row - Primary user
-          '"123/46","2434","2018-01-01","2019-01-01","2021-01-01","email","invitations","primary.user@important.com",,,,,,,,\n' +
+          '"123/46","2434","2018-01-01","2019-01-01","2021-01-01","Returns invitation","email","Primary user","primary.user@important.com",,,,,,,,\n' +
           // Row - Licence holder
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","letter","invitations",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n' +
           // Row - Returns to
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","letter","invitations",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","United Kingdom","WD25 7LR"\n' +
           //  Row - Licence holder - organisation
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","letter","invitations",,"Gringotts","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n'
+          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n'
       )
     })
 
     it('correctly formats the headers', () => {
-      const result = DownloadRecipientsPresenter.go([recipients.primaryUser])
+      const result = DownloadRecipientsPresenter.go([recipients.primaryUser], notificationType)
 
       let [headers] = result.split('\n')
       // We want to test the header includes the new line
       headers += '\n'
 
       expect(headers).to.equal(
-        'Licences,' +
-          'Return references,' +
-          'Returns period start date,' +
-          'Returns period end date,' +
-          'Returns due date,' +
+        'Licence,' +
+          'Return reference,' +
+          'Return period start date,' +
+          'Return period end date,' +
+          'Return due date,' +
+          'Notification type,' +
           'Message type,' +
-          'Message reference,' +
+          'Contact type,' +
           'Email,' +
           'Recipient name,' +
           'Address line 1,' +
@@ -70,20 +71,21 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
     describe('when the recipient is a "primary_user"', () => {
       it('correctly formats the row', () => {
-        const result = DownloadRecipientsPresenter.go([recipients.primaryUser])
+        const result = DownloadRecipientsPresenter.go([recipients.primaryUser], notificationType)
 
         let [, row] = result.split('\n')
         // We want to test the row includes the new line
         row += '\n'
 
         expect(row).to.equal(
-          '"123/46",' + // Licences
-            '"2434",' + // 'Return references'
-            '"2018-01-01",' + // 'Returns period start date'
-            '"2019-01-01",' + // 'Returns period end date'
-            '"2021-01-01",' + // 'Returns due date'
+          '"123/46",' + // Licence
+            '"2434",' + // 'Return reference'
+            '"2018-01-01",' + // 'Return period start date'
+            '"2019-01-01",' + // 'Return period end date'
+            '"2021-01-01",' + // 'Return due date'
+            '"Returns invitation",' + // 'Notification type'
             '"email",' + // 'Message type'
-            '"invitations",' + // 'Message reference'
+            '"Primary user",' + // 'Contact type'
             '"primary.user@important.com",' + // Email
             ',' + // 'Recipient name''
             ',' + // 'Address line 1'
@@ -101,20 +103,21 @@ describe('Notifications Setup - Download recipients presenter', () => {
       describe('and the "contact" is a "person"', () => {
         describe('and the "person" is a "Licence holder"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.licenceHolder])
+            const result = DownloadRecipientsPresenter.go([recipients.licenceHolder], notificationType)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
-                '"376439279",' + // 'Return references'
-                '"2018-01-01",' + // 'Returns period start date'
-                '"2019-01-01",' + // 'Returns period end date'
-                '"2021-01-01",' + // 'Returns due date'
+              '"1/343/3",' + // Licence
+                '"376439279",' + // 'Return reference'
+                '"2018-01-01",' + // 'Return period start date'
+                '"2019-01-01",' + // 'Return period end date'
+                '"2021-01-01",' + // 'Return due date'
+                '"Returns invitation",' + // 'Notification type'
                 '"letter",' + // 'Message type'
-                '"invitations",' + // 'Message reference'
+                '"Licence holder",' + // 'Contact type'
                 ',' + // Email
                 '"Mr J Licence holder only",' + // 'Recipient name''
                 '"4",' + // 'Address line 1'
@@ -131,20 +134,21 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
         describe('and the "person" is a "Returns to"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.returnsTo])
+            const result = DownloadRecipientsPresenter.go([recipients.returnsTo], notificationType)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
             row += '\n'
 
             expect(row).to.equal(
-              '"1/343/3",' + // Licences
-                '"376439279",' + // 'Return references'
-                '"2018-01-01",' + // 'Returns period start date'
-                '"2019-01-01",' + // 'Returns period end date'
-                '"2021-01-01",' + // 'Returns due date'
+              '"1/343/3",' + // Licence
+                '"376439279",' + // 'Return reference'
+                '"2018-01-01",' + // 'Return period start date'
+                '"2019-01-01",' + // 'Return period end date'
+                '"2021-01-01",' + // 'Return due date'
+                '"Returns invitation",' + // 'Notification type'
                 '"letter",' + // 'Message type'
-                '"invitations",' + // 'Message reference'
+                '"Returns to",' + // 'Contact type'
                 ',' + // Email
                 '"Mr J Returns to (same licence ref as licence holder)",' + // 'Recipient name''
                 '"4",' + // 'Address line 1'
@@ -162,20 +166,21 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
       describe('and the "contact" is a "organisation"', () => {
         it('correctly formats the row', () => {
-          const result = DownloadRecipientsPresenter.go([recipients.organisation])
+          const result = DownloadRecipientsPresenter.go([recipients.organisation], notificationType)
 
           let [, row] = result.split('\n')
           // We want to test the row includes the new line
           row += '\n'
 
           expect(row).to.equal(
-            '"1/343/3",' + // Licences
-              '"376439279",' + // 'Return references'
-              '"2018-01-01",' + // 'Returns period start date'
-              '"2019-01-01",' + // 'Returns period end date'
-              '"2021-01-01",' + // 'Returns due date'
+            '"1/343/3",' + // Licence
+              '"376439279",' + // 'Return reference'
+              '"2018-01-01",' + // 'Return period start date'
+              '"2019-01-01",' + // 'Return period end date'
+              '"2021-01-01",' + // 'Return due date'
+              '"Returns invitation",' + // 'Notification type'
               '"letter",' + // 'Message type'
-              '"invitations",' + // 'Message reference'
+              '"Licence holder",' + // 'Contact type'
               ',' + // Email
               '"Gringotts",' + // 'Recipient name'' - organisation
               '"4",' + // 'Address line 1'

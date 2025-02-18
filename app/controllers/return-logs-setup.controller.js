@@ -7,6 +7,7 @@
 
 const CancelService = require('../services/return-logs/setup/cancel.service.js')
 const CheckService = require('../services/return-logs/setup/check.service.js')
+const ConfirmReceivedService = require('../services/return-logs/setup/confirm-received.service.js')
 const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
@@ -41,6 +42,13 @@ async function check(request, h) {
   const pageData = await CheckService.go(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
+}
+
+async function confirmReceived(request, h) {
+  const { id: returnLogId } = request.query
+  const pageData = await ConfirmReceivedService.go(returnLogId)
+
+  return h.view('return-logs/setup/confirm-received.njk', pageData)
 }
 
 async function deleteNote(request, h) {
@@ -141,11 +149,11 @@ async function submitMeterDetails(request, h) {
     return h.view('return-logs/setup/meter-details.njk', pageData)
   }
 
-  if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+  if (pageData.reported === 'abstraction-volumes' && !pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
 async function submitMeterProvided(request, h) {
@@ -162,7 +170,7 @@ async function submitMeterProvided(request, h) {
   }
 
   if (pageData.meterProvided === 'no') {
-    if (pageData.checkPageVisited) {
+    if (pageData.checkPageVisited || pageData.reported === 'meter-readings') {
       return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
     }
 
@@ -265,7 +273,13 @@ async function submitSubmission(request, h) {
     return h.view('return-logs/setup/submission.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
+  // NOTE: If the user selected 'Record receipt' on the submission page, then we mark the return log as received, delete
+  // the session, and redirect to the confirm-received page
+  if (pageData.redirect === 'confirm-received') {
+    return h.redirect(`/system/return-logs/setup/confirm-received?id=${pageData.returnLogId}`)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitUnits(request, h) {
@@ -298,6 +312,7 @@ async function units(request, h) {
 module.exports = {
   cancel,
   check,
+  confirmReceived,
   deleteNote,
   guidance,
   meterDetails,

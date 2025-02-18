@@ -1,33 +1,44 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
- * @module ReviewPresenter
+ * Formats data for the `/notifications/setup/check` page
+ * @module CheckPresenter
  */
 
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
+const NOTIFICATION_TYPES = {
+  'ad-hoc': 'Ad-hoc notifications',
+  invitations: 'Returns invitations',
+  reminders: 'Returns reminders'
+}
+
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Formats data for the `/notifications/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
  * @param {object} pagination - The result from `PaginatorPresenter`
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} session - The session instance
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page, pagination, sessionId) {
+function go(recipients, page, pagination, session) {
+  const { id: sessionId, journey, referenceCode } = session
+
   return {
     defaultPageSize,
+    links: {
+      cancel: `/system/notifications/setup/${sessionId}/cancel`,
+      download: `/system/notifications/setup/${sessionId}/download`,
+      removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
+    },
     pageTitle: _pageTitle(page, pagination),
+    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
     recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length,
-    links: {
-      download: `/system/notifications/setup/${sessionId}/download`,
-      removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
-    }
+    referenceCode
   }
 }
 
@@ -62,10 +73,10 @@ function _formatRecipients(recipients) {
 
 function _pageTitle(page, pagination) {
   if (pagination.numberOfPages > 1) {
-    return `Send returns invitations (page ${page} of ${pagination.numberOfPages})`
+    return `Check the recipients (page ${page} of ${pagination.numberOfPages})`
   }
 
-  return 'Send returns invitations'
+  return `Check the recipients`
 }
 
 /**

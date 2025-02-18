@@ -16,7 +16,9 @@ const InitiateSessionService = require('../../app/services/notifications/setup/i
 const LicenceService = require('../../app/services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
-const ReviewService = require('../../app/services/notifications/setup/review.service.js')
+const CancelService = require('../../app/services/notifications/setup/cancel.service.js')
+const CheckService = require('../../app/services/notifications/setup/check.service.js')
+const SubmitCancelService = require('../../app/services/notifications/setup/submit-cancel.service.js')
 const SubmitLicenceService = require('../../app/services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
@@ -112,6 +114,37 @@ describe('Notifications Setup controller', () => {
     })
   })
 
+  describe('notifications/setup/check', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/check`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(CheckService, 'go').returns(_viewCheck())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewCheck()
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
+        })
+      })
+    })
+  })
+
   describe('notifications/setup/download', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -181,7 +214,7 @@ describe('Notifications Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/review`)
+          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/check`)
         })
       })
 
@@ -201,6 +234,54 @@ describe('Notifications Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter a Licence number')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/cancel', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/cancel`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(CancelService, 'go').returns(_viewCancel())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewCancel()
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
+          expect(response.payload).to.contain(pageData.referenceCode)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitCancelService, 'go').returns()
+          postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
+        })
+
+        it('redirects the to the next page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/manage')
         })
       })
     })
@@ -259,7 +340,7 @@ describe('Notifications Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'review' })
+            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'check' })
             postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
           })
 
@@ -267,7 +348,7 @@ describe('Notifications Setup controller', () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/notifications/setup/review')
+            expect(response.headers.location).to.equal('/system/notifications/setup/check')
           })
         })
       })
@@ -340,38 +421,19 @@ describe('Notifications Setup controller', () => {
       })
     })
   })
-
-  describe('notifications/setup/review', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/review`,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
-        }
-      })
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReviewService, 'go').returns(_viewReview())
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(getOptions)
-
-          const pageData = _viewReview()
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
-          expect(response.payload).to.contain(pageData.pageTitle)
-        })
-      })
-    })
-  })
 })
+
+function _viewCancel() {
+  return {
+    activeNavBar: 'manage',
+    pageTitle: 'You are about to cancel this notification',
+    referenceCode: '123',
+    summaryList: {
+      text: 'Licence number',
+      value: '67856'
+    }
+  }
+}
 
 function _viewReturnsPeriod() {
   return {
@@ -390,9 +452,9 @@ function _viewRemoveLicence() {
   }
 }
 
-function _viewReview() {
+function _viewCheck() {
   return {
-    pageTitle: 'Review the mailing list',
+    pageTitle: 'Check the recipients',
     activeNavBar: 'manage'
   }
 }
