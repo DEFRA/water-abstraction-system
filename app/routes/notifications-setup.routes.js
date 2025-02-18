@@ -55,6 +55,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/cancel',
+    options: {
+      handler: NotificationsSetupController.viewCancel,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/cancel',
+    options: {
+      handler: NotificationsSetupController.submitCancel,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/check',
     options: {
       handler: NotificationsSetupController.viewCheck,
