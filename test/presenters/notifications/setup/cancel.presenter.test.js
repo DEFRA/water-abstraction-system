@@ -93,7 +93,7 @@ describe('Notifications Setup - Cancel presenter', () => {
     })
   })
 
-  describe('when the journey has is for a "returnsPeriod"', () => {
+  describe('when the journey has a "returnsPeriod"', () => {
     describe('and the "returnsPeriod" is for a "quarter"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
