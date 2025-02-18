@@ -34,9 +34,7 @@ const config = require('../../../config/notify.config.js')
  * @returns {Promise<object>}
  */
 async function go(templateId, emailAddress, options) {
-  const apiKey = config.apiKey
-
-  const notifyClient = new NotifyClient(apiKey)
+  const notifyClient = new NotifyClient(config.apiKey)
 
   return _sendEmail(notifyClient, templateId, emailAddress, options)
 }
