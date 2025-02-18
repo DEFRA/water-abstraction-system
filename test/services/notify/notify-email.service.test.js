@@ -14,7 +14,7 @@ const { NotifyClient } = require('notifications-node-client')
 
 const NotifyEmailService = require('../../../app/services/notify/notify-email.service.js')
 
-describe.only('Notify - Email service', () => {
+describe('Notify - Email service', () => {
   const stubNotify = true // Used to perform integration tests with notify
 
   let emailAddress
