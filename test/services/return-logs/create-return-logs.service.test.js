@@ -203,7 +203,7 @@ describe('Return Logs - Create Return Logs service', () => {
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
 
-      expect(insertStub.callCount).to.equal(4)
+      expect(insertStub.callCount).to.equal(3)
 
       // Check we create the return log as expected
       const [insertObject] = insertStub.args[0]
@@ -211,15 +211,13 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: We don't assert every property of the object passed in because we know it is coming from
       // GenerateReturnLogService and that has its own suite of tests. We do however confirm that the createdAt and
       // UpdatedAt properties are set because those only get set in the service
-      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-05-27:2025-06-30')
-      expect(insertStub.args[1][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-07-01:2025-09-30')
-      expect(insertStub.args[2][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31')
-      expect(insertStub.args[3][0].id).to.equal('v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31')
+      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30')
+      expect(insertStub.args[1][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31')
+      expect(insertStub.args[2][0].id).to.equal('v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31')
       expect(insertObject.createdAt).to.exist()
       expect(insertObject.updatedAt).to.exist()
       expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999644:2025-05-27:2025-06-30',
-        'v1:4:01/25/90/3242:16999644:2025-07-01:2025-09-30',
+        'v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30',
         'v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31',
         'v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31'
       ])

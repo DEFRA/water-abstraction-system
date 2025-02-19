@@ -446,7 +446,7 @@ function returnRequirementsAcrossReturnVersions() {
         endDate: null,
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f095',
         reason: 'new-licence',
-        startDate: new Date('2025-05-27'),
+        startDate: new Date('2025-07-27'),
         licence: {
           expiredDate: null,
           id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
