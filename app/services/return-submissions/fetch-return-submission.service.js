@@ -11,11 +11,9 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
  * Fetches the matching return submission
  *
  * @param {string} returnSubmissionId - The return submission ID
- * @param {number} [version=0] - Optional version number of the submission to display. Defaults to 0 which means
- * 'current'
  *
- * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
- * and licence data
+ * @returns {Promise<module:ReturnSubmissionModel>} the matching `ReturnSubmissionModel` instance and its associated
+ * data (return lines and the return reference from its return log)
  */
 async function go(returnSubmissionId) {
   const returnSubmission = await _fetch(returnSubmissionId)
@@ -26,9 +24,9 @@ async function go(returnSubmissionId) {
 }
 
 async function _fetch(returnSubmissionId) {
-  const query = ReturnSubmissionModel.query()
+  return ReturnSubmissionModel.query()
     .findById(returnSubmissionId)
-    .select(['metadata'])
+    .select(['id', 'metadata'])
     .withGraphFetched('returnSubmissionLines')
     .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
       returnSubmissionLinesBuilder
@@ -39,8 +37,6 @@ async function _fetch(returnSubmissionId) {
     .modifyGraph('returnLog', (returnLogBuilder) => {
       returnLogBuilder.select(['returnReference'])
     })
-
-  return query
 }
 
 module.exports = {
