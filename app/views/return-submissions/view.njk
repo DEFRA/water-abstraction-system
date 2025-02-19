@@ -76,8 +76,8 @@
         {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
 
-      {# Define and push the final total row into the table rows array. We set the first cell to span 2 columns if we
-      are displaying meter readings in order to correctly align the cubmic metres total. #}
+      {# Create the final total row. We set the first cell to span 2 columns if we are displaying meter readings in
+      order to correctly align the cubmic metres total. #}
       {% set totalRow = [
         {
           html: '<strong>Total volume of water abstracted</strong>',
@@ -97,6 +97,7 @@
         ), totalRow) %}
       {% endif %}
 
+      {# Add the final total column #}
       {% set totalRow = (totalRow.push(
         {
           html: '<strong>' + tableData.cubicMetresTotal + '</strong>',
@@ -105,6 +106,7 @@
         }
       ), totalRow) %}
 
+      {# Push the total row into the array of table rows #}
       {% set tableRows = (tableRows.push(totalRow), tableRows) %}
 
       {{

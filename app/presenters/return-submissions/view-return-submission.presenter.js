@@ -10,7 +10,7 @@ const { formatLongDate, formatNumber, formatQuantity, sentenceCase } = require('
 const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Formats return submission data ready for presenting in the view return log page
+ * Formats return submission data ready for presenting in the view return submission page
  *
  * @param {module:ReturnSubmissionModel} returnSubmission - The return submission
  * @param {string} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
