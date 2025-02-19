@@ -49,7 +49,15 @@ function _generateReturnLogs(returnRequirement, returnCycle) {
   if (isQuarterlyReturn && returnCycle.startDate >= new Date('2025-04-01')) {
     const quarterlyReturnPeriods = determineReturnsPeriods(returnCycle)
 
-    for (const quarterlyReturnPeriod of quarterlyReturnPeriods) {
+    const periodsToProcess = quarterlyReturnPeriods.filter((period) => {
+      return (
+        returnRequirement.returnVersion.startDate <= period.endDate &&
+        (returnRequirement.returnVersion.endDate >= period.startDate ||
+          returnRequirement.returnVersion.endDate === null)
+      )
+    })
+
+    for (const quarterlyReturnPeriod of periodsToProcess) {
       returnLogs.push(GenerateReturnLogService.go(returnRequirement, quarterlyReturnPeriod))
     }
   } else {
