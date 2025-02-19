@@ -23,14 +23,12 @@
  * @param {number} singleVolume - The volume to allocate
  * @returns
  */
-async function go(lines, fromDate, toDate, singleVolume) {
+function go(lines, fromDate, toDate, singleVolume) {
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(lines, fromDate, toDate)
 
   const individualLineQuantity = singleVolume / linesInsideAbstractionPeriod.length
 
   _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume)
-
-  return lines
 }
 
 function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
