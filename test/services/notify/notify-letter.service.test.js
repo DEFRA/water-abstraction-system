@@ -33,7 +33,8 @@ describe('Notify - Letter service', () => {
         periodEndDate: '28th January 2025',
         periodStartDate: '1st January 2025',
         returnDueDate: '28th April 2025'
-      }
+      },
+      reference: 'developer-testing'
     }
 
     templateId = config.template.returnsInvitationLicenceHolderLetter

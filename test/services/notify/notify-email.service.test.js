@@ -23,6 +23,7 @@ describe('Notify - Email service', () => {
   let templateId
 
   beforeEach(() => {
+    // To test a real email is delivered replace this with an email on the whitelist (and use the whitelist api key)
     emailAddress = 'hello@world.com'
 
     options = {
@@ -30,7 +31,8 @@ describe('Notify - Email service', () => {
         periodEndDate: '28th January 2025',
         periodStartDate: '1st January 2025',
         returnDueDate: '28th April 2025'
-      }
+      },
+      reference: 'developer-testing'
     }
 
     templateId = config.template.returnsInvitationPrimaryUserEmail

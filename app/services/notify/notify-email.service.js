@@ -27,6 +27,9 @@ const config = require('../../../config/notify.config.js')
  *     }
  * ```
  *
+ * > If there are any dates types for any placeholder be sure to format the date prior to sending to notify. Otherwise,
+ * the output will be 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
+ *
  * @param {string} templateId
  * @param {string} emailAddress
  * @param {object} options
