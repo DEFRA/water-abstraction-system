@@ -12,13 +12,15 @@ const RemoveLicencesPresenter = require('../../../../app/presenters/notification
 
 describe('Notifications Setup - Remove licences presenter', () => {
   const licences = []
+  const referenceCode = 'RINV-1234'
 
   it('correctly presents the data', () => {
-    const result = RemoveLicencesPresenter.go(licences)
+    const result = RemoveLicencesPresenter.go(licences, referenceCode)
 
     expect(result).to.equal({
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
+      referenceCode,
       removeLicences: []
     })
   })

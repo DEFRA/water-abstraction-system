@@ -5,13 +5,15 @@
  * @module NotificationsSetupController
  */
 
+const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
+const CancelService = require('../services/notifications/setup/cancel.service.js')
+const CheckService = require('../services/notifications/setup/check.service.js')
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
-const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
-const ReviewService = require('../services/notifications/setup/review.service.js')
 const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
+const SubmitCancelService = require('../services/notifications/setup/submit-cancel.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
@@ -30,6 +32,14 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await CancelService.go(sessionId)
+
+  return h.view(`${basePath}/cancel.njk`, pageData)
 }
 
 async function viewLicence(request, h) {
@@ -60,15 +70,15 @@ async function viewReturnsPeriod(request, h) {
   return h.view(`${basePath}/view-returns-period.njk`, pageData)
 }
 
-async function viewReview(request, h) {
+async function viewCheck(request, h) {
   const {
     params: { sessionId },
     query: { page }
   } = request
 
-  const pageData = await ReviewService.go(sessionId, page)
+  const pageData = await CheckService.go(sessionId, page)
 
-  return h.view(`${basePath}/review.njk`, pageData)
+  return h.view(`${basePath}/check.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -77,6 +87,14 @@ async function setup(request, h) {
   const { sessionId, path } = await InitiateSessionService.go(journey)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
+}
+
+async function submitCancel(request, h) {
+  const { sessionId } = request.params
+
+  await SubmitCancelService.go(sessionId)
+
+  return h.redirect(`/manage`)
 }
 
 async function submitLicence(request, h) {
@@ -88,7 +106,7 @@ async function submitLicence(request, h) {
     return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
   }
 
-  return h.redirect(`/system/${basePath}/${sessionId}/review`)
+  return h.redirect(`/system/${basePath}/${sessionId}/check`)
 }
 
 async function submitRemoveLicences(request, h) {
@@ -123,11 +141,13 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewCancel,
   viewLicence,
+  viewCheck,
   viewRemoveLicences,
   viewReturnsPeriod,
-  viewReview,
   setup,
+  submitCancel,
   submitLicence,
   submitRemoveLicences,
   submitReturnsPeriod

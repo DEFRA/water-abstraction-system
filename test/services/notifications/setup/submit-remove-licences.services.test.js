@@ -29,7 +29,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
   })
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
+    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', referenceCode: 'RINV-123' } })
 
     validLicences = [{ licenceRef: '1234' }]
 
@@ -61,7 +61,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
         const result = await SubmitRemoveLicencesService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: `${session.id}/review`
+          redirect: `${session.id}/check`
         })
       })
     })
@@ -85,6 +85,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
           },
           hint: 'Separate the licences numbers with a comma or new line.',
           removeLicences: '789',
+          referenceCode: 'RINV-123',
           pageTitle: 'Enter the licence numbers to remove from the mailing list'
         })
       })
