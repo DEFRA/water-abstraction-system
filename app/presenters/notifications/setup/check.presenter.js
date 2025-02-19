@@ -1,15 +1,21 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
- * @module ReviewPresenter
+ * Formats data for the `/notifications/setup/check` page
+ * @module CheckPresenter
  */
 
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
+const NOTIFICATION_TYPES = {
+  'ad-hoc': 'Ad-hoc notifications',
+  invitations: 'Returns invitations',
+  reminders: 'Returns reminders'
+}
+
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Formats data for the `/notifications/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
@@ -19,17 +25,20 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { id: sessionId, journey } = session
+  const { id: sessionId, journey, referenceCode } = session
 
   return {
     defaultPageSize,
-    text: _text(page, pagination, journey),
-    recipients: _recipients(recipients, page),
-    recipientsAmount: recipients.length,
     links: {
+      cancel: `/system/notifications/setup/${sessionId}/cancel`,
       download: `/system/notifications/setup/${sessionId}/download`,
       removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
-    }
+    },
+    pageTitle: _pageTitle(page, pagination),
+    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
+    recipients: _recipients(recipients, page),
+    recipientsAmount: recipients.length,
+    referenceCode
   }
 }
 
@@ -62,23 +71,12 @@ function _formatRecipients(recipients) {
   })
 }
 
-function _text(page, pagination, journey) {
-  const type = {
-    'ad-hoc': 'Ad-hoc notifications',
-    invitations: 'Returns invitations'
-  }
-
-  let title = `Send ${type[journey].toLowerCase()}`
-
+function _pageTitle(page, pagination) {
   if (pagination.numberOfPages > 1) {
-    title += ` (page ${page} of ${pagination.numberOfPages})`
+    return `Check the recipients (page ${page} of ${pagination.numberOfPages})`
   }
 
-  return {
-    title,
-    readyToSend: `${type[journey]} are ready to send.`,
-    continueButton: 'Send'
-  }
+  return `Check the recipients`
 }
 
 /**

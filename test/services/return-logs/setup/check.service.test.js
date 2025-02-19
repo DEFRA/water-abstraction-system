@@ -27,7 +27,7 @@ describe('Return Logs Setup - Check service', () => {
         periodEndMonth: 12,
         periodStartDay: 1,
         periodStartMonth: 1,
-        purposes: 'Evaporative Cooling',
+        purposes: ['Evaporative Cooling'],
         receivedDate: '2025-01-31T00:00:00.000Z',
         reported: 'volumes',
         returnReference: '1234',
@@ -51,6 +51,7 @@ describe('Return Logs Setup - Check service', () => {
         links: {
           cancel: `/system/return-logs/setup/${session.id}/cancel`,
           meterDetails: `/system/return-logs/setup/${session.id}/meter-provided`,
+          nilReturn: `/system/return-logs/setup/${session.id}/submission`,
           received: `/system/return-logs/setup/${session.id}/received`,
           reported: `/system/return-logs/setup/${session.id}/reported`,
           units: `/system/return-logs/setup/${session.id}/units`
@@ -58,6 +59,7 @@ describe('Return Logs Setup - Check service', () => {
         meterMake: undefined,
         meterProvided: 'no',
         meterSerialNumber: undefined,
+        nilReturn: 'No',
         note: {
           actions: [
             {
