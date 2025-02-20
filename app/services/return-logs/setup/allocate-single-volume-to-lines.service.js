@@ -35,6 +35,10 @@ function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
   const abstractionPeriodLines = []
 
   lines.forEach((line) => {
+    if (line.quantity) {
+      delete line.quantity
+    }
+
     if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromDate, toDate)) {
       abstractionPeriodLines.push(line)
     }
