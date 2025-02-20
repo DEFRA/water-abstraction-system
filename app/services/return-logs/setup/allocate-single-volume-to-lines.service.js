@@ -12,8 +12,9 @@
  * frequency of the return. We need to allocate the single volume to the lines within the abstraction period the user
  * has given.
  *
- * We first start by working out how many lines the abstraction period covers. We then divide the single volume by this
- * and apply the quantity to each line within the abstraction period. To prevent rounding errors, we track the cumulative
+ * We first start by removing any existing quantity from the lines and then creating a new array that references all the
+ * return lines covered by the abstraction period. We then divide the single volume by the length of this new array and
+ * apply the quantity to each line within the abstraction period. To prevent rounding errors, we track the cumulative
  * sum using a variable called `roundingCounter` and record the index of the last applicable line (`lastIndex`). After
  * processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
  *
@@ -21,7 +22,6 @@
  * @param {string} fromDate - The start date of the abstraction period
  * @param {string} toDate - The end date of the abstraction period
  * @param {number} singleVolume - The volume to allocate
- * @returns
  */
 function go(lines, fromDate, toDate, singleVolume) {
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(lines, fromDate, toDate)
