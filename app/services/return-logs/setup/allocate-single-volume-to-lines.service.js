@@ -36,6 +36,7 @@ function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
 
   lines.forEach((line) => {
     if (line.quantity) {
+      // Delete any existing quantity
       delete line.quantity
     }
 
@@ -52,7 +53,7 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
 
   // Apply the quantity to each line within the abstraction period. Since volume is divided across multiple lines,
   // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we track the
-  // cumulative sum using `roundingCounter` and record the index of the last applicable line (`lastIndex`). After
+  // cumulative sum using `allocatedLineTotal` and record the index of the last applicable line (`lastIndex`). After
   // processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
   linesInsideAbstractionPeriod.forEach((line) => {
     line.quantity = individualLineQuantity

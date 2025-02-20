@@ -46,6 +46,22 @@ async function go(sessionId, payload) {
   }
 }
 
+/**
+ * Calculates the abstraction period dates based on the session details and
+ * the submitted data.
+ *
+ * If the user has chosen to use the default abstraction period, the abstraction
+ * period dates are calculated by calling the `DetermineAbstractionPeriodService`
+ * with the session details. If the user has entered a custom abstraction period,
+ * the abstraction period dates are set to the dates entered by the user.
+ *
+ * The abstraction period dates are then saved to the session.
+ *
+ * @param {object} session - The current session
+ * @param {object} payload - The submitted form data
+ *
+ * @private
+ */
 function _determineAbstractionPeriodDates(session, payload) {
   if (payload.periodDateUsedOptions === 'default') {
     const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
