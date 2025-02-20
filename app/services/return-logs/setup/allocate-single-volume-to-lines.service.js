@@ -31,23 +31,6 @@ function go(lines, fromDate, toDate, singleVolume) {
   _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume)
 }
 
-function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
-  const abstractionPeriodLines = []
-
-  lines.forEach((line) => {
-    if (line.quantity) {
-      // Delete any existing quantity
-      delete line.quantity
-    }
-
-    if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromDate, toDate)) {
-      abstractionPeriodLines.push(line)
-    }
-  })
-
-  return abstractionPeriodLines
-}
-
 function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume) {
   let allocatedLineTotal = 0
 
@@ -65,6 +48,23 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
     const lastIndex = linesInsideAbstractionPeriod.length - 1
     linesInsideAbstractionPeriod[lastIndex].quantity = linesInsideAbstractionPeriod[lastIndex].quantity + roundingError
   }
+}
+
+function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
+  const abstractionPeriodLines = []
+
+  lines.forEach((line) => {
+    if (line.quantity) {
+      // Delete any existing quantity
+      delete line.quantity
+    }
+
+    if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromDate, toDate)) {
+      abstractionPeriodLines.push(line)
+    }
+  })
+
+  return abstractionPeriodLines
 }
 
 function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, toFullDate) {
