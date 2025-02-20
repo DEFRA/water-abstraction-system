@@ -5,6 +5,8 @@
  * @module ReceivedPresenter
  */
 
+const { formatLongDate } = require('../../base.presenter.js')
+
 /**
  * Format data for the `/return-log/setup/{sessionId}/received` page
  *
@@ -22,6 +24,9 @@ function go(session) {
     receivedDateYear
   } = session
 
+  const yesterdaysDate = new Date()
+  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
+
   return {
     backLink: _backLink(session),
     pageTitle: 'When was the return received?',
@@ -30,7 +35,9 @@ function go(session) {
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
     returnReference,
-    sessionId
+    sessionId,
+    todaysDate: formatLongDate(new Date()),
+    yesterdaysDate: formatLongDate(yesterdaysDate)
   }
 }
 
