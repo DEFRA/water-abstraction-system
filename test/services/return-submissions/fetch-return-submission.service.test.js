@@ -80,12 +80,13 @@ describe('Fetch Return Submission service', () => {
       expect(returnSubmissionLines[1].startDate.toISOString()).to.equal('2023-03-01T00:00:00.000Z')
     })
 
-    it('includes the linked return log with its reference', async () => {
+    it('includes the linked return log with its reference and frequency', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
       const { returnLog } = result
 
       expect(returnLog).to.be.an.instanceOf(ReturnLogModel)
       expect(returnLog.returnReference).to.equal(testReturnLog.returnReference)
+      expect(returnLog.returnsFrequency).to.equal(testReturnLog.returnsFrequency)
     })
   })
 })
