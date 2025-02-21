@@ -50,7 +50,9 @@ describe('Notify - Email service', () => {
     it('should call notify', async () => {
       const result = await NotifyEmailService.go(templateId, emailAddress, options)
 
-      expect(result.status).to.equal(201)
+      expect(result).to.equal({
+        status: 201
+      })
     })
 
     if (stubNotify) {
@@ -87,14 +89,16 @@ describe('Notify - Email service', () => {
         it('should return an error', async () => {
           const result = await NotifyEmailService.go(templateId, emailAddress, options)
 
-          expect(result.status).to.equal(400)
-          expect(result.message).to.equal('Request failed with status code 400')
-          expect(result.errors).to.equal([
-            {
-              error: 'ValidationError',
-              message: 'email_address Not a valid email address'
-            }
-          ])
+          expect(result).to.equal({
+            status: 400,
+            message: 'Request failed with status code 400',
+            errors: [
+              {
+                error: 'ValidationError',
+                message: 'email_address Not a valid email address'
+              }
+            ]
+          })
         })
       })
 
@@ -121,14 +125,16 @@ describe('Notify - Email service', () => {
         it('should return an error', async () => {
           const result = await NotifyEmailService.go(templateId, emailAddress, options)
 
-          expect(result.status).to.equal(400)
-          expect(result.message).to.equal('Request failed with status code 400')
-          expect(result.errors).to.equal([
-            {
-              error: 'BadRequestError',
-              message: 'Missing personalisation: periodEndDate'
-            }
-          ])
+          expect(result).to.equal({
+            status: 400,
+            message: 'Request failed with status code 400',
+            errors: [
+              {
+                error: 'BadRequestError',
+                message: 'Missing personalisation: periodEndDate'
+              }
+            ]
+          })
         })
       })
     })
