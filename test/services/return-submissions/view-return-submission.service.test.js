@@ -24,12 +24,12 @@ const ViewReturnSubmissionService = require('../../../app/services/return-submis
 
 describe('View Return Submission service', () => {
   beforeEach(() => {
-    const mockReturnSubmission = createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
+    const mockReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
 
-    mockReturnSubmission.returnLog = createInstance(ReturnLogModel, ReturnLogHelper)
+    mockReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper)
 
     mockReturnSubmission.returnSubmissionLines = [
-      createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+      _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
         returnSubmissionId: mockReturnSubmission.id,
         startDate: new Date(2025, 0, 1),
         endDate: new Date(2025, 0, 1),
@@ -60,7 +60,7 @@ describe('View Return Submission service', () => {
 
 // Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
 // allows us to pass in the expected models without having to touch the db at all.
-function createInstance(model, helper, data = {}) {
+function _createInstance(model, helper, data = {}) {
   return model.fromJson({
     createdAt: new Date(),
     updatedAt: new Date(),
