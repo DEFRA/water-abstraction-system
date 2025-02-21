@@ -109,7 +109,7 @@ describe('View Return Submissions presenter', () => {
   })
 
   describe('the "tableData" property', () => {
-    describe('whenthe  return submission contains volumes', () => {
+    describe('when the return submission contains volumes', () => {
       beforeEach(() => {
         Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
       })
