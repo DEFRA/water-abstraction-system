@@ -38,7 +38,7 @@ describe('Return Submissions controller', () => {
 
   describe('/system/return-submissions/{yearMonth}/{returnSubmissionId}', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         Sinon.stub(ViewReturnSubmissionService, 'go').resolves({
           pageTitle: 'Return Submission'
         })
