@@ -93,14 +93,16 @@ describe('Notify - Letter service', () => {
         it('should return an error', async () => {
           const result = await NotifyLetterService.go(templateId, options)
 
-          expect(result.status).to.equal(400)
-          expect(result.message).to.equal('Request failed with status code 400')
-          expect(result.errors).to.equal([
-            {
-              error: 'ValidationError',
-              message: 'Address must be at least 3 lines'
-            }
-          ])
+          expect(result).to.equal({
+            status: 400,
+            message: 'Request failed with status code 400',
+            errors: [
+              {
+                error: 'ValidationError',
+                message: 'Address must be at least 3 lines'
+              }
+            ]
+          })
         })
       })
 
@@ -127,14 +129,16 @@ describe('Notify - Letter service', () => {
         it('should return an error', async () => {
           const result = await NotifyLetterService.go(templateId, options)
 
-          expect(result.status).to.equal(400)
-          expect(result.message).to.equal('Request failed with status code 400')
-          expect(result.errors).to.equal([
-            {
-              error: 'BadRequestError',
-              message: 'Missing personalisation: name'
-            }
-          ])
+          expect(result).to.equal({
+            status: 400,
+            message: 'Request failed with status code 400',
+            errors: [
+              {
+                error: 'BadRequestError',
+                message: 'Missing personalisation: name'
+              }
+            ]
+          })
         })
       })
     })
