@@ -9,7 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { returnCycle, returnCycles, returnRequirement } = require('../../fixtures/return-logs.fixture.js')
+const {
+  returnCycle,
+  returnCycles,
+  returnRequirement,
+  returnRequirementsAcrossReturnVersions
+} = require('../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
@@ -156,6 +161,66 @@ describe('Return Logs - Create Return Logs service', () => {
         expect(args[1].returnCycle.id).to.equal('6889b98d-964f-4966-b6d6-bf511d6526a9')
         expect(args[2]).to.be.an.error()
       })
+    })
+  })
+
+  describe('when called with a quarterly return version with a licence end date that ends during the return cycle', () => {
+    beforeEach(() => {
+      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
+      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+
+      testReturnCycle = returnCycles()[1]
+      testReturnRequirement = returnRequirementsAcrossReturnVersions()[4]
+    })
+
+    it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
+      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+
+      expect(insertStub.callCount).to.equal(1)
+
+      // Check we create the return log as expected
+      const [insertObject] = insertStub.args[0]
+
+      // NOTE: We don't assert every property of the object passed in because we know it is coming from
+      // GenerateReturnLogService and that has its own suite of tests. We do however confirm that the createdAt and
+      // UpdatedAt properties are set because those only get set in the service
+      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-26')
+      expect(insertObject.createdAt).to.exist()
+      expect(insertObject.updatedAt).to.exist()
+      expect(results).to.equal(['v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-26'])
+    })
+  })
+
+  describe('when called with a quarterly return version with a licence start date that starts during the return cycle', () => {
+    beforeEach(() => {
+      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
+      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+
+      testReturnCycle = returnCycles()[1]
+      testReturnRequirement = returnRequirementsAcrossReturnVersions()[5]
+    })
+
+    it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
+      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+
+      expect(insertStub.callCount).to.equal(3)
+
+      // Check we create the return log as expected
+      const [insertObject] = insertStub.args[0]
+
+      // NOTE: We don't assert every property of the object passed in because we know it is coming from
+      // GenerateReturnLogService and that has its own suite of tests. We do however confirm that the createdAt and
+      // UpdatedAt properties are set because those only get set in the service
+      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30')
+      expect(insertStub.args[1][0].id).to.equal('v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31')
+      expect(insertStub.args[2][0].id).to.equal('v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31')
+      expect(insertObject.createdAt).to.exist()
+      expect(insertObject.updatedAt).to.exist()
+      expect(results).to.equal([
+        'v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30',
+        'v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31',
+        'v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31'
+      ])
     })
   })
 
