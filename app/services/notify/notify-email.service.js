@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Sends an email using GOV.UK Notify
+ * Send an email using GOV.UK Notify
  * @module NotifyEmailService
  */
 
