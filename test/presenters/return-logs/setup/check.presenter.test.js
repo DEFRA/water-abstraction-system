@@ -29,6 +29,7 @@ describe('Return Logs Setup - Check presenter', () => {
       receivedDate: '2025-01-31T00:00:00.000Z',
       reported: 'abstraction-volumes',
       returnReference: '1234',
+      returnsFrequency: 'month',
       siteDescription: 'POINT A, TEST SITE DESCRIPTION',
       startDate: '2004-04-01T00:00:00.000Z',
       twoPartTariff: false,
@@ -70,6 +71,7 @@ describe('Return Logs Setup - Check presenter', () => {
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+        tableTitle: 'Summary of monthly abstraction volumes',
         tariff: 'Standard',
         units: 'Megalitres'
       })
@@ -207,6 +209,42 @@ describe('Return Logs Setup - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.reportingFigures).to.equal('Volumes')
+      })
+    })
+  })
+
+  describe('the "tableTitle" property', () => {
+    beforeEach(() => {
+      session.returnsFrequency = 'month'
+    })
+
+    it('returns the frequency in the title', () => {
+      const result = CheckPresenter.go(session)
+
+      expect(result.tableTitle).to.contain('monthly')
+    })
+
+    describe('when the values are reported using "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      it('returns "abstraction volumes" in the title', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
+      })
+    })
+
+    describe('when the reporting method is not "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns "meter readings" in the title', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.tableTitle).to.equal('Summary of monthly meter readings')
       })
     })
   })
