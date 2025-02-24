@@ -46,9 +46,6 @@ async function _sendEmail(notifyClient, templateId, emailAddress, options) {
   try {
     const response = await notifyClient.sendEmail(templateId, emailAddress, options)
 
-    // Need to save notification id in the db to check status ?
-    const status = await notifyClient.getNotificationById(response.data.id)
-
     return {
       status: response.status
     }

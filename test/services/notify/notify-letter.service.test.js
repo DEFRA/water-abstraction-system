@@ -8,14 +8,15 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const config = require('../../../config/notify.config.js')
-
+// Test helpers
 const { NotifyClient } = require('notifications-node-client')
+const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 
+// Thing under test
 const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
 
-describe('Notify - Letter service', () => {
-  const stubNotify = true // Used to perform integration tests with notify
+describe.only('Notify - Letter service', () => {
+  const stubNotify = process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
 
   let notifyStub
   let options
@@ -37,7 +38,7 @@ describe('Notify - Letter service', () => {
       reference: 'developer-testing'
     }
 
-    templateId = config.template.returnsInvitationLicenceHolderLetter
+    templateId = notifyTemplates.returns.invitations.primaryUserEmail
   })
 
   afterEach(() => {

@@ -10,11 +10,7 @@
 require('dotenv').config()
 
 const config = {
-  apiKey: process.env.GOV_UK_NOTIFY_API_KEY || 'test-key',
-  template: {
-    returnsInvitationPrimaryUserEmail: process.env.NOTIFY_TEMPLATE_RETURNS_INVITATION_PRIMARY_USER_EMAIL || 'test',
-    returnsInvitationLicenceHolderLetter: process.env.NOTIFY_TEMPLATE_RETURNS_INVITATION_LICENCE_HOLDER_LETTER || 'test'
-  }
+  apiKey: process.env.GOV_UK_NOTIFY_API_KEY || 'test-key'
 }
 
 module.exports = config
