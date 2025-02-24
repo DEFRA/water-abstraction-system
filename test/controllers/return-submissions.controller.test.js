@@ -23,7 +23,7 @@ describe('Return Submissions controller', () => {
     server = await init()
   })
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
     Sinon.stub(server.logger, 'error')
     Sinon.stub(server.logger, 'info')
@@ -38,7 +38,7 @@ describe('Return Submissions controller', () => {
 
   describe('/system/return-submissions/{yearMonth}/{returnSubmissionId}', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         Sinon.stub(ViewReturnSubmissionService, 'go').resolves({
           pageTitle: 'Return Submission'
         })

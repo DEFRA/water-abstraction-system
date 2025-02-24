@@ -25,7 +25,7 @@ describe('View Return Submissions presenter', () => {
   let testReturnSubmission
 
   beforeEach(() => {
-    testReturnSubmission = createSubmission()
+    testReturnSubmission = _createSubmission()
   })
 
   afterEach(() => {
@@ -149,7 +149,7 @@ describe('View Return Submissions presenter', () => {
 
       describe('and the volumes are not cubic metres', () => {
         beforeEach(() => {
-          testReturnSubmission = createSubmission({ userUnit: unitNames.GALLONS })
+          testReturnSubmission = _createSubmission({ userUnit: unitNames.GALLONS })
           Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
         })
 
@@ -184,7 +184,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission contains readings', () => {
       beforeEach(() => {
-        testReturnSubmission = createSubmission({ readings: true })
+        testReturnSubmission = _createSubmission({ readings: true })
         Sinon.stub(testReturnSubmission, '$method').returns('oneMeter')
       })
 
@@ -239,7 +239,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission frequency is weekly', () => {
       beforeEach(() => {
-        testReturnSubmission = createSubmission({ returnsFrequency: 'week' })
+        testReturnSubmission = _createSubmission({ returnsFrequency: 'week' })
         Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
         Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
       })
@@ -263,10 +263,21 @@ describe('View Return Submissions presenter', () => {
   })
 })
 
-function createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false, returnsFrequency = 'day' } = {}) {
-  const testReturnSubmission = createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
+// Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
+// allows us to pass in the expected models without having to touch the db at all.
+function _createInstance(model, helper, data = {}) {
+  return model.fromJson({
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...helper.defaults(),
+    ...data
+  })
+}
 
-  testReturnSubmission.returnLog = createInstance(ReturnLogModel, ReturnLogHelper, { returnsFrequency })
+function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false, returnsFrequency = 'day' } = {}) {
+  const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
+
+  testReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper, { returnsFrequency })
 
   testReturnSubmission.returnSubmissionLines = []
 
@@ -293,7 +304,7 @@ function createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false,
     const { monthIndex, days } = months[month]
     for (let day = 1; day <= days; day++) {
       testReturnSubmission.returnSubmissionLines.push(
-        createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+        _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
           returnSubmissionId: testReturnSubmission.id,
           startDate: new Date(2025, monthIndex, day),
           endDate: new Date(2025, monthIndex, day),
@@ -318,7 +329,7 @@ function createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false,
 
   weeks.forEach(({ startDate, endDate }) => {
     testReturnSubmission.returnSubmissionLines.push(
-      createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+      _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
         returnSubmissionId: testReturnSubmission.id,
         startDate,
         endDate,
@@ -330,15 +341,4 @@ function createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false,
   })
 
   return testReturnSubmission
-}
-
-// Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
-// allows us to pass in the expected models without having to touch the db at all.
-function createInstance(model, helper, data = {}) {
-  return model.fromJson({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    ...helper.defaults(),
-    ...data
-  })
 }
