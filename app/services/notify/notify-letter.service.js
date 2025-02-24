@@ -32,7 +32,8 @@ const config = require('../../../config/notify.config.js')
  *       reference: 'ABC-123' // A unique identifier which identifies a single unique message or a batch of messages
  *     }
  * ```
- *
+ * > If there are any dates types for any placeholder be sure to format the date prior to sending to notify. Otherwise,
+ * the output will be formatted like: 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
  * @param {string} templateId
  * @param {object} options
  *
