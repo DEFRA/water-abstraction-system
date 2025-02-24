@@ -29,11 +29,7 @@ function go(recipients, page, pagination, session) {
 
   return {
     defaultPageSize,
-    links: {
-      cancel: `/system/notifications/setup/${sessionId}/cancel`,
-      download: `/system/notifications/setup/${sessionId}/download`,
-      removeLicences: journey !== 'ad-hoc' ? `/system/notifications/setup/${sessionId}/remove-licences` : ''
-    },
+    links: _links(sessionId, journey),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
     recipients: _recipients(recipients, page),
@@ -69,6 +65,21 @@ function _formatRecipients(recipients) {
       method: `${recipient.message_type} - ${recipient.contact_type}`
     }
   })
+}
+function _links(sessionId, journey) {
+  const links = {
+    back: `/system/notifications/setup/${sessionId}/returns-period`,
+    cancel: `/system/notifications/setup/${sessionId}/cancel`,
+    download: `/system/notifications/setup/${sessionId}/download`,
+    removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
+  }
+
+  if (journey === 'ad-hoc') {
+    links.back = `/system/notifications/setup/${sessionId}/ad-hoc-licence`
+    links.removeLicences = ''
+  }
+
+  return links
 }
 
 function _pageTitle(page, pagination) {
