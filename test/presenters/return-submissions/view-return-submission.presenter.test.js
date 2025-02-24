@@ -108,7 +108,7 @@ describe('View Return Submissions presenter', () => {
     })
   })
 
-  describe.only('the "tableData" property', () => {
+  describe('the "tableData" property', () => {
     describe('when the return submission contains volumes', () => {
       beforeEach(() => {
         Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
@@ -239,7 +239,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission frequency is weekly', () => {
       beforeEach(() => {
-        testReturnSubmission = createSubmission({ frequency: 'week' })
+        testReturnSubmission = createSubmission({ returnsFrequency: 'week' })
         Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
         Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
       })
