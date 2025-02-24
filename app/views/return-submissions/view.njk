@@ -1,0 +1,122 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">Return {{ returnReference }}</span>{{ pageTitle }}
+      </h1>
+    </div>
+  </div>
+
+  {# Display the table using a GOVUK table component #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {% set tableRows = [] %}
+
+      {% for row in tableData.rows %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
+
+        {# Create the summary row #}
+        {% set tableRow = [
+          {
+            text: row.date,
+            attributes: { 'data-test': 'date-' + rowIndex }
+          }
+        ] %}
+
+        {# Add readings column if the submission was meter readings #}
+        {% if displayReadings %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: row.reading,
+              format: 'numeric',
+              attributes: { 'data-test': 'reading-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
+        {# Add units column if the submission was not in cubic metres #}
+        {% if displayUnits %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: row.unitQuantity,
+              format: 'numeric',
+              attributes: { 'data-test': 'unit-quantity-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
+        {# Cubic metres column #}
+        {% set tableRow = (tableRow.push(
+          {
+            text: row.cubicMetresQuantity,
+            format: 'numeric',
+            attributes: { 'data-test': 'cubic-metres-quantity' + rowIndex }
+          }
+        ), tableRow) %}
+
+        {# Push our row into the table rows array #}
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endfor %}
+
+      {# Create the final total row. We set the first cell to span 2 columns if we are displaying meter readings in
+      order to correctly align the cubmic metres total. #}
+      {% set totalRow = [
+        {
+          html: '<strong>Total volume of water abstracted</strong>',
+          attributes: { 'data-test': 'total-row-text' },
+          colspan: 2 if displayReadings else 1
+        }
+      ] %}
+
+      {# Add units column if the submission was not in cubic metres #}
+      {% if displayUnits %}
+        {% set totalRow = (totalRow.push(
+          {
+            html: '<strong>' + tableData.unitTotal + '</strong>',
+            format: 'numeric',
+            attributes: { 'data-test': 'total-row-unit-value' }
+          }
+        ), totalRow) %}
+      {% endif %}
+
+      {# Add the final total column #}
+      {% set totalRow = (totalRow.push(
+        {
+          html: '<strong>' + tableData.cubicMetresTotal + '</strong>',
+          format: 'numeric',
+          attributes: { 'data-test': 'total-row-value' }
+        }
+      ), totalRow) %}
+
+      {# Push the total row into the array of table rows #}
+      {% set tableRows = (tableRows.push(totalRow), tableRows) %}
+
+      {{
+        govukTable({
+          firstCellIsHeader: false,
+          attributes: { 'data-test': 'summaries' },
+          head: tableData.headers,
+          rows: tableRows
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
