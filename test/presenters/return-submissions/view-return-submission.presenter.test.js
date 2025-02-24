@@ -285,15 +285,15 @@ function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false
   // ensure we are only picking up the lines for February)
   const months = {
     January: {
-      monthIndex: 0,
+      monthNumber: 1,
       days: 31
     },
     February: {
-      monthIndex: 1,
+      monthNumber: 2,
       days: 28
     },
     March: {
-      monthIndex: 2,
+      monthNumber: 3,
       days: 31
     }
   }
@@ -301,13 +301,13 @@ function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false
   const BASE_READING = 1000
 
   for (const month in months) {
-    const { monthIndex, days } = months[month]
+    const { monthNumber, days } = months[month]
     for (let day = 1; day <= days; day++) {
       testReturnSubmission.returnSubmissionLines.push(
         _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
           returnSubmissionId: testReturnSubmission.id,
-          startDate: new Date(2025, monthIndex, day),
-          endDate: new Date(2025, monthIndex, day),
+          startDate: new Date(`2025-${monthNumber}-${day}`),
+          endDate: new Date(`2025-${monthNumber}-${day}`),
           timePeriod: 'day',
           quantity: 1000,
           userUnit,
@@ -320,11 +320,11 @@ function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false
 
   // Create weekly lines for April 2025 (which we use for testing weekly returns)
   const weeks = [
-    { startDate: new Date(2025, 2, 30), endDate: new Date(2025, 3, 5) },
-    { startDate: new Date(2025, 3, 6), endDate: new Date(2025, 3, 12) },
-    { startDate: new Date(2025, 3, 13), endDate: new Date(2025, 3, 19) },
-    { startDate: new Date(2025, 3, 20), endDate: new Date(2025, 3, 26) },
-    { startDate: new Date(2025, 3, 27), endDate: new Date(2025, 4, 3) }
+    { startDate: new Date('2025-03-30'), endDate: new Date('2025-04-05') },
+    { startDate: new Date('2025-04-06'), endDate: new Date('2025-04-12') },
+    { startDate: new Date('2025-04-13'), endDate: new Date('2025-04-19') },
+    { startDate: new Date('2025-04-20'), endDate: new Date('2025-04-26') },
+    { startDate: new Date('2025-04-27'), endDate: new Date('2025-05-03') }
   ]
 
   weeks.forEach(({ startDate, endDate }) => {
