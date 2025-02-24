@@ -6,6 +6,7 @@
  */
 
 const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
@@ -21,7 +22,7 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { meterMake, meterProvided, meterSerialNumber, reported, units } = session
+  const { meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, units } = session
 
   return {
     ...alwaysRequiredPageData,
@@ -29,6 +30,7 @@ function go(session) {
     meterProvided,
     meterSerialNumber,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    tableTitle: _tableTitle(returnsFrequency, reported),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
@@ -88,6 +90,13 @@ function _note(note) {
       text: 'No notes added'
     }
   }
+}
+
+function _tableTitle(returnsFrequency, reported) {
+  const frequency = returnRequirementFrequencies[returnsFrequency]
+  const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
+
+  return `Summary of ${frequency} ${method}`
 }
 
 module.exports = {
