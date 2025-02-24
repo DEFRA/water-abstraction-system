@@ -49,7 +49,8 @@ async function _sendLetter(notifyClient, templateId, options) {
     const response = await notifyClient.sendLetter(templateId, options)
 
     return {
-      status: response.status
+      status: response.status,
+      id: response.data.id
     }
   } catch (error) {
     return {

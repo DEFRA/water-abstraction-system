@@ -15,7 +15,7 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 // Thing under test
 const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
 
-describe.only('Notify - Letter service', () => {
+describe('Notify - Letter service', () => {
   const stubNotify = process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
 
   let notifyStub
@@ -38,7 +38,7 @@ describe.only('Notify - Letter service', () => {
       reference: 'developer-testing'
     }
 
-    templateId = notifyTemplates.returns.invitations.primaryUserEmail
+    templateId = notifyTemplates.returns.invitations.licenceHolderLetter
   })
 
   afterEach(() => {
@@ -47,13 +47,19 @@ describe.only('Notify - Letter service', () => {
 
   describe('when the call to "notify" is successful', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify(stubNotify, { status: 201 })
+      notifyStub = _stubSuccessfulNotify(stubNotify, {
+        data: { id: '12345' },
+        status: 201
+      })
     })
 
     it('should call notify', async () => {
       const result = await NotifyLetterService.go(templateId, options)
 
-      expect(result.status).to.equal(201)
+      expect(result).to.equal({
+        id: result.id,
+        status: 201
+      })
     })
 
     if (stubNotify) {

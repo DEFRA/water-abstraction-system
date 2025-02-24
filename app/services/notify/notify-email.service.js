@@ -47,7 +47,8 @@ async function _sendEmail(notifyClient, templateId, emailAddress, options) {
     const response = await notifyClient.sendEmail(templateId, emailAddress, options)
 
     return {
-      status: response.status
+      status: response.status,
+      id: response.data.id
     }
   } catch (error) {
     return {

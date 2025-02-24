@@ -15,7 +15,7 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 // Thing under test
 const NotifyEmailService = require('../../../app/services/notify/notify-email.service.js')
 
-describe.only('Notify - Email service', () => {
+describe('Notify - Email service', () => {
   const stubNotify = process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
 
   let emailAddress
@@ -25,7 +25,7 @@ describe.only('Notify - Email service', () => {
 
   beforeEach(() => {
     // To test a real email is delivered replace this with an email on the whitelist (and use the whitelist api key)
-    emailAddress = 'hello@world.com'
+    emailAddress = 'hello@example.com'
 
     options = {
       personalisation: {
@@ -45,13 +45,17 @@ describe.only('Notify - Email service', () => {
 
   describe('when the call to "notify" is successful', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify(stubNotify, { status: 201 })
+      notifyStub = _stubSuccessfulNotify(stubNotify, {
+        data: { id: '12345' },
+        status: 201
+      })
     })
 
     it('should call notify', async () => {
       const result = await NotifyEmailService.go(templateId, emailAddress, options)
 
       expect(result).to.equal({
+        id: result.id,
         status: 201
       })
     })
