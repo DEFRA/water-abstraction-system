@@ -50,11 +50,11 @@ function _generateReturnLogs(returnRequirement, returnCycle) {
     const quarterlyReturnPeriods = determineReturnsPeriods(returnCycle)
 
     const periodsToProcess = quarterlyReturnPeriods.filter((period) => {
-      return (
-        returnRequirement.returnVersion.startDate <= period.endDate &&
-        (returnRequirement.returnVersion.endDate >= period.startDate ||
-          returnRequirement.returnVersion.endDate === null)
-      )
+      const startDateInPeriod = returnRequirement.returnVersion.startDate <= period.endDate
+      const endDateInPeriod = returnRequirement.returnVersion.endDate >= period.startDate
+      const endDateIsNull = returnRequirement.returnVersion.endDate === null
+
+      return startDateInPeriod && (endDateInPeriod || endDateIsNull)
     })
 
     for (const quarterlyReturnPeriod of periodsToProcess) {
