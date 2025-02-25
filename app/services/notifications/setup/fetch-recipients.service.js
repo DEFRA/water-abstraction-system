@@ -257,7 +257,14 @@ FROM (
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
-  INNER JOIN public.return_logs rl
+  INNER JOIN (
+    SELECT DISTINCT ON (rl.licence_ref)
+      rl.licence_ref,
+      rl.status,
+      rl.metadata,
+      rl.due_date
+    FROM public.return_logs rl
+  )  as rl
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
@@ -275,7 +282,14 @@ FROM (
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
-  INNER JOIN public.return_logs rl
+  INNER JOIN (
+    SELECT DISTINCT ON (rl.licence_ref)
+        rl.licence_ref,
+        rl.status,
+        rl.metadata,
+        rl.due_date
+      FROM public.return_logs rl
+  )  as rl
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
