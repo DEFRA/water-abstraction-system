@@ -41,6 +41,7 @@ describe('Notifications Setup - Cancel presenter', () => {
     const result = CancelPresenter.go(session)
 
     expect(result).to.equal({
+      backLink: `/system/notifications/setup/${session.id}/check`,
       pageTitle: 'You are about to cancel this notification',
       referenceCode: 'ADHC-1234',
       summaryList: {
