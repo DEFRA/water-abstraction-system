@@ -16,7 +16,7 @@ const { stubNotify } = require('../../../config/notify.config.js')
 // Thing under test
 const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
 
-describe.only('Notify - Letter service', () => {
+describe('Notify - Letter service', () => {
   let notifyStub
   let options
   let templateId
