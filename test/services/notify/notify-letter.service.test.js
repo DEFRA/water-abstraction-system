@@ -11,13 +11,12 @@ const { expect } = Code
 // Test helpers
 const { NotifyClient } = require('notifications-node-client')
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
+const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
 const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
 
-describe('Notify - Letter service', () => {
-  const stubNotify = process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
-
+describe.only('Notify - Letter service', () => {
   let notifyStub
   let options
   let templateId
