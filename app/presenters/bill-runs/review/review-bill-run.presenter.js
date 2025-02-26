@@ -51,6 +51,44 @@ function go(billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatu
   return { ...preparedBillRun, preparedLicences, filter }
 }
 
+function _issue(issues) {
+  // if there is more than one issue the issues will be separated by a comma
+  if (issues.includes(',')) {
+    return 'Multiple Issues'
+  }
+
+  return issues
+}
+
+function _prepareBillRun(billRun, preparedLicences) {
+  const {
+    batchType,
+    createdAt,
+    id: billRunId,
+    region,
+    reviewLicences,
+    scheme,
+    status,
+    summer,
+    toFinancialYearEnding
+  } = billRun
+
+  return {
+    billRunId,
+    billRunTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
+    billRunType: formatBillRunType(batchType, scheme, summer),
+    chargeScheme: formatChargeScheme(scheme),
+    dateCreated: formatLongDate(createdAt),
+    financialYear: formatFinancialYear(toFinancialYearEnding),
+    numberOfLicencesDisplayed: preparedLicences.length,
+    numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
+    region: titleCase(region.displayName),
+    reviewMessage: _reviewMessage(reviewLicences[0].numberOfLicencesToReview),
+    status,
+    totalNumberOfLicences: reviewLicences[0].totalNumberOfLicences
+  }
+}
+
 /**
  * Returns true/false values for each issue in the Issue filter based on the filters applied to determine which
  * checkboxes if any should be checked upon loading the page
@@ -83,7 +121,7 @@ function _prepareLicences(licences) {
       id: licence.id,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
-      issue: _getIssueOnLicence(licence.issues),
+      issue: _issue(licence.issues),
       progress: licence.progress ? '✓' : '',
       status: licence.status
     })
@@ -92,36 +130,7 @@ function _prepareLicences(licences) {
   return preparedLicences
 }
 
-function _prepareBillRun(billRun, preparedLicences) {
-  const {
-    batchType,
-    createdAt,
-    id: billRunId,
-    region,
-    reviewLicences,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
-
-  return {
-    billRunId,
-    billRunTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
-    billRunType: formatBillRunType(batchType, scheme, summer),
-    chargeScheme: formatChargeScheme(scheme),
-    dateCreated: formatLongDate(createdAt),
-    financialYear: formatFinancialYear(toFinancialYearEnding),
-    numberOfLicencesDisplayed: preparedLicences.length,
-    numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
-    region: titleCase(region.displayName),
-    reviewMessage: _prepareReviewMessage(reviewLicences[0].numberOfLicencesToReview),
-    status,
-    totalNumberOfLicences: reviewLicences[0].totalNumberOfLicences
-  }
-}
-
-function _prepareReviewMessage(numberOfLicencesToReview) {
+function _reviewMessage(numberOfLicencesToReview) {
   let numberOfLicences
 
   if (numberOfLicencesToReview === 0) {
@@ -133,15 +142,6 @@ function _prepareReviewMessage(numberOfLicencesToReview) {
   }
 
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
-}
-
-function _getIssueOnLicence(issues) {
-  // if there is more than one issue the issues will be separated by a comma
-  if (issues.includes(',')) {
-    return 'Multiple Issues'
-  }
-
-  return issues
 }
 
 module.exports = {
