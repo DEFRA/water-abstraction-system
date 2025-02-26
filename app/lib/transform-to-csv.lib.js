@@ -1,5 +1,7 @@
 'use strict'
 
+const { formatDateObjectToISO } = require('../lib/dates.lib.js')
+
 /**
  * Transforms an array into a CSV formatted string.
  *
@@ -49,7 +51,13 @@ function _transformValueToCSV(value) {
 
   // Return ISO date if value is a date object
   if (value instanceof Date) {
-    return value.toISOString()
+    const dateToString = value.toISOString()
+
+    if (dateToString.includes('T00:00:00.000Z')) {
+      return formatDateObjectToISO(value)
+    }
+
+    return dateToString
   }
 
   // Return integers and booleans as they are (not converted to a string)
