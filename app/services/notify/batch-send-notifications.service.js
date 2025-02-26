@@ -30,7 +30,8 @@ async function go(recipients) {
 
     console.timeEnd('testTime')
 
-    return notifications
+    // Stripe promise status "settled"
+    return notifications.map((notification) => notification.value)
   } catch (e) {
     console.log(e)
   }

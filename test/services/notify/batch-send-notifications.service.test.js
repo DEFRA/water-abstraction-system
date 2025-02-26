@@ -88,39 +88,91 @@ describe.only('Notify - Batch send notifications service', () => {
       expect(result).to.equal([
         // Email
         {
-          status: 'fulfilled',
-          value: {
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            id: '12345',
-            status: 201,
-            personalisation: {
-              periodEndDate: '28th January 2025',
-              periodStartDate: '1st January 2025',
-              returnDueDate: '28th April 2025'
-            }
+          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+          id: '12345',
+          status: 201,
+          personalisation: {
+            periodEndDate: '28th January 2025',
+            periodStartDate: '1st January 2025',
+            returnDueDate: '28th April 2025'
           }
         },
         // Letter
         {
-          status: 'fulfilled',
-          value: {
-            contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-            id: '12345',
-            status: 201,
-            personalisation: {
-              address_line_1: '1',
-              address_line_2: 'Privet Drive',
-              address_line_3: 'Little Whinging',
-              address_line_4: 'Surrey',
-              address_line_5: 'WD25 7LR',
-              name: 'Mr H J Licence holder',
-              periodEndDate: '28th January 2025',
-              periodStartDate: '1st January 2025',
-              returnDueDate: '28th April 2025'
-            }
+          contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+          id: '12345',
+          status: 201,
+          personalisation: {
+            address_line_1: '1',
+            address_line_2: 'Privet Drive',
+            address_line_3: 'Little Whinging',
+            address_line_4: 'Surrey',
+            address_line_5: 'WD25 7LR',
+            name: 'Mr H J Licence holder',
+            periodEndDate: '28th January 2025',
+            periodStartDate: '1st January 2025',
+            returnDueDate: '28th April 2025'
           }
         }
       ])
+    })
+  })
+
+  describe('when the call to "notify" is unsuccessful', () => {
+    describe('when notify returns a "client error"', () => {
+      describe('because there is no "emailAddress"', () => {
+        beforeEach(() => {
+          emailAddress = ''
+
+          _stubUnSuccessfulNotify(stubNotify, {
+            status: 400,
+            message: 'Request failed with status code 400',
+            response: {
+              data: {
+                errors: [
+                  {
+                    error: 'ValidationError',
+                    message: 'email_address Not a valid email address'
+                  }
+                ]
+              }
+            }
+          })
+        })
+
+        it('should return an error', async () => {
+          const result = await BatchSendNotificationsService.go(recipients)
+
+          expect(result).to.equal([
+            {
+              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+              id: undefined,
+              personalisation: {
+                periodEndDate: '28th January 2025',
+                periodStartDate: '1st January 2025',
+                returnDueDate: '28th April 2025'
+              },
+              status: 400
+            },
+            {
+              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+              id: undefined,
+              personalisation: {
+                address_line_1: '1',
+                address_line_2: 'Privet Drive',
+                address_line_3: 'Little Whinging',
+                address_line_4: 'Surrey',
+                address_line_5: 'WD25 7LR',
+                name: 'Mr H J Licence holder',
+                periodEndDate: '28th January 2025',
+                periodStartDate: '1st January 2025',
+                returnDueDate: '28th April 2025'
+              },
+              status: 400
+            }
+          ])
+        })
+      })
     })
   })
 })
@@ -134,6 +186,7 @@ function _stubSuccessfulNotify(stub, response) {
 
 function _stubUnSuccessfulNotify(stub, response) {
   if (stub) {
-    return Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
+    Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
+    Sinon.stub(NotifyClient.prototype, 'sendLetter').rejects(response)
   }
 }
