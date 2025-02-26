@@ -45,16 +45,19 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
         expect(result).to.equal({
           billRunId: 'b21bd372-cd04-405d-824e-5180d854121c',
           billRunTitle: 'Southern (Test Replica) two-part tariff',
-          region: 'Southern (Test replica)',
-          status: 'review',
+          billRunType: 'Two-part tariff',
+          chargeScheme: 'Current',
           dateCreated: '17 January 2024',
+          filter: {
+            issues: undefined,
+            licenceHolderNumber: undefined,
+            licenceStatus: undefined,
+            inProgress: undefined,
+            openFilter: false
+          },
           financialYear: '2022 to 2023',
-          billRunType: 'two-part tariff',
           numberOfLicencesDisplayed: 3,
           numberOfLicencesToReview: 1,
-          reviewMessage:
-            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-          totalNumberOfLicences: 3,
           preparedLicences: [
             {
               id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
@@ -81,13 +84,11 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
               issue: 'Multiple Issues'
             }
           ],
-          filter: {
-            issues: undefined,
-            licenceHolderNumber: undefined,
-            licenceStatus: undefined,
-            inProgress: undefined,
-            openFilter: false
-          }
+          region: 'Southern (Test Replica)',
+          reviewMessage:
+            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+          status: 'review',
+          totalNumberOfLicences: 3
         })
       })
 
