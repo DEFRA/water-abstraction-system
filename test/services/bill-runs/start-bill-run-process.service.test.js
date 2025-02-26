@@ -17,6 +17,7 @@ const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 const TwoPartTariffProcessBillRunService = require('../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+const TwoPartTariffSupplementaryProcessBillRunService = require('../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
 
 // Thing under test
 const StartBillRunProcessService = require('../../../app/services/bill-runs/start-bill-run-process.service.js')
@@ -135,6 +136,35 @@ describe('Start Bill Run Process service', () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
         expect(TwoPartTariffProcessBillRunService.go.called).to.be.true()
+      })
+    })
+
+    describe('and the bill run type is "two part tariff supplementary"', () => {
+      beforeEach(async () => {
+        batchType = 'two_part_supplementary'
+
+        const twoPartTariffSupplementaryBillRun = {
+          ...billRun,
+          batchType
+        }
+
+        Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffSupplementaryBillRun)
+
+        Sinon.stub(TwoPartTariffSupplementaryProcessBillRunService, 'go')
+      })
+
+      it('initiates a new bill run', async () => {
+        await StartBillRunProcessService.go(regionId, userEmail)
+
+        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+
+        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+      })
+
+      it('starts processing the bill run', async () => {
+        await StartBillRunProcessService.go(regionId, userEmail)
+
+        expect(TwoPartTariffSupplementaryProcessBillRunService.go.called).to.be.true()
       })
     })
   })
