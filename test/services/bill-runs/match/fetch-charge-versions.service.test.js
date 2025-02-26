@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,7 +13,10 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const CompanyModel = require('../../../../app/models/company.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const LicenceDocumentModel = require('../../../../app/models/licence-document.model.js')
+const LicenceDocumentRoleModel = require('../../../../app/models/licence-document-role.model.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
@@ -27,6 +30,19 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/m
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
 
+// NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let chargeElement1
+let chargeElement2
+let chargeReference
+let chargeVersion
+let licence
+let licenceHolderDetails
+let licenceSupplementaryYear
+let otherChargeVersion
+let otherChargeReference
+let otherLicence
+let supplementary
+
 describe('Fetch Charge Versions service', () => {
   const billingPeriod = {
     startDate: new Date('2023-04-01'),
@@ -36,23 +52,16 @@ describe('Fetch Charge Versions service', () => {
 
   let changeReason
   let chargeCategory
-  let chargeElement1
-  let chargeElement2
-  let chargeReference
-  let chargeVersion
-  let licence
-  let licenceHolderDetails
-  let licenceSupplementaryYear
-  let otherChargeVersion
-  let otherChargeReference
-  let otherLicence
   let purpose
-  let supplementary
 
   before(async () => {
     purpose = PurposeHelper.select(PURPOSE_SPRAY_IRRIGATION_INDEX)
     chargeCategory = ChargeCategoryHelper.select()
     changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
+  })
+
+  afterEach(async () => {
+    await _cleanUp()
   })
 
   describe('when there are no applicable charge versions', () => {
@@ -71,12 +80,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -103,12 +106,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -131,12 +128,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -163,12 +154,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -187,12 +172,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -215,12 +194,6 @@ describe('Fetch Charge Versions service', () => {
         })
 
         await WorkflowHelper.add({ licenceId: licence.id })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -250,12 +223,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -276,12 +243,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       describe('and the licence has not been flagged for supplementary', () => {
@@ -314,7 +275,7 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are applicable charge versions', () => {
-    before(async () => {
+    beforeEach(async () => {
       licence = await LicenceHelper.add({ licenceRef: '01/128', regionId: region.id })
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
@@ -365,15 +326,6 @@ describe('Fetch Charge Versions service', () => {
         authorisedAnnualQuantity: 100,
         purposeId: purpose.id
       })
-    })
-
-    after(async () => {
-      await chargeReference.$query().delete()
-      await otherChargeReference.$query().delete()
-      await chargeVersion.$query().delete()
-      await otherChargeVersion.$query().delete()
-      await licence.$query().delete()
-      await otherLicence.$query().delete()
     })
 
     describe('and the bill run to be created is "two-part tariff annual"', () => {
@@ -487,10 +439,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await licenceSupplementaryYear.$query().delete()
-      })
-
       describe('and the first licence has been flagged for supplementary', () => {
         it('returns only its charge versions', async () => {
           const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
@@ -502,3 +450,23 @@ describe('Fetch Charge Versions service', () => {
     })
   })
 })
+
+async function _cleanUp() {
+  if (chargeElement1) await chargeElement1.$query().delete()
+  if (chargeElement2) await chargeElement2.$query().delete()
+  if (chargeReference) await chargeReference.$query().delete()
+  if (chargeVersion) await chargeVersion.$query().delete()
+  if (licence) await licence.$query().delete()
+  if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
+  if (otherChargeVersion) await otherChargeVersion.$query().delete()
+  if (otherChargeReference) await otherChargeReference.$query().delete()
+  if (otherLicence) await otherLicence.$query().delete()
+
+  if (licenceHolderDetails) {
+    const { companyId, licenceDocumentId, licenceDocumentRoleId } = licenceHolderDetails
+
+    await LicenceDocumentRoleModel.query().deleteById(licenceDocumentRoleId)
+    await LicenceDocumentModel.query().deleteById(licenceDocumentId)
+    await CompanyModel.query().deleteById(companyId)
+  }
+}
