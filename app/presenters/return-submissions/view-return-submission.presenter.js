@@ -34,7 +34,7 @@ function go(returnSubmission, yearMonth) {
     displayUnits: units !== unitNames.CUBIC_METRES,
     pageTitle: _pageTitle(requestedMonthLines[0].endDate),
     returnReference: returnSubmission.returnLog.returnReference,
-    tableData: _tableData(requestedMonthLines, units, method)
+    tableData: _tableData(requestedMonthLines, units, method, returnSubmission.returnLog.returnsFrequency)
   }
 }
 
@@ -54,8 +54,8 @@ function _pageTitle(date) {
   return `Water abstracted ${titleDate}`
 }
 
-function _tableData(lines, units, method) {
-  const headers = _generateTableHeaders(units, method)
+function _tableData(lines, units, method, frequency) {
+  const headers = _generateTableHeaders(units, method, frequency)
   const rows = _generateTableRows(lines)
   const { cubicMetresTotal, unitTotal } = _total(lines, units)
 
@@ -82,8 +82,14 @@ function _generateTableRows(lines) {
   })
 }
 
-function _generateTableHeaders(units, method) {
-  const headers = [{ text: 'Day' }]
+function _generateTableHeaders(units, method, frequency) {
+  const headers = []
+
+  if (frequency === 'week') {
+    headers.push({ text: 'Week ending' })
+  } else {
+    headers.push({ text: 'Day' })
+  }
 
   if (units !== unitNames.CUBIC_METRES) {
     headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
