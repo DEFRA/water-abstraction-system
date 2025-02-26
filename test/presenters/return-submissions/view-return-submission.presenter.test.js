@@ -213,6 +213,53 @@ describe('View Return Submissions presenter', () => {
         expect(result.tableData.cubicMetresTotal).to.equal('28,000')
       })
     })
+
+    describe('when the return submission frequency is daily', () => {
+      beforeEach(() => {
+        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+      })
+
+      it('includes the expected headers', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        const headers = result.tableData.headers.map((header) => header.text)
+
+        expect(headers).to.include('Day')
+      })
+
+      it('includes the expected rows', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        expect(result.tableData.rows.length).to.equal(28)
+        expect(result.tableData.rows[0]).to.include({ date: '1 February 2025' })
+        expect(result.tableData.rows[27]).to.include({ date: '28 February 2025' })
+      })
+    })
+
+    describe('when the return submission frequency is weekly', () => {
+      beforeEach(() => {
+        testReturnSubmission = _createSubmission({ returnsFrequency: 'week' })
+        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+      })
+
+      it('includes the expected headers', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
+
+        const headers = result.tableData.headers.map((header) => header.text)
+
+        expect(headers).to.include('Week ending')
+      })
+
+      it('includes the expected rows that start within the month', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
+
+        expect(result.tableData.rows.length).to.equal(4)
+        expect(result.tableData.rows[0]).to.include({ date: '12 April 2025' })
+        expect(result.tableData.rows[3]).to.include({ date: '3 May 2025' })
+      })
+    })
   })
 })
 
@@ -227,26 +274,26 @@ function _createInstance(model, helper, data = {}) {
   })
 }
 
-function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false } = {}) {
+function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false, returnsFrequency = 'day' } = {}) {
   const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
 
-  testReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper)
+  testReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper, { returnsFrequency })
 
   testReturnSubmission.returnSubmissionLines = []
 
-  // Create lines for February 2025 (which we are using for testing) and January & March 2025 (which are there to ensure
-  // we are only picking up the lines for February)
+  // Create daily lines for February 2025 (which we are using for testing) and January & March 2025 (which are there to
+  // ensure we are only picking up the lines for February)
   const months = {
     January: {
-      monthIndex: 0,
+      monthNumber: 1,
       days: 31
     },
     February: {
-      monthIndex: 1,
+      monthNumber: 2,
       days: 28
     },
     March: {
-      monthIndex: 2,
+      monthNumber: 3,
       days: 31
     }
   }
@@ -254,13 +301,13 @@ function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false
   const BASE_READING = 1000
 
   for (const month in months) {
-    const { monthIndex, days } = months[month]
+    const { monthNumber, days } = months[month]
     for (let day = 1; day <= days; day++) {
       testReturnSubmission.returnSubmissionLines.push(
         _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
           returnSubmissionId: testReturnSubmission.id,
-          startDate: new Date(2025, monthIndex, day),
-          endDate: new Date(2025, monthIndex, day),
+          startDate: new Date(`2025-${monthNumber}-${day}`),
+          endDate: new Date(`2025-${monthNumber}-${day}`),
           timePeriod: 'day',
           quantity: 1000,
           userUnit,
@@ -270,6 +317,28 @@ function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false
       )
     }
   }
+
+  // Create weekly lines for April 2025 (which we use for testing weekly returns)
+  const weeks = [
+    { startDate: new Date('2025-03-30'), endDate: new Date('2025-04-05') },
+    { startDate: new Date('2025-04-06'), endDate: new Date('2025-04-12') },
+    { startDate: new Date('2025-04-13'), endDate: new Date('2025-04-19') },
+    { startDate: new Date('2025-04-20'), endDate: new Date('2025-04-26') },
+    { startDate: new Date('2025-04-27'), endDate: new Date('2025-05-03') }
+  ]
+
+  weeks.forEach(({ startDate, endDate }) => {
+    testReturnSubmission.returnSubmissionLines.push(
+      _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+        returnSubmissionId: testReturnSubmission.id,
+        startDate,
+        endDate,
+        timePeriod: 'week',
+        quantity: 1000,
+        userUnit
+      })
+    )
+  })
 
   return testReturnSubmission
 }
