@@ -5,7 +5,14 @@
  * @module ReviewBillRunPresenter
  */
 
-const { formatLongDate, generateBillRunTitle } = require('../../base.presenter.js')
+const {
+  formatBillRunType,
+  formatChargeScheme,
+  formatFinancialYear,
+  formatLongDate,
+  generateBillRunTitle,
+  titleCase
+} = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run, licence and filter data for presentation
@@ -86,18 +93,31 @@ function _prepareLicences(licences) {
 }
 
 function _prepareBillRun(billRun, preparedLicences) {
+  const {
+    batchType,
+    createdAt,
+    id: billRunId,
+    region,
+    reviewLicences,
+    scheme,
+    status,
+    summer,
+    toFinancialYearEnding
+  } = billRun
+
   return {
-    billRunId: billRun.id,
-    billRunTitle: generateBillRunTitle(billRun.region.displayName, billRun.batchType, billRun.scheme, billRun.summer),
-    billRunType: 'two-part tariff',
-    dateCreated: formatLongDate(billRun.createdAt),
-    financialYear: _financialYear(billRun.toFinancialYearEnding),
+    billRunId,
+    billRunTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
+    billRunType: formatBillRunType(batchType, scheme, summer),
+    chargeScheme: formatChargeScheme(scheme),
+    dateCreated: formatLongDate(createdAt),
+    financialYear: formatFinancialYear(toFinancialYearEnding),
     numberOfLicencesDisplayed: preparedLicences.length,
-    numberOfLicencesToReview: billRun.reviewLicences[0].numberOfLicencesToReview,
-    region: billRun.region.displayName,
-    reviewMessage: _prepareReviewMessage(billRun.reviewLicences[0].numberOfLicencesToReview),
-    status: billRun.status,
-    totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
+    numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
+    region: titleCase(region.displayName),
+    reviewMessage: _prepareReviewMessage(reviewLicences[0].numberOfLicencesToReview),
+    status,
+    totalNumberOfLicences: reviewLicences[0].totalNumberOfLicences
   }
 }
 
@@ -113,13 +133,6 @@ function _prepareReviewMessage(numberOfLicencesToReview) {
   }
 
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
-}
-
-function _financialYear(financialYearEnding) {
-  const startYear = financialYearEnding - 1
-  const endYear = financialYearEnding
-
-  return `${startYear} to ${endYear}`
 }
 
 function _getIssueOnLicence(issues) {
