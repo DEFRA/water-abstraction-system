@@ -10,30 +10,15 @@ const { expect } = Code
 
 // Test helpers
 const { NotifyClient } = require('notifications-node-client')
-const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
 const BatchSendNotificationsService = require('../../../app/services/notify/batch-send-notifications.service.js')
 
 describe.only('Notify - Batch send notifications service', () => {
-  let emailAddress
-  let options
   let recipients
 
   beforeEach(() => {
-    // To test a real email is delivered replace this with an email on the whitelist (and use the whitelist api key)
-    emailAddress = 'hello@example.com'
-
-    options = {
-      personalisation: {
-        periodEndDate: '28th January 2025',
-        periodStartDate: '1st January 2025',
-        returnDueDate: '28th April 2025'
-      },
-      reference: 'developer-testing'
-    }
-
     // Determined recipients
     recipients = [
       {
@@ -122,8 +107,7 @@ describe.only('Notify - Batch send notifications service', () => {
     describe('when notify returns a "client error"', () => {
       describe('because there is no "emailAddress"', () => {
         beforeEach(() => {
-          emailAddress = ''
-
+          // This is obviously wrong when the letter errors
           _stubUnSuccessfulNotify(stubNotify, {
             status: 400,
             message: 'Request failed with status code 400',
@@ -146,7 +130,7 @@ describe.only('Notify - Batch send notifications service', () => {
           expect(result).to.equal([
             {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              id: undefined,
+              id: undefined, // this wll have an id
               personalisation: {
                 periodEndDate: '28th January 2025',
                 periodStartDate: '1st January 2025',
@@ -156,7 +140,7 @@ describe.only('Notify - Batch send notifications service', () => {
             },
             {
               contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-              id: undefined,
+              id: undefined, // this wll have an id
               personalisation: {
                 address_line_1: '1',
                 address_line_2: 'Privet Drive',
