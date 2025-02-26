@@ -109,9 +109,6 @@ function _note(note) {
 }
 
 function _summaryTableData(session) {
-  const alwaysDisplayLinkHeader = true
-  const linkPrefix = 'Enter'
-  const rootPath = '/system/return-logs/setup'
   const unitNames = {
     'cubic-metres': 'm³',
     litres: 'l',
@@ -120,7 +117,12 @@ function _summaryTableData(session) {
   }
 
   const { id: sessionId, lines, reported, returnsFrequency, units } = session
+
+  const alwaysDisplayLinkHeader = true
+  const linkPrefix = 'Enter'
   const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
+  const rootPath = '/system/return-logs/setup'
+
   const userUnit = unitNames[units]
   const formattedLines = _formatLines(lines, userUnit)
 
