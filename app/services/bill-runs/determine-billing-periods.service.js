@@ -49,8 +49,8 @@ function _billingPeriods(billRunType, financialYear) {
 
   const years = { startYear: financialYear.startDate.getFullYear(), endYear: financialYear.endDate.getFullYear() }
 
-  // Annual and two-part-tariff bill runs will always be a single period
-  if (['annual', 'two_part_tariff'].includes(billRunType)) {
+  // Annual, two-part tariff, and two-part tariff supplementary bill runs will always be a single period
+  if (['annual', 'two_part_tariff', 'two_part_supplementary'].includes(billRunType)) {
     _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
 
     return billingPeriods
