@@ -23,7 +23,7 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, units } = session
+  const { meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } = session
 
   return {
     ...alwaysRequiredPageData,
@@ -33,6 +33,7 @@ function go(session) {
     meterProvided,
     meterSerialNumber,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    startReading,
     summaryTableData: _summaryTableData(session),
     tableTitle: _tableTitle(returnsFrequency, reported),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
