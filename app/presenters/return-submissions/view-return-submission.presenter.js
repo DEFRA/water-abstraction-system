@@ -91,12 +91,12 @@ function _generateTableHeaders(units, method, frequency) {
     headers.push({ text: 'Day' })
   }
 
-  if (units !== unitNames.CUBIC_METRES) {
-    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
-  }
-
   if (method !== 'abstractionVolumes') {
     headers.push({ text: 'Reading', format: 'numeric' })
+  }
+
+  if (units !== unitNames.CUBIC_METRES) {
+    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
   }
 
   headers.push({ text: 'Cubic metres', format: 'numeric' })
