@@ -84,7 +84,7 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
               issue: 'Multiple Issues'
             }
           ],
-          region: 'Southern (Test replica)',
+          region: 'Southern (Test Replica)',
           reviewMessage:
             'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
           status: 'review',
