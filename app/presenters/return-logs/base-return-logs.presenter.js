@@ -61,13 +61,15 @@ function formatStatus(returnLog) {
 /**
  * Generates the table headers for a return log monthly summary table
  *
- * @param {string} method - whether the submission used abstraction volumes or readings
- * @param {string} frequency - the reporting frequency of the return log
- * @param {string} units - the units used for the return log's selected return submission
+ * @param {string} method - Whether the submission used abstraction volumes or readings
+ * @param {string} frequency - The reporting frequency of the return log
+ * @param {string} units - The units used for the return log's selected return submission
+ * @param {string} [alwaysDisplayLinkHeader = false] - Used to determine if the link header should always be visible. It
+ * will always be visible when entering readings
  *
  * @returns {object[]} The table headers for the summary table
  */
-function generateSummaryTableHeaders(method, frequency, units) {
+function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
   const headers = [{ text: 'Month' }]
 
   if (method !== 'abstractionVolumes') {
@@ -84,7 +86,7 @@ function generateSummaryTableHeaders(method, frequency, units) {
 
   headers.push({ text: sentenceCase(`${quantityPostfix}cubic metres`), format: 'numeric' })
 
-  if (frequency !== 'month') {
+  if (frequency !== 'month' || alwaysDisplayLinkHeader) {
     headers.push({ text: 'Details', format: 'numeric' })
   }
 
@@ -116,12 +118,20 @@ function generateSummaryTableHeaders(method, frequency, units) {
  * @param {string} frequency - The reporting frequency of the return log.
  * @param {object[]} lines - The individual submission lines to be grouped and formatted into table rows
  * @param {string} [id=null] - The ID to use in the link to view the daily/weekly details for a month
- * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view details
+ * @param {string} [linkPrefix = 'View'] - The link text prefix when generating links to view/enter details
+ * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view/enter details
  *
  * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
  * quantity, reading, and unit totals.
  */
-function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
+function generateSummaryTableRows(
+  method,
+  frequency,
+  lines,
+  id = null,
+  linkPrefix = 'View',
+  rootPath = '/system/return-submissions'
+) {
   const groups = _groupLinesByMonth(lines)
 
   return groups.map((group) => {
@@ -136,8 +146,8 @@ function generateSummaryTableRows(method, frequency, lines, id = null, rootPath 
       rowData.reading = reading
     }
 
-    if (frequency !== 'month') {
-      rowData.link = _linkDetails(id, method, frequency, endDate, rootPath)
+    if (frequency !== 'month' || linkPrefix !== 'View') {
+      rowData.link = _linkDetails(id, method, frequency, endDate, linkPrefix, rootPath)
     }
 
     if (userUnit !== unitNames.CUBIC_METRES) {
@@ -198,9 +208,9 @@ function _groupLinesByMonth(lines) {
   return Object.values(groupedLines)
 }
 
-function _linkDetails(id, method, frequency, endDate, rootPath) {
+function _linkDetails(id, method, frequency, endDate, linkPrefix, rootPath) {
   const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
-  const text = `View ${returnRequirementFrequencies[frequency]} ${linkTextMethod}`
+  const text = `${linkPrefix} ${returnRequirementFrequencies[frequency]} ${linkTextMethod}`
   const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
   return {

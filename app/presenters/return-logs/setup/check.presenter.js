@@ -6,6 +6,7 @@
  */
 
 const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { generateSummaryTableHeaders, generateSummaryTableRows } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -26,10 +27,13 @@ function go(session) {
 
   return {
     ...alwaysRequiredPageData,
+    displayReadings: reported === 'meter-readings',
+    displayUnits: units !== 'cubic-metres',
     meterMake,
     meterProvided,
     meterSerialNumber,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    summaryTableData: _summaryTableData(session),
     tableTitle: _tableTitle(returnsFrequency, reported),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
@@ -75,6 +79,18 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
+function _formatLines(lines, userUnit) {
+  const formattedLines = lines.map((line) => ({
+    quantity: null,
+    ...line,
+    endDate: new Date(line.endDate),
+    startDate: new Date(line.startDate),
+    userUnit
+  }))
+
+  return formattedLines
+}
+
 function _note(note) {
   if (note?.content) {
     return {
@@ -89,6 +105,28 @@ function _note(note) {
       actions: [{ text: 'Add a note', href: 'note' }],
       text: 'No notes added'
     }
+  }
+}
+
+function _summaryTableData(session) {
+  const alwaysDisplayLinkHeader = true
+  const linkPrefix = 'Enter'
+  const rootPath = '/system/return-logs/setup'
+  const unitNames = {
+    'cubic-metres': 'm³',
+    litres: 'l',
+    megalitres: 'Ml',
+    gallons: 'gal'
+  }
+
+  const { id: sessionId, lines, reported, returnsFrequency, units } = session
+  const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
+  const userUnit = unitNames[units]
+  const formattedLines = _formatLines(lines, userUnit)
+
+  return {
+    headers: generateSummaryTableHeaders(method, returnsFrequency, userUnit, alwaysDisplayLinkHeader),
+    rows: generateSummaryTableRows(method, returnsFrequency, formattedLines, sessionId, linkPrefix, rootPath)
   }
 }
 

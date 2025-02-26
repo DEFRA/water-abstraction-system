@@ -65,8 +65,8 @@
       <ul class="govuk-summary-list__actions-list">
         {% for action in note.actions %}
           <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href  }}">
-              {{ action.text  }} <span class="govuk-visually-hidden">the note</span>
+            <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href }}">
+              {{ action.text }} <span class="govuk-visually-hidden">the note</span>
             </a>
           </li>
         {% endfor %}
@@ -164,35 +164,112 @@
   </div>
 
   {% if nilReturn === "No" %}
-    {# Summary of daily volumes #}
-    <div class="govuk-!-margin-bottom-9">
-      {{ govukTable({
-        caption: tableTitle,
-        captionClasses: "govuk-table__caption--m",
-        firstCellIsHeader: false,
-        head: [
-          { text: "Month" },
-          { text: "Total cubic metres", format: "numeric" },
-          { text: "Details", format: "numeric" }
-        ],
-        rows: [
-          [
-            { text: "April 2024" },
-            { text: "150.388", format: "numeric" },
-            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-          ],
-          [
-            { text: "May 2024" },
-            { text: "155.403", format: "numeric" },
-            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-          ],
-          [
-            { text: "Total volume of water abstracted", classes: "govuk-table__header" },
-            { html: "<strong>305.791</strong>", format: "numeric" },
-            { text: "" }
-          ]
-        ]
-      }) }}
+    {# Summary of abstraction volumes #}
+    <div class="divider govuk-!-margin-bottom-7"></div>
+    {# Meter details #}
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-l">{{ tableTitle }}</h3>
+
+        {% if displayReadings %}
+          {% set startReadingHtml %}
+            {{ govukSummaryList({
+              classes: 'govuk-summary-list--no-border govuk-!-margin-top-0 govuk-!-margin-bottom-0',
+              rows: [
+                {
+                  key: {
+                    text: "Start Reading"
+                  },
+                  value: {
+                    text: startReading
+                  }
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {{ govukInsetText({
+            classes: "govuk-!-margin-bottom-2 govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0",
+            html: startReadingHtml
+          }) }}
+        {% endif %}
+      </div>
+    </div>
+
+    {# Display the table using a GOVUK table component #}
+    <div class="govuk-grid-row govuk-!-margin-bottom-0">
+      <div class="govuk-grid-column-full">
+        {% set tableRows = [] %}
+
+        {% for row in summaryTableData.rows %}
+          {# Set an easier to use index #}
+          {% set rowIndex = loop.index0 %}
+
+          {# Create the summary row #}
+          {% set tableRow = [
+            {
+              text: row.month,
+              attributes: { 'data-test': 'month-' + rowIndex }
+            }
+          ] %}
+
+          {% if displayReadings %}
+            {% set tableRow = (tableRow.push(
+              {
+                text: row.reading,
+                format: 'numeric',
+                attributes: { 'data-test': 'reading-' + rowIndex }
+              }
+            ), tableRow) %}
+          {% endif %}
+
+          {% if displayUnits %}
+            {% set tableRow = (tableRow.push(
+              {
+                text: row.unitTotal,
+                format: 'numeric',
+                attributes: { 'data-test': 'unit-total-' + rowIndex }
+              }
+            ), tableRow) %}
+          {% endif %}
+
+          {# Total cubic metres column #}
+          {% set tableRow = (tableRow.push(
+            {
+              text: row.monthlyTotal,
+              format: 'numeric',
+              attributes: { 'data-test': 'monthly-total-' + rowIndex }
+            }
+          ), tableRow) %}
+
+          {# Action column but only for weekly and monthly returns #}
+          {% if row.link %}
+            {% set actionLink %}
+              <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
+            {% endset %}
+
+            {% set tableRow = (tableRow.push(
+              {
+                html: actionLink,
+                format: 'numeric',
+                attributes: { 'data-test': 'action-' + rowIndex }
+              }
+            ), tableRow) %}
+          {% endif %}
+
+          {# Push our row into the table rows array #}
+          {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+        {% endfor %}
+
+        {{
+          govukTable({
+            firstCellIsHeader: false,
+            attributes: { 'data-test': 'monthly-summaries'},
+            head: summaryTableData.headers,
+            rows: tableRows
+          })
+        }}
+      </div>
     </div>
   {% endif %}
 
