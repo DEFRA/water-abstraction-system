@@ -185,7 +185,7 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission contains readings', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ readings: true })
-        Sinon.stub(testReturnSubmission, '$method').returns('oneMeter')
+        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('includes the expected headers', () => {
@@ -211,6 +211,22 @@ describe('View Return Submissions presenter', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
         expect(result.tableData.cubicMetresTotal).to.equal('28,000')
+      })
+    })
+
+    describe('when the return submission contains non-cubic metre volumes and readings', () => {
+      beforeEach(() => {
+        testReturnSubmission = _createSubmission({ readings: true })
+        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
+        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+      })
+
+      it('includes the expected headers', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        const headers = result.tableData.headers.map((header) => header.text)
+
+        expect(headers).to.equal(['Day', 'Reading', 'Gallons', 'Cubic metres'])
       })
     })
 
