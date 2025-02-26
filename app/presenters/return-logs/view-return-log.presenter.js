@@ -58,6 +58,7 @@ function go(returnLog, auth) {
     displayTable: _displayTable(selectedReturnSubmission),
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
+    downloadCSVLink: _downloadCSVLink(selectedReturnSubmission, id),
     latest,
     licenceRef: licence.licenceRef,
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
@@ -132,6 +133,16 @@ function _displayTable(selectedReturnSubmission) {
   }
 
   return !selectedReturnSubmission.nilReturn
+}
+
+function _downloadCSVLink(selectedReturnSubmission, returnLogId) {
+  if (!selectedReturnSubmission) {
+    return null
+  }
+
+  const number = selectedReturnSubmission.version
+
+  return `/system/return-logs/download?id=${returnLogId}&version=${number}`
 }
 
 function _latest(versions, selectedReturnSubmission) {
