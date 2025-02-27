@@ -49,15 +49,15 @@ function _transformValueToCSV(value) {
     return ''
   }
 
-  // Return ISO date if value is a date object
+  // Returns formatted ISO date if date-only, or ISO timestamp if date-time.
   if (value instanceof Date) {
-    const dateToString = value.toISOString()
+    const isoString = value.toISOString()
 
-    if (dateToString.includes('T00:00:00.000Z')) {
+    if (isoString.endsWith('T00:00:00.000Z')) {
       return formatDateObjectToISO(value)
     }
 
-    return dateToString
+    return isoString
   }
 
   // Return integers and booleans as they are (not converted to a string)
