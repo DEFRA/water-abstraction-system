@@ -20,7 +20,7 @@ describe('Notifications Setup - Persist event service', () => {
     event = {}
   })
 
-  it('should persist an event (required values)', async () => {
+  it('should persist the event (required values)', async () => {
     const result = await PersistEventService.go(event)
 
     const res = await EventModel.query().findById(result.id)
@@ -51,7 +51,7 @@ describe('Notifications Setup - Persist event service', () => {
       }
     })
 
-    it('should persist an event', async () => {
+    it('should persist the event', async () => {
       const result = await PersistEventService.go(event)
 
       const res = await EventModel.query().findById(result.id)

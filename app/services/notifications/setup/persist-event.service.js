@@ -33,7 +33,7 @@ const EventModel = require('../../../../app/models/event.model.js')
  *
  * @param {object} event
  *
- * @returns {object} - the event including the id
+ * @returns {object} - the created event
  */
 async function go(event) {
   return _persistEvent(event)
@@ -41,7 +41,7 @@ async function go(event) {
 
 async function _persistEvent(event) {
   return EventModel.query().insert({
-    type: 'notification', // Required
+    type: 'notification',
     ...event
   })
 }
