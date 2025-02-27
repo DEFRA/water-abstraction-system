@@ -189,7 +189,7 @@
                       classes: "govuk-!-text-align-left",
                       items: [
                         {
-                          href: "#",
+                          href: links.startReading,
                           text: "Change",
                           visuallyHiddenText: " start reading"
                         }
@@ -200,7 +200,7 @@
               }) }}
             {% else %}
               <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2">
-                <a class="govuk-link" href="#">Enter start reading</a>
+                <a class="govuk-link" href="{{ links.startReading }}">Enter start reading</a>
               </div>
             {% endif %}
           {% endset %}
