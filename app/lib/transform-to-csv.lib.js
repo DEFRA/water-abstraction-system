@@ -44,8 +44,8 @@ function transformArrayToCSVRow(arrayToTransform) {
  * @private
  */
 function _transformValueToCSV(value) {
-  // Return empty string for undefined or null values
-  if (!value && value !== false) {
+  // Return empty string for undefined, null or zero values
+  if (!value && value !== false && value !== 0) {
     return ''
   }
 
