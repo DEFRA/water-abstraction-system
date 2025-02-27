@@ -73,31 +73,38 @@ describe.only('Notify - Batch send notifications service', () => {
       expect(result).to.equal([
         // Email
         {
-          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-          id: '12345',
+          emailAddress: 'primary.user@important.com',
+          notificationId: result[0].notificationId,
+          options: {
+            personalisation: {
+              periodEndDate: '28th January 2025',
+              periodStartDate: '1st January 2025',
+              returnDueDate: '28th April 2025'
+            },
+            reference: 'developer-testing'
+          },
           status: 201,
-          personalisation: {
-            periodEndDate: '28th January 2025',
-            periodStartDate: '1st January 2025',
-            returnDueDate: '28th April 2025'
-          }
+          templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
         },
         // Letter
         {
-          contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-          id: '12345',
+          notificationId: result[1].notificationId,
+          options: {
+            personalisation: {
+              address_line_1: '1',
+              address_line_2: 'Privet Drive',
+              address_line_3: 'Little Whinging',
+              address_line_4: 'Surrey',
+              address_line_5: 'WD25 7LR',
+              name: 'Mr H J Licence holder',
+              periodEndDate: '28th January 2025',
+              periodStartDate: '1st January 2025',
+              returnDueDate: '28th April 2025'
+            },
+            reference: 'developer-testing'
+          },
           status: 201,
-          personalisation: {
-            address_line_1: '1',
-            address_line_2: 'Privet Drive',
-            address_line_3: 'Little Whinging',
-            address_line_4: 'Surrey',
-            address_line_5: 'WD25 7LR',
-            name: 'Mr H J Licence holder',
-            periodEndDate: '28th January 2025',
-            periodStartDate: '1st January 2025',
-            returnDueDate: '28th April 2025'
-          }
+          templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
         }
       ])
     })
@@ -108,6 +115,8 @@ describe.only('Notify - Batch send notifications service', () => {
       describe('because there is no "emailAddress"', () => {
         beforeEach(() => {
           // This is obviously wrong when the letter errors
+          recipients = [{ ...recipients[0], email: 'bad email' }]
+
           _stubUnSuccessfulNotify(stubNotify, {
             status: 400,
             message: 'Request failed with status code 400',
@@ -129,30 +138,18 @@ describe.only('Notify - Batch send notifications service', () => {
 
           expect(result).to.equal([
             {
-              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              id: undefined, // this wll have an id
-              personalisation: {
-                periodEndDate: '28th January 2025',
-                periodStartDate: '1st January 2025',
-                returnDueDate: '28th April 2025'
+              emailAddress: 'bad email',
+              notificationId: undefined,
+              status: 400,
+              options: {
+                personalisation: {
+                  periodEndDate: '28th January 2025',
+                  periodStartDate: '1st January 2025',
+                  returnDueDate: '28th April 2025'
+                },
+                reference: 'developer-testing'
               },
-              status: 400
-            },
-            {
-              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-              id: undefined, // this wll have an id
-              personalisation: {
-                address_line_1: '1',
-                address_line_2: 'Privet Drive',
-                address_line_3: 'Little Whinging',
-                address_line_4: 'Surrey',
-                address_line_5: 'WD25 7LR',
-                name: 'Mr H J Licence holder',
-                periodEndDate: '28th January 2025',
-                periodStartDate: '1st January 2025',
-                returnDueDate: '28th April 2025'
-              },
-              status: 400
+              templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
             }
           ])
         })
