@@ -25,7 +25,7 @@ const ReviewLicenceHelper = require('../../../support/helpers/review-licence.hel
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
 
-describe('Fetch Billing Accounts service', () => {
+describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
   let billRun
   let billingAccount
   let billingAccountNotInBillRun
@@ -41,7 +41,7 @@ describe('Fetch Billing Accounts service', () => {
 
   before(async () => {
     region = RegionHelper.select()
-    billRun = await BillRunHelper.add({ regionId: region.id })
+    billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id })
 
     licence = await LicenceHelper.add({ regionId: region.id })
 
