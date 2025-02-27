@@ -1,13 +1,21 @@
 'use strict'
 
 /**
- * Fetches the matching return log data needed for the csv
+ * Fetches the matching return log data and associated submission needed for the return csv download
  * @module FetchDownloadReturnService
  */
 
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 
+/**
+ * Fetches the matching return log data and associated submission needed for the return csv download
+ *
+ * @param {string} returnLogId - The return log ID
+ * @param {number} version - Optional version number of the submission to download csv
+ *
+ * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
+ */
 async function go(returnLogId, version) {
   const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
 
@@ -19,24 +27,21 @@ async function go(returnLogId, version) {
     returnLog.returnSubmissions[0].$applyReadings()
   }
 
-  returnLog.versions = allReturnSubmissions
-
   return returnLog
 }
 
 async function _fetch(returnLogId, selectedReturnSubmission) {
-  const query = ReturnLogModel.query().findById(returnLogId)
+  const query = ReturnLogModel.query().findById(returnLogId).select(['id', 'returnReference', 'startDate', 'endDate'])
+  console.dir(query, { depth: null })
 
   if (selectedReturnSubmission) {
     query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
       returnSubmissionsBuilder
         .findById(selectedReturnSubmission.id)
-        .select(['createdAt', 'id', 'metadata', 'nilReturn', 'userId', 'userType', 'version'])
+        .select(['id', 'metadata', 'version'])
         .withGraphFetched('returnSubmissionLines')
         .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
-          returnSubmissionLinesBuilder
-            .select(['id', 'startDate', 'endDate', 'quantity', 'userUnit'])
-            .orderBy('startDate', 'asc')
+          returnSubmissionLinesBuilder.select(['id', 'startDate', 'quantity']).orderBy('startDate', 'asc')
         })
     })
   }
