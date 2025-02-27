@@ -72,10 +72,10 @@ function _generateTableRows(lines) {
     const { endDate, quantity, reading, userUnit } = line
 
     const rowData = {
-      cubicMetresQuantity: formatQuantity(userUnit, quantity),
+      cubicMetresQuantity: formatNumber(quantity),
       date: formatLongDate(endDate),
       reading,
-      unitQuantity: formatNumber(quantity)
+      unitQuantity: formatQuantity(userUnit, quantity)
     }
 
     return rowData
@@ -112,8 +112,8 @@ function _total(lines, units) {
   }, 0)
 
   return {
-    cubicMetresTotal: formatQuantity(units, totalQuantity),
-    unitTotal: formatNumber(totalQuantity)
+    cubicMetresTotal: formatNumber(totalQuantity),
+    unitTotal: formatQuantity(units, totalQuantity)
   }
 }
 
