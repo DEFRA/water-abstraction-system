@@ -45,10 +45,20 @@ function go(billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatu
     inProgress: filterProgress
   }
 
+  const continueLink = _continueLink(billRun)
+
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
   filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus || filterProgress) !== undefined
 
-  return { ...preparedBillRun, preparedLicences, filter }
+  return { ...preparedBillRun, preparedLicences, filter, continueLink }
+}
+
+function _continueLink(billRun) {
+  if (billRun.batchType === 'two_part_tariff') {
+    return `/system/bill-runs/${billRun.id}/two-part-tariff`
+  }
+
+  return `/system/bill-runs/${billRun.id}/tpt-supplementary`
 }
 
 function _issue(issues) {
