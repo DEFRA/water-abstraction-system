@@ -47,7 +47,7 @@ async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status !== 'review') {
-    throw new ExpandedError('Cannot process a two-part tariff bill run that is not in review', { billRunId })
+    throw new ExpandedError('Cannot process a two-part tariff annual bill run that is not in review', { billRunId })
   }
 
   if (billRun.batchType !== 'two_part_tariff') {

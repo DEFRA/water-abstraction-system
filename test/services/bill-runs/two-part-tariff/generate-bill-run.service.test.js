@@ -25,7 +25,7 @@ const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/
 // Thing under test
 const GenerateBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 
-describe('Generate Bill Run Service', () => {
+describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the generating happens in
   // the background and is not awaited. We want to confirm things like the status of the bill run at certain points. But
   // the only way to do so is to give the background process time to complete.
@@ -82,7 +82,7 @@ describe('Generate Bill Run Service', () => {
         const error = await expect(GenerateBillRunService.go(billRunDetails.id)).to.reject()
 
         expect(error).to.be.an.instanceOf(ExpandedErrorError)
-        expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in review')
+        expect(error.message).to.equal('Cannot process a two-part tariff annual bill run that is not in review')
       })
     })
 
