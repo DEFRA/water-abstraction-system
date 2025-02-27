@@ -140,9 +140,9 @@ function _downloadCSVLink(selectedReturnSubmission, returnLogId) {
     return null
   }
 
-  const number = selectedReturnSubmission.version
+  const { version } = selectedReturnSubmission
 
-  return `/system/return-logs/download?id=${returnLogId}&version=${number}`
+  return `/system/return-logs/download?id=${returnLogId}&version=${version}`
 }
 
 function _latest(versions, selectedReturnSubmission) {
