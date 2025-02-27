@@ -50,6 +50,10 @@ async function go(billRunId) {
     throw new ExpandedError('Cannot process a two-part tariff bill run that is not in review', { billRunId })
   }
 
+  if (billRun.batchType !== 'two_part_tariff') {
+    throw new ExpandedError('This end point only supports two-part tariff annual', { billRunId })
+  }
+
   await _updateStatus(billRunId, 'processing')
 
   // NOTE: We do not await this call intentionally. We don't want to block the user while we generate the bill run
