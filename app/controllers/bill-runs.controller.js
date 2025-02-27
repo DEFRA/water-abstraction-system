@@ -7,10 +7,11 @@
 
 const Boom = require('@hapi/boom')
 
-const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
+const TwoPartTariffSupplementaryGenerateBillRunService = require('../services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
+const TwoPartTariffAnnualGenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
 const ViewSendBillRunService = require('../services/bill-runs/send/view-send-bill-run.service.js')
@@ -60,13 +61,28 @@ async function submitSend(request, h) {
   return h.redirect(`/billing/batch/${id}/processing`)
 }
 
+async function tptSupplementary(request, h) {
+  const { id } = request.params
+
+  try {
+    // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
+    // `processing'.
+    await TwoPartTariffSupplementaryGenerateBillRunService.go(id)
+
+    // Redirect to the bill runs page
+    return h.redirect('/system/bill-runs')
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
+}
+
 async function twoPartTariff(request, h) {
   const { id } = request.params
 
   try {
     // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
     // `processing'.
-    await GenerateBillRunService.go(id)
+    await TwoPartTariffAnnualGenerateBillRunService.go(id)
 
     // Redirect to the bill runs page
     return h.redirect('/system/bill-runs')
@@ -89,6 +105,7 @@ module.exports = {
   send,
   submitCancel,
   submitSend,
+  tptSupplementary,
   twoPartTariff,
   view
 }
