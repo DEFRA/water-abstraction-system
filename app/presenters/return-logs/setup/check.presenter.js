@@ -5,9 +5,22 @@
  * @module CheckPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatLongDate,
+  formatNumber,
+  formatQuantity,
+  sentenceCase
+} = require('../../base.presenter.js')
 const { generateSummaryTableHeaders, generateSummaryTableRows } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+
+const UNIT_NAMES = {
+  'cubic-metres': 'm³',
+  litres: 'l',
+  megalitres: 'Ml',
+  gallons: 'gal'
+}
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
@@ -23,7 +36,9 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } = session
+  const { lines, meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } =
+    session
+  const totalQuantity = _totalQuantity(lines)
 
   return {
     ...alwaysRequiredPageData,
@@ -36,6 +51,8 @@ function go(session) {
     startReading,
     summaryTableData: _summaryTableData(session),
     tableTitle: _tableTitle(returnsFrequency, reported),
+    totalCubicMetres: formatQuantity(UNIT_NAMES[units], totalQuantity),
+    totalQuantity,
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
@@ -110,13 +127,6 @@ function _note(note) {
 }
 
 function _summaryTableData(session) {
-  const unitNames = {
-    'cubic-metres': 'm³',
-    litres: 'l',
-    megalitres: 'Ml',
-    gallons: 'gal'
-  }
-
   const { id: sessionId, lines, reported, returnsFrequency, units } = session
 
   const alwaysDisplayLinkHeader = true
@@ -124,7 +134,7 @@ function _summaryTableData(session) {
   const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
   const rootPath = '/system/return-logs/setup'
 
-  const userUnit = unitNames[units]
+  const userUnit = UNIT_NAMES[units]
   const formattedLines = _formatLines(lines, userUnit)
 
   return {
@@ -138,6 +148,16 @@ function _tableTitle(returnsFrequency, reported) {
   const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
 
   return `Summary of ${frequency} ${method}`
+}
+
+function _totalQuantity(lines) {
+  const totalQuantity = lines.reduce((acc, line) => {
+    const quantity = line.quantity ?? 0
+
+    return acc + quantity
+  }, 0)
+
+  return formatNumber(totalQuantity)
 }
 
 module.exports = {

@@ -261,7 +261,7 @@
             }
           ), tableRow) %}
 
-          {# Action column but only for weekly and monthly returns #}
+          {# Action column #}
           {% if row.link %}
             {% set actionLink %}
               <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
