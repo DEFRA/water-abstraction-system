@@ -6,7 +6,6 @@
  */
 
 const { contactName } = require('../../crm.presenter.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
@@ -79,9 +78,9 @@ function _transformToCsv(recipients, notificationType) {
     const row = [
       recipient.licence_ref,
       recipient.return_reference,
-      formatDateObjectToISO(recipient.start_date),
-      formatDateObjectToISO(recipient.end_date),
-      formatDateObjectToISO(recipient.due_date),
+      recipient.start_date,
+      recipient.end_date,
+      recipient.due_date,
       notificationType,
       contact ? 'letter' : 'email',
       recipient.contact_type,
