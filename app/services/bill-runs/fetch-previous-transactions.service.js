@@ -5,9 +5,9 @@
  * @module FetchPreviousTransactionsService
  */
 
-const { db } = require('../../../../db/db.js')
-const { transactionsMatch } = require('../../../lib/general.lib.js')
-const TransactionModel = require('../../../models/transaction.model.js')
+const { db } = require('../../../db/db.js')
+const { transactionsMatch } = require('../../lib/general.lib.js')
+const TransactionModel = require('../../models/transaction.model.js')
 
 /**
  * Fetches the previously billed transactions that match, removing any debits which cancelled out by previous credits
