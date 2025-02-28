@@ -61,7 +61,7 @@ describe('Notifications Setup - Cancel presenter', () => {
         name: 'quarterOne',
         dueDate: '2025-07-28',
         endDate: '2025-06-30',
-        summer: false,
+        summer: 'false',
         startDate: '2025-04-01'
       }
     })
@@ -83,7 +83,7 @@ describe('Notifications Setup - Cancel presenter', () => {
         name: 'quarterOne',
         dueDate: '2025-07-28',
         endDate: '2025-06-30',
-        summer: false,
+        summer: 'false',
         startDate: '2025-04-01'
       }
     })
@@ -106,7 +106,7 @@ describe('Notifications Setup - Cancel presenter', () => {
           name: 'quarterOne',
           dueDate: '2025-07-28',
           endDate: '2025-06-30',
-          summer: false,
+          summer: 'false',
           startDate: '2025-04-01'
         }
       })

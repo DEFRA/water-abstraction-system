@@ -41,7 +41,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
           name: 'allYear',
           dueDate,
           endDate: '2023-03-31',
-          summer: false,
+          summer: 'false',
           startDate: '2022-04-01'
         }
       }

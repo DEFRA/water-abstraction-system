@@ -36,7 +36,7 @@ describe('Notifications Setup - Recipients service', () => {
           name: 'allYear',
           dueDate,
           endDate: '2024-03-31',
-          summer: false,
+          summer: 'false',
           startDate: '2023-04-01'
         }
       }
