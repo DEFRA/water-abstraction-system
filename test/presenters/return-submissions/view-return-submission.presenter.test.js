@@ -167,17 +167,17 @@ describe('View Return Submissions presenter', () => {
           expect(result.tableData.rows.length).to.equal(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
           expect(result.tableData.rows[0]).to.include({
-            cubicMetresQuantity: '219,969.248',
+            cubicMetresQuantity: '1,000',
             date: '1 February 2025',
-            unitQuantity: '1,000'
+            unitQuantity: '219,969.248'
           })
         })
 
         it('includes the expected totals', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.cubicMetresTotal).to.equal('6,159,138.952')
-          expect(result.tableData.unitTotal).to.equal('28,000')
+          expect(result.tableData.cubicMetresTotal).to.equal('28,000')
+          expect(result.tableData.unitTotal).to.equal('6,159,138.952')
         })
       })
     })
