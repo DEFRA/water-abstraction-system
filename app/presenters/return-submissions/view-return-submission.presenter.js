@@ -22,7 +22,7 @@ function go(returnSubmission, yearMonth) {
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
   const requestedMonthLines = returnSubmissionLines.filter(
-    (line) => line.startDate.getFullYear() === requestedYear && line.startDate.getMonth() === requestedMonth
+    (line) => line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
   )
 
   const method = returnSubmission.$method()
