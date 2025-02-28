@@ -13,7 +13,7 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
 const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
 const { generateUUID } = require('../../../lib/general.lib.js')
 const GenerateTransactionService = require('./generate-transaction.service.js')
-const ProcessTransactionsService = require('./process-transactions.service.js')
+const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
 const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
@@ -125,7 +125,7 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
     }
 
     const { id: billLicenceId, licence, transactions } = billLicence
-    const processedTransactions = await ProcessTransactionsService.go(
+    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
       transactions,
       billLicenceId,
       billingAccountId,
