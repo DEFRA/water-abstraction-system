@@ -34,12 +34,20 @@ async function go(sessionId, page = 1) {
 
   const formattedData = CheckPresenter.go(recipients, page, pagination, session)
 
+  await _save(session, recipients)
+
   return {
     activeNavBar: 'manage',
     ...formattedData,
     pagination,
     page
   }
+}
+
+async function _save(session, recipients) {
+  session.recipients = recipients
+
+  return session.$update()
 }
 
 module.exports = {
