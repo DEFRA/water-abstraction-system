@@ -90,6 +90,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: basePath + '/{sessionId}/check',
+    options: {
+      handler: NotificationsSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
