@@ -174,13 +174,11 @@ async function go(session) {
 async function _fetchRecipient(session) {
   const { licenceRef } = session
 
-  const where = `
-    AND ldh.licence_ref = ?
-  `
+  const whereLicenceRef = `ldh.licence_ref = ?`
 
   const bindings = [licenceRef, licenceRef, licenceRef]
 
-  const { rows } = await _fetch(bindings, where)
+  const { rows } = await _fetch(bindings, whereLicenceRef)
 
   return rows
 }
@@ -195,23 +193,38 @@ async function _fetchRecipients(session) {
   const where = `
     AND rl.due_date = ?
     AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
   `
-  const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences, dueDate, summer, removeLicences]
 
-  const { rows } = await _fetch(bindings, where)
+  const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
+
+  const bindings = [dueDate, summer, removeLicences, removeLicences, removeLicences]
+
+  const { rows } = await _fetch(bindings, whereLicenceRef, where)
 
   return rows
 }
 
-async function _fetch(bindings, where) {
-  const query = _query(where)
+async function _fetch(bindings, whereLicenceRef, whereReturnLogs) {
+  const query = _query(whereLicenceRef, whereReturnLogs)
 
   return db.raw(query, bindings)
 }
 
-function _query(additionalWhereClause) {
-  return `SELECT
+function _query(whereLicenceRef, whereReturnLogs = '') {
+  return `
+  WITH return_logs as (
+      SELECT DISTINCT ON (rl.licence_ref)
+        rl.licence_ref,
+        rl.status,
+        rl.metadata,
+        rl.due_date
+      FROM public.return_logs rl
+      WHERE
+        rl.status = 'due'
+        AND rl.metadata->>'isCurrent' = 'true'
+        ${whereReturnLogs}
+    )
+  SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
   contact_type,
   email,
@@ -229,13 +242,11 @@ FROM (
       )
     )) AS contact_hash_id
   FROM public.licence_document_headers ldh
-  INNER JOIN public.return_logs rl
-    ON rl.licence_ref = ldh.licence_ref
-  INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+    INNER JOIN return_logs
+        ON return_logs.licence_ref = ldh.licence_ref
+    INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
   WHERE
-    rl.status = 'due'
-    AND rl.metadata->>'isCurrent' = 'true'
-    ${additionalWhereClause}
+    ${whereLicenceRef}
     AND contacts->>'role' IN ('Licence holder', 'Returns to')
     AND NOT EXISTS (
       SELECT
@@ -257,19 +268,10 @@ FROM (
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
-  INNER JOIN (
-    SELECT DISTINCT ON (rl.licence_ref)
-      rl.licence_ref,
-      rl.status,
-      rl.metadata,
-      rl.due_date
-    FROM public.return_logs rl
-  )  as rl
-    ON rl.licence_ref = ldh.licence_ref
+  INNER JOIN return_logs
+    ON return_logs.licence_ref = ldh.licence_ref
   WHERE
-    rl.status = 'due'
-    AND rl.metadata->>'isCurrent' = 'true'
-    ${additionalWhereClause}
+    ${whereLicenceRef}
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -282,19 +284,10 @@ FROM (
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
-  INNER JOIN (
-    SELECT DISTINCT ON (rl.licence_ref)
-        rl.licence_ref,
-        rl.status,
-        rl.metadata,
-        rl.due_date
-      FROM public.return_logs rl
-  )  as rl
-    ON rl.licence_ref = ldh.licence_ref
-  WHERE
-    rl.status = 'due'
-    AND rl.metadata->>'isCurrent' = 'true'
-    ${additionalWhereClause}
+  INNER JOIN return_logs
+    ON return_logs.licence_ref = ldh.licence_ref
+    WHERE
+    ${whereLicenceRef}
 ) contacts
 GROUP BY
   contact_type,
