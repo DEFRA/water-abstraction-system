@@ -87,6 +87,19 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
     })
 
     describe('and the bill run is in review', () => {
+      describe('but it is not a two-part tariff annual', () => {
+        beforeEach(async () => {
+          billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
+        })
+
+        it('throws an error', async () => {
+          const error = await expect(GenerateBillRunService.go(billRunDetails.id)).to.reject()
+
+          expect(error).to.be.an.instanceOf(ExpandedErrorError)
+          expect(error.message).to.equal('This end point only supports two-part tariff annual')
+        })
+      })
+
       describe('but there is nothing to bill', () => {
         beforeEach(async () => {
           billRunSelectStub.resolves({ ...billRunDetails })
