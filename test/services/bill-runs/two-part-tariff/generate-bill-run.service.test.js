@@ -18,7 +18,7 @@ const ExpandedErrorError = require('../../../../app/errors/expanded.error.js')
 
 // Things we need to stub
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+const FetchTwoPartTariffBillingAccountsService = require('../../../../app/services/bill-runs/fetch-two-part-tariff-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
@@ -26,7 +26,7 @@ const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/
 // Thing under test
 const GenerateBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 
-describe('Generate Bill Run Service', () => {
+describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the generating happens in
   // the background and is not awaited. We want to confirm things like the status of the bill run at certain points. But
   // the only way to do so is to give the background process time to complete.
@@ -59,7 +59,7 @@ describe('Generate Bill Run Service', () => {
       // We stub FetchBillingAccountsService to return no results in all scenarios because it is the result of
       // ProcessBillingPeriodService which determines if there is anything to bill. We change the stub of that service
       // to dictate the scenario we're trying to test.
-      Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+      Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
     })
 
     describe('and the bill run is not in review', () => {
@@ -144,7 +144,7 @@ describe('Generate Bill Run Service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').rejects(thrownError)
+        Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
@@ -178,7 +178,7 @@ describe('Generate Bill Run Service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+          Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
           Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
         })
 
@@ -213,7 +213,7 @@ describe('Generate Bill Run Service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+        Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
         Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
       })
