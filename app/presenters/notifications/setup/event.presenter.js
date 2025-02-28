@@ -60,6 +60,8 @@ function _name(journey) {
     return 'Returns: invitation'
   } else if (journey === 'reminders') {
     return 'Returns: reminder'
+  } else {
+    return ''
   }
 }
 
@@ -94,6 +96,8 @@ function _subType(journey) {
     return 'returnInvitation'
   } else if (journey === 'reminders') {
     return 'returnReminder'
+  } else {
+    return ''
   }
 }
 

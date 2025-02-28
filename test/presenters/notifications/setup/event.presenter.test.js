@@ -176,4 +176,22 @@ describe('Notifications Setup - Event presenter', () => {
       expect(result.subtype).to.equal('returnReminder')
     })
   })
+
+  describe('when the journey is not recognised', () => {
+    beforeEach(() => {
+      session.journey = ''
+    })
+
+    it('correctly sets the "metadata.name"', () => {
+      const result = EventPresenter.go(session)
+
+      expect(result.metadata.name).to.equal('')
+    })
+
+    it('correctly sets the "subtype"', () => {
+      const result = EventPresenter.go(session)
+
+      expect(result.subtype).to.equal('')
+    })
+  })
 })
