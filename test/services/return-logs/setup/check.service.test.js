@@ -31,6 +31,7 @@ describe('Return Logs Setup - Check service', () => {
         receivedDate: '2025-01-31T00:00:00.000Z',
         reported: 'volumes',
         returnReference: '1234',
+        returnsFrequency: 'month',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startDate: '2004-04-01T00:00:00.000Z',
         twoPartTariff: false,
@@ -77,6 +78,7 @@ describe('Return Logs Setup - Check service', () => {
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+        tableTitle: 'Summary of monthly meter readings',
         tariff: 'Standard',
         units: 'Megalitres'
       })
