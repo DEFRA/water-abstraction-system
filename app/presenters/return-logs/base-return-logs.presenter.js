@@ -132,7 +132,7 @@ function generateSummaryTableRows(
   linkPrefix = 'View',
   rootPath = '/system/return-submissions'
 ) {
-  const groups = _groupLinesByMonth(lines)
+  const groups = frequency === 'month' ? lines : _groupLinesByMonth(lines)
 
   return groups.map((group) => {
     const { endDate, quantity, reading, userUnit } = group
