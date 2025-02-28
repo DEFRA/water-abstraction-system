@@ -17,7 +17,7 @@ const ExpandedErrorError = require('../../../../app/errors/expanded.error.js')
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+const FetchTwoPartTariffBillingAccountsService = require('../../../../app/services/bill-runs/fetch-two-part-tariff-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
@@ -67,10 +67,10 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      // We stub FetchBillingAccountsService to return no results in all scenarios because it is the result of
-      // ProcessBillingPeriodService which determines if there is anything to bill. We change the stub of that service
-      // to dictate the scenario we're trying to test.
-      Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+      // We stub FetchTwoPartTariffBillingAccountsService to return no results in all scenarios because it is the result
+      // of ProcessBillingPeriodService which determines if there is anything to bill. We change the stub of that
+      // service to dictate the scenario we're trying to test.
+      Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
     })
 
     describe('and the bill run is not in review', () => {
@@ -87,19 +87,6 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
     })
 
     describe('and the bill run is in review', () => {
-      describe('but it is not a two-part tariff annual', () => {
-        beforeEach(async () => {
-          billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
-        })
-
-        it('throws an error', async () => {
-          const error = await expect(GenerateBillRunService.go(billRunDetails.id)).to.reject()
-
-          expect(error).to.be.an.instanceOf(ExpandedErrorError)
-          expect(error.message).to.equal('This end point only supports two-part tariff annual')
-        })
-      })
-
       describe('but there is nothing to bill', () => {
         beforeEach(async () => {
           billRunSelectStub.resolves({ ...billRunDetails })
@@ -169,7 +156,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').rejects(thrownError)
+        Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
@@ -203,7 +190,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+          Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
           Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
         })
 
@@ -238,7 +225,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+        Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
         Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
       })
