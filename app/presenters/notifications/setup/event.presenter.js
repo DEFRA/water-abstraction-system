@@ -47,7 +47,7 @@ function _licences(recipients) {
 }
 
 /**
- * This name is used by the legacy UI to render the notification type on '/notifications/report'.
+ * This name is used in the legacy UI to render the notification type on '/notifications/report'.
  * This has been done to allow all types of notifications to be rendered in the UI. The data is taken straight from the
  * metadata and rendered in the view.
  *
@@ -76,7 +76,7 @@ function _returnCycle(returnsPeriod) {
  *
  * The legacy code has the concept of 'subType' this is used when querying to get notifications.
  *
- * Below is an example of the query.
+ * Below is an example of a query used in 'water-abstraction-service'.
  *
  * ```sql
  * SELECT * FROM water.scheduled_notification
@@ -86,8 +86,6 @@ function _returnCycle(returnsPeriod) {
  *       ORDER BY created DESC LIMIT 1)
  *     AND licences \\? :licenceRef
  * ```
- *
- * We need to be consistent with this pattern.
  *
  * @private
  */
