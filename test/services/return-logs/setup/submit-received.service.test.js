@@ -156,7 +156,7 @@ describe('Return Logs Setup - Submit Received service', () => {
             backLink: `/system/licences/cd190dc7-912a-46a5-9421-2750fb1c7ac8/returns`,
             returnReference: '12345'
           },
-          { skip: ['sessionId', 'error'] }
+          { skip: ['sessionId', 'error', 'todaysDate', 'yesterdaysDate'] }
         )
       })
 

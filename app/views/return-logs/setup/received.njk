@@ -87,12 +87,18 @@
           {
             value: "today",
             text: "Today",
-            checked: receivedDateOption === 'today'
+            checked: receivedDateOption === 'today',
+            hint: {
+              text: todaysDate
+            }
           },
           {
             value: "yesterday",
             text: "Yesterday",
-            checked: receivedDateOption === 'yesterday'
+            checked: receivedDateOption === 'yesterday',
+            hint: {
+              text: yesterdaysDate
+            }
           },
           {
             value: "custom-date",
