@@ -184,11 +184,12 @@ async function _fetchRecipient(session) {
 }
 
 async function _fetchRecipients(session) {
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  const {
+    determinedReturnsPeriod: { dueDate, summer },
+    removeLicences = ''
+  } = session
 
-  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
-
-  const dueDate = returnsPeriod.dueDate
+  const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
   const where = `
     AND rl.due_date = ?
@@ -197,7 +198,7 @@ async function _fetchRecipients(session) {
 
   const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
 
-  const bindings = [dueDate, summer, removeLicences, removeLicences, removeLicences]
+  const bindings = [dueDate, summer, excludeLicences, excludeLicences, excludeLicences]
 
   const { rows } = await _fetch(bindings, whereLicenceRef, where)
 

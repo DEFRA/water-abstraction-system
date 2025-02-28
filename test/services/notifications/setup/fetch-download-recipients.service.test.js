@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, after, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,36 +12,39 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 
 // Thing under test
 const FetchDownloadRecipientsService = require('../../../../app/services/notifications/setup/fetch-download-recipients.service.js')
-const Sinon = require('sinon')
 
 describe('Notifications Setup - Fetch Download Recipients service', () => {
   const endDate = new Date('2023-03-31')
   const startDate = new Date('2022-04-01')
   const year = 2023
 
-  let clock
   let session
   let dueDate
   let removeLicences
   let testRecipients
 
   before(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
-
     dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
 
     testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
-  })
-
-  after(() => {
-    clock.restore()
   })
 
   describe('when the "journey" is for notifications', () => {
     beforeEach(() => {
       removeLicences = ''
 
-      session = { journey: 'notifications', returnsPeriod: 'quarterFour', removeLicences }
+      session = {
+        journey: 'notifications',
+        returnsPeriod: 'allYear',
+        removeLicences,
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate,
+          endDate: '2023-03-31',
+          summer: false,
+          startDate: '2022-04-01'
+        }
+      }
     })
 
     describe('when there are recipients', () => {
@@ -177,7 +180,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         beforeEach(() => {
           removeLicences = testRecipients.primaryUser.licenceRef
 
-          session = { returnsPeriod: 'quarterFour', removeLicences }
+          session.removeLicences = removeLicences
         })
 
         it('correctly returns recipients without the "removeLicences"', async () => {

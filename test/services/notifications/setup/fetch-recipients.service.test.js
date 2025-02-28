@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,25 +12,15 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 
 // Thing under test
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
-const Sinon = require('sinon')
 
 describe('Notifications Setup - Recipients service', () => {
   const dueDate = '2025-04-28'
-  const year = 2025
 
-  let clock
   let recipients
   let session
 
   before(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
-
     recipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
-  })
-
-  afterEach(() => {
-    clock.restore()
-    clock.restore()
   })
 
   describe('when the "journey" is for notifications', () => {
@@ -38,7 +28,18 @@ describe('Notifications Setup - Recipients service', () => {
 
     beforeEach(() => {
       removeLicences = ''
-      session = { journey: 'invitations', returnsPeriod: 'quarterFour', removeLicences }
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        removeLicences,
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate,
+          endDate: '2024-03-31',
+          summer: false,
+          startDate: '2023-04-01'
+        }
+      }
     })
 
     describe('when there is a "primary user"', () => {
@@ -166,7 +167,7 @@ describe('Notifications Setup - Recipients service', () => {
       beforeEach(() => {
         removeLicences = recipients.primaryUser.licenceRef
 
-        session = { returnsPeriod: 'quarterFour', removeLicences }
+        session.removeLicences = removeLicences
       })
 
       it('correctly returns recipients without the "removeLicences"', async () => {

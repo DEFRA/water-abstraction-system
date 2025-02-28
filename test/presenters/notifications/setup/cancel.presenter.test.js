@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,7 +16,6 @@ const CancelPresenter = require('../../../../app/presenters/notifications/setup/
 describe('Notifications Setup - Cancel presenter', () => {
   const referenceCode = 'ADHC-1234'
 
-  let clock
   let licenceRef
   let session
 
@@ -29,12 +27,6 @@ describe('Notifications Setup - Cancel presenter', () => {
       licenceRef,
       referenceCode
     }
-
-    clock = Sinon.useFakeTimers(new Date('2025-01-15'))
-  })
-
-  afterEach(() => {
-    clock.restore()
   })
 
   it('correctly presents the data', () => {
@@ -65,7 +57,13 @@ describe('Notifications Setup - Cancel presenter', () => {
   describe('and the journey is "invitations"', () => {
     beforeEach(() => {
       session.journey = 'invitations'
-      session.returnsPeriod = 'quarterOne'
+      session.determinedReturnsPeriod = {
+        name: 'quarterOne',
+        dueDate: '2025-07-28',
+        endDate: '2025-06-30',
+        summer: false,
+        startDate: '2025-04-01'
+      }
     })
 
     it('correctly formats the summary list', () => {
@@ -81,7 +79,13 @@ describe('Notifications Setup - Cancel presenter', () => {
   describe('and the journey is "reminders"', () => {
     beforeEach(() => {
       session.journey = 'reminders'
-      session.returnsPeriod = 'quarterOne'
+      session.determinedReturnsPeriod = {
+        name: 'quarterOne',
+        dueDate: '2025-07-28',
+        endDate: '2025-06-30',
+        summer: false,
+        startDate: '2025-04-01'
+      }
     })
 
     it('correctly formats the summary list', () => {
@@ -98,7 +102,13 @@ describe('Notifications Setup - Cancel presenter', () => {
     describe('and the "returnsPeriod" is for a "quarter"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
-        session.returnsPeriod = 'quarterOne'
+        session.determinedReturnsPeriod = {
+          name: 'quarterOne',
+          dueDate: '2025-07-28',
+          endDate: '2025-06-30',
+          summer: false,
+          startDate: '2025-04-01'
+        }
       })
 
       it('correctly formats the summary list', () => {
@@ -114,7 +124,13 @@ describe('Notifications Setup - Cancel presenter', () => {
     describe('and the "returnsPeriod" is "summer"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
-        session.returnsPeriod = 'summer'
+        session.determinedReturnsPeriod = {
+          name: 'summer',
+          dueDate: '2025-11-28',
+          endDate: '2025-10-31',
+          summer: true,
+          startDate: '2024-11-01'
+        }
       })
 
       it('correctly formats the summary list', () => {
@@ -130,7 +146,13 @@ describe('Notifications Setup - Cancel presenter', () => {
     describe('and the "returnsPeriod" is "allYear"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
-        session.returnsPeriod = 'allYear'
+        session.determinedReturnsPeriod = {
+          name: 'allYear',
+          dueDate: '2025-04-28',
+          endDate: '2025-03-31',
+          summer: true,
+          startDate: '2024-04-01'
+        }
       })
 
       it('correctly formats the summary list', () => {
