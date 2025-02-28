@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats the session data to create an event for 'wabs.public.events'
+ * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
  * @module CreateEventPresenter
  */
 
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats the session data to create an event for 'wabs.public.events'
+ * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
  *
  * @param {SessionModel} session
  *
@@ -35,7 +35,7 @@ function go(session) {
 
 /**
  * All the licences associated with an event (licences that will receive notifications) are stored in
- * 'wabs.water.events.licences'. It is not clear where theses are used. But to be consistent we follow the established
+ * `water.events.licences`. It is not clear where theses are used. But to be consistent we follow the established
  * pattern.
  *
  * @private
