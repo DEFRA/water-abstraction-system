@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
+ * Process the billing accounts for a given billing period and creates their supplementary two-part tariff bills
  * @module ProcessBillingPeriodService
  */
 
@@ -13,15 +13,16 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
 const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
 const { generateUUID } = require('../../../lib/general.lib.js')
 const GenerateTransactionService = require('./generate-transaction.service.js')
+const ProcessTransactionsService = require('./process-transactions.service.js')
 const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
 const BillingConfig = require('../../../../config/billing.config.js')
 
 /**
- * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
+ * Process the billing accounts for a given billing period and creates their supplementary two-part tariff bills
  *
- * @param {module:BillRunModel} billRun - The two-part tariff annual bill run we need to process
+ * @param {module:BillRunModel} billRun - The two-part tariff supplementary bill run we need to process
  * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
@@ -63,9 +64,7 @@ async function go(billRun, billingPeriod, billingAccounts) {
     // _processBillingAccount() will return true (bill was created) else false (no bill created) for each billing
     // account processed. Promise.all() will return these results as an array. Only one of them has to be true for us to
     // mark the bill run as populated. The complication is we're not doing this once but multiple times as we iterate
-    // the billing accounts. As soon as we have flagged the bill run as populated we can stop checking. And TBH, unlike
-    // supplementary it is extremely unlikely an annual bill run would generate no bills. But we play it safe and don't
-    // make that assumption.
+    // the billing accounts. As soon as we have flagged the bill run as populated we can stop checking.
     const results = await Promise.all(processes)
 
     if (!billRunIsPopulated) {
@@ -79,68 +78,82 @@ async function go(billRun, billingPeriod, billingAccounts) {
 }
 
 /**
- * Create the bill licence and transaction records for a bill
+ * Generate the bill licence and transaction records for a bill, then cleanse them so only billable remains
  *
- * For each billing account we need to create a bill (1-to-1). Linked to the bill will be multiple charge versions
- * which is what we actually use to calculate a bill. A charge version can have multiple charge references and for each
- * one we need to generate a transaction line.
+ * For each billing account we need to create a bill (1-to-1). Linked to the billing account will be multiple charge
+ * versions which is what we actually use to calculate a bill. A charge version can have multiple charge references and
+ * for each one we need to generate a transaction line.
  *
- * The complication is we group transactions by licence (via the bill licence) not charge version. So, as we iterate
+ * The complication is we group transactions by licence (via the bill licence), not charge version. So, as we iterate
  * the charge versions we have to determine if its for a licence that we have already generated a bill licence for, or
- * we have to create a new one.
+ * if we have to create a new one.
+ *
+ * Once we have generated the bill licences and the transactions against them, we then need to 'cleanse' them for
+ * billing.
+ *
+ * - Those with no generated lines are simply removed (most likely some has ended the licence so the charge versions
+ * used to generate the transactions no longer applied)
+ * - Those which when the generated lines are 'paired' to previously billed lines results in nothing needing to be
+ * billed
+ *
+ * From those that remain, we extract the bill licences and transactions to allow us to 'batch' the persist queries
+ * we fire at the DB.
  *
  * @private
  */
-async function _createBillLicencesAndTransactions(billId, billingAccount, billRunExternalId, billingPeriod) {
+async function _generateBillLicencesAndTransactions(billId, billingAccount, billingPeriod) {
   const allBillLicences = []
-  const transactions = []
 
   for (const chargeVersion of billingAccount.chargeVersions) {
     const billLicence = _findOrCreateBillLicence(allBillLicences, chargeVersion.licence, billId)
 
-    const createdTransactions = await _createTransactions(
-      billLicence.id,
-      billingPeriod,
-      chargeVersion,
-      billRunExternalId,
-      billingAccount.accountNumber
+    const generatedTransactions = await _generateTransactions(billLicence.id, billingPeriod, chargeVersion)
+
+    billLicence.transactions.push(...generatedTransactions)
+  }
+
+  return allBillLicences
+}
+
+async function _processBillLicences(billLicences, billingAccountId, billingPeriod) {
+  const financialYearEnding = billingPeriod.endDate.getFullYear()
+  const cleansedBillLicences = []
+
+  for (const billLicence of billLicences) {
+    if (billLicence.transactions.length === 0) {
+      continue
+    }
+
+    const { id: billLicenceId, licence, transactions } = billLicence
+    const processedTransactions = await ProcessTransactionsService.go(
+      transactions,
+      billLicenceId,
+      billingAccountId,
+      licence.id,
+      financialYearEnding
     )
 
-    if (createdTransactions.length > 0) {
-      billLicence.billable = true
-      transactions.push(...createdTransactions)
+    if (processedTransactions.length === 0) {
+      continue
     }
+
+    billLicence.transactions = processedTransactions
+
+    cleansedBillLicences.push(billLicence)
   }
 
-  const billLicences = _extractBillableLicences(allBillLicences)
-
-  return { billLicences, transactions }
+  return cleansedBillLicences
 }
 
 /**
- * Handles generating the transaction data for a given charge version and then sending it to the Charging Module API.
+ * Intended to be used in conjunction with _generateBillLicencesAndTransactions() it extracts only those bill licences
+ * where
  *
- * @private
- */
-async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-
-  if (!chargePeriod.startDate) {
-    return []
-  }
-
-  const generatedTransactions = _generateTransactionData(billLicenceId, chargePeriod, chargeVersion)
-
-  if (generatedTransactions.length === 0) {
-    return []
-  }
-
-  return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
-}
-
-/**
- * Intended to be used in conjunction with _createBillLicencesAndTransactions() it extracts only those bill licences
- * where we generated transactions. This avoids us persisting a bill licence record with no transaction records.
+ * - we generated transactions
+ * - after comparing them to previously billed transactions a difference is found requiring us to generate a bill
+ *
+ * Along with the bill licences we extract the transactions
+ * we generated transactions. This avoids us persisting a bill licence record with no transaction records.
  *
  * A billing account can be linked to multiple licences but not all of them may be billable. We add a flag to each
  * one that denotes if transactions were generated so we can easily filter the billable ones out. But we also need
@@ -148,19 +161,6 @@ async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, 
  *
  * @private
  */
-function _extractBillableLicences(allBillLicences) {
-  const billableBillLicences = []
-
-  allBillLicences.forEach((billLicence) => {
-    const { id, billId, licenceId, licenceRef, billable } = billLicence
-
-    if (billable) {
-      billableBillLicences.push({ id, billId, licenceId, licenceRef })
-    }
-  })
-
-  return billableBillLicences
-}
 
 /**
  * Use to either find or create the bill licence for a given bill (billing account) and licence
@@ -188,19 +188,16 @@ function _extractBillableLicences(allBillLicences) {
  * @private
  */
 function _findOrCreateBillLicence(billLicences, licence, billId) {
-  const { id: licenceId, licenceRef } = licence
-
   let billLicence = billLicences.find((existingBillLicence) => {
-    return existingBillLicence.licenceId === licenceId
+    return existingBillLicence.licence.id === licence.id
   })
 
   if (!billLicence) {
     billLicence = {
       id: generateUUID(),
       billId,
-      licenceId,
-      licenceRef,
-      billable: false
+      licence,
+      transactions: []
     }
 
     billLicences.push(billLicence)
@@ -210,18 +207,25 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
 }
 
 /**
- * Generate the transaction data for a charge version
+ * Generate the transaction(s) for a charge version
  *
- * For each charge reference linked to the charge version we have to generate a
- * transaction record. One of the things we need to know is if the charge version is the first charge on a new licence.
- * This information needs to be passed to the Charging Module API as it affects the calculation.
+ * For each charge reference linked to the charge version we have to generate a transaction record. One of the things we
+ * need to know is if the charge version is the first charge on a new licence. This information needs to be passed to
+ * the Charging Module API as it affects the calculation.
  *
- * This function iterates the charge references generating a transaction for each one.
+ * This function iterates the charge references generating transaction(s) for each one.
  *
  * @private
  */
-function _generateTransactionData(billLicenceId, chargePeriod, chargeVersion) {
+async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion) {
   try {
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+    // Guard clause against invalid charge periods, for example, a licence 'ends' before the charge version starts
+    if (!chargePeriod.startDate) {
+      return []
+    }
+
     const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
     const transactions = []
@@ -271,19 +275,33 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
     financialYearEnding: billingPeriod.endDate.getFullYear()
   }
 
-  const billData = await _createBillLicencesAndTransactions(bill.id, billingAccount, billRunExternalId, billingPeriod)
+  const allBillLicences = await _generateBillLicencesAndTransactions(bill.id, billingAccount, billingPeriod)
+  const processedBillLicences = await _processBillLicences(allBillLicences, billingAccount.id, billingPeriod)
 
-  const { billLicences, transactions } = billData
-
-  // No transactions were generated so there is nothing to bill. Do not persist anything!
-  if (transactions.length === 0) {
+  if (processedBillLicences.length === 0) {
     return false
   }
 
-  return _persistBillData(bill, billLicences, transactions)
+  return _persistGeneratedData(bill, processedBillLicences, billRunExternalId, billingAccount.accountNumber)
 }
 
-async function _persistBillData(bill, billLicences, transactions) {
+async function _persistGeneratedData(bill, processedBillLicences, billRunExternalId, accountNumber) {
+  const billLicences = []
+  const transactions = []
+
+  for (const processedBillLicence of processedBillLicences) {
+    const { billId, id, licence, transactions: processedTransactions } = processedBillLicence
+    const sentTransactions = await SendTransactionsService.go(
+      processedTransactions,
+      billRunExternalId,
+      accountNumber,
+      licence
+    )
+
+    billLicences.push({ billId, id, licenceId: licence.id, licenceRef: licence.licenceRef })
+    transactions.push(...sentTransactions)
+  }
+
   await BillModel.query().insert(bill)
   await BillLicenceModel.query().insert(billLicences)
   await TransactionModel.query().insert(transactions)
