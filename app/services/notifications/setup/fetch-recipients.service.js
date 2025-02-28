@@ -5,7 +5,6 @@
  * @module FetchContactsService
  */
 
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
