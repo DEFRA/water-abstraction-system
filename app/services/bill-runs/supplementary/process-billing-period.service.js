@@ -13,7 +13,7 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
 const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
 const GenerateTransactionsService = require('../generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
-const ProcessTransactionsService = require('./process-transactions.service.js')
+const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
 const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
@@ -179,11 +179,12 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
     return []
   }
 
-  const cleansedTransactions = await ProcessTransactionsService.go(
+  const cleansedTransactions = await ProcessSupplementaryTransactionsService.go(
     currentBillingData.calculatedTransactions,
+    currentBillingData.billLicence.id,
     currentBillingData.bill.billingAccountId,
-    currentBillingData.billLicence,
-    billingPeriod
+    currentBillingData.billLicence.licenceId,
+    billingPeriod.endDate.getFullYear()
   )
 
   return cleansedTransactions
