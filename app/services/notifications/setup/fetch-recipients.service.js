@@ -242,9 +242,9 @@ FROM (
       )
     )) AS contact_hash_id
   FROM public.licence_document_headers ldh
-         INNER JOIN return_logs
-                    ON return_logs.licence_ref = ldh.licence_ref
-  INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+    INNER JOIN return_logs
+        ON return_logs.licence_ref = ldh.licence_ref
+    INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
   WHERE
     ${whereLicenceRef}
     AND contacts->>'role' IN ('Licence holder', 'Returns to')
@@ -269,7 +269,7 @@ FROM (
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
   INNER JOIN return_logs
-             ON return_logs.licence_ref = ldh.licence_ref
+    ON return_logs.licence_ref = ldh.licence_ref
   WHERE
     ${whereLicenceRef}
   UNION ALL
@@ -285,7 +285,7 @@ FROM (
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
   INNER JOIN return_logs
-             ON return_logs.licence_ref = ldh.licence_ref
+     ON return_logs.licence_ref = ldh.licence_ref
     WHERE
     ${whereLicenceRef}
 ) contacts
