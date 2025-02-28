@@ -2,7 +2,7 @@
 
 /**
  * Formats the session data to create an event for 'wabs.public.events'
- * @module EventPresenter
+ * @module CreateEventPresenter
  */
 
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')

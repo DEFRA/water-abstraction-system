@@ -11,7 +11,7 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const EventPresenter = require('../../../../app/presenters/notifications/setup/event.presenter.js')
+const CreateEventPresenter = require('../../../../app/presenters/notifications/setup/create-event.presenter.js')
 
 describe('Notifications Setup - Event presenter', () => {
   let session
@@ -36,7 +36,7 @@ describe('Notifications Setup - Event presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = EventPresenter.go(session)
+    const result = CreateEventPresenter.go(session)
 
     expect(result).to.equal({
       licences: [
@@ -67,7 +67,7 @@ describe('Notifications Setup - Event presenter', () => {
 
   describe('the "licences" property', () => {
     it('correctly return an array of all licence from all recipients', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.licences).to.equal([
         recipients.primaryUser.licence_refs,
@@ -87,7 +87,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = EventPresenter.go(session)
+          const result = CreateEventPresenter.go(session)
 
           expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
         })
@@ -99,7 +99,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = EventPresenter.go(session)
+          const result = CreateEventPresenter.go(session)
 
           expect(result.metadata.options.excludeLicences).to.equal([])
         })
@@ -112,7 +112,7 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the length of recipients', () => {
-        const result = EventPresenter.go(session)
+        const result = CreateEventPresenter.go(session)
 
         expect(result.metadata.recipients).to.equal(5)
       })
@@ -129,7 +129,7 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the return cycle', () => {
-        const result = EventPresenter.go(session)
+        const result = CreateEventPresenter.go(session)
 
         expect(result.metadata.returnCycle).to.equal({
           dueDate: session.determinedReturnsPeriod.dueDate,
@@ -147,13 +147,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.metadata.name).to.equal('Returns: invitation')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.subtype).to.equal('returnInvitation')
     })
@@ -165,13 +165,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.metadata.name).to.equal('Returns: reminder')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.subtype).to.equal('returnReminder')
     })
@@ -183,13 +183,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.metadata.name).to.equal('')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = EventPresenter.go(session)
+      const result = CreateEventPresenter.go(session)
 
       expect(result.subtype).to.equal('')
     })
