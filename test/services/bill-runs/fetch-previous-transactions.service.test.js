@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
+const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 
 // Thing under test
-const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/supplementary/fetch-previous-transactions.service.js')
+const FetchPreviousTransactionsService = require('../../../app/services/bill-runs/fetch-previous-transactions.service.js')
 
-describe('Fetch Previous Transactions service', () => {
+describe('Bill Runs - Fetch Previous Transactions service', () => {
   const chargeCategoryCode = '4.3.1'
   const financialYearEnding = 2023
 
