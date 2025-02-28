@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const EventPresenter = require('../../../../app/presenters/notifications/setup/event.presenter.js')
 
-describe.only('Notifications Setup - Event presenter', () => {
+describe('Notifications Setup - Event presenter', () => {
   let session
   let recipients
 
@@ -38,16 +38,13 @@ describe.only('Notifications Setup - Event presenter', () => {
   it('correctly presents the data', () => {
     const result = EventPresenter.go(session)
 
-    const [firstLicence, secondLicence] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
     expect(result).to.equal({
       licences: [
         recipients.primaryUser.licence_refs,
         recipients.returnsAgent.licence_refs,
         recipients.licenceHolder.licence_refs,
         recipients.returnsTo.licence_refs,
-        firstLicence,
-        secondLicence.trim()
+        ...recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
       ],
       metadata: {
         name: 'Returns: invitation',
@@ -68,16 +65,44 @@ describe.only('Notifications Setup - Event presenter', () => {
     })
   })
 
+  describe('the "licences" property', () => {
+    it('correctly return an array of all licence from all recipients', () => {
+      const result = EventPresenter.go(session)
+
+      expect(result.licences).to.equal([
+        recipients.primaryUser.licence_refs,
+        recipients.returnsAgent.licence_refs,
+        recipients.licenceHolder.licence_refs,
+        recipients.returnsTo.licence_refs,
+        ...recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+      ])
+    })
+  })
+
   describe('the "metadata" property', () => {
     describe('the "options.excludeLicences" property', () => {
-      beforeEach(() => {
-        session.removeLicences = ['123', '456']
+      describe('when there licences excluded from the recipients list', () => {
+        beforeEach(() => {
+          session.removeLicences = ['123', '456']
+        })
+
+        it('correctly returns the exclude licences', () => {
+          const result = EventPresenter.go(session)
+
+          expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
+        })
       })
 
-      it('correctly returns the exclude licences', () => {
-        const result = EventPresenter.go(session)
+      describe('when there are no licences excluded from the recipients list', () => {
+        beforeEach(() => {
+          session.removeLicences = []
+        })
 
-        expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
+        it('correctly returns the exclude licences', () => {
+          const result = EventPresenter.go(session)
+
+          expect(result.metadata.options.excludeLicences).to.equal([])
+        })
       })
     })
 
@@ -92,44 +117,33 @@ describe.only('Notifications Setup - Event presenter', () => {
         expect(result.metadata.recipients).to.equal(5)
       })
     })
+
+    describe('the "returnCycle" property', () => {
+      beforeEach(() => {
+        session.determinedReturnsPeriod = {
+          dueDate: new Date(`2025-07-28`),
+          endDate: new Date(`2025-06-30`),
+          startDate: new Date(`2025-04-01`),
+          summer: 'true'
+        }
+      })
+
+      it('correctly returns the return cycle', () => {
+        const result = EventPresenter.go(session)
+
+        expect(result.metadata.returnCycle).to.equal({
+          dueDate: session.determinedReturnsPeriod.dueDate,
+          endDate: session.determinedReturnsPeriod.endDate,
+          isSummer: 'true',
+          startDate: session.determinedReturnsPeriod.startDate
+        })
+      })
+    })
   })
 
   describe('when the journey is for "invitations"', () => {
     beforeEach(() => {
       session.journey = 'invitations'
-    })
-
-    it('correctly presents the data', () => {
-      const result = EventPresenter.go(session)
-
-      const [firstLicence, secondLicence] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
-      expect(result).to.equal({
-        licences: [
-          recipients.primaryUser.licence_refs,
-          recipients.returnsAgent.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.returnsTo.licence_refs,
-          firstLicence,
-          secondLicence.trim()
-        ],
-        metadata: {
-          name: 'Returns: invitation',
-          options: {
-            excludeLicences: []
-          },
-          recipients: 5,
-          returnCycle: {
-            dueDate: session.determinedReturnsPeriod.dueDate,
-            endDate: session.determinedReturnsPeriod.endDate,
-            isSummer: 'true',
-            startDate: session.determinedReturnsPeriod.startDate
-          }
-        },
-        referenceCode: 'RINV-123',
-        status: 'started',
-        subtype: 'returnInvitation'
-      })
     })
 
     it('correctly sets the "metadata.name"', () => {
@@ -148,39 +162,6 @@ describe.only('Notifications Setup - Event presenter', () => {
   describe('when the journey is for "reminders"', () => {
     beforeEach(() => {
       session.journey = 'reminders'
-    })
-
-    it('correctly presents the data', () => {
-      const result = EventPresenter.go(session)
-
-      const [firstLicence, secondLicence] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
-      expect(result).to.equal({
-        licences: [
-          recipients.primaryUser.licence_refs,
-          recipients.returnsAgent.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.returnsTo.licence_refs,
-          firstLicence,
-          secondLicence.trim()
-        ],
-        metadata: {
-          name: 'Returns: reminder',
-          options: {
-            excludeLicences: []
-          },
-          recipients: 5,
-          returnCycle: {
-            dueDate: session.determinedReturnsPeriod.dueDate,
-            endDate: session.determinedReturnsPeriod.endDate,
-            isSummer: 'true',
-            startDate: session.determinedReturnsPeriod.startDate
-          }
-        },
-        referenceCode: 'RINV-123',
-        status: 'started',
-        subtype: 'returnReminder'
-      })
     })
 
     it('correctly sets the "metadata.name"', () => {
