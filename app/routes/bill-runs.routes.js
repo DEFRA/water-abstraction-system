@@ -80,6 +80,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/tpt-supplementary',
+    options: {
+      handler: BillRunsController.tptSupplementary,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/two-part-tariff',
     options: {
       handler: BillRunsController.twoPartTariff,

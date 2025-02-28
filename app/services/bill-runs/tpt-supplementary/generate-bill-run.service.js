@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
+ * Generates a tpt supplementary bill run after the users have completed reviewing its match & allocate results
  * @module GenerateBillRunService
  */
 
@@ -20,38 +20,36 @@ const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bi
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
+ * Generates a tpt supplementary bill run after the users have completed reviewing its match & allocate results
  *
  * In this case, "generate" means that we create the required bills and transactions for them in both this service and
  * the Charging Module.
  *
- * > In the other bill run types this would be the `ProcessBillRunService` but that has already been used to handle
- * > the match and allocate process in two-part tariff
+ * > In the other bill run types this would be the `ProcessBillRunService` but that has already been used to handle the
+ * > match and allocate process in tpt supplementary
  *
  * We first fetch all the billing accounts applicable to this bill run and their charge information. We pass these to
  * `ProcessBillingPeriodService` which will generate the bill for each billing account both in WRLS and the
  * {@link https://github.com/DEFRA/sroc-charging-module-api | Charging Module API (CHA)}.
  *
- * Once `ProcessBillingPeriodService` is complete we tell the CHA to generate the bill run (this calculates final
- * values for each bill and the bill run overall).
+ * Once `ProcessBillingPeriodService` is complete we tell the CHA to generate the bill run (this calculates final values
+ * for each bill and the bill run overall).
  *
  * The final step is to ping the legacy
  * {@link https://github.com/DEFRA/water-abstraction-service | water-abstraction-service} 'refresh' endpoint. That
  * service will extract the final values from the CHA and update the records on our side, finally marking the bill run
  * as **Ready**.
  *
- * @param {module:BillRunModel} billRunId - The UUID of the two-part tariff bill run that has been reviewed and is ready
- * for generating
+ * @param {module:BillRunModel} billRunId - The UUID of the tpt supplementary bill run that has been reviewed and is
+ * ready for generating
  */
 async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status !== 'review') {
-    throw new ExpandedError('Cannot process a two-part tariff annual bill run that is not in review', { billRunId })
-  }
-
-  if (billRun.batchType !== 'two_part_tariff') {
-    throw new ExpandedError('This end point only supports two-part tariff annual', { billRunId })
+    throw new ExpandedError('Cannot process a two-part tariff supplementary bill run that is not in review', {
+      billRunId
+    })
   }
 
   await _updateStatus(billRunId, 'processing')

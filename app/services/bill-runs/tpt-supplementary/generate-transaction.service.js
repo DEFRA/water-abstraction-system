@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Generate two-part tariff transaction data from the the charge reference and other information passed in
+ * Generate tpt supplementary transaction data from the the charge reference and other information passed in
  * @module GenerateTransactionService
  */
 
 const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
- * Generate a two-part tariff transaction data from the the charge reference and other information passed in
+ * Generate tpt supplementary transaction data from the the charge reference and other information passed in
  *
  * Unlike a standard transaction, we don't have to calculate the billing days for the transaction. Instead, two-part
  * tariff transactions focus on volume. This information comes from the review data that results after the match &
@@ -30,7 +30,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * @param {boolean} newLicence - Whether the charge reference is linked to a new licence
  * @param {boolean} waterUndertaker - Whether the charge reference is linked to a water undertaker licence
  *
- * @returns {object} the two-part tariff transaction
+ * @returns {object} the tpt supplementary transaction
  */
 function go(billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)

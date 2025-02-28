@@ -23,9 +23,9 @@ const ReviewChargeVersionHelper = require('../../../support/helpers/review-charg
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+const FetchBillingAccountsService = require('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
 
-describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
+describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () => {
   let billRun
   let billingAccount
   let billingAccountNotInBillRun
@@ -41,7 +41,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
   before(async () => {
     region = RegionHelper.select()
-    billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id })
+    billRun = await BillRunHelper.add({ batchType: 'two_part_supplementary', regionId: region.id })
 
     licence = await LicenceHelper.add({ regionId: region.id })
 
@@ -77,7 +77,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId, reviewChargeReferenceId })
   })
 
-  describe('when there are billing accounts that are linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts that are linked to a TPT supplementary bill run', () => {
     it('returns the applicable billing accounts', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
@@ -192,7 +192,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     })
   })
 
-  describe('when there are billing accounts not linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts not linked to a TPT supplementary bill run', () => {
     it('does not include them in the results', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 

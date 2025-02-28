@@ -332,7 +332,7 @@ describe('GeneralLib', () => {
     let rightTransaction
 
     beforeEach(() => {
-      // NOTE: The properties the function is comparing are; chargeType, chargeCategoryCode, billableDays,
+      // NOTE: The properties the function is comparing are; chargeType, chargeCategoryCode, billableDays, volume,
       // section126Factor, section127Agreement, section130Agreement, aggregateFactor, adjustmentFactor, winterOnly,
       // supportedSource, supportedSourceName, waterCompanyCharge.
       //
@@ -389,6 +389,18 @@ describe('GeneralLib', () => {
       describe('because the billable days are different', () => {
         beforeEach(() => {
           rightTransaction.billableDays = 10
+        })
+
+        it('returns false', () => {
+          const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
+
+          expect(result).to.be.false()
+        })
+      })
+
+      describe('because the volume is different', () => {
+        beforeEach(() => {
+          rightTransaction.volume = 10
         })
 
         it('returns false', () => {
