@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchPreviousTransactionsService = require('../../../app/services/bill-runs/supplementary/fetch-previous-transactions.service.js')
+const FetchPreviousTransactionsService = require('../../../app/services/bill-runs/fetch-previous-transactions.service.js')
 
 // Thing under test
 const ProcessSupplementaryTransactionsService = require('../../../app/services/bill-runs/process-supplementary-transactions.service.js')
