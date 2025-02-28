@@ -21,7 +21,7 @@ const BillingConfig = require('../../../../config/billing.config.js')
 /**
  * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
  *
- * @param {module:BillRunModel} billRun - The two-part tariff bill run we need to process
+ * @param {module:BillRunModel} billRun - The two-part tariff annual bill run we need to process
  * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
