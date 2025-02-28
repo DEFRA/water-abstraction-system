@@ -233,98 +233,269 @@ describe('Base Return Logs presenter', () => {
   })
 
   describe('#generateSummaryTableRows()', () => {
-    const sampleLines = [
-      {
-        endDate: new Date('2023-01-01'),
-        quantity: 400,
-        reading: 111,
-        userUnit: unitNames.CUBIC_METRES
-      },
-      {
-        endDate: new Date('2023-01-02'),
-        quantity: 500,
-        reading: 222,
-        userUnit: unitNames.CUBIC_METRES
-      },
-      {
-        endDate: new Date('2023-01-03'),
-        quantity: 600,
-        reading: null,
-        userUnit: unitNames.CUBIC_METRES
-      },
-      {
-        endDate: new Date('2023-02-01'),
-        quantity: 100,
-        reading: 111,
-        userUnit: unitNames.GALLONS
-      }
-    ]
+    const id = 'e3cb54dc-f895-4918-bab7-0819fd870a1f'
 
-    it('when the method is not abstractionVolumes it uses the last non-null meter reading for the month', () => {
-      const result = BaseReturnLogsPresenter.generateSummaryTableRows('NOT_ABSTRACTION_VOLUMES', 'month', sampleLines)
+    let frequency
+    let method
+    let sampleLines
 
-      expect(result[0].reading).to.equal(222)
-    })
+    describe('when the frequency is month', () => {
+      beforeEach(() => {
+        frequency = 'month'
+        sampleLines = [
+          {
+            endDate: new Date('2023-01-31'),
+            quantity: 400,
+            reading: 111,
+            userUnit: unitNames.CUBIC_METRES
+          },
+          {
+            endDate: new Date('2023-02-28'),
+            quantity: 500,
+            reading: 222,
+            userUnit: unitNames.CUBIC_METRES
+          }
+        ]
+      })
 
-    it('when the method is abstractionVolumes it does not include a reading column', () => {
-      const result = BaseReturnLogsPresenter.generateSummaryTableRows('abstractionVolumes', 'month', sampleLines)
-
-      expect(result[0].reading).to.not.exist()
-    })
-
-    it('returns the monthlyTotal as a formatted string', () => {
-      const result = BaseReturnLogsPresenter.generateSummaryTableRows('NOT_ABSTRACTION_VOLUMES', 'month', sampleLines)
-
-      expect(result[0].monthlyTotal).to.equal('1,500')
-    })
-
-    it('returns non-cubic metre totals as a converted and formatted string', () => {
-      const result = BaseReturnLogsPresenter.generateSummaryTableRows('NOT_ABSTRACTION_VOLUMES', 'month', sampleLines)
-
-      expect(result[1].unitTotal).to.equal('21,996.925')
-    })
-
-    describe('when the frequency is not month', () => {
-      describe('the included link object', () => {
-        it('exists', () => {
-          const result = BaseReturnLogsPresenter.generateSummaryTableRows('NOT_ABSTRACTION_VOLUMES', 'day', sampleLines)
-
-          expect(result[0].link).to.exist()
-          expect(result[1].link).to.exist()
+      describe('and the abstraction method is "abstractionVolumes"', () => {
+        beforeEach(() => {
+          method = 'abstractionVolumes'
         })
 
-        it('contains a link to the return submissions page', () => {
-          const result = BaseReturnLogsPresenter.generateSummaryTableRows(
-            'NOT_ABSTRACTION_VOLUMES',
-            'day',
-            sampleLines,
-            'ID'
-          )
+        it('returns the month as a formatted string', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].link.href).to.equal('/system/return-submissions/ID/2023-0')
-          expect(result[1].link.href).to.equal('/system/return-submissions/ID/2023-1')
+          expect(result[0].month).to.equal('January 2023')
+          expect(result[1].month).to.equal('February 2023')
         })
 
-        describe('when the method is abstractionVolumes', () => {
-          it('has link text for volumes', () => {
-            const result = BaseReturnLogsPresenter.generateSummaryTableRows('abstractionVolumes', 'day', sampleLines)
+        it('returns the monthlyTotal as a formatted string', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].link.text).to.equal('View daily volumes')
-            expect(result[1].link.text).to.equal('View daily volumes')
+          expect(result[0].monthlyTotal).to.equal('400')
+          expect(result[1].monthlyTotal).to.equal('500')
+        })
+
+        it('does not include a "reading" column', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].reading).to.not.exist()
+          expect(result[1].reading).to.not.exist()
+        })
+
+        it('does not include a "link" object', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].link).to.not.exist()
+          expect(result[1].link).to.not.exist()
+        })
+
+        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
+          let linkPrefix
+
+          beforeEach(() => {
+            linkPrefix = 'Enter'
           })
-        })
 
-        describe('when the method is not abstractionVolumes', () => {
-          it('has link text for readings', () => {
+          it('includes a "link" object', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(
-              'NOT_ABSTRACTION_VOLUMES',
-              'day',
-              sampleLines
+              method,
+              frequency,
+              sampleLines,
+              id,
+              linkPrefix
             )
 
-            expect(result[0].link.text).to.equal('View daily readings')
-            expect(result[1].link.text).to.equal('View daily readings')
+            expect(result[0].link.href).to.equal(
+              '/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0'
+            )
+            expect(result[0].link.text).to.equal('Enter monthly volumes')
+            expect(result[1].link.href).to.equal(
+              '/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-1'
+            )
+            expect(result[1].link.text).to.equal('Enter monthly volumes')
           })
+        })
+
+        describe('and the "userUnit" is not cubic metres', () => {
+          beforeEach(() => {
+            sampleLines = [
+              {
+                endDate: new Date('2023-01-31'),
+                quantity: 400,
+                reading: 111,
+                userUnit: unitNames.GALLONS
+              },
+              {
+                endDate: new Date('2023-02-28'),
+                quantity: 500,
+                reading: 222,
+                userUnit: unitNames.GALLONS
+              }
+            ]
+          })
+
+          it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].unitTotal).to.equal('87,987.699')
+            expect(result[1].unitTotal).to.equal('109,984.624')
+          })
+        })
+      })
+
+      describe('and the abstraction method is not "abstractionVolumes"', () => {
+        beforeEach(() => {
+          method = 'readings'
+        })
+
+        it('includes a reading column', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].reading).to.equal(111)
+          expect(result[1].reading).to.equal(222)
+        })
+
+        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
+          let linkPrefix
+
+          beforeEach(() => {
+            linkPrefix = 'Enter'
+          })
+
+          it('includes a "link" object', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(
+              method,
+              frequency,
+              sampleLines,
+              id,
+              linkPrefix
+            )
+
+            expect(result[0].link.text).to.equal('Enter monthly readings')
+            expect(result[1].link.text).to.equal('Enter monthly readings')
+          })
+        })
+      })
+    })
+
+    describe('when the "frequency" is not month', () => {
+      beforeEach(() => {
+        frequency = 'day'
+        sampleLines = [
+          {
+            endDate: new Date('2023-01-01'),
+            quantity: 400,
+            reading: 111,
+            userUnit: unitNames.CUBIC_METRES
+          },
+          {
+            endDate: new Date('2023-01-02'),
+            quantity: 500,
+            reading: 222,
+            userUnit: unitNames.CUBIC_METRES
+          },
+          {
+            endDate: new Date('2023-01-03'),
+            quantity: 600,
+            reading: null,
+            userUnit: unitNames.CUBIC_METRES
+          }
+        ]
+      })
+
+      describe('and the abstraction method is "abstractionVolumes"', () => {
+        beforeEach(() => {
+          method = 'abstractionVolumes'
+        })
+
+        it('returns the month as a formatted string', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].month).to.equal('January 2023')
+        })
+
+        it('returns the monthlyTotal as a formatted string', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].monthlyTotal).to.equal('1,500')
+        })
+
+        it('does not include a "reading" column', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].reading).to.not.exist()
+        })
+
+        it('includes a "link" object', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines, id)
+
+          expect(result[0].link.href).to.equal('/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0')
+          expect(result[0].link.text).to.equal('View daily volumes')
+        })
+
+        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
+          let linkPrefix
+
+          beforeEach(() => {
+            linkPrefix = 'Enter'
+          })
+
+          it('includes a "link" object', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(
+              method,
+              frequency,
+              sampleLines,
+              id,
+              linkPrefix
+            )
+
+            expect(result[0].link.text).to.equal('Enter daily volumes')
+          })
+        })
+
+        describe('and the "userUnit" is not cubic metres', () => {
+          beforeEach(() => {
+            sampleLines = [
+              {
+                endDate: new Date('2023-01-01'),
+                quantity: 400,
+                reading: 111,
+                userUnit: unitNames.GALLONS
+              },
+              {
+                endDate: new Date('2023-01-02'),
+                quantity: 500,
+                reading: 222,
+                userUnit: unitNames.GALLONS
+              },
+              {
+                endDate: new Date('2023-01-03'),
+                quantity: 600,
+                reading: null,
+                userUnit: unitNames.GALLONS
+              }
+            ]
+          })
+
+          it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].unitTotal).to.equal('329,953.872')
+          })
+        })
+      })
+
+      describe('and the abstraction method is not "abstractionVolumes"', () => {
+        beforeEach(() => {
+          method = 'readings'
+        })
+
+        it('includes a "reading" column which is the last non-null meter reading', () => {
+          const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+          expect(result[0].reading).to.equal(222)
         })
       })
     })
