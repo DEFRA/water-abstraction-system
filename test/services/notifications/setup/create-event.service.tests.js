@@ -11,17 +11,17 @@ const { expect } = Code
 const EventModel = require('../../../../app/models/event.model.js')
 
 // Thing under test
-const PersistEventService = require('../../../../app/services/notifications/setup/persist-event.service.js')
+const CreateEventService = require('../../../../app/services/notifications/setup/create-event.service.js')
 
-describe('Notifications Setup - Persist event service', () => {
+describe('Notifications Setup - Create event service', () => {
   let event
 
   beforeEach(() => {
     event = {}
   })
 
-  it('should persist the event (required values)', async () => {
-    const result = await PersistEventService.go(event)
+  it('should create the event (required values)', async () => {
+    const result = await CreateEventService.go(event)
 
     const res = await EventModel.query().findById(result.id)
 
@@ -51,8 +51,8 @@ describe('Notifications Setup - Persist event service', () => {
       }
     })
 
-    it('should persist the event', async () => {
-      const result = await PersistEventService.go(event)
+    it('should create the event', async () => {
+      const result = await CreateEventService.go(event)
 
       const res = await EventModel.query().findById(result.id)
 

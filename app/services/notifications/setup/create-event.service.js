@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Persists a 'returnInvitation' or 'returnReminder' notification event
- * @module PersistEventService
+ * Create a 'returnInvitation' or 'returnReminder' notification event
+ * @module CreateEventService
  */
 
 const EventModel = require('../../../../app/models/event.model.js')
 
 /**
- * Persists a 'returnInvitation' or 'returnReminder' notification event
+ * Create a 'returnInvitation' or 'returnReminder' notification event
  *
  * An event for a 'returnInvitation' or 'returnReminder' should look like this:
  *
@@ -36,10 +36,10 @@ const EventModel = require('../../../../app/models/event.model.js')
  * @returns {object} - the created event
  */
 async function go(event) {
-  return _persistEvent(event)
+  return _createEvent(event)
 }
 
-async function _persistEvent(event) {
+async function _createEvent(event) {
   return EventModel.query().insert({
     type: 'notification',
     ...event
