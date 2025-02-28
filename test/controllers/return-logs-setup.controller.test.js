@@ -67,27 +67,49 @@ describe('Return Logs - Setup - Controller', () => {
 
   describe('return-logs/setup', () => {
     describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/return-logs/setup?returnLogId=v1:1:123:10021668:2022-04-01:2023-03-31',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
-        }
-      })
-
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId, data: {} })
         })
 
-        it('redirects to the "received" page', async () => {
-          const response = await server.inject(options)
+        describe('and the user clicked "Edit return"', () => {
+          beforeEach(() => {
+            options = {
+              method: 'GET',
+              url: '/return-logs/setup?returnLogId=v1:6:01/117:10032788:2019-04-01:2019-05-12&action=edit',
+              auth: {
+                strategy: 'session',
+                credentials: { scope: ['billing'] }
+              }
+            }
+          })
 
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/received`)
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the user clicked "Submit return"', () => {
+          beforeEach(() => {
+            options = {
+              method: 'GET',
+              url: '/return-logs/setup?returnLogId=v1:6:01/117:10032788:2019-04-01:2019-05-12&action=submit',
+              auth: {
+                strategy: 'session',
+                credentials: { scope: ['billing'] }
+              }
+            }
+          })
+
+          it('redirects to the "received" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/received`)
+          })
         })
       })
     })

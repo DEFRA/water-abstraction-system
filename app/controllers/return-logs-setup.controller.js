@@ -107,10 +107,17 @@ async function reported(request, h) {
 }
 
 async function setup(request, h) {
-  const { returnLogId } = request.query
+  const { action, returnLogId } = request.query
   const session = await InitiateSessionService.go(returnLogId)
 
-  return h.redirect(`/system/return-logs/setup/${session.id}/received`)
+  const redirectUrl =
+    action === 'submit'
+      ? // User clicked 'Submit return' so redirect to the received page
+        `/system/return-logs/setup/${session.id}/received`
+      : // Otherwise, assume 'Edit return' was clicked and redirect accordingly
+        `/system/return-logs/setup/${session.id}/check`
+
+  return h.redirect(redirectUrl)
 }
 
 async function singleVolume(request, h) {
