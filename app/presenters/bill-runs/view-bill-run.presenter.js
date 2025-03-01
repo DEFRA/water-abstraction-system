@@ -6,7 +6,12 @@
  */
 
 const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../billing.presenter.js')
+const {
+  formatBillRunType,
+  formatChargeScheme,
+  displayCreditDebitTotals,
+  generateBillRunTitle
+} = require('../billing.presenter.js')
 
 /**
  * Formats bill run data ready for presenting in the view bill run page
@@ -50,7 +55,7 @@ function go(billRun, billSummaries) {
     dateCreated: formatLongDate(createdAt),
     debitsCount: _debitsCount(invoiceCount),
     debitsTotal: formatMoney(invoiceValue),
-    displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
+    displayCreditDebitTotals: displayCreditDebitTotals(billRun.batchType),
     financialYear: formatFinancialYear(toFinancialYearEnding),
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: titleCase(region.displayName),
@@ -110,12 +115,6 @@ function _debitsCount(count) {
   }
 
   return `${count} invoices`
-}
-
-function _displayCreditDebitTotals(billRun) {
-  const { batchType } = billRun
-
-  return batchType === 'supplementary'
 }
 
 module.exports = {
