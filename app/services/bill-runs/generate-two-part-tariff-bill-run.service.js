@@ -14,6 +14,7 @@ const FetchTwoPartTariffBillingAccountsService = require('./fetch-two-part-tarif
 const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../requests/legacy/refresh-bill-run.request.js')
 const ProcessAnnualBillingPeriodService = require('./two-part-tariff/process-billing-period.service.js')
+const ProcessSupplementaryBillingPeriodService = require('./tpt-supplementary/process-billing-period.service.js')
 
 /**
  * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
@@ -132,7 +133,12 @@ async function _processBillingPeriod(billingPeriod, billRun) {
 
   const billingAccounts = await _fetchBillingAccounts(billRunId)
 
-  const billRunPopulated = await ProcessAnnualBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  let billRunPopulated = false
+  if (billRun.batchType === 'two_part_tariff') {
+    billRunPopulated = await ProcessAnnualBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  } else {
+    billRunPopulated = await ProcessSupplementaryBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  }
 
   await _finaliseBillRun(billRun, billRunPopulated)
 }
