@@ -47,6 +47,24 @@ function formatChargeScheme(scheme) {
 }
 
 /**
+ * Whether a view should display both the credit and debit totals, or just the debits
+ *
+ * If a bill run's batch type is `annual` or `two_part_tariff` then it will only contain debits. So, our billing views
+ * don't bother to show the credit columns and credit total row.
+ *
+ * But supplementary and two-part tariff supplementary bill runs _can_ contain both credit and debit values. In these
+ * cases our billing views will display both. This helper allows them to share the logic which determines when to show
+ * the credit values.
+ *
+ * @param {string} batchType - The bill run batch type
+ *
+ * @returns `true` if both credit and debit totals should be displayed, else `false`
+ */
+function displayCreditDebitTotals(batchType) {
+  return ['supplementary', 'two_part_supplementary'].includes(batchType)
+}
+
+/**
  * Generates the page title for a bill run, for example, 'Anglian supplementary'
  *
  * Typically the page title when viewing a bill run is the region name followed by the bill run type. We determine the
@@ -69,5 +87,6 @@ function generateBillRunTitle(regionName, batchType, scheme, summer) {
 module.exports = {
   formatBillRunType,
   formatChargeScheme,
+  displayCreditDebitTotals,
   generateBillRunTitle
 }

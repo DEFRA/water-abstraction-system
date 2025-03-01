@@ -129,6 +129,58 @@ describe('Billing presenter', () => {
     })
   })
 
+  describe('#displayCreditDebitTotals()', () => {
+    let batchType
+
+    describe('when the batch type is "annual"', () => {
+      beforeEach(() => {
+        batchType = 'annual'
+      })
+
+      it('returns "false"', () => {
+        const result = BillingPresenter.displayCreditDebitTotals(batchType)
+
+        expect(result).to.be.false()
+      })
+    })
+
+    describe('when the batch type is "supplementary"', () => {
+      beforeEach(() => {
+        batchType = 'supplementary'
+      })
+
+      it('returns "true"', () => {
+        const result = BillingPresenter.displayCreditDebitTotals(batchType)
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('when the batch type is "two_part_supplementary"', () => {
+      beforeEach(() => {
+        batchType = 'two_part_supplementary'
+      })
+
+      it('returns "true"', () => {
+        const result = BillingPresenter.displayCreditDebitTotals(batchType)
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('when the batch type is "two_part_tariff"', () => {
+      beforeEach(() => {
+        batchType = 'two_part_tariff'
+      })
+
+      it('returns "false"', () => {
+        const result = BillingPresenter.displayCreditDebitTotals(batchType)
+
+        expect(result).to.be.false()
+      })
+    })
+  })
+
   describe('#generateBillRunTitle()', () => {
     const regionName = 'anglian'
     const batchType = 'two_part_tariff'
