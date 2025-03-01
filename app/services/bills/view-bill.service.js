@@ -48,6 +48,7 @@ async function go(id) {
     const billLicence = await FetchBillLicence.go(licenceSummaries[0].id)
 
     additionalData = ViewBillLicencePresenter.go(billLicence)
+    console.log('🚀 ~ go ~ additionalData:', additionalData)
   }
 
   return {

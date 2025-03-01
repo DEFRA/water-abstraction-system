@@ -5,15 +5,8 @@
  * @module ViewBillRunPresenter
  */
 
-const {
-  generateBillRunTitle,
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../billing.presenter.js')
 
 /**
  * Formats bill run data ready for presenting in the view bill run page

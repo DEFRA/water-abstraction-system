@@ -5,14 +5,8 @@
  * @module ViewBillPresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
