@@ -78,91 +78,6 @@ async function go(billRun, billingPeriod, billingAccounts) {
 }
 
 /**
- * Generate the bill licence and transaction records for a bill, then cleanse them so only billable remains
- *
- * For each billing account we need to create a bill (1-to-1). Linked to the billing account will be multiple charge
- * versions which is what we actually use to calculate a bill. A charge version can have multiple charge references and
- * for each one we need to generate a transaction line.
- *
- * The complication is we group transactions by licence (via the bill licence), not charge version. So, as we iterate
- * the charge versions we have to determine if its for a licence that we have already generated a bill licence for, or
- * if we have to create a new one.
- *
- * Once we have generated the bill licences and the transactions against them, we then need to 'cleanse' them for
- * billing.
- *
- * - Those with no generated lines are simply removed (most likely some has ended the licence so the charge versions
- * used to generate the transactions no longer applied)
- * - Those which when the generated lines are 'paired' to previously billed lines results in nothing needing to be
- * billed
- *
- * From those that remain, we extract the bill licences and transactions to allow us to 'batch' the persist queries
- * we fire at the DB.
- *
- * @private
- */
-async function _generateBillLicencesAndTransactions(billId, billingAccount, billingPeriod) {
-  const allBillLicences = []
-
-  for (const chargeVersion of billingAccount.chargeVersions) {
-    const billLicence = _findOrCreateBillLicence(allBillLicences, chargeVersion.licence, billId)
-
-    const generatedTransactions = await _generateTransactions(billLicence.id, billingPeriod, chargeVersion)
-
-    billLicence.transactions.push(...generatedTransactions)
-  }
-
-  return allBillLicences
-}
-
-async function _processBillLicences(billLicences, billingAccountId, billingPeriod) {
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-  const cleansedBillLicences = []
-
-  for (const billLicence of billLicences) {
-    if (billLicence.transactions.length === 0) {
-      continue
-    }
-
-    const { id: billLicenceId, licence, transactions } = billLicence
-    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
-      transactions,
-      billLicenceId,
-      billingAccountId,
-      licence.id,
-      financialYearEnding
-    )
-
-    if (processedTransactions.length === 0) {
-      continue
-    }
-
-    billLicence.transactions = processedTransactions
-
-    cleansedBillLicences.push(billLicence)
-  }
-
-  return cleansedBillLicences
-}
-
-/**
- * Intended to be used in conjunction with _generateBillLicencesAndTransactions() it extracts only those bill licences
- * where
- *
- * - we generated transactions
- * - after comparing them to previously billed transactions a difference is found requiring us to generate a bill
- *
- * Along with the bill licences we extract the transactions
- * we generated transactions. This avoids us persisting a bill licence record with no transaction records.
- *
- * A billing account can be linked to multiple licences but not all of them may be billable. We add a flag to each
- * one that denotes if transactions were generated so we can easily filter the billable ones out. But we also need
- * to remove that flag because it doesn't exist in the DB and will cause issues if we try and persist the object.
- *
- * @private
- */
-
-/**
  * Use to either find or create the bill licence for a given bill (billing account) and licence
  *
  * For each billing account being processed the engine will create a bill. But the transactions within a bill are
@@ -178,12 +93,6 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
  *
  * Because we're processing the charge versions for a billing account the same licence might appear more than once. This
  * means we need to find the existing bill licence record or if one doesn't exist create it.
- *
- * @param {object[]} billLicences - The existing bill licences created for the bill being generated
- * @param {object} licence - the licence we're looking for an existing bill licence record
- * @param {string} billId - the ID of the bill we're creating
- *
- * @return {object} returns either an existing bill licence or a new one for the licence and bill being generated
  *
  * @private
  */
@@ -204,6 +113,33 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
   }
 
   return billLicence
+}
+
+/**
+ * Generate the bill licence and transaction records for a bill
+ *
+ * For each billing account we need to create a bill (1-to-1). Linked to the billing account will be multiple charge
+ * versions which is what we actually use to calculate a bill. A charge version can have multiple charge references and
+ * for each one we need to generate a transaction line.
+ *
+ * The complication is we group transactions by licence (via the bill licence), not charge version. So, as we iterate
+ * the charge versions we have to determine if its for a licence that we have already generated a bill licence for, or
+ * if we have to create a new one.
+ *
+ * @private
+ */
+async function _generateBillLicencesAndTransactions(billId, billingAccount, billingPeriod) {
+  const allBillLicences = []
+
+  for (const chargeVersion of billingAccount.chargeVersions) {
+    const billLicence = _findOrCreateBillLicence(allBillLicences, chargeVersion.licence, billId)
+
+    const generatedTransactions = await _generateTransactions(billLicence.id, billingPeriod, chargeVersion)
+
+    billLicence.transactions.push(...generatedTransactions)
+  }
+
+  return allBillLicences
 }
 
 /**
@@ -254,10 +190,13 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
  * Processes the billing account
  *
  * We create a bill object that will eventually be persisted for the billing account. We then call
- * `_createBillLicencesAndTransactions()` which handles generating the bill licences and transactions that will form
- * our bill.
+ * `_generateBillLicencesAndTransactions()` which handles generating the candidate bill licences and their transactions.
  *
- * Once everything has been generated we persist the results to the DB.
+ * These are 'processed' by `_processBillLicences()` which returns only those which have something to bill.
+ *
+ * Those bill licences with transactions after processing are then passed to `_persistGeneratedData()`. It first
+ * calls the Charging Module API to get the charge value, before persisting the transactions, bill licences and the bill
+ * itself to the DB.
  *
  * @private
  */
@@ -283,6 +222,49 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
   }
 
   return _persistGeneratedData(bill, processedBillLicences, billRunExternalId, billingAccount.accountNumber)
+}
+
+/**
+ * Process the bill licences
+ *
+ * We loop through each bill licence and check if any transactions were generated. If not we skip it.
+ *
+ * If there are transactions we call `ProcessSupplementaryTransactionsService.go()` which will pair up newly generated
+ * transactions with previously billed ones. If there are no differences (i.e. all transactions have been previously
+ * billed) we skip it.
+ *
+ * Finally, we return an array of the bill licences that have been processed and have transactions that require billing.
+ *
+ * @private
+ */
+async function _processBillLicences(billLicences, billingAccountId, billingPeriod) {
+  const financialYearEnding = billingPeriod.endDate.getFullYear()
+  const cleansedBillLicences = []
+
+  for (const billLicence of billLicences) {
+    if (billLicence.transactions.length === 0) {
+      continue
+    }
+
+    const { id: billLicenceId, licence, transactions } = billLicence
+    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
+      transactions,
+      billLicenceId,
+      billingAccountId,
+      licence.id,
+      financialYearEnding
+    )
+
+    if (processedTransactions.length === 0) {
+      continue
+    }
+
+    billLicence.transactions = processedTransactions
+
+    cleansedBillLicences.push(billLicence)
+  }
+
+  return cleansedBillLicences
 }
 
 async function _persistGeneratedData(bill, processedBillLicences, billRunExternalId, accountNumber) {
