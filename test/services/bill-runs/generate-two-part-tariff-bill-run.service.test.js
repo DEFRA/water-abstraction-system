@@ -88,7 +88,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         const error = await expect(GenerateTwoPartTariffBillRunService.go(billRunDetails.id)).to.reject()
 
         expect(error).to.be.an.instanceOf(ExpandedErrorError)
-        expect(error.message).to.equal('Cannot process a two-part tariff annual bill run that is not in review')
+        expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in review')
       })
     })
 

@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
-describe('Bill Runs - Review - Review Bill Run presenter', () => {
+describe('Bill Runs Review - Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     let filterIssues
     let filterLicenceHolderNumber
@@ -47,7 +47,6 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
           billRunTitle: 'Southern (Test Replica) two-part tariff',
           billRunType: 'Two-part tariff',
           chargeScheme: 'Current',
-          continueLink: '/system/bill-runs/b21bd372-cd04-405d-824e-5180d854121c/two-part-tariff',
           dateCreated: '17 January 2024',
           filter: {
             issues: undefined,
@@ -172,48 +171,6 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
           returnSplitOverRefs: false,
           someReturnsNotReceived: false,
           unableToMatchReturn: false
-        })
-      })
-    })
-
-    describe('the "continueLink" property', () => {
-      describe('when the bill run batch type is "two_part_tariff"', () => {
-        beforeEach(() => {
-          testBillRun.batchType = 'two_part_tariff'
-        })
-
-        it('returns a link to generate the two-part tariff annual bill run', () => {
-          const result = ReviewBillRunPresenter.go(
-            testBillRun,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            testLicences
-          )
-
-          expect(result.continueLink).to.equal('/system/bill-runs/b21bd372-cd04-405d-824e-5180d854121c/two-part-tariff')
-        })
-      })
-
-      describe('when the bill run batch type is "two_part_supplementary"', () => {
-        beforeEach(() => {
-          testBillRun.batchType = 'two_part_supplementary'
-        })
-
-        it('returns a link to generate the two-part tariff supplementary bill run', () => {
-          const result = ReviewBillRunPresenter.go(
-            testBillRun,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            testLicences
-          )
-
-          expect(result.continueLink).to.equal(
-            '/system/bill-runs/b21bd372-cd04-405d-824e-5180d854121c/tpt-supplementary'
-          )
         })
       })
     })
