@@ -13,11 +13,10 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
+const GenerateTwoPartTariffBillRunService = require('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
-const TwoPartTariffSupplementaryGenerateBillRunService = require('../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
-const TwoPartTariffAnnualGenerateBillRunService = require('../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
 const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-send-bill-run.service.js')
@@ -269,45 +268,6 @@ describe('Bill Runs controller', () => {
     })
   })
 
-  describe('/bill-runs/{id}/tpt-supplementary', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        options = _getRequestOptions('tpt-supplementary')
-      })
-
-      describe('when a request is valid', () => {
-        beforeEach(() => {
-          Sinon.stub(TwoPartTariffSupplementaryGenerateBillRunService, 'go').resolves(
-            '97db1a27-8308-4aba-b463-8a6af2558b28'
-          )
-        })
-
-        it('redirects to the bill runs page', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs')
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the generate service threw an error', () => {
-          beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(TwoPartTariffSupplementaryGenerateBillRunService, 'go').rejects()
-          })
-
-          it('returns the error page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
-          })
-        })
-      })
-    })
-  })
-
   describe('/bill-runs/{id}/two-part-tariff', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -316,7 +276,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(TwoPartTariffAnnualGenerateBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
+          Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
         })
 
         it('redirects to the bill runs page', async () => {
@@ -331,7 +291,7 @@ describe('Bill Runs controller', () => {
         describe('because the generate service threw an error', () => {
           beforeEach(async () => {
             Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(TwoPartTariffAnnualGenerateBillRunService, 'go').rejects()
+            Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').rejects()
           })
 
           it('returns the error page', async () => {
