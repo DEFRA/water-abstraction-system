@@ -12,7 +12,7 @@ const BillLicenceModel = require('../../../models/bill-licence.model.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
 const { generateUUID } = require('../../../lib/general.lib.js')
-const GenerateTransactionService = require('./generate-transaction.service.js')
+const GenerateTwoPartTariffTransactionService = require('../generate-two-part-tariff-transaction.service.js')
 const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
@@ -21,7 +21,7 @@ const BillingConfig = require('../../../../config/billing.config.js')
 /**
  * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
  *
- * @param {module:BillRunModel} billRun - The two-part tariff bill run we need to process
+ * @param {module:BillRunModel} billRun - The two-part tariff annual bill run we need to process
  * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
@@ -227,7 +227,7 @@ function _generateTransactionData(billLicenceId, chargePeriod, chargeVersion) {
     const transactions = []
 
     chargeVersion.chargeReferences.forEach((chargeReference) => {
-      const transaction = GenerateTransactionService.go(
+      const transaction = GenerateTwoPartTariffTransactionService.go(
         billLicenceId,
         chargeReference,
         chargePeriod,

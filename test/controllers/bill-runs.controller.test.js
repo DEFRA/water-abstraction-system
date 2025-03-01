@@ -13,7 +13,7 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
-const GenerateBillRunService = require('../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
+const GenerateTwoPartTariffBillRunService = require('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
@@ -276,7 +276,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(GenerateBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
+          Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
         })
 
         it('redirects to the bill runs page', async () => {
@@ -291,7 +291,7 @@ describe('Bill Runs controller', () => {
         describe('because the generate service threw an error', () => {
           beforeEach(async () => {
             Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(GenerateBillRunService, 'go').rejects()
+            Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').rejects()
           })
 
           it('returns the error page', async () => {

@@ -5,19 +5,16 @@
  * @module GenerateBillRunService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
-const FetchTwoPartTariffBillingAccountsService = require('../fetch-two-part-tariff-billing-accounts.service.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('./process-billing-period.service.js')
+const BillRunError = require('../../errors/bill-run.error.js')
+const BillRunModel = require('../../models/bill-run.model.js')
+const ChargingModuleGenerateBillRunRequest = require('../../requests/charging-module/generate-bill-run.request.js')
+const ExpandedError = require('../../errors/expanded.error.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
+const FetchTwoPartTariffBillingAccountsService = require('./fetch-two-part-tariff-billing-accounts.service.js')
+const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
+const LegacyRefreshBillRunRequest = require('../../requests/legacy/refresh-bill-run.request.js')
+const ProcessAnnualBillingPeriodService = require('./two-part-tariff/process-billing-period.service.js')
+const ProcessSupplementaryBillingPeriodService = require('./tpt-supplementary/process-billing-period.service.js')
 
 /**
  * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
@@ -136,7 +133,12 @@ async function _processBillingPeriod(billingPeriod, billRun) {
 
   const billingAccounts = await _fetchBillingAccounts(billRunId)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  let billRunPopulated = false
+  if (billRun.batchType === 'two_part_tariff') {
+    billRunPopulated = await ProcessAnnualBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  } else {
+    billRunPopulated = await ProcessSupplementaryBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  }
 
   await _finaliseBillRun(billRun, billRunPopulated)
 }

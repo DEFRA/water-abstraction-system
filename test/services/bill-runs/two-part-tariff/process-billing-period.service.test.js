@@ -19,12 +19,12 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
-const GenerateTransactionService = require('../../../../app/services/bill-runs/two-part-tariff/generate-transaction.service.js')
+const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
 
-describe('Two-part Tariff - Process Billing Period service', () => {
+describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -198,7 +198,7 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionService, 'go').throws()
+        Sinon.stub(GenerateTwoPartTariffTransactionService, 'go').throws()
       })
 
       it('throws a BillRunError with the correct code', async () => {

@@ -11,19 +11,20 @@ const { expect } = Code
 // Test helpers
 const { setTimeout } = require('timers/promises')
 
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const ExpandedErrorError = require('../../../../app/errors/expanded.error.js')
+const BillRunError = require('../../../app/errors/bill-run.error.js')
+const ExpandedErrorError = require('../../../app/errors/expanded.error.js')
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchTwoPartTariffBillingAccountsService = require('../../../../app/services/bill-runs/fetch-two-part-tariff-billing-accounts.service.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
+const ChargingModuleGenerateRequest = require('../../../app/requests/charging-module/generate-bill-run.request.js')
+const FetchTwoPartTariffBillingAccountsService = require('../../../app/services/bill-runs/fetch-two-part-tariff-billing-accounts.service.js')
+const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+const LegacyRefreshBillRunRequest = require('../../../app/requests/legacy/refresh-bill-run.request.js')
+const ProcessAnnualBillingPeriodService = require('../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
+const ProcessSupplementaryBillingPeriodService = require('../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js')
 
 // Thing under test
-const GenerateBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
+const GenerateTwoPartTariffBillRunService = require('../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 
 describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the generating happens in
@@ -41,6 +42,8 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
 
   let billRunPatchStub
   let billRunSelectStub
+  let processAnnualStub
+  let processSupplementaryStub
   let notifierStub
 
   beforeEach(async () => {
@@ -52,6 +55,9 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       patch: billRunPatchStub,
       select: billRunSelectStub
     })
+
+    processAnnualStub = Sinon.stub(ProcessAnnualBillingPeriodService, 'go')
+    processSupplementaryStub = Sinon.stub(ProcessSupplementaryBillingPeriodService, 'go')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -79,7 +85,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(GenerateBillRunService.go(billRunDetails.id)).to.reject()
+        const error = await expect(GenerateTwoPartTariffBillRunService.go(billRunDetails.id)).to.reject()
 
         expect(error).to.be.an.instanceOf(ExpandedErrorError)
         expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in review')
@@ -87,13 +93,48 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
     })
 
     describe('and the bill run is in review', () => {
+      describe('and is a "two part tariff annual"', () => {
+        beforeEach(async () => {
+          billRunSelectStub.resolves({ ...billRunDetails })
+          processAnnualStub.resolves(false)
+          processSupplementaryStub.resolves(false)
+        })
+
+        it('triggers the "process annual" service', async () => {
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+          await setTimeout(delay)
+
+          expect(processAnnualStub.calledOnce).to.be.true()
+          expect(processSupplementaryStub.called).to.be.false()
+        })
+      })
+
+      describe('and is a "two part tariff annual"', () => {
+        beforeEach(async () => {
+          billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
+          processAnnualStub.resolves(false)
+          processSupplementaryStub.resolves(false)
+        })
+
+        it('triggers the "process supplementary" service', async () => {
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+          await setTimeout(delay)
+
+          expect(processSupplementaryStub.calledOnce).to.be.true()
+          expect(processAnnualStub.called).to.be.false()
+        })
+      })
+
       describe('but there is nothing to bill', () => {
         beforeEach(async () => {
           billRunSelectStub.resolves({ ...billRunDetails })
+          processAnnualStub.resolves(false)
         })
 
         it('sets the bill run status first to "processing" and then to "empty"', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           await setTimeout(delay)
 
@@ -113,18 +154,18 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
           chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
           legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
-          Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+          processAnnualStub.resolves(true)
         })
 
         it('sets the bill run status to "processing"', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           expect(billRunPatchStub.calledOnce).to.be.true()
           expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
         })
 
         it('tells the charging module API to "generate" the bill run', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           await setTimeout(delay)
 
@@ -132,7 +173,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         })
 
         it('tells the legacy service to start its refresh job', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           await setTimeout(delay)
 
@@ -160,7 +201,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await GenerateBillRunService.go(billRunDetails.id)
+        await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
         await setTimeout(delay)
 
@@ -170,7 +211,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       })
 
       it('logs the error', async () => {
-        await GenerateBillRunService.go(billRunDetails.id)
+        await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
         await setTimeout(delay)
 
@@ -191,11 +232,11 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
           Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
-          Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
+          processAnnualStub.rejects(thrownError)
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           await setTimeout(delay)
 
@@ -205,7 +246,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         })
 
         it('logs the error', async () => {
-          await GenerateBillRunService.go(billRunDetails.id)
+          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
           await setTimeout(delay)
 
@@ -226,12 +267,12 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         thrownError = new Error('ERROR')
 
         Sinon.stub(FetchTwoPartTariffBillingAccountsService, 'go').resolves([])
-        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+        processAnnualStub.resolves(true)
         Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await GenerateBillRunService.go(billRunDetails.id)
+        await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
         await setTimeout(delay)
 
@@ -241,7 +282,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
       })
 
       it('logs the error', async () => {
-        await GenerateBillRunService.go(billRunDetails.id)
+        await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
         await setTimeout(delay)
 
