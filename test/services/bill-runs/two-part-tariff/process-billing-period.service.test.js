@@ -9,15 +9,17 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillModel = require('../../../../app/models/bill.model.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const TwoPartTariffFixture = require('../../../fixtures/two-part-tariff.fixture.js')
 
 // Things we need to stub
+const BillModel = require('../../../../app/models/bill.model.js')
+const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
@@ -28,11 +30,14 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     endDate: new Date('2023-03-31')
   }
 
+  let billInsertStub
+  let billLicenceInsertStub
   let billRun
   let billingAccount
   let chargingModuleCreateTransactionRequestStub
   let licence
   let region
+  let transactionInsertStub
 
   beforeEach(async () => {
     region = RegionHelper.select()
@@ -41,6 +46,14 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     licence = TwoPartTariffFixture.licence(region)
 
     chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+
+    billInsertStub = Sinon.stub()
+    billLicenceInsertStub = Sinon.stub()
+    transactionInsertStub = Sinon.stub()
+
+    Sinon.stub(BillModel, 'query').returns({ insert: billInsertStub })
+    Sinon.stub(BillLicenceModel, 'query').returns({ insert: billLicenceInsertStub })
+    Sinon.stub(TransactionModel, 'query').returns({ insert: transactionInsertStub })
   })
 
   afterEach(() => {
@@ -70,7 +83,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       describe('and they are billable', () => {
         beforeEach(async () => {
           // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
-          // new one when processing a billing account. To to that we need a billing account with 2 charge versions
+          // new one when processing a billing account. To do that we need a billing account with 2 charge versions
           // linked to the same licence
           billingAccount.chargeVersions = [
             TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
@@ -83,30 +96,45 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
           expect(result).to.be.true()
 
-          const bills = await _fetchPersistedBill(billRun.id)
+          // NOTE: We pass a single bill per billing account when persisting
+          const billInsertArgs = billInsertStub.args[0]
 
-          expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal(
+          expect(billInsertStub.calledOnce).to.be.true()
+          expect(billInsertArgs[0]).to.equal(
             {
               accountNumber: billingAccount.accountNumber,
               address: {}, // Address is set to an empty object for SROC billing invoices
               billingAccountId: billingAccount.id,
+              billRunId: billRun.id,
               credit: false,
               financialYearEnding: billingPeriod.endDate.getFullYear()
             },
-            { skip: ['billLicences'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal(
+          // NOTE: A bill may have multiple bill licences, so we always pass them as an array
+          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+
+          expect(billLicenceInsertStub.calledOnce).to.be.true()
+          expect(billLicenceInsertArgs[0]).to.have.length(1)
+          expect(billLicenceInsertArgs[0][0]).to.equal(
             {
+              billId: billInsertArgs[0].id,
               licenceId: licence.id,
               licenceRef: licence.licenceRef
             },
-            { skip: ['transactions'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences[0].transactions).to.have.length(2)
+          // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
+          const transactionInsertArgs = transactionInsertStub.args[0]
+
+          expect(transactionInsertStub.calledOnce).to.be.true()
+          expect(transactionInsertArgs[0]).to.have.length(2)
+
+          // We just check that on of the transactions being persisted is linked to the records we expect
+          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
@@ -134,30 +162,45 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
           expect(result).to.be.true()
 
-          const bills = await _fetchPersistedBill(billRun.id)
+          // NOTE: We pass a single bill per billing account when persisting
+          const billInsertArgs = billInsertStub.args[0]
 
-          expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal(
+          expect(billInsertStub.calledOnce).to.be.true()
+          expect(billInsertArgs[0]).to.equal(
             {
               accountNumber: billingAccount.accountNumber,
               address: {}, // Address is set to an empty object for SROC billing invoices
               billingAccountId: billingAccount.id,
+              billRunId: billRun.id,
               credit: false,
               financialYearEnding: billingPeriod.endDate.getFullYear()
             },
-            { skip: ['billLicences'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal(
+          // NOTE: A bill may have multiple bill licences, so we always pass them as an array
+          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+
+          expect(billLicenceInsertStub.calledOnce).to.be.true()
+          expect(billLicenceInsertArgs[0]).to.have.length(1)
+          expect(billLicenceInsertArgs[0][0]).to.equal(
             {
+              billId: billInsertArgs[0].id,
               licenceId: licence.id,
               licenceRef: licence.licenceRef
             },
-            { skip: ['transactions'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences[0].transactions).to.have.length(2)
+          // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
+          const transactionInsertArgs = transactionInsertStub.args[0]
+
+          expect(transactionInsertStub.calledOnce).to.be.true()
+          expect(transactionInsertArgs[0]).to.have.length(2)
+
+          // We just check that on of the transactions being persisted is linked to the records we expect
+          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
@@ -178,9 +221,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
           expect(result).to.be.false()
 
-          const bills = await _fetchPersistedBill(billRun.id)
-
-          expect(bills).to.be.empty()
+          expect(billInsertStub.called).to.be.false()
         })
       })
     })
@@ -218,17 +259,3 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     })
   })
 })
-
-async function _fetchPersistedBill(billRunId) {
-  return BillModel.query()
-    .select(['accountNumber', 'address', 'billingAccountId', 'credit', 'financialYearEnding'])
-    .where('billRunId', billRunId)
-    .withGraphFetched('billLicences')
-    .modifyGraph('billLicences', (builder) => {
-      builder.select(['licenceId', 'licenceRef'])
-    })
-    .withGraphFetched('billLicences.transactions')
-    .modifyGraph('billLicences.transactions', (builder) => {
-      builder.select(['id'])
-    })
-}
