@@ -10,10 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const BillModel = require('../../../../app/models/bill.model.js')
-const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const TwoPartTariffFixture = require('../../../fixtures/two-part-tariff.fixture.js')
 
 // Things we need to stub
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
@@ -34,16 +32,13 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   let billingAccount
   let chargingModuleCreateTransactionRequestStub
   let licence
+  let region
 
   beforeEach(async () => {
-    billRun = {
-      id: generateUUID(),
-      externalId: generateUUID()
-    }
-
-    billingAccount = _billingAccount()
-
-    licence = _licence()
+    region = RegionHelper.select()
+    billRun = TwoPartTariffFixture.billRun(region.id)
+    billingAccount = TwoPartTariffFixture.billingAccount()
+    licence = TwoPartTariffFixture.licence(region)
 
     chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
   })
@@ -64,11 +59,11 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     describe('and there are billing accounts to process', () => {
       beforeEach(async () => {
         chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
-          ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
+          ...TwoPartTariffFixture.chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
 
         chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
-          ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
+          ...TwoPartTariffFixture.chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
         })
       })
 
@@ -78,8 +73,8 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           // new one when processing a billing account. To to that we need a billing account with 2 charge versions
           // linked to the same licence
           billingAccount.chargeVersions = [
-            _chargeVersion(billingAccount.id, licence),
-            _chargeVersion(billingAccount.id, licence)
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
           ]
         })
 
@@ -121,15 +116,15 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           // that is also linked to our billing account. The engine will determine that the charge period for the charge
           // version is invalid so won't attempt to generate a transaction. If we did try, the Charging Module would
           // only reject it.
-          const unbillableLicence = _licence()
+          const unbillableLicence = TwoPartTariffFixture.licence(region)
 
           unbillableLicence.revokedDate = new Date('2019-01-01')
 
-          const unbillableChargeVersion = _chargeVersion(billingAccount.id, unbillableLicence)
+          const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, unbillableLicence)
 
           billingAccount.chargeVersions = [
-            _chargeVersion(billingAccount.id, licence),
-            _chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
             unbillableChargeVersion
           ]
         })
@@ -170,7 +165,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         beforeEach(() => {
           // This time we update the charge version so that nothing is allocated in the charge references. This means
           // the service will not generate any transactions and therefore no bills leading to bills being empty
-          const unbillableChargeVersion = _chargeVersion(billingAccount.id, licence)
+          const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
 
           unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
           unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
@@ -193,7 +188,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      billingAccount.chargeVersions = [_chargeVersion(billingAccount.id, licence)]
+      billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
     })
 
     describe('because generating the calculated transaction fails', () => {
@@ -224,91 +219,6 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   })
 })
 
-function _billingAccount() {
-  return {
-    id: generateUUID(),
-    accountNumber: generateAccountNumber()
-  }
-}
-
-function _chargingModuleResponse(transactionId) {
-  return {
-    succeeded: true,
-    response: {
-      body: { transaction: { id: transactionId } }
-    }
-  }
-}
-
-function _chargeVersion(billingAccountId, licence) {
-  // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
-  // of processing the billing account.
-  const toJSON = () => {
-    return '{}'
-  }
-
-  return {
-    id: generateUUID(),
-    scheme: 'sroc',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
-    billingAccountId,
-    status: 'current',
-    licence,
-    chargeReferences: [
-      {
-        id: generateUUID(),
-        additionalCharges: { isSupplyPublicWater: false },
-        adjustments: {
-          s126: null,
-          s127: false,
-          s130: false,
-          charge: null,
-          winter: false,
-          aggregate: '0.562114443'
-        },
-        chargeCategory: {
-          id: 'b270718a-12c0-4fca-884b-3f8612dbe2f5',
-          reference: '4.4.5',
-          shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
-        },
-        chargeElements: [
-          {
-            id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '1d9050b2-09c8-4570-8173-7f55921437cc', amendedAllocated: 5 }],
-            toJSON
-          },
-          {
-            id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9', amendedAllocated: 10 }],
-            toJSON
-          }
-        ],
-        description: 'Lower Queenstown - Pittisham',
-        loss: 'low',
-        reviewChargeReferences: [
-          {
-            id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
-            amendedAggregate: 0.75,
-            amendedAuthorisedVolume: 20,
-            amendedChargeAdjustment: 0.6
-          }
-        ],
-        source: 'non-tidal',
-        volume: 20
-      }
-    ]
-  }
-}
-
 async function _fetchPersistedBill(billRunId) {
   return BillModel.query()
     .select(['accountNumber', 'address', 'billingAccountId', 'credit', 'financialYearEnding'])
@@ -321,24 +231,4 @@ async function _fetchPersistedBill(billRunId) {
     .modifyGraph('billLicences.transactions', (builder) => {
       builder.select(['id'])
     })
-}
-
-function _licence() {
-  const region = RegionHelper.select()
-
-  return {
-    id: generateUUID(),
-    licenceRef: generateLicenceRef(),
-    waterUndertaker: true,
-    historicalAreaCode: 'SAAR',
-    regionalChargeArea: 'Southern',
-    startDate: new Date('2022-01-01'),
-    expiredDate: null,
-    lapsedDate: null,
-    revokedDate: null,
-    region: {
-      id: region.id,
-      chargeRegionId: region.chargeRegionId
-    }
-  }
 }
