@@ -83,7 +83,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       describe('and they are billable', () => {
         beforeEach(async () => {
           // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
-          // new one when processing a billing account. To to that we need a billing account with 2 charge versions
+          // new one when processing a billing account. To do that we need a billing account with 2 charge versions
           // linked to the same licence
           billingAccount.chargeVersions = [
             TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
