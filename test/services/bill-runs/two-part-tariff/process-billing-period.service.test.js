@@ -205,23 +205,41 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       })
 
       describe('but they are not billable', () => {
-        beforeEach(() => {
-          // This time we update the charge version so that nothing is allocated in the charge references. This means
-          // the service will not generate any transactions and therefore no bills leading to bills being empty
-          const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
+        describe('because the billable volume is 0', () => {
+          beforeEach(() => {
+            // This time we update the charge version so that nothing is allocated in the charge references. This means
+            // the service will not generate any transactions and therefore no bills leading to bills being empty
+            const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
 
-          unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
-          unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
+            unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
+            unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
 
-          billingAccount.chargeVersions = [unbillableChargeVersion]
+            billingAccount.chargeVersions = [unbillableChargeVersion]
+          })
+
+          it('returns false (bill run is empty) and persists nothing', async () => {
+            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+            expect(result).to.be.false()
+
+            expect(billInsertStub.called).to.be.false()
+          })
         })
 
-        it('returns false (bill run is empty) and persists nothing', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+        describe('because the charge period is invalid (perhaps the licence has been ended)', () => {
+          beforeEach(() => {
+            licence.revokedDate = new Date('2022-03-31')
 
-          expect(result).to.be.false()
+            billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
+          })
 
-          expect(billInsertStub.called).to.be.false()
+          it('returns false (bill run is empty) and persists nothing', async () => {
+            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+            expect(result).to.be.false()
+
+            expect(billInsertStub.called).to.be.false()
+          })
         })
       })
     })
