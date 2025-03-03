@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const CheckService = require('../../../../app/services/notifications/setup/check.service.js')
 
-describe('Notifications Setup - Review service', () => {
+describe('Notifications Setup - Check service', () => {
   let removeLicences
   let session
   let testRecipients
@@ -31,6 +31,10 @@ describe('Notifications Setup - Review service', () => {
     testRecipients = RecipientsFixture.recipients()
 
     Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', async () => {
