@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+
 // Thing under test
 const ReceivedPresenter = require('../../../../app/presenters/return-logs/setup/received.presenter.js')
 
@@ -33,7 +36,9 @@ describe('Return Logs Setup - Received presenter', () => {
         receivedDateDay: null,
         receivedDateMonth: null,
         receivedDateYear: null,
-        backLink: '/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns'
+        backLink: '/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns',
+        todaysDate: formatLongDate(new Date()),
+        yesterdaysDate: _yesterdaysDate()
       })
     })
   })
@@ -116,3 +121,10 @@ describe('Return Logs Setup - Received presenter', () => {
     })
   })
 })
+
+function _yesterdaysDate() {
+  const yesterdaysDate = new Date()
+  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
+
+  return formatLongDate(yesterdaysDate)
+}
