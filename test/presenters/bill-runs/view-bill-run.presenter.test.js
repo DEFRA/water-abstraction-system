@@ -178,28 +178,6 @@ describe('View Bill Run presenter', () => {
         })
       })
     })
-
-    describe('the "displayCreditDebitTotals" property', () => {
-      describe('when the bill run is not supplementary', () => {
-        beforeEach(() => {
-          billRun.batchType = 'annual'
-        })
-
-        it('returns false', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.displayCreditDebitTotals).to.be.false()
-        })
-      })
-
-      describe('when the bill run is supplementary', () => {
-        it('returns true', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.displayCreditDebitTotals).to.be.true()
-        })
-      })
-    })
   })
 })
 

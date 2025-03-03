@@ -6,6 +6,7 @@
  */
 
 const { formatMoney } = require('../base.presenter.js')
+const { displayCreditDebitTotals } = require('../billing.presenter.js')
 const ViewCompensationChargeTransactionPresenter = require('./view-compensation-charge-transaction.presenter.js')
 const ViewMinimumChargeTransactionPresenter = require('./view-minimum-charge-transaction.presenter.js')
 const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-transaction.presenter.js')
@@ -22,8 +23,6 @@ const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-t
 function go(billLicence) {
   const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
-  const displayCreditDebitTotals = _displayCreditDebitTotals(bill.billRun)
-
   const { creditTotal, debitTotal, total } = _totals(transactions)
 
   return {
@@ -31,7 +30,7 @@ function go(billLicence) {
     billId: bill.id,
     creditTotal,
     debitTotal,
-    displayCreditDebitTotals,
+    displayCreditDebitTotals: displayCreditDebitTotals(bill.billRun.batchType),
     licenceId,
     licenceRef,
     removeLicenceLink: _removeLicenceLink(bill.billRun, billLicenceId),
@@ -41,12 +40,6 @@ function go(billLicence) {
     transactions: _transactions(transactions),
     transactionsTotal: total
   }
-}
-
-function _displayCreditDebitTotals(billRun) {
-  const { batchType } = billRun
-
-  return batchType === 'supplementary'
 }
 
 function _removeLicenceLink(billRun, billLicenceId) {
