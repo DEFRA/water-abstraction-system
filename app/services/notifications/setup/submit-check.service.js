@@ -6,6 +6,8 @@
  */
 
 const SessionModel = require('../../../models/session.model.js')
+const RecipientsService = require('./fetch-recipients.service.js')
+const DetermineRecipientsService = require('./determine-recipients.service.js')
 
 /**
  * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
@@ -19,7 +21,11 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return session.recipients
+  const recipientsData = await RecipientsService.go(session)
+
+  const recipients = DetermineRecipientsService.go(recipientsData)
+
+  return recipients
 }
 
 module.exports = {

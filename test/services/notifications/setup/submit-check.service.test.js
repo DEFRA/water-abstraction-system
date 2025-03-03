@@ -5,18 +5,18 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
 describe('Notifications Setup - Submit Check service', () => {
-  let clock
   let recipients
   let session
 
@@ -26,23 +26,28 @@ describe('Notifications Setup - Submit Check service', () => {
     session = await SessionHelper.add({
       data: {
         journey: 'invitations',
-        recipients: [recipients.primaryUser, recipients.licenceHolder],
         referenceCode: 'RINV-123',
-        removeLicences: '',
         returnsPeriod: 'quarterFour'
       }
     })
 
-    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
-  })
+    recipients = RecipientsFixture.recipients()
 
-  afterEach(() => {
-    clock.restore()
+    Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
   })
 
   it('correctly presents the data', async () => {
     const result = await SubmitCheckService.go(session.id)
 
-    expect(result).to.equal([recipients.primaryUser, recipients.licenceHolder])
+    expect(result).to.equal([
+      {
+        contact: null,
+        contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+        contact_type: 'Primary user',
+        email: 'primary.user@important.com',
+        licence_refs: recipients.primaryUser.licence_refs,
+        message_type: 'Email'
+      }
+    ])
   })
 })
