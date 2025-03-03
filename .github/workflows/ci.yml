@@ -24,6 +24,7 @@ jobs:
       TACTICAL_IDM_URL: http://localhost:8003
       PERMIT_REPOSITORY_URL: http://localhost:8004
       RETURNS_URL: http://localhost:8006
+      GOV_UK_NOTIFY_API_KEY: 'test-api-key'
       # JWT Auth token shared by all legacy external services
       LEGACY_AUTH_TOKEN: longvalueofnumbersandletters.inbothcases.splitin3by2periods
       # External Charging Module JWT (AWS Cognito) service

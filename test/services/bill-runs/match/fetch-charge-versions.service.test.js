@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,9 +13,13 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const CompanyModel = require('../../../../app/models/company.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const LicenceDocumentModel = require('../../../../app/models/licence-document.model.js')
+const LicenceDocumentRoleModel = require('../../../../app/models/licence-document-role.model.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
+const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
@@ -26,6 +30,19 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/m
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
 
+// NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let chargeElement1
+let chargeElement2
+let chargeReference
+let chargeVersion
+let licence
+let licenceHolderDetails
+let licenceSupplementaryYear
+let otherChargeVersion
+let otherChargeReference
+let otherLicence
+let supplementary
+
 describe('Fetch Charge Versions service', () => {
   const billingPeriod = {
     startDate: new Date('2023-04-01'),
@@ -35,21 +52,16 @@ describe('Fetch Charge Versions service', () => {
 
   let changeReason
   let chargeCategory
-  let chargeElement1
-  let chargeElement2
-  let chargeReference
-  let chargeVersion
-  let licence
-  let licenceHolderDetails
-  let otherChargeVersion
-  let otherChargeReference
-  let otherLicence
   let purpose
 
   before(async () => {
     purpose = PurposeHelper.select(PURPOSE_SPRAY_IRRIGATION_INDEX)
     chargeCategory = ChargeCategoryHelper.select()
     changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
+  })
+
+  afterEach(async () => {
+    await _cleanUp()
   })
 
   describe('when there are no applicable charge versions', () => {
@@ -68,12 +80,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -100,12 +106,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -128,12 +128,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -160,12 +154,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -184,12 +172,6 @@ describe('Fetch Charge Versions service', () => {
           chargeVersionId: chargeVersion.id,
           chargeCategory: chargeCategory.id
         })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -212,12 +194,6 @@ describe('Fetch Charge Versions service', () => {
         })
 
         await WorkflowHelper.add({ licenceId: licence.id })
-      })
-
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -247,22 +223,59 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      afterEach(async () => {
-        await chargeReference.$query().delete()
-        await chargeVersion.$query().delete()
-        await licence.$query().delete()
-      })
-
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
         expect(results).to.be.empty()
       })
     })
+
+    describe('because the bill run to be created is "two-part tariff supplementary"', () => {
+      beforeEach(async () => {
+        supplementary = true
+
+        licence = await LicenceHelper.add({ regionId: region.id })
+
+        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
+
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
+      })
+
+      describe('and the licence has not been flagged for supplementary', () => {
+        it('returns no records', async () => {
+          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+
+          expect(results).to.be.empty()
+        })
+      })
+
+      describe('and the licence has been flagged for supplementary but a different year', () => {
+        beforeEach(async () => {
+          licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+            licenceId: licence.id,
+            financialYearEnd: billingPeriod.endDate.getFullYear() - 1
+          })
+        })
+
+        afterEach(async () => {
+          await licenceSupplementaryYear.$query().delete()
+        })
+
+        it('returns no records', async () => {
+          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+
+          expect(results).to.be.empty()
+        })
+      })
+    })
   })
 
   describe('when there are applicable charge versions', () => {
-    before(async () => {
+    beforeEach(async () => {
       licence = await LicenceHelper.add({ licenceRef: '01/128', regionId: region.id })
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
@@ -315,112 +328,145 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    after(async () => {
-      await chargeReference.$query().delete()
-      await otherChargeReference.$query().delete()
-      await chargeVersion.$query().delete()
-      await otherChargeVersion.$query().delete()
-      await licence.$query().delete()
-      await otherLicence.$query().delete()
-    })
+    describe('and the bill run to be created is "two-part tariff annual"', () => {
+      it('returns the charge version with related licence, charge references and charge elements', async () => {
+        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
-    it('returns the charge version with related licence, charge references and charge elements', async () => {
-      const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
-
-      expect(results).to.have.length(2)
-      expect(results[0]).to.equal({
-        id: chargeVersion.id,
-        startDate: new Date('2022-04-01'),
-        endDate: null,
-        status: 'current',
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef,
-          startDate: new Date('2022-01-01'),
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null,
-          licenceDocument: {
-            id: licenceHolderDetails.licenceDocumentId,
-            licenceDocumentRoles: [
-              {
-                company: {
-                  id: licenceHolderDetails.companyId,
-                  name: 'Licence Holder Ltd',
-                  type: 'organisation'
-                },
-                contact: null,
-                id: licenceHolderDetails.licenceDocumentRoleId
-              }
-            ]
-          }
-        },
-        chargeReferences: [
-          {
-            id: chargeReference.id,
-            volume: 6.819,
-            description: 'Mineral washing',
-            aggregate: 0.562114443,
-            s126: null,
-            s127: 'true',
-            s130: null,
-            winter: null,
-            charge: null,
-            chargeCategory: {
-              reference: chargeCategory.reference,
-              shortDescription: chargeCategory.shortDescription,
-              subsistenceCharge: chargeCategory.subsistenceCharge
-            },
-            chargeElements: [
-              {
-                id: chargeElement2.id,
-                description: 'Trickle Irrigation - Direct',
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                authorisedAnnualQuantity: 200,
-                purpose: {
-                  id: purpose.id,
-                  legacyId: purpose.legacyId,
-                  description: purpose.description
+        expect(results).to.have.length(2)
+        expect(results[0]).to.equal({
+          id: chargeVersion.id,
+          startDate: new Date('2022-04-01'),
+          endDate: null,
+          status: 'current',
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef,
+            startDate: new Date('2022-01-01'),
+            expiredDate: null,
+            lapsedDate: null,
+            revokedDate: null,
+            licenceDocument: {
+              id: licenceHolderDetails.licenceDocumentId,
+              licenceDocumentRoles: [
+                {
+                  company: {
+                    id: licenceHolderDetails.companyId,
+                    name: 'Licence Holder Ltd',
+                    type: 'organisation'
+                  },
+                  contact: null,
+                  id: licenceHolderDetails.licenceDocumentRoleId
                 }
+              ]
+            }
+          },
+          chargeReferences: [
+            {
+              id: chargeReference.id,
+              volume: 6.819,
+              description: 'Mineral washing',
+              aggregate: 0.562114443,
+              s126: null,
+              s127: 'true',
+              s130: null,
+              winter: null,
+              charge: null,
+              chargeCategory: {
+                reference: chargeCategory.reference,
+                shortDescription: chargeCategory.shortDescription,
+                subsistenceCharge: chargeCategory.subsistenceCharge
               },
-              {
-                id: chargeElement1.id,
-                description: 'Trickle Irrigation - Direct',
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                authorisedAnnualQuantity: 100,
-                purpose: {
-                  id: purpose.id,
-                  legacyId: purpose.legacyId,
-                  description: purpose.description
+              chargeElements: [
+                {
+                  id: chargeElement2.id,
+                  description: 'Trickle Irrigation - Direct',
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 4,
+                  abstractionPeriodEndDay: 31,
+                  abstractionPeriodEndMonth: 3,
+                  authorisedAnnualQuantity: 200,
+                  purpose: {
+                    id: purpose.id,
+                    legacyId: purpose.legacyId,
+                    description: purpose.description
+                  }
+                },
+                {
+                  id: chargeElement1.id,
+                  description: 'Trickle Irrigation - Direct',
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 4,
+                  abstractionPeriodEndDay: 31,
+                  abstractionPeriodEndMonth: 3,
+                  authorisedAnnualQuantity: 100,
+                  purpose: {
+                    id: purpose.id,
+                    legacyId: purpose.legacyId,
+                    description: purpose.description
+                  }
                 }
-              }
-            ]
+              ]
+            }
+          ],
+          changeReason: {
+            description: changeReason.description
           }
-        ],
-        changeReason: {
-          description: changeReason.description
-        }
+        })
+      })
+
+      it('returns the charge versions ordered by licence reference', async () => {
+        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+
+        expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
+        expect(results[1].licence.licenceRef).to.equal(otherLicence.licenceRef)
+      })
+
+      it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
+        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+
+        expect(results[0].chargeReferences[0].chargeElements[0].id).to.equal(chargeElement2.id)
+        expect(results[0].chargeReferences[0].chargeElements[1].id).to.equal(chargeElement1.id)
       })
     })
 
-    it('returns the charge versions ordered by licence reference', async () => {
-      const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+    describe('and the bill run to be created is "two-part tariff supplementary"', () => {
+      beforeEach(async () => {
+        supplementary = true
 
-      expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
-      expect(results[1].licence.licenceRef).to.equal(otherLicence.licenceRef)
-    })
+        licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+          licenceId: licence.id,
+          financialYearEnd: billingPeriod.endDate.getFullYear()
+        })
+      })
 
-    it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
-      const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+      describe('and the first licence has been flagged for supplementary', () => {
+        it('returns only its charge versions', async () => {
+          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
 
-      expect(results[0].chargeReferences[0].chargeElements[0].id).to.equal(chargeElement2.id)
-      expect(results[0].chargeReferences[0].chargeElements[1].id).to.equal(chargeElement1.id)
+          expect(results).to.have.length(1)
+          expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
+        })
+      })
     })
   })
 })
+
+async function _cleanUp() {
+  if (chargeElement1) await chargeElement1.$query().delete()
+  if (chargeElement2) await chargeElement2.$query().delete()
+  if (chargeReference) await chargeReference.$query().delete()
+  if (chargeVersion) await chargeVersion.$query().delete()
+  if (licence) await licence.$query().delete()
+  if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
+  if (otherChargeVersion) await otherChargeVersion.$query().delete()
+  if (otherChargeReference) await otherChargeReference.$query().delete()
+  if (otherLicence) await otherLicence.$query().delete()
+
+  if (licenceHolderDetails) {
+    const { companyId, licenceDocumentId, licenceDocumentRoleId } = licenceHolderDetails
+
+    await LicenceDocumentRoleModel.query().deleteById(licenceDocumentRoleId)
+    await LicenceDocumentModel.query().deleteById(licenceDocumentId)
+    await CompanyModel.query().deleteById(companyId)
+  }
+}

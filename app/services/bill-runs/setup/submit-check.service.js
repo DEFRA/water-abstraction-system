@@ -48,11 +48,7 @@ async function go(sessionId, auth) {
   // blocking bill run was found. This is just protection against malicious use, or more likely, someone has left the
   // page idle and another user has triggered a bill run that now blocks it.
   if (blockingResults.trigger !== engineTriggers.neither) {
-    // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
-    // is not currently possible
-    if (session.type !== 'two_part_supplementary') {
-      await CreateService.go(session, blockingResults, auth.credentials.user)
-    }
+    await CreateService.go(session, blockingResults, auth.credentials.user)
 
     return {}
   }

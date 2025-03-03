@@ -5,8 +5,9 @@
  * @module BlockedBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme, formatLongDate } = require('../../../base.presenter.js')
+const { formatLongDate } = require('../../../base.presenter.js')
 const { checkPageBackLink } = require('./base-check.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
 
 const LAST_PRESROC_YEAR = 2022
 

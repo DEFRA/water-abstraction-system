@@ -5,13 +5,8 @@
  * @module ViewCancelBillRunPresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  titleCase
-} = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
 
 /**
  * Prepares and processes bill run data for presentation

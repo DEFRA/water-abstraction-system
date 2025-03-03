@@ -29,7 +29,8 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, false otherwise
  */
 async function go(billRun, billingPeriod) {
-  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod)
+  const supplementary = billRun.batchType === 'two_part_supplementary'
+  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod, supplementary)
 
   if (licences.length > 0) {
     await _process(licences, billingPeriod, billRun)
