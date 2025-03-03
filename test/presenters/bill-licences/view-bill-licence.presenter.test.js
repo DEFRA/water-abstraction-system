@@ -32,28 +32,6 @@ describe('View Bill Licence presenter', () => {
       Sinon.stub(ViewStandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
     })
 
-    describe('the "displayCreditDebitTotals" property', () => {
-      describe('when the linked bill run is not supplementary', () => {
-        beforeEach(() => {
-          billLicence.bill.billRun.batchType = 'annual'
-        })
-
-        it('returns false', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
-
-          expect(result.displayCreditDebitTotals).to.be.false()
-        })
-      })
-
-      describe('when the bill run is supplementary', () => {
-        it('returns true', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
-
-          expect(result.displayCreditDebitTotals).to.be.true()
-        })
-      })
-    })
-
     describe('the "removeLicenceLink" property', () => {
       describe('when the linked bill run has a status of "ready"', () => {
         beforeEach(() => {

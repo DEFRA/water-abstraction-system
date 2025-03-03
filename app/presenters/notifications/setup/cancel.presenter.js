@@ -5,15 +5,13 @@
  * @module CancelPresenter
  */
 
-const DetermineReturnsPeriodService = require('../../../services/notifications/setup/determine-returns-period.service.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/{sessionId}/cancel` page
  *
- * @param {string} sessionId - The UUID for the notification setup session record
+ * @param {module:SessionModel} session - The session instance
  *
- * @param session
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
@@ -35,20 +33,22 @@ function _summaryList(session) {
     }
   }
 
-  const { returnsPeriod } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  const {
+    determinedReturnsPeriod: { name, startDate, endDate }
+  } = session
 
-  const textPrefix = _textPrefix(returnsPeriod)
+  const textPrefix = _textPrefix(name)
 
   return {
     text: 'Returns period',
-    value: `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`
+    value: `${textPrefix} ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`
   }
 }
 
-function _textPrefix(returnPeriod) {
-  if (returnPeriod.name === 'allYear') {
+function _textPrefix(name) {
+  if (name === 'allYear') {
     return 'Winter and all year annual'
-  } else if (returnPeriod.name === 'summer') {
+  } else if (name === 'summer') {
     return 'Summer annual'
   } else {
     return 'Quarterly'

@@ -1,41 +1,56 @@
 'use strict'
 
 /**
- * Fetches the matching debit transactions from a previous bill run and reverses them as credits
- * @module ProcessTransactionsService
+ * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
+ * @module ProcessSupplementaryTransactionsService
  */
 
 const FetchPreviousTransactionsService = require('./fetch-previous-transactions.service.js')
-const { transactionsMatch } = require('../../../lib/general.lib.js')
-const ReverseTransactionsService = require('./reverse-transactions.service.js')
+const { transactionsMatch } = require('../../lib/general.lib.js')
+const ReverseTransactionsService = require('./reverse-supplementary-transactions.service.js')
 
 /**
- * Fetches debit-only transactions from the previous bill run for the billing account and licence provided and reverses
- * them as credits.
+ * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
  *
- * These credits are compared with the supplied calculated debit transactions (ie. debit transactions which are to be
- * sent to the Charging Module) and any matching pairs of transactions which would cancel each other out are removed.
- * Any remaining reversed credits and calculated debits are returned.
+ * The `FetchPreviousTransactionsService` finds _all_ previous debit and credit transactions. It then compares the
+ * debits to the credits. If they match, the debit transaction is dropped. This is because it must have been dealt with
+ * by a previous supplementary bill run.
  *
- * @param {object[]} calculatedTransactions - The calculated transactions to be processed
- * @param {string} billingAccountId - The UUID that identifies the billing account we are processing transactions for
- * @param {object} billLicence - A generated bill licence that identifies the licence we need to match against
- * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * Any debits that remain are then reversed as credits. These are then compared against the ones we've generated for the
+ * bill run in progress.
  *
- * @returns {Promise<object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
- * out by a previous matching credit)
+ * If any matches occur here, both transactions are dropped. There is no point in sending them to the Charging Module
+ * API and including them in the bill, as the result will just be £0, and we've been asked to limit zero-value bills
+ * where we can.
+ *
+ * Any generated transactions and reversed debits (now credits) that didn't match are returned as the transactions to be
+ * sent to the Charging Module API, and included in the bill.
+ *
+ * @param {object[]} generatedTransactions - The generated transactions for the bill licence being processed
+ * @param {string} billLicenceId - The UUID that will be used for the bill licence we are processing transactions for
+ * @param {string} billingAccountId - The UUID for the billing account we are processing transactions for and for which
+ * we need to fetch previous transactions
+ * @param {string} licenceId - The UUID for the licence we are processing transactions for and  and for which we need to
+ * fetch previous transactions
+ * @param {number} financialYearEnding - Which financial year to look for previous transactions in
+ *
+ * @returns {Promise<object[]>} An array of the remaining generated transactions and reversed debits from previous
+ * transactions (ie. those which were not cancelled out when the generated and reversed were compared)
  */
-async function go(calculatedTransactions, billingAccountId, billLicence, billingPeriod) {
-  const { id: billLicenceId, licenceId } = billLicence
-  const previousTransactions = await _fetchPreviousTransactions(billingAccountId, licenceId, billingPeriod)
+async function go(generatedTransactions, billLicenceId, billingAccountId, licenceId, financialYearEnding) {
+  const previousTransactions = await FetchPreviousTransactionsService.go(
+    billingAccountId,
+    licenceId,
+    financialYearEnding
+  )
 
   if (previousTransactions.length === 0) {
-    return calculatedTransactions
+    return generatedTransactions
   }
 
   const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
 
-  return _cleanseTransactions(calculatedTransactions, reversedTransactions)
+  return _cleanseTransactions(generatedTransactions, reversedTransactions)
 }
 
 /**
@@ -89,14 +104,6 @@ function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   cleansedTransactionLines.push(...reverseTransactions)
 
   return cleansedTransactionLines
-}
-
-async function _fetchPreviousTransactions(billingAccountId, licenceId, billingPeriod) {
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-
-  const transactions = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
-
-  return transactions
 }
 
 module.exports = {

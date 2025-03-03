@@ -8,9 +8,9 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ReverseTransactionsService = require('../../../../app/services/bill-runs/supplementary/reverse-transactions.service.js')
+const ReverseSupplementaryTransactionsService = require('../../../app/services/bill-runs/reverse-supplementary-transactions.service.js')
 
-describe('Reverse Transactions service', () => {
+describe('Bill Runs - Reverse Supplementary Transactions service', () => {
   const transactions = [
     {
       name: 'DEBIT',
@@ -32,7 +32,7 @@ describe('Reverse Transactions service', () => {
 
   describe('when the service is called', () => {
     it('returns reversing transactions', () => {
-      const result = ReverseTransactionsService.go(transactions, billLicenceId)
+      const result = ReverseSupplementaryTransactionsService.go(transactions, billLicenceId)
 
       expect(result).to.have.length(transactions.length)
 
