@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,6 +31,10 @@ describe('Notifications Setup - Check service', () => {
     testRecipients = RecipientsFixture.recipients()
 
     Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', async () => {
