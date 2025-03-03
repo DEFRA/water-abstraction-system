@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const DownloadRecipientsPresenter = require('../../../../app/presenters/notifications/setup/download-recipients.presenter.js')
 
-describe('Notifications Setup - Download recipients presenter', () => {
+describe.only('Notifications Setup - Download recipients presenter', () => {
   const notificationType = 'Returns invitation'
 
   let recipients
@@ -30,13 +30,13 @@ describe('Notifications Setup - Download recipients presenter', () => {
         // Headers
         'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
           // Row - Primary user
-          '"123/46","2434","2018-01-01","2019-01-01","2021-01-01","Returns invitation","email","Primary user","primary.user@important.com",,,,,,,,\n' +
+          '"123/46","2434",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","email","Primary user","primary.user@important.com",,,,,,,,\n' +
           // Row - Licence holder
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n' +
           // Row - Returns to
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","United Kingdom","WD25 7LR"\n' +
           //  Row - Licence holder - organisation
-          '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n'
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n'
       )
     })
 
@@ -80,9 +80,9 @@ describe('Notifications Setup - Download recipients presenter', () => {
         expect(row).to.equal(
           '"123/46",' + // Licence
             '"2434",' + // 'Return reference'
-            '"2018-01-01",' + // 'Return period start date'
-            '"2019-01-01",' + // 'Return period end date'
-            '"2021-01-01",' + // 'Return due date'
+            '2018-01-01,' + // 'Return period start date'
+            '2019-01-01,' + // 'Return period end date'
+            '2021-01-01,' + // 'Return due date'
             '"Returns invitation",' + // 'Notification type'
             '"email",' + // 'Message type'
             '"Primary user",' + // 'Contact type'
@@ -112,9 +112,9 @@ describe('Notifications Setup - Download recipients presenter', () => {
             expect(row).to.equal(
               '"1/343/3",' + // Licence
                 '"376439279",' + // 'Return reference'
-                '"2018-01-01",' + // 'Return period start date'
-                '"2019-01-01",' + // 'Return period end date'
-                '"2021-01-01",' + // 'Return due date'
+                '2018-01-01,' + // 'Return period start date'
+                '2019-01-01,' + // 'Return period end date'
+                '2021-01-01,' + // 'Return due date'
                 '"Returns invitation",' + // 'Notification type'
                 '"letter",' + // 'Message type'
                 '"Licence holder",' + // 'Contact type'
@@ -143,9 +143,9 @@ describe('Notifications Setup - Download recipients presenter', () => {
             expect(row).to.equal(
               '"1/343/3",' + // Licence
                 '"376439279",' + // 'Return reference'
-                '"2018-01-01",' + // 'Return period start date'
-                '"2019-01-01",' + // 'Return period end date'
-                '"2021-01-01",' + // 'Return due date'
+                '2018-01-01,' + // 'Return period start date'
+                '2019-01-01,' + // 'Return period end date'
+                '2021-01-01,' + // 'Return due date'
                 '"Returns invitation",' + // 'Notification type'
                 '"letter",' + // 'Message type'
                 '"Returns to",' + // 'Contact type'
@@ -175,9 +175,9 @@ describe('Notifications Setup - Download recipients presenter', () => {
           expect(row).to.equal(
             '"1/343/3",' + // Licence
               '"376439279",' + // 'Return reference'
-              '"2018-01-01",' + // 'Return period start date'
-              '"2019-01-01",' + // 'Return period end date'
-              '"2021-01-01",' + // 'Return due date'
+              '2018-01-01,' + // 'Return period start date'
+              '2019-01-01,' + // 'Return period end date'
+              '2021-01-01,' + // 'Return due date'
               '"Returns invitation",' + // 'Notification type'
               '"letter",' + // 'Message type'
               '"Licence holder",' + // 'Contact type'
