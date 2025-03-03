@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
+const UnflagUnbilledSupplementaryLicencesService = require('../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
 
-describe('Unflag unbilled licences service', () => {
+describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
   let billRun
 
   describe('when there are licences flagged for SROC supplementary billing', () => {
@@ -59,7 +59,7 @@ describe('Unflag unbilled licences service', () => {
       describe('which were not billed', () => {
         describe('and are not in workflow or updated after the bill run was created', () => {
           it('unflags them for SROC supplementary billing', async () => {
-            await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+            await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
             const licenceToBeChecked = await licenceNotBilledInBillRun.$query()
 
@@ -69,7 +69,7 @@ describe('Unflag unbilled licences service', () => {
 
         describe('but are in workflow', () => {
           it('leaves flagged for SROC supplementary billing', async () => {
-            await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+            await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
             const licenceToBeChecked = await licenceNotBilledInBillRunAndWorkflow.$query()
 
@@ -79,7 +79,7 @@ describe('Unflag unbilled licences service', () => {
 
         describe('but were updated after the bill run was created', () => {
           it('leaves flagged for SROC supplementary billing', async () => {
-            await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+            await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
             const licenceToBeChecked = await licenceNotBilledInBillRunAndUpdated.$query()
 
@@ -96,7 +96,7 @@ describe('Unflag unbilled licences service', () => {
         })
 
         it('are left flagged (include_in_sroc_billing still true)', async () => {
-          await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+          await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
           const licenceToBeChecked = await licenceBilledInBillRun.$query()
 
@@ -107,7 +107,7 @@ describe('Unflag unbilled licences service', () => {
 
     describe('those licences not in the current bill run', () => {
       it('leaves flagged (include_in_sroc_billing still true)', async () => {
-        await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+        await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
         const licenceToBeChecked = await licenceNotInBillRun.$query()
 
