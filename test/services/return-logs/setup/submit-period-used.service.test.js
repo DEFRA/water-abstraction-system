@@ -27,7 +27,22 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         periodStartDay: '01',
         periodStartMonth: '04',
         periodEndDay: '31',
-        periodEndMonth: '03'
+        periodEndMonth: '03',
+        singleVolumeQuantity: '1200',
+        lines: [
+          { startDate: new Date('2023-04-01'), endDate: new Date('2023-04-30') },
+          { startDate: new Date('2023-05-01'), endDate: new Date('2023-05-31') },
+          { startDate: new Date('2023-06-01'), endDate: new Date('2023-06-30') },
+          { startDate: new Date('2023-07-01'), endDate: new Date('2023-07-31') },
+          { startDate: new Date('2023-08-01'), endDate: new Date('2023-08-31') },
+          { startDate: new Date('2023-09-01'), endDate: new Date('2023-09-30') },
+          { startDate: new Date('2023-10-01'), endDate: new Date('2023-10-31') },
+          { startDate: new Date('2023-11-01'), endDate: new Date('2023-11-30') },
+          { startDate: new Date('2023-12-01'), endDate: new Date('2023-12-31') },
+          { startDate: new Date('2024-01-01'), endDate: new Date('2024-01-31') },
+          { startDate: new Date('2024-02-01'), endDate: new Date('2024-02-29') },
+          { startDate: new Date('2024-03-01'), endDate: new Date('2024-03-31') }
+        ]
       }
     }
 
@@ -47,6 +62,27 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.periodDateUsedOptions).to.equal('default')
+          expect(refreshedSession.fromFullDate).to.equal('2023-04-01T00:00:00.000Z')
+          expect(refreshedSession.toFullDate).to.equal('2024-03-31T00:00:00.000Z')
+        })
+
+        it('applies the single volume to the applicable lines', async () => {
+          await SubmitPeriodUsedService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.lines[0].quantity).to.equal(100)
+          expect(refreshedSession.lines[1].quantity).to.equal(100)
+          expect(refreshedSession.lines[2].quantity).to.equal(100)
+          expect(refreshedSession.lines[3].quantity).to.equal(100)
+          expect(refreshedSession.lines[4].quantity).to.equal(100)
+          expect(refreshedSession.lines[5].quantity).to.equal(100)
+          expect(refreshedSession.lines[6].quantity).to.equal(100)
+          expect(refreshedSession.lines[7].quantity).to.equal(100)
+          expect(refreshedSession.lines[8].quantity).to.equal(100)
+          expect(refreshedSession.lines[9].quantity).to.equal(100)
+          expect(refreshedSession.lines[10].quantity).to.equal(100)
+          expect(refreshedSession.lines[11].quantity).to.equal(100)
         })
       })
 
@@ -54,11 +90,11 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         beforeEach(async () => {
           payload = {
             periodDateUsedOptions: 'custom-dates',
-            'period-used-from-day': '01',
-            'period-used-from-month': '04',
+            'period-used-from-day': '15',
+            'period-used-from-month': '08',
             'period-used-from-year': '2023',
-            'period-used-to-day': '31',
-            'period-used-to-month': '03',
+            'period-used-to-day': '20',
+            'period-used-to-month': '01',
             'period-used-to-year': '2024'
           }
         })
@@ -69,12 +105,33 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.periodDateUsedOptions).to.equal('custom-dates')
-          expect(refreshedSession.periodUsedFromDay).to.equal('01')
-          expect(refreshedSession.periodUsedFromMonth).to.equal('04')
+          expect(refreshedSession.periodUsedFromDay).to.equal('15')
+          expect(refreshedSession.periodUsedFromMonth).to.equal('08')
           expect(refreshedSession.periodUsedFromYear).to.equal('2023')
-          expect(refreshedSession.periodUsedToDay).to.equal('31')
-          expect(refreshedSession.periodUsedToMonth).to.equal('03')
+          expect(refreshedSession.periodUsedToDay).to.equal('20')
+          expect(refreshedSession.periodUsedToMonth).to.equal('01')
           expect(refreshedSession.periodUsedToYear).to.equal('2024')
+          expect(refreshedSession.fromFullDate).to.equal('2023-08-15T00:00:00.000Z')
+          expect(refreshedSession.toFullDate).to.equal('2024-01-20T00:00:00.000Z')
+        })
+
+        it('applies the single volume to the applicable lines', async () => {
+          await SubmitPeriodUsedService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.lines[0].quantity).to.not.exist()
+          expect(refreshedSession.lines[1].quantity).to.not.exist()
+          expect(refreshedSession.lines[2].quantity).to.not.exist()
+          expect(refreshedSession.lines[3].quantity).to.not.exist()
+          expect(refreshedSession.lines[4].quantity).to.not.exist()
+          expect(refreshedSession.lines[5].quantity).to.equal(300)
+          expect(refreshedSession.lines[6].quantity).to.equal(300)
+          expect(refreshedSession.lines[7].quantity).to.equal(300)
+          expect(refreshedSession.lines[8].quantity).to.equal(300)
+          expect(refreshedSession.lines[9].quantity).to.not.exist()
+          expect(refreshedSession.lines[10].quantity).to.not.exist()
+          expect(refreshedSession.lines[11].quantity).to.not.exist()
         })
       })
     })
