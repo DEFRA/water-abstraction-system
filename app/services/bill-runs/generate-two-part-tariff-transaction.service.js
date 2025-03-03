@@ -2,10 +2,10 @@
 
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in
- * @module GenerateTransactionService
+ * @module GenerateTwoPartTariffTransactionService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../lib/general.lib.js')
 
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in

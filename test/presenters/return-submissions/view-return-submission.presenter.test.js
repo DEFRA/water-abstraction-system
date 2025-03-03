@@ -268,12 +268,12 @@ describe('View Return Submissions presenter', () => {
         expect(headers).to.include('Week ending')
       })
 
-      it('includes the expected rows that start within the month', () => {
+      it('includes the expected rows that end within the month', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
 
         expect(result.tableData.rows.length).to.equal(4)
-        expect(result.tableData.rows[0]).to.include({ date: '12 April 2025' })
-        expect(result.tableData.rows[3]).to.include({ date: '3 May 2025' })
+        expect(result.tableData.rows[0]).to.include({ date: '5 April 2025' })
+        expect(result.tableData.rows).to.not.include({ date: '3 May 2025' })
       })
     })
   })
