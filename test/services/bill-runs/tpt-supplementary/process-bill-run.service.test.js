@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const AssignBillRunToLicencesService = require('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 
@@ -32,6 +33,8 @@ describe('Bill Runs - TpT Supplementary - Process Bill Run service', () => {
       patch: billRunPatchStub
     })
 
+    Sinon.stub(AssignBillRunToLicencesService, 'go').resolves()
+
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -47,7 +50,7 @@ describe('Bill Runs - TpT Supplementary - Process Bill Run service', () => {
   describe('when the service is called', () => {
     describe('and no licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([])
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
@@ -72,7 +75,11 @@ describe('Bill Runs - TpT Supplementary - Process Bill Run service', () => {
 
     describe('and licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        // NOTE: ProcessBillRunService orchestrates the creation of a bill run. The actual work is done in the services
+        // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
+        // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
+        // return, only that it returns something!
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([{ id: '27e16528-bf00-459e-9980-902feb84a054' }])
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {

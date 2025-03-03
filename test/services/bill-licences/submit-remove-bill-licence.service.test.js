@@ -15,24 +15,27 @@ const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js'
 // Things we need to stub
 const LegacyDeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
 const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+const UnassignLicencesToBillRunService = require('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
 
 // Thing under test
 const SubmitRemoveBillLicenceService = require('../../../app/services/bill-licences/submit-remove-bill-licence.service.js')
 
-describe('Submit Remove Bill Licence service', () => {
+describe('Bill Licences - Submit Remove Bill Licence service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
 
   let bill
   let billLicence
   let legacyDeleteBillLicenceRequestStub
-  let ProcessBillingFlagServiceStub
+  let processBillingFlagStub
+  let unassignLicencesToBillRunStub
 
   beforeEach(async () => {
     bill = await BillHelper.add()
     billLicence = await BillLicenceHelper.add({ billId: bill.id })
 
     legacyDeleteBillLicenceRequestStub = Sinon.stub(LegacyDeleteBillLicenceRequest, 'send').resolves()
-    ProcessBillingFlagServiceStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    processBillingFlagStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    unassignLicencesToBillRunStub = Sinon.stub(UnassignLicencesToBillRunService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -40,10 +43,16 @@ describe('Submit Remove Bill Licence service', () => {
   })
 
   describe('when called', () => {
+    it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
+      await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+
+      expect(unassignLicencesToBillRunStub.called).to.be.true()
+    })
+
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
-      expect(ProcessBillingFlagServiceStub.called).to.be.true()
+      expect(processBillingFlagStub.called).to.be.true()
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {

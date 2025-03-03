@@ -15,16 +15,18 @@ const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js'
 // Things we need to stub
 const LegacyDeleteBillRequest = require('../../../app/requests/legacy/delete-bill.request.js')
 const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+const UnassignLicencesToBillRunService = require('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
 
 // Thing under test
 const SubmitRemoveBillService = require('../../../app/services/bills/submit-remove-bill.service.js')
 
-describe('Submit Remove Bill service', () => {
+describe('Bills - Submit Remove Bill service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
 
   let bill
   let legacyDeleteBillRequestStub
   let processBillingFlagsStub
+  let unassignLicencesToBillRunStub
 
   beforeEach(async () => {
     bill = await BillHelper.add()
@@ -34,6 +36,7 @@ describe('Submit Remove Bill service', () => {
 
     legacyDeleteBillRequestStub = Sinon.stub(LegacyDeleteBillRequest, 'send').resolves()
     processBillingFlagsStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    unassignLicencesToBillRunStub = Sinon.stub(UnassignLicencesToBillRunService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -41,6 +44,12 @@ describe('Submit Remove Bill service', () => {
   })
 
   describe('when called', () => {
+    it('unassigns any two-part tariff supplementary licences in the bill from the bill run', async () => {
+      await SubmitRemoveBillService.go(bill.id, user)
+
+      expect(unassignLicencesToBillRunStub.called).to.be.true()
+    })
+
     it('flags the two licences in the bill for supplementary billing', async () => {
       await SubmitRemoveBillService.go(bill.id, user)
 
