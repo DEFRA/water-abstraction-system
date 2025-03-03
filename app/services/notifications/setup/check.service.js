@@ -32,8 +32,6 @@ async function go(sessionId, page = 1) {
     `/system/notifications/setup/${sessionId}/check`
   )
 
-  await _save(session, recipients)
-
   const formattedData = CheckPresenter.go(recipients, page, pagination, session)
 
   return {
@@ -42,12 +40,6 @@ async function go(sessionId, page = 1) {
     pagination,
     page
   }
-}
-
-async function _save(session, recipients) {
-  session.recipients = recipients
-
-  return session.$update()
 }
 
 module.exports = {

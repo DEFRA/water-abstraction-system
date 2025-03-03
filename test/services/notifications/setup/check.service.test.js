@@ -62,46 +62,4 @@ describe('Notifications Setup - Check service', () => {
       referenceCode: 'RINV-123'
     })
   })
-
-  it('correctly persists the data to the session', async () => {
-    await CheckService.go(session.id)
-
-    const refreshedSession = await session.$query()
-
-    expect(refreshedSession).to.equal({
-      createdAt: session.createdAt,
-      data: {
-        journey: 'invitations',
-        recipients: [
-          {
-            contact: null,
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            contact_type: 'Primary user',
-            email: 'primary.user@important.com',
-            licence_refs: testRecipients.primaryUser.licence_refs,
-            message_type: 'Email'
-          }
-        ],
-        referenceCode: 'RINV-123',
-        removeLicences: '',
-        returnsPeriod: 'quarterFour'
-      },
-      id: session.id,
-      journey: 'invitations',
-      recipients: [
-        {
-          contact: null,
-          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-          contact_type: 'Primary user',
-          email: 'primary.user@important.com',
-          licence_refs: testRecipients.primaryUser.licence_refs,
-          message_type: 'Email'
-        }
-      ],
-      referenceCode: 'RINV-123',
-      removeLicences: '',
-      returnsPeriod: 'quarterFour',
-      updatedAt: session.updatedAt
-    })
-  })
 })
