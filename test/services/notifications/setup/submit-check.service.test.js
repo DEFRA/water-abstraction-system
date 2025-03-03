@@ -25,11 +25,11 @@ describe('Notifications Setup - Submit Check service', () => {
 
     session = await SessionHelper.add({
       data: {
-        returnsPeriod: 'quarterFour',
-        removeLicences: '',
         journey: 'invitations',
+        recipients: [recipients.primaryUser, recipients.licenceHolder],
         referenceCode: 'RINV-123',
-        recipients: [recipients.primaryUser, recipients.licenceHolder]
+        removeLicences: '',
+        returnsPeriod: 'quarterFour'
       }
     })
 
@@ -43,18 +43,6 @@ describe('Notifications Setup - Submit Check service', () => {
   it('correctly presents the data', async () => {
     const result = await SubmitCheckService.go(session.id)
 
-    expect(result).to.equal({
-      licences: [recipients.primaryUser.licence_refs, recipients.licenceHolder.licence_refs],
-      metadata: {
-        returnCycle: {
-          dueDate: new Date('2025-04-28'),
-          endDate: new Date('2025-03-31'),
-          isSummer: 'false',
-          startDate: new Date('2025-01-01')
-        }
-      },
-      referenceCode: 'RINV-123',
-      status: 'started'
-    })
+    expect(result).to.equal([recipients.primaryUser, recipients.licenceHolder])
   })
 })
