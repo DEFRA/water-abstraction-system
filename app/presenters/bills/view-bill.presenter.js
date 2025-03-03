@@ -5,14 +5,8 @@
  * @module ViewBillPresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = require('../billing.presenter.js')
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
@@ -45,7 +39,7 @@ function go(bill, billingAccount) {
     dateCreated: formatLongDate(bill.createdAt),
     debitsTotal: _debitsTotal(bill, billRun),
     deminimis: bill.deminimis,
-    displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
+    displayCreditDebitTotals: displayCreditDebitTotals(billRun.batchType),
     financialYear: formatFinancialYear(bill.financialYearEnding),
     flaggedForReissue: bill.flaggedForRebilling,
     pageTitle: `Bill for ${accountName}`,
@@ -84,12 +78,6 @@ function _debitsTotal(bill, billRun) {
   }
 
   return '£0.00'
-}
-
-function _displayCreditDebitTotals(billRun) {
-  const { batchType } = billRun
-
-  return batchType === 'supplementary'
 }
 
 function _billTotal(valueInPence, credit) {

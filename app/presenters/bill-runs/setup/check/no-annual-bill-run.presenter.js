@@ -5,7 +5,7 @@
  * @module NoAnnualBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme } = require('../../../base.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
 const { checkPageBackLink } = require('./base-check.presenter.js')
 
 /**

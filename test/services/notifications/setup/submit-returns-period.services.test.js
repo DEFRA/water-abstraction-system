@@ -44,6 +44,20 @@ describe('Notifications Setup - Submit Returns Period service', () => {
         expect(refreshedSession.returnsPeriod).to.equal('quarterFour')
       })
 
+      it('saves the determined returns period', async () => {
+        await SubmitReturnsPeriodService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.determinedReturnsPeriod).to.equal({
+          dueDate: '2025-04-28T00:00:00.000Z',
+          endDate: '2025-03-31T00:00:00.000Z',
+          name: 'quarterFour',
+          startDate: '2025-01-01T00:00:00.000Z',
+          summer: 'false'
+        })
+      })
+
       it('returns the redirect route', async () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload)
 
