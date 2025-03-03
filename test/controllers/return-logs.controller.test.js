@@ -19,7 +19,7 @@ const ViewReturnLogService = require('../../app/services/return-logs/view-return
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Return Logs controller', () => {
+describe('Return Logs controller', () => {
   let server
 
   // Create server before running the tests
