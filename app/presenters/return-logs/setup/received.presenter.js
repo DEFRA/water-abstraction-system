@@ -24,9 +24,6 @@ function go(session) {
     receivedDateYear
   } = session
 
-  const yesterdaysDate = new Date()
-  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
-
   return {
     backLink: _backLink(session),
     pageTitle: 'When was the return received?',
@@ -37,7 +34,7 @@ function go(session) {
     returnReference,
     sessionId,
     todaysDate: formatLongDate(new Date()),
-    yesterdaysDate: formatLongDate(yesterdaysDate)
+    yesterdaysDate: _yesterdaysDate()
   }
 }
 
@@ -49,6 +46,13 @@ function _backLink(session) {
   }
 
   return `/system/licences/${licenceId}/returns`
+}
+
+function _yesterdaysDate() {
+  const yesterdaysDate = new Date()
+  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
+
+  return formatLongDate(yesterdaysDate)
 }
 
 module.exports = {
