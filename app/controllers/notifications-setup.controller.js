@@ -14,6 +14,7 @@ const RemoveLicencesService = require('../services/notifications/setup/remove-li
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitCancelService = require('../services/notifications/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../services/notifications/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
@@ -97,6 +98,14 @@ async function submitCancel(request, h) {
   return h.redirect(`/manage`)
 }
 
+async function submitCheck(request, h) {
+  const { sessionId } = request.params
+
+  SubmitCheckService.go(sessionId)
+
+  return h.redirect(`/system/${basePath}/${sessionId}/confirmation`)
+}
+
 async function submitLicence(request, h) {
   const { sessionId } = request.params
 
@@ -148,6 +157,7 @@ module.exports = {
   viewReturnsPeriod,
   setup,
   submitCancel,
+  submitCheck,
   submitLicence,
   submitRemoveLicences,
   submitReturnsPeriod

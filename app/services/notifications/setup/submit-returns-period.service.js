@@ -5,6 +5,7 @@
  * @module SubmitReturnsPeriodService
  */
 
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../validators/notifications/setup/returns-periods.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -41,6 +42,13 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   session.returnsPeriod = payload.returnsPeriod
+
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+
+  session.determinedReturnsPeriod = {
+    ...returnsPeriod,
+    summer
+  }
 
   return session.$update()
 }
