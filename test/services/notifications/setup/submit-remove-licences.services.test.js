@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,20 +16,25 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitRemoveLicencesService = require('../../../../app/services/notifications/setup/submit-remove-licences.service.js')
 
 describe('Notifications Setup - Submit Remove licences service', () => {
-  const year = 2025
-
-  let clock
+  let fetchReturnsDueServiceStub
   let payload
   let session
   let validLicences
-  let fetchReturnsDueServiceStub
-
-  before(() => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
-  })
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', referenceCode: 'RINV-123' } })
+    session = await SessionHelper.add({
+      data: {
+        returnsPeriod: 'allYear',
+        referenceCode: 'RINV-123',
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate: '2024-04-28',
+          endDate: '2024-03-31',
+          summer: false,
+          startDate: '2023-04-01'
+        }
+      }
+    })
 
     validLicences = [{ licenceRef: '1234' }]
 
@@ -37,7 +42,6 @@ describe('Notifications Setup - Submit Remove licences service', () => {
   })
 
   afterEach(() => {
-    clock.restore()
     fetchReturnsDueServiceStub.restore()
   })
 

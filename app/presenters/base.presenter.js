@@ -1,5 +1,7 @@
 'use strict'
 
+const { returnUnits } = require('../lib/static-lookups.lib.js')
+
 /**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
@@ -15,23 +17,21 @@ function convertPenceToPounds(value) {
 }
 
 /**
- * Generates the page title for a bill run, for example, 'Anglian supplementary'
+ * Converts a quantity from a given unit to cubic metres and formats it
  *
- * Typically the page title when viewing a bill run is the region name followed by the bill run type. We determine the
- * bill run type using the bill run's batch type, scheme and in the case of two-part tariff PRESROC bill runs, whether
- * it is summer only or not.
+ * @param {string} units - the unit of the quantity
+ * @param {number} quantity - the quantity to be formatted
  *
- * @param {string} regionName - Name of the region the bill run is for
- * @param {string} batchType - The type of bill run; annual, supplementary or two_part_tariff
- * @param {string} scheme - Whether the bill run is PRESROC (alcs) or SROC (sroc)
- * @param {boolean} summer - Applies to PRESROC two-part tariff bill runs. Whether the bill run is for summer only
- *
- * @returns The bill run title to use in bill run pages
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
  */
-function generateBillRunTitle(regionName, batchType, scheme, summer) {
-  const billRunType = formatBillRunType(batchType, scheme, summer)
+function formatQuantity(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
 
-  return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -81,35 +81,6 @@ function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
 }
 
 /**
- * Formats how the bill run type for display in views
- *
- * @param {string} batchType - The type of bill run; annual, supplementary, two_part_tariff or two_part_supplementary
- * @param {string} scheme - Whether the bill run is PRESROC (alcs) or SROC (sroc)
- * @param {boolean} summer - Applies to PRESROC two-part tariff bill runs. Whether the bill run is for summer only
- *
- * @returns {string} The bill run type formatted for display
- */
-function formatBillRunType(batchType, scheme, summer) {
-  if (!['two_part_tariff', 'two_part_supplementary'].includes(batchType)) {
-    return titleCase(batchType)
-  }
-
-  if (batchType === 'two_part_supplementary') {
-    return 'Two-part tariff supplementary'
-  }
-
-  if (scheme === 'sroc') {
-    return 'Two-part tariff'
-  }
-
-  if (summer) {
-    return 'Two-part tariff summer'
-  }
-
-  return 'Two-part tariff winter and all year'
-}
-
-/**
  * Converts a date into the format required by the Charging Module, eg 25/03/2021 becomes 25-MAR-2021
  *
  * @param {Date} date - The date to be formatted
@@ -129,21 +100,6 @@ function formatChargingModuleDate(date) {
   const year = date.getFullYear()
 
   return `${day}-${month}-${year}`
-}
-
-/**
- * Formats a bill run's scheme (alcs or sroc) for display in a view (Old or Current)
- *
- * @param {string} scheme - The bill run scheme to format
- *
- * @returns {string} The scheme formatted for display
- */
-function formatChargeScheme(scheme) {
-  if (scheme === 'sroc') {
-    return 'Current'
-  }
-
-  return 'Old'
 }
 
 /**
@@ -306,18 +262,16 @@ function titleCase(value) {
 
 module.exports = {
   convertPenceToPounds,
-  generateBillRunTitle,
   formatAbstractionDate,
   formatAbstractionPeriod,
-  formatBillRunType,
   formatChargingModuleDate,
-  formatChargeScheme,
   formatFinancialYear,
   formatLongDate,
   formatLongDateTime,
   formatMoney,
   formatNumber,
   formatPounds,
+  formatQuantity,
   leftPadZeroes,
   sentenceCase,
   titleCase

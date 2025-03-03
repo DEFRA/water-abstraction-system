@@ -200,15 +200,15 @@ function timestampForPostgres() {
 /**
  * Compare key properties of 2 transactions and determine if they are a 'match'
  *
- * We compare those properties which determine the charge value calculated by the charging module. If the properties
- * are the same we return true. Else we return false.
+ * We compare those properties which determine the charge value calculated by the charging module. If the properties are
+ * the same we return true. Else we return false.
  *
- * This is used in the billing engines to determine 2 transactions within the same bill, often a debit and a credit,
- * and whether they match. If they do we don't send either to the charge module or include them in the bill as they
- * 'cancel' each other out.
+ * This is used in the billing engines to determine 2 transactions within the same bill, often a debit and a credit, and
+ * whether they match. If they do we don't send either to the charge module or include them in the bill as they 'cancel'
+ * each other out.
  *
- * The key properties are charge type, category code, and billable days. But we also need to compare agreements and
- * additional charges because if those have changed, we need to credit the previous transaction and calculate the
+ * The key properties are charge type, category code, billable days, and volume. But we also need to compare agreements
+ * and additional charges because if those have changed, we need to credit the previous transaction and calculate the
  * new debit value.
  *
  * Because what we are checking does not match up to what you see in the UI we have this reference
@@ -242,6 +242,7 @@ function transactionsMatch(left, right) {
     left.chargeType === right.chargeType &&
     left.chargeCategoryCode === right.chargeCategoryCode &&
     left.billableDays === right.billableDays &&
+    left.volume === right.volume &&
     left.section126Factor === right.section126Factor &&
     left.section127Agreement === right.section127Agreement &&
     left.section130Agreement === right.section130Agreement &&

@@ -47,16 +47,31 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#generateBillRunTitle()', () => {
-    const regionName = 'anglian'
-    const batchType = 'two_part_tariff'
-    const scheme = 'sroc'
-    const summer = false
+  describe('#formatQuantity()', () => {
+    describe('when quantity and units are provided', () => {
+      describe('and the value is not 0', () => {
+        it('returns converted and formatted quantity', () => {
+          const result = BasePresenter.formatQuantity('gal', 100)
 
-    it('generates the page title for the bill run, for example, "Anglian two-part tariff"', () => {
-      const result = BasePresenter.generateBillRunTitle(regionName, batchType, scheme, summer)
+          expect(result).to.equal('21,996.925')
+        })
+      })
 
-      expect(result).to.equal('Anglian two-part tariff')
+      describe('and the value is 0', () => {
+        it('returns 0 as a string', () => {
+          const result = BasePresenter.formatQuantity('gal', 0)
+
+          expect(result).to.equal('0')
+        })
+      })
+    })
+
+    describe('when quantity is null', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatQuantity('someUnit', null)
+
+        expect(result).to.equal(null)
+      })
     })
   })
 
@@ -116,96 +131,6 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatBillRunType()', () => {
-    let batchType
-    let scheme
-    let summer
-
-    describe('when the batch type is "annual"', () => {
-      beforeEach(() => {
-        batchType = 'annual'
-      })
-
-      it('returns "Annual"', () => {
-        const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-        expect(result).to.equal('Annual')
-      })
-    })
-
-    describe('when the batch type is "supplementary"', () => {
-      beforeEach(() => {
-        batchType = 'supplementary'
-      })
-
-      it('returns "Supplementary"', () => {
-        const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-        expect(result).to.equal('Supplementary')
-      })
-    })
-
-    describe('when the batch type is "two_part_supplementary"', () => {
-      beforeEach(() => {
-        batchType = 'two_part_supplementary'
-      })
-
-      it('returns "Two-part tariff supplementary"', () => {
-        const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-        expect(result).to.equal('Two-part tariff supplementary')
-      })
-    })
-
-    describe('when the batch type is "two_part_tariff"', () => {
-      beforeEach(() => {
-        batchType = 'two_part_tariff'
-      })
-
-      describe('and the scheme is "sroc"', () => {
-        beforeEach(() => {
-          scheme = 'sroc'
-        })
-
-        it('returns "Two-part tariff"', () => {
-          const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-          expect(result).to.equal('Two-part tariff')
-        })
-      })
-
-      describe('and the scheme is "alcs"', () => {
-        beforeEach(() => {
-          scheme = 'alcs'
-        })
-
-        describe('and it is not summer only', () => {
-          beforeEach(() => {
-            summer = false
-          })
-
-          it('returns "Two-part tariff winter and all year"', () => {
-            const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-            expect(result).to.equal('Two-part tariff winter and all year')
-          })
-        })
-
-        describe('and it is for summer only', () => {
-          beforeEach(() => {
-            summer = true
-          })
-
-          it('returns "Two-part tariff summer"', () => {
-            const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
-
-            expect(result).to.equal('Two-part tariff summer')
-          })
-        })
-      })
-    })
-  })
-
   describe('#formatChargingModuleDate()', () => {
     it('correctly formats the given date, for example, 12-SEP-2021', async () => {
       // We check an array of dates, one for each month, to ensure that every month is formatted correctly
@@ -240,34 +165,6 @@ describe('Base presenter', () => {
         '12-NOV-2021',
         '12-DEC-2021'
       ])
-    })
-  })
-
-  describe('#formatChargeScheme()', () => {
-    let scheme
-
-    describe('when the scheme is "sroc"', () => {
-      beforeEach(() => {
-        scheme = 'sroc'
-      })
-
-      it('returns "Current"', () => {
-        const result = BasePresenter.formatChargeScheme(scheme)
-
-        expect(result).to.equal('Current')
-      })
-    })
-
-    describe('when the scheme is "alcs"', () => {
-      beforeEach(() => {
-        scheme = 'alcs'
-      })
-
-      it('returns "Old"', () => {
-        const result = BasePresenter.formatChargeScheme(scheme)
-
-        expect(result).to.equal('Old')
-      })
     })
   })
 

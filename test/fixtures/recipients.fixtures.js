@@ -113,7 +113,7 @@ function _addReturnTo() {
 
 function _addLicenceHolderWithMultipleLicences() {
   return {
-    licence_refs: `${generateLicenceRef()}, ${generateLicenceRef()}`,
+    licence_refs: `${generateLicenceRef()},${generateLicenceRef()}`,
     contact_type: 'Licence holder',
     contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075'
