@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const DownloadRecipientsPresenter = require('../../../../app/presenters/notifications/setup/download-recipients.presenter.js')
 
-describe.only('Notifications Setup - Download recipients presenter', () => {
+describe('Notifications Setup - Download recipients presenter', () => {
   const notificationType = 'Returns invitation'
 
   let recipients
