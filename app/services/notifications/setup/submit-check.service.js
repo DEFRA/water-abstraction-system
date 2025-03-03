@@ -8,6 +8,7 @@
 const SessionModel = require('../../../models/session.model.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
+const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
@@ -16,16 +17,22 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
  *
  * @param {string} sessionId - The UUID for the notification setup session record
  *
- * @returns {Promise<object>} The view data for the licence page
+ * Does not return to allow the process to run in the background
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  try {
+    const startTime = currentTimeInNanoseconds()
 
-  const recipientsData = await RecipientsService.go(session)
+    const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = DetermineRecipientsService.go(recipientsData)
+    const recipientsData = await RecipientsService.go(session)
 
-  return recipients
+    DetermineRecipientsService.go(recipientsData)
+
+    calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
+  } catch (error) {
+    global.GlobalNotifier.omfg('Send notifications failed', { sessionId }, error)
+  }
 }
 
 module.exports = {

@@ -5,10 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
@@ -17,10 +18,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
 describe('Notifications Setup - Submit Check service', () => {
+  let notifierStub
   let recipients
   let session
 
   before(async () => {
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+
     recipients = RecipientsFixture.recipients()
 
     session = await SessionHelper.add({
@@ -33,21 +38,18 @@ describe('Notifications Setup - Submit Check service', () => {
 
     recipients = RecipientsFixture.recipients()
 
+    Sinon.stub(DetermineRecipientsService, 'go').resolves()
     Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
   })
 
-  it('correctly presents the data', async () => {
-    const result = await SubmitCheckService.go(session.id)
+  afterEach(() => {
+    Sinon.restore()
+    delete global.GlobalNotifier
+  })
 
-    expect(result).to.equal([
-      {
-        contact: null,
-        contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-        contact_type: 'Primary user',
-        email: 'primary.user@important.com',
-        licence_refs: recipients.primaryUser.licence_refs,
-        message_type: 'Email'
-      }
-    ])
+  it('correctly triggers the "DetermineRecipientsService"', async () => {
+    await SubmitCheckService.go(session.id)
+
+    expect(DetermineRecipientsService.go.calledWith([recipients.primaryUser])).to.be.true()
   })
 })
