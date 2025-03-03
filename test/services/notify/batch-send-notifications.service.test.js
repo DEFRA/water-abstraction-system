@@ -1,0 +1,173 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const { NotifyClient } = require('notifications-node-client')
+const { stubNotify } = require('../../../config/notify.config.js')
+
+// Thing under test
+const BatchSendNotificationsService = require('../../../app/services/notify/batch-send-notifications.service.js')
+
+describe.only('Notify - Batch send notifications service', () => {
+  let recipients
+
+  beforeEach(() => {
+    // Determined recipients
+    recipients = [
+      {
+        contact: null,
+        contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+        contact_type: 'Primary user',
+        email: 'primary.user@important.com',
+        licence_refs: '456',
+        message_type: 'Email'
+      },
+      {
+        contact: {
+          addressLine1: '1',
+          addressLine2: 'Privet Drive',
+          addressLine3: null,
+          addressLine4: null,
+          country: null,
+          county: 'Surrey',
+          forename: 'Harry',
+          initials: 'H J',
+          name: 'Licence holder',
+          postcode: 'WD25 7LR',
+          role: 'Licence holder',
+          salutation: 'Mr',
+          town: 'Little Whinging',
+          type: 'Person'
+        },
+        contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+        contact_type: 'Licence holder',
+        email: null,
+        licence_refs: '123',
+        message_type: 'Letter'
+      }
+    ]
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when the call to "notify" is successful', () => {
+    beforeEach(() => {
+      _stubSuccessfulNotify(stubNotify, {
+        data: { id: '12345' },
+        status: 201
+      })
+    })
+
+    it('should call notify', { timeout: 120000 }, async () => {
+      const result = await BatchSendNotificationsService.go(recipients)
+
+      expect(result).to.equal([
+        // Email
+        {
+          emailAddress: 'primary.user@important.com',
+          notificationId: result[0].notificationId,
+          options: {
+            personalisation: {
+              periodEndDate: '28th January 2025',
+              periodStartDate: '1st January 2025',
+              returnDueDate: '28th April 2025'
+            },
+            reference: 'developer-testing'
+          },
+          status: 201,
+          templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
+        },
+        // Letter
+        {
+          notificationId: result[1].notificationId,
+          options: {
+            personalisation: {
+              address_line_1: '1',
+              address_line_2: 'Privet Drive',
+              address_line_3: 'Little Whinging',
+              address_line_4: 'Surrey',
+              address_line_5: 'WD25 7LR',
+              name: 'Mr H J Licence holder',
+              periodEndDate: '28th January 2025',
+              periodStartDate: '1st January 2025',
+              returnDueDate: '28th April 2025'
+            },
+            reference: 'developer-testing'
+          },
+          status: 201,
+          templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
+        }
+      ])
+    })
+  })
+
+  describe('when the call to "notify" is unsuccessful', () => {
+    describe('when notify returns a "client error"', () => {
+      describe('because there is no "emailAddress"', () => {
+        beforeEach(() => {
+          // This is obviously wrong when the letter errors
+          recipients = [{ ...recipients[0], email: 'bad email' }]
+
+          _stubUnSuccessfulNotify(stubNotify, {
+            status: 400,
+            message: 'Request failed with status code 400',
+            response: {
+              data: {
+                errors: [
+                  {
+                    error: 'ValidationError',
+                    message: 'email_address Not a valid email address'
+                  }
+                ]
+              }
+            }
+          })
+        })
+
+        it('should return an error', async () => {
+          const result = await BatchSendNotificationsService.go(recipients)
+
+          expect(result).to.equal([
+            {
+              emailAddress: 'bad email',
+              notificationId: undefined,
+              status: 400,
+              options: {
+                personalisation: {
+                  periodEndDate: '28th January 2025',
+                  periodStartDate: '1st January 2025',
+                  returnDueDate: '28th April 2025'
+                },
+                reference: 'developer-testing'
+              },
+              templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
+            }
+          ])
+        })
+      })
+    })
+  })
+})
+
+function _stubSuccessfulNotify(stub, response) {
+  if (stub) {
+    Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
+    Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
+  }
+}
+
+function _stubUnSuccessfulNotify(stub, response) {
+  if (stub) {
+    Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
+    Sinon.stub(NotifyClient.prototype, 'sendLetter').rejects(response)
+  }
+}
