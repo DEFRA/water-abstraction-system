@@ -12,13 +12,14 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const DownloadReturnService = require('../../app/services/return-logs/download-return.service.js')
 const SubmitViewReturnLogService = require('../../app/services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../../app/services/return-logs/view-return-log.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Return Logs controller', () => {
+describe.only('Return Logs controller', () => {
   let server
 
   // Create server before running the tests
@@ -98,6 +99,38 @@ describe('Return Logs controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal('/system/return-logs?id=RETURN_LOG_ID')
+        })
+      })
+    })
+  })
+
+  describe('/system/return-logs/download', () => {
+    describe('GET', () => {
+      let getOptions
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: `/return-logs/download?id=RETURN_LOG_ID&version=1`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(DownloadReturnService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+        })
+
+        it('returns the file successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.headers['content-type']).to.equal('type/csv')
+          expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
+          expect(response.payload).to.equal('test')
         })
       })
     })
