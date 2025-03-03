@@ -55,7 +55,7 @@ function _fromDateBeforeToDate(value, helpers) {
 }
 
 function _fullDate(day, month, year) {
-  if (!year && !month && !day) {
+  if (!year || !month || !day) {
     return null
   }
 

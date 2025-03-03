@@ -107,7 +107,7 @@ describe('Return Logs Setup - Received Date validator', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error.details[0].message).to.equal('Enter a return received date')
         })
       })
 
