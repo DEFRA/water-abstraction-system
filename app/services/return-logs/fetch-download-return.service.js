@@ -32,7 +32,6 @@ async function go(returnLogId, version) {
 
 async function _fetch(returnLogId, selectedReturnSubmission) {
   const query = ReturnLogModel.query().findById(returnLogId).select(['id', 'returnReference', 'startDate', 'endDate'])
-  console.dir(query, { depth: null })
 
   if (selectedReturnSubmission) {
     query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
