@@ -10,35 +10,40 @@ const { expect } = Code
 
 // Test helpers
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Things we need to stub
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
+const UnflagUnbilledSupplementaryLicencesService = require('../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
 
 // Thing under test
-const SupplementaryProcessBillRunService = require('../../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
+const ProcessBillRunService = require('../../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 
-describe('Supplementary Process Bill Run service', () => {
+describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   const billingPeriods = [
     { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
     { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
   ]
+  const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
-  let billRun
+  let billRunPatchStub
   let chargingModuleGenerateBillRunRequestStub
   let handleErroredBillRunStub
   let legacyRefreshBillRunRequestStub
   let notifierStub
 
   beforeEach(async () => {
-    billRun = await BillRunHelper.add()
+    billRunPatchStub = Sinon.stub().resolves()
+
+    Sinon.stub(BillRunModel, 'query').returns({
+      findById: Sinon.stub().returnsThis(),
+      patch: billRunPatchStub
+    })
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
     chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
@@ -62,7 +67,7 @@ describe('Supplementary Process Bill Run service', () => {
   describe('when the service is called', () => {
     beforeEach(() => {
       Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
-      Sinon.stub(UnflagUnbilledLicencesService, 'go')
+      Sinon.stub(UnflagUnbilledSupplementaryLicencesService, 'go')
     })
 
     describe('and nothing is billed', () => {
@@ -70,12 +75,23 @@ describe('Supplementary Process Bill Run service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
-      it('sets the Bill Run status to empty', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      it('sets the bill run status first to "processing" and then to "empty"', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const result = await BillRunModel.query().findById(billRun.id)
+        expect(billRunPatchStub.calledTwice).to.be.true()
+        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' })
+      })
 
-        expect(result.status).to.equal('empty')
+      it('logs the time taken', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Process bill run complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].billRunId).to.equal(billRun.id)
+        expect(args[1].type).to.equal('supplementary')
       })
     })
 
@@ -84,28 +100,27 @@ describe('Supplementary Process Bill Run service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
       })
 
-      it('sets the Bill Run status to processing', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      it('sets the bill run status to "processing"', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const result = await BillRunModel.query().findById(billRun.id)
-
-        expect(result.status).to.equal('processing')
+        expect(billRunPatchStub.calledOnce).to.be.true()
+        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         expect(chargingModuleGenerateBillRunRequestStub.called).to.be.true()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         expect(legacyRefreshBillRunRequestStub.called).to.be.true()
       })
 
-      it('it logs the time taken', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      it('logs the time taken', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -127,7 +142,7 @@ describe('Supplementary Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -135,7 +150,7 @@ describe('Supplementary Process Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -158,7 +173,7 @@ describe('Supplementary Process Bill Run service', () => {
         })
 
         it('calls HandleErroredBillRunService with the error code', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+          await ProcessBillRunService.go(billRun, billingPeriods)
 
           const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -166,7 +181,7 @@ describe('Supplementary Process Bill Run service', () => {
         })
 
         it('logs the error', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+          await ProcessBillRunService.go(billRun, billingPeriods)
 
           const args = notifierStub.omfg.firstCall.args
 
@@ -186,11 +201,11 @@ describe('Supplementary Process Bill Run service', () => {
 
         Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
-        Sinon.stub(UnflagUnbilledLicencesService, 'go').rejects(thrownError)
+        Sinon.stub(UnflagUnbilledSupplementaryLicencesService, 'go').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService without an error code', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -198,7 +213,7 @@ describe('Supplementary Process Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 

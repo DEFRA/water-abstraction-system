@@ -8,16 +8,16 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const UnflagBilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
+const UnflagBilledSupplementaryLicencesService = require('../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
 
-describe('Unflag Billed Licences service', () => {
+describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
   const { id: regionId } = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   let billRun
@@ -64,7 +64,7 @@ describe('Unflag Billed Licences service', () => {
     })
 
     it('unflags those in the same region, not in workflow, and that were last updated before the bill run was created', async () => {
-      await UnflagBilledLicencesService.go(billRun)
+      await UnflagBilledSupplementaryLicencesService.go(billRun)
 
       let licenceBeingChecked
 
@@ -120,7 +120,7 @@ describe('Unflag Billed Licences service', () => {
     })
 
     it('unflags only those licences in the bill run that are not in workflow, and that were last updated before the bill run was created)', async () => {
-      await UnflagBilledLicencesService.go(billRun)
+      await UnflagBilledSupplementaryLicencesService.go(billRun)
 
       let licenceBeingChecked
 
