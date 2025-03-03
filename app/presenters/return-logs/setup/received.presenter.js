@@ -5,6 +5,8 @@
  * @module ReceivedPresenter
  */
 
+const { formatLongDate } = require('../../base.presenter.js')
+
 /**
  * Format data for the `/return-log/setup/{sessionId}/received` page
  *
@@ -30,7 +32,9 @@ function go(session) {
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
     returnReference,
-    sessionId
+    sessionId,
+    todaysDate: formatLongDate(new Date()),
+    yesterdaysDate: _yesterdaysDate()
   }
 }
 
@@ -42,6 +46,13 @@ function _backLink(session) {
   }
 
   return `/system/licences/${licenceId}/returns`
+}
+
+function _yesterdaysDate() {
+  const yesterdaysDate = new Date()
+  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
+
+  return formatLongDate(yesterdaysDate)
 }
 
 module.exports = {
