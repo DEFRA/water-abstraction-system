@@ -2,13 +2,13 @@
 
 /**
  * Fetches all billing accounts linked to a bill run to be processed as part of two-part tariff billing
- * @module FetchBillingAccountsService
+ * @module FetchTwoPartTariffBillingAccountsService
  */
 
 const { ref } = require('objection')
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
+const BillingAccountModel = require('../../models/billing-account.model.js')
+const ChargeVersionModel = require('../../models/charge-version.model.js')
 
 /**
  * Fetches all billing accounts linked to a bill run to be processed as part of two-part tariff billing

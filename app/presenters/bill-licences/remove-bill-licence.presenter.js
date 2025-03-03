@@ -5,14 +5,8 @@
  * @module RemoveBillLicencePresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
 
 /**
  * Formats data for the confirm remove a bill licence page
