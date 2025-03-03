@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
@@ -54,6 +55,8 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           receivedDate: null,
           endDate: new Date('2022-06-01')
         })
+
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
       })
 
       it('creates a new session record containing details of the return log', async () => {
@@ -90,7 +93,8 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           startDate: '2022-04-01T00:00:00.000Z',
           status: returnLog.status,
           twoPartTariff: returnLog.metadata.isTwoPartTariff,
-          underQuery: returnLog.underQuery
+          underQuery: returnLog.underQuery,
+          units: 'cubic-metres'
         })
       })
 
@@ -106,6 +110,8 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     describe('and the return log has been received', () => {
       before(async () => {
         returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata, receivedDate: new Date() })
+
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
       })
 
       it('sets "beenReceived" to "true"', async () => {
@@ -114,6 +120,48 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data.beenReceived).to.be.true()
+      })
+    })
+
+    describe('and a unit is specified', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: null,
+          endDate: new Date('2022-06-01')
+        })
+
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, metadata: { units: 'Ml' } })
+      })
+
+      it('formats the unit as expected', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.units).to.equal('megalitres')
+      })
+    })
+
+    describe('and no unit is specified', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: null,
+          endDate: new Date('2022-06-01')
+        })
+
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+      })
+
+      it("defaults the unit to 'cubic-metres'", async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.units).to.equal('cubic-metres')
       })
     })
   })

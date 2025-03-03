@@ -11,6 +11,14 @@ const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { unitNames } = require('../../../lib/static-lookups.lib.js')
+
+const UNITS = {
+  [unitNames.CUBIC_METRES]: 'cubic-metres',
+  [unitNames.LITRES]: 'litres',
+  [unitNames.MEGALITRES]: 'megalitres',
+  [unitNames.GALLONS]: 'gallons'
+}
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -38,10 +46,12 @@ async function go(returnLogId) {
 function _data(returnLog) {
   const formattedPurposes = _formatPurposes(returnLog.purposes)
   const lines = _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
+  const units = _formatUnits(returnLog.units)
 
   returnLog.beenReceived = returnLog.receivedDate !== null
   returnLog.purposes = formattedPurposes
   returnLog.lines = lines
+  returnLog.units = units
 
   return returnLog
 }
@@ -85,9 +95,11 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
+      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
+      ref('returnSubmissions.metadata:units').as('units')
     )
     .innerJoinRelated('licence')
+    .innerJoinRelated('returnSubmissions')
     .where('returnLogs.id', returnLogId)
 }
 
@@ -95,6 +107,11 @@ function _formatPurposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
+}
+
+// Format units in the form `m³`, `l` etc. to the text expected by the edit return pages, defaulting to cubic metres
+function _formatUnits(units) {
+  return UNITS[units || unitNames.CUBIC_METRES]
 }
 
 module.exports = {
