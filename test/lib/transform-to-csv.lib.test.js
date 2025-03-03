@@ -106,10 +106,20 @@ describe('Transform to csv', () => {
       })
 
       describe('a date', () => {
-        it('correctly formats the date to an iso string', () => {
-          const result = transformArrayToCSVRow([new Date('2021-02-01')])
+        describe('and it has a timestamp - "T12:20:12.012Z"', () => {
+          it('correctly formats the date to an iso string', () => {
+            const result = transformArrayToCSVRow([new Date('2021-02-01T12:20:12.012Z')])
 
-          expect(result).to.equal('2021-02-01T00:00:00.000Z\n')
+            expect(result).to.equal('2021-02-01T12:20:12.012Z\n')
+          })
+        })
+
+        describe('and it does not have a timestamp - "T00:00:00.000Z"', () => {
+          it('correctly formats the date to a formatted iso string', () => {
+            const result = transformArrayToCSVRow([new Date('2021-02-01')])
+
+            expect(result).to.equal('2021-02-01\n')
+          })
         })
       })
     })
