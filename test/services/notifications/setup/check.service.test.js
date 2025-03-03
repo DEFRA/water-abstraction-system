@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,7 +21,7 @@ describe('Notifications Setup - Check service', () => {
   let session
   let testRecipients
 
-  before(async () => {
+  beforeEach(async () => {
     removeLicences = ''
 
     session = await SessionHelper.add({
