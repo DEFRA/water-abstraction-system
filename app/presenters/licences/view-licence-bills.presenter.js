@@ -5,7 +5,8 @@
  * @module ViewLicenceBillsPresenter
  */
 
-const { formatBillRunType, formatLongDate, formatMoney } = require('../base.presenter.js')
+const { formatLongDate, formatMoney } = require('../base.presenter.js')
+const { formatBillRunType } = require('../billing.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page

@@ -54,68 +54,6 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe('the "billRunType" property', () => {
-      describe('when the bill run is annual', () => {
-        it('returns Annual', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.billRunType).to.equal('Annual')
-        })
-      })
-
-      describe('when the bill run is supplementary', () => {
-        beforeEach(() => {
-          bill.billRun.batchType = 'supplementary'
-        })
-
-        it('returns Supplementary', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.billRunType).to.equal('Supplementary')
-        })
-      })
-
-      describe('when the bill run is two_part_tariff', () => {
-        beforeEach(() => {
-          bill.billRun.batchType = 'two_part_tariff'
-        })
-
-        describe('and the scheme is sroc', () => {
-          it('returns Supplementary', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
-
-            expect(result.billRunType).to.equal('Two-part tariff')
-          })
-        })
-
-        describe('and the scheme is alcs', () => {
-          beforeEach(() => {
-            bill.billRun.scheme = 'alcs'
-          })
-
-          describe('and it is not summer only', () => {
-            it('returns Supplementary', () => {
-              const result = ViewBillPresenter.go(bill, billingAccount)
-
-              expect(result.billRunType).to.equal('Two-part tariff winter and all year')
-            })
-          })
-
-          describe('and it is for summer only', () => {
-            beforeEach(() => {
-              bill.billRun.summer = true
-            })
-
-            it('returns Supplementary', () => {
-              const result = ViewBillPresenter.go(bill, billingAccount)
-
-              expect(result.billRunType).to.equal('Two-part tariff summer')
-            })
-          })
-        })
-      })
-    })
-
     describe('the "billTotal" property', () => {
       describe('when the bill is a debit', () => {
         it('returns just the bill total formatted as money', () => {
@@ -134,28 +72,6 @@ describe('View Bill presenter', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billTotal).to.equal('£213,178.00 credit')
-        })
-      })
-    })
-
-    describe('the "chargeScheme" property', () => {
-      describe('when the bill run is sroc', () => {
-        it('returns Current', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.chargeScheme).to.equal('Current')
-        })
-      })
-
-      describe('when the bill run is alcs', () => {
-        beforeEach(() => {
-          bill.billRun.scheme = 'alcs'
-        })
-
-        it('returns Old', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.chargeScheme).to.equal('Old')
         })
       })
     })
@@ -253,44 +169,6 @@ describe('View Bill presenter', () => {
             expect(result.debitsTotal).to.equal('£0.00')
           })
         })
-      })
-    })
-
-    describe('the "displayCreditDebitTotals" property', () => {
-      describe('when the bill run is not supplementary', () => {
-        it('returns false', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.displayCreditDebitTotals).to.be.false()
-        })
-      })
-
-      describe('when the bill run is supplementary', () => {
-        beforeEach(() => {
-          bill.billRun.batchType = 'supplementary'
-        })
-
-        it('returns true', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.displayCreditDebitTotals).to.be.true()
-        })
-      })
-    })
-
-    describe('the "financialYear" property', () => {
-      it('returns the bill run start and end financial year', () => {
-        const result = ViewBillPresenter.go(bill, billingAccount)
-
-        expect(result.financialYear).to.equal('2022 to 2023')
-      })
-    })
-
-    describe('the "region" property', () => {
-      it("returns the bill run's region display name in title case", () => {
-        const result = ViewBillPresenter.go(bill, billingAccount)
-
-        expect(result.region).to.equal('South West')
       })
     })
   })

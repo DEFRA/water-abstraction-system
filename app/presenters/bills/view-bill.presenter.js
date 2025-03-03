@@ -5,7 +5,8 @@
  * @module ViewBillPresenter
  */
 
-const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = require('../billing.presenter.js')
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
@@ -29,17 +30,17 @@ function go(bill, billingAccount) {
     billRunId: billRun.id,
     billRunNumber: billRun.billRunNumber,
     billRunStatus: billRun.status,
-    billRunType: _billRunType(billRun),
+    billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
     billTotal: _billTotal(bill.netAmount, bill.credit),
-    chargeScheme: _scheme(billRun),
+    chargeScheme: formatChargeScheme(billRun.scheme),
     contactName: billingAccount.$contactName(),
     credit: bill.credit,
     creditsTotal: _creditsTotal(bill, billRun),
     dateCreated: formatLongDate(bill.createdAt),
     debitsTotal: _debitsTotal(bill, billRun),
     deminimis: bill.deminimis,
-    displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
-    financialYear: _financialYear(bill),
+    displayCreditDebitTotals: displayCreditDebitTotals(billRun.batchType),
+    financialYear: formatFinancialYear(bill.financialYearEnding),
     flaggedForReissue: bill.flaggedForRebilling,
     pageTitle: `Bill for ${accountName}`,
     region: titleCase(billRun.region.displayName),
@@ -47,24 +48,6 @@ function go(bill, billingAccount) {
   }
 
   return formattedBill
-}
-
-function _billRunType(billRun) {
-  const { batchType, summer, scheme } = billRun
-
-  if (batchType !== 'two_part_tariff') {
-    return titleCase(batchType)
-  }
-
-  if (scheme === 'sroc') {
-    return 'Two-part tariff'
-  }
-
-  if (summer) {
-    return 'Two-part tariff summer'
-  }
-
-  return 'Two-part tariff winter and all year'
 }
 
 function _creditsTotal(bill, billRun) {
@@ -95,26 +78,6 @@ function _debitsTotal(bill, billRun) {
   }
 
   return '£0.00'
-}
-
-function _displayCreditDebitTotals(billRun) {
-  const { batchType } = billRun
-
-  return batchType === 'supplementary'
-}
-
-function _financialYear(bill) {
-  const { financialYearEnding } = bill
-
-  return `${financialYearEnding - 1} to ${financialYearEnding}`
-}
-
-function _scheme(billRun) {
-  if (billRun.scheme === 'sroc') {
-    return 'Current'
-  }
-
-  return 'Old'
 }
 
 function _billTotal(valueInPence, credit) {

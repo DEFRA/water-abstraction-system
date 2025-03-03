@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const GenerateTransactionService = require('../../../../app/services/bill-runs/two-part-tariff/generate-transaction.service.js')
+const GenerateTwoPartTariffTransactionService = require('../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
 
-describe('Generate Transaction service', () => {
+describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'
 
   let chargePeriod
@@ -32,7 +32,7 @@ describe('Generate Transaction service', () => {
   describe('when called', () => {
     describe('with a charge reference that has volume to be billed', () => {
       it('returns a two-part tariff transaction ready to be persisted', () => {
-        const result = GenerateTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService.go(
           billLicenceId,
           chargeReference,
           chargePeriod,
@@ -90,7 +90,7 @@ describe('Generate Transaction service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const result = GenerateTransactionService.go(
+          const result = GenerateTwoPartTariffTransactionService.go(
             billLicenceId,
             chargeReference,
             chargePeriod,
@@ -112,7 +112,7 @@ describe('Generate Transaction service', () => {
       })
 
       it('returns null', () => {
-        const result = GenerateTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService.go(
           billLicenceId,
           chargeReference,
           chargePeriod,

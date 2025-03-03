@@ -7,7 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
-const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
+const GenerateTwoPartTariffBillRunService = require('../services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
@@ -66,7 +66,7 @@ async function twoPartTariff(request, h) {
   try {
     // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
     // `processing'.
-    await GenerateBillRunService.go(id)
+    await GenerateTwoPartTariffBillRunService.go(id)
 
     // Redirect to the bill runs page
     return h.redirect('/system/bill-runs')

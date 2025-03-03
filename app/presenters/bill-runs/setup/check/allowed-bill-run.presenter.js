@@ -5,8 +5,8 @@
  * @module AllowBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme } = require('../../../base.presenter.js')
 const { checkPageBackLink } = require('./base-check.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
 const { engineTriggers } = require('../../../../lib/static-lookups.lib.js')
 
 /**

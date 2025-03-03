@@ -5,12 +5,8 @@
  * @module ReviewLicencePresenter
  */
 
-const {
-  formatAbstractionPeriod,
-  formatFinancialYear,
-  formatLongDate,
-  generateBillRunTitle
-} = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+const { generateBillRunTitle } = require('../../billing.presenter.js')
 const {
   calculateTotalBillableReturns,
   determineReturnLink,
