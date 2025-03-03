@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
 
-describe('Determine Billing Periods service', () => {
+describe('Bill Runs - Determine Billing Periods service', () => {
   let billRunType
   let financialYearEnding
 
@@ -34,6 +34,23 @@ describe('Determine Billing Periods service', () => {
   describe('when the bill run type is "two_part_tariff"', () => {
     beforeEach(() => {
       billRunType = 'two_part_tariff'
+      financialYearEnding = 2024
+    })
+
+    it('returns a single billing period for the financial year provided', () => {
+      const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+
+      expect(result).to.have.length(1)
+      expect(result[0]).to.equal({
+        startDate: new Date('2023-04-01'),
+        endDate: new Date('2024-03-31')
+      })
+    })
+  })
+
+  describe('when the bill run type is "two_part_supplementary"', () => {
+    beforeEach(() => {
+      billRunType = 'two_part_supplementary'
       financialYearEnding = 2024
     })
 

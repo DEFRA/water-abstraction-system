@@ -5,14 +5,8 @@
  * @module ReviewBillRunPresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate,
-  generateBillRunTitle,
-  titleCase
-} = require('../../base.presenter.js')
+const { formatFinancialYear, formatLongDate, titleCase } = require('../../base.presenter.js')
+const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../../billing.presenter.js')
 
 /**
  * Prepares and processes bill run, licence and filter data for presentation

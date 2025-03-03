@@ -13,12 +13,14 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
  *
  * @param {string} regionId - UUID of the region being billed that the licences must be linked to
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {boolean} [supplementary=false] - flag to indicate if an annual or supplementary two-part tariff bill run is
+ * being created
  *
  * @returns {Promise<object[]>} the licences to be matched, each containing an array of charge versions applicable for
  * two-part tariff
  */
-async function go(regionId, billingPeriod) {
-  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod)
+async function go(regionId, billingPeriod, supplementary = false) {
+  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod, supplementary)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 

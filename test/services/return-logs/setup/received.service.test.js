@@ -47,7 +47,7 @@ describe('Return Logs Setup - Received service', () => {
           receivedDateMonth: null,
           receivedDateYear: null
         },
-        { skip: ['sessionId'] }
+        { skip: ['sessionId', 'todaysDate', 'yesterdaysDate'] }
       )
     })
   })
