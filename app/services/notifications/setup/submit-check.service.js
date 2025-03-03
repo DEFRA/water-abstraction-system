@@ -17,7 +17,6 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  *
  * @param {string} sessionId - The UUID for the notification setup session record
  *
- * Does not return to allow the process to run in the background
  */
 async function go(sessionId) {
   try {
