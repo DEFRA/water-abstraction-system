@@ -9,10 +9,12 @@ const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
+const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
