@@ -2,10 +2,10 @@
 
 /**
  * Unflag all licences in a bill run that did not result in a billing invoice (they are unbilled)
- * @module UnflagUnbilledLicencesService
+ * @module UnflagUnbilledSupplementaryLicencesService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 /**
  * Unflag any licences that were not billed as part of a bill run
