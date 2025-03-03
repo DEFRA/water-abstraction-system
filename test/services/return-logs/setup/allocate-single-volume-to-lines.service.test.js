@@ -100,6 +100,18 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         expect(lines[5].quantity).to.equal(166.83333333333323)
       })
 
+      it('allocates the single volume across lines so their total matches the single volume', () => {
+        AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+
+        const linesTotal = lines.reduce((sum, line) => {
+          const quantity = line.quantity ?? 0
+
+          return sum + quantity
+        }, 0)
+
+        expect(linesTotal).to.equal(1001)
+      })
+
       it('ignores lines outside the abstraction period', () => {
         AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
 

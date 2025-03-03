@@ -40,13 +40,13 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
   // processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
   linesInsideAbstractionPeriod.forEach((line) => {
     line.quantity = individualLineQuantity
-    allocatedLineTotal = allocatedLineTotal + individualLineQuantity
+    allocatedLineTotal += individualLineQuantity
   })
 
   if (allocatedLineTotal !== Number(singleVolume)) {
     const roundingError = singleVolume - allocatedLineTotal
     const lastIndex = linesInsideAbstractionPeriod.length - 1
-    linesInsideAbstractionPeriod[lastIndex].quantity = linesInsideAbstractionPeriod[lastIndex].quantity + roundingError
+    linesInsideAbstractionPeriod[lastIndex].quantity += roundingError
   }
 }
 
@@ -54,10 +54,7 @@ function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
   const abstractionPeriodLines = []
 
   lines.forEach((line) => {
-    if (line.quantity) {
-      // Delete any existing quantity
-      delete line.quantity
-    }
+    delete line.quantity // Delete any existing quantity
 
     if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromDate, toDate)) {
       abstractionPeriodLines.push(line)
@@ -67,8 +64,8 @@ function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
   return abstractionPeriodLines
 }
 
-function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, toFullDate) {
-  return lineStartDate >= fromFullDate && lineEndDate <= toFullDate
+function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromDate, toDate) {
+  return lineStartDate >= fromDate && lineEndDate <= toDate
 }
 
 module.exports = {
