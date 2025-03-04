@@ -15,7 +15,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 // Thing under test
 const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
 
-describe('Download Return presenter', () => {
+describe('Download Return Log presenter', () => {
   let returnLog
 
   beforeEach(() => {
