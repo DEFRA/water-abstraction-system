@@ -12,7 +12,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const DownloadReturnService = require('../../app/services/return-logs/download-return.service.js')
+const DownloadReturnLogService = require('../../app/services/return-logs/download-return-log.service.js')
 const SubmitViewReturnLogService = require('../../app/services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../../app/services/return-logs/view-return-log.service.js')
 
@@ -121,7 +121,7 @@ describe('Return Logs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(DownloadReturnService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          Sinon.stub(DownloadReturnLogService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
         })
 
         it('returns the file successfully', async () => {

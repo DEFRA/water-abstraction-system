@@ -2,7 +2,7 @@
 
 /**
  * Formats return log data ready for presenting in the download CSV
- * @module ViewReturnLogPresenter
+ * @module DownloadReturnLogPresenter
  */
 
 const { formatDateObjectToISO } = require('../../lib/dates.lib.js')

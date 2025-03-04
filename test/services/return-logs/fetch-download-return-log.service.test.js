@@ -15,7 +15,7 @@ const ReturnSubmissionModel = require('../../../app/models/return-submission.mod
 const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
 
 // Thing under test
-const FetchDownloadReturnService = require('../../../app/services/return-logs/fetch-download-return.service.js')
+const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
 
 describe('Fetch Download Return Log service', () => {
   let returnLog
@@ -59,7 +59,7 @@ describe('Fetch Download Return Log service', () => {
       it('returns the return log with most recent related return submission and return submission lines', async () => {
         // We call the Fetch Download Return Log Service with version 0 (the default), which returns the most recent
         // return submission.
-        const results = await FetchDownloadReturnService.go(returnLog.id, 0)
+        const results = await FetchDownloadReturnLogService.go(returnLog.id, 0)
 
         expect(results).to.equal({
           id: returnLog.id,
@@ -80,7 +80,7 @@ describe('Fetch Download Return Log service', () => {
 
     describe('when a specified version is selected', () => {
       it('returns the return log with the specified related return submission and return submission lines', async () => {
-        const results = await FetchDownloadReturnService.go(returnLog.id, 2)
+        const results = await FetchDownloadReturnLogService.go(returnLog.id, 2)
 
         expect(results).to.equal({
           id: returnLog.id,
@@ -100,7 +100,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('orders submission lines by start date', async () => {
-      const result = await FetchDownloadReturnService.go(returnLog.id, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)
@@ -109,7 +109,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('applies readings to selected submission', async () => {
-      const result = await FetchDownloadReturnService.go(returnLog.id, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
       const selectedSubmission = result.returnSubmissions[0]
 
       expect(selectedSubmission.$applyReadings.calledOnce).to.be.true()
@@ -118,7 +118,7 @@ describe('Fetch Download Return Log service', () => {
 
   describe('when a return log has no submissions', () => {
     it('returns the return log without submissions', async () => {
-      const result = await FetchDownloadReturnService.go(returnLog.id)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id)
 
       expect(result.returnSubmissions).to.be.undefined()
     })

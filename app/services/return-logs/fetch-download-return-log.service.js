@@ -2,10 +2,10 @@
 
 /**
  * Fetches the matching return log data and associated submission needed for the return csv download
- * @module FetchDownloadReturnService
+ * @module FetchDownloadReturnLogService
  */
 
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
 const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 
 /**

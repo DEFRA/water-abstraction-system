@@ -13,7 +13,7 @@ const ReturnSubmissionModel = require('../../../app/models/return-submission.mod
 const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
 
 // Thing under test
-const DownloadReturnPresenter = require('../../../app/presenters/return-logs/download-return.presenter.js')
+const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
 
 describe('Download Return presenter', () => {
   let returnLog
@@ -25,7 +25,7 @@ describe('Download Return presenter', () => {
   describe('the "data" property', () => {
     describe('when provided with a returnLog with a returnSubmission.method of "abstractionVolumes"', () => {
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter.go(returnLog)
 
         expect(result.data).to.equal('start date,reading,volume\n2022-11-01,,123\n2022-12-01,,456\n2023-01-01,,789\n')
       })
@@ -37,7 +37,7 @@ describe('Download Return presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter.go(returnLog)
 
         expect(result.data).to.equal('start date,reading,volume\n2022-11-01,,123\n2022-12-01,,456\n2023-01-01,,789\n')
       })
@@ -46,7 +46,7 @@ describe('Download Return presenter', () => {
 
   describe('the "filename" property', () => {
     it('returns the formatted name for the csv file', () => {
-      const result = DownloadReturnPresenter.go(returnLog)
+      const result = DownloadReturnLogPresenter.go(returnLog)
 
       expect(result.filename).to.equal('10055412_2022-11-01_2023-10-31_v2.csv')
     })

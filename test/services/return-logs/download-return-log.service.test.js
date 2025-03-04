@@ -9,7 +9,7 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchDownloadReturnService = require('../../../app/services/return-logs/fetch-download-return.service.js')
+const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
 
 // Test helpers
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
@@ -17,7 +17,7 @@ const ReturnSubmissionModel = require('../../../app/models/return-submission.mod
 const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
 
 // Thing under test
-const DownloadReturnService = require('../../../app/services/return-logs/download-return.service.js')
+const DownloadReturnLogService = require('../../../app/services/return-logs/download-return-log.service.js')
 
 describe('Download Return Service', () => {
   let returnLog
@@ -25,11 +25,11 @@ describe('Download Return Service', () => {
   before(() => {
     returnLog = _testReturnLog()
 
-    Sinon.stub(FetchDownloadReturnService, 'go').resolves(returnLog)
+    Sinon.stub(FetchDownloadReturnLogService, 'go').resolves(returnLog)
   })
 
   it('correctly returns the csv string, filename and type', async () => {
-    const result = await DownloadReturnService.go(returnLog.id)
+    const result = await DownloadReturnLogService.go(returnLog.id)
 
     expect(result).to.equal({
       data: 'start date,reading,volume\n2022-11-01,,123\n2022-12-01,,456\n2023-01-01,,789\n',
