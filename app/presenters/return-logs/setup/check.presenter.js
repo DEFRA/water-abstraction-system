@@ -5,14 +5,8 @@
  * @module CheckPresenter
  */
 
-const {
-  formatAbstractionPeriod,
-  formatLongDate,
-  formatNumber,
-  formatQuantity,
-  sentenceCase
-} = require('../../base.presenter.js')
-const { generateSummaryTableHeaders, generateSummaryTableRows } = require('../base-return-logs.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = require('../../base.presenter.js')
+const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const UNIT_NAMES = {
@@ -51,8 +45,8 @@ function go(session) {
     startReading,
     summaryTableData: _summaryTableData(session),
     tableTitle: _tableTitle(returnsFrequency, reported),
-    totalCubicMetres: formatQuantity(UNIT_NAMES[units], totalQuantity),
-    totalQuantity,
+    totalCubicMetres: formatNumber(convertToCubicMetres(UNIT_NAMES[units], totalQuantity)),
+    totalQuantity: formatNumber(totalQuantity),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
@@ -110,6 +104,51 @@ function _formatLines(lines, userUnit) {
   return formattedLines
 }
 
+function _groupLinesByMonth(formattedLines) {
+  const groupedLines = formattedLines.reduce((acc, line) => {
+    const { endDate, quantity, reading, userUnit } = line
+    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
+
+    if (!acc[key]) {
+      acc[key] = {
+        endDate,
+        quantity: 0,
+        userUnit
+      }
+    }
+    acc[key].quantity += quantity
+
+    if (reading) {
+      acc[key].reading = reading
+    }
+
+    return acc
+  }, {})
+
+  return Object.values(groupedLines)
+}
+
+function _linkDetails(sessionId, method, returnsFrequency, endDate) {
+  const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
+  const text = `Enter ${returnRequirementFrequencies[returnsFrequency]} ${linkTextMethod}`
+  const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
+
+  return {
+    href: `/system/return-logs/setup/${sessionId}/${yearMonth}`,
+    text
+  }
+}
+
+function _monthlyTotal(quantity, returnsFrequency, userUnit) {
+  if (returnsFrequency === 'month' || userUnit === 'm³') {
+    return formatNumber(quantity)
+  }
+
+  const monthlyTotalInCubicMetres = convertToCubicMetres(userUnit, quantity)
+
+  return formatNumber(monthlyTotalInCubicMetres)
+}
+
 function _note(note) {
   if (note?.content) {
     return {
@@ -131,17 +170,36 @@ function _summaryTableData(session) {
   const { id: sessionId, lines, reported, returnsFrequency, units } = session
 
   const alwaysDisplayLinkHeader = true
-  const linkPrefix = 'Enter'
   const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
-  const rootPath = '/system/return-logs/setup'
 
   const userUnit = UNIT_NAMES[units]
   const formattedLines = _formatLines(lines, userUnit)
 
   return {
     headers: generateSummaryTableHeaders(method, returnsFrequency, userUnit, alwaysDisplayLinkHeader),
-    rows: generateSummaryTableRows(method, returnsFrequency, formattedLines, sessionId, linkPrefix, rootPath)
+    rows: _summaryTableRows(method, returnsFrequency, formattedLines, sessionId)
   }
+}
+
+function _summaryTableRows(method, returnsFrequency, formattedLines, sessionId) {
+  const groups = returnsFrequency === 'month' ? formattedLines : _groupLinesByMonth(formattedLines)
+
+  return groups.map((group) => {
+    const { endDate, quantity, reading, userUnit } = group
+
+    const rowData = {
+      link: _linkDetails(sessionId, method, returnsFrequency, endDate),
+      month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
+      monthlyTotal: _monthlyTotal(quantity, returnsFrequency, userUnit),
+      unitTotal: formatNumber(quantity)
+    }
+
+    if (method !== 'abstractionVolumes') {
+      rowData.reading = reading
+    }
+
+    return rowData
+  })
 }
 
 function _tableTitle(returnsFrequency, reported) {
@@ -158,7 +216,7 @@ function _totalQuantity(lines) {
     return acc + quantity
   }, 0)
 
-  return formatNumber(totalQuantity)
+  return totalQuantity
 }
 
 module.exports = {
