@@ -5,7 +5,7 @@
  * @module UnflagUnbilledLicencesService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 /**
  * Unflag any licences that were not billed as part of a bill run

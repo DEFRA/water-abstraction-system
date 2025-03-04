@@ -15,12 +15,12 @@ const ExpandedError = require('../../../../app/errors/expanded.error.js')
 // Things we need to stub
 const ChargingModuleSendBillRunRequest = require('../../../../app/requests/charging-module/send-bill-run.request.js')
 const ChargingModuleViewBillRunRequest = require('../../../../app/requests/charging-module/view-bill-run.request.js')
-const UnflagBilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
+const UnflagBilledSupplementaryLicencesService = require('../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
 
 // Thing under test
 const UpdateInvoiceNumbersService = require('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
 
-describe('Bill Runs - Update Invoice Numbers service', () => {
+describe('Bill Runs - Send- Update Invoice Numbers service', () => {
   let billRun
   let chargingModuleSendBillRunRequestStub
   let chargingModuleViewBillRunRequestStub
@@ -33,7 +33,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
   beforeEach(async () => {
     chargingModuleSendBillRunRequestStub = Sinon.stub(ChargingModuleSendBillRunRequest, 'send')
     chargingModuleViewBillRunRequestStub = Sinon.stub(ChargingModuleViewBillRunRequest, 'send')
-    unflagBilledLicencesServiceStub = Sinon.stub(UnflagBilledLicencesService, 'go').resolves()
+    unflagBilledLicencesServiceStub = Sinon.stub(UnflagBilledSupplementaryLicencesService, 'go').resolves()
 
     billPatchStub = Sinon.stub().resolves()
     billRunPatchStub = Sinon.stub().resolves()
