@@ -15,7 +15,7 @@ const ReviewLicenceHelper = require('../../../support/helpers/review-licence.hel
 // Thing under test
 const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
 
-describe('Bill Runs Review - Fetch Remove Review Licence service', () => {
+describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
   let billRun
   let region
   let reviewLicence
@@ -38,6 +38,7 @@ describe('Bill Runs Review - Fetch Remove Review Licence service', () => {
         licenceRef: reviewLicence.licenceRef,
         billRun: {
           id: billRun.id,
+          batchType: billRun.batchType,
           billRunNumber: billRun.billRunNumber,
           createdAt: billRun.createdAt,
           status: 'review',
