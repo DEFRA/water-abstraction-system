@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats return log data ready for presenting in the download CSV
+ * Formats return log data ready for presenting in the csv file
  * @module DownloadReturnLogPresenter
  */
 
@@ -11,11 +11,11 @@ const { transformArrayToCSVRow } = require('../../lib/transform-to-csv.lib.js')
 const HEADERS = ['start date', 'reading', 'volume']
 
 /**
- * Formats return log data ready for presenting in the download CSV
+ * Formats return log data ready for presenting in the csv file
  *
  * @param {module:ReturnLogModel} returnLog - The return log and associated submission data
  *
- * @returns {object} the data needed by the CSV download
+ * @returns {object} the data needed for the csv download
  */
 function go(returnLog) {
   const { returnSubmissions } = returnLog
