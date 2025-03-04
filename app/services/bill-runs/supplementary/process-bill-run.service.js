@@ -13,7 +13,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
+const UnflagUnbilledSupplementaryLicencesService = require('../unflag-unbilled-supplementary-licences.service.js')
 
 /**
  * Process a given bill run for the given billing periods. In this case, "process" means that we create the
@@ -81,7 +81,7 @@ async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcess
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-  await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
+  await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some((result) => {
