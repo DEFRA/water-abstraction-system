@@ -61,10 +61,14 @@ async function _unflagStandard(billRun, allLicenceIds) {
   await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .where('updatedAt', '<=', createdAt)
-    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
     .whereNotExists(
-      LicenceModel.relatedQuery('billLicences')
-        .join('bills', 'bills.id', '=', 'billLicences.billId')
+      WorkflowModel.query().select(1).whereColumn('licences.id', 'workflows.licenceId').whereNull('workflows.deletedAt')
+    )
+    .whereNotExists(
+      BillLicenceModel.query()
+        .select(1)
+        .innerJoin('bills', 'bills.id', '=', 'billLicences.billId')
+        .whereColumn('licences.id', 'billLicences.licenceId')
         .where('bills.billRunId', '=', billRunId)
     )
     .whereIn('id', allLicenceIds)
