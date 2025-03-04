@@ -7,7 +7,7 @@
 
 const CreateLicenceSupplementaryYearService = require('../../licences/supplementary/create-licence-supplementary-year.service.js')
 const FetchRemoveReviewLicenceModel = require('./fetch-remove-review-licence.service.js')
-const UnassignLicenceToBillRunService = require('../unassign-licences-to-bill-run.service.js')
+const UnassignLicencesToBillRunService = require('../unassign-licences-to-bill-run.service.js')
 const ProcessBillRunPostRemove = require('./process-bill-run-post-remove.service.js')
 const RemoveReviewLicenceService = require('./remove-review-licence.service.js')
 
@@ -61,7 +61,7 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // caused it to be included in the bill run. If we are removing the licence, we need to unassign it so that it will
   // be processed by the next TPT supplementary bill run.
   if (billRun.batchType === 'two_part_supplementary') {
-    await UnassignLicenceToBillRunService.go(licenceId, billRun.id)
+    await UnassignLicencesToBillRunService.go([licenceId], billRun.id)
 
     return
   }
