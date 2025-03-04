@@ -14,6 +14,7 @@ function removeReviewLicence() {
     licenceRef: '1/11/11/*11/1111',
     billRun: {
       id: '287aeb25-cf11-429d-8c6f-f98f06db021d',
+      batchType: 'two_part_tariff',
       billRunNumber: 10001,
       createdAt: new Date('2024-10-22'),
       status: 'review',
