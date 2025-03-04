@@ -11,24 +11,26 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const ReturnsNotifyPresenterTest = require('../../../../app/presenters/notifications/setup/returns-notify.presenter.js')
+const ReturnsNotificationPresenter = require('../../../../app/presenters/notifications/setup/returns-notification.presenter.js')
 
-describe('Notifications Setup - Returns Notify Presenter', () => {
+describe('Notifications Setup - Returns Notification Presenter', () => {
   const referenceCode = 'TEST-123'
 
-  let recipients
-  let returnsPeriod
+  let determinedReturnsPeriod
   let journey
+  let recipients
   let testRecipients
 
   beforeEach(() => {
-    journey = 'invitations'
-
-    returnsPeriod = {
-      periodEndDate: new Date('2025-01-28'),
-      periodStartDate: new Date('2025-01-01'),
-      returnDueDate: new Date('2025-04-28')
+    determinedReturnsPeriod = {
+      dueDate: new Date('2025-04-28'),
+      endDate: new Date('2025-03-31'),
+      name: 'quarterFour',
+      startDate: new Date('2025-01-01'),
+      summer: 'false'
     }
+
+    journey = 'invitations'
 
     recipients = RecipientsFixture.recipients()
 
@@ -36,14 +38,14 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
   })
 
   it('correctly transform the recipients into notifications', () => {
-    const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+    const result = ReturnsNotificationPresenter.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
 
     expect(result).to.equal([
       {
         emailAddress: 'primary.user@important.com',
         options: {
           personalisation: {
-            periodEndDate: '28 January 2025',
+            periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025'
           },
@@ -55,7 +57,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         emailAddress: 'returns.agent@important.com',
         options: {
           personalisation: {
-            periodEndDate: '28 January 2025',
+            periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025'
           },
@@ -72,7 +74,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
             name: 'Mr H J Licence holder',
-            periodEndDate: '28 January 2025',
+            periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025'
           },
@@ -89,7 +91,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
             name: 'Mr H J Returns to',
-            periodEndDate: '28 January 2025',
+            periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025'
           },
@@ -106,7 +108,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
             name: 'Mr H J Licence holder with multiple licences',
-            periodEndDate: '28 January 2025',
+            periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025'
           },
@@ -129,14 +131,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'primary.user@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -154,14 +161,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'returns.agent@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -179,14 +191,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'primary.user@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -206,7 +223,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -218,7 +240,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -236,7 +258,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -248,7 +275,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Returns to',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -266,7 +293,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -278,7 +310,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -304,14 +336,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'primary.user@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -329,14 +366,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'returns.agent@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -354,14 +396,19 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
               emailAddress: 'primary.user@important.com',
               options: {
                 personalisation: {
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -381,7 +428,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -393,7 +445,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -411,7 +463,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -423,7 +480,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Returns to',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
@@ -441,7 +498,12 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ReturnsNotifyPresenterTest.go(testRecipients, returnsPeriod, referenceCode, journey)
+          const result = ReturnsNotificationPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey
+          )
 
           expect(result).to.equal([
             {
@@ -453,7 +515,7 @@ describe('Notifications Setup - Returns Notify Presenter', () => {
                   address_line_4: 'Surrey',
                   address_line_5: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '28 January 2025',
+                  periodEndDate: '31 March 2025',
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
