@@ -5,11 +5,13 @@
  * @module SubmitCheckService
  */
 
-const SessionModel = require('../../../models/session.model.js')
-const RecipientsService = require('./fetch-recipients.service.js')
+const CreateEventPresenter = require('../../../presenters/notifications/setup/create-event.presenter.js')
+const CreateEventService = require('./create-event.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
+const RecipientsService = require('./fetch-recipients.service.js')
 const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
+const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
@@ -25,16 +27,37 @@ async function go(sessionId) {
 
     const session = await SessionModel.query().findById(sessionId)
 
-    const recipientsData = await RecipientsService.go(session)
+    const recipients = await _recipients(session)
 
-    const recipients = DetermineRecipientsService.go(recipientsData)
+    await _event(session, recipients)
 
-    ReturnsNotificationPresenter.go(recipients, session.determinedReturnsPeriod, session.referenceCode, session.journey)
+    _notifications(session, recipients)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
     global.GlobalNotifier.omfg('Send notifications failed', { sessionId }, error)
   }
+}
+
+async function _event(session, recipients) {
+  const event = CreateEventPresenter.go(session, recipients)
+
+  return CreateEventService.go(event)
+}
+
+function _notifications(session, recipients) {
+  return ReturnsNotificationPresenter.go(
+    recipients,
+    session.determinedReturnsPeriod,
+    session.referenceCode,
+    session.journey
+  )
+}
+
+async function _recipients(session) {
+  const recipientsData = await RecipientsService.go(session)
+
+  return DetermineRecipientsService.go(recipientsData)
 }
 
 module.exports = {

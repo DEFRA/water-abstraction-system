@@ -23,11 +23,13 @@ describe('Notifications Setup - Create event service', () => {
   it('should create the event (required values)', async () => {
     const result = await CreateEventService.go(event)
 
-    const res = await EventModel.query().findById(result.id)
+    const createdResult = await EventModel.query().findById(result.id)
 
     expect(result).equal({
-      id: res.id,
-      type: 'notification'
+      createdAt: result.createdAt,
+      id: createdResult.id,
+      type: 'notification',
+      updatedAt: result.updatedAt
     })
   })
 
@@ -54,12 +56,12 @@ describe('Notifications Setup - Create event service', () => {
     it('should create the event', async () => {
       const result = await CreateEventService.go(event)
 
-      const res = await EventModel.query().findById(result.id)
+      const createdResult = await EventModel.query().findById(result.id)
 
-      expect(res).equal({
-        createdAt: null,
+      expect(createdResult).equal({
+        createdAt: createdResult.createdAt,
         entities: null,
-        id: res.id,
+        id: createdResult.id,
         issuer: null,
         licences: ['123', '456'],
         metadata: {
@@ -81,7 +83,7 @@ describe('Notifications Setup - Create event service', () => {
         status: 'started',
         subtype: 'returnInvitation',
         type: 'notification',
-        updatedAt: null
+        updatedAt: createdResult.updatedAt
       })
     })
   })
