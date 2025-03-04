@@ -22,6 +22,7 @@ const HandleErroredBillRunService = require('../../../app/services/bill-runs/han
 const LegacyRefreshBillRunRequest = require('../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessAnnualBillingPeriodService = require('../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
 const ProcessSupplementaryBillingPeriodService = require('../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js')
+const UnflagUnbilledSupplementaryLicencesService = require('../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
 
 // Thing under test
 const GenerateTwoPartTariffBillRunService = require('../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
@@ -45,6 +46,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
   let processAnnualStub
   let processSupplementaryStub
   let notifierStub
+  let unflagUnbilledStub
 
   beforeEach(async () => {
     billRunPatchStub = Sinon.stub().resolves()
@@ -58,6 +60,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
 
     processAnnualStub = Sinon.stub(ProcessAnnualBillingPeriodService, 'go')
     processSupplementaryStub = Sinon.stub(ProcessSupplementaryBillingPeriodService, 'go')
+    unflagUnbilledStub = Sinon.stub(UnflagUnbilledSupplementaryLicencesService, 'go')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -93,54 +96,74 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
     })
 
     describe('and the bill run is in review', () => {
-      describe('and is a "two part tariff annual"', () => {
-        beforeEach(async () => {
-          billRunSelectStub.resolves({ ...billRunDetails })
-          processAnnualStub.resolves(false)
-          processSupplementaryStub.resolves(false)
-        })
-
-        it('triggers the "process annual" service', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
-
-          await setTimeout(delay)
-
-          expect(processAnnualStub.calledOnce).to.be.true()
-          expect(processSupplementaryStub.called).to.be.false()
-        })
-      })
-
-      describe('and is a "two part tariff annual"', () => {
-        beforeEach(async () => {
-          billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
-          processAnnualStub.resolves(false)
-          processSupplementaryStub.resolves(false)
-        })
-
-        it('triggers the "process supplementary" service', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
-
-          await setTimeout(delay)
-
-          expect(processSupplementaryStub.calledOnce).to.be.true()
-          expect(processAnnualStub.called).to.be.false()
-        })
-      })
-
       describe('but there is nothing to bill', () => {
-        beforeEach(async () => {
-          billRunSelectStub.resolves({ ...billRunDetails })
-          processAnnualStub.resolves(false)
+        describe('and is a "two part tariff annual"', () => {
+          beforeEach(async () => {
+            billRunSelectStub.resolves({ ...billRunDetails })
+            processAnnualStub.resolves(false)
+          })
+
+          it('sets the bill run status first to "processing" and then to "empty"', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(billRunPatchStub.calledTwice).to.be.true()
+            expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+            expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' }, { skip: ['updatedAt'] })
+          })
+
+          it('triggers the "process annual" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(processAnnualStub.calledOnce).to.be.true()
+            expect(processSupplementaryStub.called).to.be.false()
+          })
+
+          it('does not trigger the "unflag unbilled supplementary licences" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(unflagUnbilledStub.called).to.be.false()
+          })
         })
 
-        it('sets the bill run status first to "processing" and then to "empty"', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+        describe('and is a "two part tariff supplementary"', () => {
+          beforeEach(async () => {
+            billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
+            processSupplementaryStub.resolves(false)
+            unflagUnbilledStub.resolves()
+          })
 
-          await setTimeout(delay)
+          it('sets the bill run status first to "processing" and then to "empty"', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(billRunPatchStub.calledTwice).to.be.true()
-          expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
-          expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' }, { skip: ['updatedAt'] })
+            await setTimeout(delay)
+
+            expect(billRunPatchStub.calledTwice).to.be.true()
+            expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+            expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' }, { skip: ['updatedAt'] })
+          })
+
+          it('triggers the "process supplementary" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(processSupplementaryStub.calledOnce).to.be.true()
+            expect(processAnnualStub.called).to.be.false()
+          })
+
+          it('triggers the "unflag unbilled supplementary licences" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(unflagUnbilledStub.calledOnce).to.be.true()
+          })
         })
       })
 
@@ -148,36 +171,89 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run Service', () => {
         let chargingModuleGenerateRequestStub
         let legacyRefreshBillRunRequestStub
 
-        beforeEach(() => {
-          billRunSelectStub.resolves({ ...billRunDetails })
+        describe('and is a "two part tariff annual"', () => {
+          beforeEach(() => {
+            billRunSelectStub.resolves({ ...billRunDetails })
 
-          chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
-          legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
+            chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
+            legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
-          processAnnualStub.resolves(true)
+            processAnnualStub.resolves(true)
+          })
+
+          it('sets the bill run status to "processing"', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            expect(billRunPatchStub.calledOnce).to.be.true()
+            expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+          })
+
+          it('tells the charging module API to "generate" the bill run', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(chargingModuleGenerateRequestStub.called).to.be.true()
+          })
+
+          it('tells the legacy service to start its refresh job', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(legacyRefreshBillRunRequestStub.called).to.be.true()
+          })
+
+          it('does not trigger the "unflag unbilled supplementary licences" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(unflagUnbilledStub.called).to.be.false()
+          })
         })
 
-        it('sets the bill run status to "processing"', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+        describe('and is a "two part tariff supplementary"', () => {
+          beforeEach(() => {
+            billRunSelectStub.resolves({ ...billRunDetails, batchType: 'two_part_supplementary' })
 
-          expect(billRunPatchStub.calledOnce).to.be.true()
-          expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
-        })
+            chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
+            legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
-        it('tells the charging module API to "generate" the bill run', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+            processSupplementaryStub.resolves(true)
+            unflagUnbilledStub.resolves()
+          })
 
-          await setTimeout(delay)
+          it('sets the bill run status to "processing"', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(chargingModuleGenerateRequestStub.called).to.be.true()
-        })
+            expect(billRunPatchStub.calledOnce).to.be.true()
+            expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+          })
 
-        it('tells the legacy service to start its refresh job', async () => {
-          await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+          it('tells the charging module API to "generate" the bill run', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          await setTimeout(delay)
+            await setTimeout(delay)
 
-          expect(legacyRefreshBillRunRequestStub.called).to.be.true()
+            expect(chargingModuleGenerateRequestStub.called).to.be.true()
+          })
+
+          it('tells the legacy service to start its refresh job', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(legacyRefreshBillRunRequestStub.called).to.be.true()
+          })
+
+          it('triggers the "unflag unbilled supplementary licences" service', async () => {
+            await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
+
+            await setTimeout(delay)
+
+            expect(unflagUnbilledStub.calledOnce).to.be.true()
+          })
         })
       })
     })

@@ -20,7 +20,7 @@ const UnflagBilledSupplementaryLicencesService = require('../../../../app/servic
 // Thing under test
 const UpdateInvoiceNumbersService = require('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
 
-describe('Bill Runs - Send- Update Invoice Numbers service', () => {
+describe('Bill Runs - Send - Update Invoice Numbers service', () => {
   let billRun
   let chargingModuleSendBillRunRequestStub
   let chargingModuleViewBillRunRequestStub
