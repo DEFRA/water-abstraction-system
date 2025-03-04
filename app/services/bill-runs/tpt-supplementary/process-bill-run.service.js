@@ -5,6 +5,7 @@
  * @module ProcessBillRunService
  */
 
+const AssignBillRunToLicencesService = require('../assign-bill-run-to-licences.service.js')
 const BillRunModel = require('../../../models/bill-run.model.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
@@ -38,7 +39,11 @@ async function go(billRun, billingPeriods) {
     await _updateStatus(billRunId, 'processing')
 
     // `populated` will be set to true if `MatchAndAllocateService` processes at least one licence
-    const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
+    const licences = await MatchAndAllocateService.go(billRun, billingPeriod)
+
+    await AssignBillRunToLicencesService.go(billRunId, licences, billingPeriod, true)
+
+    const populated = licences.length > 0
 
     await _setBillRunStatus(billRunId, populated)
 
