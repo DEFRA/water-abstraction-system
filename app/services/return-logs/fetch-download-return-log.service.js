@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the matching return log data and associated submission needed for the return csv download
+ * Fetches the matching return log data and associated submission needed for the csv download
  * @module FetchDownloadReturnLogService
  */
 
@@ -9,10 +9,10 @@ const ReturnLogModel = require('../../models/return-log.model.js')
 const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 
 /**
- * Fetches the matching return log data and associated submission needed for the return csv download
+ * Fetches the matching return log data and associated submission needed for the csv download
  *
  * @param {string} returnLogId - The return log ID
- * @param {number} version - Optional version number of the submission to download csv
+ * @param {number} version - Version number of the submission to download csv
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
