@@ -32,7 +32,7 @@ const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
  * @param {string} referenceCode - the unique code used to group the notifications in notify
  * @param {string} journey - the journey should be either "reminders" or "invitations"
  *
- * @returns {object[{ScheduledNotificationModel}]} - the recipients transformed into notifications
+ * @returns {object[]} - the recipients transformed into notifications ('ScheduledNotificationModel')
  */
 function go(recipients, returnsPeriod, referenceCode, journey) {
   return recipients.map((recipient) => {
