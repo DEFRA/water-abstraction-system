@@ -5,6 +5,7 @@
  * @module UnflagBilledSupplementaryLicencesService
  */
 
+const BillLicenceModel = require('../../models/bill-licence.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 const WorkflowModel = require('../../models/workflow.model.js')
@@ -65,7 +66,9 @@ async function _unflagOldScheme(billRun) {
     .where('updatedAt', '<=', createdAt)
     .where('regionId', regionId)
     .where('includeInPresrocBilling', 'yes')
-    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
+    .whereNotExists(
+      WorkflowModel.query().select(1).whereColumn('licences.id', 'workflows.licenceId').whereNull('workflows.deletedAt')
+    )
 }
 
 async function _unflagStandard(billRun) {
@@ -74,11 +77,15 @@ async function _unflagStandard(billRun) {
   await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .where('updatedAt', '<=', createdAt)
-    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
+    .whereNotExists(
+      WorkflowModel.query().select(1).whereColumn('licences.id', 'workflows.licenceId').whereNull('workflows.deletedAt')
+    )
     .whereExists(
-      LicenceModel.relatedQuery('billLicences')
-        .join('bills', 'bills.id', 'billLicences.billId')
-        .where('bills.billRunId', billRunId)
+      BillLicenceModel.query()
+        .select(1)
+        .innerJoin('bills', 'bills.id', '=', 'billLicences.billId')
+        .whereColumn('licences.id', 'billLicences.licenceId')
+        .where('bills.billRunId', '=', billRunId)
     )
 }
 
