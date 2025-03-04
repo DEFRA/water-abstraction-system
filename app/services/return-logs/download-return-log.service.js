@@ -11,9 +11,6 @@ const FetchDownloadReturnLogService = require('./fetch-download-return-log.servi
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
  *
- * This service created a csv file for a returns monthly abstraction volumes. It does not seem necessary to use a `Stream`
- * to create the csv as the data is relatively small.
- *
  * @param {string} returnLogId - The UUID of the return
  * @param {string} version - The version number of the return
  *
