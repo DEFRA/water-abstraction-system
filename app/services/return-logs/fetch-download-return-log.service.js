@@ -17,9 +17,9 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
 async function go(returnLogId, version) {
-  const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
+  const returnSubmissions = await _fetchReturnSubmissions(returnLogId)
 
-  const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
+  const selectedReturnSubmission = _selectReturnSubmission(returnSubmissions, version)
 
   const returnLog = await _fetch(returnLogId, selectedReturnSubmission)
 
@@ -48,25 +48,24 @@ async function _fetch(returnLogId, selectedReturnSubmission) {
   return query
 }
 
-async function _fetchAllReturnSubmissions(returnId) {
+async function _fetchReturnSubmissions(returnLogId) {
   return ReturnSubmissionModel.query()
     .select(['createdAt', 'id', 'version', 'userId'])
-    .where('returnLogId', returnId)
+    .where('returnLogId', returnLogId)
     .orderBy('version', 'desc')
 }
 
-function _returnSubmission(allReturnSubmissions, version) {
-  // We are dealing with a due or received return log that has no submissions yet
-  if (allReturnSubmissions.length === 0) {
+function _selectReturnSubmission(returnSubmissions, version) {
+  if (returnSubmissions.length === 0) {
     return null
   }
 
-  // If version is 0, it means a previous version has not been selected so we want the latest i.e. the 'current' version
+  // If version is 0, we want the latest i.e. the 'current' version
   if (version === 0) {
-    return allReturnSubmissions[0]
+    return returnSubmissions[0]
   }
 
-  const selectedReturnSubmission = allReturnSubmissions.find((returnSubmission) => {
+  const selectedReturnSubmission = returnSubmissions.find((returnSubmission) => {
     return returnSubmission.version === version
   })
 
