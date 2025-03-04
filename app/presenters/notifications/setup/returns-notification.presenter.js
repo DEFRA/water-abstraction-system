@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats recipients into notification to send to notify for a returns invitation and reminder
+ * Formats recipients into notifications to send to notify for a returns invitation and reminder
  * @module ReturnsNotificationPresenter
  */
 
@@ -10,7 +10,7 @@ const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 
 /**
- * Formats recipients into notification to send to notify for a returns invitation and reminder
+ * Formats recipients into notifications to send to notify for a returns invitation and reminder
  *
  * A returns invitation or reminder will need to send a letter or email to notify. The basic structure for a notify
  * payload looks like this:
@@ -35,17 +35,26 @@ const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
  * @returns {object[]} - the recipients transformed into notifications
  */
 function go(recipients, returnsPeriod, referenceCode, journey) {
-  return recipients.map((recipient) => {
+  const notifications = []
+
+  for (const recipient of recipients) {
     if (recipient.email) {
-      return _email(recipient, returnsPeriod, referenceCode, journey)
+      notifications.push(_email(recipient, returnsPeriod, referenceCode, journey))
     } else {
-      return _letter(recipient, returnsPeriod, referenceCode, journey)
+      notifications.push(_letter(recipient, returnsPeriod, referenceCode, journey))
     }
-  })
+  }
+
+  return notifications
 }
 
-function _addressLines(recipient) {
-  const address = contactAddress(recipient.contact)
+/**
+ * Notify expects address lines to be formatted into: 'address_line_1'
+ *
+ * @private
+ */
+function _addressLines(contact) {
+  const address = contactAddress(contact)
 
   const addressLines = {}
 
@@ -134,7 +143,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey) {
     options: {
       personalisation: {
         name,
-        ..._addressLines(recipient),
+        ..._addressLines(recipient.contact),
         ..._returnsPeriod(returnsPeriod)
       },
       reference: referenceCode

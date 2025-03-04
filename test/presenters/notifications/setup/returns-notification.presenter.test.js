@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const ReturnsNotificationPresenter = require('../../../../app/presenters/notifications/setup/returns-notification.presenter.js')
 
-describe('Notifications Setup - Returns Notification Presenter', () => {
+describe.only('Notifications Setup - Returns Notification Presenter', () => {
   const referenceCode = 'TEST-123'
 
   let determinedReturnsPeriod
