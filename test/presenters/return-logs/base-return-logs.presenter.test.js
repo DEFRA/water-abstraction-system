@@ -291,33 +291,6 @@ describe('Base Return Logs presenter', () => {
           expect(result[1].link).to.not.exist()
         })
 
-        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
-          let linkPrefix
-
-          beforeEach(() => {
-            linkPrefix = 'Enter'
-          })
-
-          it('includes a "link" object', () => {
-            const result = BaseReturnLogsPresenter.generateSummaryTableRows(
-              method,
-              frequency,
-              sampleLines,
-              id,
-              linkPrefix
-            )
-
-            expect(result[0].link.href).to.equal(
-              '/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0'
-            )
-            expect(result[0].link.text).to.equal('Enter monthly volumes')
-            expect(result[1].link.href).to.equal(
-              '/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-1'
-            )
-            expect(result[1].link.text).to.equal('Enter monthly volumes')
-          })
-        })
-
         describe('and the "userUnit" is not cubic metres', () => {
           beforeEach(() => {
             sampleLines = [
@@ -355,27 +328,6 @@ describe('Base Return Logs presenter', () => {
 
           expect(result[0].reading).to.equal(111)
           expect(result[1].reading).to.equal(222)
-        })
-
-        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
-          let linkPrefix
-
-          beforeEach(() => {
-            linkPrefix = 'Enter'
-          })
-
-          it('includes a "link" object', () => {
-            const result = BaseReturnLogsPresenter.generateSummaryTableRows(
-              method,
-              frequency,
-              sampleLines,
-              id,
-              linkPrefix
-            )
-
-            expect(result[0].link.text).to.equal('Enter monthly readings')
-            expect(result[1].link.text).to.equal('Enter monthly readings')
-          })
         })
       })
     })
@@ -433,26 +385,6 @@ describe('Base Return Logs presenter', () => {
 
           expect(result[0].link.href).to.equal('/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0')
           expect(result[0].link.text).to.equal('View daily volumes')
-        })
-
-        describe('and a "linkPrefix" other than "View" is passed to the service', () => {
-          let linkPrefix
-
-          beforeEach(() => {
-            linkPrefix = 'Enter'
-          })
-
-          it('includes a "link" object', () => {
-            const result = BaseReturnLogsPresenter.generateSummaryTableRows(
-              method,
-              frequency,
-              sampleLines,
-              id,
-              linkPrefix
-            )
-
-            expect(result[0].link.text).to.equal('Enter daily volumes')
-          })
         })
 
         describe('and the "userUnit" is not cubic metres', () => {

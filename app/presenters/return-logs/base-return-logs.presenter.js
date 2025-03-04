@@ -4,6 +4,23 @@ const { formatNumber, formatQuantity, sentenceCase } = require('../base.presente
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
+ * Converts a quantity from a given unit to cubic metres and formats it
+ *
+ * @param {string} units - the unit of the quantity
+ * @param {number} quantity - the quantity to be converted
+ *
+ * @returns {number|null} The converted quantity or null if the quantity is null or undefined
+ */
+function convertToCubicMetres(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+  const convertedQuantity = quantity / returnUnits[units].multiplier
+
+  return convertedQuantity
+}
+
+/**
  * Formats the details of a return submission meter
  *
  * @param {object} meter - the meter to be formatted
@@ -118,20 +135,12 @@ function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLink
  * @param {string} frequency - The reporting frequency of the return log.
  * @param {object[]} lines - The individual submission lines to be grouped and formatted into table rows
  * @param {string} [id=null] - The ID to use in the link to view the daily/weekly details for a month
- * @param {string} [linkPrefix = 'View'] - The link text prefix when generating links to view/enter details
  * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view/enter details
  *
  * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
  * quantity, reading, and unit totals.
  */
-function generateSummaryTableRows(
-  method,
-  frequency,
-  lines,
-  id = null,
-  linkPrefix = 'View',
-  rootPath = '/system/return-submissions'
-) {
+function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
   const groups = frequency === 'month' ? lines : _groupLinesByMonth(lines)
 
   return groups.map((group) => {
@@ -146,8 +155,8 @@ function generateSummaryTableRows(
       rowData.reading = reading
     }
 
-    if (frequency !== 'month' || linkPrefix !== 'View') {
-      rowData.link = _linkDetails(id, method, frequency, endDate, linkPrefix, rootPath)
+    if (frequency !== 'month') {
+      rowData.link = _linkDetails(id, method, frequency, endDate, rootPath)
     }
 
     if (userUnit !== unitNames.CUBIC_METRES) {
@@ -208,9 +217,9 @@ function _groupLinesByMonth(lines) {
   return Object.values(groupedLines)
 }
 
-function _linkDetails(id, method, frequency, endDate, linkPrefix, rootPath) {
+function _linkDetails(id, method, frequency, endDate, rootPath) {
   const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
-  const text = `${linkPrefix} ${returnRequirementFrequencies[frequency]} ${linkTextMethod}`
+  const text = `View ${returnRequirementFrequencies[frequency]} ${linkTextMethod}`
   const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
   return {
@@ -220,6 +229,7 @@ function _linkDetails(id, method, frequency, endDate, linkPrefix, rootPath) {
 }
 
 module.exports = {
+  convertToCubicMetres,
   formatMeterDetails,
   formatQuantity,
   formatStatus,
