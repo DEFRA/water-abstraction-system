@@ -19,7 +19,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 // Thing under test
 const DownloadReturnLogService = require('../../../app/services/return-logs/download-return-log.service.js')
 
-describe('Download Return Service', () => {
+describe('Download Return Log Service', () => {
   let returnLog
 
   before(() => {
