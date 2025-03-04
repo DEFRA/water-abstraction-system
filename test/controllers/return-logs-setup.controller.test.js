@@ -24,6 +24,7 @@ const PeriodUsedService = require('../../app/services/return-logs/setup/period-u
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
+const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
@@ -33,6 +34,7 @@ const SubmitPeriodUsedService = require('../../app/services/return-logs/setup/su
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
+const SubmitStartReadingService = require('../../app/services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
@@ -1222,6 +1224,65 @@ describe('Return Logs - Setup - Controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select which units were used')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/start-reading', () => {
+    beforeEach(() => {
+      path = 'start-reading'
+    })
+
+    describe('GET', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(StartReadingService, 'go').resolves({
+            sessionId,
+            pageTitle: 'Enter the start meter reading'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter the start meter reading')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        describe('and a start reading was provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStartReadingService, 'go').resolves({})
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitStartReadingService, 'go').resolves({
+            error: { text: 'Enter a start meter reading' },
+            pageTitle: 'Enter the start meter reading',
+            sessionId
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(_postOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter a start meter reading')
           expect(response.payload).to.contain('There is a problem')
         })
       })
