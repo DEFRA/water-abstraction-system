@@ -271,6 +271,26 @@ describe('Fetch Charge Versions service', () => {
           expect(results).to.be.empty()
         })
       })
+
+      describe('and the licence has been flagged for supplementary but is already assigned to a bill run', () => {
+        beforeEach(async () => {
+          licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+            billRunId: '210d0685-5d61-44d3-9206-46ec037d8b73',
+            licenceId: licence.id,
+            financialYearEnd: billingPeriod.endDate.getFullYear()
+          })
+        })
+
+        afterEach(async () => {
+          await licenceSupplementaryYear.$query().delete()
+        })
+
+        it('returns no records', async () => {
+          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+
+          expect(results).to.be.empty()
+        })
+      })
     })
   })
 
