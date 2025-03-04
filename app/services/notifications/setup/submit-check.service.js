@@ -9,6 +9,7 @@ const SessionModel = require('../../../models/session.model.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
+const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
 
 /**
  * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
@@ -26,7 +27,9 @@ async function go(sessionId) {
 
     const recipientsData = await RecipientsService.go(session)
 
-    DetermineRecipientsService.go(recipientsData)
+    const recipients = DetermineRecipientsService.go(recipientsData)
+
+    ReturnsNotificationPresenter.go(recipients, session.determinedReturnsPeriod, session.referenceCode, session.journey)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
