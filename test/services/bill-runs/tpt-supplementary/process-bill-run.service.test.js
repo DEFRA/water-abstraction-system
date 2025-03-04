@@ -17,7 +17,7 @@ const HandleErroredBillRunService = require('../../../../app/services/bill-runs/
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 const ProcessBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
 
-describe('Bill Runs - TpT Supplementary - Process Bill Run service', () => {
+describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') }]
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 

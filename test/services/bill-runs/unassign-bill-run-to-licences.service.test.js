@@ -14,7 +14,7 @@ const LicenceSupplementaryYearModel = require('../../../app/models/licence-suppl
 // Thing under test
 const UnassignBillRunToLicencesService = require('../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
 
-describe('Bill Runs - Unassign Bill Run To Licence service', () => {
+describe('Bill Runs - Unassign Bill Run To Licences service', () => {
   const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'
 
   let licenceSupplementaryYearPatch

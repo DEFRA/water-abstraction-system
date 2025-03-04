@@ -26,7 +26,7 @@ const TransactionModel = require('../../../../app/models/transaction.model.js')
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js')
 
-describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
+describe('Bill Runs - TPT Supplementary - Process Billing Period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')

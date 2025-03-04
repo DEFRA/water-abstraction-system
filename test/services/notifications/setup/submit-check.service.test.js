@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,7 +24,7 @@ describe('Notifications Setup - Submit Check service', () => {
   let recipients
   let session
 
-  before(async () => {
+  beforeEach(async () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
@@ -34,13 +34,20 @@ describe('Notifications Setup - Submit Check service', () => {
       data: {
         journey: 'invitations',
         referenceCode: 'RINV-123',
-        returnsPeriod: 'quarterFour'
+        returnsPeriod: 'quarterFour',
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate: '2025-04-28',
+          endDate: '2023-03-31',
+          summer: 'false',
+          startDate: '2022-04-01'
+        }
       }
     })
 
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(DetermineRecipientsService, 'go').resolves()
+    Sinon.stub(DetermineRecipientsService, 'go').returns([recipients.primaryUser])
     Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
   })
 
@@ -53,5 +60,11 @@ describe('Notifications Setup - Submit Check service', () => {
     await SubmitCheckService.go(session.id)
 
     expect(DetermineRecipientsService.go.calledWith([recipients.primaryUser])).to.be.true()
+  })
+
+  it('should not throw an error', async () => {
+    await SubmitCheckService.go(session.id)
+
+    expect(notifierStub.omfg.called).to.be.false()
   })
 })
