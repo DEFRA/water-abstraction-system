@@ -11,7 +11,7 @@ const DownloadReturnLogService = require('../services/return-logs/download-retur
 const SubmitViewReturnLogService = require('../services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
 
-async function downloadReturnLog(request, h) {
+async function download(request, h) {
   const { query } = request
 
   const version = query.version ? Number(query.version) : 0
@@ -49,7 +49,7 @@ async function submitView(request, h) {
 }
 
 module.exports = {
-  downloadReturnLog,
+  download,
   submitView,
   view
 }
