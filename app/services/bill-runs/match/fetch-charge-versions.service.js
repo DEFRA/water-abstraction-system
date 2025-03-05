@@ -85,7 +85,8 @@ async function _fetch(regionId, billingPeriod, supplementary) {
           LicenceSupplementaryYearModel.query()
             .select(1)
             .whereColumn('licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
-            .whereColumn('licenceSupplementaryYears.financialYearEnd', billingPeriod.endDate.getFullYear())
+            .where('licenceSupplementaryYears.financialYearEnd', billingPeriod.endDate.getFullYear())
+            .whereNull('licenceSupplementaryYears.billRunId')
         )
       } else {
         builder.whereRaw('1=1')

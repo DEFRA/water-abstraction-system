@@ -16,16 +16,17 @@ const CreateEventPresenter = require('../../../../app/presenters/notifications/s
 describe('Notifications Setup - Event presenter', () => {
   let session
   let recipients
+  let testRecipients
 
   beforeEach(async () => {
     recipients = RecipientsFixture.recipients()
+    testRecipients = [...Object.values(recipients)]
 
     session = {
       returnsPeriod: 'quarterFour',
       removeLicences: [],
       journey: 'invitations',
       referenceCode: 'RINV-123',
-      recipients: [...Object.values(recipients)],
       determinedReturnsPeriod: {
         dueDate: new Date(`2025-07-28`),
         endDate: new Date(`2025-06-30`),
@@ -36,16 +37,15 @@ describe('Notifications Setup - Event presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CreateEventPresenter.go(session)
+    const result = CreateEventPresenter.go(session, testRecipients)
+
+    const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
     expect(result).to.equal({
-      licences: [
-        recipients.primaryUser.licence_refs,
-        recipients.returnsAgent.licence_refs,
-        recipients.licenceHolder.licence_refs,
-        recipients.returnsTo.licence_refs,
-        ...recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-      ],
+      licences:
+        `["${recipients.primaryUser.licence_refs}","${recipients.returnsAgent.licence_refs}",` +
+        `"${recipients.licenceHolder.licence_refs}","${recipients.returnsTo.licence_refs}",` +
+        `"${firstMultiple}","${secondMultiple}"]`,
       metadata: {
         name: 'Returns: invitation',
         options: {
@@ -53,10 +53,10 @@ describe('Notifications Setup - Event presenter', () => {
         },
         recipients: 5,
         returnCycle: {
-          dueDate: session.determinedReturnsPeriod.dueDate,
-          endDate: session.determinedReturnsPeriod.endDate,
-          isSummer: 'true',
-          startDate: session.determinedReturnsPeriod.startDate
+          dueDate: '2025-07-28',
+          endDate: '2025-06-30',
+          isSummer: true,
+          startDate: '2025-04-01'
         }
       },
       referenceCode: 'RINV-123',
@@ -66,16 +66,16 @@ describe('Notifications Setup - Event presenter', () => {
   })
 
   describe('the "licences" property', () => {
-    it('correctly return an array of all licence from all recipients', () => {
-      const result = CreateEventPresenter.go(session)
+    it('correctly return a JSON string containing an array of all licences from all recipients', () => {
+      const result = CreateEventPresenter.go(session, testRecipients)
 
-      expect(result.licences).to.equal([
-        recipients.primaryUser.licence_refs,
-        recipients.returnsAgent.licence_refs,
-        recipients.licenceHolder.licence_refs,
-        recipients.returnsTo.licence_refs,
-        ...recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-      ])
+      const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+
+      expect(result.licences).to.equal(
+        `["${recipients.primaryUser.licence_refs}","${recipients.returnsAgent.licence_refs}",` +
+          `"${recipients.licenceHolder.licence_refs}","${recipients.returnsTo.licence_refs}",` +
+          `"${firstMultiple}","${secondMultiple}"]`
+      )
     })
   })
 
@@ -87,7 +87,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = CreateEventPresenter.go(session)
+          const result = CreateEventPresenter.go(session, testRecipients)
 
           expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
         })
@@ -99,7 +99,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = CreateEventPresenter.go(session)
+          const result = CreateEventPresenter.go(session, testRecipients)
 
           expect(result.metadata.options.excludeLicences).to.equal([])
         })
@@ -112,7 +112,7 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the length of recipients', () => {
-        const result = CreateEventPresenter.go(session)
+        const result = CreateEventPresenter.go(session, testRecipients)
 
         expect(result.metadata.recipients).to.equal(5)
       })
@@ -129,13 +129,13 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the return cycle', () => {
-        const result = CreateEventPresenter.go(session)
+        const result = CreateEventPresenter.go(session, testRecipients)
 
         expect(result.metadata.returnCycle).to.equal({
-          dueDate: session.determinedReturnsPeriod.dueDate,
-          endDate: session.determinedReturnsPeriod.endDate,
-          isSummer: 'true',
-          startDate: session.determinedReturnsPeriod.startDate
+          dueDate: '2025-07-28',
+          endDate: '2025-06-30',
+          isSummer: true,
+          startDate: '2025-04-01'
         })
       })
     })
@@ -147,13 +147,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.metadata.name).to.equal('Returns: invitation')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.subtype).to.equal('returnInvitation')
     })
@@ -165,13 +165,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.metadata.name).to.equal('Returns: reminder')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.subtype).to.equal('returnReminder')
     })
@@ -183,13 +183,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.metadata.name).to.equal('')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session)
+      const result = CreateEventPresenter.go(session, testRecipients)
 
       expect(result.subtype).to.equal('')
     })
