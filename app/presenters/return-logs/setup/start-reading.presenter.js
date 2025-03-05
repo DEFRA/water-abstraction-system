@@ -14,10 +14,12 @@
  */
 function go(session) {
   const { id: sessionId, returnReference, startReading } = session
+
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
     pageTitle: 'Enter the start meter reading',
     returnReference,
+    sessionId,
     startReading: startReading ?? null
   }
 }
