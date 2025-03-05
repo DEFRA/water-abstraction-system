@@ -10,31 +10,11 @@ const { expect } = Code
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/return-logs/setup/check.presenter.js')
 
-describe('Return Logs Setup - Check presenter', () => {
+describe.only('Return Logs Setup - Check presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {
-      endDate: '2005-03-31T00:00:00.000Z',
-      id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
-      journey: 'enter-return',
-      meterMake: 'Test meter make',
-      meterProvided: 'yes',
-      meterSerialNumber: '098765',
-      periodEndDay: 31,
-      periodEndMonth: 12,
-      periodStartDay: 1,
-      periodStartMonth: 1,
-      purposes: ['Evaporative Cooling'],
-      receivedDate: '2025-01-31T00:00:00.000Z',
-      reported: 'abstraction-volumes',
-      returnReference: '1234',
-      returnsFrequency: 'month',
-      siteDescription: 'POINT A, TEST SITE DESCRIPTION',
-      startDate: '2004-04-01T00:00:00.000Z',
-      twoPartTariff: false,
-      units: 'megalitres'
-    }
+    session = _sessionData()
   })
 
   describe('when provided with a populated session', () => {
@@ -43,12 +23,15 @@ describe('Return Logs Setup - Check presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
+        displayReadings: false,
+        displayUnits: true,
         links: {
           cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
           meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
           nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
           received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
           reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+          startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
           units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
         },
         meterMake: 'Test meter make',
@@ -68,11 +51,62 @@ describe('Return Logs Setup - Check presenter', () => {
         purposes: 'Evaporative Cooling',
         returnReceivedDate: '31 January 2025',
         reportingFigures: 'Volumes',
-        returnPeriod: '1 April 2004 to 31 March 2005',
+        returnPeriod: '1 April 2023 to 31 March 2024',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+        startReading: undefined,
+        summaryTableData: {
+          headers: [
+            {
+              text: 'Month'
+            },
+            {
+              format: 'numeric',
+              text: 'Megalitres'
+            },
+            {
+              format: 'numeric',
+              text: 'Cubic metres'
+            },
+            {
+              format: 'numeric',
+              text: 'Details'
+            }
+          ],
+          rows: [
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                text: 'Enter monthly volumes'
+              },
+              month: 'April 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            },
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                text: 'Enter monthly volumes'
+              },
+              month: 'May 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            },
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                text: 'Enter monthly volumes'
+              },
+              month: 'June 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            }
+          ]
+        },
         tableTitle: 'Summary of monthly abstraction volumes',
         tariff: 'Standard',
+        totalCubicMetres: '0',
+        totalQuantity: '0',
         units: 'Megalitres'
       })
     })
@@ -93,6 +127,7 @@ describe('Return Logs Setup - Check presenter', () => {
             nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
             received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
             reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+            startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
             units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
           },
           nilReturn: 'Yes',
@@ -107,12 +142,64 @@ describe('Return Logs Setup - Check presenter', () => {
           },
           pageTitle: 'Check details and enter new volumes or readings',
           purposes: 'Evaporative Cooling',
+          returnPeriod: '1 April 2023 to 31 March 2024',
           returnReceivedDate: '31 January 2025',
-          returnPeriod: '1 April 2004 to 31 March 2005',
           returnReference: '1234',
           siteDescription: 'POINT A, TEST SITE DESCRIPTION',
           tariff: 'Standard'
         })
+      })
+    })
+  })
+
+  describe('the "displayReadings" property', () => {
+    describe('when the user has used meter readings', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns "true"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayReadings).to.be.true()
+      })
+    })
+
+    describe('when the user has used volumes', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      it('returns "false"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayReadings).to.be.false()
+      })
+    })
+  })
+
+  describe('the "displayUnits" property', () => {
+    describe('when the unit of measurement used is "cubic-metres"', () => {
+      beforeEach(() => {
+        session.units = 'cubic-metres'
+      })
+
+      it('returns "false"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayUnits).to.be.false()
+      })
+    })
+
+    describe('when the unit of measurement used is not "cubic-metres"', () => {
+      beforeEach(() => {
+        session.units = 'megalitres'
+      })
+
+      it('returns "true"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayUnits).to.be.true()
       })
     })
   })
@@ -275,6 +362,100 @@ describe('Return Logs Setup - Check presenter', () => {
     })
   })
 
+  describe('the "totalCubicMetres" property', () => {
+    beforeEach(() => {
+      session.lines = [
+        {
+          endDate: '2023-04-30T00:00:00.000Z',
+          startDate: '2023-04-01T00:00:00.000Z',
+          quantity: 1000.123456
+        }
+      ]
+    })
+
+    describe('when the unit of measurement is cubic metres', () => {
+      beforeEach(() => {
+        session.units = 'cubic-metres'
+      })
+
+      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalCubicMetres).to.equal('1,000.123')
+      })
+    })
+
+    describe('when the unit of measurement is not cubic metres', () => {
+      beforeEach(() => {
+        session.units = 'megalitres'
+      })
+
+      it('returns the "totalQuantity" converted to cubic metres to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalCubicMetres).to.equal('1,000,123.456')
+      })
+    })
+  })
+
+  describe('the "totalQuantity" property', () => {
+    describe('when the "quantity" of each line is populated', () => {
+      beforeEach(() => {
+        session.lines = [
+          {
+            endDate: '2023-04-30T00:00:00.000Z',
+            startDate: '2023-04-01T00:00:00.000Z',
+            quantity: 10.123567
+          },
+          {
+            endDate: '2023-05-31T00:00:00.000Z',
+            startDate: '2023-05-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-06-30T00:00:00.000Z',
+            startDate: '2023-06-01T00:00:00.000Z',
+            quantity: 1000
+          }
+        ]
+      })
+
+      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalQuantity).to.equal('1,010.124')
+      })
+    })
+
+    describe('when the "quantity" of each line is null', () => {
+      beforeEach(() => {
+        session.lines = [
+          {
+            endDate: '2023-04-30T00:00:00.000Z',
+            startDate: '2023-04-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-05-31T00:00:00.000Z',
+            startDate: '2023-05-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-06-30T00:00:00.000Z',
+            startDate: '2023-06-01T00:00:00.000Z',
+            quantity: null
+          }
+        ]
+      })
+
+      it('returns the "totalQuantity" as 0 formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalQuantity).to.equal('0')
+      })
+    })
+  })
+
   describe('the "units" property', () => {
     describe('when the user has used cubic metres', () => {
       beforeEach(() => {
@@ -325,3 +506,41 @@ describe('Return Logs Setup - Check presenter', () => {
     })
   })
 })
+
+function _sessionData() {
+  return {
+    endDate: '2024-03-31T00:00:00.000Z',
+    id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
+    journey: 'enter-return',
+    lines: [
+      {
+        endDate: '2023-04-30T00:00:00.000Z',
+        startDate: '2023-04-01T00:00:00.000Z'
+      },
+      {
+        endDate: '2023-05-31T00:00:00.000Z',
+        startDate: '2023-05-01T00:00:00.000Z'
+      },
+      {
+        endDate: '2023-06-30T00:00:00.000Z',
+        startDate: '2023-06-01T00:00:00.000Z'
+      }
+    ],
+    meterMake: 'Test meter make',
+    meterProvided: 'yes',
+    meterSerialNumber: '098765',
+    periodEndDay: 31,
+    periodEndMonth: 12,
+    periodStartDay: 1,
+    periodStartMonth: 1,
+    purposes: ['Evaporative Cooling'],
+    receivedDate: '2025-01-31T00:00:00.000Z',
+    reported: 'abstraction-volumes',
+    returnReference: '1234',
+    returnsFrequency: 'month',
+    siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+    startDate: '2023-04-01T00:00:00.000Z',
+    twoPartTariff: false,
+    units: 'megalitres'
+  }
+}
