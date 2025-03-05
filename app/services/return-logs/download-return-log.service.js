@@ -11,8 +11,8 @@ const FetchDownloadReturnLogService = require('./fetch-download-return-log.servi
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
  *
- * @param {string} returnLogId - The UUID of the return
- * @param {string} version - The version number of the return
+ * @param {string} returnLogId - The UUID of the return log to download
+ * @param {number} version - The version number of the return submission to download
  *
  * @returns {Promise<object>} The data for the download return log link (csv string, filename and type)
  */
