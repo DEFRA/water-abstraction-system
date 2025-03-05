@@ -14,7 +14,7 @@ const ViewReturnLogService = require('../services/return-logs/view-return-log.se
 async function download(request, h) {
   const { query } = request
 
-  const version = query.version ? Number(query.version) : 0
+  const version = Number(query.version)
 
   const { data, type, filename } = await DownloadReturnLogService.go(query.id, version)
 
