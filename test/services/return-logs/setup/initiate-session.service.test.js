@@ -164,5 +164,40 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         expect(matchingSession.data.units).to.equal('cubic-metres')
       })
     })
+
+    describe('and meter details are specified', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: null,
+          endDate: new Date('2022-06-01')
+        })
+
+        await ReturnSubmissionHelper.add({
+          returnLogId: returnLog.id,
+          metadata: {
+            type: 'measured',
+            total: null,
+            units: 'm³',
+            meters: [
+              {
+                manufacturer: 'METER_MAKE',
+                serialNumber: 'METER_SERIAL_NUMBER'
+              }
+            ]
+          }
+        })
+      })
+
+      it('includes the meter details', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
+        expect(matchingSession.data.meterserialNumber).to.equal('METER_SERIAL_NUMBER')
+      })
+    })
   })
 })
