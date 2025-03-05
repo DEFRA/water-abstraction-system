@@ -9,13 +9,6 @@ const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = 
 const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
-const UNIT_NAMES = {
-  'cubic-metres': 'm³',
-  litres: 'l',
-  megalitres: 'Ml',
-  gallons: 'gal'
-}
-
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
  *
@@ -24,6 +17,13 @@ const UNIT_NAMES = {
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/check` page
  */
 function go(session) {
+  const UNIT_NAMES = {
+    'cubic-metres': 'm³',
+    litres: 'l',
+    megalitres: 'Ml',
+    gallons: 'gal'
+  }
+
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
   if (session.journey === 'nil-return') {
@@ -32,6 +32,8 @@ function go(session) {
 
   const { lines, meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } =
     session
+  const unitName = UNIT_NAMES[units]
+  const formattedLines = _formatLines(lines, unitName)
   const totalQuantity = _totalQuantity(lines)
 
   return {
@@ -43,9 +45,9 @@ function go(session) {
     meterSerialNumber,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
     startReading,
-    summaryTableData: _summaryTableData(session),
+    summaryTableData: _summaryTableData(formattedLines, session, unitName),
     tableTitle: _tableTitle(reported, returnsFrequency),
-    totalCubicMetres: convertToCubicMetres(totalQuantity, UNIT_NAMES[units]),
+    totalCubicMetres: convertToCubicMetres(totalQuantity, unitName),
     totalQuantity: formatNumber(totalQuantity),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
@@ -92,13 +94,13 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
-function _formatLines(lines, userUnit) {
+function _formatLines(lines, unitName) {
   const formattedLines = lines.map((line) => ({
     quantity: null,
     ...line,
     endDate: new Date(line.endDate),
     startDate: new Date(line.startDate),
-    userUnit
+    unitName
   }))
 
   return formattedLines
@@ -106,14 +108,14 @@ function _formatLines(lines, userUnit) {
 
 function _groupLinesByMonth(formattedLines) {
   const groupedLines = formattedLines.reduce((acc, line) => {
-    const { endDate, quantity, reading, userUnit } = line
+    const { endDate, quantity, reading, unitName } = line
     const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
     if (!acc[key]) {
       acc[key] = {
         endDate,
         quantity: 0,
-        userUnit
+        unitName
       }
     }
     acc[key].quantity += quantity
@@ -156,17 +158,14 @@ function _note(note) {
   }
 }
 
-function _summaryTableData(session) {
-  const { id: sessionId, lines, reported, returnsFrequency, units } = session
+function _summaryTableData(formattedLines, session, unitName) {
+  const { id: sessionId, reported, returnsFrequency } = session
 
   const alwaysDisplayLinkHeader = true
   const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
 
-  const userUnit = UNIT_NAMES[units]
-  const formattedLines = _formatLines(lines, userUnit)
-
   return {
-    headers: generateSummaryTableHeaders(method, returnsFrequency, userUnit, alwaysDisplayLinkHeader),
+    headers: generateSummaryTableHeaders(method, returnsFrequency, unitName, alwaysDisplayLinkHeader),
     rows: _summaryTableRows(formattedLines, method, returnsFrequency, sessionId)
   }
 }
@@ -175,12 +174,12 @@ function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) 
   const groups = returnsFrequency === 'month' ? formattedLines : _groupLinesByMonth(formattedLines)
 
   return groups.map((group) => {
-    const { endDate, quantity, reading, userUnit } = group
+    const { endDate, quantity, reading, unitName } = group
 
     const rowData = {
       link: _linkDetails(endDate, method, returnsFrequency, sessionId),
       month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-      monthlyTotal: convertToCubicMetres(quantity, userUnit),
+      monthlyTotal: convertToCubicMetres(quantity, unitName),
       unitTotal: formatNumber(quantity)
     }
 
