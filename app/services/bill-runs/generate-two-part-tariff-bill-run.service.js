@@ -15,6 +15,7 @@ const HandleErroredBillRunService = require('./handle-errored-bill-run.service.j
 const LegacyRefreshBillRunRequest = require('../../requests/legacy/refresh-bill-run.request.js')
 const ProcessAnnualBillingPeriodService = require('./two-part-tariff/process-billing-period.service.js')
 const ProcessSupplementaryBillingPeriodService = require('./tpt-supplementary/process-billing-period.service.js')
+const UnflagUnbilledSupplementaryLicencesService = require('./unflag-unbilled-supplementary-licences.service.js')
 
 /**
  * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
@@ -93,15 +94,23 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   // this in the UI
   if (!billRunPopulated) {
     await _updateStatus(billRun.id, 'empty')
+  } else {
+    // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
+    // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
+    await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
 
-    return
+    // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
+    // has finished generating the bill run. We need to take this over when we next get the opportunity.
+    await LegacyRefreshBillRunRequest.send(billRun.id)
   }
 
-  // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
-  // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
-
-  await LegacyRefreshBillRunRequest.send(billRun.id)
+  // We unflag any unbilled licences last, just in case any of the other calls error. Should that happen, the bill run
+  // will be flagged as errored and the unassigned from the licences. They can then be processed again. If we get to
+  // here though, we're removing the licence supplementary year record, because we are saying the licence has been
+  // processed and no new bill was needed.
+  if (billRun.batchType === 'two_part_supplementary') {
+    await UnflagUnbilledSupplementaryLicencesService.go(billRun)
+  }
 }
 
 /**

@@ -41,7 +41,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
 
   before(async () => {
     region = RegionHelper.select()
-    billRun = await BillRunHelper.add({ regionId: region.id })
+    billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id })
 
     licence = await LicenceHelper.add({ regionId: region.id })
 
