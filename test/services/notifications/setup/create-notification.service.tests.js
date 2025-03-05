@@ -64,7 +64,7 @@ describe('Notifications Setup - Create notification service', () => {
     })
   })
 
-  describe('when inserting a multiples notifications', () => {
+  describe('when inserting multiple notifications', () => {
     beforeEach(() => {
       notifications = [
         { eventId, metadata: {}, createdAt: timestampForPostgres() },
