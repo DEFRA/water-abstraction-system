@@ -44,8 +44,8 @@ function go(session) {
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
     startReading,
     summaryTableData: _summaryTableData(session),
-    tableTitle: _tableTitle(returnsFrequency, reported),
-    totalCubicMetres: formatNumber(convertToCubicMetres(UNIT_NAMES[units], totalQuantity)),
+    tableTitle: _tableTitle(reported, returnsFrequency),
+    totalCubicMetres: convertToCubicMetres(totalQuantity, UNIT_NAMES[units]),
     totalQuantity: formatNumber(totalQuantity),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
@@ -128,7 +128,7 @@ function _groupLinesByMonth(formattedLines) {
   return Object.values(groupedLines)
 }
 
-function _linkDetails(sessionId, method, returnsFrequency, endDate) {
+function _linkDetails(endDate, method, returnsFrequency, sessionId) {
   const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
   const text = `Enter ${returnRequirementFrequencies[returnsFrequency]} ${linkTextMethod}`
   const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
@@ -137,16 +137,6 @@ function _linkDetails(sessionId, method, returnsFrequency, endDate) {
     href: `/system/return-logs/setup/${sessionId}/${yearMonth}`,
     text
   }
-}
-
-function _monthlyTotal(quantity, returnsFrequency, userUnit) {
-  if (returnsFrequency === 'month' || userUnit === 'm³') {
-    return formatNumber(quantity)
-  }
-
-  const monthlyTotalInCubicMetres = convertToCubicMetres(userUnit, quantity)
-
-  return formatNumber(monthlyTotalInCubicMetres)
 }
 
 function _note(note) {
@@ -177,20 +167,20 @@ function _summaryTableData(session) {
 
   return {
     headers: generateSummaryTableHeaders(method, returnsFrequency, userUnit, alwaysDisplayLinkHeader),
-    rows: _summaryTableRows(method, returnsFrequency, formattedLines, sessionId)
+    rows: _summaryTableRows(formattedLines, method, returnsFrequency, sessionId)
   }
 }
 
-function _summaryTableRows(method, returnsFrequency, formattedLines, sessionId) {
+function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) {
   const groups = returnsFrequency === 'month' ? formattedLines : _groupLinesByMonth(formattedLines)
 
   return groups.map((group) => {
     const { endDate, quantity, reading, userUnit } = group
 
     const rowData = {
-      link: _linkDetails(sessionId, method, returnsFrequency, endDate),
+      link: _linkDetails(endDate, method, returnsFrequency, sessionId),
       month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-      monthlyTotal: _monthlyTotal(quantity, returnsFrequency, userUnit),
+      monthlyTotal: convertToCubicMetres(quantity, userUnit),
       unitTotal: formatNumber(quantity)
     }
 
@@ -202,7 +192,7 @@ function _summaryTableRows(method, returnsFrequency, formattedLines, sessionId) 
   })
 }
 
-function _tableTitle(returnsFrequency, reported) {
+function _tableTitle(reported, returnsFrequency) {
   const frequency = returnRequirementFrequencies[returnsFrequency]
   const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
 

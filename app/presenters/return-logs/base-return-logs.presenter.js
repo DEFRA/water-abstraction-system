@@ -6,18 +6,18 @@ const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../
 /**
  * Converts a quantity from a given unit to cubic metres and formats it
  *
+ * @param {number} quantity - the quantity to be formatted and converted to cubic metres
  * @param {string} units - the unit of the quantity
- * @param {number} quantity - the quantity to be converted
  *
  * @returns {number|null} The converted quantity or null if the quantity is null or undefined
  */
-function convertToCubicMetres(units, quantity) {
+function convertToCubicMetres(quantity, units) {
   if (quantity === null || quantity === undefined) {
     return null
   }
   const convertedQuantity = quantity / returnUnits[units].multiplier
 
-  return convertedQuantity
+  return formatNumber(convertedQuantity)
 }
 
 /**
