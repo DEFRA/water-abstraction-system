@@ -5,6 +5,7 @@
  * @module SubmitStartReadingService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const StartReadingPresenter = require('../../../presenters/return-logs/setup/start-reading.presenter.js')
 const StartReadingValidator = require('../../../validators/return-logs/setup/start-reading.validator.js')
@@ -20,16 +21,18 @@ const StartReadingValidator = require('../../../validators/return-logs/setup/sta
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} If no errors the page data for the start reading page else the validation error details
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
+    GeneralLib.flashNotification(yar)
 
     return {}
   }
