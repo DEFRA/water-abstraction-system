@@ -28,8 +28,8 @@ const INVITATIONS_MESSAGE_REF = {
  *
  * @param {object} notification
  * @param {string} journey
+ * @param {object} notify - the striped response from out notify services
  *
- * @param notify
  * @returns {object}
  */
 function go(notification, journey, notify) {
