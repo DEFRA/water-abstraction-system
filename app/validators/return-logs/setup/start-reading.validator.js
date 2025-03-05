@@ -17,15 +17,16 @@ const Joi = require('joi')
  */
 function go(payload) {
   const errorMessage = 'Enter a start meter reading'
+  const positiveErrorMessage = 'Start meter reading must be a positive number'
 
   const schema = Joi.object({
     startReading: Joi.number().positive().integer().required().messages({
       'any.required': errorMessage,
-      'number.base': errorMessage,
+      'number.base': positiveErrorMessage,
       'number.max': errorMessage,
       'number.unsafe': errorMessage,
-      'number.positive': 'Start meter reading must be a positive number',
-      'number.integer': errorMessage
+      'number.positive': positiveErrorMessage,
+      'number.integer': 'Enter a whole number'
     })
   })
 
