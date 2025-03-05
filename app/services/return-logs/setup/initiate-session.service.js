@@ -44,36 +44,15 @@ async function go(returnLogId) {
 }
 
 function _data(returnLog) {
-  const formattedPurposes = _formatPurposes(returnLog.purposes)
-  const lines = _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
-  const units = _formatUnits(returnLog.units)
-
-  returnLog.beenReceived = returnLog.receivedDate !== null
-  returnLog.lines = lines
-  returnLog.meterProvided = returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no'
-  returnLog.purposes = formattedPurposes
-  returnLog.reported = returnLog.reported === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
-  returnLog.units = units
-
-  return returnLog
-}
-
-function _formatLines(frequency, startDate, endDate) {
-  let lines
-
-  if (frequency === 'day') {
-    lines = daysFromPeriod(startDate, endDate)
+  return {
+    ...returnLog,
+    beenReceived: _formatBeenReceived(returnLog),
+    lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
+    meterProvided: _formatMeterProvided(returnLog),
+    purposes: _formatPurposes(returnLog.purposes),
+    reported: _formatReported(returnLog),
+    units: _formatUnits(returnLog.units)
   }
-
-  if (frequency === 'week') {
-    lines = weeksFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'month') {
-    lines = monthsFromPeriod(startDate, endDate)
-  }
-
-  return lines
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -108,10 +87,40 @@ async function _fetchReturnLog(returnLogId) {
     .where('returnLogs.id', returnLogId)
 }
 
+function _formatBeenReceived(returnLog) {
+  return returnLog.receivedDate !== null
+}
+
+function _formatLines(frequency, startDate, endDate) {
+  let lines
+
+  if (frequency === 'day') {
+    lines = daysFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'week') {
+    lines = weeksFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'month') {
+    lines = monthsFromPeriod(startDate, endDate)
+  }
+
+  return lines
+}
+
+function _formatMeterProvided(returnLog) {
+  return returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no'
+}
+
 function _formatPurposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
+}
+
+function _formatReported(returnLog) {
+  return returnLog.reported === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
 }
 
 // Format units in the form `m³`, `l` etc. to the text expected by the edit return pages, defaulting to cubic metres
