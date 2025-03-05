@@ -21,7 +21,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/download',
     options: {
-      handler: ReturnLogsController.downloadReturnLog
+      handler: ReturnLogsController.download
     }
   }
 ]
