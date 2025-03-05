@@ -11,8 +11,8 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 /**
  * Fetches the matching return log data and associated submission needed for the csv download
  *
- * @param {string} returnLogId - The return log ID
- * @param {number} version - Version number of the submission to download csv
+ * @param {string} returnLogId - The UUID of the return log to fetch for download
+ * @param {number} version - The version number of the submission data to use
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
