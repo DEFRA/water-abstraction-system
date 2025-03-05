@@ -3,16 +3,34 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
 const ScheduledNotificationPresenter = require('../../../../app/presenters/notifications/setup/scheduled-notifications.presenter.js')
 
-describe.only('Notifications Setup - Scheduled Notification Presenter', () => {
-  let notification
+describe('Notifications Setup - Scheduled Notification Presenter', () => {
+  let clock
   let journey
+  let notification
+  let notify
+
+  beforeEach(() => {
+    notify = {
+      id: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
+      status: 201,
+      plaintext: 'My dearest margery',
+      statusText: 'created'
+    }
+
+    clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+  })
+
+  afterEach(() => {
+    clock.restore()
+  })
 
   describe('when the journey is for "invitations"', () => {
     beforeEach(() => {
@@ -26,13 +44,18 @@ describe.only('Notifications Setup - Scheduled Notification Presenter', () => {
 
       describe('and the recipient is a "Primary user"', () => {
         it('correctly transform the "email" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
 
           expect(result).to.equal({
             messageRef: 'returns_invitation_primary_user_email',
             messageType: 'email',
+            notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
+            notifyStatus: 'created',
             personalisation: notification.options.personalisation,
-            recipient: notification.emailAddress
+            plaintext: 'My dearest margery',
+            recipient: notification.emailAddress,
+            sendAfter: '2025-01-15T00:00:00.000Z',
+            status: 'sent'
           })
         })
       })
@@ -45,13 +68,18 @@ describe.only('Notifications Setup - Scheduled Notification Presenter', () => {
         })
 
         it('correctly transform the "email" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
 
           expect(result).to.equal({
             messageRef: 'returns_invitation_returns_agent_email',
             messageType: 'email',
+            notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
+            notifyStatus: 'created',
             personalisation: notification.options.personalisation,
-            recipient: notification.emailAddress
+            recipient: notification.emailAddress,
+            plaintext: 'My dearest margery',
+            sendAfter: '2025-01-15T00:00:00.000Z',
+            status: 'sent'
           })
         })
       })
@@ -64,12 +92,17 @@ describe.only('Notifications Setup - Scheduled Notification Presenter', () => {
 
       describe('and the recipient is a "Licence holder"', () => {
         it('correctly transform the "letter" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
 
           expect(result).to.equal({
             messageRef: 'returns_invitation_licence_holder_letter',
             messageType: 'letter',
-            personalisation: notification.options.personalisation
+            notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
+            notifyStatus: 'created',
+            personalisation: notification.options.personalisation,
+            plaintext: 'My dearest margery',
+            sendAfter: '2025-01-15T00:00:00.000Z',
+            status: 'sent'
           })
         })
       })
@@ -82,14 +115,52 @@ describe.only('Notifications Setup - Scheduled Notification Presenter', () => {
         })
 
         it('correctly transform the "letter" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
 
           expect(result).to.equal({
             messageRef: 'returns_invitation_returns_to_letter',
             messageType: 'letter',
-            personalisation: notification.options.personalisation
+            notifyStatus: 'created',
+            notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
+            personalisation: notification.options.personalisation,
+            plaintext: 'My dearest margery',
+            sendAfter: '2025-01-15T00:00:00.000Z',
+            status: 'sent'
           })
         })
+      })
+    })
+  })
+
+  describe('when the call to notify fails', () => {
+    beforeEach(() => {
+      journey = 'invitations'
+
+      notification = _email()
+
+      notify = {
+        status: 400,
+        message: 'Request failed with status code 400',
+        errors: [
+          {
+            error: 'BadRequestError',
+            message: 'Missing personalisation: periodEndDate'
+          }
+        ]
+      }
+    })
+
+    it('correctly formats the "scheduled_notifications" as an error', () => {
+      const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+
+      expect(result).to.equal({
+        log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: periodEndDate"}]}',
+        messageRef: 'returns_invitation_primary_user_email',
+        messageType: 'email',
+        personalisation: notification.options.personalisation,
+        recipient: notification.emailAddress,
+        sendAfter: '2025-01-15T00:00:00.000Z',
+        status: 'error'
       })
     })
   })
