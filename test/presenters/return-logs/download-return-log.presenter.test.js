@@ -8,9 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
+const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
 
 // Thing under test
 const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
@@ -19,7 +17,7 @@ describe('Download Return Log presenter', () => {
   let returnLog
 
   beforeEach(() => {
-    returnLog = _testReturnLog()
+    testReturnLog = ReturnLogsFixture.returnLog('abstractionVolumes')
   })
 
   describe('the "data" property', () => {
@@ -33,7 +31,7 @@ describe('Download Return Log presenter', () => {
 
     describe('when provided with a returnLog with a returnSubmission.method of other than "abstractionVolumes"', () => {
       beforeEach(() => {
-        returnLog.returnSubmissions[0].method = 'NOT_ABSTRACTION_VOLUMES'
+        testReturnLog = ReturnLogsFixture.returnLog('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('correctly formats the data to a csv string', () => {
