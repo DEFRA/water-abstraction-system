@@ -13,7 +13,7 @@ const ScheduledNotificationModel = require('../../../../app/models/scheduled-not
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CreateNotificationService = require('../../../../app/services/notifications/setup/create-notification.service.js')
+const CreateNotificationsService = require('../../../../app/services/notifications/setup/create-notifications.service.js')
 
 describe('Notifications Setup - Create notification service', () => {
   let eventId
@@ -34,7 +34,7 @@ describe('Notifications Setup - Create notification service', () => {
     })
 
     it('should create a single notification (and only set the required values)', async () => {
-      const result = await CreateNotificationService.go(notifications)
+      const result = await CreateNotificationsService.go(notifications)
 
       const createdResult = await ScheduledNotificationModel.query().findById(result[0].id)
 
@@ -73,7 +73,7 @@ describe('Notifications Setup - Create notification service', () => {
     })
 
     it('should return the saved notifications', async () => {
-      const result = await CreateNotificationService.go(notifications)
+      const result = await CreateNotificationsService.go(notifications)
 
       expect(result).equal([
         {
