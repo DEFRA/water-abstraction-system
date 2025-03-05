@@ -20,7 +20,7 @@ const HEADERS = ['start date', 'reading', 'volume']
 function go(returnLog) {
   const { returnSubmissions } = returnLog
 
-  const selectedReturnSubmission = _selectedReturnSubmission(returnSubmissions)
+  const selectedReturnSubmission = returnSubmissions[0]
 
   const csvData = _transformToCsv(selectedReturnSubmission)
   const filename = _formatFileName(returnLog)
@@ -52,13 +52,6 @@ function _transformToCsv(selectedReturnSubmission) {
   })
 }
 
-function _selectedReturnSubmission(returnSubmissions) {
-  if (!returnSubmissions) {
-    return null
-  }
-
-  return returnSubmissions[0]
-}
 module.exports = {
   go
 }
