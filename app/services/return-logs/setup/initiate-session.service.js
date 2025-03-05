@@ -49,8 +49,10 @@ function _data(returnLog) {
   const units = _formatUnits(returnLog.units)
 
   returnLog.beenReceived = returnLog.receivedDate !== null
-  returnLog.purposes = formattedPurposes
   returnLog.lines = lines
+  returnLog.meterProvided = returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no'
+  returnLog.purposes = formattedPurposes
+  returnLog.reported = returnLog.reported === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
   returnLog.units = units
 
   return returnLog
@@ -96,7 +98,10 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
       ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
-      ref('returnSubmissions.metadata:units').as('units')
+      ref('returnSubmissions.metadata:units').as('units'),
+      ref('returnSubmissions.metadata:method').as('reported'),
+      ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
+      ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber')
     )
     .innerJoinRelated('licence')
     .innerJoinRelated('returnSubmissions')
