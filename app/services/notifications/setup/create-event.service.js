@@ -6,6 +6,7 @@
  */
 
 const EventModel = require('../../../../app/models/event.model.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Create a 'returnInvitation' or 'returnReminder' notification event
@@ -42,6 +43,8 @@ async function go(event) {
 async function _createEvent(event) {
   return EventModel.query().insert({
     type: 'notification',
+    createdAt: timestampForPostgres(),
+    updatedAt: timestampForPostgres(),
     ...event
   })
 }
