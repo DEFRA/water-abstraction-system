@@ -35,7 +35,7 @@ async function go(billRun, billingPeriod, billingAccounts) {
   }
 
   // We set the batch size and number of billing accounts here rather than determine them for every iteration of the
-  // loop. It's a very minor node towards performance.
+  // loop. It's a very minor nod towards performance.
   const batchSize = BillingConfig.annual.batchSize
   const billingAccountsCount = billingAccounts.length
 

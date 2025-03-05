@@ -14,16 +14,18 @@ const { setTimeout } = require('timers/promises')
 // Things we need to stub
 const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
+const UnassignBillRunToLicencesService = require('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
 
 // Thing under test
 const SubmitCancelBillBunService = require('../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 
-describe('Bill Runs - Submit Cancel Bill Run service', () => {
+describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
 
   let cancelBillRunStub
   let deleteBillRunStub
   let deleteDoneFake
+  let unassignBillRunStub
 
   beforeEach(async () => {
     cancelBillRunStub = Sinon.stub(CancelBillRunService, 'go')
@@ -32,6 +34,8 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       await setTimeout(500)
       deleteDoneFake()
     })
+
+    unassignBillRunStub = Sinon.stub(UnassignBillRunToLicencesService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -44,6 +48,12 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
         const billRun = { id: billRunId, externalId: '917aaad6-1e7b-4848-8713-1fe1d9fc1e30', status: 'cancel' }
 
         cancelBillRunStub.resolves(billRun)
+      })
+
+      it('unassigns the bill run from those licences with supplementary year records', async () => {
+        await SubmitCancelBillBunService.go(billRunId)
+
+        expect(unassignBillRunStub.called).to.be.true()
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
@@ -69,6 +79,12 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
     describe('and the CancelBillRunService fails', () => {
       beforeEach(() => {
         cancelBillRunStub.rejects()
+      })
+
+      it('does not unassign the bill run from those licences with supplementary year records', async () => {
+        await expect(SubmitCancelBillBunService.go(billRunId)).to.reject()
+
+        expect(unassignBillRunStub.called).to.equal(false)
       })
 
       it('does not delete the bill run and throws an error', async () => {

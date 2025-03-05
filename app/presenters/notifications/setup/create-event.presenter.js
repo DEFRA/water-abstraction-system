@@ -5,17 +5,19 @@
  * @module CreateEventPresenter
  */
 
+const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
  *
  * @param {SessionModel} session
+ * @param {object[]} recipients
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
-  const { referenceCode, recipients, determinedReturnsPeriod, journey, removeLicences = [] } = session
+function go(session, recipients) {
+  const { referenceCode, determinedReturnsPeriod, journey, removeLicences = [] } = session
 
   return {
     licences: _licences(recipients),
@@ -38,12 +40,16 @@ function go(session) {
  * `water.events.licences`. It is not clear where theses are used. But to be consistent we follow the established
  * pattern.
  *
+ * These licences are stored as 'jsonb' so we need to stringify the array to match the schema.
+ *
  * @private
  */
 function _licences(recipients) {
-  return recipients.flatMap((recipient) => {
+  const formattedRecipients = recipients.flatMap((recipient) => {
     return transformStringOfLicencesToArray(recipient.licence_refs)
   })
+
+  return JSON.stringify(formattedRecipients)
 }
 
 /**
@@ -67,10 +73,10 @@ function _name(journey) {
 
 function _returnCycle(returnsPeriod) {
   return {
-    dueDate: returnsPeriod.dueDate,
-    endDate: returnsPeriod.endDate,
-    isSummer: returnsPeriod.summer,
-    startDate: returnsPeriod.startDate
+    dueDate: formatDateObjectToISO(new Date(returnsPeriod.dueDate)),
+    endDate: formatDateObjectToISO(new Date(returnsPeriod.endDate)),
+    isSummer: returnsPeriod.summer === 'true',
+    startDate: formatDateObjectToISO(new Date(returnsPeriod.startDate))
   }
 }
 
