@@ -13,6 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
+const CreateEventService = require('../../../../app/services/notifications/setup/create-event.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 
@@ -23,12 +24,15 @@ describe('Notifications Setup - Submit Check service', () => {
   let notifierStub
   let recipients
   let session
+  let testRecipients
 
   beforeEach(async () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
     recipients = RecipientsFixture.recipients()
+
+    testRecipients = [recipients.primaryUser]
 
     session = await SessionHelper.add({
       data: {
@@ -47,8 +51,9 @@ describe('Notifications Setup - Submit Check service', () => {
 
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(DetermineRecipientsService, 'go').returns([recipients.primaryUser])
-    Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(CreateEventService, 'go').resolves()
+    Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
+    Sinon.stub(RecipientsService, 'go').resolves(testRecipients)
   })
 
   afterEach(() => {
@@ -59,7 +64,33 @@ describe('Notifications Setup - Submit Check service', () => {
   it('correctly triggers the "DetermineRecipientsService"', async () => {
     await SubmitCheckService.go(session.id)
 
-    expect(DetermineRecipientsService.go.calledWith([recipients.primaryUser])).to.be.true()
+    expect(DetermineRecipientsService.go.calledWith(testRecipients)).to.be.true()
+  })
+
+  it('correctly triggers the "CreateEventService"', async () => {
+    await SubmitCheckService.go(session.id)
+
+    const expected = {
+      licences: `["${testRecipients[0].licence_refs}"]`,
+      metadata: {
+        name: 'Returns: invitation',
+        options: {
+          excludeLicences: []
+        },
+        recipients: 1,
+        returnCycle: {
+          dueDate: '2025-04-28',
+          endDate: '2023-03-31',
+          isSummer: false,
+          startDate: '2022-04-01'
+        }
+      },
+      referenceCode: 'RINV-123',
+      status: 'started',
+      subtype: 'returnInvitation'
+    }
+
+    expect(CreateEventService.go.calledWith(expected)).to.be.true()
   })
 
   it('should not throw an error', async () => {
