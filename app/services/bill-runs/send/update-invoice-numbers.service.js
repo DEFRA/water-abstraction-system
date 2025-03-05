@@ -30,7 +30,7 @@ async function go(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 
-    const { id: billRunId, externalId } = billRun
+    const { id: billRunId, batchType, externalId } = billRun
 
     await ChargingModuleSendBillRunRequest.send(externalId)
 
@@ -40,7 +40,7 @@ async function go(billRun) {
 
     await _updateBillRun(billRunId, externalBillRun)
 
-    if (billRun.batchType === 'supplementary') {
+    if (batchType === 'supplementary' || batchType === 'two_part_supplementary') {
       await UnflagBilledSupplementaryLicencesService.go(billRun)
     }
 

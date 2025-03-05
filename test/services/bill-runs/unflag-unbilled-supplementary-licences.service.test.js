@@ -8,7 +8,6 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -135,19 +134,16 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
       // denotes if a licence is flagged. This means for testing, we don't have to create the licence record as well.
 
       tptSupplementary.licenceNotInBillRunSupYear = await LicenceSupplementaryYearHelper.add({
-        licenceId: generateUUID(),
         financialYearEnd: billRun.toFinancialYearEnding
       })
 
       tptSupplementary.licenceNotBilledInBillRunSupYear = await LicenceSupplementaryYearHelper.add({
         billRunId: billRun.id,
-        licenceId: generateUUID(),
         financialYearEnd: billRun.toFinancialYearEnding
       })
 
       tptSupplementary.licenceNotBilledInBillRunAndWorkflowSupYear = await LicenceSupplementaryYearHelper.add({
         billRunId: billRun.id,
-        licenceId: generateUUID(),
         financialYearEnd: billRun.toFinancialYearEnding
       })
       tptSupplementary.workflow = await WorkflowHelper.add({
@@ -165,7 +161,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
       })
 
       tptSupplementary.licenceBilledInBillRunSupYear = await LicenceSupplementaryYearHelper.add({
-        licenceId: generateUUID(),
+        billRunId: billRun.id,
         financialYearEnd: billRun.toFinancialYearEnding
       })
       tptSupplementary.bill = await BillHelper.add({ billRunId: billRun.id })
@@ -174,8 +170,6 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
         licenceId: tptSupplementary.licenceBilledInBillRunSupYear.licenceId
       })
 
-      // We have to instantiate the bill run createdAt date last to ensure it is _after_ the updatedAt dates on the
-      // licences
       billRun.batchType = 'two_part_supplementary'
       billRun.createdAt = new Date()
     })
