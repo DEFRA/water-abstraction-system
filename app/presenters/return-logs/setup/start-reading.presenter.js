@@ -16,12 +16,22 @@ function go(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: _backLink(session),
     pageTitle: 'Enter the start meter reading',
     returnReference,
     sessionId,
     startReading: startReading ?? null
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/reported`
 }
 
 module.exports = {
