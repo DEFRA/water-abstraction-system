@@ -25,7 +25,9 @@ const INVITATIONS_MESSAGE_REF = {
  * - 'notification_type' is null
  * - 'status_checks' is incremented every time the status is checked with notify (It is not used anywhere else).
  *
- * However, there is a colum 'next_status_check' which is used to trigger a status update check with notify.
+ * However, there is a colum 'next_status_check' which is used to trigger a status update check with notify, this is
+ * defaulted to null by the database.
+ *
  * ```sql
  * AND (next_status_check IS NULL OR next_status_check<=CURRENT_TIMESTAMP)
  * ```
