@@ -51,7 +51,8 @@ describe('Return Logs Setup - Submit Reported service', () => {
           const result = await SubmitReportedService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            checkPageVisited: undefined
+            checkPageVisited: undefined,
+            reported: 'meter-readings'
           })
         })
       })
@@ -65,7 +66,8 @@ describe('Return Logs Setup - Submit Reported service', () => {
           const result = await SubmitReportedService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            checkPageVisited: true
+            checkPageVisited: true,
+            reported: 'meter-readings'
           })
         })
 
