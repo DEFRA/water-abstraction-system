@@ -18,8 +18,8 @@ const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
-const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
 const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
+const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
 const ProcessSupplementaryTransactionsService = require('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
@@ -37,7 +37,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
   let billRun
   let billingAccount
   let chargingModuleCreateTransactionRequestStub
-  let fetchPreviousTransactionsStub
   let licence
   let region
   let transactionInsertStub
@@ -48,7 +47,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    fetchPreviousTransactionsStub = Sinon.stub(FetchPreviousTransactionsService, 'go')
     chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
 
     billInsertStub = Sinon.stub()
@@ -58,6 +56,8 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     Sinon.stub(BillModel, 'query').returns({ insert: billInsertStub })
     Sinon.stub(BillLicenceModel, 'query').returns({ insert: billLicenceInsertStub })
     Sinon.stub(TransactionModel, 'query').returns({ insert: transactionInsertStub })
+
+    Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
   })
 
   afterEach(() => {
@@ -75,13 +75,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('and there are billing accounts to process', () => {
       describe('and no previous billed transactions', () => {
-        beforeEach(() => {
-          // NOTE: Called by ProcessSupplementaryTransactions when checking if any previous billed transactions need to
-          // be considered/processed. Stubbing FetchPreviousTransactionsService means ProcessSupplementaryTransactions
-          // will just return what we passed in.
-          fetchPreviousTransactionsStub.resolves([])
-        })
-
         describe('and the billable volume is greater than 0', () => {
           beforeEach(async () => {
             // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
@@ -229,11 +222,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        // NOTE: Called by ProcessSupplementaryTransactions when checking if any previous billed transactions need to
-        // be considered/processed. Stubbing FetchPreviousTransactionsService means ProcessSupplementaryTransactions
-        // will just return what we passed in, which is all we need make the engine attempt to get the charge from the
-        // Charging Module API.
-        fetchPreviousTransactionsStub.resolves([])
         chargingModuleCreateTransactionRequestStub.rejects()
       })
 
