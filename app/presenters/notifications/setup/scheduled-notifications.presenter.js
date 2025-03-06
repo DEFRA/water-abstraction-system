@@ -75,8 +75,8 @@ function _messageRef(journey, templateId) {
  *
  * Notify returns a 'statusText' of 'created' which is only used in the legacy code for a successful notify request.
  *
- * Notify does provide 'statusText' with responses like 'BAD REQUEST'. But the legacy code does not use this. So we
- * follow the existing pattern.
+ * Notify does provide 'statusText' when an error occurs but the legacy code does not use this. So we
+ * follow the existing pattern (an error 'statusText' would be something like 'BAD REQUEST').
  *
  * @private
  */
@@ -112,6 +112,10 @@ function _personalisation(notification) {
  * ```javascript
  *  WHERE send_after>(CURRENT_TIMESTAMP - interval '1 week')
  * ```
+ *
+ * The legacy code has conflicting use case for this column:
+ * - it has the concept of checking the next time to send (if this is null it will attempt to send)
+ * - it also says this column is used for when a message was sent
  *
  * @private
  */
