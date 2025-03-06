@@ -45,7 +45,9 @@
         id: "start-reading",
         name: "startReading",
         value: startReading,
-        errorMessage: error.startReadingInputFormElement
+        errorMessage: {
+            text: error.text
+          } if error.text
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
