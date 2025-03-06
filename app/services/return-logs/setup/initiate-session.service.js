@@ -40,6 +40,8 @@ async function go(returnLogId) {
 
   const data = _data(returnLog)
 
+  delete data.nilReturn
+
   return SessionModel.query().insert({ data }).returning('id')
 }
 
@@ -47,6 +49,7 @@ function _data(returnLog) {
   return {
     ...returnLog,
     beenReceived: _formatBeenReceived(returnLog),
+    journey: _formatJourney(returnLog.nilReturn),
     lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
     meterProvided: _formatMeterProvided(returnLog),
     purposes: _formatPurposes(returnLog.purposes),
@@ -77,6 +80,7 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
       ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
+      'returnSubmissions.nilReturn',
       ref('returnSubmissions.metadata:units').as('units'),
       ref('returnSubmissions.metadata:method').as('reported'),
       ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
@@ -89,6 +93,10 @@ async function _fetchReturnLog(returnLogId) {
 
 function _formatBeenReceived(returnLog) {
   return returnLog.receivedDate !== null
+}
+
+function _formatJourney(nilReturn) {
+  return nilReturn ? 'nil-return' : 'enter-return'
 }
 
 function _formatLines(frequency, startDate, endDate) {
