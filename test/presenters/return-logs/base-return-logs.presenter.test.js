@@ -229,6 +229,17 @@ describe('Base Return Logs presenter', () => {
 
         expect(result).to.not.include({ text: 'Details', format: 'numeric' })
       })
+
+      it('is present when the frequency is month and "alwaysDisplayLinkHeader" is true', () => {
+        const result = BaseReturnLogsPresenter.generateSummaryTableHeaders(
+          'abstractionVolumes',
+          'month',
+          unitNames.CUBIC_METRES,
+          true
+        )
+
+        expect(result).to.include({ text: 'Details', format: 'numeric' })
+      })
     })
   })
 
