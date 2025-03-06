@@ -28,13 +28,18 @@ const StartReadingValidator = require('../../../validators/return-logs/setup/sta
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session)
 
   if (!validationResult) {
     await _save(session, payload)
-    GeneralLib.flashNotification(yar)
 
-    return {}
+    if (session.checkPageVisited) {
+      GeneralLib.flashNotification(yar)
+    }
+
+    return {
+      checkPageVisited: session.checkPageVisited
+    }
   }
 
   session.startReading = payload.startReading
@@ -53,8 +58,8 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = StartReadingValidator.go(payload)
+function _validate(payload, session) {
+  const validation = StartReadingValidator.go(payload, session.lines)
 
   if (!validation.error) {
     return null
