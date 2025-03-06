@@ -68,6 +68,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           beenReceived: false,
           dueDate: '2023-04-28T00:00:00.000Z',
           endDate: '2022-06-01T00:00:00.000Z',
+          journey: 'enter-return',
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
           lines: [
@@ -204,6 +205,27 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         expect(matchingSession.data.meterSerialNumber).to.equal('METER_SERIAL_NUMBER')
         expect(matchingSession.data.meterProvided).to.equal('yes')
         expect(matchingSession.reported).to.equal('meter-readings')
+      })
+    })
+
+    describe('and it is a nil return', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: null,
+          endDate: new Date('2022-06-01')
+        })
+
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, nilReturn: true })
+      })
+
+      it('sets the journey as expected', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.journey).to.equal('nil-return')
       })
     })
   })
