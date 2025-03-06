@@ -13,6 +13,76 @@ const BaseReturnLogsPresenter = require('../../../app/presenters/return-logs/bas
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
 describe('Base Return Logs presenter', () => {
+  describe('#convertToCubicMetres()', () => {
+    let quantity
+    let units
+
+    describe('when the quantity is null or undefined', () => {
+      before(() => {
+        quantity = null
+        units = 'm³'
+      })
+
+      it('returns null', () => {
+        const result = BaseReturnLogsPresenter.convertToCubicMetres(quantity, units)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the quantity is in cubic metres', () => {
+      before(() => {
+        quantity = 1000
+        units = 'm³'
+      })
+
+      it('returns the same quantity formatted as a string', () => {
+        const result = BaseReturnLogsPresenter.convertToCubicMetres(quantity, units)
+
+        expect(result).to.equal('1,000')
+      })
+    })
+
+    describe('when the quantity is in litres', () => {
+      before(() => {
+        quantity = 1000
+        units = 'l'
+      })
+
+      it('returns the quantity converted to cubic metres formatted as a string', () => {
+        const result = BaseReturnLogsPresenter.convertToCubicMetres(quantity, units)
+
+        expect(result).to.equal('1')
+      })
+    })
+
+    describe('when the quantity is in megalitres', () => {
+      before(() => {
+        quantity = 1000
+        units = 'Ml'
+      })
+
+      it('returns the quantity converted to cubic metres formatted as a string', () => {
+        const result = BaseReturnLogsPresenter.convertToCubicMetres(quantity, units)
+
+        expect(result).to.equal('1,000,000')
+      })
+    })
+
+    describe('when the quantity is in gallons', () => {
+      before(() => {
+        quantity = 1000
+        units = 'gal'
+      })
+
+      it('returns the quantity converted to cubic metres formatted as a string to 3 decimal places', () => {
+        const result = BaseReturnLogsPresenter.convertToCubicMetres(quantity, units)
+
+        expect(result).to.equal('4.546')
+      })
+    })
+  })
+
   describe('#formatMeterDetails()', () => {
     const testMeter = {
       manufacturer: 'METER_MAKE',
