@@ -30,16 +30,26 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { lines, meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } =
-    session
+  const {
+    lines,
+    meter10TimesDisplay,
+    meterMake,
+    meterProvided,
+    meterSerialNumber,
+    reported,
+    returnsFrequency,
+    startReading,
+    units
+  } = session
   const unitName = UNIT_NAMES[units]
-  const formattedLines = _formatLines(lines, reported, startReading, unitName)
+  const formattedLines = _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName)
   const totalQuantity = _totalQuantity(formattedLines)
 
   return {
     ...alwaysRequiredPageData,
     displayReadings: reported === 'meter-readings',
     displayUnits: units !== 'cubic-metres',
+    meter10TimesDisplay,
     meterMake,
     meterProvided,
     meterSerialNumber,
@@ -93,7 +103,7 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
-function _formatLines(lines, reported, startReading, unitName) {
+function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName) {
   const formattedLines = []
   let previousReading = startReading ?? 0
 
@@ -110,7 +120,9 @@ function _formatLines(lines, reported, startReading, unitName) {
       formattedLine.reading = line.reading ?? null
 
       if (line.reading) {
-        formattedLine.quantity = line.reading - previousReading
+        const multiplier = meter10TimesDisplay === 'yes' ? 10 : 1
+
+        formattedLine.quantity = (line.reading - previousReading) * multiplier
         previousReading = line.reading
       } else {
         formattedLine.quantity = null

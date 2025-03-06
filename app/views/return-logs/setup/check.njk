@@ -82,6 +82,9 @@
   {% set meterDetails %}
     {% if meterProvided === 'yes' %}
       <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
+      {% if meter10TimesDisplay === 'yes' %}
+        <div>Has x10 display</div>
+      {% endif %}
     {% else %}
       <div>Not provided</div>
     {% endif %}
