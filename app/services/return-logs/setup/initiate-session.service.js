@@ -38,9 +38,8 @@ const UNITS = {
 async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
-  const data = _data(returnLog)
-
-  delete data.nilReturn
+  // We use destructuring to discard things we've fetched that are needed to format data but not needed in the session
+  const { method, nilReturn, ...data } = _data(returnLog)
 
   return SessionModel.query().insert({ data }).returning('id')
 }
@@ -48,12 +47,12 @@ async function go(returnLogId) {
 function _data(returnLog) {
   return {
     ...returnLog,
-    beenReceived: _formatBeenReceived(returnLog),
+    beenReceived: _formatBeenReceived(returnLog.receivedDate),
     journey: _formatJourney(returnLog.nilReturn),
     lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
-    meterProvided: _formatMeterProvided(returnLog),
+    meterProvided: _formatMeterProvided(returnLog.meterMake, returnLog.meterSerialNumber),
     purposes: _formatPurposes(returnLog.purposes),
-    reported: _formatReported(returnLog),
+    reported: _formatReported(returnLog.method),
     units: _formatUnits(returnLog.units)
   }
 }
@@ -82,7 +81,7 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
       'returnSubmissions.nilReturn',
       ref('returnSubmissions.metadata:units').as('units'),
-      ref('returnSubmissions.metadata:method').as('reported'),
+      ref('returnSubmissions.metadata:method').as('method'),
       ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
       ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber')
     )
@@ -91,8 +90,8 @@ async function _fetchReturnLog(returnLogId) {
     .where('returnLogs.id', returnLogId)
 }
 
-function _formatBeenReceived(returnLog) {
-  return returnLog.receivedDate !== null
+function _formatBeenReceived(receivedDate) {
+  return receivedDate !== null
 }
 
 function _formatJourney(nilReturn) {
@@ -117,8 +116,8 @@ function _formatLines(frequency, startDate, endDate) {
   return lines
 }
 
-function _formatMeterProvided(returnLog) {
-  return returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no'
+function _formatMeterProvided(meterMake, meterSerialNumber) {
+  return meterMake && meterSerialNumber ? 'yes' : 'no'
 }
 
 function _formatPurposes(purposes) {
@@ -127,8 +126,8 @@ function _formatPurposes(purposes) {
   })
 }
 
-function _formatReported(returnLog) {
-  return returnLog.reported === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
+function _formatReported(method) {
+  return method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
 }
 
 // Format units in the form `m³`, `l` etc. to the text expected by the edit return pages, defaulting to cubic metres
