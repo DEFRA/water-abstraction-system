@@ -1051,7 +1051,7 @@ describe('Return Logs - Setup - Controller', () => {
               Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meter-readings' })
             })
 
-            it('redirects to the "units" page', async () => {
+            it('redirects to the "start reading" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
               expect(response.statusCode).to.equal(302)
