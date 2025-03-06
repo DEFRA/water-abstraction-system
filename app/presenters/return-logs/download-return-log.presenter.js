@@ -22,8 +22,8 @@ function go(returnLog) {
 
   const selectedReturnSubmission = returnSubmissions[0]
 
-  const csvData = _transformToCsv(selectedReturnSubmission)
-  const filename = _formatFileName(returnLog)
+  const csvData = _csvData(selectedReturnSubmission)
+  const filename = _fileName(returnLog)
 
   return {
     data: [HEADERS + '\n', ...csvData].join(''),
@@ -31,14 +31,14 @@ function go(returnLog) {
   }
 }
 
-function _formatFileName(returnLog) {
+function _fileName(returnLog) {
   const { returnReference, startDate, endDate, returnSubmissions } = returnLog
   const version = returnSubmissions[0].version
 
   return `${returnReference}_${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}_v${version}.csv`
 }
 
-function _transformToCsv(selectedReturnSubmission) {
+function _csvData(selectedReturnSubmission) {
   const displayReadings = selectedReturnSubmission?.$method() !== 'abstractionVolumes'
 
   const { returnSubmissionLines } = selectedReturnSubmission
