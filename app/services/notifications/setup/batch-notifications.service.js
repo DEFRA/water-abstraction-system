@@ -31,7 +31,7 @@ const ReturnsNotificationPresenter = require('../../../presenters/notifications/
  * @param {string} referenceCode
  * @param {string} journey
  *
- * @returns {object} - return the amount of sent and errored notifications
+ * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey) {
   const notifications = ReturnsNotificationPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey)
