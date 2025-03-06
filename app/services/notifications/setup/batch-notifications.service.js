@@ -15,7 +15,6 @@ const CREATED = 201
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
  *
  * This service needs to perform the following actions on a recipient:
- 
  * - convert the recipients into notifications
  * - send the notifications to Notify
  * - save the notifications to `water.scheduled_notifications`
@@ -98,7 +97,7 @@ function _errorCount(notifications) {
   const erroredNotifications = notifications.filter((notification) => {
     return notification.value.status !== CREATED
   })
-  
+
   return erroredNotifications.length
 }
 
