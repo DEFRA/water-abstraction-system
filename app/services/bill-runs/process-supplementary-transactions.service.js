@@ -5,7 +5,6 @@
  * @module ProcessSupplementaryTransactionsService
  */
 
-const FetchPreviousTransactionsService = require('./fetch-previous-transactions.service.js')
 const { transactionsMatch } = require('../../lib/general.lib.js')
 const ReverseTransactionsService = require('./reverse-supplementary-transactions.service.js')
 
@@ -26,24 +25,14 @@ const ReverseTransactionsService = require('./reverse-supplementary-transactions
  * Any generated transactions and reversed debits (now credits) that didn't match are returned as the transactions to be
  * sent to the Charging Module API, and included in the bill.
  *
+ * @param {object[]} previousTransactions - The previously billed transactions for this licence
  * @param {object[]} generatedTransactions - The generated transactions for the bill licence being processed
  * @param {string} billLicenceId - The UUID that will be used for the bill licence we are processing transactions for
- * @param {string} billingAccountId - The UUID for the billing account we are processing transactions for and for which
- * we need to fetch previous transactions
- * @param {string} licenceId - The UUID for the licence we are processing transactions for and  and for which we need to
- * fetch previous transactions
- * @param {number} financialYearEnding - Which financial year to look for previous transactions in
  *
  * @returns {Promise<object[]>} An array of the remaining generated transactions and reversed debits from previous
  * transactions (ie. those which were not cancelled out when the generated and reversed were compared)
  */
-async function go(generatedTransactions, billLicenceId, billingAccountId, licenceId, financialYearEnding) {
-  const previousTransactions = await FetchPreviousTransactionsService.go(
-    billingAccountId,
-    licenceId,
-    financialYearEnding
-  )
-
+async function go(previousTransactions, generatedTransactions, billLicenceId) {
   if (previousTransactions.length === 0) {
     return generatedTransactions
   }

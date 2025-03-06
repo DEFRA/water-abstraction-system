@@ -3,26 +3,15 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
-
-// Things we need to stub
-const FetchPreviousTransactionsService = require('../../../app/services/bill-runs/fetch-previous-transactions.service.js')
 
 // Thing under test
 const ProcessSupplementaryTransactionsService = require('../../../app/services/bill-runs/process-supplementary-transactions.service.js')
 
 describe('Bill Runs - Process Supplementary Transactions service', () => {
-  const billingAccountId = 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f'
   const billLicenceId = '9d587a65-aa00-4be6-969e-5bbb9fc6c885'
-  const financialYearEnding = 2023
-  const licenceId = '9d587a65-aa00-4be6-969e-5bbb9fc6c885'
-
-  afterEach(() => {
-    Sinon.restore()
-  })
 
   describe('when the bill, licence and period', () => {
     let generatedTransactions
@@ -45,17 +34,13 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               _previousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
               _previousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2')
             ]
-
-            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the unmatched generated transactions', async () => {
             const result = await ProcessSupplementaryTransactionsService.go(
+              previousTransactions,
               generatedTransactions,
-              billLicenceId,
-              billingAccountId,
-              licenceId,
-              financialYearEnding
+              billLicenceId
             )
 
             expect(result).to.have.length(1)
@@ -70,17 +55,13 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               _previousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2'),
               _previousTransaction('6.12.3', 100, 'I_WILL_BE_REMOVED_3')
             ]
-
-            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns no transactions', async () => {
             const result = await ProcessSupplementaryTransactionsService.go(
+              previousTransactions,
               generatedTransactions,
-              billLicenceId,
-              billingAccountId,
-              licenceId,
-              financialYearEnding
+              billLicenceId
             )
 
             expect(result).to.be.empty()
@@ -93,18 +74,10 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               _previousTransaction('4.10.1', 365, 'I_WILL_NOT_BE_REMOVED_1'),
               _previousTransaction('5.11.2', 265, 'I_WILL_NOT_BE_REMOVED_2')
             ]
-
-            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns only the previous transactions', async () => {
-            const result = await ProcessSupplementaryTransactionsService.go(
-              [],
-              billLicenceId,
-              billingAccountId,
-              licenceId,
-              financialYearEnding
-            )
+            const result = await ProcessSupplementaryTransactionsService.go(previousTransactions, [], billLicenceId)
 
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_1'])
@@ -119,17 +92,13 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               _previousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2'),
               _previousTransaction('9.9.9', 180, 'I_WILL_NOT_BE_REMOVED')
             ]
-
-            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the unmatched generated transactions and previous transactions (reversed)', async () => {
             const result = await ProcessSupplementaryTransactionsService.go(
+              previousTransactions,
               generatedTransactions,
-              billLicenceId,
-              billingAccountId,
-              licenceId,
-              financialYearEnding
+              billLicenceId
             )
 
             expect(result).to.have.length(2)
@@ -142,18 +111,8 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
     })
 
     describe('do not match to transactions on a previous bill run', () => {
-      beforeEach(() => {
-        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
-      })
-
       it('returns the generated transactions unchanged', async () => {
-        const result = await ProcessSupplementaryTransactionsService.go(
-          generatedTransactions,
-          billLicenceId,
-          billingAccountId,
-          licenceId,
-          financialYearEnding
-        )
+        const result = await ProcessSupplementaryTransactionsService.go([], generatedTransactions, billLicenceId)
 
         expect(result).to.have.length(3)
         expect(result[0].purposes).to.equal('GENERATED_TRANSACTION_1')
