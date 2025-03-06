@@ -5,11 +5,11 @@
  * @module BatchNotificationsService
  */
 
-const CREATED = 201
-
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
+
+const CREATED = 201
 
 /**
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
