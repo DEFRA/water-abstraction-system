@@ -61,6 +61,7 @@ describe('Return Logs Setup - Check service', () => {
           reported: `/system/return-logs/setup/${session.id}/reported`,
           units: `/system/return-logs/setup/${session.id}/units`
         },
+        meter10TimesDisplay: undefined,
         meterMake: undefined,
         meterProvided: 'no',
         meterSerialNumber: undefined,
