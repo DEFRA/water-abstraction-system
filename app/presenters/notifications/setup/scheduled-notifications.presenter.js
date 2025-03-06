@@ -18,6 +18,16 @@ const INVITATIONS_MESSAGE_REF = {
 /**
  * Formats a notification into a 'water.scheduled_notifications'
  *
+ * > The legacy code has some columns that are not used for returns notifications:
+ * - 'job_id' is null
+ * - 'notification_type' is null
+ * - 'status_checks' is incremented every time the status is checked with notify (It is not used anywhere else).
+ *
+ * However, there is a colum 'next_status_check' which is used to trigger a status update check with notify.
+ * ```sql
+ * AND (next_status_check IS NULL OR next_status_check<=CURRENT_TIMESTAMP)
+ * ```
+ *
  * @param {object} notification
  * @param {string} journey
  * @param {object} notify - the striped response from out notify services
