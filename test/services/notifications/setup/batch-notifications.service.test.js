@@ -63,7 +63,7 @@ describe('Notifications Setup - Batch notifications service', () => {
       })
     })
 
-    it('correctly sends an "email" data to notify', async () => {
+    it('correctly sends the "email" data to Notify', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
 
       expect(
