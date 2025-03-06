@@ -115,7 +115,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
     describe('and the return log has been received', () => {
       before(async () => {
-        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata, receivedDate: new Date() })
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: new Date('2025-03-06')
+        })
 
         await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
       })
@@ -126,6 +130,17 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data.beenReceived).to.be.true()
+      })
+
+      it('sets the received date fields accordingly', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.receivedDateOptions).to.equal('custom-date')
+        expect(matchingSession.data.receivedDateDay).to.equal('6')
+        expect(matchingSession.data.receivedDateMonth).to.equal('3')
+        expect(matchingSession.data.receivedDateYear).to.equal('2025')
       })
     })
 
