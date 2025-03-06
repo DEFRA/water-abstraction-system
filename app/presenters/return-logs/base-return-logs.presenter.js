@@ -135,13 +135,13 @@ function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLink
  * @param {string} frequency - The reporting frequency of the return log.
  * @param {object[]} lines - The individual submission lines to be grouped and formatted into table rows
  * @param {string} [id=null] - The ID to use in the link to view the daily/weekly details for a month
- * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view/enter details
+ * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view details
  *
  * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
  * quantity, reading, and unit totals.
  */
 function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
-  const groups = frequency === 'month' ? lines : _groupLinesByMonth(lines)
+  const groups = _groupLinesByMonth(lines)
 
   return groups.map((group) => {
     const { endDate, quantity, reading, userUnit } = group
