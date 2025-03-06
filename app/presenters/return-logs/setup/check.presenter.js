@@ -33,8 +33,8 @@ function go(session) {
   const { lines, meterMake, meterProvided, meterSerialNumber, reported, returnsFrequency, startReading, units } =
     session
   const unitName = UNIT_NAMES[units]
-  const formattedLines = _formatLines(lines, unitName)
-  const totalQuantity = _totalQuantity(lines)
+  const formattedLines = _formatLines(lines, reported, startReading, unitName)
+  const totalQuantity = _totalQuantity(formattedLines)
 
   return {
     ...alwaysRequiredPageData,
@@ -94,14 +94,32 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
-function _formatLines(lines, unitName) {
-  const formattedLines = lines.map((line) => ({
-    quantity: null,
-    ...line,
-    endDate: new Date(line.endDate),
-    startDate: new Date(line.startDate),
-    unitName
-  }))
+function _formatLines(lines, reported, startReading, unitName) {
+  const formattedLines = []
+  let previousReading = startReading ?? 0
+
+  lines.forEach((line) => {
+    const formattedLine = {
+      endDate: new Date(line.endDate),
+      startDate: new Date(line.startDate),
+      unitName
+    }
+
+    if (reported !== 'meter-readings') {
+      formattedLine.quantity = line.quantity
+    } else {
+      formattedLine.reading = line.reading ?? null
+
+      if (line.reading) {
+        formattedLine.quantity = line.reading - previousReading
+        previousReading = line.reading
+      } else {
+        formattedLine.quantity = null
+      }
+    }
+
+    formattedLines.push(formattedLine)
+  })
 
   return formattedLines
 }
