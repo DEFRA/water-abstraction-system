@@ -24,6 +24,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
+const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
 const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
@@ -33,7 +34,7 @@ const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const REGION_SOUTH_WEST_INDEX = 4
 
-describe('Supplementary Process billing period service', () => {
+describe('Bill Runs - Supplementary - Process Billing Period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -56,6 +57,8 @@ describe('Supplementary Process billing period service', () => {
     chargeCategory = ChargeCategoryHelper.select()
 
     billRun = await BillRunHelper.add({ regionId: region.id })
+
+    Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
   })
 
   afterEach(() => {
