@@ -48,7 +48,7 @@ describe('Notifications Setup - Batch notifications service', () => {
 
   describe('when the batch is successful', () => {
     beforeEach(() => {
-      _stubSuccessfulNotify(stubNotify, {
+      _stubSuccessfulNotify({
         data: { id: '12345' },
         status: 201
       })
@@ -106,7 +106,7 @@ describe('Notifications Setup - Batch notifications service', () => {
 
   describe('when a call to "notify" is unsuccessful', () => {
     beforeEach(() => {
-      _stubUnSuccessfulNotify(stubNotify, {
+      _stubUnSuccessfulNotify({
         status: 400,
         message: 'Request failed with status code 400',
         response: {
@@ -133,15 +133,15 @@ describe('Notifications Setup - Batch notifications service', () => {
   })
 })
 
-function _stubSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubSuccessfulNotify(response) {
+  if (stubNotify) {
     Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
     Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
   }
 }
 
-function _stubUnSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubUnSuccessfulNotify(response) {
+  if (stubNotify) {
     Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
     Sinon.stub(NotifyClient.prototype, 'sendLetter').rejects(response)
   }
