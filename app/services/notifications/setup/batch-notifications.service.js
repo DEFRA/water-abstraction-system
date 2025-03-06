@@ -95,7 +95,11 @@ function _toSendNotifications(notifications) {
  * @private
  */
 function _errorCount(notifications) {
-  return notifications.filter((notification) => notification.value.status !== CREATED).length
+  const erroredNotifications = notifications.filter((notification) => {
+    return notification.value.status !== CREATED
+  })
+  
+  return erroredNotifications.length
 }
 
 module.exports = {
