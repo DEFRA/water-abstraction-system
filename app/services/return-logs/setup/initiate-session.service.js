@@ -39,7 +39,7 @@ async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   // We use destructuring to discard things we've fetched that are needed to format data but not needed in the session
-  const { method, nilReturn, ...data } = _data(returnLog)
+  const { method, multiplier, nilReturn, ...data } = _data(returnLog)
 
   return SessionModel.query().insert({ data }).returning('id')
 }
@@ -51,10 +51,23 @@ function _data(returnLog) {
     journey: _formatJourney(returnLog.nilReturn),
     lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
     meterProvided: _formatMeterProvided(returnLog.meterMake, returnLog.meterSerialNumber),
+    meter10TimesDisplay: _formatMeter10TimesDisplay(returnLog.multiplier),
     purposes: _formatPurposes(returnLog.purposes),
     reported: _formatReported(returnLog.method),
     units: _formatUnits(returnLog.units)
   }
+}
+
+function _formatMeter10TimesDisplay(multiplier) {
+  if (multiplier === 10) {
+    return 'yes'
+  }
+
+  if (multiplier === 1) {
+    return 'no'
+  }
+
+  return null
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -83,6 +96,7 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnSubmissions.metadata:units').as('units'),
       ref('returnSubmissions.metadata:method').as('method'),
       ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
+      ref('returnSubmissions.metadata:meters[0].multiplier').as('multiplier'),
       ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber')
     )
     .innerJoinRelated('licence')
