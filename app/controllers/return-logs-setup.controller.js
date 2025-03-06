@@ -252,6 +252,10 @@ async function submitReported(request, h) {
     return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
+  if (pageData.reported === 'meter-readings') {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/start-reading`)
+  }
+
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
@@ -287,7 +291,11 @@ async function submitStartReading(request, h) {
     return h.view('return-logs/setup/start-reading.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
 async function submitSubmission(request, h) {

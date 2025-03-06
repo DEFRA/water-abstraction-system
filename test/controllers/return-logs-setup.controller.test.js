@@ -1046,15 +1046,30 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitReportedService, 'go').resolves({})
+          describe('and the reported type was "meter-readings"', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meter-readings' })
+            })
+
+            it('redirects to the "units" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/start-reading`)
+            })
           })
 
-          it('redirects to the "units" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
+          describe('and the reported type was "abstraction-volumes"', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'abstraction-volumes' })
+            })
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+            it('redirects to the "units" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+            })
           })
         })
 
@@ -1255,9 +1270,22 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('POST', () => {
       describe('when a request is valid', () => {
-        describe('and a start reading was provided', () => {
+        describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             Sinon.stub(SubmitStartReadingService, 'go').resolves({})
+          })
+
+          it('redirects to the "units" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStartReadingService, 'go').resolves({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
