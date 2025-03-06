@@ -47,6 +47,7 @@ async function go(returnLogId) {
 function _data(returnLog) {
   return {
     ...returnLog,
+    ..._formatReceivedDate(returnLog.receivedDate),
     beenReceived: _formatBeenReceived(returnLog.receivedDate),
     journey: _formatJourney(returnLog.nilReturn),
     lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
@@ -56,18 +57,6 @@ function _data(returnLog) {
     reported: _formatReported(returnLog.method),
     units: _formatUnits(returnLog.units)
   }
-}
-
-function _formatMeter10TimesDisplay(multiplier) {
-  if (multiplier === 10) {
-    return 'yes'
-  }
-
-  if (multiplier === 1) {
-    return 'no'
-  }
-
-  return null
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -104,6 +93,18 @@ async function _fetchReturnLog(returnLogId) {
     .where('returnLogs.id', returnLogId)
 }
 
+function _formatMeter10TimesDisplay(multiplier) {
+  if (multiplier === 10) {
+    return 'yes'
+  }
+
+  if (multiplier === 1) {
+    return 'no'
+  }
+
+  return null
+}
+
 function _formatBeenReceived(receivedDate) {
   return receivedDate !== null
 }
@@ -138,6 +139,19 @@ function _formatPurposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
+}
+
+function _formatReceivedDate(receivedDate) {
+  if (!receivedDate) {
+    return {}
+  }
+
+  return {
+    receivedDateOptions: 'custom-date',
+    receivedDateDay: `${receivedDate.getDate()}`,
+    receivedDateMonth: `${receivedDate.getMonth() + 1}`,
+    receivedDateYear: `${receivedDate.getFullYear()}`
+  }
 }
 
 function _formatReported(method) {
