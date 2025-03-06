@@ -12,6 +12,8 @@ const { expect } = Code
 const ScheduledNotificationPresenter = require('../../../../app/presenters/notifications/setup/scheduled-notifications.presenter.js')
 
 describe('Notifications Setup - Scheduled Notification Presenter', () => {
+  const eventId = 'a8eed65a-1a11-4566-8811-f8be2eba46f4'
+
   let clock
   let journey
   let notification
@@ -44,9 +46,10 @@ describe('Notifications Setup - Scheduled Notification Presenter', () => {
 
       describe('and the recipient is a "Primary user"', () => {
         it('correctly transform the "email" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify, eventId)
 
           expect(result).to.equal({
+            eventId,
             messageRef: 'returns_invitation_primary_user_email',
             messageType: 'email',
             notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
@@ -68,9 +71,10 @@ describe('Notifications Setup - Scheduled Notification Presenter', () => {
         })
 
         it('correctly transform the "email" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify, eventId)
 
           expect(result).to.equal({
+            eventId,
             messageRef: 'returns_invitation_returns_agent_email',
             messageType: 'email',
             notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
@@ -92,9 +96,10 @@ describe('Notifications Setup - Scheduled Notification Presenter', () => {
 
       describe('and the recipient is a "Licence holder"', () => {
         it('correctly transform the "letter" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify, eventId)
 
           expect(result).to.equal({
+            eventId,
             messageRef: 'returns_invitation_licence_holder_letter',
             messageType: 'letter',
             notifyId: '9b50a7b8-c971-46d9-a247-6be7d5576c18',
@@ -115,9 +120,10 @@ describe('Notifications Setup - Scheduled Notification Presenter', () => {
         })
 
         it('correctly transform the "letter" notification into a "scheduled_notifications"', () => {
-          const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+          const result = ScheduledNotificationPresenter.go(notification, journey, notify, eventId)
 
           expect(result).to.equal({
+            eventId,
             messageRef: 'returns_invitation_returns_to_letter',
             messageType: 'letter',
             notifyStatus: 'created',
@@ -151,9 +157,10 @@ describe('Notifications Setup - Scheduled Notification Presenter', () => {
     })
 
     it('correctly formats the "scheduled_notifications" as an error', () => {
-      const result = ScheduledNotificationPresenter.go(notification, journey, notify)
+      const result = ScheduledNotificationPresenter.go(notification, journey, notify, eventId)
 
       expect(result).to.equal({
+        eventId,
         log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: periodEndDate"}]}',
         messageRef: 'returns_invitation_primary_user_email',
         messageType: 'email',

@@ -31,13 +31,15 @@ const INVITATIONS_MESSAGE_REF = {
  * @param {object} notification
  * @param {string} journey
  * @param {object} notify - the striped response from out notify services
+ * @param {UUID} eventId - the id from the created 'EventModel'
  *
  * @returns {object}
  */
-function go(notification, journey, notify) {
+function go(notification, journey, notify, eventId) {
   return {
-    messageType: 'letter',
+    eventId,
     messageRef: _messageRef(journey, notification.templateId),
+    messageType: 'letter',
     personalisation: _personalisation(notification),
     sendAfter: _sendAfter(),
     ..._notify(notify),
@@ -60,6 +62,8 @@ function _messageRef(journey, templateId) {
   if (journey === 'invitations') {
     return INVITATIONS_MESSAGE_REF[templateId]
   }
+
+  return ''
 }
 
 /**
