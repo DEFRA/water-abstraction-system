@@ -81,6 +81,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
               startDate: '2022-05-01T00:00:00.000Z'
             }
           ],
+          meter10TimesDisplay: null,
           meterMake: null,
           meterProvided: 'no',
           meterSerialNumber: null,
@@ -189,6 +190,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
             meters: [
               {
                 manufacturer: 'METER_MAKE',
+                multiplier: 10,
                 serialNumber: 'METER_SERIAL_NUMBER'
               }
             ]
@@ -201,6 +203,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
+        expect(matchingSession.data.meter10TimesDisplay).to.equal('yes')
         expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
         expect(matchingSession.data.meterSerialNumber).to.equal('METER_SERIAL_NUMBER')
         expect(matchingSession.data.meterProvided).to.equal('yes')
