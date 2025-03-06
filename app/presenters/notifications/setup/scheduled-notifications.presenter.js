@@ -15,14 +15,6 @@ const INVITATIONS_MESSAGE_REF = {
   [notifyTemplates.returns.invitations.returnsToLetter]: 'returns_invitation_returns_to_letter'
 }
 
-//   returnReminder: {
-//     [CONTACT_ROLE_PRIMARY_USER]: emailTemplate('returns_reminder_primary_user_email'),
-//     [CONTACT_ROLE_RETURNS_AGENT]: emailTemplate('returns_reminder_returns_agent_email'),
-//     [CONTACT_ROLE_LICENCE_HOLDER]: letterTemplate('returns_reminder_licence_holder_letter'),
-//     [CONTACT_ROLE_RETURNS_TO]: letterTemplate('returns_reminder_returns_to_letter')
-//   }
-// }
-
 /**
  * Formats a notification into a 'water.scheduled_notifications'
  *
