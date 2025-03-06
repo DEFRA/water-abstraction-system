@@ -114,7 +114,7 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
       unitName
     }
 
-    if (reported !== 'meter-readings') {
+    if (reported === 'abstraction-volumes') {
       formattedLine.quantity = line.quantity ?? null
     } else {
       formattedLine.reading = line.reading ?? null
