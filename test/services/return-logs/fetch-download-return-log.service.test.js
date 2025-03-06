@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,12 +21,8 @@ describe('Fetch Download Return Log service', () => {
   let returnLog
   let returnSubmissions = []
 
-  beforeEach(async () => {
+  before(async () => {
     returnLog = await ReturnLogHelper.add()
-
-    // We stub on the model prototype so that any created instances have $applyReadings stubbed. We don't set any return
-    // value as we don't need it to actually do anything; we just want to be able to assert that it was called.
-    Sinon.stub(ReturnSubmissionModel.prototype, '$applyReadings')
 
     returnSubmissions = await Promise.all([
       ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 1 }),
@@ -46,6 +42,12 @@ describe('Fetch Download Return Log service', () => {
         quantity: 5
       })
     ])
+  })
+
+  beforeEach(async () => {
+    // We stub on the model prototype so that any created instances have $applyReadings stubbed. We don't set any return
+    // value as we don't need it to actually do anything; we just want to be able to assert that it was called.
+    Sinon.stub(ReturnSubmissionModel.prototype, '$applyReadings')
   })
 
   afterEach(() => {
