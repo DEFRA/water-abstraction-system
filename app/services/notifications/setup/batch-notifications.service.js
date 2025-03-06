@@ -38,11 +38,9 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey) {
 
   const sentNotifications = await Promise.allSettled(toSendNotifications)
 
-  const errorCount = _errorCount(sentNotifications)
-
   return {
     sent: sentNotifications.length,
-    error: errorCount
+    error: _errorCount(sentNotifications)
   }
 }
 
