@@ -5,6 +5,8 @@
  * @module BatchNotificationsService
  */
 
+const CREATED = 201
+
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
@@ -93,7 +95,7 @@ function _toSendNotifications(notifications) {
  * @private
  */
 function _errorCount(notifications) {
-  return notifications.filter((notification) => notification.value.status !== 201).length
+  return notifications.filter((notification) => notification.value.status !== CREATED).length
 }
 
 module.exports = {
