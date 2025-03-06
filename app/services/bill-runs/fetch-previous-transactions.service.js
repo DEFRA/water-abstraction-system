@@ -16,11 +16,12 @@ const TransactionModel = require('../../models/transaction.model.js')
  * @param {string} licenceId - The UUID that identifies the licence we need to fetch transactions for
  * @param {number} financialYearEnding - The year the financial billing period ends that we need to fetch transactions
  * for
+ * @param {boolean} twoPartTariff - Whether to fetch two-part tariff transactions or standard transactions
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-async function go(billingAccountId, licenceId, financialYearEnding) {
-  const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding)
+async function go(billingAccountId, licenceId, financialYearEnding, twoPartTariff) {
+  const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding, twoPartTariff)
 
   return _cleanse(transactions)
 }
@@ -54,7 +55,9 @@ function _cleanse(transactions) {
   return debits
 }
 
-async function _fetch(billingAccountId, licenceId, financialYearEnding) {
+async function _fetch(billingAccountId, licenceId, financialYearEnding, twoPartTariff) {
+  const batchTypes = twoPartTariff ? ['two_part_tariff', 'two_part_supplementary'] : ['annual', 'supplementary']
+
   return TransactionModel.query()
     .select([
       'transactions.authorisedDays',
@@ -103,6 +106,7 @@ async function _fetch(billingAccountId, licenceId, financialYearEnding) {
       'billRuns.status': 'sent',
       'billRuns.scheme': 'sroc'
     })
+    .whereIn('billRuns.batchType', batchTypes)
 }
 
 module.exports = {
