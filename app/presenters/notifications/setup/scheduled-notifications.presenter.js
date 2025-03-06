@@ -8,6 +8,8 @@
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
+const CREATED = 201
+
 const INVITATIONS_MESSAGE_REF = {
   [notifyTemplates.returns.invitations.primaryUserEmail]: 'returns_invitation_primary_user_email',
   [notifyTemplates.returns.invitations.returnsAgentEmail]: 'returns_invitation_returns_agent_email',
@@ -77,7 +79,7 @@ function _messageRef(journey, templateId) {
  * @private
  */
 function _notify(notify) {
-  if (notify.status !== 201) {
+  if (notify.status !== CREATED) {
     return _error(notify)
   }
 
@@ -85,7 +87,7 @@ function _notify(notify) {
     notifyId: notify.id,
     notifyStatus: notify.statusText,
     plaintext: notify.plaintext,
-    status: _status(notify)
+    status: _status()
   }
 }
 
