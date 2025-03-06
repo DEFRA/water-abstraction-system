@@ -15,15 +15,15 @@ const ReturnsNotificationPresenter = require('../../../presenters/notifications/
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
  *
  * This service needs to perform the following actions on a recipient:
+ 
  * - convert the recipients into notifications
- * - send the notification to notify
- * - save the notifications to 'water.scheduled_notifications'
- * - check the status of the notifications with notify (sent or otherwise)
- * - update the notifications status in 'water.scheduled_notifications' (with the updated notify status)
- * - return the amount of successful and failed notifications
+ * - send the notifications to Notify
+ * - save the notifications to `water.scheduled_notifications`
+ * - check the status of the notifications with Notify (sent or otherwise)
+ * - update the notifications status in `water.scheduled_notifications` (with the updated Notify status)
+ * - return the number of successful and failed notifications
  *
- * This will need to be done in batches because Notify has a rate limit (3,000 messages per minute), and the persisting of the
- * 'water.scheduled_notifications' uses postgresql's ability to insert with batches (this is much grater than the Notify
+ * This will need to be done in batches because Notify has a rate limit (3,000 messages per minute). It also means the persisting of the notifications can use PostgreSQL's ability to batch insert (this is much greater than the Notify
  * rate limit).
  *
  * @param {object[]} recipients
