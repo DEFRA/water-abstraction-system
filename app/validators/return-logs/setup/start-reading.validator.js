@@ -17,8 +17,6 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, lines) {
-  console.log('🚀 lines:', lines)
-  console.log('🚀 payload:', payload)
   // Use the maximum possible number if no meter reading exists in the return submission
   const maxMeterReading = _maxMeterReading(lines) || Number.MAX_SAFE_INTEGER
 
@@ -52,10 +50,3 @@ function _maxMeterReading(lines) {
 module.exports = {
   go
 }
-
-// REBECCA
-// Tidy up console logs
-// Validation error messages for the max number
-// Fix the unit tests for the routes that you have broken
-// Make sure in the controller to test the new way the pages can redirect
-// Need to test the check answers page stuff that has been added to the page
