@@ -11,6 +11,7 @@ const BillModel = require('../../../models/bill.model.js')
 const BillLicenceModel = require('../../../models/bill-licence.model.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
+const FetchPreviousTransactionsService = require('../fetch-previous-transactions.service.js')
 const { generateUUID } = require('../../../lib/general.lib.js')
 const GenerateTwoPartTariffTransactionService = require('../generate-two-part-tariff-transaction.service.js')
 const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
@@ -246,13 +247,16 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
       continue
     }
 
-    const { id: billLicenceId, licence, transactions } = billLicence
-    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
-      transactions,
-      billLicenceId,
+    const previousTransactions = await FetchPreviousTransactionsService.go(
       billingAccountId,
-      licence.id,
-      financialYearEnding
+      billLicence.licence.id,
+      financialYearEnding,
+      true
+    )
+    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
+      previousTransactions,
+      billLicence.transactions,
+      billLicence.id
     )
 
     if (processedTransactions.length === 0) {
