@@ -105,7 +105,7 @@ function _formatLines(lines, reported, startReading, unitName) {
     }
 
     if (reported !== 'meter-readings') {
-      formattedLine.quantity = line.quantity
+      formattedLine.quantity = line.quantity ?? null
     } else {
       formattedLine.reading = line.reading ?? null
 
