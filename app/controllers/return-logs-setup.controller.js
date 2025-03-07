@@ -17,6 +17,7 @@ const PeriodUsedService = require('../services/return-logs/setup/period-used.ser
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
+const StartReadingService = require('../services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
@@ -26,6 +27,7 @@ const SubmitPeriodUsedService = require('../services/return-logs/setup/submit-pe
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
+const SubmitStartReadingService = require('../services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
@@ -118,6 +120,14 @@ async function singleVolume(request, h) {
   const pageData = await SingleVolumeService.go(sessionId)
 
   return h.view('return-logs/setup/single-volume.njk', pageData)
+}
+
+async function startReading(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await StartReadingService.go(sessionId)
+
+  return h.view('return-logs/setup/start-reading.njk', pageData)
 }
 
 async function submission(request, h) {
@@ -242,6 +252,10 @@ async function submitReported(request, h) {
     return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
+  if (pageData.reported === 'meter-readings') {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/start-reading`)
+  }
+
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
@@ -262,6 +276,26 @@ async function submitSingleVolume(request, h) {
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/period-used`)
+}
+
+async function submitStartReading(request, h) {
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
+
+  const pageData = await SubmitStartReadingService.go(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/start-reading.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
 async function submitSubmission(request, h) {
@@ -323,6 +357,7 @@ module.exports = {
   reported,
   setup,
   singleVolume,
+  startReading,
   submission,
   submitCancel,
   submitMeterDetails,
@@ -332,6 +367,7 @@ module.exports = {
   submitReceived,
   submitReported,
   submitSingleVolume,
+  submitStartReading,
   submitSubmission,
   submitUnits,
   units

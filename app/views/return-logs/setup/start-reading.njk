@@ -1,0 +1,56 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#start-reading-error"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukInput({
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--xl",
+          isPageHeading: true
+        },
+        classes: "govuk-input--width-10",
+        id: "start-reading",
+        name: "startReading",
+        value: startReading,
+        errorMessage: {
+            text: error.text
+          } if error.text
+      }) }}
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}
