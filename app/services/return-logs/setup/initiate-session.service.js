@@ -11,6 +11,14 @@ const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { unitNames } = require('../../../lib/static-lookups.lib.js')
+
+const UNITS = {
+  [unitNames.CUBIC_METRES]: 'cubic-metres',
+  [unitNames.LITRES]: 'litres',
+  [unitNames.MEGALITRES]: 'megalitres',
+  [unitNames.GALLONS]: 'gallons'
+}
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -30,38 +38,25 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
-  const data = _data(returnLog)
+  // We use destructuring to discard things we've fetched that are needed to format data but not needed in the session
+  const { method, multiplier, nilReturn, ...data } = _data(returnLog)
 
   return SessionModel.query().insert({ data }).returning('id')
 }
 
 function _data(returnLog) {
-  const formattedPurposes = _formatPurposes(returnLog.purposes)
-  const lines = _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
-
-  returnLog.beenReceived = returnLog.receivedDate !== null
-  returnLog.purposes = formattedPurposes
-  returnLog.lines = lines
-
-  return returnLog
-}
-
-function _formatLines(frequency, startDate, endDate) {
-  let lines
-
-  if (frequency === 'day') {
-    lines = daysFromPeriod(startDate, endDate)
+  return {
+    ...returnLog,
+    ..._formatReceivedDate(returnLog.receivedDate),
+    beenReceived: _formatBeenReceived(returnLog.receivedDate),
+    journey: _formatJourney(returnLog.nilReturn),
+    lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
+    meterProvided: _formatMeterProvided(returnLog.meterMake, returnLog.meterSerialNumber),
+    meter10TimesDisplay: _formatMeter10TimesDisplay(returnLog.multiplier),
+    purposes: _formatPurposes(returnLog.purposes),
+    reported: _formatReported(returnLog.method),
+    units: _formatUnits(returnLog.units)
   }
-
-  if (frequency === 'week') {
-    lines = weeksFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'month') {
-    lines = monthsFromPeriod(startDate, endDate)
-  }
-
-  return lines
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -85,16 +80,87 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
+      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
+      'returnSubmissions.nilReturn',
+      ref('returnSubmissions.metadata:units').as('units'),
+      ref('returnSubmissions.metadata:method').as('method'),
+      ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
+      ref('returnSubmissions.metadata:meters[0].multiplier').as('multiplier'),
+      ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber')
     )
     .innerJoinRelated('licence')
+    .innerJoinRelated('returnSubmissions')
     .where('returnLogs.id', returnLogId)
+}
+
+function _formatMeter10TimesDisplay(multiplier) {
+  if (multiplier === 10) {
+    return 'yes'
+  }
+
+  if (multiplier === 1) {
+    return 'no'
+  }
+
+  return null
+}
+
+function _formatBeenReceived(receivedDate) {
+  return receivedDate !== null
+}
+
+function _formatJourney(nilReturn) {
+  return nilReturn ? 'nil-return' : 'enter-return'
+}
+
+function _formatLines(frequency, startDate, endDate) {
+  let lines
+
+  if (frequency === 'day') {
+    lines = daysFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'week') {
+    lines = weeksFromPeriod(startDate, endDate)
+  }
+
+  if (frequency === 'month') {
+    lines = monthsFromPeriod(startDate, endDate)
+  }
+
+  return lines
+}
+
+function _formatMeterProvided(meterMake, meterSerialNumber) {
+  return meterMake && meterSerialNumber ? 'yes' : 'no'
 }
 
 function _formatPurposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
+}
+
+function _formatReceivedDate(receivedDate) {
+  if (!receivedDate) {
+    return {}
+  }
+
+  return {
+    receivedDateOptions: 'custom-date',
+    receivedDateDay: `${receivedDate.getDate()}`,
+    receivedDateMonth: `${receivedDate.getMonth() + 1}`,
+    receivedDateYear: `${receivedDate.getFullYear()}`
+  }
+}
+
+function _formatReported(method) {
+  return method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
+}
+
+// Format units in the form `m³`, `l` etc. to the text expected by the edit return pages, defaulting to cubic metres
+function _formatUnits(units) {
+  return UNITS[units || unitNames.CUBIC_METRES]
 }
 
 module.exports = {
