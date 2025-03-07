@@ -45,8 +45,14 @@ describe('Notify - Email service', () => {
   describe('when the call to "notify" is successful', () => {
     beforeEach(() => {
       notifyStub = _stubSuccessfulNotify(stubNotify, {
-        data: { id: '12345' },
-        status: 201
+        data: {
+          id: '12345',
+          content: {
+            body: 'My dearest margery'
+          }
+        },
+        status: 201,
+        statusText: 'CREATED'
       })
     })
 
@@ -55,7 +61,9 @@ describe('Notify - Email service', () => {
 
       expect(result).to.equal({
         id: result.id,
-        status: 201
+        plaintext: 'My dearest margery',
+        status: 201,
+        statusText: 'created'
       })
     })
 
