@@ -81,7 +81,7 @@ function formatStatus(returnLog) {
  * @param {string} method - Whether the submission used abstraction volumes or readings
  * @param {string} frequency - The reporting frequency of the return log
  * @param {string} units - The units used for the return log's selected return submission
- * @param {string} [alwaysDisplayLinkHeader = false] - Used to determine if the link header should always be visible. It
+ * @param {boolean} [alwaysDisplayLinkHeader = false] - Used to determine if the link header should always be visible. It
  * will always be visible when entering readings
  *
  * @returns {object[]} The table headers for the summary table
