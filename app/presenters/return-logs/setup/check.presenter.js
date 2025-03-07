@@ -104,10 +104,9 @@ function _alwaysRequiredPageData(session) {
 }
 
 function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName) {
-  const formattedLines = []
   let previousReading = startReading ?? 0
 
-  lines.forEach((line) => {
+  return lines.map((line) => {
     const formattedLine = {
       endDate: new Date(line.endDate),
       startDate: new Date(line.startDate),
@@ -129,10 +128,8 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
       }
     }
 
-    formattedLines.push(formattedLine)
+    return formattedLine
   })
-
-  return formattedLines
 }
 
 function _groupLinesByMonth(formattedLines) {
