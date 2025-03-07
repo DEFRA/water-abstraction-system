@@ -44,7 +44,7 @@ async function go(billRun, billingPeriods) {
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_tariff' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId)
-    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+    global.GlobalNotifier.omfg('Process bill run failed', { billRun }, error)
   }
 }
 
