@@ -103,6 +103,15 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
+/**
+ * Formats an array of line objects with additional properties based on the provided parameters. When "volumes" are used
+ * the quantity is taken directly from the line in the sessions data. When "meter readings" are used, the quantity is
+ * calculated based on the difference between the current and previous meter readings. If the meter has a x10 display,
+ * the calculated quantity will be multiplied by 10.
+ *
+ * @returns {Array<Object>} The array of formatted line objects.
+ * @private
+ */
 function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName) {
   let previousReading = startReading ?? 0
 
