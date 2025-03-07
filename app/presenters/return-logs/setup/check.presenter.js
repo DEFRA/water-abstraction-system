@@ -9,6 +9,13 @@ const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = 
 const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
+const UNIT_NAMES = {
+  'cubic-metres': 'm³',
+  litres: 'l',
+  megalitres: 'Ml',
+  gallons: 'gal'
+}
+
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
  *
@@ -17,13 +24,6 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/check` page
  */
 function go(session) {
-  const UNIT_NAMES = {
-    'cubic-metres': 'm³',
-    litres: 'l',
-    megalitres: 'Ml',
-    gallons: 'gal'
-  }
-
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
   if (session.journey === 'nil-return') {
