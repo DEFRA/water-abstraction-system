@@ -53,7 +53,7 @@ async function go(sessionId, payload, yar) {
 }
 
 async function _save(session, payload) {
-  session.startReading = payload.startReading
+  session.startReading = Number(payload.startReading)
 
   return session.$update()
 }

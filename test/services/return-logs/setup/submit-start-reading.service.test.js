@@ -53,7 +53,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.startReading).to.equal('15600')
+        expect(refreshedSession.startReading).to.equal(15600)
       })
 
       describe('and the page has been not been visited', () => {
