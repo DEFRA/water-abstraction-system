@@ -1,51 +1,44 @@
 'use strict'
 
 /**
- * Formats recipients into notifications to send to notify for a returns invitation and reminder
- * @module ReturnsNotificationPresenter
+ * Formats recipients into scheduled notifications for a returns invitation or reminder
+ * @module ScheduledNotificationsPresenter
  */
 
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats recipients into notifications to send to notify for a returns invitation and reminder
+ * Formats recipients into scheduled notifications for a returns invitation or reminder
  *
- * A returns invitation or reminder will need to send a letter or email to notify. The basic structure for a notify
- * payload looks like this:
+ * This function prepares data for both sending notifications via a notification service (e.g., Notify)
+ * and storing scheduled notification records in a database (e.g., 'water.scheduled_notifications').
+ * It aligns with legacy practices by including parts of the Notify payload and response directly
+ * within the scheduled notification objects.
  *
- * ```javascript
- *   const options = {
- *       personalisation: {
- *         // All our returns templates expect at least these three dates
- *         periodEndDate: '30th January 2021',
- *         periodStartDate: '1st January 2021',
- *         returnDueDate: '28 April 2025'
- *       },
- *       reference: 'ABC-123' // This will be the reference code we set when the session is initialised
- *     }
- * ```
+ * The output of this function is designed to be used directly for both notification delivery and persistent storage.
  *
  * @param {object[]} recipients
  * @param {object} returnsPeriod - the return period including the endDate, startDate and dueDate
  * @param {string} referenceCode - the unique code used to group the notifications in notify
  * @param {string} journey - the journey should be either "reminders" or "invitations"
  *
- * @returns {object[]} - the recipients transformed into notifications
+ * @returns {object[]} - the recipients transformed into scheduled notifications
  */
 function go(recipients, returnsPeriod, referenceCode, journey) {
-  const notifications = []
+  const scheduledNotifications = []
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      notifications.push(_email(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey))
     } else {
-      notifications.push(_letter(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey))
     }
   }
 
-  return notifications
+  return scheduledNotifications
 }
 
 /**
@@ -69,8 +62,9 @@ function _addressLines(contact) {
  * An email notification requires an email address alongside the expected payload:
  *
  * ```javascript
- *   const options = {
- *       emailAddress: 'hello@world.com
+ *   {
+ *      emailAddress: 'hello@world.com
+ *      options: {
  *       personalisation: {
  *         periodEndDate: '30th January 2021',
  *         periodStartDate: '1st January 2021',
@@ -78,7 +72,10 @@ function _addressLines(contact) {
  *       },
  *       reference: 'ABC-123' // This will be the reference code we set when the session is initialised
  *     }
+ *    }
  * ```
+ *
+ * A scheduled notification saves the 'emailAddress' as 'recipient' and so is used as the variables name.
  *
  * @private
  */
@@ -86,14 +83,14 @@ function _email(recipient, returnsPeriod, referenceCode, journey) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
   return {
-    templateId,
-    emailAddress: recipient.email,
-    options: {
-      personalisation: {
-        ..._returnsPeriod(returnsPeriod)
-      },
-      reference: referenceCode
-    }
+    licences: _licences(recipient.licence_refs),
+    messageType: 'email',
+    personalisation: {
+      ..._returnsPeriod(returnsPeriod)
+    },
+    recipient: recipient.email,
+    reference: referenceCode,
+    templateId
   }
 }
 
@@ -139,15 +136,15 @@ function _letter(recipient, returnsPeriod, referenceCode, journey) {
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
   return {
-    templateId,
-    options: {
-      personalisation: {
-        name,
-        ..._addressLines(recipient.contact),
-        ..._returnsPeriod(returnsPeriod)
-      },
-      reference: referenceCode
-    }
+    licences: _licences(recipient.licence_refs),
+    messageType: 'letter',
+    personalisation: {
+      name,
+      ..._addressLines(recipient.contact),
+      ..._returnsPeriod(returnsPeriod)
+    },
+    reference: referenceCode,
+    templateId
   }
 }
 
@@ -170,6 +167,19 @@ function _returnsPeriod(returnsPeriod) {
     periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
     returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
   }
+}
+
+/**
+ * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
+ *
+ * These licences are stored as 'jsonb' so we need to stringify the array to match the legacy schema.
+ *
+ * @private
+ */
+function _licences(licenceRefs) {
+  const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
+
+  return JSON.stringify(formattedRecipients)
 }
 
 module.exports = {
