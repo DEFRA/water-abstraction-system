@@ -32,7 +32,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
-        payload = { singleVolume: 'no' }
+        payload = { singleVolume: 'yes', singleVolumeQuantity: '1000' }
       })
 
       it('saves the submitted option', async () => {
@@ -40,26 +40,27 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.singleVolume).to.equal('no')
-      })
-
-      describe('and the user has previously selected "no" to a single volume being provided', () => {
-        it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
-
-          expect(result).to.equal({ singleVolume: 'no' })
-        })
+        expect(refreshedSession.singleVolume).to.equal('yes')
+        expect(refreshedSession.singleVolumeQuantity).to.equal(1000)
       })
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {
-        beforeEach(async () => {
-          payload = { singleVolume: 'yes', singleVolumeQuantity: '1000' }
-        })
-
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
           expect(result).to.equal({ singleVolume: 'yes' })
+        })
+      })
+
+      describe('and the user has previously selected "no" to a single volume being provided', () => {
+        beforeEach(async () => {
+          payload = { singleVolume: 'no' }
+        })
+
+        it('returns the correct details the controller needs to redirect the journey', async () => {
+          const result = await SubmitSingleVolumeService.go(session.id, payload)
+
+          expect(result).to.equal({ singleVolume: 'no' })
         })
       })
     })
