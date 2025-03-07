@@ -257,6 +257,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/start-reading',
+    options: {
+      handler: ReturnLogsSetupController.startReading,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/start-reading',
+    options: {
+      handler: ReturnLogsSetupController.submitStartReading,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/submission',
     options: {
       handler: ReturnLogsSetupController.submission,

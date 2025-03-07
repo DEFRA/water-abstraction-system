@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
- * @module SubmitReportedService
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/start-reading` page
+ * @module SubmitStartReadingService
  */
 
 const GeneralLib = require('../../../lib/general.lib.js')
-const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
-const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const StartReadingPresenter = require('../../../presenters/return-logs/setup/start-reading.presenter.js')
+const StartReadingValidator = require('../../../validators/return-logs/setup/start-reading.validator.js')
 
 /**
- * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/start-reading` page
  *
  * It first retrieves the session instance for the return log setup session in progress.
  *
@@ -23,12 +23,12 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} If no errors the page data for the reported page else the validation error details
+ * @returns {Promise<object>} If no errors the page data for the start reading page else the validation error details
  */
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -38,12 +38,12 @@ async function go(sessionId, payload, yar) {
     }
 
     return {
-      checkPageVisited: session.checkPageVisited,
-      reported: session.reported
+      checkPageVisited: session.checkPageVisited
     }
   }
 
-  const formattedData = ReportedPresenter.go(session)
+  session.startReading = payload.startReading
+  const formattedData = StartReadingPresenter.go(session)
 
   return {
     activeNavBar: 'search',
@@ -53,13 +53,13 @@ async function go(sessionId, payload, yar) {
 }
 
 async function _save(session, payload) {
-  session.reported = payload.reported
+  session.startReading = Number(payload.startReading)
 
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = ReportedValidator.go(payload)
+function _validate(payload, session) {
+  const validation = StartReadingValidator.go(payload, session.lines)
 
   if (!validation.error) {
     return null
