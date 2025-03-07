@@ -16,6 +16,13 @@ const routes = [
     options: {
       handler: ReturnLogsController.submitView
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/download',
+    options: {
+      handler: ReturnLogsController.download
+    }
   }
 ]
 

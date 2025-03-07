@@ -48,7 +48,7 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   session.singleVolume = payload.singleVolume
-  session.singleVolumeQuantity = payload.singleVolumeQuantity
+  session.singleVolumeQuantity = Number(payload.singleVolumeQuantity)
 
   return session.$update()
 }

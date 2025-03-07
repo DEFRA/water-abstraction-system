@@ -41,7 +41,7 @@ describe('Notifications Setup - Download recipients service', () => {
         // Headers
         'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
         // Row - licence holder
-        '"1/343/3","376439279","2018-01-01","2019-01-01","2021-01-01","Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n',
+        '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n',
       filename: `Returns reminder - ${referenceCode}.csv`,
       type: 'text/csv'
     })
