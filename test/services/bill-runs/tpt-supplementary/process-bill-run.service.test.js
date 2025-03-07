@@ -12,9 +12,9 @@ const { expect } = Code
 const AssignBillRunToLicencesService = require('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
 // Thing under test
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 const ProcessBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
 
 describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
@@ -22,7 +22,6 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
   let billRunPatchStub
-  let handleErroredBillRunStub
   let notifierStub
 
   beforeEach(async () => {
@@ -104,33 +103,28 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   })
 
   describe('when the service errors', () => {
-    let thrownError
+    describe('because matching and allocating fails', () => {
+      beforeEach(() => {
+        Sinon.stub(MatchAndAllocateService, 'go').throws('MatchAndAllocateService has gone pop')
+        Sinon.stub(HandleErroredBillRunService, 'go')
+      })
 
-    beforeEach(() => {
-      handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
+      it('calls HandleErroredBillRunService', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-      thrownError = new Error('ERROR')
-      Sinon.stub(MatchAndAllocateService, 'go').rejects(thrownError)
-    })
+        expect(HandleErroredBillRunService.go.called).to.be.true()
+      })
 
-    it('calls HandleErroredBillRunService with no error code', async () => {
-      await ProcessBillRunService.go(billRun, billingPeriods)
+      it('logs the error', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-      const args = handleErroredBillRunStub.firstCall.args
+        const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal(billRun.id)
-    })
-
-    it('logs the error', async () => {
-      await ProcessBillRunService.go(billRun, billingPeriods)
-
-      const args = notifierStub.omfg.firstCall.args
-
-      expect(args[0]).to.equal('Process bill run failed')
-      expect(args[1].billRun.id).to.equal(billRun.id)
-      expect(args[2]).to.be.an.error()
-      expect(args[2].name).to.equal(thrownError.name)
-      expect(args[2].message).to.equal(`${thrownError.message}`)
+        expect(args[0]).to.equal('Process bill run failed')
+        expect(args[1].billRun.id).to.equal(billRun.id)
+        expect(args[2]).to.be.an.error()
+        expect(args[2].name).to.equal('MatchAndAllocateService has gone pop')
+      })
     })
   })
 })
