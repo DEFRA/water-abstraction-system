@@ -8,25 +8,28 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-
 // Things we need to stub
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
 // Thing under test
-const TwoPartTariffProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+const ProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
 
-describe('Two Part Tariff Process Bill Run service', () => {
+describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
+  const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
-  let billRun
+  let billRunPatchStub
   let notifierStub
 
   beforeEach(async () => {
-    billRun = await BillRunHelper.add()
+    billRunPatchStub = Sinon.stub().resolves()
+
+    Sinon.stub(BillRunModel, 'query').returns({
+      findById: Sinon.stub().returnsThis(),
+      patch: billRunPatchStub
+    })
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -43,29 +46,55 @@ describe('Two Part Tariff Process Bill Run service', () => {
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([])
       })
 
-      it('sets the Bill Run status to empty', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      it('sets the bill run status first to "processing" and then to "empty"', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const result = await BillRunModel.query().findById(billRun.id)
+        expect(billRunPatchStub.calledTwice).to.be.true()
+        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' })
+      })
 
-        expect(result.status).to.equal('empty')
+      it('logs the time taken', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Process bill run complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].billRunId).to.equal(billRun.id)
+        expect(args[1].type).to.equal('two_part_tariff')
       })
     })
 
-    describe('and there are licences to be billed', () => {
+    describe('and licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        // NOTE: ProcessBillRunService orchestrates the creation of a bill run. The actual work is done in the services
+        // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
+        // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
+        // return, only that it returns something!
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([{ id: '27e16528-bf00-459e-9980-902feb84a054' }])
       })
 
-      it('sets the Bill Run status to review', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      it('sets the bill run status first to "processing" and then to "review"', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const result = await BillRunModel.query().findById(billRun.id)
+        expect(billRunPatchStub.calledTwice).to.be.true()
+        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'review' })
+      })
 
-        expect(result.status).to.equal('review')
+      it('logs the time taken', async () => {
+        await ProcessBillRunService.go(billRun, billingPeriods)
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Process bill run complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].billRunId).to.equal(billRun.id)
+        expect(args[1].type).to.equal('two_part_tariff')
       })
     })
   })
@@ -78,17 +107,17 @@ describe('Two Part Tariff Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).to.be.true()
       })
 
       it('logs the error', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Bill run process errored')
+        expect(args[0]).to.equal('Process bill run failed')
         expect(args[1].billRun.id).to.equal(billRun.id)
         expect(args[2]).to.be.an.error()
         expect(args[2].name).to.equal('MatchAndAllocateService has gone pop')
