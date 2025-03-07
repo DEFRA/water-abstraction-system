@@ -141,6 +141,17 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
   })
 }
 
+/**
+ * Groups an array of formatted lines by month.
+ *
+ * @returns {Array} An array of objects grouped by month, each containing:
+ *   @param {Date} endDate - The end date of the month.
+ *   @param {number} quantity - The total quantity for the month.
+ *   @param {string} unitName - The name of the unit of measurement.
+ *   @param {number} [reading] - The meter reading value for the month (if available). This will always be the last
+ * meter reading for the month if readings exist.
+ * @private
+ */
 function _groupLinesByMonth(formattedLines) {
   const groupedLines = formattedLines.reduce((monthlyLine, line) => {
     const { endDate, quantity, reading, unitName } = line
