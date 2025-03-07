@@ -4,6 +4,23 @@ const { formatNumber, formatQuantity, sentenceCase } = require('../base.presente
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
+ * Converts a quantity from a given unit to cubic metres and formats it
+ *
+ * @param {number} quantity - the quantity to be formatted and converted to cubic metres
+ * @param {string} units - the unit of the quantity
+ *
+ * @returns {number|null} The converted quantity or null if the quantity is null or undefined
+ */
+function convertToCubicMetres(quantity, units) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+  const convertedQuantity = quantity / returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
+}
+
+/**
  * Formats the details of a return submission meter
  *
  * @param {object} meter - the meter to be formatted
@@ -61,13 +78,15 @@ function formatStatus(returnLog) {
 /**
  * Generates the table headers for a return log monthly summary table
  *
- * @param {string} method - whether the submission used abstraction volumes or readings
- * @param {string} frequency - the reporting frequency of the return log
- * @param {string} units - the units used for the return log's selected return submission
+ * @param {string} method - Whether the submission used abstraction volumes or readings
+ * @param {string} frequency - The reporting frequency of the return log
+ * @param {string} units - The units used for the return log's selected return submission
+ * @param {boolean} [alwaysDisplayLinkHeader = false] - Used to determine if the link header should always be visible. It
+ * will always be visible when entering readings
  *
  * @returns {object[]} The table headers for the summary table
  */
-function generateSummaryTableHeaders(method, frequency, units) {
+function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
   const headers = [{ text: 'Month' }]
 
   if (method !== 'abstractionVolumes') {
@@ -84,7 +103,7 @@ function generateSummaryTableHeaders(method, frequency, units) {
 
   headers.push({ text: sentenceCase(`${quantityPostfix}cubic metres`), format: 'numeric' })
 
-  if (frequency !== 'month') {
+  if (frequency !== 'month' || alwaysDisplayLinkHeader) {
     headers.push({ text: 'Details', format: 'numeric' })
   }
 
@@ -210,6 +229,7 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 }
 
 module.exports = {
+  convertToCubicMetres,
   formatMeterDetails,
   formatQuantity,
   formatStatus,

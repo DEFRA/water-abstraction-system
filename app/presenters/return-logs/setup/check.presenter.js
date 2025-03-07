@@ -5,7 +5,16 @@
  * @module CheckPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = require('../../base.presenter.js')
+const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+
+const UNIT_NAMES = {
+  'cubic-metres': 'm³',
+  litres: 'l',
+  megalitres: 'Ml',
+  gallons: 'gal'
+}
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
@@ -21,14 +30,35 @@ function go(session) {
     return alwaysRequiredPageData
   }
 
-  const { meterMake, meterProvided, meterSerialNumber, reported, units } = session
+  const {
+    lines,
+    meter10TimesDisplay,
+    meterMake,
+    meterProvided,
+    meterSerialNumber,
+    reported,
+    returnsFrequency,
+    startReading,
+    units
+  } = session
+  const unitName = UNIT_NAMES[units]
+  const formattedLines = _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName)
+  const totalQuantity = _totalQuantity(formattedLines)
 
   return {
     ...alwaysRequiredPageData,
+    displayReadings: reported === 'meter-readings',
+    displayUnits: units !== 'cubic-metres',
+    meter10TimesDisplay,
     meterMake,
     meterProvided,
     meterSerialNumber,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    startReading,
+    summaryTableData: _summaryTableData(formattedLines, session, unitName),
+    tableTitle: _tableTitle(reported, returnsFrequency),
+    totalCubicMetres: convertToCubicMetres(totalQuantity, unitName),
+    totalQuantity: formatNumber(totalQuantity),
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
@@ -73,6 +103,90 @@ function _alwaysRequiredPageData(session) {
   }
 }
 
+/**
+ * Formats an array of line objects with additional properties based on the provided parameters. When "volumes" are used
+ * the quantity is taken directly from the line in the sessions data. When "meter readings" are used, the quantity is
+ * calculated based on the difference between the current and previous meter readings. If the meter has a x10 display,
+ * the calculated quantity will be multiplied by 10.
+ *
+ * @returns {Array<Object>} The array of formatted line objects.
+ * @private
+ */
+function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitName) {
+  let previousReading = startReading ?? 0
+
+  return lines.map((line) => {
+    const formattedLine = {
+      endDate: new Date(line.endDate),
+      startDate: new Date(line.startDate),
+      unitName
+    }
+
+    if (reported === 'abstraction-volumes') {
+      formattedLine.quantity = line.quantity ?? null
+    } else {
+      formattedLine.reading = line.reading ?? null
+
+      if (line.reading) {
+        const multiplier = meter10TimesDisplay === 'yes' ? 10 : 1
+
+        formattedLine.quantity = (line.reading - previousReading) * multiplier
+        previousReading = line.reading
+      } else {
+        formattedLine.quantity = null
+      }
+    }
+
+    return formattedLine
+  })
+}
+
+/**
+ * Groups an array of formatted lines by month.
+ *
+ * @returns {Array} An array of objects grouped by month, each containing:
+ *   @param {Date} endDate - The end date of the month.
+ *   @param {number} quantity - The total quantity for the month.
+ *   @param {string} unitName - The name of the unit of measurement.
+ *   @param {number} [reading] - The meter reading value for the month (if available). This will always be the last
+ * meter reading for the month if readings exist.
+ * @private
+ */
+function _groupLinesByMonth(formattedLines) {
+  const groupedLines = formattedLines.reduce((monthlyLine, line) => {
+    const { endDate, quantity, reading, unitName } = line
+    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
+
+    if (!monthlyLine[key]) {
+      monthlyLine[key] = {
+        endDate,
+        quantity: 0,
+        unitName
+      }
+    }
+    monthlyLine[key].quantity += quantity
+
+    if (reading) {
+      monthlyLine[key].reading = reading
+    }
+
+    return monthlyLine
+  }, {})
+
+  return Object.values(groupedLines)
+}
+
+function _linkDetails(endDate, method, returnsFrequency, sessionId) {
+  const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
+  const text = `Enter ${returnRequirementFrequencies[returnsFrequency]} ${linkTextMethod}`
+  const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
+
+  return {
+    href: `/system/return-logs/setup/${sessionId}/${yearMonth}`,
+    text
+  }
+}
+
 function _note(note) {
   if (note?.content) {
     return {
@@ -88,6 +202,56 @@ function _note(note) {
       text: 'No notes added'
     }
   }
+}
+
+function _summaryTableData(formattedLines, session, unitName) {
+  const { id: sessionId, reported, returnsFrequency } = session
+
+  const alwaysDisplayLinkHeader = true
+  const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
+
+  return {
+    headers: generateSummaryTableHeaders(method, returnsFrequency, unitName, alwaysDisplayLinkHeader),
+    rows: _summaryTableRows(formattedLines, method, returnsFrequency, sessionId)
+  }
+}
+
+function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) {
+  const groups = returnsFrequency === 'month' ? formattedLines : _groupLinesByMonth(formattedLines)
+
+  return groups.map((group) => {
+    const { endDate, quantity, reading, unitName } = group
+
+    const rowData = {
+      link: _linkDetails(endDate, method, returnsFrequency, sessionId),
+      month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
+      monthlyTotal: convertToCubicMetres(quantity, unitName),
+      unitTotal: formatNumber(quantity)
+    }
+
+    if (method !== 'abstractionVolumes') {
+      rowData.reading = reading
+    }
+
+    return rowData
+  })
+}
+
+function _tableTitle(reported, returnsFrequency) {
+  const frequency = returnRequirementFrequencies[returnsFrequency]
+  const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
+
+  return `Summary of ${frequency} ${method}`
+}
+
+function _totalQuantity(lines) {
+  const totalQuantity = lines.reduce((acc, line) => {
+    const quantity = line.quantity ?? 0
+
+    return acc + quantity
+  }, 0)
+
+  return totalQuantity
 }
 
 module.exports = {
