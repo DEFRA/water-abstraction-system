@@ -7,9 +7,24 @@
 
 const Boom = require('@hapi/boom')
 
+const DownloadReturnLogService = require('../services/return-logs/download-return-log.service.js')
 const SubmitViewReturnLogService = require('../services/return-logs/submit-view-return-log.service.js')
-
 const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
+
+async function download(request, h) {
+  const { query } = request
+
+  const version = Number(query.version)
+
+  const { data, type, filename } = await DownloadReturnLogService.go(query.id, version)
+
+  return h
+    .response(data)
+    .type(type)
+    .encoding('binary')
+    .header('Content-Type', type)
+    .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
 
 async function view(request, h) {
   const { auth, query } = request
@@ -34,6 +49,7 @@ async function submitView(request, h) {
 }
 
 module.exports = {
+  download,
   submitView,
   view
 }
