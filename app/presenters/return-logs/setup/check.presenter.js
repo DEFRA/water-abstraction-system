@@ -136,24 +136,24 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
 }
 
 function _groupLinesByMonth(formattedLines) {
-  const groupedLines = formattedLines.reduce((acc, line) => {
+  const groupedLines = formattedLines.reduce((monthlyLine, line) => {
     const { endDate, quantity, reading, unitName } = line
     const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
-    if (!acc[key]) {
-      acc[key] = {
+    if (!monthlyLine[key]) {
+      monthlyLine[key] = {
         endDate,
         quantity: 0,
         unitName
       }
     }
-    acc[key].quantity += quantity
+    monthlyLine[key].quantity += quantity
 
     if (reading) {
-      acc[key].reading = reading
+      monthlyLine[key].reading = reading
     }
 
-    return acc
+    return monthlyLine
   }, {})
 
   return Object.values(groupedLines)
