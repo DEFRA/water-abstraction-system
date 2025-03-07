@@ -12,9 +12,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitReportedService = require('../../../../app/services/return-logs/setup/submit-reported.service.js')
+const SubmitStartReadingService = require('../../../../app/services/return-logs/setup/submit-start-reading.service.js')
 
-describe('Return Logs Setup - Submit Reported service', () => {
+describe('Return Logs Setup - Submit Start Reading service', () => {
   let payload
   let session
   let sessionData
@@ -23,7 +23,17 @@ describe('Return Logs Setup - Submit Reported service', () => {
   beforeEach(async () => {
     sessionData = {
       data: {
-        returnReference: '12345'
+        returnReference: '12345',
+        lines: [
+          {
+            endDate: '2019-04-30T00:00:00.000Z',
+            startDate: '2019-04-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2019-05-31T00:00:00.000Z',
+            startDate: '2019-05-01T00:00:00.000Z'
+          }
+        ]
       }
     }
 
@@ -34,25 +44,24 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
-        payload = { reported: 'meter-readings' }
+      beforeEach(() => {
+        payload = { startReading: '15600' }
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReportedService.go(session.id, payload, yarStub)
+        await SubmitStartReadingService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.reported).to.equal('meter-readings')
+        expect(refreshedSession.startReading).to.equal(15600)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitStartReadingService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            checkPageVisited: undefined,
-            reported: 'meter-readings'
+            checkPageVisited: undefined
           })
         })
       })
@@ -63,16 +72,15 @@ describe('Return Logs Setup - Submit Reported service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitStartReadingService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            checkPageVisited: true,
-            reported: 'meter-readings'
+            checkPageVisited: true
           })
         })
 
         it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
-          await SubmitReportedService.go(session.id, payload, yarStub)
+          await SubmitStartReadingService.go(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -83,19 +91,19 @@ describe('Return Logs Setup - Submit Reported service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReportedService.go(session.id, payload, yarStub)
+        const result = await SubmitStartReadingService.go(session.id, payload, yarStub)
 
         expect(result).to.equal(
           {
-            pageTitle: 'How was this return reported?',
+            pageTitle: 'Enter the start meter reading',
             activeNavBar: 'search',
-            reported: null,
-            backLink: `/system/return-logs/setup/${session.id}/submission`,
+            startReading: null,
+            backLink: `/system/return-logs/setup/${session.id}/reported`,
             returnReference: '12345'
           },
           { skip: ['sessionId', 'error'] }
@@ -104,9 +112,9 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitStartReadingService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select how this return was reported' })
+          expect(result.error).to.equal({ text: 'Enter a start meter reading' })
         })
       })
     })
