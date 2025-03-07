@@ -17,9 +17,9 @@ const HandleErroredBillRunService = require('../../../../app/services/bill-runs/
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
 // Thing under test
-const TwoPartTariffProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+const ProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
 
-describe('Two Part Tariff Process Bill Run service', () => {
+describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
 
   let billRun
@@ -43,11 +43,11 @@ describe('Two Part Tariff Process Bill Run service', () => {
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([])
       })
 
       it('sets the Bill Run status to empty', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -57,11 +57,15 @@ describe('Two Part Tariff Process Bill Run service', () => {
 
     describe('and there are licences to be billed', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        // NOTE: ProcessBillRunService orchestrates the creation of a bill run. The actual work is done in the services
+        // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
+        // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
+        // return, only that it returns something!
+        Sinon.stub(MatchAndAllocateService, 'go').resolves([{ id: '27e16528-bf00-459e-9980-902feb84a054' }])
       })
 
       it('sets the Bill Run status to review', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -78,13 +82,13 @@ describe('Two Part Tariff Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).to.be.true()
       })
 
       it('logs the error', async () => {
-        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
