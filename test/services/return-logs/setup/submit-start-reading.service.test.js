@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { startReading: '15600' }
       })
 
@@ -91,7 +91,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
