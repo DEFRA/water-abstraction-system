@@ -13,14 +13,16 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  *
  * @param {SessionModel} session
  * @param {object[]} recipients
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, recipients) {
+function go(session, recipients, auth) {
   const { referenceCode, determinedReturnsPeriod, journey, removeLicences = [] } = session
 
   return {
     licences: _licences(recipients),
+    issuer: auth.credentials.user.username,
     metadata: {
       name: _name(journey),
       options: {

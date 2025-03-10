@@ -14,8 +14,9 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const CreateEventPresenter = require('../../../../app/presenters/notifications/setup/create-event.presenter.js')
 
 describe('Notifications Setup - Event presenter', () => {
-  let session
+  let auth
   let recipients
+  let session
   let testRecipients
 
   beforeEach(async () => {
@@ -34,14 +35,23 @@ describe('Notifications Setup - Event presenter', () => {
         summer: 'true'
       }
     }
+
+    auth = {
+      credentials: {
+        user: {
+          username: 'hello@world.com'
+        }
+      }
+    }
   })
 
   it('correctly presents the data', () => {
-    const result = CreateEventPresenter.go(session, testRecipients)
+    const result = CreateEventPresenter.go(session, testRecipients, auth)
 
     const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
     expect(result).to.equal({
+      issuer: 'hello@world.com',
       licences:
         `["${recipients.primaryUser.licence_refs}","${recipients.returnsAgent.licence_refs}",` +
         `"${recipients.licenceHolder.licence_refs}","${recipients.returnsTo.licence_refs}",` +
@@ -65,9 +75,17 @@ describe('Notifications Setup - Event presenter', () => {
     })
   })
 
+  describe('the "issuer" property', () => {
+    it('correctly return the email address from the auth credentials', () => {
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
+
+      expect(result.issuer).to.equal('hello@world.com')
+    })
+  })
+
   describe('the "licences" property', () => {
     it('correctly return a JSON string containing an array of all licences from all recipients', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
@@ -87,7 +105,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = CreateEventPresenter.go(session, testRecipients)
+          const result = CreateEventPresenter.go(session, testRecipients, auth)
 
           expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
         })
@@ -99,7 +117,7 @@ describe('Notifications Setup - Event presenter', () => {
         })
 
         it('correctly returns the exclude licences', () => {
-          const result = CreateEventPresenter.go(session, testRecipients)
+          const result = CreateEventPresenter.go(session, testRecipients, auth)
 
           expect(result.metadata.options.excludeLicences).to.equal([])
         })
@@ -112,7 +130,7 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the length of recipients', () => {
-        const result = CreateEventPresenter.go(session, testRecipients)
+        const result = CreateEventPresenter.go(session, testRecipients, auth)
 
         expect(result.metadata.recipients).to.equal(5)
       })
@@ -129,7 +147,7 @@ describe('Notifications Setup - Event presenter', () => {
       })
 
       it('correctly returns the return cycle', () => {
-        const result = CreateEventPresenter.go(session, testRecipients)
+        const result = CreateEventPresenter.go(session, testRecipients, auth)
 
         expect(result.metadata.returnCycle).to.equal({
           dueDate: '2025-07-28',
@@ -147,13 +165,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.metadata.name).to.equal('Returns: invitation')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('returnInvitation')
     })
@@ -165,13 +183,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.metadata.name).to.equal('Returns: reminder')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('returnReminder')
     })
@@ -183,13 +201,13 @@ describe('Notifications Setup - Event presenter', () => {
     })
 
     it('correctly sets the "metadata.name"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.metadata.name).to.equal('')
     })
 
     it('correctly sets the "subtype"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients)
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('')
     })
