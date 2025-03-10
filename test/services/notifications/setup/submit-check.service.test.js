@@ -13,6 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
+const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 const CreateEventService = require('../../../../app/services/notifications/setup/create-event.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
@@ -20,7 +21,7 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
-describe('Notifications Setup - Submit Check service', () => {
+describe.only('Notifications Setup - Submit Check service', () => {
   let notifierStub
   let recipients
   let session
@@ -51,6 +52,7 @@ describe('Notifications Setup - Submit Check service', () => {
 
     recipients = RecipientsFixture.recipients()
 
+    Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
     Sinon.stub(CreateEventService, 'go').resolves()
     Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
     Sinon.stub(RecipientsService, 'go').resolves(testRecipients)

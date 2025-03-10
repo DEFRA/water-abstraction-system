@@ -5,11 +5,11 @@
  * @module SubmitCheckService
  */
 
+const BatchNotificationsService = require('./batch-notifications.service.js')
 const CreateEventPresenter = require('../../../presenters/notifications/setup/create-event.presenter.js')
 const CreateEventService = require('./create-event.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const RecipientsService = require('./fetch-recipients.service.js')
-const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
@@ -31,7 +31,7 @@ async function go(sessionId) {
 
     await _event(session, recipients)
 
-    _notifications(session, recipients)
+    await _notifications(session, recipients)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
@@ -45,8 +45,8 @@ async function _event(session, recipients) {
   return CreateEventService.go(event)
 }
 
-function _notifications(session, recipients) {
-  return ReturnsNotificationPresenter.go(
+async function _notifications(session, recipients) {
+  return BatchNotificationsService.go(
     recipients,
     session.determinedReturnsPeriod,
     session.referenceCode,

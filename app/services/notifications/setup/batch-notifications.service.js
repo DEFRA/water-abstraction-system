@@ -7,7 +7,7 @@
 
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
-const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
+const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 
 const CREATED = 201
 
@@ -33,7 +33,7 @@ const CREATED = 201
  * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey) {
-  const notifications = ReturnsNotificationPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey)
+  const notifications = ScheduledNotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey)
 
   const toSendNotifications = _toSendNotifications(notifications)
 
