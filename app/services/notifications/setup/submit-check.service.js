@@ -9,7 +9,7 @@ const CreateEventPresenter = require('../../../presenters/notifications/setup/cr
 const CreateEventService = require('./create-event.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const RecipientsService = require('./fetch-recipients.service.js')
-const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
+const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 

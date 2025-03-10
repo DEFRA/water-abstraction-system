@@ -17,10 +17,10 @@ function convertPenceToPounds(value) {
 }
 
 /**
- * Converts a quantity from a given unit to cubic metres and formats it
+ * Converts a quantity in cubic metres to a given unit and formats it
  *
- * @param {string} units - the unit of the quantity
- * @param {number} quantity - the quantity to be formatted
+ * @param {string} units - the unit to convert the quantity to
+ * @param {number} quantity - the quantity in cubic metres to be formatted
  *
  * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
  */

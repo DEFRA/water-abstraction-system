@@ -22,6 +22,7 @@ describe('Return Logs Setup - Check service', () => {
     session = await SessionHelper.add({
       data: {
         endDate: '2005-03-31T00:00:00.000Z',
+        lines: [],
         meterProvided: 'no',
         periodEndDay: 31,
         periodEndMonth: 12,
@@ -31,8 +32,10 @@ describe('Return Logs Setup - Check service', () => {
         receivedDate: '2025-01-31T00:00:00.000Z',
         reported: 'volumes',
         returnReference: '1234',
+        returnsFrequency: 'month',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startDate: '2004-04-01T00:00:00.000Z',
+        startReading: 0,
         twoPartTariff: false,
         units: 'megalitres'
       }
@@ -48,6 +51,8 @@ describe('Return Logs Setup - Check service', () => {
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
         activeNavBar: 'search',
+        displayReadings: false,
+        displayUnits: true,
         links: {
           cancel: `/system/return-logs/setup/${session.id}/cancel`,
           meterDetails: `/system/return-logs/setup/${session.id}/meter-provided`,
@@ -56,6 +61,7 @@ describe('Return Logs Setup - Check service', () => {
           reported: `/system/return-logs/setup/${session.id}/reported`,
           units: `/system/return-logs/setup/${session.id}/units`
         },
+        meter10TimesDisplay: undefined,
         meterMake: undefined,
         meterProvided: 'no',
         meterSerialNumber: undefined,
@@ -77,7 +83,35 @@ describe('Return Logs Setup - Check service', () => {
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+        startReading: 0,
+        summaryTableData: {
+          headers: [
+            {
+              text: 'Month'
+            },
+            {
+              format: 'numeric',
+              text: 'Reading'
+            },
+            {
+              format: 'numeric',
+              text: 'Megalitres'
+            },
+            {
+              format: 'numeric',
+              text: 'Cubic metres'
+            },
+            {
+              format: 'numeric',
+              text: 'Details'
+            }
+          ],
+          rows: []
+        },
+        tableTitle: 'Summary of monthly meter readings',
         tariff: 'Standard',
+        totalCubicMetres: '0',
+        totalQuantity: '0',
         units: 'Megalitres'
       })
     })

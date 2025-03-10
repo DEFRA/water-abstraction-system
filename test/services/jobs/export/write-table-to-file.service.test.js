@@ -45,7 +45,7 @@ const csvValues =
   '"low",' +
   '"no model",' +
   'false,' +
-  ',' +
+  '0,' +
   '25002\n'
 
 const csvHeaders =

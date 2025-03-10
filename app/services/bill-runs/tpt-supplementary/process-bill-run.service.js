@@ -38,7 +38,6 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    // `populated` will be set to true if `MatchAndAllocateService` processes at least one licence
     const licences = await MatchAndAllocateService.go(billRun, billingPeriod)
 
     await AssignBillRunToLicencesService.go(billRunId, licences, billingPeriod, true)
