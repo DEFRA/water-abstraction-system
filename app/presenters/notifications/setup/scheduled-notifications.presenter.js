@@ -82,9 +82,11 @@ function _addressLines(contact) {
 function _email(recipient, returnsPeriod, referenceCode, journey) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
+  const messageType = 'email'
   return {
     licences: _licences(recipient.licence_refs),
-    messageType: 'email',
+    messageType,
+    messageRef: _messageRef(messageType, journey, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
@@ -135,9 +137,12 @@ function _letter(recipient, returnsPeriod, referenceCode, journey) {
 
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
+  const messageType = 'letter'
+
   return {
     licences: _licences(recipient.licence_refs),
-    messageType: 'letter',
+    messageType,
+    messageRef: _messageRef(messageType, journey, recipient.contact_type),
     personalisation: {
       name,
       ..._addressLines(recipient.contact),
@@ -180,6 +185,47 @@ function _licences(licenceRefs) {
   const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
 
   return JSON.stringify(formattedRecipients)
+}
+
+/**
+ * The legacy code has the concept of 'message_refs' used to group different types of notifications. There are queries
+ * which rely on checking this 'message_refs' as part of the fetch. We need to follow this pattern.
+ *
+ * As we have introduced the concept of 'both' for a 'contact_type' we use what we call the primary recipient for the
+ * 'message_ref'. When the licence is 'registered' we use the 'Primary user', when the licence is 'unregistered' we use
+ * the 'Licence holder'. This is consistent with other areas of our codebase (they use the same 'template_id').
+ *
+ * @private
+ */
+function _messageRef(messageType, journey, contactType) {
+  const MESSAGE_REFS = {
+    email: {
+      invitations: {
+        'Primary user': 'returns_invitation_primary_user_email',
+        both: 'returns_invitation_primary_user_email',
+        'Returns agent': 'returns_invitation_returns_agent_email'
+      },
+      reminders: {
+        'Primary user': 'returns_reminder_primary_user_email',
+        both: 'returns_reminder_primary_user_email',
+        'Returns agent': 'returns_reminder_returns_agent_email'
+      }
+    },
+    letter: {
+      invitations: {
+        'Licence holder': 'returns_invitation_licence_holder_letter',
+        both: 'returns_invitation_licence_holder_letter',
+        'Returns to': 'returns_invitation_returns_to_letter'
+      },
+      reminders: {
+        'Licence holder': 'returns_reminder_licence_holder_letter',
+        both: 'returns_reminder_licence_holder_letter',
+        'Returns to': 'returns_reminder_returns_to_letter'
+      }
+    }
+  }
+
+  return MESSAGE_REFS[messageType][journey][contactType]
 }
 
 module.exports = {
