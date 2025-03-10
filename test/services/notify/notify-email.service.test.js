@@ -44,9 +44,15 @@ describe('Notify - Email service', () => {
 
   describe('when the call to "notify" is successful', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify(stubNotify, {
-        data: { id: '12345' },
-        status: 201
+      notifyStub = _stubSuccessfulNotify({
+        data: {
+          id: '12345',
+          content: {
+            body: 'My dearest margery'
+          }
+        },
+        status: 201,
+        statusText: 'CREATED'
       })
     })
 
@@ -55,7 +61,9 @@ describe('Notify - Email service', () => {
 
       expect(result).to.equal({
         id: result.id,
-        status: 201
+        plaintext: 'My dearest margery',
+        status: 201,
+        statusText: 'created'
       })
     })
 
@@ -74,7 +82,7 @@ describe('Notify - Email service', () => {
         beforeEach(() => {
           emailAddress = ''
 
-          notifyStub = _stubUnSuccessfulNotify(stubNotify, {
+          notifyStub = _stubUnSuccessfulNotify({
             status: 400,
             message: 'Request failed with status code 400',
             response: {
@@ -110,7 +118,7 @@ describe('Notify - Email service', () => {
         beforeEach(() => {
           delete options.personalisation.periodEndDate
 
-          notifyStub = _stubUnSuccessfulNotify(stubNotify, {
+          notifyStub = _stubUnSuccessfulNotify({
             status: 400,
             message: 'Request failed with status code 400',
             response: {
@@ -145,14 +153,14 @@ describe('Notify - Email service', () => {
   })
 })
 
-function _stubSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubSuccessfulNotify(response) {
+  if (stubNotify) {
     return Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
   }
 }
 
-function _stubUnSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubUnSuccessfulNotify(response) {
+  if (stubNotify) {
     return Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
   }
 }
