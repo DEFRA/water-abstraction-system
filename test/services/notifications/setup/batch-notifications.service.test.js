@@ -49,8 +49,14 @@ describe('Notifications Setup - Batch notifications service', () => {
   describe('when the batch is successful', () => {
     beforeEach(() => {
       _stubSuccessfulNotify({
-        data: { id: '12345' },
-        status: 201
+        data: {
+          id: '12345',
+          content: {
+            body: 'My dearest margery'
+          }
+        },
+        status: 201,
+        statusText: 'CREATED'
       })
     })
 
