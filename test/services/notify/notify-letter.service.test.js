@@ -46,9 +46,15 @@ describe('Notify - Letter service', () => {
 
   describe('when the call to "notify" is successful', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify(stubNotify, {
-        data: { id: '12345' },
-        status: 201
+      notifyStub = _stubSuccessfulNotify({
+        data: {
+          id: '12345',
+          content: {
+            body: 'My dearest margery'
+          }
+        },
+        status: 201,
+        statusText: 'CREATED'
       })
     })
 
@@ -57,7 +63,9 @@ describe('Notify - Letter service', () => {
 
       expect(result).to.equal({
         id: result.id,
-        status: 201
+        plaintext: 'My dearest margery',
+        status: 201,
+        statusText: 'created'
       })
     })
 
@@ -80,7 +88,7 @@ describe('Notify - Letter service', () => {
           delete options.personalisation.address_line_4
           delete options.personalisation.address_line_5
 
-          notifyStub = _stubUnSuccessfulNotify(stubNotify, {
+          notifyStub = _stubUnSuccessfulNotify({
             status: 400,
             message: 'Request failed with status code 400',
             response: {
@@ -116,7 +124,7 @@ describe('Notify - Letter service', () => {
         beforeEach(() => {
           delete options.personalisation.name
 
-          notifyStub = _stubUnSuccessfulNotify(stubNotify, {
+          notifyStub = _stubUnSuccessfulNotify({
             status: 400,
             message: 'Request failed with status code 400',
             response: {
@@ -151,14 +159,14 @@ describe('Notify - Letter service', () => {
   })
 })
 
-function _stubSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubSuccessfulNotify(response) {
+  if (stubNotify) {
     return Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
   }
 }
 
-function _stubUnSuccessfulNotify(stub, response) {
-  if (stub) {
+function _stubUnSuccessfulNotify(response) {
+  if (stubNotify) {
     return Sinon.stub(NotifyClient.prototype, 'sendLetter').rejects(response)
   }
 }
