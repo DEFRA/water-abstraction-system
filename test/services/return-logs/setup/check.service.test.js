@@ -59,6 +59,7 @@ describe('Return Logs Setup - Check service', () => {
           nilReturn: `/system/return-logs/setup/${session.id}/submission`,
           received: `/system/return-logs/setup/${session.id}/received`,
           reported: `/system/return-logs/setup/${session.id}/reported`,
+          startReading: `/system/return-logs/setup/${session.id}/start-reading`,
           units: `/system/return-logs/setup/${session.id}/units`
         },
         meter10TimesDisplay: undefined,
