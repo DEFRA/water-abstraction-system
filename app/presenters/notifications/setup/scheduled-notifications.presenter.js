@@ -86,7 +86,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey) {
   return {
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(messageType, journey, recipient.contact_type),
+    messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
@@ -142,7 +142,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey) {
   return {
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(messageType, journey, recipient.contact_type),
+    messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
       name,
       ..._addressLines(recipient.contact),
@@ -197,27 +197,27 @@ function _licences(licenceRefs) {
  *
  * @private
  */
-function _messageRef(messageType, journey, contactType) {
+function _messageRef(journey, messageType, contactType) {
   const MESSAGE_REFS = {
-    email: {
-      invitations: {
+    invitations: {
+      email: {
         'Primary user': 'returns_invitation_primary_user_email',
         both: 'returns_invitation_primary_user_email',
         'Returns agent': 'returns_invitation_returns_agent_email'
       },
-      reminders: {
-        'Primary user': 'returns_reminder_primary_user_email',
-        both: 'returns_reminder_primary_user_email',
-        'Returns agent': 'returns_reminder_returns_agent_email'
-      }
-    },
-    letter: {
-      invitations: {
+      letter: {
         'Licence holder': 'returns_invitation_licence_holder_letter',
         both: 'returns_invitation_licence_holder_letter',
         'Returns to': 'returns_invitation_returns_to_letter'
+      }
+    },
+    reminders: {
+      email: {
+        'Primary user': 'returns_reminder_primary_user_email',
+        both: 'returns_reminder_primary_user_email',
+        'Returns agent': 'returns_reminder_returns_agent_email'
       },
-      reminders: {
+      letter: {
         'Licence holder': 'returns_reminder_licence_holder_letter',
         both: 'returns_reminder_licence_holder_letter',
         'Returns to': 'returns_reminder_returns_to_letter'
@@ -225,7 +225,7 @@ function _messageRef(messageType, journey, contactType) {
     }
   }
 
-  return MESSAGE_REFS[messageType][journey][contactType]
+  return MESSAGE_REFS[journey][messageType][contactType]
 }
 
 module.exports = {
