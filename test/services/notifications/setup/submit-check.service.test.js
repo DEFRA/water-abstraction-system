@@ -21,7 +21,7 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
-describe.only('Notifications Setup - Submit Check service', () => {
+describe('Notifications Setup - Submit Check service', () => {
   let notifierStub
   let recipients
   let session
