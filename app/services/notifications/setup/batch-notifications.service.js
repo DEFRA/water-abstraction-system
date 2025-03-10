@@ -7,7 +7,7 @@
 
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
-const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/returns-notification.presenter.js')
+const ReturnsNotificationPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 
 const CREATED = 201
 
@@ -46,11 +46,17 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey) {
 }
 
 async function _sendLetter(recipient) {
-  return NotifyLetterService.go(recipient.templateId, recipient.options)
+  return NotifyLetterService.go(recipient.templateId, {
+    personalisation: recipient.personalisation,
+    reference: recipient.reference
+  })
 }
 
 async function _sendEmail(recipient) {
-  return NotifyEmailService.go(recipient.templateId, recipient.emailAddress, recipient.options)
+  return NotifyEmailService.go(recipient.templateId, recipient.recipient, {
+    personalisation: recipient.personalisation,
+    reference: recipient.reference
+  })
 }
 
 /**
@@ -61,7 +67,7 @@ function _toSendNotifications(notifications) {
   const sentNotifications = []
 
   for (const recipient of notifications) {
-    if (recipient.emailAddress) {
+    if (recipient.messageType === 'email') {
       sentNotifications.push(_sendEmail(recipient))
     } else {
       sentNotifications.push(_sendLetter(recipient))
