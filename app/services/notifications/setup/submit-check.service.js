@@ -29,9 +29,9 @@ async function go(sessionId) {
 
     const recipients = await _recipients(session)
 
-    await _event(session, recipients)
+    const { id: eventId } = await _event(session, recipients)
 
-    await _notifications(session, recipients)
+    await _notifications(session, recipients, eventId)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
@@ -45,12 +45,13 @@ async function _event(session, recipients) {
   return CreateEventService.go(event)
 }
 
-async function _notifications(session, recipients) {
+async function _notifications(session, recipients, eventId) {
   return BatchNotificationsService.go(
     recipients,
     session.determinedReturnsPeriod,
     session.referenceCode,
-    session.journey
+    session.journey,
+    eventId
   )
 }
 

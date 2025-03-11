@@ -22,6 +22,8 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
 describe('Notifications Setup - Submit Check service', () => {
+  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+
   let notifierStub
   let recipients
   let session
@@ -53,7 +55,7 @@ describe('Notifications Setup - Submit Check service', () => {
     recipients = RecipientsFixture.recipients()
 
     Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
-    Sinon.stub(CreateEventService, 'go').resolves()
+    Sinon.stub(CreateEventService, 'go').resolves({ id: eventId })
     Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
     Sinon.stub(RecipientsService, 'go').resolves(testRecipients)
   })

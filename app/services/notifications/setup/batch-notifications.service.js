@@ -29,11 +29,18 @@ const CREATED = 201
  * @param {object} determinedReturnsPeriod
  * @param {string} referenceCode
  * @param {string} journey
+ * @param {string} eventId - the event id to link all the notifications to an event
  *
  * @returns {object} - the number of sent and errored notifications
  */
-async function go(recipients, determinedReturnsPeriod, referenceCode, journey) {
-  const notifications = ScheduledNotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey)
+async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
+  const notifications = ScheduledNotificationsPresenter.go(
+    recipients,
+    determinedReturnsPeriod,
+    referenceCode,
+    journey,
+    eventId
+  )
 
   const toSendNotifications = _toSendNotifications(notifications)
 
