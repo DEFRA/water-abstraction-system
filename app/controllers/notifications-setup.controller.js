@@ -99,9 +99,12 @@ async function submitCancel(request, h) {
 }
 
 async function submitCheck(request, h) {
-  const { sessionId } = request.params
+  const {
+    auth,
+    params: { sessionId }
+  } = request
 
-  SubmitCheckService.go(sessionId)
+  SubmitCheckService.go(sessionId, auth)
 
   return h.redirect(`/system/${basePath}/${sessionId}/confirmation`)
 }
