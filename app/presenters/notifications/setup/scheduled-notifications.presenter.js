@@ -24,17 +24,18 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @param {object} returnsPeriod - the return period including the endDate, startDate and dueDate
  * @param {string} referenceCode - the unique code used to group the notifications in notify
  * @param {string} journey - the journey should be either "reminders" or "invitations"
+ * @param {string} eventId - the event id to link all the notifications to an event
  *
  * @returns {object[]} - the recipients transformed into scheduled notifications
  */
-function go(recipients, returnsPeriod, referenceCode, journey) {
+function go(recipients, returnsPeriod, referenceCode, journey, eventId) {
   const scheduledNotifications = []
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey, eventId))
     } else {
-      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey, eventId))
     }
   }
 
@@ -79,10 +80,11 @@ function _addressLines(contact) {
  *
  * @private
  */
-function _email(recipient, returnsPeriod, referenceCode, journey) {
+function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
   return {
+    eventId,
     licences: _licences(recipient.licence_refs),
     messageType: 'email',
     personalisation: {
@@ -130,12 +132,13 @@ function _emailTemplate(contactType, journey) {
  *
  * @private
  */
-function _letter(recipient, returnsPeriod, referenceCode, journey) {
+function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const name = contactName(recipient.contact)
 
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
   return {
+    eventId,
     licences: _licences(recipient.licence_refs),
     messageType: 'letter',
     personalisation: {

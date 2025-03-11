@@ -15,6 +15,7 @@ const ScheduledNotificationsPresenter = require('../../../../app/presenters/noti
 
 describe('Notifications Setup - Scheduled Notifications Presenter', () => {
   const referenceCode = 'TEST-123'
+  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let determinedReturnsPeriod
   let journey
@@ -38,12 +39,19 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
   })
 
   it('correctly transform the recipients into notifications', () => {
-    const result = ScheduledNotificationsPresenter.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
+    const result = ScheduledNotificationsPresenter.go(
+      testRecipients,
+      determinedReturnsPeriod,
+      referenceCode,
+      journey,
+      eventId
+    )
 
     const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
     expect(result).to.equal([
       {
+        eventId,
         licences: `["${recipients.primaryUser.licence_refs}"]`,
         messageType: 'email',
         personalisation: {
@@ -56,6 +64,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
       {
+        eventId,
         licences: `["${recipients.returnsAgent.licence_refs}"]`,
         messageType: 'email',
         personalisation: {
@@ -68,6 +77,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
       },
       {
+        eventId,
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
         messageType: 'letter',
         personalisation: {
@@ -85,6 +95,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       },
       {
+        eventId,
         licences: `["${recipients.returnsTo.licence_refs}"]`,
         messageType: 'letter',
         personalisation: {
@@ -102,6 +113,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
       },
       {
+        eventId,
         licences: `["${firstMultiple}","${secondMultiple}"]`,
         messageType: 'letter',
         personalisation: {
@@ -137,11 +149,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -167,11 +181,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -197,11 +213,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -229,11 +247,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
@@ -264,11 +284,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
@@ -299,11 +321,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
@@ -342,11 +366,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -372,11 +398,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -402,11 +430,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageType: 'email',
               personalisation: {
@@ -434,11 +464,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
@@ -469,11 +501,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
@@ -504,11 +538,13 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
-            journey
+            journey,
+            eventId
           )
 
           expect(result).to.equal([
             {
+              eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageType: 'letter',
               personalisation: {
