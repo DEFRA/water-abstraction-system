@@ -89,6 +89,7 @@ function _alwaysRequiredPageData(session) {
       nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
       received: `/system/return-logs/setup/${sessionId}/received`,
       reported: `/system/return-logs/setup/${sessionId}/reported`,
+      startReading: `/system/return-logs/setup/${sessionId}/start-reading`,
       units: `/system/return-logs/setup/${sessionId}/units`
     },
     nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
