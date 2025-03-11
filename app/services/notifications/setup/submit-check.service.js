@@ -19,9 +19,10 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  * This service will transform the recipients into notifications and start processing notifications.
  *
  * @param {string} sessionId - The UUID for the notification setup session record
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  */
-async function go(sessionId) {
+async function go(sessionId, auth) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -29,7 +30,7 @@ async function go(sessionId) {
 
     const recipients = await _recipients(session)
 
-    const { id: eventId } = await _event(session, recipients)
+    const { id: eventId } = await _event(session, recipients, auth)
 
     await _notifications(session, recipients, eventId)
 
@@ -39,8 +40,8 @@ async function go(sessionId) {
   }
 }
 
-async function _event(session, recipients) {
-  const event = CreateEventPresenter.go(session, recipients)
+async function _event(session, recipients, auth) {
+  const event = CreateEventPresenter.go(session, recipients, auth)
 
   return CreateEventService.go(event)
 }

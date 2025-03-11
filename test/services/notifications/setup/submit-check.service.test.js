@@ -24,6 +24,7 @@ const SubmitCheckService = require('../../../../app/services/notifications/setup
 describe('Notifications Setup - Submit Check service', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
+  let auth
   let notifierStub
   let recipients
   let session
@@ -52,6 +53,14 @@ describe('Notifications Setup - Submit Check service', () => {
       }
     })
 
+    auth = {
+      credentials: {
+        user: {
+          username: 'hello@world.com'
+        }
+      }
+    }
+
     recipients = RecipientsFixture.recipients()
 
     Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
@@ -66,15 +75,16 @@ describe('Notifications Setup - Submit Check service', () => {
   })
 
   it('correctly triggers the "DetermineRecipientsService"', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     expect(DetermineRecipientsService.go.calledWith(testRecipients)).to.be.true()
   })
 
   it('correctly triggers the "CreateEventService"', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     const expected = {
+      issuer: 'hello@world.com',
       licences: `["${testRecipients[0].licence_refs}"]`,
       metadata: {
         name: 'Returns: invitation',
@@ -98,7 +108,7 @@ describe('Notifications Setup - Submit Check service', () => {
   })
 
   it('should not throw an error', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     expect(notifierStub.omfg.called).to.be.false()
   })
