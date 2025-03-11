@@ -19,6 +19,8 @@ const { NotifyClient } = require('notifications-node-client')
 const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 
 describe('Notifications Setup - Batch notifications service', () => {
+  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+
   let determinedReturnsPeriod
   let journey
   let recipients
@@ -61,7 +63,13 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     it('should return with no errors', async () => {
-      const result = await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
+      const result = await BatchNotificationsService.go(
+        testRecipients,
+        determinedReturnsPeriod,
+        referenceCode,
+        journey,
+        eventId
+      )
 
       expect(result).to.equal({
         error: 0,
@@ -70,7 +78,7 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     it('correctly sends the "email" data to Notify', async () => {
-      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
+      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
       expect(
         NotifyClient.prototype.sendEmail.calledWith(
@@ -89,7 +97,7 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     it('correctly sends the "letter" data to Notify', async () => {
-      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
+      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
       expect(
         NotifyClient.prototype.sendLetter.calledWith('4fe80aed-c5dd-44c3-9044-d0289d635019', {
@@ -129,7 +137,13 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     it('should return the "error" count in the response', async () => {
-      const result = await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey)
+      const result = await BatchNotificationsService.go(
+        testRecipients,
+        determinedReturnsPeriod,
+        referenceCode,
+        journey,
+        eventId
+      )
 
       expect(result).to.equal({
         error: 5,

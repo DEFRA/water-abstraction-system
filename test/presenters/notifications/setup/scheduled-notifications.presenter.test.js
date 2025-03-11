@@ -53,6 +53,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       {
         eventId,
         licences: `["${recipients.primaryUser.licence_refs}"]`,
+        messageRef: 'returns_invitation_primary_user_email',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
@@ -66,6 +67,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       {
         eventId,
         licences: `["${recipients.returnsAgent.licence_refs}"]`,
+        messageRef: 'returns_invitation_returns_agent_email',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
@@ -79,6 +81,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       {
         eventId,
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
+        messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
           address_line_1: '1',
@@ -97,6 +100,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       {
         eventId,
         licences: `["${recipients.returnsTo.licence_refs}"]`,
+        messageRef: 'returns_invitation_returns_to_letter',
         messageType: 'letter',
         personalisation: {
           address_line_1: '2',
@@ -115,6 +119,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       {
         eventId,
         licences: `["${firstMultiple}","${secondMultiple}"]`,
+        messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
           address_line_1: '3',
@@ -157,6 +162,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'returns_invitation_primary_user_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -189,6 +195,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
+              messageRef: 'returns_invitation_returns_agent_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -221,6 +228,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'returns_invitation_primary_user_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -255,6 +263,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'returns_invitation_licence_holder_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '1',
@@ -292,6 +301,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
+              messageRef: 'returns_invitation_returns_to_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '2',
@@ -329,6 +339,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'returns_invitation_licence_holder_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '1',
@@ -374,6 +385,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'returns_reminder_primary_user_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -406,6 +418,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
+              messageRef: 'returns_reminder_returns_agent_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -438,6 +451,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'returns_reminder_primary_user_email',
               messageType: 'email',
               personalisation: {
                 periodEndDate: '31 March 2025',
@@ -472,6 +486,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'returns_reminder_licence_holder_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '1',
@@ -509,6 +524,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
+              messageRef: 'returns_reminder_returns_to_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '2',
@@ -546,6 +562,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
             {
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'returns_reminder_licence_holder_letter',
               messageType: 'letter',
               personalisation: {
                 address_line_1: '1',
