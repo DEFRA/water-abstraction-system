@@ -153,7 +153,8 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
       ..._returnsPeriod(returnsPeriod)
     },
     reference: referenceCode,
-    sendAfter: _sendAfter(),
+    // NOTE: The legacy code uses the 'sendAfter' to know when a notification is sent.
+    sendAfter: timestampForPostgres(),
     templateId
   }
 }
