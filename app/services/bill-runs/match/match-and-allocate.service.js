@@ -26,7 +26,7 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
  * @param {module:BillRunModel} billRun - The bill run object containing billing information
  * @param {object} billingPeriod - A single billing period containing a `startDate` and `endDate`
  *
- * @returns {Promise<object[]>} - the licences found for matching and allocating
+ * @returns {Promise<boolean>} - True if there are any licences matched to returns, else false
  */
 async function go(billRun, billingPeriod) {
   const supplementary = billRun.batchType === 'two_part_supplementary'
@@ -36,7 +36,7 @@ async function go(billRun, billingPeriod) {
     await _process(licences, billingPeriod, billRun)
   }
 
-  return licences
+  return licences.length > 0
 }
 
 async function _process(licences, billingPeriod, billRun) {
