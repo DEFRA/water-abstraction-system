@@ -8,7 +8,7 @@
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Formats recipients into scheduled notifications for a returns invitation or reminder
@@ -94,6 +94,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
     },
     recipient: recipient.email,
     reference: referenceCode,
+    sendAfter: timestampForPostgres(),
     templateId
   }
 }
@@ -152,6 +153,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
       ..._returnsPeriod(returnsPeriod)
     },
     reference: referenceCode,
+    sendAfter: timestampForPostgres(),
     templateId
   }
 }
