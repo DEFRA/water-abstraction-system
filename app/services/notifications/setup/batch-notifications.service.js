@@ -38,10 +38,8 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
   let sent = 0
   let error = 0
 
-  const size = batchSize
-
-  for (let i = 0; i < recipients.length; i += size) {
-    const batchRecipients = recipients.slice(i, i + size)
+  for (let i = 0; i < recipients.length; i += batchSize) {
+    const batchRecipients = recipients.slice(i, i + batchSize)
 
     const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
