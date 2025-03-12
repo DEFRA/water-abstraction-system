@@ -5,11 +5,12 @@
  * @module BatchNotificationsService
  */
 
+const CreateNotificationsService = require('./create-notifications.service.js')
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
-const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
+const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
+const { batchSize } = require('../../../../config/notify.config.js')
 
 /**
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
@@ -34,6 +35,27 @@ const CreateNotificationsService = require('./create-notifications.service.js')
  * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
+  let sent = 0
+  let error = 0
+
+  const size = batchSize
+
+  for (let i = 0; i < recipients.length; i += size) {
+    const batchRecipients = recipients.slice(i, i + size)
+
+    const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+
+    sent += batch.sent
+    error += batch.error
+  }
+
+  return {
+    sent,
+    error
+  }
+}
+
+async function _batch(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
   const scheduledNotifications = ScheduledNotificationsPresenter.go(
     recipients,
     determinedReturnsPeriod,

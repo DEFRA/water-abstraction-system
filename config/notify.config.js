@@ -11,7 +11,8 @@ require('dotenv').config()
 
 const config = {
   apiKey: process.env.GOV_UK_NOTIFY_API_KEY,
-  stubNotify: process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
+  batchSize: process.env.NOTIFICATIONS_BATCH_SIZE || 250,
+  stubNotify: process.env.STUB_NOTIFY || true // Used to perform integration tests with notify,
 }
 
 module.exports = config

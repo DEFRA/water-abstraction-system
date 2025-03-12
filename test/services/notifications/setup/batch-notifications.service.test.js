@@ -15,6 +15,7 @@ const ScheduledNotificationModel = require('../../../../app/models/scheduled-not
 const { stubNotify } = require('../../../../config/notify.config.js')
 
 // Things we need to stub
+const NotifyConfig = require('../../../../config/notify.config.js')
 const { NotifyClient } = require('notifications-node-client')
 
 // Thing under test
@@ -32,6 +33,10 @@ describe('Notifications Setup - Batch notifications service', () => {
   let testRecipients
 
   beforeEach(async () => {
+    // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the scheduled
+    // notifications still saved in the database regardless of batch size
+    NotifyConfig.batchSize = 1
+
     determinedReturnsPeriod = {
       name: 'allYear',
       dueDate: '2025-04-28',
