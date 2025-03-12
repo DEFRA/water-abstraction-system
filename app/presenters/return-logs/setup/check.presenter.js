@@ -183,7 +183,7 @@ function _linkDetails(endDate, method, returnsFrequency, sessionId) {
   const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
   return {
-    href: `/system/return-logs/setup/${sessionId}/${yearMonth}`,
+    href: `/system/return-logs/setup/${sessionId}/${linkTextMethod}/${yearMonth}`,
     text
   }
 }
