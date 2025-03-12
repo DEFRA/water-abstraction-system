@@ -151,7 +151,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const messageType = 'letter'
 
   return {
-    ..._common(referenceCode, templateId, eventId, recipient),
+    ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(journey, messageType, recipient.contact_type),
