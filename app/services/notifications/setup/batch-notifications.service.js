@@ -54,6 +54,16 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
   }
 }
 
+function _scheduledNotification(scheduledNotification, notifyResponse) {
+  delete scheduledNotification.reference
+  delete scheduledNotification.templateId
+
+  return {
+    ...scheduledNotification,
+    ...NotifyUpdatePresenter.go(notifyResponse)
+  }
+}
+
 async function _sendLetter(scheduledNotification) {
   const notifyResponse = await NotifyLetterService.go(scheduledNotification.templateId, {
     personalisation: scheduledNotification.personalisation,
@@ -80,17 +90,6 @@ async function _sentNotifications(toSendNotifications) {
   const settledPromises = await Promise.allSettled(toSendNotifications)
 
   return settledPromises.map((settledPromise) => settledPromise.value)
-}
-
-function _scheduledNotification(scheduledNotification, notifyResponse) {
-  delete scheduledNotification.reference
-  delete scheduledNotification.templateId
-
-  return {
-    createdAt: new Date(),
-    ...scheduledNotification,
-    ...NotifyUpdatePresenter.go(notifyResponse)
-  }
 }
 
 /**

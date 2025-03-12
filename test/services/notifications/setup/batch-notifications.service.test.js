@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
 
 // Things we need to stub
@@ -19,9 +20,11 @@ const { NotifyClient } = require('notifications-node-client')
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 
-describe('Notifications Setup - Batch notifications service', () => {
+describe.only('Notifications Setup - Batch notifications service', () => {
+  const mockDate = new Date('2025-01-01')
   const referenceCode = 'RINV-123'
 
+  let clock
   let determinedReturnsPeriod
   let eventId
   let journey
@@ -50,10 +53,13 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     eventId = event.id
+
+    clock = Sinon.useFakeTimers(mockDate)
   })
 
   afterEach(() => {
     Sinon.restore()
+    clock.restore()
   })
 
   describe('when the batch is successful', () => {
@@ -68,6 +74,170 @@ describe('Notifications Setup - Batch notifications service', () => {
         status: 201,
         statusText: 'CREATED'
       })
+    })
+
+    it('should persist the scheduled notifications', async () => {
+      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+
+      const result = await _getScheduledNotifications(eventId)
+
+      const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+
+      expect(result).to.equal([
+        {
+          id: result[0].id,
+          recipient: 'primary.user@important.com',
+          messageType: 'email',
+          messageRef: 'returns_invitation_primary_user_email',
+          personalisation: {
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            periodStartDate: '1 April 2022'
+          },
+          sendAfter: mockDate,
+          status: 'sent',
+          log: null,
+          licences: [recipients.primaryUser.licence_refs],
+          individualId: null,
+          companyId: null,
+          notifyId: '12345',
+          notifyStatus: 'created',
+          plaintext: 'My dearest margery',
+          eventId,
+          metadata: null,
+          statusChecks: null,
+          nextStatusCheck: null,
+          notificationType: null,
+          jobId: null,
+          createdAt: mockDate
+        },
+        {
+          id: result[1].id,
+          recipient: 'returns.agent@important.com',
+          messageType: 'email',
+          messageRef: 'returns_invitation_returns_agent_email',
+          personalisation: {
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            periodStartDate: '1 April 2022'
+          },
+          sendAfter: mockDate,
+          status: 'sent',
+          log: null,
+          licences: [recipients.returnsAgent.licence_refs],
+          individualId: null,
+          companyId: null,
+          notifyId: '12345',
+          notifyStatus: 'created',
+          plaintext: 'My dearest margery',
+          eventId,
+          metadata: null,
+          statusChecks: null,
+          nextStatusCheck: null,
+          notificationType: null,
+          jobId: null,
+          createdAt: mockDate
+        },
+        {
+          id: result[2].id,
+          recipient: null,
+          messageType: 'letter',
+          messageRef: 'returns_invitation_licence_holder_letter',
+          personalisation: {
+            name: 'Mr H J Licence holder',
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            address_line_1: '1',
+            address_line_2: 'Privet Drive',
+            address_line_3: 'Little Whinging',
+            address_line_4: 'Surrey',
+            address_line_5: 'WD25 7LR',
+            periodStartDate: '1 April 2022'
+          },
+          sendAfter: mockDate,
+          status: 'sent',
+          log: null,
+          licences: [recipients.licenceHolder.licence_refs],
+          individualId: null,
+          companyId: null,
+          notifyId: '12345',
+          notifyStatus: 'created',
+          plaintext: 'My dearest margery',
+          eventId,
+          metadata: null,
+          statusChecks: null,
+          nextStatusCheck: null,
+          notificationType: null,
+          jobId: null,
+          createdAt: mockDate
+        },
+        {
+          id: result[3].id,
+          recipient: null,
+          messageType: 'letter',
+          messageRef: 'returns_invitation_returns_to_letter',
+          personalisation: {
+            name: 'Mr H J Returns to',
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            address_line_1: '2',
+            address_line_2: 'Privet Drive',
+            address_line_3: 'Little Whinging',
+            address_line_4: 'Surrey',
+            address_line_5: 'WD25 7LR',
+            periodStartDate: '1 April 2022'
+          },
+          sendAfter: mockDate,
+          status: 'sent',
+          log: null,
+          licences: [recipients.returnsTo.licence_refs],
+          individualId: null,
+          companyId: null,
+          notifyId: '12345',
+          notifyStatus: 'created',
+          plaintext: 'My dearest margery',
+          eventId,
+          metadata: null,
+          statusChecks: null,
+          nextStatusCheck: null,
+          notificationType: null,
+          jobId: null,
+          createdAt: mockDate
+        },
+        {
+          id: result[4].id,
+          recipient: null,
+          messageType: 'letter',
+          messageRef: 'returns_invitation_licence_holder_letter',
+          personalisation: {
+            name: 'Mr H J Licence holder with multiple licences',
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            address_line_1: '3',
+            address_line_2: 'Privet Drive',
+            address_line_3: 'Little Whinging',
+            address_line_4: 'Surrey',
+            address_line_5: 'WD25 7LR',
+            periodStartDate: '1 April 2022'
+          },
+          sendAfter: mockDate,
+          status: 'sent',
+          log: null,
+          licences: [firstMultiple, secondMultiple],
+          individualId: null,
+          companyId: null,
+          notifyId: '12345',
+          notifyStatus: 'created',
+          plaintext: 'My dearest margery',
+          eventId,
+          metadata: null,
+          statusChecks: null,
+          nextStatusCheck: null,
+          notificationType: null,
+          jobId: null,
+          createdAt: mockDate
+        }
+      ])
     })
 
     it('should return with no errors', async () => {
@@ -158,8 +328,46 @@ describe('Notifications Setup - Batch notifications service', () => {
         sent: 5
       })
     })
+
+    it('should persist the scheduled notifications with the errors', async () => {
+      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+
+      const result = await _getScheduledNotifications(eventId)
+
+      expect(result[0]).to.equal({
+        id: result[0].id,
+        recipient: 'primary.user@important.com',
+        messageType: 'email',
+        messageRef: 'returns_invitation_primary_user_email',
+        personalisation: {
+          periodEndDate: '31 March 2023',
+          returnDueDate: '28 April 2025',
+          periodStartDate: '1 April 2022'
+        },
+        sendAfter: mockDate,
+        status: 'error',
+        log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
+        licences: [recipients.primaryUser.licence_refs],
+        individualId: null,
+        companyId: null,
+        notifyId: null,
+        notifyStatus: null,
+        plaintext: null,
+        eventId,
+        metadata: null,
+        statusChecks: null,
+        nextStatusCheck: null,
+        notificationType: null,
+        jobId: null,
+        createdAt: mockDate
+      })
+    })
   })
 })
+
+async function _getScheduledNotifications(eventId) {
+  return ScheduledNotificationModel.query().where('eventId', eventId)
+}
 
 function _stubSuccessfulNotify(response) {
   if (stubNotify) {
