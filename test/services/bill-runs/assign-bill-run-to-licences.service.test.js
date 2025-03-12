@@ -14,7 +14,7 @@ const LicenceSupplementaryYearModel = require('../../../app/models/licence-suppl
 // Thing under test
 const AssignBillRunToLicencesService = require('../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
 
-describe('Bill Runs - Unassign Bill Run To Licence service', () => {
+describe('Bill Runs - Assign Bill Run To Licences service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
   const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'
   const licences = [{ id: '098e0fff-1c3e-4be3-83b9-8f483ae5b41e' }, { id: '406b8ba4-63b6-442a-86f3-a144f1f63ca9' }]
