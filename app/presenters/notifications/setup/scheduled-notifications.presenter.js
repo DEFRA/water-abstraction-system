@@ -59,6 +59,17 @@ function _addressLines(contact) {
   return addressLines
 }
 
+function _common(referenceCode, templateId, eventId) {
+  const createdAt = timestampForPostgres()
+
+  return {
+    createdAt,
+    eventId,
+    reference: referenceCode,
+    sendAfter: createdAt,
+    templateId
+  }
+}
 /**
  * An email notification requires an email address alongside the expected payload:
  *
@@ -83,22 +94,17 @@ function _addressLines(contact) {
 function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
-  const createdAt = timestampForPostgres()
   const messageType = 'email'
 
   return {
-    createdAt,
-    eventId,
+    ..._common(referenceCode, templateId, eventId, recipient),
     licences: _licences(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
-    recipient: recipient.email,
-    reference: referenceCode,
-    sendAfter: createdAt,
-    templateId
+    recipient: recipient.email
   }
 }
 
@@ -140,15 +146,12 @@ function _emailTemplate(contactType, journey) {
  */
 function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const name = contactName(recipient.contact)
-
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
-  const createdAt = timestampForPostgres()
   const messageType = 'letter'
 
   return {
-    createdAt,
-    eventId,
+    ..._common(referenceCode, templateId, eventId, recipient),
     licences: _licences(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(journey, messageType, recipient.contact_type),
@@ -156,10 +159,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
       name,
       ..._addressLines(recipient.contact),
       ..._returnsPeriod(returnsPeriod)
-    },
-    reference: referenceCode,
-    sendAfter: createdAt,
-    templateId
+    }
   }
 }
 
