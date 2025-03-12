@@ -23,9 +23,7 @@ const CREATED = 201
  */
 function go(notify) {
   if (notify.status !== CREATED) {
-    return {
-      ..._error(notify)
-    }
+    return _error(notify)
   }
 
   return {
