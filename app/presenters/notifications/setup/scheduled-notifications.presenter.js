@@ -233,15 +233,6 @@ function _messageRef(journey, messageType, contactType) {
   return MESSAGE_REFS[journey][messageType][contactType]
 }
 
-/**
- * The legacy code uses the 'sendAfter' to know when a notification is sent.
- *
- * @private
- */
-function _sendAfter() {
-  return timestampForPostgres()
-}
-
 module.exports = {
   go
 }
