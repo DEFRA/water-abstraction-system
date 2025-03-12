@@ -15,7 +15,7 @@ const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 // Thing under test
 const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 
-describe('Determine Charge Version Flags Service', () => {
+describe.only('Determine Charge Version Flags Service', () => {
   describe('when given a valid chargeVersionId', () => {
     let chargeVersion
     let licence
@@ -27,7 +27,11 @@ describe('Determine Charge Version Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+        const result = await DetermineChargeVersionFlagsService.go(
+          chargeVersion.id,
+          licence.id,
+          chargeVersion.startDate
+        )
 
         expect(result.licenceId).to.equal(licence.id)
         expect(result.regionId).to.equal(licence.regionId)
@@ -37,7 +41,11 @@ describe('Determine Charge Version Flags Service', () => {
 
       describe('and has a charging schema of "alcs"', () => {
         it('returns the correct flags', async () => {
-          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+          const result = await DetermineChargeVersionFlagsService.go(
+            chargeVersion.id,
+            licence.id,
+            chargeVersion.startDate
+          )
 
           expect(result.flagForPreSrocSupplementary).to.equal(true)
           expect(result.flagForSrocSupplementary).to.equal(true)
@@ -52,7 +60,11 @@ describe('Determine Charge Version Flags Service', () => {
 
         describe('but no two-part tariff indicators', () => {
           it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+            const result = await DetermineChargeVersionFlagsService.go(
+              chargeVersion.id,
+              licence.id,
+              chargeVersion.startDate
+            )
 
             expect(result.flagForPreSrocSupplementary).to.equal(true)
             expect(result.flagForSrocSupplementary).to.equal(true)
@@ -66,7 +78,11 @@ describe('Determine Charge Version Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+            const result = await DetermineChargeVersionFlagsService.go(
+              chargeVersion.id,
+              licence.id,
+              chargeVersion.startDate
+            )
 
             expect(result.flagForPreSrocSupplementary).to.equal(true)
             expect(result.flagForSrocSupplementary).to.equal(true)
@@ -83,7 +99,11 @@ describe('Determine Charge Version Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+        const result = await DetermineChargeVersionFlagsService.go(
+          chargeVersion.id,
+          licence.id,
+          chargeVersion.startDate
+        )
 
         expect(result.licenceId).to.equal(licence.id)
         expect(result.regionId).to.equal(licence.regionId)
@@ -93,7 +113,11 @@ describe('Determine Charge Version Flags Service', () => {
 
       describe('and has a charging schema of "alcs"', () => {
         it('returns the correct flags', async () => {
-          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+          const result = await DetermineChargeVersionFlagsService.go(
+            chargeVersion.id,
+            licence.id,
+            chargeVersion.startDate
+          )
 
           expect(result.flagForPreSrocSupplementary).to.equal(true)
           expect(result.flagForSrocSupplementary).to.equal(false)
@@ -108,7 +132,11 @@ describe('Determine Charge Version Flags Service', () => {
 
         describe('but no two-part tariff indicators', () => {
           it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+            const result = await DetermineChargeVersionFlagsService.go(
+              chargeVersion.id,
+              licence.id,
+              chargeVersion.startDate
+            )
 
             expect(result.flagForPreSrocSupplementary).to.equal(false)
             expect(result.flagForSrocSupplementary).to.equal(true)
@@ -122,7 +150,11 @@ describe('Determine Charge Version Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+            const result = await DetermineChargeVersionFlagsService.go(
+              chargeVersion.id,
+              licence.id,
+              chargeVersion.startDate
+            )
 
             expect(result.flagForPreSrocSupplementary).to.equal(false)
             expect(result.flagForSrocSupplementary).to.equal(true)
