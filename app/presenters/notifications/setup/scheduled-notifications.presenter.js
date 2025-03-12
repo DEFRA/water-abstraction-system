@@ -83,8 +83,11 @@ function _addressLines(contact) {
 function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
+  const createdAt = timestampForPostgres()
   const messageType = 'email'
+
   return {
+    createdAt,
     eventId,
     licences: _licences(recipient.licence_refs),
     messageType,
@@ -94,7 +97,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
     },
     recipient: recipient.email,
     reference: referenceCode,
-    sendAfter: timestampForPostgres(),
+    sendAfter: createdAt,
     templateId
   }
 }
@@ -140,9 +143,11 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
 
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
+  const createdAt = timestampForPostgres()
   const messageType = 'letter'
 
   return {
+    createdAt,
     eventId,
     licences: _licences(recipient.licence_refs),
     messageType,
@@ -153,7 +158,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
       ..._returnsPeriod(returnsPeriod)
     },
     reference: referenceCode,
-    sendAfter: timestampForPostgres(),
+    sendAfter: createdAt,
     templateId
   }
 }
