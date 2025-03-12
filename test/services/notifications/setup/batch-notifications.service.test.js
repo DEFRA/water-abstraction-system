@@ -20,7 +20,7 @@ const { NotifyClient } = require('notifications-node-client')
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 
-describe.only('Notifications Setup - Batch notifications service', () => {
+describe('Notifications Setup - Batch notifications service', () => {
   const mockDate = new Date('2025-01-01')
   const referenceCode = 'RINV-123'
 
