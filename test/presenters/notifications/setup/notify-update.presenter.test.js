@@ -22,7 +22,7 @@ describe('Notifications Setup - Notify update presenter', () => {
     }
   })
 
-  it('correctly updates the scheduled notification with the notify data', () => {
+  it('correctly returns notify data', () => {
     const result = NotifyUpdatePresenter.go(notifyResponse)
 
     expect(result).to.equal({
@@ -47,7 +47,7 @@ describe('Notifications Setup - Notify update presenter', () => {
       }
     })
 
-    it('correctly updates the scheduled notification with the notify error', () => {
+    it('correctly returns notify data with the error', () => {
       const result = NotifyUpdatePresenter.go(notifyResponse)
 
       expect(result).to.equal({
