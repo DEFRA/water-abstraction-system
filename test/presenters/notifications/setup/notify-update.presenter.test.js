@@ -8,15 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ScheduledNotificationsUpdateNotifyPresenter = require('../../../../app/presenters/notifications/setup/scheduled-notification-update-notify.presenter.js')
+const NotifyUpdatePresenter = require('../../../../app/presenters/notifications/setup/notify-update.presenter.js')
 
-describe('Notifications Setup - Scheduled notifications updates notify presenter', () => {
-  let scheduledNotification
+describe('Notifications Setup - Notify update presenter', () => {
   let notifyResponse
 
   beforeEach(() => {
-    scheduledNotification = { messageType: 'email' }
-
     notifyResponse = {
       id: '123',
       plaintext: 'My dearest margery',
@@ -26,10 +23,9 @@ describe('Notifications Setup - Scheduled notifications updates notify presenter
   })
 
   it('correctly updates the scheduled notification with the notify data', () => {
-    const result = ScheduledNotificationsUpdateNotifyPresenter.go(scheduledNotification, notifyResponse)
+    const result = NotifyUpdatePresenter.go(notifyResponse)
 
     expect(result).to.equal({
-      messageType: 'email',
       notifyId: '123',
       notifyStatus: 'created',
       plaintext: 'My dearest margery',
@@ -52,11 +48,10 @@ describe('Notifications Setup - Scheduled notifications updates notify presenter
     })
 
     it('correctly updates the scheduled notification with the notify error', () => {
-      const result = ScheduledNotificationsUpdateNotifyPresenter.go(scheduledNotification, notifyResponse)
+      const result = NotifyUpdatePresenter.go(notifyResponse)
 
       expect(result).to.equal({
         log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
-        messageType: 'email',
         status: 'error'
       })
     })
