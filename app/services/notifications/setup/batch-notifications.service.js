@@ -8,8 +8,8 @@
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
-
-const CREATED = 201
+const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
+const CreateNotificationsService = require('./create-notifications.service.js')
 
 /**
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
@@ -34,7 +34,7 @@ const CREATED = 201
  * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
-  const notifications = ScheduledNotificationsPresenter.go(
+  const scheduledNotifications = ScheduledNotificationsPresenter.go(
     recipients,
     determinedReturnsPeriod,
     referenceCode,
@@ -42,9 +42,11 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
     eventId
   )
 
-  const toSendNotifications = _toSendNotifications(notifications)
+  const toSendNotifications = _toSendNotifications(scheduledNotifications)
 
-  const sentNotifications = await Promise.allSettled(toSendNotifications)
+  const sentNotifications = await _sentNotifications(toSendNotifications)
+
+  await CreateNotificationsService.go(sentNotifications)
 
   return {
     sent: sentNotifications.length,
@@ -52,32 +54,57 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
   }
 }
 
-async function _sendLetter(recipient) {
-  return NotifyLetterService.go(recipient.templateId, {
-    personalisation: recipient.personalisation,
-    reference: recipient.reference
+async function _sendLetter(scheduledNotification) {
+  const notifyResponse = await NotifyLetterService.go(scheduledNotification.templateId, {
+    personalisation: scheduledNotification.personalisation,
+    reference: scheduledNotification.reference
   })
+
+  return _scheduledNotification(scheduledNotification, notifyResponse)
 }
 
-async function _sendEmail(recipient) {
-  return NotifyEmailService.go(recipient.templateId, recipient.recipient, {
-    personalisation: recipient.personalisation,
-    reference: recipient.reference
-  })
+async function _sendEmail(scheduledNotification) {
+  const notifyResponse = await NotifyEmailService.go(
+    scheduledNotification.templateId,
+    scheduledNotification.recipient,
+    {
+      personalisation: scheduledNotification.personalisation,
+      reference: scheduledNotification.reference
+    }
+  )
+
+  return _scheduledNotification(scheduledNotification, notifyResponse)
+}
+
+async function _sentNotifications(toSendNotifications) {
+  const settledPromises = await Promise.allSettled(toSendNotifications)
+
+  return settledPromises.map((settledPromise) => settledPromise.value)
+}
+
+function _scheduledNotification(scheduledNotification, notifyResponse) {
+  delete scheduledNotification.reference
+  delete scheduledNotification.templateId
+
+  return {
+    createdAt: new Date(),
+    ...scheduledNotification,
+    ...NotifyUpdatePresenter.go(notifyResponse)
+  }
 }
 
 /**
- * Creates an array of promises to make requests to the relevant notification service
+ * Creates an array of promises to make requests to the relevant Notify service
  * @private
  */
-function _toSendNotifications(notifications) {
+function _toSendNotifications(scheduledNotifications) {
   const sentNotifications = []
 
-  for (const recipient of notifications) {
-    if (recipient.messageType === 'email') {
-      sentNotifications.push(_sendEmail(recipient))
+  for (const scheduledNotification of scheduledNotifications) {
+    if (scheduledNotification.messageType === 'email') {
+      sentNotifications.push(_sendEmail(scheduledNotification))
     } else {
-      sentNotifications.push(_sendLetter(recipient))
+      sentNotifications.push(_sendLetter(scheduledNotification))
     }
   }
 
@@ -108,7 +135,7 @@ function _toSendNotifications(notifications) {
  */
 function _errorCount(notifications) {
   const erroredNotifications = notifications.filter((notification) => {
-    return notification.value.status !== CREATED
+    return notification.notifyStatus !== 'created'
   })
 
   return erroredNotifications.length

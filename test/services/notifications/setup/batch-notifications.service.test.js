@@ -9,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const EventHelper = require('../../../support/helpers/event.helper.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
 
@@ -19,15 +20,15 @@ const { NotifyClient } = require('notifications-node-client')
 const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 
 describe('Notifications Setup - Batch notifications service', () => {
-  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+  const referenceCode = 'RINV-123'
 
   let determinedReturnsPeriod
+  let eventId
   let journey
   let recipients
-  let referenceCode
   let testRecipients
 
-  beforeEach(() => {
+  beforeEach(async () => {
     determinedReturnsPeriod = {
       name: 'allYear',
       dueDate: '2025-04-28',
@@ -37,11 +38,18 @@ describe('Notifications Setup - Batch notifications service', () => {
     }
 
     journey = 'invitations'
-    referenceCode = 'RINV-123'
 
     recipients = RecipientsFixture.recipients()
 
     testRecipients = [...Object.values(recipients)]
+
+    const event = await EventHelper.add({
+      type: 'notification',
+      subtype: 'returnsInvitation',
+      referenceCode
+    })
+
+    eventId = event.id
   })
 
   afterEach(() => {
