@@ -94,7 +94,8 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
     },
     recipient: recipient.email,
     reference: referenceCode,
-    sendAfter: _sendAfter(),
+    // NOTE: The legacy code uses the 'sendAfter' to know when a notification is sent.
+    sendAfter: timestampForPostgres(),
     templateId
   }
 }
