@@ -36,10 +36,10 @@
       }) %}
 
       {% for line in inputLines %}
-      {# Set an easier to use index #}
-      {% set rowIndex = loop.index0 %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
 
-      {# Create the input fields #}
+        {# Create the input fields #}
         {{ govukInput({
           label: {
             text: line.date
