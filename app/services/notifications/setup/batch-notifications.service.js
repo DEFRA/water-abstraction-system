@@ -10,7 +10,7 @@ const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
 const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
-const { batchSize } = require('../../../../config/notify.config.js')
+const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
@@ -35,6 +35,8 @@ const { batchSize } = require('../../../../config/notify.config.js')
  * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
+  const { batchSize, delay } = NotifyConfig
+
   let sent = 0
   let error = 0
 
@@ -42,6 +44,8 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
     const batchRecipients = recipients.slice(i, i + batchSize)
 
     const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+
+    await _delay(delay)
 
     sent += batch.sent
     error += batch.error
@@ -72,6 +76,37 @@ async function _batch(recipients, determinedReturnsPeriod, referenceCode, journe
     sent: sentNotifications.length,
     error: _errorCount(sentNotifications)
   }
+}
+
+/**
+ * The Notify service imposes the following rate limits:
+ * 1. A maximum of 3,000 requests per minute.
+ * 2. A maximum of 250 statuses returned per API call.
+ *
+ * To ensure we don't exceed these limits and to allow room for other parts of the system to utilize GOV.UK Notify,
+ * we restrict our usage to **half** the rate limit. This means we will limit our bacth notifications requests to 1,500
+ * requests per minute (3,000 / 2).
+ *
+ * Additionally, since the maximum number of statuses returned per API call is 250, we need to adjust our batch
+ * processing mechanism to respect both rate limits:
+ *
+ * 1. **Requests per minute**: We are limiting ourselves to 1,500 requests per minute. Given that each status request
+ * returns up to 250 statuses, this translates to a maximum of 6 batches per minute (1,500 requests / 250 statuses per
+ * request = 6 batches).
+ * 2. **Batch delay**: To ensure we stay within this 6-batch-per-minute constraint, we introduce a **10-second delay**
+ * between each batch. This delay is calculated as:
+ *    - 60 seconds (1 minute) / 6 batches = 10 seconds per batch.
+ *
+ * This delay ensures we don’t exceed 1,500 requests per minute, leaving enough room for other parts of the system to
+ * make requests to the service.
+ *
+ * > The call to get the statues will count towards the rate limit. But to keep the explanation simple it has been
+ * ignored. In reality the total calls per minute will be 1506 (6 additional calls to get the statues for each batch).
+ *
+ * @private
+ */
+async function _delay(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay))
 }
 
 function _scheduledNotification(scheduledNotification, notifyResponse) {
@@ -114,6 +149,7 @@ async function _sentNotifications(toSendNotifications) {
 
 /**
  * Creates an array of promises to make requests to the relevant Notify service
+ *
  * @private
  */
 function _toSendNotifications(scheduledNotifications) {
