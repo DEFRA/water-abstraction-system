@@ -14,6 +14,7 @@ const MeterDetailsService = require('../services/return-logs/setup/meter-details
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
 const NoteService = require('../services/return-logs/setup/note.service.js')
 const PeriodUsedService = require('../services/return-logs/setup/period-used.service.js')
+const ReadingsService = require('../services/return-logs/setup/readings.service.js')
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
@@ -92,6 +93,13 @@ async function periodUsed(request, h) {
   const pageData = await PeriodUsedService.go(sessionId)
 
   return h.view('return-logs/setup/period-used.njk', pageData)
+}
+
+async function readings(request, h) {
+  const { sessionId, yearMonth } = request.params
+  const pageData = await ReadingsService.go(sessionId, yearMonth)
+
+  return h.view('return-logs/setup/readings.njk', pageData)
 }
 
 async function received(request, h) {
@@ -354,6 +362,7 @@ module.exports = {
   meterProvided,
   note,
   periodUsed,
+  readings,
   received,
   reported,
   setup,
