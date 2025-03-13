@@ -49,15 +49,14 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service is called', () => {
     describe('and no licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves([])
+        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
       })
 
-      it('sets the bill run status first to "processing" and then to "empty"', async () => {
+      it('sets the bill run status only to "processing"', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).to.be.true()
+        expect(billRunPatchStub.calledOnce).to.be.true()
         expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' })
       })
 
       it('logs the time taken', async () => {
@@ -78,7 +77,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
         // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
         // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
         // return, only that it returns something!
-        Sinon.stub(MatchAndAllocateService, 'go').resolves([{ id: '27e16528-bf00-459e-9980-902feb84a054' }])
+        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {

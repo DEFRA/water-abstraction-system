@@ -38,32 +38,26 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    const licences = await MatchAndAllocateService.go(billRun, billingPeriod)
+    await AssignBillRunToLicencesService.go(billRunId, billingPeriod, true)
 
-    await AssignBillRunToLicencesService.go(billRunId, licences, billingPeriod, true)
+    const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
 
-    const populated = licences.length > 0
-
-    await _setBillRunStatus(billRunId, populated)
+    // NOTE: Unlike two-part tariff annual, we don't automatically set the bill run status to empty if no licences were
+    // found to be matched and allocated. This is because for supplementary, we have to handle licences that _were_ 2PT
+    // so received a second part charge, but have then had a new charge version added that is either non-chargeable or
+    // had the 2PT flag unchecked.
+    //
+    // These won't be picked up by match and allocate, but we still need to include them when we come to generate the
+    // bill run so we can assess if a credit is required.
+    if (populated) {
+      await _updateStatus(billRunId, 'review')
+    }
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_supplementary' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId)
     global.GlobalNotifier.omfg('Process bill run failed', { billRun }, error)
   }
-}
-
-async function _setBillRunStatus(billRunId, populated) {
-  // It is highly unlikely no licences were matched to returns. So we default status to 'review'
-  let status = 'review'
-
-  // Just in case no licences were found to be matched to returns we set the status to 'empty'
-  if (!populated) {
-    status = 'empty'
-  }
-
-  // Update the bill run's status
-  await _updateStatus(billRunId, status)
 }
 
 async function _updateStatus(billRunId, status) {
