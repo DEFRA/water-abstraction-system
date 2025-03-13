@@ -81,7 +81,7 @@ describe('Notifications Setup - Batch notifications service', () => {
       })
     })
 
-    it('should persist the scheduled notifications', { timeout: 10000 }, async () => {
+    it('should persist the scheduled notifications', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
       const result = await _getScheduledNotifications(eventId)
