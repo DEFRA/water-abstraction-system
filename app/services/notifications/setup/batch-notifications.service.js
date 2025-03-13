@@ -6,11 +6,12 @@
  */
 
 const CreateNotificationsService = require('./create-notifications.service.js')
+const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
 const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
+const { setTimeout } = require('node:timers/promises')
 
 /**
  * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
@@ -106,7 +107,7 @@ async function _batch(recipients, determinedReturnsPeriod, referenceCode, journe
  * @private
  */
 async function _delay(delay) {
-  return new Promise((resolve) => setTimeout(resolve, delay))
+  return setTimeout(delay)
 }
 
 function _scheduledNotification(scheduledNotification, notifyResponse) {
