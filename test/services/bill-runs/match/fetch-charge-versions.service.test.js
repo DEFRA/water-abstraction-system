@@ -43,7 +43,7 @@ let otherChargeReference
 let otherLicence
 let supplementary
 
-describe('Fetch Charge Versions service', () => {
+describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   const billingPeriod = {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')
@@ -215,6 +215,30 @@ describe('Fetch Charge Versions service', () => {
         })
 
         chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
+
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
+      })
+
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+
+        expect(results).to.be.empty()
+      })
+    })
+
+    describe('because the licence ended (expired, lapsed or revoked) before the charge version starts', () => {
+      beforeEach(async () => {
+        licence = await LicenceHelper.add({ revokedDate: new Date('2023-06-01'), regionId: region.id })
+
+        chargeVersion = await ChargeVersionHelper.add({
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          startDate: new Date('2023-07-01')
+        })
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
