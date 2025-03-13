@@ -7,8 +7,6 @@
 
 const { ref } = require('objection')
 
-const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
-
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { unitNames } = require('../../../lib/static-lookups.lib.js')
@@ -37,9 +35,10 @@ const UNITS = {
  */
 async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
+  returnLog.returnSubmissions[0].$applyReadings()
 
   // We use destructuring to discard things we've fetched that are needed to format data but not needed in the session
-  const { method, multiplier, nilReturn, ...data } = _data(returnLog)
+  const { method, multiplier, nilReturn, returnSubmissions, ...data } = _data(returnLog)
 
   return SessionModel.query().insert({ data }).returning('id')
 }
@@ -50,7 +49,7 @@ function _data(returnLog) {
     ..._formatReceivedDate(returnLog.receivedDate),
     beenReceived: _formatBeenReceived(returnLog.receivedDate),
     journey: _formatJourney(returnLog.nilReturn),
-    lines: _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate),
+    lines: returnLog.returnSubmissions[0].returnSubmissionLines,
     meterProvided: _formatMeterProvided(returnLog.meterMake, returnLog.meterSerialNumber),
     meter10TimesDisplay: _formatMeter10TimesDisplay(returnLog.multiplier),
     purposes: _formatPurposes(returnLog.purposes),
@@ -86,10 +85,19 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnSubmissions.metadata:method').as('method'),
       ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
       ref('returnSubmissions.metadata:meters[0].multiplier').as('multiplier'),
-      ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber')
+      ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber'),
+      ref('returnSubmissions.metadata:meters[0].startReading').as('startReading')
     )
     .innerJoinRelated('licence')
     .innerJoinRelated('returnSubmissions')
+    .where('returnSubmissions.current', true)
+    .withGraphFetched('returnSubmissions.returnSubmissionLines')
+    .modifyGraph('returnSubmissions', (builder) => {
+      builder.select(['metadata'])
+    })
+    .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
+      builder.select(['id', 'startDate', 'endDate', 'quantity', 'userUnit']).orderBy('startDate', 'asc')
+    })
     .where('returnLogs.id', returnLogId)
 }
 
@@ -111,24 +119,6 @@ function _formatBeenReceived(receivedDate) {
 
 function _formatJourney(nilReturn) {
   return nilReturn ? 'nil-return' : 'enter-return'
-}
-
-function _formatLines(frequency, startDate, endDate) {
-  let lines
-
-  if (frequency === 'day') {
-    lines = daysFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'week') {
-    lines = weeksFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'month') {
-    lines = monthsFromPeriod(startDate, endDate)
-  }
-
-  return lines
 }
 
 function _formatMeterProvided(meterMake, meterSerialNumber) {
