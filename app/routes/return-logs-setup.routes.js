@@ -196,6 +196,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/readings/{yearMonth}',
+    options: {
+      handler: ReturnLogsSetupController.submitReadings,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {

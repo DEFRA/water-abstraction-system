@@ -25,6 +25,7 @@ const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
 const SubmitPeriodUsedService = require('../services/return-logs/setup/submit-period-used.service.js')
+const SubmitReadingsService = require('../services/return-logs/setup/submitReadings.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
@@ -223,6 +224,18 @@ async function submitPeriodUsed(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
+async function submitReadings(request, h) {
+  const { sessionId, yearMonth } = request.params
+
+  const pageData = await SubmitReadingsService.go(sessionId, request.payload, yearMonth)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/readings.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+}
+
 async function submitReceived(request, h) {
   const {
     params: { sessionId },
@@ -374,6 +387,7 @@ module.exports = {
   submitMeterProvided,
   submitNote,
   submitPeriodUsed,
+  submitReadings,
   submitReceived,
   submitReported,
   submitSingleVolume,
