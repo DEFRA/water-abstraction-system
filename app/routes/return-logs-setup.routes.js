@@ -185,6 +185,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/readings/{yearMonth}',
+    options: {
+      handler: ReturnLogsSetupController.readings,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
       handler: ReturnLogsSetupController.received,
