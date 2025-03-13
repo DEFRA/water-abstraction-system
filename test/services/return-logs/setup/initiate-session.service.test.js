@@ -11,6 +11,7 @@ const { expect } = Code
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
+const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
@@ -21,6 +22,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     let licence
     let metadata
     let returnLog
+    let returnSubmissionLine
 
     before(async () => {
       metadata = {
@@ -56,7 +58,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           endDate: new Date('2022-06-01')
         })
 
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, metadata: { method: 'abstractionVolumes' } })
+        const returnSubmission = await ReturnSubmissionHelper.add({
+          returnLogId: returnLog.id,
+          metadata: { method: 'abstractionVolumes' }
+        })
+        returnSubmissionLine = await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
       })
 
       it('creates a new session record containing details of the return log', async () => {
@@ -73,12 +79,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           licenceRef: licence.licenceRef,
           lines: [
             {
-              endDate: '2022-04-30T00:00:00.000Z',
-              startDate: '2022-04-01T00:00:00.000Z'
-            },
-            {
-              endDate: '2022-05-31T00:00:00.000Z',
-              startDate: '2022-05-01T00:00:00.000Z'
+              startDate: '2021-12-26T00:00:00.000Z',
+              endDate: '2022-01-01T00:00:00.000Z',
+              quantity: 4380,
+              userUnit: 'm³',
+              id: returnSubmissionLine.id
             }
           ],
           meter10TimesDisplay: null,
@@ -97,6 +102,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           returnsFrequency: 'month',
           siteDescription: returnLog.metadata.description,
           startDate: '2022-04-01T00:00:00.000Z',
+          startReading: null,
           status: returnLog.status,
           twoPartTariff: returnLog.metadata.isTwoPartTariff,
           underQuery: returnLog.underQuery,
