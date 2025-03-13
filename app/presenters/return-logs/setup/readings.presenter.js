@@ -51,7 +51,8 @@ function _inputLines(lines) {
     const { endDate, reading } = line
 
     const lineData = {
-      date: formatLongDate(new Date(endDate)),
+      formattedEndDate: formatLongDate(new Date(endDate)),
+      endDate,
       reading
     }
 

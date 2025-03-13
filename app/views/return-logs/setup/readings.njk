@@ -42,11 +42,11 @@
         {# Create the input fields #}
         {{ govukInput({
           label: {
-            text: line.date
+            text: line.formattedEndDate
           },
           classes: "govuk-input--width-10",
           id: 'reading-' + rowIndex,
-          name: line.date,
+          name: line.endDate,
           value: line.reading
         }) }}
       {% endfor %}
