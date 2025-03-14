@@ -1,0 +1,86 @@
+'use strict'
+
+/**
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
+ * @module SubmitMultipleEntriesService
+ */
+
+const GeneralLib = require('../../../lib/general.lib.js')
+const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
+const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
+const SessionModel = require('../../../models/session.model.js')
+
+/**
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
+ *
+ * It first retrieves the session instance for the return log journey in progress.
+ *
+ * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the
+ * controller will redirect to the next page in the journey.
+ *
+ * @param {string} sessionId - The id of the current session
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} If no errors it returns an empty object else the page data for the multiple entries page
+ * including the validation error details
+ */
+async function go(sessionId, payload, yar) {
+  console.log('🚀 payload:', payload)
+  // payload = {
+  //   multipleEntries: '70100\r\n72000\r\n73000\r\n100\r\n10000000\r\n230000\r\n42\r\n0\r\n1233\r\n345'
+  // }
+  // With an x
+  // payload = {  multipleEntries: '70100\r\n72000\r\n73000\r\nx\r\n10000000\r\n230000\r\n42\r\n0\r\n1233\r\n345'}
+  console.log('🚀 payload.multipleEntries.split(/\r?\n/):', payload.multipleEntries.split(/\r?\n/))
+  console.log('Number()', Number('1,000,000,000'))
+  const session = await SessionModel.query().findById(sessionId)
+  const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    GeneralLib.flashNotification(yar)
+
+    return {}
+  }
+
+  const submittedSessionData = _submittedSessionData(session, payload)
+
+  return {
+    activeNavBar: 'search',
+    error: validationResult,
+    ...submittedSessionData
+  }
+}
+
+async function _save(session, payload) {
+  session.multipleEntires = payload.multipleEntires
+
+  return session.$update()
+}
+
+function _submittedSessionData(session, payload) {
+  session.multipleEntries = payload.multipleEntires ?? null
+
+  return MultipleEntriesPresenter.go(session)
+}
+
+function _validate(payload) {
+  const validation = MultipleEntriesValidator.go(payload)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message } = validation.error.details[0]
+
+  return {
+    text: message
+  }
+}
+
+module.exports = {
+  go
+}
