@@ -31,6 +31,7 @@ describe('Return Logs Setup - Check presenter', () => {
           nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
           received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
           reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+          startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
           units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
         },
         meter10TimesDisplay: 'yes',
@@ -76,7 +77,7 @@ describe('Return Logs Setup - Check presenter', () => {
           rows: [
             {
               link: {
-                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
                 text: 'Enter monthly volumes'
               },
               month: 'April 2023',
@@ -85,7 +86,7 @@ describe('Return Logs Setup - Check presenter', () => {
             },
             {
               link: {
-                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
                 text: 'Enter monthly volumes'
               },
               month: 'May 2023',
@@ -94,7 +95,7 @@ describe('Return Logs Setup - Check presenter', () => {
             },
             {
               link: {
-                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
                 text: 'Enter monthly volumes'
               },
               month: 'June 2023',
@@ -127,6 +128,7 @@ describe('Return Logs Setup - Check presenter', () => {
             nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
             received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
             reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+            startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
             units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
           },
           nilReturn: 'Yes',
@@ -348,7 +350,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
@@ -357,7 +359,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
                   text: 'Enter monthly volumes'
                 },
                 month: 'May 2023',
@@ -366,7 +368,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
                   text: 'Enter monthly volumes'
                 },
                 month: 'June 2023',
@@ -399,7 +401,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
@@ -408,7 +410,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
                   text: 'Enter monthly volumes'
                 },
                 month: 'May 2023',
@@ -417,7 +419,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
                   text: 'Enter monthly volumes'
                 },
                 month: 'June 2023',
@@ -472,7 +474,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
@@ -505,7 +507,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
@@ -568,7 +570,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
                   text: 'Enter monthly readings'
                 },
                 month: 'April 2023',
@@ -578,7 +580,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
                   text: 'Enter monthly readings'
                 },
                 month: 'May 2023',
@@ -588,7 +590,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
                   text: 'Enter monthly readings'
                 },
                 month: 'June 2023',
@@ -610,7 +612,7 @@ describe('Return Logs Setup - Check presenter', () => {
               expect(result.summaryTableData.rows).to.equal([
                 {
                   link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
                     text: 'Enter monthly readings'
                   },
                   month: 'April 2023',
@@ -620,7 +622,7 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 {
                   link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
                     text: 'Enter monthly readings'
                   },
                   month: 'May 2023',
@@ -630,7 +632,7 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 {
                   link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
                     text: 'Enter monthly readings'
                   },
                   month: 'June 2023',
@@ -666,7 +668,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
                   text: 'Enter monthly readings'
                 },
                 month: 'April 2023',
@@ -676,7 +678,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-4',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
                   text: 'Enter monthly readings'
                 },
                 month: 'May 2023',
@@ -686,7 +688,7 @@ describe('Return Logs Setup - Check presenter', () => {
               },
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-5',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
                   text: 'Enter monthly readings'
                 },
                 month: 'June 2023',
@@ -742,7 +744,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
                   text: 'Enter daily readings'
                 },
                 month: 'April 2023',
@@ -777,7 +779,7 @@ describe('Return Logs Setup - Check presenter', () => {
             expect(result.summaryTableData.rows).to.equal([
               {
                 link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/2023-3',
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
                   text: 'Enter daily readings'
                 },
                 month: 'April 2023',

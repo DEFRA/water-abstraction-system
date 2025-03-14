@@ -8,7 +8,7 @@
 const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Formats recipients into scheduled notifications for a returns invitation or reminder
@@ -24,17 +24,18 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @param {object} returnsPeriod - the return period including the endDate, startDate and dueDate
  * @param {string} referenceCode - the unique code used to group the notifications in notify
  * @param {string} journey - the journey should be either "reminders" or "invitations"
+ * @param {string} eventId - the event id to link all the notifications to an event
  *
  * @returns {object[]} - the recipients transformed into scheduled notifications
  */
-function go(recipients, returnsPeriod, referenceCode, journey) {
+function go(recipients, returnsPeriod, referenceCode, journey, eventId) {
   const scheduledNotifications = []
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey, eventId))
     } else {
-      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey))
+      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey, eventId))
     }
   }
 
@@ -58,6 +59,17 @@ function _addressLines(contact) {
   return addressLines
 }
 
+function _common(referenceCode, templateId, eventId) {
+  const createdAt = timestampForPostgres()
+
+  return {
+    createdAt,
+    eventId,
+    reference: referenceCode,
+    sendAfter: createdAt,
+    templateId
+  }
+}
 /**
  * An email notification requires an email address alongside the expected payload:
  *
@@ -79,18 +91,20 @@ function _addressLines(contact) {
  *
  * @private
  */
-function _email(recipient, returnsPeriod, referenceCode, journey) {
+function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const templateId = _emailTemplate(recipient.contact_type, journey)
 
+  const messageType = 'email'
+
   return {
+    ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
-    messageType: 'email',
+    messageType,
+    messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
-    recipient: recipient.email,
-    reference: referenceCode,
-    templateId
+    recipient: recipient.email
   }
 }
 
@@ -130,21 +144,22 @@ function _emailTemplate(contactType, journey) {
  *
  * @private
  */
-function _letter(recipient, returnsPeriod, referenceCode, journey) {
+function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
   const name = contactName(recipient.contact)
-
   const templateId = _letterTemplate(recipient.contact_type, journey)
 
+  const messageType = 'letter'
+
   return {
+    ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
-    messageType: 'letter',
+    messageType,
+    messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
       name,
       ..._addressLines(recipient.contact),
       ..._returnsPeriod(returnsPeriod)
-    },
-    reference: referenceCode,
-    templateId
+    }
   }
 }
 
@@ -180,6 +195,47 @@ function _licences(licenceRefs) {
   const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
 
   return JSON.stringify(formattedRecipients)
+}
+
+/**
+ * The legacy code has the concept of 'message_refs' used to group different types of notifications. There are queries
+ * which rely on checking this 'message_refs' as part of the fetch. We need to follow this pattern.
+ *
+ * As we have introduced the concept of 'both' for a 'contact_type' we use what we call the primary recipient for the
+ * 'message_ref'. When the licence is 'registered' we use the 'Primary user', when the licence is 'unregistered' we use
+ * the 'Licence holder'. This is consistent with other areas of our codebase (they use the same 'template_id').
+ *
+ * @private
+ */
+function _messageRef(journey, messageType, contactType) {
+  const MESSAGE_REFS = {
+    invitations: {
+      email: {
+        'Primary user': 'returns_invitation_primary_user_email',
+        both: 'returns_invitation_primary_user_email',
+        'Returns agent': 'returns_invitation_returns_agent_email'
+      },
+      letter: {
+        'Licence holder': 'returns_invitation_licence_holder_letter',
+        both: 'returns_invitation_licence_holder_letter',
+        'Returns to': 'returns_invitation_returns_to_letter'
+      }
+    },
+    reminders: {
+      email: {
+        'Primary user': 'returns_reminder_primary_user_email',
+        both: 'returns_reminder_primary_user_email',
+        'Returns agent': 'returns_reminder_returns_agent_email'
+      },
+      letter: {
+        'Licence holder': 'returns_reminder_licence_holder_letter',
+        both: 'returns_reminder_licence_holder_letter',
+        'Returns to': 'returns_reminder_returns_to_letter'
+      }
+    }
+  }
+
+  return MESSAGE_REFS[journey][messageType][contactType]
 }
 
 module.exports = {
