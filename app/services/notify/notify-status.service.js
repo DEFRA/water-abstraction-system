@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Get the status of a notifications from GOV.UK Notify
+ * Get the status of a notification from GOV.UK Notify
  * @module NotifyStatusService
  */
 
@@ -10,7 +10,7 @@ const NotifyClient = require('notifications-node-client').NotifyClient
 const config = require('../../../config/notify.config.js')
 
 /**
- * Get the status of a notifications from GOV.UK Notify
+ * Get the status of a notification from GOV.UK Notify
  *
  * https://docs.notifications.service.gov.uk/node.html#get-message-status
  *
