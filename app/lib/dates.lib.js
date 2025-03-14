@@ -42,7 +42,7 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
 }
 
 /**
- * Determine the current financial year end
+ * Determine the financial year end for a given date
  *
  * The financial year runs from April 1st to March 31st. If the given date falls on or after April 1st,
  * the financial year end will be in the following calendar year. Otherwise, it remains in the current year.
