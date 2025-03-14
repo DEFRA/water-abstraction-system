@@ -23,14 +23,13 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
  *
  * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
  *
- * @param {module:BillRunModel} billRun - The bill run object containing billing information
+ * @param {module:BillRunModel} billRun - The bill run being processed
  * @param {object} billingPeriod - A single billing period containing a `startDate` and `endDate`
  *
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, else false
  */
 async function go(billRun, billingPeriod) {
-  const supplementary = billRun.batchType === 'two_part_supplementary'
-  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod, supplementary)
+  const licences = await FetchLicencesService.go(billRun, billingPeriod)
 
   if (licences.length > 0) {
     await _process(licences, billingPeriod, billRun)
