@@ -42,6 +42,34 @@ describe('Dates lib', () => {
     })
   })
 
+  describe('determineCurrentFinancialYearEnd', () => {
+    let date
+
+    describe('given a date starting on or after 1st April', () => {
+      before(async () => {
+        date = new Date('2022-04-01')
+      })
+
+      it('returns the correct financial year end', () => {
+        const result = DateLib.determineCurrentFinancialYearEnd(date)
+
+        expect(result).to.equal(2023)
+      })
+    })
+
+    describe('given a date starting before 1st April', () => {
+      before(async () => {
+        date = new Date('2022-02-21')
+      })
+
+      it('returns the correct financial year end', () => {
+        const result = DateLib.determineCurrentFinancialYearEnd(date)
+
+        expect(result).to.equal(2022)
+      })
+    })
+  })
+
   describe('determineEarliestDate', () => {
     let dates
 
