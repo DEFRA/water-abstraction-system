@@ -32,7 +32,7 @@ async function go(chargeVersionId) {
     return { chargeVersion }
   }
 
-  const changeDateFinancialYearEnd = _determineFinancialYearEnd(new Date(chargeVersion.startDate))
+  const changeDateFinancialYearEnd = _determineFinancialYearEnd(chargeVersion.startDate)
   const srocBillRuns = await _fetchSrocBillRuns(changeDateFinancialYearEnd, chargeVersion.licence.id)
 
   return { chargeVersion, srocBillRuns }
