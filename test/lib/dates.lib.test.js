@@ -42,7 +42,7 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('determineCurrentFinancialYearEnd', () => {
+  describe('determineFinancialYearEnd', () => {
     let date
 
     describe('given a date starting on or after 1st April', () => {
@@ -51,7 +51,7 @@ describe('Dates lib', () => {
       })
 
       it('returns the correct financial year end', () => {
-        const result = DateLib.determineCurrentFinancialYearEnd(date)
+        const result = DateLib.determineFinancialYearEnd(date)
 
         expect(result).to.equal(2023)
       })
@@ -63,7 +63,7 @@ describe('Dates lib', () => {
       })
 
       it('returns the correct financial year end', () => {
-        const result = DateLib.determineCurrentFinancialYearEnd(date)
+        const result = DateLib.determineFinancialYearEnd(date)
 
         expect(result).to.equal(2022)
       })

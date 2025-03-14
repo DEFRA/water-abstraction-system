@@ -338,7 +338,7 @@ function _cloneDate(dateToClone) {
 
 module.exports = {
   daysFromPeriod,
-  determineCurrentFinancialYearEnd,
+  determineFinancialYearEnd,
   determineEarliestDate,
   determineLatestDate,
   formatDateObjectToISO,

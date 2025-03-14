@@ -5,7 +5,7 @@
  * @module DetermineBillingYearsService
  */
 
-const { determineCurrentFinancialYearEnd } = require('../../../lib/dates.lib.js')
+const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
 
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 
@@ -26,9 +26,9 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 function go(startDate, endDate) {
   const years = []
 
-  const startYear = determineCurrentFinancialYearEnd(startDate)
+  const startYear = determineFinancialYearEnd(startDate)
   // As some changes don't have an end date we need to take this into consideration
-  const endYear = determineCurrentFinancialYearEnd(endDate || new Date())
+  const endYear = determineFinancialYearEnd(endDate || new Date())
 
   for (let year = startYear; year <= endYear; year++) {
     // SROC supplementary billing started in the financial year 2022/2023. Anything before this year is not considered
