@@ -51,7 +51,7 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
  *
  * @returns {number} The year in which the financial year ends
  */
-function determineCurrentFinancialYearEnd(date) {
+function determineFinancialYearEnd(date) {
   let year = date.getFullYear()
 
   if (date.getMonth() >= APRIL) {
