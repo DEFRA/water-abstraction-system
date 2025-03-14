@@ -8,6 +8,7 @@
 const AssignBillRunToLicencesService = require('../assign-bill-run-to-licences.service.js')
 const BillRunModel = require('../../../models/bill-run.model.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const GenerateBillRunService = require('../tpt-supplementary/generate-bill-run.service.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const MatchAndAllocateService = require('../match/match-and-allocate.service.js')
 
@@ -51,6 +52,12 @@ async function go(billRun, billingPeriods) {
     // bill run so we can assess if a credit is required.
     if (populated) {
       await _updateStatus(billRunId, 'review')
+    } else {
+      // When no licences were found to match and allocate, we can immediately proceed to the next step in the bill run
+      // process. We don't await it, even though as far as the user is concerned control has already been passed back to
+      // them, because the generate engines are intended to be run in the background. Plus, it'd make the log messages
+      // confusing ;-)
+      GenerateBillRunService.go(billRun)
     }
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_supplementary' })
