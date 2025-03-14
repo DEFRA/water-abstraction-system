@@ -6,6 +6,7 @@
  */
 
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
+const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -22,7 +23,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, payload, yar, yearMonth) {
   const session = await SessionModel.query().findById(sessionId)
-  const validationResult = _validate(payload)
+  const validationResult = Object.keys(payload).length === 0 ? null : _validate(payload)
 
   if (!validationResult) {
     const notification = _notification(session.returnsFrequency)
@@ -72,7 +73,7 @@ async function _save(session, payload, yearMonth) {
     const endDate = new Date(line.endDate)
 
     if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
-      line.reading = payload[line.endDate] ?? null
+      line.reading = Number(payload[line.endDate]) ?? null
     }
   })
 
@@ -81,7 +82,7 @@ async function _save(session, payload, yearMonth) {
 
 function _validate(payload) {
   // const validation = ReadingsValidator.go(payload)
-  const validation = { error: null } // temporary thang
+  const validation = {} // temporary thang
 
   if (!validation.error) {
     return null
