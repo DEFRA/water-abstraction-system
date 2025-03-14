@@ -83,7 +83,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     await _cleanUp()
   })
 
-  describe('when there are billing accounts that are linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts that are linked to the bill run', () => {
     it('returns the applicable billing accounts', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
@@ -198,7 +198,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     })
   })
 
-  describe('when there are billing accounts not linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts not linked to the bill run', () => {
     it('does not include them in the results', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
