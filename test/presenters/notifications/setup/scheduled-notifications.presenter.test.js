@@ -59,6 +59,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
     expect(result).to.equal([
       {
+        createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
         licences: `["${recipients.primaryUser.licence_refs}"]`,
         messageRef: 'returns_invitation_primary_user_email',
@@ -74,6 +75,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
       {
+        createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
         licences: `["${recipients.returnsAgent.licence_refs}"]`,
         messageRef: 'returns_invitation_returns_agent_email',
@@ -89,6 +91,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
       },
       {
+        createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
         messageRef: 'returns_invitation_licence_holder_letter',
@@ -109,6 +112,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       },
       {
+        createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
         licences: `["${recipients.returnsTo.licence_refs}"]`,
         messageRef: 'returns_invitation_returns_to_letter',
@@ -129,6 +133,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
       },
       {
+        createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
         licences: `["${firstMultiple}","${secondMultiple}"]`,
         messageRef: 'returns_invitation_licence_holder_letter',
@@ -173,6 +178,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageRef: 'returns_invitation_primary_user_email',
@@ -207,6 +213,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
               messageRef: 'returns_invitation_returns_agent_email',
@@ -241,6 +248,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageRef: 'returns_invitation_primary_user_email',
@@ -277,6 +285,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageRef: 'returns_invitation_licence_holder_letter',
@@ -316,6 +325,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
               messageRef: 'returns_invitation_returns_to_letter',
@@ -355,6 +365,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageRef: 'returns_invitation_licence_holder_letter',
@@ -402,6 +413,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageRef: 'returns_reminder_primary_user_email',
@@ -436,6 +448,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.returnsAgent.licence_refs}"]`,
               messageRef: 'returns_reminder_returns_agent_email',
@@ -470,6 +483,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.primaryUser.licence_refs}"]`,
               messageRef: 'returns_reminder_primary_user_email',
@@ -506,6 +520,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageRef: 'returns_reminder_licence_holder_letter',
@@ -545,6 +560,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.returnsTo.licence_refs}"]`,
               messageRef: 'returns_reminder_returns_to_letter',
@@ -584,6 +600,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
 
           expect(result).to.equal([
             {
+              createdAt: '2025-01-01T00:00:00.000Z',
               eventId,
               licences: `["${recipients.licenceHolder.licence_refs}"]`,
               messageRef: 'returns_reminder_licence_holder_letter',
