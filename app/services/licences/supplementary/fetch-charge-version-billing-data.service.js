@@ -9,8 +9,7 @@ const { ref } = require('objection')
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
-
-const APRIL = 3
+const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
 
 /**
  * Fetches the charge version billing data needed to determine the supplementary billing flags
@@ -32,20 +31,10 @@ async function go(chargeVersionId) {
     return { chargeVersion }
   }
 
-  const changeDateFinancialYearEnd = _determineFinancialYearEnd(chargeVersion.startDate)
+  const changeDateFinancialYearEnd = determineFinancialYearEnd(chargeVersion.startDate)
   const srocBillRuns = await _fetchSrocBillRuns(changeDateFinancialYearEnd, chargeVersion.licence.id)
 
   return { chargeVersion, srocBillRuns }
-}
-
-function _determineFinancialYearEnd(date) {
-  let year = date.getFullYear()
-
-  if (date.getMonth() >= APRIL) {
-    year++
-  }
-
-  return year
 }
 
 async function _fetchChargeVersion(chargeVersionId) {
