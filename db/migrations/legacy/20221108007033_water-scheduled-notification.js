@@ -21,7 +21,7 @@ exports.up = function (knex) {
     table.string('medium')
     table.string('notify_id')
     table.string('notify_status')
-    table.string('plaintext')
+    table.text('plaintext')
     table.uuid('event_id')
     table.jsonb('metadata')
     table.bigint('status_checks')
