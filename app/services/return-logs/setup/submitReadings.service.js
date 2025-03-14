@@ -57,6 +57,14 @@ function _notification(returnsFrequency) {
   }
 }
 
+/**
+ * Saves the readings for the specified yearMonth. As the payload will not contain lines where there is no reading
+ * entered. We update all the session lines for the specified yearMonth and assign a null reading where it does not
+ * exist in the payload. We do this because if a line previously had a reading which was then subsequently removed
+ * there would be no entry for that line in the payload. We therefore need to set the reading to null in that situation.
+ *
+ * @private
+ */
 async function _save(session, payload, yearMonth) {
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
