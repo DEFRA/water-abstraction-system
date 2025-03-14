@@ -34,11 +34,10 @@ describe('Notifications Setup - Batch notifications service', () => {
   beforeEach(async () => {
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the scheduled
     // notifications still saved in the database regardless of batch size
-    NotifyConfig.batchSize = 1
-
+    Sinon.stub(NotifyConfig, 'batchSize').value(1)
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
-    NotifyConfig.delay = ONE_HUNDRED_MILLISECONDS
+    Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
 
     determinedReturnsPeriod = {
       name: 'allYear',
