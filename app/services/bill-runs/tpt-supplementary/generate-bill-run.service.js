@@ -13,7 +13,7 @@ const {
   currentTimeInNanoseconds,
   timestampForPostgres
 } = require('../../../lib/general.lib.js')
-const FetchTwoPartTariffBillingAccountsService = require('../fetch-two-part-tariff-billing-accounts.service.js')
+const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
@@ -79,9 +79,9 @@ function _billingPeriod(billRun) {
   }
 }
 
-async function _fetchBillingAccounts(billRunId) {
+async function _fetchBillingAccounts(billRunId, billingPeriod) {
   try {
-    return await FetchTwoPartTariffBillingAccountsService.go(billRunId)
+    return await FetchBillingAccountsService.go(billRunId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -114,7 +114,7 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
 async function _processBillingPeriod(billingPeriod, billRun) {
   const { id: billRunId } = billRun
 
-  const billingAccounts = await _fetchBillingAccounts(billRunId)
+  const billingAccounts = await _fetchBillingAccounts(billRunId, billingPeriod)
 
   const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
 
