@@ -225,9 +225,13 @@ async function submitPeriodUsed(request, h) {
 }
 
 async function submitReadings(request, h) {
-  const { sessionId, yearMonth } = request.params
+  const {
+    params: { sessionId, yearMonth },
+    payload,
+    yar
+  } = request
 
-  const pageData = await SubmitReadingsService.go(sessionId, request.payload, yearMonth)
+  const pageData = await SubmitReadingsService.go(sessionId, payload, yar, yearMonth)
 
   if (pageData.error) {
     return h.view('return-logs/setup/readings.njk', pageData)
