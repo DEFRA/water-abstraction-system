@@ -248,12 +248,13 @@ async function submitReported(request, h) {
     return h.view('return-logs/setup/reported.njk', pageData)
   }
 
-  if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
-  }
-
+  // If the user has selected 'Meter readings' we always redirect to the start-reading page
   if (pageData.reported === 'meter-readings') {
     return h.redirect(`/system/return-logs/setup/${sessionId}/start-reading`)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)

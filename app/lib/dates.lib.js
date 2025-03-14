@@ -5,6 +5,7 @@
  * @module DatesLib
  */
 
+const APRIL = 3
 const FEBRUARY = 2
 const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
 const LAST_DAY_OF_FEB_LEAP_YEAR = 29
@@ -38,6 +39,26 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
   }
 
   return days
+}
+
+/**
+ * Determine the financial year end for a given date
+ *
+ * The financial year runs from April 1st to March 31st. If the given date falls on or after April 1st,
+ * the financial year end will be in the following calendar year. Otherwise, it remains in the current year.
+ *
+ * @param {Date} date - The date to determine the financial year for
+ *
+ * @returns {number} The year in which the financial year ends
+ */
+function determineFinancialYearEnd(date) {
+  let year = date.getFullYear()
+
+  if (date.getMonth() >= APRIL) {
+    year++
+  }
+
+  return year
 }
 
 /**
@@ -317,6 +338,7 @@ function _cloneDate(dateToClone) {
 
 module.exports = {
   daysFromPeriod,
+  determineFinancialYearEnd,
   determineEarliestDate,
   determineLatestDate,
   formatDateObjectToISO,

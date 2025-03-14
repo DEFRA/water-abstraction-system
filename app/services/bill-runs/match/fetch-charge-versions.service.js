@@ -23,6 +23,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * - have an end date on or after the start of the billing period
  * - not be linked to a licence in the workflow
  * - not be linked to a licence that 'ended' before the billing period
+ * - not be linked to a licence that 'ended' before its start date
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
@@ -57,6 +58,15 @@ async function _fetch(regionId, billingPeriod, supplementary) {
     })
     .where((builder) => {
       builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
+    })
+    .where((builder) => {
+      builder.whereNull('licence.expiredDate').orWhereColumn('licence.expiredDate', '>=', 'chargeVersions.startDate')
+    })
+    .where((builder) => {
+      builder.whereNull('licence.lapsedDate').orWhereColumn('licence.lapsedDate', '>=', 'chargeVersions.startDate')
+    })
+    .where((builder) => {
+      builder.whereNull('licence.revokedDate').orWhereColumn('licence.revokedDate', '>=', 'chargeVersions.startDate')
     })
     .whereNotExists(
       Workflow.query()

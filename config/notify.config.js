@@ -11,7 +11,15 @@ require('dotenv').config()
 
 const config = {
   apiKey: process.env.GOV_UK_NOTIFY_API_KEY,
-  stubNotify: process.env.STUB_NOTIFY || true // Used to perform integration tests with notify
+  // The Notify service imposes a rate limit of 3,000 requests per minute and restricts the number of statuses returned
+  // per API call to a maximum of 250. Given these constraints, our batch processing mechanism should handle the lowest
+  // of the two limitations, which in this case is the 250-message status retrieval limit from Notify.
+  // https://docs.notifications.service.gov.uk/node.html#get-the-status-of-multiple-messages
+  batchSize: process.env.NOTIFICATIONS_BATCH_SIZE || 250,
+  // In conjunction with the rate limit mentioned above, we have set a delay between requests to notify. This is
+  // defaulted to 10 seconds.
+  delay: process.env.NOTIFICATIONS_BATCH_DELAY || 10000,
+  stubNotify: process.env.STUB_NOTIFY || true // Used to perform integration tests with notify,
 }
 
 module.exports = config
