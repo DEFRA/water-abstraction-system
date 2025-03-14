@@ -25,9 +25,9 @@ const NO_CONTENT_STATUS_CODE = 204
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
 async function flagForBilling(request, h) {
-  const { licenceId, changeDate } = request.payload
+  const { chargeVersionId } = request.payload
 
-  await ProcessBillingFlagService.go({ licenceId, changeDate: new Date(changeDate) })
+  await ProcessBillingFlagService.go({ chargeVersionId })
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
