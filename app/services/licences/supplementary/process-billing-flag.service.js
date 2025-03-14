@@ -64,7 +64,7 @@ async function _determineFlags(payload) {
     return DetermineImportedLicenceFlagsService.go(payload.licenceId, payload.changedDateDetails.changeDate)
   }
   if (payload.chargeVersionId) {
-    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId, payload.licenceId, payload.startDate)
+    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   }
   if (payload.returnId) {
     return DetermineReturnLogFlagsService.go(payload.returnId)
