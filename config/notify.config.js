@@ -16,6 +16,9 @@ const config = {
   // of the two limitations, which in this case is the 250-message status retrieval limit from Notify.
   // https://docs.notifications.service.gov.uk/node.html#get-the-status-of-multiple-messages
   batchSize: process.env.NOTIFICATIONS_BATCH_SIZE || 250,
+  // In conjunction with the rate limit mentioned above, we have set a delay between requests to notify. This is
+  // defaulted to 10 seconds.
+  delay: process.env.NOTIFICATIONS_BATCH_DELAY || 10000,
   stubNotify: process.env.STUB_NOTIFY || true // Used to perform integration tests with notify,
 }
 

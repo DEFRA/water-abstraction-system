@@ -22,10 +22,9 @@ const { NotifyClient } = require('notifications-node-client')
 const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 
 describe('Notifications Setup - Batch notifications service', () => {
-  const mockDate = new Date('2025-01-01')
+  const ONE_HUNDRED_MILLISECONDS = 100
   const referenceCode = 'RINV-123'
 
-  let clock
   let determinedReturnsPeriod
   let eventId
   let journey
@@ -35,7 +34,10 @@ describe('Notifications Setup - Batch notifications service', () => {
   beforeEach(async () => {
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the scheduled
     // notifications still saved in the database regardless of batch size
-    NotifyConfig.batchSize = 1
+    Sinon.stub(NotifyConfig, 'batchSize').value(1)
+    // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
+    // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
+    Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
 
     determinedReturnsPeriod = {
       name: 'allYear',
@@ -58,13 +60,10 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     eventId = event.id
-
-    clock = Sinon.useFakeTimers(mockDate)
   })
 
   afterEach(() => {
     Sinon.restore()
-    clock.restore()
   })
 
   describe('when the batch is successful', () => {
@@ -99,7 +98,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: mockDate,
+          sendAfter: result[0].sendAfter,
           status: 'sent',
           log: null,
           licences: [recipients.primaryUser.licence_refs],
@@ -114,7 +113,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           nextStatusCheck: null,
           notificationType: null,
           jobId: null,
-          createdAt: mockDate
+          createdAt: result[0].createdAt
         },
         {
           id: result[1].id,
@@ -126,7 +125,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: mockDate,
+          sendAfter: result[1].sendAfter,
           status: 'sent',
           log: null,
           licences: [recipients.returnsAgent.licence_refs],
@@ -141,7 +140,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           nextStatusCheck: null,
           notificationType: null,
           jobId: null,
-          createdAt: mockDate
+          createdAt: result[1].createdAt
         },
         {
           id: result[2].id,
@@ -159,7 +158,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: mockDate,
+          sendAfter: result[2].sendAfter,
           status: 'sent',
           log: null,
           licences: [recipients.licenceHolder.licence_refs],
@@ -174,7 +173,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           nextStatusCheck: null,
           notificationType: null,
           jobId: null,
-          createdAt: mockDate
+          createdAt: result[2].createdAt
         },
         {
           id: result[3].id,
@@ -192,7 +191,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: mockDate,
+          sendAfter: result[3].sendAfter,
           status: 'sent',
           log: null,
           licences: [recipients.returnsTo.licence_refs],
@@ -207,7 +206,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           nextStatusCheck: null,
           notificationType: null,
           jobId: null,
-          createdAt: mockDate
+          createdAt: result[3].createdAt
         },
         {
           id: result[4].id,
@@ -225,7 +224,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: mockDate,
+          sendAfter: result[4].sendAfter,
           status: 'sent',
           log: null,
           licences: [firstMultiple, secondMultiple],
@@ -240,7 +239,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           nextStatusCheck: null,
           notificationType: null,
           jobId: null,
-          createdAt: mockDate
+          createdAt: result[4].createdAt
         }
       ])
     })
@@ -349,7 +348,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           returnDueDate: '28 April 2025',
           periodStartDate: '1 April 2022'
         },
-        sendAfter: mockDate,
+        sendAfter: result[0].sendAfter,
         status: 'error',
         log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
         licences: [recipients.primaryUser.licence_refs],
@@ -364,7 +363,7 @@ describe('Notifications Setup - Batch notifications service', () => {
         nextStatusCheck: null,
         notificationType: null,
         jobId: null,
-        createdAt: mockDate
+        createdAt: result[0].createdAt
       })
     })
   })

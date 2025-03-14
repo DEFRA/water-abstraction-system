@@ -61,7 +61,7 @@ function _transformValueToCSV(value) {
   }
 
   // Return integers and booleans as they are (not converted to a string)
-  if (Number.isInteger(value) || typeof value === 'boolean') {
+  if ((typeof value === 'number' && !Number.isNaN(value)) || typeof value === 'boolean') {
     return `${value}`
   }
 
