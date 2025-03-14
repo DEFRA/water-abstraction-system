@@ -1,86 +1,47 @@
 'use strict'
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
- * @module GenerateBillRunService
+ * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
+ * @module GenerateTwoPartTariffBillRunService
  */
 
-const BillRunError = require('../../errors/bill-run.error.js')
 const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleGenerateBillRunRequest = require('../../requests/charging-module/generate-bill-run.request.js')
 const ExpandedError = require('../../errors/expanded.error.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
-const FetchTwoPartTariffBillingAccountsService = require('./fetch-two-part-tariff-billing-accounts.service.js')
-const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../requests/legacy/refresh-bill-run.request.js')
-const ProcessAnnualBillingPeriodService = require('./two-part-tariff/process-billing-period.service.js')
-const ProcessSupplementaryBillingPeriodService = require('./tpt-supplementary/process-billing-period.service.js')
-const UnflagUnbilledSupplementaryLicencesService = require('./unflag-unbilled-supplementary-licences.service.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
+const GenerateAnnualBillRun = require('./two-part-tariff/generate-bill-run.service.js')
+const GenerateSupplementaryBillRun = require('./tpt-supplementary/generate-bill-run.service.js')
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
+ * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
  *
- * In this case, "generate" means that we create the required bills and transactions for them in both this service and
- * the Charging Module.
+ * The actual work of generating the bill run is handled by the `GenerateBillRunService`s in two-part-tariff and
+ * tpt-supplementary folders.
  *
- * > In the other bill run types this would be the `ProcessBillRunService` but that has already been used to handle
- * > the match and allocate process in two-part tariff
+ * But for both types we need to
  *
- * We first fetch all the billing accounts applicable to this bill run and their charge information. We pass these to
- * `ProcessBillingPeriodService` which will generate the bill for each billing account both in WRLS and the
- * {@link https://github.com/DEFRA/sroc-charging-module-api | Charging Module API (CHA)}.
+ * - fetch the bill run instance
+ * - check it has a status that permits the bill run to be generated
+ * - set the status to `processing` so both the user and the system knows it is being worked on
  *
- * Once `ProcessBillingPeriodService` is complete we tell the CHA to generate the bill run (this calculates final
- * values for each bill and the bill run overall).
+ * Having this service means the endpoint that triggers the process just has one service to call, and these actions can
+ * be performed in one place.
  *
- * The final step is to ping the legacy
- * {@link https://github.com/DEFRA/water-abstraction-service | water-abstraction-service} 'refresh' endpoint. That
- * service will extract the final values from the CHA and update the records on our side, finally marking the bill run
- * as **Ready**.
+ * Once complete, it then determines the engine to use and calls it. Note, we don't await the engine generate calls.
  *
- * @param {module:BillRunModel} billRunId - The UUID of the two-part tariff bill run that has been reviewed and is ready
- * for generating
+ * We need the user to wait whilst we validate and update the bill run's status. But we don't want them waiting (and
+ * possibly timing out) whilst we generate the bill run itself.
+ *
+ * @param {string} billRunId - The UUID of the two-part tariff bill run that is ready for generating
  */
 async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
-  if (billRun.status !== 'review') {
-    throw new ExpandedError('Cannot process a two-part tariff bill run that is not in review', { billRunId })
-  }
+  _validate(billRun)
 
-  await _updateStatus(billRunId, 'processing')
+  await _markAsProcessing(billRun)
 
   // NOTE: We do not await this call intentionally. We don't want to block the user while we generate the bill run
   _generateBillRun(billRun)
-}
-
-/**
- * Unlike other bill runs where the bill run itself and the bills are generated in one process, two-part tariff is
- * split. The first part which matches and allocates charge information to returns create's the bill run itself. This
- * service handles the second part where we create the bills using the match and allocate data.
- *
- * This means we've already determined the billing period and recorded it against the bill run. So, we retrieve it from
- * the bill run rather than pass it into the service.
- *
- * @private
- */
-function _billingPeriod(billRun) {
-  const { toFinancialYearEnding } = billRun
-
-  return {
-    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
-    endDate: new Date(`${toFinancialYearEnding}-03-31`)
-  }
-}
-
-async function _fetchBillingAccounts(billRunId) {
-  try {
-    return await FetchTwoPartTariffBillingAccountsService.go(billRunId)
-  } catch (error) {
-    // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
-    // is the closest one related to what stage we're at in the process
-    throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
-  }
 }
 
 async function _fetchBillRun(billRunId) {
@@ -89,71 +50,44 @@ async function _fetchBillRun(billRunId) {
     .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status', 'toFinancialYearEnding'])
 }
 
-async function _finaliseBillRun(billRun, billRunPopulated) {
-  // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
-  // this in the UI
-  if (!billRunPopulated) {
-    await _updateStatus(billRun.id, 'empty')
-  } else {
-    // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
-    // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-    await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
-
-    // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
-    // has finished generating the bill run. We need to take this over when we next get the opportunity.
-    await LegacyRefreshBillRunRequest.send(billRun.id)
-  }
-
-  // We unflag any unbilled licences last, just in case any of the other calls error. Should that happen, the bill run
-  // will be flagged as errored and the unassigned from the licences. They can then be processed again. If we get to
-  // here though, we're removing the licence supplementary year record, because we are saying the licence has been
-  // processed and no new bill was needed.
-  if (billRun.batchType === 'two_part_supplementary') {
-    await UnflagUnbilledSupplementaryLicencesService.go(billRun)
-  }
-}
-
-/**
- * The go() has to deal with updating the status of the bill run and then passing a response back to the request to
- * avoid the user seeing a timeout in their browser. So, this is where we actually generate the bills and record the
- * time taken.
- *
- * @private
- */
 async function _generateBillRun(billRun) {
-  const { id: billRunId } = billRun
+  if (billRun.batchType === 'two_part_supplementary') {
+    GenerateSupplementaryBillRun.go(billRun)
 
-  try {
-    const startTime = currentTimeInNanoseconds()
+    return
+  }
 
-    const billingPeriod = _billingPeriod(billRun)
+  GenerateAnnualBillRun.go(billRun)
+}
 
-    await _processBillingPeriod(billingPeriod, billRun)
+async function _markAsProcessing(billRun) {
+  const { id, status } = billRun
 
-    calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId })
-  } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
-    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+  // If the 'review' step was skipped, the bill run will already have a state of 'processing'
+  if (status === 'review') {
+    await BillRunModel.query().findById(id).patch({ status: 'processing', updatedAt: timestampForPostgres() })
   }
 }
 
-async function _processBillingPeriod(billingPeriod, billRun) {
-  const { id: billRunId } = billRun
+function _validate(billRun) {
+  const { batchType, id: billRunId, status } = billRun
 
-  const billingAccounts = await _fetchBillingAccounts(billRunId)
-
-  let billRunPopulated = false
-  if (billRun.batchType === 'two_part_tariff') {
-    billRunPopulated = await ProcessAnnualBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
-  } else {
-    billRunPopulated = await ProcessSupplementaryBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  // 'review' is valid for both two-part tariff bill run types
+  if (status === 'review') {
+    return
   }
 
-  await _finaliseBillRun(billRun, billRunPopulated)
-}
+  // 'processing' is valid for supplementary. It signifies that the match and allocate step found no licences to
+  // process. But there still might be licences we need to credit hence we carry on
+  if (batchType === 'two_part_supplementary' && status === 'processing') {
+    return
+  }
 
-async function _updateStatus(billRunId, status) {
-  return BillRunModel.query().findById(billRunId).patch({ status, updatedAt: timestampForPostgres() })
+  throw new ExpandedError('Cannot process a two-part tariff bill run that is not in a valid state', {
+    batchType,
+    billRunId,
+    status
+  })
 }
 
 module.exports = {

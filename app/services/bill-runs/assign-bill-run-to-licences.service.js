@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Assigns a bill run to licences in the bill run with matching `LicenceSupplementaryYear` records
+ * Assigns a bill run to licences with matching `LicenceSupplementaryYear` records
  * @module AssignBillRunToLicences
  */
 
@@ -9,7 +9,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
 /**
- * Assigns a bill run to licences in the bill run with matching `LicenceSupplementaryYear` records
+ * Assigns a bill run to licences with matching `LicenceSupplementaryYear` records
  *
  * When a licence is changed, either directly because an 'end date' has changed, or indirectly via charge version,
  * return version, or return log changes it is flagged for supplementary billing.
@@ -34,21 +34,16 @@ const LicenceSupplementaryYearModel = require('../../models/licence-supplementar
  * be considered 'processed' for supplementary billing.
  *
  * @param {string} billRunId - The UUID of the bill run to assign the licences to
- * @param {object[]} licences - An array of licence objects, each containing an 'id' property
  * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {boolean} twoPartTariff - Whether we are assigning two-part tariff supplementary years to the bill run
  */
-async function go(billRunId, licences, billingPeriod, twoPartTariff) {
+async function go(billRunId, billingPeriod, twoPartTariff) {
   const financialYearEnd = billingPeriod.endDate.getFullYear()
-  const licenceIds = licences.map((licence) => {
-    return licence.id
-  })
 
   await LicenceSupplementaryYearModel.query()
     .patch({ billRunId, updatedAt: timestampForPostgres() })
     .where('financialYearEnd', financialYearEnd)
     .where('twoPartTariff', twoPartTariff)
-    .whereIn('licenceId', licenceIds)
 }
 
 module.exports = {

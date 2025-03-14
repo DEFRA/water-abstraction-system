@@ -167,6 +167,11 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
 
     const transactions = []
 
+    // NOTE: If the charge version never went through match and allocate, either because it is a non-chargeable or the
+    // two-part tariff flag was removed (hence the licence has been flagged for TPT!) charge references will be empty
+    // and no transactions will be generated. This is because in FetchBillingAccounts we INNER JOIN the charge
+    // references to `review_charge_references` i.e. we only 'generate' transactions for things that have gone through
+    // match and allocate.
     chargeVersion.chargeReferences.forEach((chargeReference) => {
       const transaction = GenerateTwoPartTariffTransactionService.go(
         billLicenceId,
@@ -243,10 +248,6 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
   const cleansedBillLicences = []
 
   for (const billLicence of billLicences) {
-    if (billLicence.transactions.length === 0) {
-      continue
-    }
-
     const previousTransactions = await FetchPreviousTransactionsService.go(
       billingAccountId,
       billLicence.licence.id,

@@ -1,26 +1,23 @@
 'use strict'
 
 /**
- * Fetches 2PT Licences for the matching region and billing period
+ * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
  * @module FetchLicencesService
  */
 
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 
 /**
- * Fetches 2PT Licences for the matching region and billing period plus the charge versions associated with them grouped
- * by licence
+ * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
  *
- * @param {string} regionId - UUID of the region being billed that the licences must be linked to
+ * @param {module:BillRunModel} billRun - The bill run being processed
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
- * @param {boolean} [supplementary=false] - flag to indicate if an annual or supplementary two-part tariff bill run is
- * being created
  *
  * @returns {Promise<object[]>} the licences to be matched, each containing an array of charge versions applicable for
  * two-part tariff
  */
-async function go(regionId, billingPeriod, supplementary = false) {
-  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod, supplementary)
+async function go(billRun, billingPeriod) {
+  const chargeVersions = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 

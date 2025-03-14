@@ -14,8 +14,11 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/m
 // Thing under test
 const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
 
-describe('Fetch Licences service', () => {
-  const regionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
+describe('Bill Runs - Match - Fetch Licences service', () => {
+  const billRun = {
+    regionId: '64924759-8142-4a08-9d1e-1e902cd9d316',
+    billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282'
+  }
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -52,7 +55,7 @@ describe('Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge version by the licence', async () => {
-        const result = await FetchLicencesService.go(regionId, billingPeriod)
+        const result = await FetchLicencesService.go(billRun, billingPeriod)
 
         expect(result).to.have.length(1)
         expect(result[0].id).to.equal(licenceOne.id)
@@ -110,7 +113,7 @@ describe('Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge versions by the licences', async () => {
-        const result = await FetchLicencesService.go(regionId, billingPeriod)
+        const result = await FetchLicencesService.go(billRun, billingPeriod)
 
         expect(result).to.have.length(2)
         expect(result[0].id).to.equal(licenceOne.id)
@@ -131,7 +134,7 @@ describe('Fetch Licences service', () => {
     })
 
     it('will return an empty array', async () => {
-      const result = await FetchLicencesService.go(regionId, billingPeriod)
+      const result = await FetchLicencesService.go(billRun, billingPeriod)
 
       expect(result).to.have.length(0)
     })

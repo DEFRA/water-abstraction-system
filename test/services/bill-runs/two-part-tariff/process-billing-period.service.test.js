@@ -17,8 +17,8 @@ const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Thing under test
@@ -34,9 +34,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   let billLicenceInsertStub
   let billRun
   let billingAccount
-  let chargingModuleCreateTransactionRequestStub
   let licence
   let region
+  let sendTransactionsStub
   let transactionInsertStub
 
   beforeEach(async () => {
@@ -45,7 +45,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    sendTransactionsStub = Sinon.stub(SendTransactionsService, 'go')
 
     billInsertStub = Sinon.stub()
     billLicenceInsertStub = Sinon.stub()
@@ -71,13 +71,25 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('and there are billing accounts to process', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
-          ...TwoPartTariffFixture.chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
-        })
+        // NOTE: We use callsFake() instead of resolves, as it allows us to access the arguments passed to the stub,
+        // which we can then use in our response. In this case billLicenceId is generated inside the service but we want
+        // to assert that the transactions we're persisting link to the bill licence we are persisting. This allows us
+        // to replay back what has been generated with a 'faked' external ID from the Charging Module API
+        sendTransactionsStub.onFirstCall().callsFake(
+          // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
+          // wanted to highlight how you would access the other arguments
+          async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+            return [{ ...generatedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' }]
+          }
+        )
 
-        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
-          ...TwoPartTariffFixture.chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
-        })
+        sendTransactionsStub.onSecondCall().callsFake(
+          // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
+          // wanted to highlight how you would access the other arguments
+          async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+            return [{ ...generatedTransactions[0], externalId: 'a2086da4-e3b6-4b83-afe1-0e2e5255efaf' }]
+          }
+        )
       })
 
       describe('and they are billable', () => {
@@ -265,14 +277,13 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.rejects()
+        sendTransactionsStub.rejects()
       })
 
-      it('throws a BillRunError with the correct code', async () => {
+      it('throws an error', async () => {
         const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+        expect(error).to.be.an.instanceOf(Error)
       })
     })
   })

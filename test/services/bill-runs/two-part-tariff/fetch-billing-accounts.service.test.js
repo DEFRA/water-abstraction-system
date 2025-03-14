@@ -4,40 +4,42 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const ReviewChargeElementHelper = require('../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeReferenceHelper = require('../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../support/helpers/review-licence.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
+const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
+const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
+const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
-const FetchTwoPartTariffBillingAccountsService = require('../../../app/services/bill-runs/fetch-two-part-tariff-billing-accounts.service.js')
+const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
 
-describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
-  let billRun
-  let billingAccount
-  let billingAccountNotInBillRun
+// NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let billRun
+let billingAccount
+let billingAccountNotInBillRun
+let chargeElement
+let chargeReference
+let chargeVersion
+let licence
+let reviewChargeElement
+let reviewChargeReference
+let reviewChargeVersion
+
+describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
   let chargeCategory
-  let chargeElement
-  let chargeReference
-  let chargeVersion
-  let licence
   let region
-  let reviewChargeElement
-  let reviewChargeReference
-  let reviewChargeVersion
 
   before(async () => {
     region = RegionHelper.select()
@@ -77,9 +79,13 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
     reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId, reviewChargeReferenceId })
   })
 
-  describe('when there are billing accounts that are linked to a two-part tariff bill run', () => {
+  after(async () => {
+    await _cleanUp()
+  })
+
+  describe('when there are billing accounts that are linked to the bill run', () => {
     it('returns the applicable billing accounts', async () => {
-      const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+      const results = await FetchBillingAccountsService.go(billRun.id)
 
       expect(results).to.have.length(1)
 
@@ -91,7 +97,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
     describe('and each billing account', () => {
       describe('for the charge versions property', () => {
         it('returns the applicable charge versions', async () => {
-          const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+          const results = await FetchBillingAccountsService.go(billRun.id)
 
           const { chargeVersions } = results[0]
 
@@ -105,7 +111,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
 
         describe('and against each charge version', () => {
           it('includes the licence', async () => {
-            const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+            const results = await FetchBillingAccountsService.go(billRun.id)
 
             const { licence } = results[0].chargeVersions[0]
 
@@ -121,7 +127,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
           })
 
           it('includes the applicable charge references', async () => {
-            const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+            const results = await FetchBillingAccountsService.go(billRun.id)
 
             const { chargeReferences } = results[0].chargeVersions[0]
 
@@ -143,7 +149,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
 
           describe('and against each charge reference', () => {
             it('includes the charge category', async () => {
-              const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService.go(billRun.id)
 
               const { chargeCategory: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -153,7 +159,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
             })
 
             it('includes the review charge references', async () => {
-              const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService.go(billRun.id)
 
               const { reviewChargeReferences: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -164,7 +170,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
             })
 
             it('includes the charge elements', async () => {
-              const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService.go(billRun.id)
 
               const { chargeElements: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -177,7 +183,7 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
 
             describe('and against each charge element', () => {
               it('includes the review charge elements', async () => {
-                const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+                const results = await FetchBillingAccountsService.go(billRun.id)
 
                 const { reviewChargeElements: result } =
                   results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
@@ -192,9 +198,9 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
     })
   })
 
-  describe('when there are billing accounts not linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts not linked to the bill run', () => {
     it('does not include them in the results', async () => {
-      const results = await FetchTwoPartTariffBillingAccountsService.go(billRun.id)
+      const results = await FetchBillingAccountsService.go(billRun.id)
 
       expect(results).to.have.length(1)
 
@@ -205,9 +211,22 @@ describe('Bill Runs - Fetch Two Part Tariff Billing Accounts service', () => {
 
   describe('when there are no billing accounts at all (no results)', () => {
     it('returns no results', async () => {
-      const results = await FetchTwoPartTariffBillingAccountsService.go('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d')
+      const results = await FetchBillingAccountsService.go('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d')
 
       expect(results).to.be.empty()
     })
   })
 })
+
+async function _cleanUp() {
+  if (billingAccount) await billingAccount.$query().delete()
+  if (billingAccountNotInBillRun) await billingAccountNotInBillRun.$query().delete()
+  if (chargeElement) await chargeElement.$query().delete()
+  if (chargeReference) await chargeReference.$query().delete()
+  if (chargeVersion) await chargeVersion.$query().delete()
+  if (licence) await licence.$query().delete()
+  if (reviewChargeElement) await reviewChargeElement.$query().delete()
+  if (reviewChargeReference) await reviewChargeReference.$query().delete()
+  if (reviewChargeVersion) await reviewChargeVersion.$query().delete()
+  if (billRun) await billRun.$query().delete()
+}

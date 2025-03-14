@@ -27,19 +27,17 @@ const Workflow = require('../../../models/workflow.model.js')
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
- * @param {string} regionId - UUID of the region being billed
+ * @param {module:BillRunModel} billRun - The bill run being processed
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
- * @param {boolean} [supplementary=false] - flag to indicate if an annual or supplementary two-part tariff bill run is
- * being created
  *
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-async function go(regionId, billingPeriod, supplementary = false) {
-  return _fetch(regionId, billingPeriod, supplementary)
-}
+async function go(billRun, billingPeriod) {
+  const { id: billRunId, batchType, regionId } = billRun
 
-async function _fetch(regionId, billingPeriod, supplementary) {
+  const supplementary = batchType === 'two_part_supplementary'
+
   const chargeVersions = await ChargeVersionModel.query()
     .select(['chargeVersions.id', 'chargeVersions.startDate', 'chargeVersions.endDate', 'chargeVersions.status'])
     .innerJoinRelated('licence')
@@ -96,7 +94,7 @@ async function _fetch(regionId, billingPeriod, supplementary) {
             .select(1)
             .whereColumn('licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
             .where('licenceSupplementaryYears.financialYearEnd', billingPeriod.endDate.getFullYear())
-            .whereNull('licenceSupplementaryYears.billRunId')
+            .where('licenceSupplementaryYears.billRunId', billRunId)
         )
       } else {
         builder.whereRaw('1=1')
