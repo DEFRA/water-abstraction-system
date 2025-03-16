@@ -59,7 +59,7 @@ async function go(chargeVersionId) {
   }
 
   result.flagForSrocSupplementary = _flagForSrocSupplementary(srocBillRuns, chargeReferences)
-  result.flagForTwoPartTariffSupplementary = _flagForTwoPartTariffSupplementary(srocBillRuns)
+  result.flagForTwoPartTariffSupplementary = _flagForTwoPartTariffSupplementary(srocBillRuns, chargeReferences)
 
   return result
 }
