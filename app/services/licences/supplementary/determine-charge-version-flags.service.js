@@ -39,18 +39,22 @@ async function go(chargeVersionId) {
     startDate,
     endDate,
     regionId: chargeVersion.licence.regionId,
-    flagForPreSrocSupplementary: licence.includeInPresrocBilling === 'yes' || scheme === 'alcs',
+    flagForPreSrocSupplementary: licence.includeInPresrocBilling === 'yes',
     flagForSrocSupplementary: licence.includeInSrocBilling,
     flagForTwoPartTariffSupplementary: false
   }
 
-  const currentFinancialYear = determineCurrentFinancialYear()
-  const futureChargeVersion = chargeVersion.startDate > currentFinancialYear.endDate
+  const futureChargeVersion = _futureChargeVersion(chargeVersion)
 
-  // If the charge version is pre-sroc, we don’t need to add any sroc or two-part tariff supplementary flags.
-  // If the charge version starts after the current financial year, it’s a future charge version, so supplementary flags
-  // aren’t needed.
-  if (futureChargeVersion || scheme === 'alcs') {
+  // If the charge version starts after the current financial year, nothing will have been billed so nothing is effected
+  if (futureChargeVersion) {
+    return result
+  }
+
+  // If the charge version is PRE-SROC (alcs), it _has_ to be in the past so the licence will need checking
+  if (scheme === 'alcs') {
+    result.flagForPreSrocSupplementary = true
+
     return result
   }
 
@@ -98,6 +102,12 @@ function _flagForTwoPartTariffSupplementary(srocBillRuns, chargeReferences) {
   }
 
   return _twoPartTariffSrocIndicators(chargeReferences)
+}
+
+function _futureChargeVersion(chargeVersion) {
+  const currentFinancialYear = determineCurrentFinancialYear()
+
+  return chargeVersion.startDate > currentFinancialYear.endDate
 }
 
 function _twoPartTariffSrocIndicators(chargeReferences) {
