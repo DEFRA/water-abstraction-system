@@ -17,10 +17,10 @@ const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
 const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
 const ProcessSupplementaryTransactionsService = require('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Thing under test
@@ -36,9 +36,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
   let billLicenceInsertStub
   let billRun
   let billingAccount
-  let chargingModuleCreateTransactionRequestStub
   let licence
   let region
+  let sendTransactionsStub
   let transactionInsertStub
 
   beforeEach(async () => {
@@ -47,7 +47,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    sendTransactionsStub = Sinon.stub(SendTransactionsService, 'go')
 
     billInsertStub = Sinon.stub()
     billLicenceInsertStub = Sinon.stub()
@@ -74,24 +74,179 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     })
 
     describe('and there are billing accounts to process', () => {
-      describe('and no previous billed transactions', () => {
-        describe('and the billable volume is greater than 0', () => {
+      describe('and they have two-part tariff charge versions processed during match & allocate', () => {
+        describe('and no previous billed transactions', () => {
+          describe('and the billable volume is greater than 0', () => {
+            beforeEach(async () => {
+              // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
+              // new one when processing a billing account. To to that we need a billing account with 2 charge versions
+              // linked to the same licence
+              billingAccount.chargeVersions = [
+                TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
+                TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
+              ]
+
+              // NOTE: We use callsFake() instead of resolves, as it allows us to access the arguments passed to the
+              // stub, which we can then use in our response. In this case billLicenceId is generated inside the service
+              // but we want to assert that the transactions we're persisting link to the bill licence we are
+              // persisting. This allows us to replay back what has been generated with a 'faked' external ID from the
+              // Charging Module API
+              sendTransactionsStub.callsFake(
+                // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
+                // wanted to highlight how you would access the other arguments
+                async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+                  return [
+                    { ...processedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' },
+                    { ...processedTransactions[1], externalId: 'a2086da4-e3b6-4b83-afe1-0e2e5255efaf' }
+                  ]
+                }
+              )
+            })
+
+            it('returns true (bill run is not empty) and persists the generated bills', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+              expect(result).to.be.true()
+
+              // NOTE: We pass a single bill per billing account when persisting
+              const billInsertArgs = billInsertStub.args[0]
+
+              expect(billInsertStub.calledOnce).to.be.true()
+              expect(billInsertArgs[0]).to.equal(
+                {
+                  accountNumber: billingAccount.accountNumber,
+                  address: {}, // Address is set to an empty object for SROC billing invoices
+                  billingAccountId: billingAccount.id,
+                  billRunId: billRun.id,
+                  credit: false,
+                  financialYearEnding: billingPeriod.endDate.getFullYear()
+                },
+                { skip: ['id'] }
+              )
+
+              // NOTE: A bill may have multiple bill licences, so we always pass them as an array
+              const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+
+              expect(billLicenceInsertStub.calledOnce).to.be.true()
+              expect(billLicenceInsertArgs[0]).to.have.length(1)
+              expect(billLicenceInsertArgs[0][0]).to.equal(
+                {
+                  billId: billInsertArgs[0].id,
+                  licenceId: licence.id,
+                  licenceRef: licence.licenceRef
+                },
+                { skip: ['id'] }
+              )
+
+              // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
+              const transactionInsertArgs = transactionInsertStub.args[0]
+
+              expect(transactionInsertStub.calledOnce).to.be.true()
+              expect(transactionInsertArgs[0]).to.have.length(2)
+
+              // We just check that on of the transactions being persisted is linked to the records we expect
+              expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
+              expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
+            })
+          })
+
+          describe('but the billable volume is 0', () => {
+            beforeEach(() => {
+              // This time we update the charge version so that nothing is allocated in the charge references. This means
+              // the service will not generate any transactions so no bill licences, leading to bills being empty
+              const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
+
+              unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
+              unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
+
+              billingAccount.chargeVersions = [unbillableChargeVersion]
+            })
+
+            it('returns false (bill run is empty) and persists nothing', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+              expect(result).to.be.false()
+
+              expect(billInsertStub.called).to.be.false()
+            })
+          })
+
+          describe('but the charge period is invalid (perhaps the licence has been ended)', () => {
+            beforeEach(() => {
+              licence.revokedDate = new Date('2022-03-31')
+
+              billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
+            })
+
+            it('returns false (bill run is empty) and persists nothing', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+              expect(result).to.be.false()
+
+              expect(billInsertStub.called).to.be.false()
+            })
+          })
+        })
+
+        describe('with previous billed transactions', () => {
+          describe('that cancel out those generated in the bill run', () => {
+            beforeEach(() => {
+              // NOTE: If FetchPreviousTransactions finds existing transactions that 'cancel' out those generated as part
+              // of the current bill run, ProcessSupplementaryTransactionsService will return nothing, and the engine uses
+              // this to know not to create a bill.
+              Sinon.stub(ProcessSupplementaryTransactionsService, 'go').resolves([])
+
+              billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
+            })
+
+            it('returns false (bill run is empty) and persists nothing', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+              expect(result).to.be.false()
+
+              expect(billInsertStub.called).to.be.false()
+            })
+          })
+        })
+      })
+
+      describe('and they have charge versions not processed during match & allocate because they are not two-part tariff', () => {
+        beforeEach(() => {
+          // We replicate what FetchBillingAccountsService would return in this scenario, by dropping the charge
+          // references from the charge version
+          const nonTptChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
+
+          nonTptChargeVersion.chargeReferences = []
+
+          billingAccount.chargeVersions = [nonTptChargeVersion]
+        })
+
+        describe('and no previous billed transactions', () => {
+          it('returns false (bill run is empty) and persists nothing', async () => {
+            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+            expect(result).to.be.false()
+
+            expect(billInsertStub.called).to.be.false()
+          })
+        })
+
+        describe('with previous billed transactions', () => {
           beforeEach(async () => {
-            // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
-            // new one when processing a billing account. To to that we need a billing account with 2 charge versions
-            // linked to the same licence
-            billingAccount.chargeVersions = [
-              TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
-              TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
-            ]
+            // NOTE: If FetchPreviousTransactions finds existing transactions it'll pass them to
+            // ProcessSupplementaryTransactionsService which will then reverse them as credits to
+            // ProcessBillingPeriodService.
+            Sinon.stub(ProcessSupplementaryTransactionsService, 'go').callsFake(
+              async (_previousTransactions, _generatedTransactions, billLicenceId) => {
+                return [{ billLicenceId, credit: true, id: '3032d87b-176a-4db8-8b6d-f3c04311ca80' }]
+              }
+            )
 
-            chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
-              ...TwoPartTariffFixture.chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
-            })
-
-            chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
-              ...TwoPartTariffFixture.chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
-            })
+            sendTransactionsStub.callsFake(
+              async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+                return [{ ...processedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' }]
+              }
+            )
           })
 
           it('returns true (bill run is not empty) and persists the generated bills', async () => {
@@ -133,69 +288,10 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             const transactionInsertArgs = transactionInsertStub.args[0]
 
             expect(transactionInsertStub.calledOnce).to.be.true()
-            expect(transactionInsertArgs[0]).to.have.length(2)
+            expect(transactionInsertArgs[0]).to.have.length(1)
 
-            // We just check that on of the transactions being persisted is linked to the records we expect
             expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
             expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
-          })
-        })
-
-        describe('but the billable volume is 0', () => {
-          beforeEach(() => {
-            // This time we update the charge version so that nothing is allocated in the charge references. This means
-            // the service will not generate any transactions so no bill licences, leading to bills being empty
-            const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
-
-            unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
-            unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
-
-            billingAccount.chargeVersions = [unbillableChargeVersion]
-          })
-
-          it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
-
-            expect(result).to.be.false()
-
-            expect(billInsertStub.called).to.be.false()
-          })
-        })
-
-        describe('but the charge period is invalid (perhaps the licence has been ended)', () => {
-          beforeEach(() => {
-            licence.revokedDate = new Date('2022-03-31')
-
-            billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
-          })
-
-          it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
-
-            expect(result).to.be.false()
-
-            expect(billInsertStub.called).to.be.false()
-          })
-        })
-      })
-
-      describe('with previous billed transactions', () => {
-        describe('that cancel out those generated in the bill run', () => {
-          beforeEach(() => {
-            // NOTE: If FetchPreviousTransactions finds existing transactions that 'cancel' out those generated as part
-            // of the current bill run, ProcessSupplementaryTransactionsService will return nothing, and the engine uses
-            // this to know not to create a bill.
-            Sinon.stub(ProcessSupplementaryTransactionsService, 'go').resolves([])
-
-            billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
-          })
-
-          it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
-
-            expect(result).to.be.false()
-
-            expect(billInsertStub.called).to.be.false()
           })
         })
       })
@@ -222,14 +318,13 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.rejects()
+        sendTransactionsStub.rejects()
       })
 
-      it('throws a BillRunError with the correct code', async () => {
+      it('throws an error', async () => {
         const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+        expect(error).to.be.an.instanceOf(Error)
       })
     })
   })

@@ -146,16 +146,32 @@ async function _generateBillLicencesAndTransactions(billId, billingAccount, bill
 /**
  * Generate the transaction(s) for a charge version
  *
- * For each charge reference linked to the charge version we have to generate a transaction record. One of the things we
- * need to know is if the charge version is the first charge on a new licence. This information needs to be passed to
- * the Charging Module API as it affects the calculation.
+ * Two kinds of charge version are processed by this function.
  *
- * This function iterates the charge references generating transaction(s) for each one.
+ * The first will have charge references that in turn will have charge elements and review records. These are those the
+ * match and allocate engine found and processed and that the user has reviewed. They are in the supplementary because
+ * the user has made a change to the licence (edited a return, added a new two-part tariff charge version etc) that
+ * doesn't prevent match & allocate from finding it.
+ *
+ * The second kind is where match & allocate hasn't processed the licence and its charge versions. This is because the
+ * user has made a change that means match & allocate cannot see it. For example, adding a non-chargeable charge
+ * version, or adding a new charge version but removing the two-part tariff agreement from it. These won't have charge
+ * references.
+ *
+ * > This is because in FetchBillingAccounts we INNER JOIN the charge references to `review_charge_references` i.e. we
+ * > only 'generate' transactions for things that have gone through match and allocate.
+ *
+ * The first kind we need to generate new transaction lines with the intention of creating new debit transactions. The
+ * second we only need to help look for any previous transactions that might need to be credited.
  *
  * @private
  */
 async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion) {
   try {
+    if (chargeVersion.chargeReferences.length === 0) {
+      return []
+    }
+
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
     // Guard clause against invalid charge periods, for example, a licence 'ends' before the charge version starts
@@ -163,6 +179,8 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
       return []
     }
 
+    // One of the things we need to know is if the charge version is the first charge on a new licence. This information
+    // needs to be passed to the Charging Module API as it affects the calculation.
     const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
     const transactions = []
@@ -243,16 +261,13 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
   const cleansedBillLicences = []
 
   for (const billLicence of billLicences) {
-    if (billLicence.transactions.length === 0) {
-      continue
-    }
-
     const previousTransactions = await FetchPreviousTransactionsService.go(
       billingAccountId,
       billLicence.licence.id,
       financialYearEnding,
       true
     )
+
     const processedTransactions = await ProcessSupplementaryTransactionsService.go(
       previousTransactions,
       billLicence.transactions,
