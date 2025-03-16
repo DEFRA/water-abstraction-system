@@ -35,9 +35,7 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    const licences = await MatchAndAllocateService.go(billRun, billingPeriod)
-
-    const populated = licences.length > 0
+    const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
 
     await _setBillRunStatus(billRunId, populated)
 
