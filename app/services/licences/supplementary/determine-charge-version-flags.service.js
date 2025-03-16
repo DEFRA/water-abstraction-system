@@ -112,7 +112,7 @@ function _futureChargeVersion(chargeVersion) {
 
 function _twoPartTariffSrocIndicators(chargeReferences) {
   return chargeReferences.some((chargeReference) => {
-    return chargeReference.twoPartTariff && chargeReference.scheme === 'sroc'
+    return chargeReference.twoPartTariff
   })
 }
 
