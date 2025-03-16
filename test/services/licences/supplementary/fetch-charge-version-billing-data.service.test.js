@@ -18,7 +18,7 @@ const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 // Thing under test
 const FetchChargeVersionBillingDataService = require('../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js')
 
-describe('Fetch Charge Version Billing Data Service', () => {
+describe('Licences - Supplementary - Fetch Charge Version Billing Data service', () => {
   describe('when passed a charge version ID', () => {
     let bill
     let licence

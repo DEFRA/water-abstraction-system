@@ -15,10 +15,10 @@ const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
  * Fetches the charge version billing data needed to determine the supplementary billing flags
  *
  * First we fetch the charge version that the change has been made on. If the charge version is pre-sroc (has a scheme
- * of `alcs`), then we don't need to fetch any of the billing data associated with the charge versions licence. A
- * change to a pre-sroc charge version won't affect the flags for sroc or two-part tariff supplementary billing.
- * If the charge version is an sroc one (scheme of `sroc`), then we fetch any SROC bill runs associated with the licence
- * These bill runs will then be used to determine the supplementary billing flags.
+ * of `alcs`), then we don't need to fetch any of the billing data associated with the charge versions licence. A change
+ * to a pre-sroc charge version won't affect the flags for sroc or two-part tariff supplementary billing. If the charge
+ * version is an sroc one (scheme of `sroc`), then we fetch any SROC bill runs associated with the licence These bill
+ * runs will then be used to determine the supplementary billing flags.
  *
  * @param {string} chargeVersionId - The UUID for the charge version which has changed
  *

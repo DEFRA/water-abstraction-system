@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determines if a licence with a change in charge version should be flagged for supplementary billing
+ * Determines if a licence should be flagged for supplementary billing based on a change in charge version
  * @module DetermineChargeVersionFlagsService
  */
 
@@ -12,14 +12,14 @@ const FetchChargeVersionBillingDataService = require('./fetch-charge-version-bil
 /**
  * Determines if a licence should be flagged for supplementary billing based on a change in charge version
  *
- * This service checks whether a licence should be flagged for supplementary billing by first determining if
- * there are any existing bill runs for the licence in relevant financial years. If bill runs exist,
- * flags are determined based on their batch type and scheme. If no bill runs exist, the decision is made
- * based on the changed charge versions details.
+ * This service checks whether a licence should be flagged for supplementary billing by first determining if there are
+ * any existing bill runs for the licence in relevant financial years. If bill runs exist, flags are determined based on
+ * their batch type and scheme. If no bill runs exist, the decision is made based on the changed charge versions
+ * details.
  *
- * If the scheme is `alcs`, the licence is flagged for pre-sroc supplementary billing.
- * If the scheme is `sroc`:
- * - With no two-part tariff indicators: The licence is flagged for Sroc supplementary billing.
+ * If the scheme is `alcs`, the licence is flagged for pre-sroc supplementary billing. If the scheme is `sroc`:
+ *
+ * - With no two-part tariff indicators: The licence is flagged for SROC supplementary billing.
  * - With two-part tariff indicators: The licence is flagged for two-part tariff supplementary billing.
  *
  * NOTE: Unlike pre-sroc and sroc flags (which apply at the licence level), two-part tariff flags are year specific.
@@ -68,11 +68,26 @@ function _flagForSrocSupplementary(srocBillRuns, chargeReferences) {
   if (flagForSrocSupplementary) {
     return true
   }
-  // If there are no charge references attached to the charge version it means its a non-chargeable charge version
-  // So if its not been included in a bill run then we don't need to flag it
+
+  // If there are no charge references attached to the charge version it means its a non-chargeable charge version.
+  // So, if its not been included in a bill run then we don't need to flag it.
   return chargeReferences.length > 0
 }
 
+/**
+ * We first check the bill runs for 2 reasons
+ *
+ * - Confirming the licence has been in a two-part tariff bill run confirms the change must checked by supplementary
+ * - The change might have been to remove two-part tariff from the licence, or making it non-chargeable
+ *
+ * If the second reason, the new charge version won't have the two-part tariff agreement set to true. But we still need
+ * to process the licence in supplementary billing in case the change means we need to credit a historic transaction.
+ *
+ * If the licence has not been in a two-part tariff bill run for the period affected, _then_ we fall back on checking
+ * the charge version itself.
+ *
+ * @private
+ */
 function _flagForTwoPartTariffSupplementary(srocBillRuns, chargeReferences) {
   const flagForTwoPartTariffSupplementary = srocBillRuns.some((billRun) => {
     return ['two_part_tariff', 'two_part_supplementary'].includes(billRun.batchType)
