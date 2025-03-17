@@ -18,14 +18,20 @@ const SCHEDULED_NOTIFICATIONS_STATUS = {
  * states:
  * - **error** - Any error has occurred (initial creation with notify or a status update returns an error)
  * - **pending** - when a notification is 'created' or 'sending'
- * - **sent** - when a notification is any other state is considered sent
+ * - **sent** - when a notification is in any other state it is considered sent
  *
- * We store the 'status' in 'water.scheduled_notifications.status'
+ * This 'display status' is stored in 'water.scheduled_notifications.status'
  *
  * We also store the raw 'notifyStatus' in 'water.scheduled_notifications.notifyStatus'
  *
+ * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
+ * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial
+ * 'notifyStatus' value set for a 'scheduledNotification' (when no error has occurred), and the 'status' is set to
+ * pending.
+ *
+ * **Caveat**
  * > GOV.UK Notify has a retention period of 7 days. Whilst out system should not be checking statuses past this date it
- * is technically possible to receive a status update where notfication id does not exisit:
+ * is technically possible to receive a status update where notification id does not exist:
  *
  * ```javascript
  * [{
@@ -35,11 +41,6 @@ const SCHEDULED_NOTIFICATIONS_STATUS = {
  * ```
  *
  * https://docs.notifications.service.gov.uk/node.html#get-the-status-of-one-message-error-codes
- *
- *
- * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
- * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial
- * 'notifyStatus' value set for a 'scheduledNotification' (when no error has occurred).
  *
  *
  * @param {string} notifyStatus - the status from notify
@@ -58,14 +59,18 @@ function go(notifyStatus, scheduledNotification) {
 /**
  * https://docs.notifications.service.gov.uk/node.html#email-status-descriptions
  *
- * | Status             | Description                                                                                                                                           |
- * |--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
- * | created            | GOV.UK Notify has placed the message in a queue, ready to be sent to the provider. It should only remain in this state for a few seconds.              |
- * | sending            | GOV.UK Notify has sent the message to the provider. The provider will try to deliver the message to the recipient for up to 72 hours. Notify is waiting for delivery information. |
- * | delivered          | The message was successfully delivered.                                                                                                                |
- * | permanent-failure  | The provider could not deliver the message because the email address was wrong. You should remove these email addresses from your database.           |
- * | temporary-failure  | The provider could not deliver the message. This can happen when the recipient’s inbox is full or their anti-spam filter rejects your email. Check your content does not look like spam before you try to send the message again. |
- * | technical-failure  | Your message was not sent because there was a problem between Notify and the provider. You’ll have to try sending your messages again.                |
+ * - **created**: GOV.UK Notify has placed the message in a queue, ready to be sent to the provider.
+ *   It should only remain in this state for a few seconds.
+ * - **sending**: GOV.UK Notify has sent the message to the provider. The provider will try to deliver
+ *   the message to the recipient for up to 72 hours. Notify is waiting for delivery information.
+ * - **delivered**: The message was successfully delivered.
+ * - **permanent-failure**: The provider could not deliver the message because the email address was wrong.
+ *   You should remove these email addresses from your database.
+ * - **temporary-failure**: The provider could not deliver the message. This can happen when the recipient’s
+ *   inbox is full or their anti-spam filter rejects your email. Check your content does not look like spam
+ *   before you try to send the message again.
+ * - **technical-failure**: Your message was not sent because there was a problem between Notify and the provider.
+ *   You’ll have to try sending your messages again.
  *
  * @private
  */
@@ -87,18 +92,13 @@ function _emailStatus(notifyStatus) {
 }
 
 /**
- *
- * A letter also returns the created status text to match the 201 - do we need to change this ?
- *
  * https://docs.notifications.service.gov.uk/node.html#letter-status-descriptions
  *
- * | Status            | Description                                                                              |
- * |-------------------|----------------------------------------------------------------------------------------  |
- * | accepted          | GOV.UK Notify has sent the letter to the provider to be printed.                         |
- * | received          | The provider has printed and dispatched the letter.                                      |
- * | cancelled         | Sending cancelled. The letter will not be printed or dispatched.                         |
- * | technical-failure | GOV.UK Notify had an unexpected error while sending the letter to our printing provider. |
- * | permanent-failure | The provider cannot print the letter. Your letter will not be dispatched.                |
+ * - **accepted**: GOV.UK Notify has sent the letter to the provider to be printed.
+ * - **received**: The provider has printed and dispatched the letter.
+ * - **cancelled**: Sending cancelled. The letter will not be printed or dispatched.
+ * - **technical-failure**: GOV.UK Notify had an unexpected error while sending the letter to our printing provider.
+ * - **permanent-failure**: The provider cannot print the letter. Your letter will not be dispatched.
  *
  * @private
  */
