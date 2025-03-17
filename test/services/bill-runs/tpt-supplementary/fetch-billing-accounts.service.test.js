@@ -35,6 +35,7 @@ let billingAccount
 let billingAccountNotInBillRun
 let licence
 let licenceSupplementaryYear
+let licenceSupplementaryYearDuplicate
 let nonTptChargeElement
 let nonTptChargeReference
 let nonTptChargeVersion
@@ -73,6 +74,17 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
     licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
       billRunId: billRun.id,
+      financialYearEnd: financialYear,
+      licenceId: licence.id
+    })
+
+    // When testing TPT supplementary we go an error because the service was returning duplicate charge versions against
+    // some billing accounts. This was caused by licences with duplicate licence supplementary year records (which is
+    // possible) assigned to the same bill run. To ensure we don't get caught out again, we incorporate the scenario
+    // as part of our tests.
+    licenceSupplementaryYearDuplicate = await LicenceSupplementaryYearHelper.add({
+      billRunId: billRun.id,
+      financialYearEnd: financialYear,
       licenceId: licence.id
     })
 
@@ -166,6 +178,8 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       describe('for the charge versions property', () => {
         it('returns the applicable charge versions', async () => {
           const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+
+          expect(results[0].chargeVersions).to.have.length(2)
 
           const [tptChargeVersionResult, nonTptChargeVersionResult] = results[0].chargeVersions
 
@@ -445,6 +459,7 @@ async function _cleanUp() {
   if (tptChargeElement) await tptChargeElement.$query().delete()
   if (tptChargeReference) await tptChargeReference.$query().delete()
   if (tptChargeVersion) await tptChargeVersion.$query().delete()
+  if (licenceSupplementaryYearDuplicate) await licenceSupplementaryYearDuplicate.$query().delete()
   if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
   if (licence) await licence.$query().delete()
   if (reviewChargeElement) await reviewChargeElement.$query().delete()
