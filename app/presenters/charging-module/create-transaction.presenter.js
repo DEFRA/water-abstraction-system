@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Formats a transaction as a Charging Module API transaction request
+ * @module CreateTransactionPresenter
+ */
+
 const { formatChargingModuleDate } = require('../base.presenter.js')
 
 /**

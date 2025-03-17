@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Fetches all billing accounts linked to a bill run to be processed as part of two-part tariff billing
- * @module FetchTwoPartTariffBillingAccountsService
+ * Fetches all billing accounts linked to a bill run to be processed as part of annual two-part tariff billing
+ * @module FetchBillingAccountsService
  */
 
 const { ref } = require('objection')
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const ChargeVersionModel = require('../../models/charge-version.model.js')
+const BillingAccountModel = require('../../../models/billing-account.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
 
 /**
- * Fetches all billing accounts linked to a bill run to be processed as part of two-part tariff billing
+ * Fetches all billing accounts linked to a bill run to be processed as part of annual two-part tariff billing
  *
  * Unlike regular annual and supplementary, when we come to generate the bill run the licences that will be in it have
  * already been determined. This is because they first would have gone through 'review' after the match & allocate
@@ -25,7 +25,7 @@ const ChargeVersionModel = require('../../models/charge-version.model.js')
  *
  * That information is extracted in `ProcessBillingPeriodService` though. This just focuses on fetching the data.
  *
- * @param {string} billRunId - The UUID of the two-part tariff bill run to fetches billing accounts for
+ * @param {string} billRunId - The UUID of the annual two-part tariff bill run to fetch billing accounts for
  *
  * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records, plus the two-part tariff review details needed to generate the
