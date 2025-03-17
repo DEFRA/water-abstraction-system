@@ -13,12 +13,11 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(event) {
-  const { referenceCode, subtype } = event
+  const { referenceCode, subtype, id: eventId } = event
 
   const type = _type(subtype)
   return {
-    backLink: `/manage`,
-    forwardLink: '/notifications/report',
+    forwardLink: `/notifications/report/${eventId}`,
     pageTitle: `Returns ${type} sent`,
     referenceCode
   }

@@ -518,7 +518,6 @@ function _viewCheck() {
 function _viewConfirmation() {
   return {
     activeNavBar: 'manage',
-    backLink: `/manage`,
     forwardLink: '/notifications/report',
     pageTitle: `Returns invitations sent`,
     referenceCode: 'RINV-CPFRQ4'

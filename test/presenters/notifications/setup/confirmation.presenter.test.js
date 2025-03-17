@@ -17,6 +17,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
 
   beforeEach(() => {
     event = {
+      id: '123',
       subtype: 'adHoc',
       referenceCode
     }
@@ -26,8 +27,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
     const result = ConfirmationPresenter.go(event)
 
     expect(result).to.equal({
-      backLink: `/manage`,
-      forwardLink: '/notifications/report',
+      forwardLink: '/notifications/report/123',
       pageTitle: `Returns ad-hoc sent`,
       referenceCode: 'ADHC-1234'
     })
@@ -38,8 +38,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        backLink: `/manage`,
-        forwardLink: '/notifications/report',
+        forwardLink: '/notifications/report/123',
         pageTitle: `Returns ad-hoc sent`,
         referenceCode: 'ADHC-1234'
       })
@@ -55,8 +54,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        backLink: `/manage`,
-        forwardLink: '/notifications/report',
+        forwardLink: '/notifications/report/123',
         pageTitle: `Returns invitations sent`,
         referenceCode: 'ADHC-1234'
       })
@@ -72,8 +70,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        backLink: `/manage`,
-        forwardLink: '/notifications/report',
+        forwardLink: '/notifications/report/123',
         pageTitle: `Returns reminders sent`,
         referenceCode: 'ADHC-1234'
       })

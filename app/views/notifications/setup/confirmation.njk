@@ -2,12 +2,6 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Back',
-    href: backLink
-  }) }}
-{% endblock %}
 
 {% block content %}
   <div class="govuk-body">

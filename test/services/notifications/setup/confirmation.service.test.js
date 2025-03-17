@@ -37,8 +37,7 @@ describe('Notifications Setup - Confirmation service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: '/manage',
-        forwardLink: '/notifications/report',
+        forwardLink: `/notifications/report/${event.id}`,
         pageTitle: 'Returns invitations sent',
         referenceCode: 'RINV-123'
       })
