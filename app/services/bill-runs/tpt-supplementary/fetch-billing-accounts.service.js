@@ -87,7 +87,7 @@ async function _fetch(billRunId, billingPeriod) {
     .orderBy([{ column: 'billingAccounts.accountNumber' }])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.select([
+      builder.distinct([
         'chargeVersions.id',
         'chargeVersions.scheme',
         'chargeVersions.startDate',
