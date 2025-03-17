@@ -9,16 +9,22 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const EventHelper = require('../../../support/helpers/event.helper.js')
 
 // Thing under test
 const ConfirmationService = require('../../../../app/services/notifications/setup/confirmation.service.js')
 
 describe('Notifications Setup - Confirmation service', () => {
-  let session
+  const referenceCode = 'RINV-123'
+
+  let event
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { referenceCode: 'ADHC-1234', journey: 'ad-hoc' } })
+    event = await EventHelper.add({
+      type: 'notification',
+      subtype: 'returnInvitation',
+      referenceCode
+    })
   })
 
   afterEach(() => {
@@ -27,14 +33,14 @@ describe('Notifications Setup - Confirmation service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmationService.go(session.id)
+      const result = await ConfirmationService.go(event.id)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: '/manage',
         forwardLink: '/notifications/report',
-        pageTitle: 'Returns ad-hoc sent',
-        referenceCode: 'ADHC-1234'
+        pageTitle: 'Returns invitations sent',
+        referenceCode: 'RINV-123'
       })
     })
   })

@@ -74,6 +74,12 @@ describe('Notifications Setup - Submit Check service', () => {
     delete global.GlobalNotifier
   })
 
+  it('correctly returns the event id ', async () => {
+    const result = await SubmitCheckService.go(session.id, auth)
+
+    expect(result).to.equal(eventId)
+  })
+
   it('correctly triggers the "DetermineRecipientsService"', async () => {
     await SubmitCheckService.go(session.id, auth)
 

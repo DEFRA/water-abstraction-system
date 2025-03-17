@@ -45,9 +45,9 @@ async function viewCancel(request, h) {
 }
 
 async function viewConfirmation(request, h) {
-  const { sessionId } = request.params
+  const { eventId } = request.params
 
-  const pageData = await ConfirmationService.go(sessionId)
+  const pageData = await ConfirmationService.go(eventId)
 
   return h.view(`${basePath}/confirmation.njk`, pageData)
 }
@@ -113,9 +113,9 @@ async function submitCheck(request, h) {
     params: { sessionId }
   } = request
 
-  SubmitCheckService.go(sessionId, auth)
+  const eventId = await SubmitCheckService.go(sessionId, auth)
 
-  return h.redirect(`/system/${basePath}/${sessionId}/confirmation`)
+  return h.redirect(`/system/${basePath}/${eventId}/confirmation`)
 }
 
 async function submitLicence(request, h) {

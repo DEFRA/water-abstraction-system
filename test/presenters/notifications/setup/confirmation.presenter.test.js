@@ -13,17 +13,17 @@ const ConfirmationPresenter = require('../../../../app/presenters/notifications/
 describe('Notifications Setup - Confirmation presenter', () => {
   const referenceCode = 'ADHC-1234'
 
-  let session
+  let event
 
   beforeEach(() => {
-    session = {
-      journey: 'ad-hoc',
+    event = {
+      subtype: 'adHoc',
       referenceCode
     }
   })
 
   it('correctly presents the data', () => {
-    const result = ConfirmationPresenter.go(session)
+    const result = ConfirmationPresenter.go(event)
 
     expect(result).to.equal({
       backLink: `/manage`,
@@ -35,7 +35,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
 
   describe('when the journey is "ad-hoc"', () => {
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(session)
+      const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
         backLink: `/manage`,
@@ -48,11 +48,11 @@ describe('Notifications Setup - Confirmation presenter', () => {
 
   describe('and the journey is "invitations"', () => {
     beforeEach(() => {
-      session.journey = 'invitations'
+      event.subtype = 'returnInvitation'
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(session)
+      const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
         backLink: `/manage`,
@@ -65,11 +65,11 @@ describe('Notifications Setup - Confirmation presenter', () => {
 
   describe('and the journey is "reminders"', () => {
     beforeEach(() => {
-      session.journey = 'reminders'
+      event.subtype = 'returnReminder'
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(session)
+      const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
         backLink: `/manage`,

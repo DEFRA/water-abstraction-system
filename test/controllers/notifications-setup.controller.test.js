@@ -148,8 +148,11 @@ describe('Notifications Setup controller', () => {
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
+        let eventId
+
         beforeEach(async () => {
-          Sinon.stub(SubmitCheckService, 'go').returns()
+          eventId = '1233'
+          Sinon.stub(SubmitCheckService, 'go').returns(eventId)
           postOptions = postRequestOptions(basePath + `/${session.id}/check`, {})
         })
 
@@ -157,7 +160,7 @@ describe('Notifications Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/confirmation`)
+          expect(response.headers.location).to.equal(`/system/notifications/setup/${eventId}/confirmation`)
         })
       })
     })
@@ -165,10 +168,14 @@ describe('Notifications Setup controller', () => {
 
   describe('notifications/setup/confirmation', () => {
     describe('GET', () => {
+      let eventId
+
       beforeEach(async () => {
+        eventId = '123'
+
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/confirmation`,
+          url: basePath + `/${eventId}/confirmation`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
