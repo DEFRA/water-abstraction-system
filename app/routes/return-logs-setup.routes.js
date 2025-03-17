@@ -343,7 +343,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/multiple-entries',
     options: {
-      handler: ReturnLogsSetupController.multipleEntries,
+      handler: ReturnLogsSetupController.submitMultipleEntires,
       auth: {
         access: {
           scope: ['billing']
