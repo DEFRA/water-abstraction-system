@@ -7,6 +7,7 @@
 
 const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const CancelService = require('../services/notifications/setup/cancel.service.js')
+const ConfirmationService = require('../services/notifications/setup/confirmation.service.js')
 const CheckService = require('../services/notifications/setup/check.service.js')
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
@@ -41,6 +42,14 @@ async function viewCancel(request, h) {
   const pageData = await CancelService.go(sessionId)
 
   return h.view(`${basePath}/cancel.njk`, pageData)
+}
+
+async function viewConfirmation(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ConfirmationService.go(sessionId)
+
+  return h.view(`${basePath}/confirmation.njk`, pageData)
 }
 
 async function viewLicence(request, h) {
@@ -154,6 +163,7 @@ async function submitReturnsPeriod(request, h) {
 module.exports = {
   downloadRecipients,
   viewCancel,
+  viewConfirmation,
   viewLicence,
   viewCheck,
   viewRemoveLicences,

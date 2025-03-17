@@ -11,13 +11,14 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const CancelService = require('../../app/services/notifications/setup/cancel.service.js')
+const CheckService = require('../../app/services/notifications/setup/check.service.js')
+const ConfirmationService = require('../../app/services/notifications/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../../app/services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notifications/setup/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
-const CancelService = require('../../app/services/notifications/setup/cancel.service.js')
-const CheckService = require('../../app/services/notifications/setup/check.service.js')
 const SubmitCancelService = require('../../app/services/notifications/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notifications/setup/submit-check.service.js')
 const SubmitLicenceService = require('../../app/services/notifications/setup/submit-ad-hoc-licence.service.js')
@@ -157,6 +158,37 @@ describe('Notifications Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/confirmation`)
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/confirmation', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/confirmation`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(ConfirmationService, 'go').returns(_viewConfirmation())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewConfirmation()
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
     })
@@ -473,5 +505,15 @@ function _viewCheck() {
   return {
     pageTitle: 'Check the recipients',
     activeNavBar: 'manage'
+  }
+}
+
+function _viewConfirmation() {
+  return {
+    activeNavBar: 'manage',
+    backLink: `/manage`,
+    forwardLink: '/notifications/report',
+    pageTitle: `Returns invitations sent`,
+    referenceCode: 'RINV-CPFRQ4'
   }
 }
