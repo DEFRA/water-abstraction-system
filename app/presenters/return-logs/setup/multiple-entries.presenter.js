@@ -1,6 +1,5 @@
 'use strict'
 
-const { multipleEntries } = require('../../../controllers/return-logs-setup.controller.js')
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
  * @module MultipleEntiresPresenter
@@ -23,8 +22,9 @@ function go(session) {
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
-    endDate: formatLongDate(new Date(lines[lines.length - 1].endDate)),
+    endDate: formatLongDate(new Date(lines[lines.length - 1].startDate)),
     frequency,
+    lineCount: lines.length,
     measurementType,
     multipleEntries: multipleEntries ?? null,
     pageTitle: `Enter multiple ${frequency} ${measurementType}`,
