@@ -103,7 +103,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/confirmation',
+    path: basePath + '/{eventId}/confirmation',
     options: {
       handler: NotificationsSetupController.viewConfirmation,
       auth: {
