@@ -152,6 +152,7 @@ describe('Notifications Setup controller', () => {
 
         beforeEach(async () => {
           eventId = '1233'
+
           Sinon.stub(SubmitCheckService, 'go').returns(eventId)
           postOptions = postRequestOptions(basePath + `/${session.id}/check`, {})
         })

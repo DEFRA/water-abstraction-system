@@ -16,6 +16,7 @@ function go(event) {
   const { referenceCode, subtype, id: eventId } = event
 
   const type = _type(subtype)
+
   return {
     forwardLink: `/notifications/report/${eventId}`,
     pageTitle: `Returns ${type} sent`,
