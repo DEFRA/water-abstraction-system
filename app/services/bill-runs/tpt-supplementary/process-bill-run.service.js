@@ -39,7 +39,7 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    await AssignBillRunToLicencesService.go(billRunId, billingPeriod, true)
+    await AssignBillRunToLicencesService.go(billRunId)
 
     const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
 
