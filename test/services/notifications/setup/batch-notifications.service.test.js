@@ -385,7 +385,7 @@ describe('Notifications Setup - Batch notifications service', () => {
           individualId: null,
           companyId: null,
           notifyId: result[1].notifyId,
-          notifyStatus: 'created',
+          notifyStatus: 'pending',
           plaintext: result[1].plaintext,
           eventId,
           metadata: null,
