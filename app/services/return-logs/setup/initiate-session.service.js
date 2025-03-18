@@ -52,7 +52,7 @@ function _data(returnLog) {
     beenReceived: returnLog.receivedDate !== null,
     journey: returnLog.nilReturn ? 'nil-return' : 'enter-return',
     lines: returnLog.returnSubmissions[0]?.returnSubmissionLines,
-    meter10TimesDisplay: returnLog.multiplier === 10 ? 'yes' : returnLog.multiplier === 1 ? 'no' : null,
+    meter10TimesDisplay: _meter10TimesDisplay(returnLog.multiplier),
     meterProvided: returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no',
     purposes: _purposes(returnLog.purposes),
     reported: returnLog.method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings',
@@ -92,6 +92,18 @@ async function _fetchReturnLog(returnLogId) {
       builder.select(['id', 'startDate', 'endDate', 'quantity', 'userUnit']).orderBy('startDate', 'asc')
     })
     .where('returnLogs.id', returnLogId)
+}
+
+function _meter10TimesDisplay(multiplier) {
+  if (multiplier === 10) {
+    return 'yes'
+  }
+
+  if (multiplier === 1) {
+    return 'no'
+  }
+
+  return null
 }
 
 function _purposes(purposes) {
