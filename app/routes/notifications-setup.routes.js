@@ -103,6 +103,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{eventId}/confirmation',
+    options: {
+      handler: NotificationsSetupController.viewConfirmation,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NotificationsSetupController.viewReturnsPeriod,
