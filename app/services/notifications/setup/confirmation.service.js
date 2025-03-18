@@ -16,7 +16,7 @@ const EventModel = require('../../../models/event.model.js')
  * @returns {Promise<object>} The view data for the licence page
  */
 async function go(eventId) {
-  const event = await _getEventId(eventId)
+  const event = await EventModel.query().findById(eventId)
 
   const formattedData = ConfirmationPresenter.go(event)
 
@@ -24,10 +24,6 @@ async function go(eventId) {
     activeNavBar: 'manage',
     ...formattedData
   }
-}
-
-async function _getEventId(eventId) {
-  return EventModel.query().findById(eventId)
 }
 
 module.exports = {
