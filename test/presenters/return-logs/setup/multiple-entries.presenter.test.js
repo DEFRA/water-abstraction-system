@@ -31,16 +31,16 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       const result = MultipleEntriesPresenter.go(session)
 
       expect(result).to.equal({
-        pageTitle: 'Enter multiple monthly volumes',
-        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
-        multipleEntries: null,
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
-        lineCount: 2,
+        endDate: '1 May 2023',
         frequency: 'monthly',
+        lineCount: 2,
         measurementType: 'volumes',
-        startDate: '1 April 2023',
-        endDate: '1 May 2023'
+        multipleEntries: null,
+        pageTitle: 'Enter multiple monthly volumes',
+        returnReference: '012345',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
+        startDate: '1 April 2023'
       })
     })
   })
