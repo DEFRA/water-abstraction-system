@@ -44,17 +44,19 @@ async function go(returnLogId) {
 }
 
 function _data(returnLog) {
+  Object.assign(returnLog, _returnSubmissionsData(returnLog.returnSubmissions[0]))
+
   return {
     ...returnLog,
-    ..._formatReceivedDate(returnLog.receivedDate),
-    beenReceived: _formatBeenReceived(returnLog.receivedDate),
-    journey: _formatJourney(returnLog.nilReturn),
-    lines: returnLog.returnSubmissions[0].returnSubmissionLines,
-    meterProvided: _formatMeterProvided(returnLog.meterMake, returnLog.meterSerialNumber),
-    meter10TimesDisplay: _formatMeter10TimesDisplay(returnLog.multiplier),
-    purposes: _formatPurposes(returnLog.purposes),
-    reported: _formatReported(returnLog.method),
-    units: _formatUnits(returnLog.units)
+    ..._receivedDate(returnLog.receivedDate),
+    beenReceived: returnLog.receivedDate !== null,
+    journey: returnLog.nilReturn ? 'nil-return' : 'enter-return',
+    lines: returnLog.returnSubmissions[0]?.returnSubmissionLines,
+    meter10TimesDisplay: returnLog.multiplier === 10 ? 'yes' : returnLog.multiplier === 1 ? 'no' : null,
+    meterProvided: returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no',
+    purposes: _purposes(returnLog.purposes),
+    reported: returnLog.method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings',
+    units: UNITS[returnLog.units || unitNames.CUBIC_METRES]
   }
 }
 
@@ -79,21 +81,12 @@ async function _fetchReturnLog(returnLogId) {
       ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
-      'returnSubmissions.nilReturn',
-      ref('returnSubmissions.metadata:units').as('units'),
-      ref('returnSubmissions.metadata:method').as('method'),
-      ref('returnSubmissions.metadata:meters[0].manufacturer').as('meterMake'),
-      ref('returnSubmissions.metadata:meters[0].multiplier').as('multiplier'),
-      ref('returnSubmissions.metadata:meters[0].serialNumber').as('meterSerialNumber'),
-      ref('returnSubmissions.metadata:meters[0].startReading').as('startReading')
+      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
     )
     .innerJoinRelated('licence')
-    .innerJoinRelated('returnSubmissions')
-    .where('returnSubmissions.current', true)
     .withGraphFetched('returnSubmissions.returnSubmissionLines')
     .modifyGraph('returnSubmissions', (builder) => {
-      builder.select(['metadata'])
+      builder.select(['metadata', 'nilReturn']).where('returnSubmissions.current', true)
     })
     .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
       builder.select(['id', 'startDate', 'endDate', 'quantity', 'userUnit']).orderBy('startDate', 'asc')
@@ -101,37 +94,13 @@ async function _fetchReturnLog(returnLogId) {
     .where('returnLogs.id', returnLogId)
 }
 
-function _formatMeter10TimesDisplay(multiplier) {
-  if (multiplier === 10) {
-    return 'yes'
-  }
-
-  if (multiplier === 1) {
-    return 'no'
-  }
-
-  return null
-}
-
-function _formatBeenReceived(receivedDate) {
-  return receivedDate !== null
-}
-
-function _formatJourney(nilReturn) {
-  return nilReturn ? 'nil-return' : 'enter-return'
-}
-
-function _formatMeterProvided(meterMake, meterSerialNumber) {
-  return meterMake && meterSerialNumber ? 'yes' : 'no'
-}
-
-function _formatPurposes(purposes) {
+function _purposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
 }
 
-function _formatReceivedDate(receivedDate) {
+function _receivedDate(receivedDate) {
   if (!receivedDate) {
     return {}
   }
@@ -144,13 +113,20 @@ function _formatReceivedDate(receivedDate) {
   }
 }
 
-function _formatReported(method) {
-  return method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings'
-}
+function _returnSubmissionsData(returnSubmission) {
+  const { metadata, nilReturn } = returnSubmission
 
-// Format units in the form `m³`, `l` etc. to the text expected by the edit return pages, defaulting to cubic metres
-function _formatUnits(units) {
-  return UNITS[units || unitNames.CUBIC_METRES]
+  const meter = metadata?.meters?.[0]
+
+  return {
+    nilReturn,
+    meterMake: meter?.manufacturer || null,
+    meterSerialNumber: meter?.serialNumber || null,
+    method: metadata.method,
+    multiplier: meter?.multiplier || null,
+    startReading: meter?.startReading || null,
+    units: metadata.units
+  }
 }
 
 module.exports = {
