@@ -19,7 +19,7 @@
  *
  * @returns {Array<number>} The formatted array of numbers and null values.
  */
-async function go(multipleEntries) {
+function go(multipleEntries) {
   const multipleEntriesSplit = multipleEntries.includes('\r\n')
     ? multipleEntries.split(/\r?\n/)
     : multipleEntries.split(',').filter(Boolean)
