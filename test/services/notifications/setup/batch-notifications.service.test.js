@@ -99,7 +99,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[0].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.primaryUser.licence_refs],
           individualId: null,
@@ -126,7 +126,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[1].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsAgent.licence_refs],
           individualId: null,
@@ -159,7 +159,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[2].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.licenceHolder.licence_refs],
           individualId: null,
@@ -192,7 +192,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[3].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsTo.licence_refs],
           individualId: null,
@@ -225,7 +225,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[4].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [firstMultiple, secondMultiple],
           individualId: null,
@@ -379,7 +379,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[1].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsAgent.licence_refs],
           individualId: null,
