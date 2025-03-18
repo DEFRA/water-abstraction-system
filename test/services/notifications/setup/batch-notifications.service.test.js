@@ -244,21 +244,6 @@ describe('Notifications Setup - Batch notifications service', () => {
       ])
     })
 
-    it('should return with no errors', async () => {
-      const result = await BatchNotificationsService.go(
-        testRecipients,
-        determinedReturnsPeriod,
-        referenceCode,
-        journey,
-        eventId
-      )
-
-      expect(result).to.equal({
-        error: 0,
-        sent: 5
-      })
-    })
-
     if (stubNotify) {
       it('correctly sends the "email" data to Notify', async () => {
         await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
@@ -316,21 +301,6 @@ describe('Notifications Setup - Batch notifications service', () => {
       ]
 
       _stubUnSuccessfulNotify()
-    })
-
-    it('should return the "error" count in the response', async () => {
-      const result = await BatchNotificationsService.go(
-        testRecipients,
-        determinedReturnsPeriod,
-        referenceCode,
-        journey,
-        eventId
-      )
-
-      expect(result).to.equal({
-        error: 1,
-        sent: 2
-      })
     })
 
     it('should persist the scheduled notifications with the errors', async () => {

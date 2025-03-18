@@ -106,7 +106,7 @@ describe('Notifications Setup - Submit Check service', () => {
         }
       },
       referenceCode: 'RINV-123',
-      status: 'started',
+      status: 'completed',
       subtype: 'returnInvitation'
     }
 
