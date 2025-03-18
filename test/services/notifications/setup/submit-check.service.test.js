@@ -13,6 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
+const BatchNotificationsService = require('../../../../app/services/notifications/setup/batch-notifications.service.js')
 const CreateEventService = require('../../../../app/services/notifications/setup/create-event.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
@@ -21,6 +22,9 @@ const RecipientsService = require('../../../../app/services/notifications/setup/
 const SubmitCheckService = require('../../../../app/services/notifications/setup/submit-check.service.js')
 
 describe('Notifications Setup - Submit Check service', () => {
+  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+
+  let auth
   let notifierStub
   let recipients
   let session
@@ -49,9 +53,18 @@ describe('Notifications Setup - Submit Check service', () => {
       }
     })
 
+    auth = {
+      credentials: {
+        user: {
+          username: 'hello@world.com'
+        }
+      }
+    }
+
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(CreateEventService, 'go').resolves()
+    Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+    Sinon.stub(CreateEventService, 'go').resolves({ id: eventId })
     Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
     Sinon.stub(RecipientsService, 'go').resolves(testRecipients)
   })
@@ -61,16 +74,23 @@ describe('Notifications Setup - Submit Check service', () => {
     delete global.GlobalNotifier
   })
 
+  it('correctly returns the event id ', async () => {
+    const result = await SubmitCheckService.go(session.id, auth)
+
+    expect(result).to.equal(eventId)
+  })
+
   it('correctly triggers the "DetermineRecipientsService"', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     expect(DetermineRecipientsService.go.calledWith(testRecipients)).to.be.true()
   })
 
   it('correctly triggers the "CreateEventService"', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     const expected = {
+      issuer: 'hello@world.com',
       licences: `["${testRecipients[0].licence_refs}"]`,
       metadata: {
         name: 'Returns: invitation',
@@ -94,7 +114,7 @@ describe('Notifications Setup - Submit Check service', () => {
   })
 
   it('should not throw an error', async () => {
-    await SubmitCheckService.go(session.id)
+    await SubmitCheckService.go(session.id, auth)
 
     expect(notifierStub.omfg.called).to.be.false()
   })

@@ -8,6 +8,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
@@ -31,6 +32,7 @@ const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let billRun
 let chargeElement1
 let chargeElement2
 let chargeReference
@@ -43,7 +45,7 @@ let otherChargeReference
 let otherLicence
 let supplementary
 
-describe('Fetch Charge Versions service', () => {
+describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   const billingPeriod = {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')
@@ -65,8 +67,10 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are no applicable charge versions', () => {
-    describe('because the scheme is "presroc"', () => {
+    describe('because their scheme is "presroc"', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: region.id })
 
         chargeVersion = await ChargeVersionHelper.add({
@@ -83,7 +87,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -91,6 +95,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the start date is after the billing period ends', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: region.id })
 
         chargeVersion = await ChargeVersionHelper.add({
@@ -107,7 +113,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -115,6 +121,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the end date is before the billing period starts', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: region.id })
 
         chargeVersion = await ChargeVersionHelper.add({
@@ -131,7 +139,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -139,6 +147,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the status is not "current"', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: region.id })
 
         chargeVersion = await ChargeVersionHelper.add({
@@ -155,7 +165,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -163,6 +173,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the region is different', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: generateUUID() })
 
         chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
@@ -175,7 +187,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -183,6 +195,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the licence is linked to a workflow', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         licence = await LicenceHelper.add({ regionId: region.id })
 
         chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
@@ -197,7 +211,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -205,6 +219,8 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the licence ended (expired, lapsed or revoked) before the billing period', () => {
       beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
         // NOTE: To make things spicy (!) we have the licence expire _after_ the billing period starts but revoked
         // before it. Where the licence has dates in more than one of these fields, it is considered ended on the
         // earliest of them (we have found real examples that confirm this is possible)
@@ -224,7 +240,33 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
+
+        expect(results).to.be.empty()
+      })
+    })
+
+    describe('because the licence ended (expired, lapsed or revoked) before the charge version starts', () => {
+      beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+
+        licence = await LicenceHelper.add({ revokedDate: new Date('2023-06-01'), regionId: region.id })
+
+        chargeVersion = await ChargeVersionHelper.add({
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          startDate: new Date('2023-07-01')
+        })
+
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
+      })
+
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.be.empty()
       })
@@ -232,7 +274,7 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the bill run to be created is "two-part tariff supplementary"', () => {
       beforeEach(async () => {
-        supplementary = true
+        billRun = await BillRunHelper.add({ batchType: 'two_part_supplementary', regionId: region.id, scheme: 'sroc' })
 
         licence = await LicenceHelper.add({ regionId: region.id })
 
@@ -247,7 +289,7 @@ describe('Fetch Charge Versions service', () => {
 
       describe('and the licence has not been flagged for supplementary', () => {
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+          const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
           expect(results).to.be.empty()
         })
@@ -256,23 +298,20 @@ describe('Fetch Charge Versions service', () => {
       describe('and the licence has been flagged for supplementary but a different year', () => {
         beforeEach(async () => {
           licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+            billRunId: billRun.id,
             licenceId: licence.id,
             financialYearEnd: billingPeriod.endDate.getFullYear() - 1
           })
         })
 
-        afterEach(async () => {
-          await licenceSupplementaryYear.$query().delete()
-        })
-
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+          const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
           expect(results).to.be.empty()
         })
       })
 
-      describe('and the licence has been flagged for supplementary but is already assigned to a bill run', () => {
+      describe('and the licence has been flagged for supplementary but is assigned to a different bill run', () => {
         beforeEach(async () => {
           licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
             billRunId: '210d0685-5d61-44d3-9206-46ec037d8b73',
@@ -281,12 +320,8 @@ describe('Fetch Charge Versions service', () => {
           })
         })
 
-        afterEach(async () => {
-          await licenceSupplementaryYear.$query().delete()
-        })
-
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+          const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
           expect(results).to.be.empty()
         })
@@ -349,8 +384,12 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('and the bill run to be created is "two-part tariff annual"', () => {
+      beforeEach(async () => {
+        billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
+      })
+
       it('returns the charge version with related licence, charge references and charge elements', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results).to.have.length(2)
         expect(results[0]).to.equal({
@@ -435,14 +474,14 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions ordered by licence reference', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
         expect(results[1].licence.licenceRef).to.equal(otherLicence.licenceRef)
       })
 
       it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
-        const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
+        const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
         expect(results[0].chargeReferences[0].chargeElements[0].id).to.equal(chargeElement2.id)
         expect(results[0].chargeReferences[0].chargeElements[1].id).to.equal(chargeElement1.id)
@@ -451,9 +490,14 @@ describe('Fetch Charge Versions service', () => {
 
     describe('and the bill run to be created is "two-part tariff supplementary"', () => {
       beforeEach(async () => {
-        supplementary = true
+        billRun = await BillRunHelper.add({
+          batchType: 'two_part_supplementary',
+          regionId: region.id,
+          scheme: 'sroc'
+        })
 
         licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+          billRunId: billRun.id,
           licenceId: licence.id,
           financialYearEnd: billingPeriod.endDate.getFullYear()
         })
@@ -461,7 +505,7 @@ describe('Fetch Charge Versions service', () => {
 
       describe('and the first licence has been flagged for supplementary', () => {
         it('returns only its charge versions', async () => {
-          const results = await FetchChargeVersionsService.go(region.id, billingPeriod, supplementary)
+          const results = await FetchChargeVersionsService.go(billRun, billingPeriod, supplementary)
 
           expect(results).to.have.length(1)
           expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
@@ -481,6 +525,7 @@ async function _cleanUp() {
   if (otherChargeVersion) await otherChargeVersion.$query().delete()
   if (otherChargeReference) await otherChargeReference.$query().delete()
   if (otherLicence) await otherLicence.$query().delete()
+  if (billRun) await billRun.$query().delete()
 
   if (licenceHolderDetails) {
     const { companyId, licenceDocumentId, licenceDocumentRoleId } = licenceHolderDetails

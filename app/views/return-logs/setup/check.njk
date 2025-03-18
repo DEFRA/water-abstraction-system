@@ -138,18 +138,18 @@
           }
         } if nilReturn === "No",
         {
-          key: { text: "Meter details" },
-          value: { html: meterDetails },
+          key: { text: "Start meter reading" },
+          value: { text: startReading },
           actions: {
             items: [
               {
-                href: links.meterDetails,
+                href: links.startReading,
                 text: "Change",
-                visuallyHiddenText: "meter details"
+                visuallyHiddenText: "start meter reading"
               }
             ]
           }
-        } if nilReturn === "No",
+        } if nilReturn === "No" and displayReadings,
         {
           key: { text: "Units" },
           value: { text: units },
@@ -159,6 +159,19 @@
                 href: links.units,
                 text: "Change",
                 visuallyHiddenText: "unit of measure"
+              }
+            ]
+          }
+        } if nilReturn === "No",
+        {
+          key: { text: "Meter details" },
+          value: { html: meterDetails },
+          actions: {
+            items: [
+              {
+                href: links.meterDetails,
+                text: "Change",
+                visuallyHiddenText: "meter details"
               }
             ]
           }

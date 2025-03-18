@@ -411,28 +411,61 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitReportedService, 'go').resolves({})
+          describe('and "Meter readings" has been selected', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meter-readings' })
+            })
+
+            it('redirects to the "start-reading" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/start-reading`)
+            })
           })
 
-          it('redirects to the "units" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
+          describe('and "Abstraction Volumes" has been selected', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'abstraction-volumes' })
+            })
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+            it('redirects to the "units" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+            })
           })
         })
 
         describe('and the page has been visited previously', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true })
+          describe('and "Meter readings" has been selected', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true, reported: 'meter-readings' })
+            })
+
+            it('redirects to the "start-reading" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/start-reading`)
+            })
           })
 
-          it('redirects to the "check" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
+          describe('and "Abstraction Volumes" has been selected', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitReportedService, 'go').resolves({
+                checkPageVisited: true,
+                reported: 'abstraction-volumes'
+              })
+            })
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            it('redirects to the "check" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            })
           })
         })
 

@@ -6,8 +6,8 @@
  */
 
 const { formatFinancialYear } = require('../../base.presenter.js')
+const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
 
-const APRIL = 3
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 const PREVIOUS_SIX_YEARS = 6
 
@@ -28,21 +28,6 @@ function go(licence) {
 }
 
 /**
- * Determines the current financial year end based on the current date.
- * The financial year end is the end of March, so if the current month is April or later the end of the financial year
- * is the next calendar year. Otherwise it is the current year.
- */
-function _determineCurrentFinancialYearEnd() {
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
-  const currentMonth = currentDate.getMonth()
-
-  const currentFinancialYearEnd = currentMonth >= APRIL ? currentYear + 1 : currentYear
-
-  return currentFinancialYearEnd
-}
-
-/**
  * Calculates and formats the last six financial years for display on the mark for supplementary billing page.
  *
  * When marking a licence for supplementary billing, financial years from 2023 onward (SROC billing)
@@ -51,7 +36,7 @@ function _determineCurrentFinancialYearEnd() {
  * covered by pre-SROC (up to six years).
  */
 function _yearsToDisplay() {
-  const currentFinancialYearEnd = _determineCurrentFinancialYearEnd()
+  const currentFinancialYearEnd = determineFinancialYearEnd(new Date())
   const lastSixFinancialYears = []
 
   for (let i = 0; i < PREVIOUS_SIX_YEARS; i++) {
