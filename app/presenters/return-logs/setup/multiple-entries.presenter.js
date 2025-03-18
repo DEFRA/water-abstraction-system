@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
@@ -18,7 +19,7 @@ function go(session) {
   const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
 
   const measurementType = reported === 'abstraction-volumes' ? 'volumes' : 'readings'
-  const frequency = _frequency(returnsFrequency)
+  const frequency = returnRequirementFrequencies[returnsFrequency]
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
@@ -31,16 +32,6 @@ function go(session) {
     returnReference,
     sessionId,
     startDate: formatLongDate(new Date(lines[0].startDate))
-  }
-}
-
-function _frequency(returnsFrequency) {
-  if (returnsFrequency === 'day') {
-    return 'daily'
-  } else if (returnsFrequency === 'week') {
-    return 'weekly'
-  } else if (returnsFrequency === 'month') {
-    return 'monthly'
   }
 }
 
