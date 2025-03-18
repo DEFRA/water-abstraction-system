@@ -21,7 +21,7 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  * @param {string} sessionId - The UUID for the notification setup session record
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {string} - the created eventId
+ * @returns {Promise<string>} - the created eventId
  */
 async function go(sessionId, auth) {
   const session = await SessionModel.query().findById(sessionId)
