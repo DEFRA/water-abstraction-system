@@ -5,7 +5,6 @@
  * @module SubmitMultipleEntriesService
  */
 
-const GeneralLib = require('../../../lib/general.lib.js')
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
 const SessionModel = require('../../../models/session.model.js')
