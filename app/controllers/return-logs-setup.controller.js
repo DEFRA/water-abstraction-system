@@ -108,20 +108,6 @@ async function reported(request, h) {
   return h.view('return-logs/setup/reported.njk', pageData)
 }
 
-async function setup(request, h) {
-  const { action, returnLogId } = request.query
-  const session = await InitiateSessionService.go(returnLogId)
-
-  const redirectUrl =
-    action === 'submit'
-      ? // User clicked 'Submit return' so redirect to the received page
-        `/system/return-logs/setup/${session.id}/received`
-      : // Otherwise, assume 'Edit return' was clicked and redirect accordingly
-        `/system/return-logs/setup/${session.id}/check`
-
-  return h.redirect(redirectUrl)
-}
-
 async function singleVolume(request, h) {
   const { sessionId } = request.params
   const pageData = await SingleVolumeService.go(sessionId)
@@ -267,6 +253,16 @@ async function submitReported(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
+async function submitSetup(request, h) {
+  const { returnLogId } = request.payload
+
+  const session = await InitiateSessionService.go(returnLogId)
+
+  // TODO: Redirect to `/system/return-logs/setup/${session.id}/received` if there's no return ie. Submit was clicked
+
+  return h.redirect(`/system/return-logs/setup/${session.id}/check`)
+}
+
 async function submitSingleVolume(request, h) {
   const {
     params: { sessionId },
@@ -363,7 +359,6 @@ module.exports = {
   periodUsed,
   received,
   reported,
-  setup,
   singleVolume,
   startReading,
   submission,
@@ -374,6 +369,7 @@ module.exports = {
   submitPeriodUsed,
   submitReceived,
   submitReported,
+  submitSetup,
   submitSingleVolume,
   submitStartReading,
   submitSubmission,

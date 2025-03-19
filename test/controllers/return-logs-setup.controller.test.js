@@ -68,7 +68,7 @@ describe('Return Logs - Setup - Controller', () => {
   })
 
   describe('return-logs/setup', () => {
-    describe('GET', () => {
+    describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId, data: {} })
@@ -76,14 +76,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the user clicked "Edit return"', () => {
           beforeEach(() => {
-            options = {
-              method: 'GET',
-              url: '/return-logs/setup?returnLogId=v1:6:01/117:10032788:2019-04-01:2019-05-12&action=edit',
-              auth: {
-                strategy: 'session',
-                credentials: { scope: ['billing'] }
-              }
-            }
+            options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'EDIT_RETURN_LOG_ID' } })
           })
 
           it('redirects to the "check" page', async () => {
@@ -96,14 +89,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the user clicked "Submit return"', () => {
           beforeEach(() => {
-            options = {
-              method: 'GET',
-              url: '/return-logs/setup?returnLogId=v1:6:01/117:10032788:2019-04-01:2019-05-12&action=submit',
-              auth: {
-                strategy: 'session',
-                credentials: { scope: ['billing'] }
-              }
-            }
+            options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'SUBMIT_RETURN_LOG_ID' } })
           })
 
           it('redirects to the "received" page', async () => {
