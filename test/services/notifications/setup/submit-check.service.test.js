@@ -24,9 +24,9 @@ const SubmitCheckService = require('../../../../app/services/notifications/setup
 describe('Notifications Setup - Submit Check service', () => {
   let auth
   let notifierStub
+  let recipients
   let referenceCode
   let session
-  let recipients
   let testRecipients
 
   beforeEach(async () => {
