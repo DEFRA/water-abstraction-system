@@ -625,4 +625,239 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
       })
     })
   })
+
+  describe('when the journey is for "ad-hoc"', () => {
+    beforeEach(() => {
+      journey = 'ad-hoc'
+    })
+
+    describe('when the notifications is an email', () => {
+      describe('and the "contact_type" is for a "Primary user"', () => {
+        beforeEach(() => {
+          testRecipients = [recipients.primaryUser]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'ad-hoc_primary_user_email',
+              messageType: 'email',
+              personalisation: {
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              recipient: 'primary.user@important.com',
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
+            }
+          ])
+        })
+      })
+
+      describe('and the "contact_type" is for a "Returns Agent"', () => {
+        beforeEach(() => {
+          testRecipients = [recipients.returnsAgent]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.returnsAgent.licence_refs}"]`,
+              messageRef: 'ad-hoc_returns_agent_email',
+              messageType: 'email',
+              personalisation: {
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              recipient: 'returns.agent@important.com',
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a'
+            }
+          ])
+        })
+      })
+
+      describe('and the "contact_type" is for "both"', () => {
+        beforeEach(() => {
+          testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.primaryUser.licence_refs}"]`,
+              messageRef: 'ad-hoc_primary_user_email',
+              messageType: 'email',
+              personalisation: {
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              recipient: 'primary.user@important.com',
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('when the notifications is a letter', () => {
+      describe('and the "contact_type" is for a "Licence Holder"', () => {
+        beforeEach(() => {
+          testRecipients = [recipients.licenceHolder]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'ad-hoc_licence_holder_letter',
+              messageType: 'letter',
+              personalisation: {
+                address_line_1: '1',
+                address_line_2: 'Privet Drive',
+                address_line_3: 'Little Whinging',
+                address_line_4: 'Surrey',
+                address_line_5: 'WD25 7LR',
+                name: 'Mr H J Licence holder',
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
+            }
+          ])
+        })
+      })
+
+      describe('and the "contact_type" is for a "Returns To"', () => {
+        beforeEach(() => {
+          testRecipients = [recipients.returnsTo]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.returnsTo.licence_refs}"]`,
+              messageRef: 'ad-hoc_returns_to_letter',
+              messageType: 'letter',
+              personalisation: {
+                address_line_1: '2',
+                address_line_2: 'Privet Drive',
+                address_line_3: 'Little Whinging',
+                address_line_4: 'Surrey',
+                address_line_5: 'WD25 7LR',
+                name: 'Mr H J Returns to',
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
+            }
+          ])
+        })
+      })
+
+      describe('and the "contact_type" is for "both"', () => {
+        beforeEach(() => {
+          testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+        })
+
+        it('correctly transforms the recipient to a notification', () => {
+          const result = ScheduledNotificationsPresenter.go(
+            testRecipients,
+            determinedReturnsPeriod,
+            referenceCode,
+            journey,
+            eventId
+          )
+
+          expect(result).to.equal([
+            {
+              createdAt: '2025-01-01T00:00:00.000Z',
+              eventId,
+              licences: `["${recipients.licenceHolder.licence_refs}"]`,
+              messageRef: 'ad-hoc_licence_holder_letter',
+              messageType: 'letter',
+              personalisation: {
+                address_line_1: '1',
+                address_line_2: 'Privet Drive',
+                address_line_3: 'Little Whinging',
+                address_line_4: 'Surrey',
+                address_line_5: 'WD25 7LR',
+                name: 'Mr H J Licence holder',
+                periodEndDate: '31 March 2025',
+                periodStartDate: '1 January 2025',
+                returnDueDate: '28 April 2025'
+              },
+              reference: 'TEST-123',
+              sendAfter: '2025-01-01T00:00:00.000Z',
+              templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
+            }
+          ])
+        })
+      })
+    })
+  })
 })

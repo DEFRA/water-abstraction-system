@@ -13,6 +13,13 @@ const notifyTemplates = {
       returnsAgentEmail: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
       licenceHolderLetter: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba',
       returnsToLetter: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
+    },
+    // ad-hoc uses the same templates as reminders
+    'ad-hoc': {
+      primaryUserEmail: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836',
+      returnsAgentEmail: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
+      licenceHolderLetter: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba',
+      returnsToLetter: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
     }
   }
 }
