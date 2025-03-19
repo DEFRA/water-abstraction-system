@@ -35,7 +35,7 @@ function go(frequency, length, measurementType, payload, startReading) {
         .min(0)
         .allow(null)
         .messages({
-          'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x`,
+          'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
           'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
         })
     )
@@ -65,11 +65,11 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
 
   for (let i = 0; i < filteredValues.length; i++) {
     if (filteredValues[i] < startReading) {
-      return helpers.message(`The meter readings must be greater than or equal to the start reading`)
+      return helpers.message(`The meter readings must be greater than or equal to the start reading of ${startReading}`)
     }
 
     if (filteredValues[i] < filteredValues[i - 1]) {
-      return helpers.message(`Each meter reading must be greater than or equal to the previous one`)
+      return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
     }
   }
 
