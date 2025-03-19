@@ -3,65 +3,180 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things we need to stub
-const LicenceSupplementaryYearModel = require('../../../app/models/licence-supplementary-year.model.js')
+// Test helpers
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const AssignBillRunToLicencesService = require('../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
 
-describe('Bill Runs - Unassign Bill Run To Licence service', () => {
-  const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
-  const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'
-  const licences = [{ id: '098e0fff-1c3e-4be3-83b9-8f483ae5b41e' }, { id: '406b8ba4-63b6-442a-86f3-a144f1f63ca9' }]
-  const twoPartTariff = true
+// NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let billRun
+let assignedSameRegionAndYear
+let unassignedSameRegionAndYear
+let unassignedSameRegionDifferentYear
+let unassignedDifferentRegionSameYear
+let unassignedSameRegionAndYearNonTpt
 
-  let licenceSupplementaryYearPatch
-  let licenceSupplementaryYearWhereIn
-  let licenceSupplementaryYearWhere
+describe('Bill Runs - Assign Bill Run To Licences service', () => {
+  let region
 
-  beforeEach(() => {
-    licenceSupplementaryYearPatch = Sinon.stub().returnsThis()
-    licenceSupplementaryYearWhere = Sinon.stub().returnsThis()
-    licenceSupplementaryYearWhereIn = Sinon.stub()
+  beforeEach(async () => {
+    region = RegionHelper.select()
 
-    Sinon.stub(LicenceSupplementaryYearModel, 'query').returns({
-      patch: licenceSupplementaryYearPatch,
-      where: licenceSupplementaryYearWhere,
-      whereIn: licenceSupplementaryYearWhereIn
+    billRun = await BillRunHelper.add({
+      batchType: 'two_part_supplementary',
+      regionId: region.id,
+      scheme: 'sroc',
+      status: 'processing',
+      toFinancialYearEnding: 2024
     })
   })
 
-  afterEach(() => {
-    Sinon.restore()
+  afterEach(async () => {
+    await _cleanUp()
   })
 
-  describe('when called', () => {
-    it('assigns the bill run ID to the matching "LicenceSupplementaryYear" records', async () => {
-      await AssignBillRunToLicencesService.go(billRunId, licences, billingPeriod, twoPartTariff)
+  describe('when the supplementary year records are unassigned', () => {
+    describe('and the financial year matches the bill run in progress', () => {
+      describe('and the type of supplementary is the same', () => {
+        describe('and the licences are for the same region as the bill run', () => {
+          beforeEach(async () => {
+            // Unassigned LSY for same year as bill run, and licence in same region as bill run
+            const licence = await LicenceHelper.add({ regionId: region.id })
+            const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+              financialYearEnd: 2024,
+              licenceId: licence.id,
+              twoPartTariff: true
+            })
 
-      const patchArgs = licenceSupplementaryYearPatch.args[0][0]
+            unassignedSameRegionAndYear = { licence, licenceSupplementaryYear }
+          })
 
-      expect(patchArgs.billRunId).to.equal(billRunId)
+          it('assigns the bill run to the supplementary year records', async () => {
+            await AssignBillRunToLicencesService.go(billRun.id)
 
-      const financialYearWhereArgs = licenceSupplementaryYearWhere.firstCall.args
+            const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
-      expect(financialYearWhereArgs).to.equal(['financialYearEnd', 2023])
+            expect(result.billRunId).to.equal(billRun.id)
+          })
+        })
 
-      const twoPartTariffWhereArgs = licenceSupplementaryYearWhere.secondCall.args
+        describe('but the licences are for a different region to the bill run', () => {
+          beforeEach(async () => {
+            // Unassigned LSY for same year as bill run, but licence in different region to bill run
+            const licence = await LicenceHelper.add({ regionId: generateUUID() })
+            const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+              financialYearEnd: 2024,
+              licenceId: licence.id,
+              twoPartTariff: true
+            })
 
-      expect(twoPartTariffWhereArgs).to.equal(['twoPartTariff', true])
+            unassignedDifferentRegionSameYear = { licence, licenceSupplementaryYear }
+          })
 
-      const whereInArgs = licenceSupplementaryYearWhereIn.args[0]
+          it('does not assign the bill run to the supplementary year records', async () => {
+            await AssignBillRunToLicencesService.go(billRun.id)
 
-      expect(whereInArgs).to.equal([
-        'licenceId',
-        ['098e0fff-1c3e-4be3-83b9-8f483ae5b41e', '406b8ba4-63b6-442a-86f3-a144f1f63ca9']
-      ])
+            const result = await unassignedDifferentRegionSameYear.licenceSupplementaryYear.$query().select()
+
+            expect(result.billRunId).not.to.equal(billRun.id)
+          })
+        })
+      })
+
+      describe('but the type of supplementary is different', () => {
+        beforeEach(async () => {
+          // Unassigned LSY for same year as bill run, and licence in same region as bill run, but is not two-part tariff
+          const licence = await LicenceHelper.add({ regionId: region.id })
+          const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+            financialYearEnd: 2024,
+            licenceId: licence.id,
+            twoPartTariff: false
+          })
+
+          unassignedSameRegionAndYearNonTpt = { licence, licenceSupplementaryYear }
+        })
+
+        it('does not assign the bill run to the supplementary year records', async () => {
+          await AssignBillRunToLicencesService.go(billRun.id)
+
+          const result = await unassignedSameRegionAndYearNonTpt.licenceSupplementaryYear.$query().select()
+
+          expect(result.billRunId).not.to.equal(billRun.id)
+        })
+      })
+    })
+
+    describe('but the financial year is different to the bill run in progress', () => {
+      beforeEach(async () => {
+        // Unassigned LSY for different year to bill run, but licence in same region as bill run
+        const licence = await LicenceHelper.add({ regionId: region.id })
+        const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+          financialYearEnd: 2023,
+          licenceId: licence.id,
+          twoPartTariff: true
+        })
+
+        unassignedSameRegionDifferentYear = { licence, licenceSupplementaryYear }
+      })
+
+      it('does not assign the bill run to the supplementary year records', async () => {
+        await AssignBillRunToLicencesService.go(billRun.id)
+
+        const result = await unassignedSameRegionDifferentYear.licenceSupplementaryYear.$query().select()
+
+        expect(result.billRunId).not.to.equal(billRun.id)
+      })
+    })
+  })
+
+  describe('when the supplementary year records are already assigned', () => {
+    beforeEach(async () => {
+      // Already assigned LSY for same year as bill run, and licence in same region as bill run
+      const licence = await LicenceHelper.add({ regionId: region.id })
+      const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
+        billRunId: 'e286f865-ebda-451b-89b6-4da947d6556b',
+        financialYearEnd: 2024,
+        licenceId: licence.id,
+        twoPartTariff: true
+      })
+
+      assignedSameRegionAndYear = { licence, licenceSupplementaryYear }
+    })
+
+    it('does not assign the bill run to the supplementary year records', async () => {
+      await AssignBillRunToLicencesService.go(billRun.id)
+
+      const result = await assignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
+
+      expect(result.billRunId).not.to.equal(billRun.id)
     })
   })
 })
+
+async function _cleanUp() {
+  if (billRun) await billRun.$query().delete()
+
+  await _cleanUpEntry(assignedSameRegionAndYear)
+  await _cleanUpEntry(unassignedSameRegionAndYear)
+  await _cleanUpEntry(unassignedSameRegionDifferentYear)
+  await _cleanUpEntry(unassignedDifferentRegionSameYear)
+  await _cleanUpEntry(unassignedSameRegionAndYearNonTpt)
+}
+
+async function _cleanUpEntry(entry) {
+  if (!entry) {
+    return
+  }
+
+  if (entry.licence) await entry.licence.$query().delete()
+  if (entry.licenceSupplementaryYear) await entry.licence.$query().delete()
+}

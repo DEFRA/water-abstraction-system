@@ -70,7 +70,7 @@ describe('Notifications Setup - Event presenter', () => {
         }
       },
       referenceCode: 'RINV-123',
-      status: 'started',
+      status: 'completed',
       subtype: 'returnInvitation'
     })
   })
