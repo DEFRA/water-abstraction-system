@@ -14,15 +14,13 @@ const { NotifyClient } = require('notifications-node-client')
 // Thing under test
 const NotifyStatusesService = require('../../../app/services/notify/notify-statuses.service.js')
 
-describe('Notify - Batch status service', () => {
+describe('Notify - Statuses service', () => {
   let notificationId
   let notifyStub
   let referenceCode
 
   beforeEach(() => {
-    // If you wish to test live notify replace this with a real notification id
-    notificationId = null
-    // If you wish to test live notify replace this with a real unique reference
+    notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
     referenceCode = 'RINV-97CN09'
   })
 
@@ -61,9 +59,6 @@ describe('Notify - Batch status service', () => {
 
   describe('and there are no "notifications"', () => {
     beforeEach(() => {
-      // This is a bad uuid and should not exist in notify
-      notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
-
       notifyStub = _stubSuccessfulNotify({
         data: {
           notifications: []
@@ -82,9 +77,6 @@ describe('Notify - Batch status service', () => {
 
   describe('when the call to "notify" is unsuccessful', () => {
     beforeEach(() => {
-      // This is a bad uuid and should not exist in notify
-      notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
-
       notifyStub = _stubUnSuccessfulNotify()
     })
 
