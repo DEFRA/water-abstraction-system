@@ -24,7 +24,6 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * - save the notifications to `water.scheduled_notifications`
  * - check the status of the notifications with Notify (sent or otherwise)
  * - update the notifications status in `water.scheduled_notifications` (with the updated Notify status)
- * - return the number of successful and failed notifications
  *
  * This will need to be done in batches because Notify has a rate limit (3,000 messages per minute). It also means the persisting of the notifications can use PostgreSQL's ability to batch insert (this is much greater than the Notify
  * rate limit).
@@ -35,28 +34,16 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * @param {string} journey
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {object} - the number of sent and errored notifications
  */
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
   const { batchSize, delay } = NotifyConfig
 
-  let sent = 0
-  let error = 0
-
   for (let i = 0; i < recipients.length; i += batchSize) {
     const batchRecipients = recipients.slice(i, i + batchSize)
 
-    const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+    await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
     await _delay(delay)
-
-    sent += batch.sent
-    error += batch.error
-  }
-
-  return {
-    sent,
-    error
   }
 }
 

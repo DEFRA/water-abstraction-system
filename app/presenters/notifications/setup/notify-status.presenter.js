@@ -6,7 +6,7 @@
  */
 
 const SCHEDULED_NOTIFICATIONS_STATUS = {
-  pending: 'pending',
+  sending: 'sending',
   sent: 'sent',
   error: 'error'
 }
@@ -27,7 +27,7 @@ const SCHEDULED_NOTIFICATIONS_STATUS = {
  * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
  * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial
  * 'notifyStatus' value set for a 'scheduledNotification' (when no error has occurred), and the 'status' is set to
- * pending.
+ * sending.
  *
  * @param {string} notifyStatus - the status from notify
  * @param {string} scheduledNotification - a 'scheduled notification'
@@ -62,8 +62,8 @@ function go(notifyStatus, scheduledNotification) {
  */
 function _emailStatus(notifyStatus) {
   const emailStatuses = {
-    created: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    sending: SCHEDULED_NOTIFICATIONS_STATUS.pending,
+    created: SCHEDULED_NOTIFICATIONS_STATUS.sending,
+    sending: SCHEDULED_NOTIFICATIONS_STATUS.sending,
     delivered: SCHEDULED_NOTIFICATIONS_STATUS.sent,
     'permanent-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
     'technical-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
@@ -91,8 +91,8 @@ function _emailStatus(notifyStatus) {
 function _letterStatus(notifyStatus) {
   const letterStatuses = {
     accepted: SCHEDULED_NOTIFICATIONS_STATUS.sent,
-    created: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    sending: SCHEDULED_NOTIFICATIONS_STATUS.pending,
+    created: SCHEDULED_NOTIFICATIONS_STATUS.sending,
+    sending: SCHEDULED_NOTIFICATIONS_STATUS.sending,
     delivered: SCHEDULED_NOTIFICATIONS_STATUS.sent,
     received: SCHEDULED_NOTIFICATIONS_STATUS.sent,
     'permanent-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,

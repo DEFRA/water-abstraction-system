@@ -99,7 +99,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[0].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.primaryUser.licence_refs],
           individualId: null,
@@ -126,7 +126,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[1].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsAgent.licence_refs],
           individualId: null,
@@ -159,7 +159,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[2].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.licenceHolder.licence_refs],
           individualId: null,
@@ -192,7 +192,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[3].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsTo.licence_refs],
           individualId: null,
@@ -225,7 +225,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[4].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [firstMultiple, secondMultiple],
           individualId: null,
@@ -242,21 +242,6 @@ describe('Notifications Setup - Batch notifications service', () => {
           createdAt: result[4].createdAt
         }
       ])
-    })
-
-    it('should return with no errors', async () => {
-      const result = await BatchNotificationsService.go(
-        testRecipients,
-        determinedReturnsPeriod,
-        referenceCode,
-        journey,
-        eventId
-      )
-
-      expect(result).to.equal({
-        error: 0,
-        sent: 5
-      })
     })
 
     if (stubNotify) {
@@ -318,21 +303,6 @@ describe('Notifications Setup - Batch notifications service', () => {
       _stubUnSuccessfulNotify()
     })
 
-    it('should return the "error" count in the response', async () => {
-      const result = await BatchNotificationsService.go(
-        testRecipients,
-        determinedReturnsPeriod,
-        referenceCode,
-        journey,
-        eventId
-      )
-
-      expect(result).to.equal({
-        error: 1,
-        sent: 2
-      })
-    })
-
     it('should persist the scheduled notifications with the errors', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
@@ -379,7 +349,7 @@ describe('Notifications Setup - Batch notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           sendAfter: result[1].sendAfter,
-          status: 'pending',
+          status: 'sending',
           log: null,
           licences: [recipients.returnsAgent.licence_refs],
           individualId: null,
