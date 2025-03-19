@@ -173,9 +173,6 @@ function _whereClauseForChargeVersions(query, billRunId, billingPeriod) {
     .innerJoin('licenceSupplementaryYears', 'licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .where((builder) => {
-      builder.whereNull('chargeVersions.endDate').orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
-    })
     .where('licenceSupplementaryYears.billRunId', billRunId)
 }
 
