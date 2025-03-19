@@ -108,7 +108,7 @@ describe('Return Logs - Create Return Logs service', () => {
   describe('when called with a quarterly return version and a return cycle after 01-04-2025', () => {
     beforeEach(() => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+      clock = Sinon.useFakeTimers(new Date('2025-12-01'))
 
       testReturnCycle = returnCycle()
       testReturnRequirement = returnRequirement()
@@ -167,14 +167,16 @@ describe('Return Logs - Create Return Logs service', () => {
   describe('when called with a quarterly return version with a licence end date that ends during the return cycle', () => {
     beforeEach(() => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+      clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
       testReturnCycle = returnCycles()[1]
       testReturnRequirement = returnRequirementsAcrossReturnVersions()[4]
+      testReturnRequirement.returnVersion.endDate = null
+      testReturnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle, new Date('2025-05-01'))
 
       expect(insertStub.callCount).to.equal(1)
 
@@ -184,10 +186,10 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: We don't assert every property of the object passed in because we know it is coming from
       // GenerateReturnLogService and that has its own suite of tests. We do however confirm that the createdAt and
       // UpdatedAt properties are set because those only get set in the service
-      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-26')
+      expect(insertStub.args[0][0].id).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-01')
       expect(insertObject.createdAt).to.exist()
       expect(insertObject.updatedAt).to.exist()
-      expect(results).to.equal(['v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-26'])
+      expect(results).to.equal(['v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-01'])
     })
   })
 
