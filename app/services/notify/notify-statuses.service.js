@@ -14,13 +14,13 @@ const config = require('../../../config/notify.config.js')
  *
  * https://docs.notifications.service.gov.uk/node.html#get-the-status-of-multiple-messages
  *
- * @param {string|null} olderThanNotificationId - the client returns the next 250 received notifications older than
+ * @param {string | null} olderThanNotificationId - the client returns the next 250 received notifications older than
  * the given id
  * @param {string} referenceCode - This reference identifies a single unique notification or a batch of notifications
  *
  * @returns {Promise<object>}
  */
-async function go(olderThanNotificationId = null, referenceCode) {
+async function go(olderThanNotificationId, referenceCode) {
   const notifyClient = new NotifyClient(config.apiKey)
 
   return _statuses(notifyClient, olderThanNotificationId, referenceCode)

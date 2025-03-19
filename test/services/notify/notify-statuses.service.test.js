@@ -20,7 +20,7 @@ describe('Notify - Statuses service', () => {
   let referenceCode
 
   beforeEach(() => {
-    notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
+    notificationId = null
     referenceCode = 'RINV-97CN09'
   })
 
@@ -59,6 +59,8 @@ describe('Notify - Statuses service', () => {
 
   describe('and there are no "notifications"', () => {
     beforeEach(() => {
+      notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
+
       notifyStub = _stubSuccessfulNotify({
         data: {
           notifications: []
