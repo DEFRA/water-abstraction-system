@@ -30,7 +30,7 @@ function go(notify) {
     notifyId: notify.id,
     notifyStatus: notify.statusText,
     plaintext: notify.plaintext,
-    status: 'pending'
+    status: 'sending'
   }
 }
 
