@@ -55,9 +55,6 @@ async function go(sessionId, payload, yar) {
 }
 
 async function _save(session, payload) {
-  session.multipleEntries = payload.multipleEntries
-  session.formattedEntries = payload.formattedEntries
-
   session.lines.forEach((line, index) => {
     if (session.reported === 'abstraction-volumes') {
       line.quantity = payload.formattedEntries[index]
