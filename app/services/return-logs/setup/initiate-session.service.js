@@ -82,17 +82,21 @@ async function _fetchReturnLog(returnLogId) {
 }
 
 function _lines(returnsFrequency, startDate, endDate) {
+  let lines
+
   if (returnsFrequency === 'day') {
-    return daysFromPeriod(startDate, endDate)
+    lines = daysFromPeriod(startDate, endDate)
   }
 
   if (returnsFrequency === 'week') {
-    return weeksFromPeriod(startDate, endDate)
+    lines = weeksFromPeriod(startDate, endDate)
   }
 
   if (returnsFrequency === 'month') {
-    return monthsFromPeriod(startDate, endDate)
+    lines = monthsFromPeriod(startDate, endDate)
   }
+
+  return lines
 }
 
 function _meter(meter) {
@@ -201,7 +205,10 @@ function _submissionLines(returnSubmissionLines) {
   return returnSubmissionLines.map((returnSubmissionLine) => {
     const { endDate, quantity, reading, startDate, userUnit } = returnSubmissionLine
 
-    const convertedQuantity = quantity * returnUnits[userUnit].multiplier ?? null
+    let convertedQuantity
+    if (quantity) {
+      convertedQuantity = quantity * returnUnits[userUnit].multiplier
+    }
 
     return {
       endDate,
