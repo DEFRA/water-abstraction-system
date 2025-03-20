@@ -32,7 +32,7 @@ const TransactionHelper = require('../helpers/transaction.helper.js')
  * bill run, then it should only return the 'two-part-tariff' transactions for each licence when called. The standard
  * transactions must be ignored.
  *
- * @returns {Promise<object>} An containing references to all the seeded data
+ * @returns {Promise<object>} An object containing references to all the seeded data
  */
 async function seed() {
   const region = RegionHelper.select(2)
