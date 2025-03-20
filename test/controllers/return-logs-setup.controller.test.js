@@ -71,33 +71,15 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId, data: {} })
+          Sinon.stub(InitiateSessionService, 'go').resolves(`/system/return-logs/setup/${sessionId}/check`)
+          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } })
         })
 
-        describe('and the user clicked "Edit return"', () => {
-          beforeEach(() => {
-            options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'EDIT_RETURN_LOG_ID' } })
-          })
+        it('redirects to the returned page', async () => {
+          const response = await server.inject(options)
 
-          it('redirects to the "check" page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
-          })
-        })
-
-        describe('and the user clicked "Submit return"', () => {
-          beforeEach(() => {
-            options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'SUBMIT_RETURN_LOG_ID' } })
-          })
-
-          it('redirects to the "received" page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/received`)
-          })
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
     })
