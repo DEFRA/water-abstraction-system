@@ -8,7 +8,7 @@
 const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const { unitNames } = require('../../../lib/static-lookups.lib.js')
+const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
 const UNITS = {
   [unitNames.CUBIC_METRES]: 'cubic-metres',
@@ -185,7 +185,7 @@ function _submissionData(returnLog) {
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: returnSubmissionLines,
+    lines: _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
@@ -199,6 +199,24 @@ function _submissionData(returnLog) {
     startReading: meter.startReading,
     units: UNITS[metadata.units || unitNames.CUBIC_METRES]
   }
+}
+
+function _submissionLines(returnSubmissionLines) {
+  return returnSubmissionLines.map((returnSubmissionLine) => {
+    const { endDate, quantity, reading, startDate, userUnit } = returnSubmissionLine
+
+    let convertedQuantity = null
+    if (quantity) {
+      convertedQuantity = quantity * returnUnits[userUnit].multiplier
+    }
+
+    return {
+      endDate,
+      quantity: convertedQuantity,
+      reading: reading ?? null,
+      startDate
+    }
+  })
 }
 
 module.exports = {
