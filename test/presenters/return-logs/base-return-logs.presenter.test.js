@@ -159,7 +159,7 @@ describe('Base Return Logs presenter', () => {
         })
       })
 
-      describe('and the due date is in the future', () => {
+      describe('and the due date is in the next 28 days', () => {
         before(() => {
           const nextWeek = new Date()
           nextWeek.setDate(nextWeek.getDate() + 7)
@@ -170,6 +170,20 @@ describe('Base Return Logs presenter', () => {
           const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
 
           expect(result).to.equal('due')
+        })
+      })
+
+      describe('and the due date is after the next 28 days', () => {
+        before(() => {
+          const fourWeeks = new Date()
+          fourWeeks.setDate(fourWeeks.getDate() + 27)
+          testReturnLog.dueDate = fourWeeks
+        })
+
+        it('returns not due yet', () => {
+          const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
         })
       })
     })
