@@ -49,7 +49,7 @@ async function go(sessionId, payload) {
 /**
  * Ad-hoc licence notifications has highlighted an issue with using the returns period dates.
  *
- * This code is intended as a temporary 'fix' to allow ad-hoc returns to use the returns reminders Notify template
+ * This code is intended as a temporary 'fix' to allow ad-hoc returns to use the returns invitations Notify template
  * (which requires the 'determinedReturnsPeriod' dates)
  *
  * This function alters the 'dueDate' by adding 28 days to the current date (this may not be the final state and should be regarded as a
