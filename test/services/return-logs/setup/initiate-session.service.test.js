@@ -22,7 +22,6 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     let licence
     let metadata
     let returnLog
-    let returnSubmissionLine
 
     before(async () => {
       metadata = {
@@ -62,13 +61,15 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           returnLogId: returnLog.id,
           metadata: { method: 'abstractionVolumes' }
         })
-        returnSubmissionLine = await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
+        await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
       })
 
       it('creates a new session record containing details of the return log', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data).to.equal({
           beenReceived: false,
@@ -82,28 +83,32 @@ describe('Return Logs - Setup - Initiate Session service', () => {
               startDate: '2021-12-26T00:00:00.000Z',
               endDate: '2022-01-01T00:00:00.000Z',
               quantity: 4380,
-              userUnit: 'm³',
-              id: returnSubmissionLine.id
+              reading: null
             }
           ],
           meter10TimesDisplay: null,
           meterMake: null,
           meterProvided: 'no',
           meterSerialNumber: null,
+          nilReturn: false,
           periodStartDay: returnLog.metadata.nald.periodStartDay,
           periodStartMonth: returnLog.metadata.nald.periodStartMonth,
           periodEndDay: returnLog.metadata.nald.periodEndDay,
           periodEndMonth: returnLog.metadata.nald.periodEndMonth,
           purposes: ['Test description'],
-          receivedDate: returnLog.receivedDate,
+          receivedDate: null,
+          receivedDateDay: null,
+          receivedDateMonth: null,
+          receivedDateOptions: 'custom-date',
+          receivedDateYear: null,
           reported: 'abstraction-volumes',
           returnLogId: returnLog.id,
           returnReference: returnLog.returnReference,
           returnsFrequency: 'month',
           siteDescription: returnLog.metadata.description,
           startDate: '2022-04-01T00:00:00.000Z',
-          startReading: null,
           status: returnLog.status,
+          submissionType: 'edit',
           twoPartTariff: returnLog.metadata.isTwoPartTariff,
           underQuery: returnLog.underQuery,
           units: 'cubic-metres'
@@ -113,7 +118,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('sets "beenReceived" to "false"', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.beenReceived).to.be.false()
       })
@@ -133,7 +140,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('sets "beenReceived" to "true"', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.beenReceived).to.be.true()
       })
@@ -141,7 +150,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('sets the received date fields accordingly', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.receivedDateOptions).to.equal('custom-date')
         expect(matchingSession.data.receivedDateDay).to.equal('6')
@@ -165,7 +176,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('formats the unit as expected', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.units).to.equal('megalitres')
       })
@@ -186,7 +199,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it("defaults the unit to 'cubic-metres'", async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.units).to.equal('cubic-metres')
       })
@@ -222,7 +237,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('includes the meter details', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.meter10TimesDisplay).to.equal('yes')
         expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
@@ -247,10 +264,18 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       it('sets the journey as expected', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
 
         expect(matchingSession.data.journey).to.equal('nil-return')
       })
     })
   })
 })
+
+// InitiateSessionService returns a string in the format`/system/return-logs/setup/${sessionId}/${redirect}`. We extract
+// the session id by splitting by '/' and taking the next-to-last element
+function _getSessionId(url) {
+  return url.split('/').at(-2)
+}
