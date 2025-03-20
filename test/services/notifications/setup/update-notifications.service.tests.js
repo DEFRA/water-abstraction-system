@@ -105,7 +105,7 @@ describe('Notifications Setup - Update Notifications service', () => {
       ]
     })
 
-    it('should return the saved notifications', async () => {
+    it('updates the notifications required values', async () => {
       await UpdateNotificationsService.go(notifications)
 
       const createdResult = await ScheduledNotificationModel.query().where('eventId', eventId)
