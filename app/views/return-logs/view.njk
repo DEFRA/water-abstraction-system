@@ -130,22 +130,24 @@
           {% endif %}
 
           {# Mark as under query / Resolve query button #}
-          {% if underQuery %}
-            {% set queryButtonText = 'Resolve query' %}
-            {% set queryButtonValue = 'resolve' %}
-          {% else %}
-            {% set queryButtonText = 'Mark as under query' %}
-            {% set queryButtonValue = 'mark' %}
+          {% if showUnderQuery %}
+            {% if underQuery %}
+              {% set queryButtonText = 'Resolve query' %}
+              {% set queryButtonValue = 'resolve' %}
+            {% else %}
+              {% set queryButtonText = 'Mark as under query' %}
+              {% set queryButtonValue = 'mark' %}
+            {% endif %}
+            {{
+              govukButton({
+                text: queryButtonText,
+                classes: "govuk-button--secondary",
+                name: "mark-query",
+                value: queryButtonValue,
+                preventDoubleClick: true
+              })
+            }}
           {% endif %}
-          {{
-            govukButton({
-              text: queryButtonText,
-              classes: "govuk-button--secondary",
-              name: "mark-query",
-              value: queryButtonValue,
-              preventDoubleClick: true
-            })
-          }}
 
           {% if actionButton %}
             </div>
