@@ -55,25 +55,23 @@ async function go(sessionId, payload) {
  * This function alters the 'dueDate' by adding 28 days to the current date (this may not be the final state and should be regarded as a
  * placeholder).
  *
- * This also, manually, sets gets the 'startDate' and 'endDate' for 'allYear' which represents the current financial
- * kyear.
- *
  * @private
  */
 function _determinedReturnsPeriod() {
-  const dueDate = new Date()
-  
-  dueDate.setDate(dueDate.getDate() + 28)
-  
   // TODO: Remove this use of DetermineReturnsPeriodService(). Ad-hoc will use the same Notify template as invitations,
   // but currently it expects period start and end date values to be provided. We don't have these on the ad-hoc journey
   // so for now are using whatever the current return period is. Once we have confirmation the template has been updated
-  // we can drop this call. 
-  const returnsPeriod = DetermineReturnsPeriodService.go('allYear')
+  // we can drop this call.
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go('allYear')
+
+  const dueDate = new Date()
+
+  dueDate.setDate(dueDate.getDate() + 28)
 
   return {
-    dueDate,
-    ...returnsPeriod
+    ...returnsPeriod,
+    summer,
+    dueDate
   }
 }
 
