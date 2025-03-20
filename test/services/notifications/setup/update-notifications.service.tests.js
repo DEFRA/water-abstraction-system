@@ -16,7 +16,7 @@ const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const UpdateNotificationsService = require('../../../../app/services/notifications/setup/update-notifications.service.js')
 
-describe('Notifications Setup - Update notification service', () => {
+describe('Notifications Setup - Update Notifications service', () => {
   let eventId
   let notifications
   let scheduledNotification
