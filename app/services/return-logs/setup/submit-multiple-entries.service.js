@@ -5,10 +5,10 @@
  * @module SubmitMultipleEntriesService
  */
 
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page

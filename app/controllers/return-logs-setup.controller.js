@@ -199,7 +199,7 @@ async function submitMeterProvided(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-details`)
 }
 
-async function submitMultipleEntires(request, h) {
+async function submitMultipleEntries(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -389,7 +389,7 @@ module.exports = {
   submitCancel,
   submitMeterDetails,
   submitMeterProvided,
-  submitMultipleEntires,
+  submitMultipleEntries,
   submitNote,
   submitPeriodUsed,
   submitReceived,

@@ -12,11 +12,11 @@ const SplitMultipleEntriesService = require('../../../services/return-logs/setup
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
  *
- * @param {string} frequency - The frequency of the return
+ * @param {string} frequency - The reporting frequency of the return (daily/weekly/monthly)
  * @param {number} length - The number of entries the user needs to enter
- * @param {string} measurementType - The type of measurement the entries are
+ * @param {string} measurementType - The type of measurement the entries are (volumes or readings)
  * @param {object} payload - The payload from the request to be validated
- * @param {number} startReading - The start reading of the return
+ * @param {number} startReading - The start meter reading for the return
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were

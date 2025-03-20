@@ -2,7 +2,7 @@
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
- * @module MultipleEntiresPresenter
+ * @module MultipleEntriesPresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
