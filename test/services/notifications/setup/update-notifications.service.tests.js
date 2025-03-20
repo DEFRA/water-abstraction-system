@@ -49,7 +49,7 @@ describe('Notifications Setup - Update Notifications service', () => {
       ]
     })
 
-    it('should update a single notification (and only update the required values)', async () => {
+    it("updates only the notification's required values", async () => {
       await UpdateNotificationsService.go(notifications)
 
       const createdResult = await ScheduledNotificationModel.query().where('eventId', eventId)
