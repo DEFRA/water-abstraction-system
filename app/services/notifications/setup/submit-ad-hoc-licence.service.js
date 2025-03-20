@@ -61,16 +61,19 @@ async function go(sessionId, payload) {
  * @private
  */
 function _determinedReturnsPeriod() {
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go('allYear')
-
   const dueDate = new Date()
-  const daysToAdd = 28
-  dueDate.setDate(dueDate.getDate() + daysToAdd)
+  
+  dueDate.setDate(dueDate.getDate() + 28)
+  
+  // TODO: Remove this use of DetermineReturnsPeriodService(). Ad-hoc will use the same Notify template as invitations,
+  // but currently it expects period start and end date values to be provided. We don't have these on the ad-hoc journey
+  // so for now are using whatever the current return period is. Once we have confirmation the template has been updated
+  // we can drop this call. 
+  const returnsPeriod = DetermineReturnsPeriodService.go('allYear')
 
   return {
-    ...returnsPeriod,
-    summer,
-    dueDate
+    dueDate,
+    ...returnsPeriod
   }
 }
 
