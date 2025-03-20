@@ -11,6 +11,19 @@
   {% endif %}
 {% endmacro %}
 
+{% macro newCommunicationType(communication) %}
+  {% if communication.type.pdf %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ communication.type.label }}<span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span></p>
+  {% else %}
+    {# Testing new communications page link #}
+    <a href="/system/communications/{{ communication.id }}" class="govuk-link">NEW TEST {{ communication.type.label }}
+      <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
+    </a>
+  {% endif %}
+{% endmacro %}
+
+
+
 <h2 class="govuk-heading-l">Communications</h2>
 
 {% if communications.length === 0 %}
@@ -24,6 +37,28 @@
     {% set row = [
       {
         html: communicationType(communication),
+        attributes: { 'data-test': 'communication-type-' + rowIndex }
+      },
+      {
+        text: communication.sent,
+        attributes: { 'data-test': 'communication-sent-' + rowIndex }
+      },
+      {
+        text: communication.sender,
+        attributes: { 'data-test': 'communication-sender-' + rowIndex }
+      },
+      {
+        text: communication.method,
+        attributes: { 'data-test': 'communication-method-' + rowIndex }
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(row), tableRows) %}
+
+    {# Testing new communications page link #}
+    {% set row = [
+      {
+        html: newCommunicationType(communication),
         attributes: { 'data-test': 'communication-type-' + rowIndex }
       },
       {
