@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,23 +25,25 @@ const ReviewLicenceHelper = require('../../../support/helpers/review-licence.hel
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
 
-describe('Fetch Billing Accounts service', () => {
-  let billRun
-  let billingAccount
-  let billingAccountNotInBillRun
+// NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
+let billRun
+let billingAccount
+let billingAccountNotInBillRun
+let chargeElement
+let chargeReference
+let chargeVersion
+let licence
+let reviewChargeElement
+let reviewChargeReference
+let reviewChargeVersion
+
+describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
   let chargeCategory
-  let chargeElement
-  let chargeReference
-  let chargeVersion
-  let licence
   let region
-  let reviewChargeElement
-  let reviewChargeReference
-  let reviewChargeVersion
 
   before(async () => {
     region = RegionHelper.select()
-    billRun = await BillRunHelper.add({ regionId: region.id })
+    billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id })
 
     licence = await LicenceHelper.add({ regionId: region.id })
 
@@ -77,7 +79,11 @@ describe('Fetch Billing Accounts service', () => {
     reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId, reviewChargeReferenceId })
   })
 
-  describe('when there are billing accounts that are linked to a two-part tariff bill run', () => {
+  after(async () => {
+    await _cleanUp()
+  })
+
+  describe('when there are billing accounts that are linked to the bill run', () => {
     it('returns the applicable billing accounts', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
@@ -192,7 +198,7 @@ describe('Fetch Billing Accounts service', () => {
     })
   })
 
-  describe('when there are billing accounts not linked to a two-part tariff bill run', () => {
+  describe('when there are billing accounts not linked to the bill run', () => {
     it('does not include them in the results', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
@@ -211,3 +217,16 @@ describe('Fetch Billing Accounts service', () => {
     })
   })
 })
+
+async function _cleanUp() {
+  if (billingAccount) await billingAccount.$query().delete()
+  if (billingAccountNotInBillRun) await billingAccountNotInBillRun.$query().delete()
+  if (chargeElement) await chargeElement.$query().delete()
+  if (chargeReference) await chargeReference.$query().delete()
+  if (chargeVersion) await chargeVersion.$query().delete()
+  if (licence) await licence.$query().delete()
+  if (reviewChargeElement) await reviewChargeElement.$query().delete()
+  if (reviewChargeReference) await reviewChargeReference.$query().delete()
+  if (reviewChargeVersion) await reviewChargeVersion.$query().delete()
+  if (billRun) await billRun.$query().delete()
+}

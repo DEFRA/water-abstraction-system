@@ -31,6 +31,10 @@ function _backLink(session) {
     return `/system/return-logs/setup/${id}/check`
   }
 
+  if (session.reported === 'meter-readings') {
+    return `/system/return-logs/setup/${id}/start-reading`
+  }
+
   return `/system/return-logs/setup/${id}/reported`
 }
 

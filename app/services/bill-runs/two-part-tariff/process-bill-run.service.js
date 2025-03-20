@@ -35,7 +35,6 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    // `populated` will be set to true if `MatchAndAllocateService` processes at least one licence
     const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
 
     await _setBillRunStatus(billRunId, populated)
@@ -43,7 +42,7 @@ async function go(billRun, billingPeriods) {
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_tariff' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId)
-    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+    global.GlobalNotifier.omfg('Process bill run failed', { billRun }, error)
   }
 }
 

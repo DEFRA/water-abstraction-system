@@ -14,26 +14,7 @@ describe('Return Logs Setup - Check presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {
-      endDate: '2005-03-31T00:00:00.000Z',
-      id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
-      journey: 'enter-return',
-      meterMake: 'Test meter make',
-      meterProvided: 'yes',
-      meterSerialNumber: '098765',
-      periodEndDay: 31,
-      periodEndMonth: 12,
-      periodStartDay: 1,
-      periodStartMonth: 1,
-      purposes: ['Evaporative Cooling'],
-      receivedDate: '2025-01-31T00:00:00.000Z',
-      reported: 'abstraction-volumes',
-      returnReference: '1234',
-      siteDescription: 'POINT A, TEST SITE DESCRIPTION',
-      startDate: '2004-04-01T00:00:00.000Z',
-      twoPartTariff: false,
-      units: 'megalitres'
-    }
+    session = _sessionData()
   })
 
   describe('when provided with a populated session', () => {
@@ -42,14 +23,18 @@ describe('Return Logs Setup - Check presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
+        displayReadings: false,
+        displayUnits: true,
         links: {
           cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
           meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
           nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
           received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
           reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+          startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
           units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
         },
+        meter10TimesDisplay: 'yes',
         meterMake: 'Test meter make',
         meterProvided: 'yes',
         meterSerialNumber: '098765',
@@ -67,10 +52,62 @@ describe('Return Logs Setup - Check presenter', () => {
         purposes: 'Evaporative Cooling',
         returnReceivedDate: '31 January 2025',
         reportingFigures: 'Volumes',
-        returnPeriod: '1 April 2004 to 31 March 2005',
+        returnPeriod: '1 April 2023 to 31 March 2024',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+        startReading: undefined,
+        summaryTableData: {
+          headers: [
+            {
+              text: 'Month'
+            },
+            {
+              format: 'numeric',
+              text: 'Megalitres'
+            },
+            {
+              format: 'numeric',
+              text: 'Cubic metres'
+            },
+            {
+              format: 'numeric',
+              text: 'Details'
+            }
+          ],
+          rows: [
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
+                text: 'Enter monthly volumes'
+              },
+              month: 'April 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            },
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
+                text: 'Enter monthly volumes'
+              },
+              month: 'May 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            },
+            {
+              link: {
+                href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
+                text: 'Enter monthly volumes'
+              },
+              month: 'June 2023',
+              monthlyTotal: null,
+              unitTotal: null
+            }
+          ]
+        },
+        tableTitle: 'Summary of monthly abstraction volumes',
         tariff: 'Standard',
+        totalCubicMetres: '0',
+        totalQuantity: '0',
         units: 'Megalitres'
       })
     })
@@ -91,6 +128,7 @@ describe('Return Logs Setup - Check presenter', () => {
             nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
             received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
             reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
+            startReading: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/start-reading',
             units: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/units'
           },
           nilReturn: 'Yes',
@@ -105,12 +143,64 @@ describe('Return Logs Setup - Check presenter', () => {
           },
           pageTitle: 'Check details and enter new volumes or readings',
           purposes: 'Evaporative Cooling',
+          returnPeriod: '1 April 2023 to 31 March 2024',
           returnReceivedDate: '31 January 2025',
-          returnPeriod: '1 April 2004 to 31 March 2005',
           returnReference: '1234',
           siteDescription: 'POINT A, TEST SITE DESCRIPTION',
           tariff: 'Standard'
         })
+      })
+    })
+  })
+
+  describe('the "displayReadings" property', () => {
+    describe('when the user has used meter readings', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns "true"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayReadings).to.be.true()
+      })
+    })
+
+    describe('when the user has used volumes', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      it('returns "false"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayReadings).to.be.false()
+      })
+    })
+  })
+
+  describe('the "displayUnits" property', () => {
+    describe('when the unit of measurement used is "cubic-metres"', () => {
+      beforeEach(() => {
+        session.units = 'cubic-metres'
+      })
+
+      it('returns "false"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayUnits).to.be.false()
+      })
+    })
+
+    describe('when the unit of measurement used is not "cubic-metres"', () => {
+      beforeEach(() => {
+        session.units = 'megalitres'
+      })
+
+      it('returns "true"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.displayUnits).to.be.true()
       })
     })
   })
@@ -211,6 +301,535 @@ describe('Return Logs Setup - Check presenter', () => {
     })
   })
 
+  describe('the "summaryTableData" property', () => {
+    describe('when the reporting method is volumes', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      describe('and the frequency is monthly', () => {
+        beforeEach(() => {
+          session.lines = [
+            {
+              endDate: '2023-04-30T00:00:00.000Z',
+              startDate: '2023-04-01T00:00:00.000Z',
+              quantity: 10.123567
+            },
+            {
+              endDate: '2023-05-31T00:00:00.000Z',
+              startDate: '2023-05-01T00:00:00.000Z',
+              quantity: null
+            },
+            {
+              endDate: '2023-06-30T00:00:00.000Z',
+              startDate: '2023-06-01T00:00:00.000Z',
+              quantity: 1000
+            }
+          ]
+          session.returnsFrequency = 'month'
+        })
+
+        describe('and the unit of measurement is cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'cubic-metres'
+          })
+
+          it('returns the "summaryTableData" headers', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'April 2023',
+                monthlyTotal: '10.124',
+                unitTotal: '10.124'
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'May 2023',
+                monthlyTotal: null,
+                unitTotal: null
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'June 2023',
+                monthlyTotal: '1,000',
+                unitTotal: '1,000'
+              }
+            ])
+          })
+        })
+
+        describe('and the unit of measurement is not cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'megalitres'
+          })
+
+          it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Megalitres', format: 'numeric' },
+              { text: 'Cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'April 2023',
+                monthlyTotal: '10,123.567',
+                unitTotal: '10.124'
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-4',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'May 2023',
+                monthlyTotal: null,
+                unitTotal: null
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-5',
+                  text: 'Enter monthly volumes'
+                },
+                month: 'June 2023',
+                monthlyTotal: '1,000,000',
+                unitTotal: '1,000'
+              }
+            ])
+          })
+        })
+      })
+
+      describe('and the frequency is daily', () => {
+        beforeEach(() => {
+          session.lines = [
+            {
+              endDate: '2023-04-01T00:00:00.000Z',
+              startDate: '2023-04-01T00:00:00.000Z',
+              quantity: 10.123567
+            },
+            {
+              endDate: '2023-04-02T00:00:00.000Z',
+              startDate: '2023-04-02T00:00:00.000Z',
+              quantity: null
+            },
+            {
+              endDate: '2023-04-03T00:00:00.000Z',
+              startDate: '2023-04-03T00:00:00.000Z',
+              quantity: 1000
+            }
+          ]
+          session.returnsFrequency = 'day'
+        })
+
+        describe('and the unit of measurement is cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'cubic-metres'
+          })
+
+          it('returns the "summaryTableData" headers', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Total cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows grouped in months', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
+                  text: 'Enter daily volumes'
+                },
+                month: 'April 2023',
+                monthlyTotal: '1,010.124',
+                unitTotal: '1,010.124'
+              }
+            ])
+          })
+        })
+
+        describe('and the unit of measurement is not cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'gallons'
+          })
+
+          it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Total gallons', format: 'numeric' },
+              { text: 'Total cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/volumes/2023-3',
+                  text: 'Enter daily volumes'
+                },
+                month: 'April 2023',
+                monthlyTotal: '4.592',
+                unitTotal: '1,010.124'
+              }
+            ])
+          })
+        })
+      })
+    })
+
+    describe('when the reporting method is meter readings', () => {
+      beforeEach(() => {
+        session.meter10TimesDisplay = 'no'
+        session.reported = 'meter-readings'
+        session.startReading = 100
+      })
+
+      describe('and the frequency is monthly', () => {
+        beforeEach(() => {
+          session.lines = [
+            {
+              endDate: '2023-04-30T00:00:00.000Z',
+              startDate: '2023-04-01T00:00:00.000Z'
+            },
+            {
+              endDate: '2023-05-31T00:00:00.000Z',
+              startDate: '2023-05-01T00:00:00.000Z',
+              reading: 102
+            },
+            {
+              endDate: '2023-06-30T00:00:00.000Z',
+              startDate: '2023-06-01T00:00:00.000Z',
+              reading: 200
+            }
+          ]
+          session.returnsFrequency = 'month'
+        })
+
+        describe('and the unit of measurement is cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'cubic-metres'
+          })
+
+          it('returns the "summaryTableData" headers', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Reading', format: 'numeric' },
+              { text: 'Cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter monthly readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: null,
+                unitTotal: null,
+                reading: null
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
+                  text: 'Enter monthly readings'
+                },
+                month: 'May 2023',
+                monthlyTotal: '2',
+                unitTotal: '2',
+                reading: 102
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
+                  text: 'Enter monthly readings'
+                },
+                month: 'June 2023',
+                monthlyTotal: '98',
+                unitTotal: '98',
+                reading: 200
+              }
+            ])
+          })
+
+          describe('and the meter has a x10 display', () => {
+            beforeEach(() => {
+              session.meter10TimesDisplay = 'yes'
+            })
+
+            it('returns the "summaryTableData" rows with the volumes x10', () => {
+              const result = CheckPresenter.go(session)
+
+              expect(result.summaryTableData.rows).to.equal([
+                {
+                  link: {
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                    text: 'Enter monthly readings'
+                  },
+                  month: 'April 2023',
+                  monthlyTotal: null,
+                  unitTotal: null,
+                  reading: null
+                },
+                {
+                  link: {
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
+                    text: 'Enter monthly readings'
+                  },
+                  month: 'May 2023',
+                  monthlyTotal: '20',
+                  unitTotal: '20',
+                  reading: 102
+                },
+                {
+                  link: {
+                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
+                    text: 'Enter monthly readings'
+                  },
+                  month: 'June 2023',
+                  monthlyTotal: '980',
+                  unitTotal: '980',
+                  reading: 200
+                }
+              ])
+            })
+          })
+        })
+
+        describe('and the unit of measurement is not cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'megalitres'
+          })
+
+          it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'Reading', format: 'numeric' },
+              { text: 'Megalitres', format: 'numeric' },
+              { text: 'Cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter monthly readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: null,
+                unitTotal: null,
+                reading: null
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
+                  text: 'Enter monthly readings'
+                },
+                month: 'May 2023',
+                monthlyTotal: '2,000',
+                unitTotal: '2',
+                reading: 102
+              },
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
+                  text: 'Enter monthly readings'
+                },
+                month: 'June 2023',
+                monthlyTotal: '98,000',
+                unitTotal: '98',
+                reading: 200
+              }
+            ])
+          })
+        })
+      })
+
+      describe('and the frequency is daily', () => {
+        beforeEach(() => {
+          session.lines = [
+            {
+              endDate: '2023-04-01T00:00:00.000Z',
+              startDate: '2023-04-01T00:00:00.000Z',
+              reading: 102
+            },
+            {
+              endDate: '2023-04-02T00:00:00.000Z',
+              startDate: '2023-04-02T00:00:00.000Z'
+            },
+            {
+              endDate: '2023-04-03T00:00:00.000Z',
+              startDate: '2023-04-03T00:00:00.000Z',
+              reading: 200
+            }
+          ]
+          session.returnsFrequency = 'day'
+        })
+
+        describe('and the unit of measurement is cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'cubic-metres'
+          })
+
+          it('returns the "summaryTableData" headers', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'End reading', format: 'numeric' },
+              { text: 'Total cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows grouped in months', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter daily readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: '100',
+                unitTotal: '100',
+                reading: 200
+              }
+            ])
+          })
+        })
+
+        describe('and the unit of measurement is not cubic metres', () => {
+          beforeEach(() => {
+            session.units = 'gallons'
+          })
+
+          it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.headers).to.equal([
+              { text: 'Month' },
+              { text: 'End reading', format: 'numeric' },
+              { text: 'Total gallons', format: 'numeric' },
+              { text: 'Total cubic metres', format: 'numeric' },
+              { text: 'Details', format: 'numeric' }
+            ])
+          })
+
+          it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter daily readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: '0.455',
+                unitTotal: '100',
+                reading: 200
+              }
+            ])
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "tableTitle" property', () => {
+    beforeEach(() => {
+      session.returnsFrequency = 'month'
+    })
+
+    it('returns the frequency in the title', () => {
+      const result = CheckPresenter.go(session)
+
+      expect(result.tableTitle).to.contain('monthly')
+    })
+
+    describe('when the values are reported using "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      it('returns "abstraction volumes" in the title', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
+      })
+    })
+
+    describe('when the reporting method is not "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns "meter readings" in the title', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.tableTitle).to.equal('Summary of monthly meter readings')
+      })
+    })
+  })
+
   describe('the "tariff" property', () => {
     describe('when the tariff is "Two-part"', () => {
       beforeEach(() => {
@@ -233,6 +852,100 @@ describe('Return Logs Setup - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.tariff).to.equal('Standard')
+      })
+    })
+  })
+
+  describe('the "totalCubicMetres" property', () => {
+    beforeEach(() => {
+      session.lines = [
+        {
+          endDate: '2023-04-30T00:00:00.000Z',
+          startDate: '2023-04-01T00:00:00.000Z',
+          quantity: 1000.123456
+        }
+      ]
+    })
+
+    describe('when the unit of measurement is cubic metres', () => {
+      beforeEach(() => {
+        session.units = 'cubic-metres'
+      })
+
+      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalCubicMetres).to.equal('1,000.123')
+      })
+    })
+
+    describe('when the unit of measurement is not cubic metres', () => {
+      beforeEach(() => {
+        session.units = 'megalitres'
+      })
+
+      it('returns the "totalQuantity" converted to cubic metres to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalCubicMetres).to.equal('1,000,123.456')
+      })
+    })
+  })
+
+  describe('the "totalQuantity" property', () => {
+    describe('when the "quantity" of each line is populated', () => {
+      beforeEach(() => {
+        session.lines = [
+          {
+            endDate: '2023-04-30T00:00:00.000Z',
+            startDate: '2023-04-01T00:00:00.000Z',
+            quantity: 10.123567
+          },
+          {
+            endDate: '2023-05-31T00:00:00.000Z',
+            startDate: '2023-05-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-06-30T00:00:00.000Z',
+            startDate: '2023-06-01T00:00:00.000Z',
+            quantity: 1000
+          }
+        ]
+      })
+
+      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalQuantity).to.equal('1,010.124')
+      })
+    })
+
+    describe('when the "quantity" of each line is null', () => {
+      beforeEach(() => {
+        session.lines = [
+          {
+            endDate: '2023-04-30T00:00:00.000Z',
+            startDate: '2023-04-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-05-31T00:00:00.000Z',
+            startDate: '2023-05-01T00:00:00.000Z',
+            quantity: null
+          },
+          {
+            endDate: '2023-06-30T00:00:00.000Z',
+            startDate: '2023-06-01T00:00:00.000Z',
+            quantity: null
+          }
+        ]
+      })
+
+      it('returns the "totalQuantity" as 0 formatted as a string', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.totalQuantity).to.equal('0')
       })
     })
   })
@@ -287,3 +1000,42 @@ describe('Return Logs Setup - Check presenter', () => {
     })
   })
 })
+
+function _sessionData() {
+  return {
+    endDate: '2024-03-31T00:00:00.000Z',
+    id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
+    journey: 'enter-return',
+    lines: [
+      {
+        endDate: '2023-04-30T00:00:00.000Z',
+        startDate: '2023-04-01T00:00:00.000Z'
+      },
+      {
+        endDate: '2023-05-31T00:00:00.000Z',
+        startDate: '2023-05-01T00:00:00.000Z'
+      },
+      {
+        endDate: '2023-06-30T00:00:00.000Z',
+        startDate: '2023-06-01T00:00:00.000Z'
+      }
+    ],
+    meter10TimesDisplay: 'yes',
+    meterMake: 'Test meter make',
+    meterProvided: 'yes',
+    meterSerialNumber: '098765',
+    periodEndDay: 31,
+    periodEndMonth: 12,
+    periodStartDay: 1,
+    periodStartMonth: 1,
+    purposes: ['Evaporative Cooling'],
+    receivedDate: '2025-01-31T00:00:00.000Z',
+    reported: 'abstraction-volumes',
+    returnReference: '1234',
+    returnsFrequency: 'month',
+    siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+    startDate: '2023-04-01T00:00:00.000Z',
+    twoPartTariff: false,
+    units: 'megalitres'
+  }
+}

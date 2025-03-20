@@ -7,6 +7,7 @@
 
 const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
 const CancelService = require('../services/notifications/setup/cancel.service.js')
+const ConfirmationService = require('../services/notifications/setup/confirmation.service.js')
 const CheckService = require('../services/notifications/setup/check.service.js')
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
@@ -14,6 +15,7 @@ const RemoveLicencesService = require('../services/notifications/setup/remove-li
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
 const SubmitCancelService = require('../services/notifications/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../services/notifications/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
@@ -40,6 +42,14 @@ async function viewCancel(request, h) {
   const pageData = await CancelService.go(sessionId)
 
   return h.view(`${basePath}/cancel.njk`, pageData)
+}
+
+async function viewConfirmation(request, h) {
+  const { eventId } = request.params
+
+  const pageData = await ConfirmationService.go(eventId)
+
+  return h.view(`${basePath}/confirmation.njk`, pageData)
 }
 
 async function viewLicence(request, h) {
@@ -97,6 +107,17 @@ async function submitCancel(request, h) {
   return h.redirect(`/manage`)
 }
 
+async function submitCheck(request, h) {
+  const {
+    auth,
+    params: { sessionId }
+  } = request
+
+  const eventId = await SubmitCheckService.go(sessionId, auth)
+
+  return h.redirect(`/system/${basePath}/${eventId}/confirmation`)
+}
+
 async function submitLicence(request, h) {
   const { sessionId } = request.params
 
@@ -142,12 +163,14 @@ async function submitReturnsPeriod(request, h) {
 module.exports = {
   downloadRecipients,
   viewCancel,
+  viewConfirmation,
   viewLicence,
   viewCheck,
   viewRemoveLicences,
   viewReturnsPeriod,
   setup,
   submitCancel,
+  submitCheck,
   submitLicence,
   submitRemoveLicences,
   submitReturnsPeriod

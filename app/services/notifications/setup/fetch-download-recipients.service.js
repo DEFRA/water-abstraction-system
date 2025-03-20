@@ -6,7 +6,6 @@
  */
 
 const { db } = require('../../../../db/db.js')
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
@@ -78,11 +77,12 @@ async function _fetchRecipient(session) {
 }
 
 async function _fetchRecipients(session) {
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  const {
+    determinedReturnsPeriod: { dueDate, summer },
+    removeLicences = ''
+  } = session
 
-  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
-
-  const dueDate = returnsPeriod.dueDate
+  const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
   const where = `
     AND rl.due_date = ?
@@ -90,7 +90,7 @@ async function _fetchRecipients(session) {
     AND NOT (ldh.licence_ref = ANY (?))
   `
 
-  const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences]
+  const bindings = [dueDate, summer, excludeLicences, dueDate, summer, excludeLicences]
 
   const { rows } = await _fetch(bindings, where)
 

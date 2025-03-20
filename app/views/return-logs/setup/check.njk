@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -65,8 +66,8 @@
       <ul class="govuk-summary-list__actions-list">
         {% for action in note.actions %}
           <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href  }}">
-              {{ action.text  }} <span class="govuk-visually-hidden">the note</span>
+            <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href }}">
+              {{ action.text }} <span class="govuk-visually-hidden">the note</span>
             </a>
           </li>
         {% endfor %}
@@ -81,6 +82,9 @@
   {% set meterDetails %}
     {% if meterProvided === 'yes' %}
       <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
+      {% if meter10TimesDisplay === 'yes' %}
+        <div>Has &times;10 display</div>
+      {% endif %}
     {% else %}
       <div>Not provided</div>
     {% endif %}
@@ -134,18 +138,18 @@
           }
         } if nilReturn === "No",
         {
-          key: { text: "Meter details" },
-          value: { html: meterDetails },
+          key: { text: "Start meter reading" },
+          value: { text: startReading },
           actions: {
             items: [
               {
-                href: links.meterDetails,
+                href: links.startReading,
                 text: "Change",
-                visuallyHiddenText: "meter details"
+                visuallyHiddenText: "start meter reading"
               }
             ]
           }
-        } if nilReturn === "No",
+        } if nilReturn === "No" and displayReadings,
         {
           key: { text: "Units" },
           value: { text: units },
@@ -158,41 +162,150 @@
               }
             ]
           }
+        } if nilReturn === "No",
+        {
+          key: { text: "Meter details" },
+          value: { html: meterDetails },
+          actions: {
+            items: [
+              {
+                href: links.meterDetails,
+                text: "Change",
+                visuallyHiddenText: "meter details"
+              }
+            ]
+          }
         } if nilReturn === "No"
       ]
     }) }}
   </div>
 
   {% if nilReturn === "No" %}
-    {# Summary of daily volumes #}
-    <div class="govuk-!-margin-bottom-9">
-      {{ govukTable({
-        caption: "Summary of daily volumes",
-        captionClasses: "govuk-table__caption--m",
-        firstCellIsHeader: false,
-        head: [
-          { text: "Month" },
-          { text: "Total cubic metres", format: "numeric" },
-          { text: "Details", format: "numeric" }
-        ],
-        rows: [
-          [
-            { text: "April 2024" },
-            { text: "150.388", format: "numeric" },
-            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-          ],
-          [
-            { text: "May 2024" },
-            { text: "155.403", format: "numeric" },
-            { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
-          ],
-          [
-            { text: "Total volume of water abstracted", classes: "govuk-table__header" },
-            { html: "<strong>305.791</strong>", format: "numeric" },
-            { text: "" }
-          ]
-        ]
-      }) }}
+    {# Summary of abstraction volumes #}
+    <div class="divider govuk-!-margin-bottom-7"></div>
+
+    {# Create the rows for the summary table #}
+    {% set tableRows = [] %}
+
+    {% for row in summaryTableData.rows %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+
+      {# Create the summary row #}
+      {% set tableRow = [
+        {
+          text: row.month,
+          attributes: { 'data-test': 'month-' + rowIndex }
+        }
+      ] %}
+
+      {% if displayReadings %}
+        {% set tableRow = (tableRow.push(
+          {
+            text: row.reading,
+            format: 'numeric',
+            attributes: { 'data-test': 'reading-' + rowIndex }
+          }
+        ), tableRow) %}
+      {% endif %}
+
+      {% if displayUnits %}
+        {% set tableRow = (tableRow.push(
+          {
+            text: row.unitTotal,
+            format: 'numeric',
+            attributes: { 'data-test': 'unit-total-' + rowIndex }
+          }
+        ), tableRow) %}
+      {% endif %}
+
+      {# Total cubic metres column #}
+      {% set tableRow = (tableRow.push(
+        {
+          text: row.monthlyTotal,
+          format: 'numeric',
+          attributes: { 'data-test': 'monthly-total-' + rowIndex }
+        }
+      ), tableRow) %}
+
+      {# Action column #}
+      {% if row.link %}
+        {% set actionLink %}
+          <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
+        {% endset %}
+
+        {% set tableRow = (tableRow.push(
+          {
+            html: actionLink,
+            format: 'numeric',
+            attributes: { 'data-test': 'action-' + rowIndex }
+          }
+        ), tableRow) %}
+      {% endif %}
+
+      {# Push our row into the table rows array #}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {# Create the totals row #}
+    {% set tableRow = [
+      {
+        text: "Total volume of water abstracted",
+        classes: "govuk-table__header"
+      }
+    ] %}
+
+    {% if displayReadings %}
+      {% set tableRow = (tableRow.push(
+        {
+          text: ""
+        }
+      ), tableRow) %}
+    {% endif %}
+
+    {% if displayUnits %}
+      {% set tableRow = (tableRow.push(
+        {
+          html: "<strong>" + totalQuantity + "</strong>",
+          format: 'numeric',
+          attributes: { 'data-test': 'total-quantity' }
+        }
+      ), tableRow) %}
+    {% endif %}
+
+    {# Total cubic metres column #}
+    {% set tableRow = (tableRow.push(
+      {
+        html: "<strong>" + totalCubicMetres + "</strong>",
+        format: 'numeric',
+        attributes: { 'data-test': 'total-cubic-metres' }
+      }
+    ), tableRow) %}
+
+    {# Action column #}
+    {% set tableRow = (tableRow.push(
+      {
+        text: ""
+      }
+    ), tableRow) %}
+
+    {# Push our row into the table rows array #}
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+
+    {# Display the table using a GOVUK table component #}
+    <div class="govuk-grid-row govuk-!-margin-bottom-0">
+      <div class="govuk-grid-column-full">
+        {{
+          govukTable({
+            caption: tableTitle,
+            captionClasses: "govuk-table__caption--l",
+            firstCellIsHeader: false,
+            attributes: { 'data-test': 'monthly-summaries'},
+            head: summaryTableData.headers,
+            rows: tableRows
+          })
+        }}
+      </div>
     </div>
   {% endif %}
 

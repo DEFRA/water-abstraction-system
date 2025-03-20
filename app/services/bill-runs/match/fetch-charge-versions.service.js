@@ -9,6 +9,7 @@ const { ref } = require('objection')
 
 const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
+const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
@@ -22,20 +23,21 @@ const Workflow = require('../../../models/workflow.model.js')
  * - have an end date on or after the start of the billing period
  * - not be linked to a licence in the workflow
  * - not be linked to a licence that 'ended' before the billing period
+ * - not be linked to a licence that 'ended' before its start date
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
- * @param {string} regionId - UUID of the region being billed
+ * @param {module:BillRunModel} billRun - The bill run being processed
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-async function go(regionId, billingPeriod) {
-  return _fetch(regionId, billingPeriod)
-}
+async function go(billRun, billingPeriod) {
+  const { id: billRunId, batchType, regionId } = billRun
 
-async function _fetch(regionId, billingPeriod) {
+  const supplementary = batchType === 'two_part_supplementary'
+
   const chargeVersions = await ChargeVersionModel.query()
     .select(['chargeVersions.id', 'chargeVersions.startDate', 'chargeVersions.endDate', 'chargeVersions.status'])
     .innerJoinRelated('licence')
@@ -55,6 +57,15 @@ async function _fetch(regionId, billingPeriod) {
     .where((builder) => {
       builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
     })
+    .where((builder) => {
+      builder.whereNull('licence.expiredDate').orWhereColumn('licence.expiredDate', '>=', 'chargeVersions.startDate')
+    })
+    .where((builder) => {
+      builder.whereNull('licence.lapsedDate').orWhereColumn('licence.lapsedDate', '>=', 'chargeVersions.startDate')
+    })
+    .where((builder) => {
+      builder.whereNull('licence.revokedDate').orWhereColumn('licence.revokedDate', '>=', 'chargeVersions.startDate')
+    })
     .whereNotExists(
       Workflow.query()
         .select(1)
@@ -70,6 +81,25 @@ async function _fetch(regionId, billingPeriod) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
+    .where((builder) => {
+      // NOTE: Ordinarily we'd assign the query to a variable, then use `supplementary` to add the `where` clause to it.
+      // But because the query is already very complex, breaking it apart to allow us to add this `where` clause in the
+      // middle doesn't seem worth it, when we can just use a little SQL magic!
+      //
+      // If `supplementary` is false (we're getting the charge versions for an annual 2PT) we basically tack on a
+      // `where TRUE` clause to the query, i.e. the clause does nothing.
+      if (supplementary) {
+        builder.whereExists(
+          LicenceSupplementaryYearModel.query()
+            .select(1)
+            .whereColumn('licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
+            .where('licenceSupplementaryYears.financialYearEnd', billingPeriod.endDate.getFullYear())
+            .where('licenceSupplementaryYears.billRunId', billRunId)
+        )
+      } else {
+        builder.whereRaw('1=1')
+      }
+    })
     .orderBy('chargeVersions.licenceRef', 'asc')
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {

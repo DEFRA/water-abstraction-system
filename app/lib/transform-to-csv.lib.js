@@ -1,5 +1,7 @@
 'use strict'
 
+const { formatDateObjectToISO } = require('../lib/dates.lib.js')
+
 /**
  * Transforms an array into a CSV formatted string.
  *
@@ -42,18 +44,24 @@ function transformArrayToCSVRow(arrayToTransform) {
  * @private
  */
 function _transformValueToCSV(value) {
-  // Return empty string for undefined or null values
-  if (!value && value !== false) {
+  // Return empty string for undefined or null values except false and 0
+  if (!value && value !== false && value !== 0) {
     return ''
   }
 
-  // Return ISO date if value is a date object
+  // Returns formatted ISO date if date-only, or ISO timestamp if date-time.
   if (value instanceof Date) {
-    return value.toISOString()
+    const isoString = value.toISOString()
+
+    if (isoString.endsWith('T00:00:00.000Z')) {
+      return formatDateObjectToISO(value)
+    }
+
+    return isoString
   }
 
   // Return integers and booleans as they are (not converted to a string)
-  if (Number.isInteger(value) || typeof value === 'boolean') {
+  if ((typeof value === 'number' && !Number.isNaN(value)) || typeof value === 'boolean') {
     return `${value}`
   }
 

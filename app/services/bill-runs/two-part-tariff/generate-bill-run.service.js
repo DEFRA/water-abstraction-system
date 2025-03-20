@@ -1,14 +1,13 @@
 'use strict'
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
+ * Generates an annual two-part tariff bill run after the users have completed reviewing its match & allocate results
  * @module GenerateBillRunService
  */
 
 const BillRunError = require('../../../errors/bill-run.error.js')
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
 const {
   calculateAndLogTimeTaken,
   currentTimeInNanoseconds,
@@ -20,40 +19,44 @@ const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bi
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 
 /**
- * Generates a two-part tariff bill run after the users have completed reviewing its match & allocate results
+ * Generates an annual two-part tariff bill run after the users have completed reviewing its match & allocate results
  *
  * In this case, "generate" means that we create the required bills and transactions for them in both this service and
  * the Charging Module.
  *
- * > In the other bill run types this would be the `ProcessBillRunService` but that has already been used to handle
- * > the match and allocate process in two-part tariff
+ * > In the other bill run types this would be the `ProcessBillRunService` but that has already been used to handle the
+ * > match and allocate process in two-part tariff
  *
  * We first fetch all the billing accounts applicable to this bill run and their charge information. We pass these to
  * `ProcessBillingPeriodService` which will generate the bill for each billing account both in WRLS and the
  * {@link https://github.com/DEFRA/sroc-charging-module-api | Charging Module API (CHA)}.
  *
- * Once `ProcessBillingPeriodService` is complete we tell the CHA to generate the bill run (this calculates final
- * values for each bill and the bill run overall).
+ * Once `ProcessBillingPeriodService` is complete we tell the CHA to generate the bill run (this calculates final values
+ * for each bill and the bill run overall).
  *
  * The final step is to ping the legacy
  * {@link https://github.com/DEFRA/water-abstraction-service | water-abstraction-service} 'refresh' endpoint. That
  * service will extract the final values from the CHA and update the records on our side, finally marking the bill run
  * as **Ready**.
  *
- * @param {module:BillRunModel} billRunId - The UUID of the two-part tariff bill run that has been reviewed and is ready
- * for generating
+ * @param {module:BillRunModel} billRun - The instance of the annual two-part tariff bill run that has been reviewed and
+ * is ready for generating
  */
-async function go(billRunId) {
-  const billRun = await _fetchBillRun(billRunId)
+async function go(billRun) {
+  const { id: billRunId } = billRun
 
-  if (billRun.status !== 'review') {
-    throw new ExpandedError('Cannot process a two-part tariff bill run that is not in review', { billRunId })
+  try {
+    const startTime = currentTimeInNanoseconds()
+
+    const billingPeriod = _billingPeriod(billRun)
+
+    await _processBillingPeriod(billingPeriod, billRun)
+
+    calculateAndLogTimeTaken(startTime, 'Generate annual two-part tariff bill run complete', { billRunId })
+  } catch (error) {
+    await HandleErroredBillRunService.go(billRunId, error.code)
+    global.GlobalNotifier.omfg('Generate annual two-part tariff bill run failed', { billRun }, error)
   }
-
-  await _updateStatus(billRunId, 'processing')
-
-  // NOTE: We do not await this call intentionally. We don't want to block the user while we generate the bill run
-  _generateBillRun(billRun)
 }
 
 /**
@@ -85,17 +88,11 @@ async function _fetchBillingAccounts(billRunId) {
   }
 }
 
-async function _fetchBillRun(billRunId) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status', 'toFinancialYearEnding'])
-}
-
 async function _finaliseBillRun(billRun, billRunPopulated) {
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!billRunPopulated) {
-    await _updateStatus(billRun.id, 'empty')
+    await BillRunModel.query().findById(billRun.id).patch({ status: 'empty', updatedAt: timestampForPostgres() })
 
     return
   }
@@ -104,31 +101,9 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
 
+  // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
+  // has finished generating the bill run. We need to take this over when we next get the opportunity.
   await LegacyRefreshBillRunRequest.send(billRun.id)
-}
-
-/**
- * The go() has to deal with updating the status of the bill run and then passing a response back to the request to
- * avoid the user seeing a timeout in their browser. So, this is where we actually generate the bills and record the
- * time taken.
- *
- * @private
- */
-async function _generateBillRun(billRun) {
-  const { id: billRunId } = billRun
-
-  try {
-    const startTime = currentTimeInNanoseconds()
-
-    const billingPeriod = _billingPeriod(billRun)
-
-    await _processBillingPeriod(billingPeriod, billRun)
-
-    calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId })
-  } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
-    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
-  }
 }
 
 async function _processBillingPeriod(billingPeriod, billRun) {
@@ -139,10 +114,6 @@ async function _processBillingPeriod(billingPeriod, billRun) {
   const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
-}
-
-async function _updateStatus(billRunId, status) {
-  return BillRunModel.query().findById(billRunId).patch({ status, updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

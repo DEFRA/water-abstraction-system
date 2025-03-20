@@ -22,7 +22,7 @@ function go(returnSubmission, yearMonth) {
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
   const requestedMonthLines = returnSubmissionLines.filter(
-    (line) => line.startDate.getFullYear() === requestedYear && line.startDate.getMonth() === requestedMonth
+    (line) => line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
   )
 
   const method = returnSubmission.$method()
@@ -72,10 +72,10 @@ function _generateTableRows(lines) {
     const { endDate, quantity, reading, userUnit } = line
 
     const rowData = {
-      cubicMetresQuantity: formatQuantity(userUnit, quantity),
+      cubicMetresQuantity: formatNumber(quantity),
       date: formatLongDate(endDate),
       reading,
-      unitQuantity: formatNumber(quantity)
+      unitQuantity: formatQuantity(userUnit, quantity)
     }
 
     return rowData
@@ -91,12 +91,12 @@ function _generateTableHeaders(units, method, frequency) {
     headers.push({ text: 'Day' })
   }
 
-  if (units !== unitNames.CUBIC_METRES) {
-    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
-  }
-
   if (method !== 'abstractionVolumes') {
     headers.push({ text: 'Reading', format: 'numeric' })
+  }
+
+  if (units !== unitNames.CUBIC_METRES) {
+    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
   }
 
   headers.push({ text: 'Cubic metres', format: 'numeric' })
@@ -112,8 +112,8 @@ function _total(lines, units) {
   }, 0)
 
   return {
-    cubicMetresTotal: formatQuantity(units, totalQuantity),
-    unitTotal: formatNumber(totalQuantity)
+    cubicMetresTotal: formatNumber(totalQuantity),
+    unitTotal: formatQuantity(units, totalQuantity)
   }
 }
 

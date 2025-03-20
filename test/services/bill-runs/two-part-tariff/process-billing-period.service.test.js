@@ -9,43 +9,51 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillModel = require('../../../../app/models/bill.model.js')
-const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const TwoPartTariffFixture = require('../../../fixtures/two-part-tariff.fixture.js')
 
 // Things we need to stub
+const BillModel = require('../../../../app/models/bill.model.js')
+const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
-const GenerateTransactionService = require('../../../../app/services/bill-runs/two-part-tariff/generate-transaction.service.js')
+const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
+const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
 
-describe('Two-part Tariff - Process Billing Period service', () => {
+describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
 
+  let billInsertStub
+  let billLicenceInsertStub
   let billRun
   let billingAccount
-  let chargingModuleCreateTransactionRequestStub
   let licence
+  let region
+  let sendTransactionsStub
+  let transactionInsertStub
 
   beforeEach(async () => {
-    billRun = {
-      id: generateUUID(),
-      externalId: generateUUID()
-    }
+    region = RegionHelper.select()
+    billRun = TwoPartTariffFixture.billRun(region.id)
+    billingAccount = TwoPartTariffFixture.billingAccount()
+    licence = TwoPartTariffFixture.licence(region)
 
-    billingAccount = _billingAccount()
+    sendTransactionsStub = Sinon.stub(SendTransactionsService, 'go')
 
-    licence = _licence()
+    billInsertStub = Sinon.stub()
+    billLicenceInsertStub = Sinon.stub()
+    transactionInsertStub = Sinon.stub()
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    Sinon.stub(BillModel, 'query').returns({ insert: billInsertStub })
+    Sinon.stub(BillLicenceModel, 'query').returns({ insert: billLicenceInsertStub })
+    Sinon.stub(TransactionModel, 'query').returns({ insert: transactionInsertStub })
   })
 
   afterEach(() => {
@@ -63,23 +71,35 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
     describe('and there are billing accounts to process', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
-          ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
-        })
+        // NOTE: We use callsFake() instead of resolves, as it allows us to access the arguments passed to the stub,
+        // which we can then use in our response. In this case billLicenceId is generated inside the service but we want
+        // to assert that the transactions we're persisting link to the bill licence we are persisting. This allows us
+        // to replay back what has been generated with a 'faked' external ID from the Charging Module API
+        sendTransactionsStub.onFirstCall().callsFake(
+          // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
+          // wanted to highlight how you would access the other arguments
+          async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+            return [{ ...generatedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' }]
+          }
+        )
 
-        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
-          ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
-        })
+        sendTransactionsStub.onSecondCall().callsFake(
+          // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
+          // wanted to highlight how you would access the other arguments
+          async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
+            return [{ ...generatedTransactions[0], externalId: 'a2086da4-e3b6-4b83-afe1-0e2e5255efaf' }]
+          }
+        )
       })
 
       describe('and they are billable', () => {
         beforeEach(async () => {
           // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
-          // new one when processing a billing account. To to that we need a billing account with 2 charge versions
+          // new one when processing a billing account. To do that we need a billing account with 2 charge versions
           // linked to the same licence
           billingAccount.chargeVersions = [
-            _chargeVersion(billingAccount.id, licence),
-            _chargeVersion(billingAccount.id, licence)
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
           ]
         })
 
@@ -88,30 +108,45 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
           expect(result).to.be.true()
 
-          const bills = await _fetchPersistedBill(billRun.id)
+          // NOTE: We pass a single bill per billing account when persisting
+          const billInsertArgs = billInsertStub.args[0]
 
-          expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal(
+          expect(billInsertStub.calledOnce).to.be.true()
+          expect(billInsertArgs[0]).to.equal(
             {
               accountNumber: billingAccount.accountNumber,
               address: {}, // Address is set to an empty object for SROC billing invoices
               billingAccountId: billingAccount.id,
+              billRunId: billRun.id,
               credit: false,
               financialYearEnding: billingPeriod.endDate.getFullYear()
             },
-            { skip: ['billLicences'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal(
+          // NOTE: A bill may have multiple bill licences, so we always pass them as an array
+          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+
+          expect(billLicenceInsertStub.calledOnce).to.be.true()
+          expect(billLicenceInsertArgs[0]).to.have.length(1)
+          expect(billLicenceInsertArgs[0][0]).to.equal(
             {
+              billId: billInsertArgs[0].id,
               licenceId: licence.id,
               licenceRef: licence.licenceRef
             },
-            { skip: ['transactions'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences[0].transactions).to.have.length(2)
+          // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
+          const transactionInsertArgs = transactionInsertStub.args[0]
+
+          expect(transactionInsertStub.calledOnce).to.be.true()
+          expect(transactionInsertArgs[0]).to.have.length(2)
+
+          // We just check that on of the transactions being persisted is linked to the records we expect
+          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
@@ -121,15 +156,15 @@ describe('Two-part Tariff - Process Billing Period service', () => {
           // that is also linked to our billing account. The engine will determine that the charge period for the charge
           // version is invalid so won't attempt to generate a transaction. If we did try, the Charging Module would
           // only reject it.
-          const unbillableLicence = _licence()
+          const unbillableLicence = TwoPartTariffFixture.licence(region)
 
           unbillableLicence.revokedDate = new Date('2019-01-01')
 
-          const unbillableChargeVersion = _chargeVersion(billingAccount.id, unbillableLicence)
+          const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, unbillableLicence)
 
           billingAccount.chargeVersions = [
-            _chargeVersion(billingAccount.id, licence),
-            _chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
+            TwoPartTariffFixture.chargeVersion(billingAccount.id, licence),
             unbillableChargeVersion
           ]
         })
@@ -139,53 +174,84 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
           expect(result).to.be.true()
 
-          const bills = await _fetchPersistedBill(billRun.id)
+          // NOTE: We pass a single bill per billing account when persisting
+          const billInsertArgs = billInsertStub.args[0]
 
-          expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal(
+          expect(billInsertStub.calledOnce).to.be.true()
+          expect(billInsertArgs[0]).to.equal(
             {
               accountNumber: billingAccount.accountNumber,
               address: {}, // Address is set to an empty object for SROC billing invoices
               billingAccountId: billingAccount.id,
+              billRunId: billRun.id,
               credit: false,
               financialYearEnding: billingPeriod.endDate.getFullYear()
             },
-            { skip: ['billLicences'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal(
+          // NOTE: A bill may have multiple bill licences, so we always pass them as an array
+          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+
+          expect(billLicenceInsertStub.calledOnce).to.be.true()
+          expect(billLicenceInsertArgs[0]).to.have.length(1)
+          expect(billLicenceInsertArgs[0][0]).to.equal(
             {
+              billId: billInsertArgs[0].id,
               licenceId: licence.id,
               licenceRef: licence.licenceRef
             },
-            { skip: ['transactions'] }
+            { skip: ['id'] }
           )
 
-          expect(bills[0].billLicences[0].transactions).to.have.length(2)
+          // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
+          const transactionInsertArgs = transactionInsertStub.args[0]
+
+          expect(transactionInsertStub.calledOnce).to.be.true()
+          expect(transactionInsertArgs[0]).to.have.length(2)
+
+          // We just check that on of the transactions being persisted is linked to the records we expect
+          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
       describe('but they are not billable', () => {
-        beforeEach(() => {
-          // This time we update the charge version so that nothing is allocated in the charge references. This means
-          // the service will not generate any transactions and therefore no bills leading to bills being empty
-          const unbillableChargeVersion = _chargeVersion(billingAccount.id, licence)
+        describe('because the billable volume is 0', () => {
+          beforeEach(() => {
+            // This time we update the charge version so that nothing is allocated in the charge references. This means
+            // the service will not generate any transactions and therefore no bills leading to bills being empty
+            const unbillableChargeVersion = TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)
 
-          unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
-          unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
+            unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
+            unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
 
-          billingAccount.chargeVersions = [unbillableChargeVersion]
+            billingAccount.chargeVersions = [unbillableChargeVersion]
+          })
+
+          it('returns false (bill run is empty) and persists nothing', async () => {
+            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+            expect(result).to.be.false()
+
+            expect(billInsertStub.called).to.be.false()
+          })
         })
 
-        it('returns false (bill run is empty) and persists nothing', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+        describe('because the charge period is invalid (perhaps the licence has been ended)', () => {
+          beforeEach(() => {
+            licence.revokedDate = new Date('2022-03-31')
 
-          expect(result).to.be.false()
+            billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
+          })
 
-          const bills = await _fetchPersistedBill(billRun.id)
+          it('returns false (bill run is empty) and persists nothing', async () => {
+            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(bills).to.be.empty()
+            expect(result).to.be.false()
+
+            expect(billInsertStub.called).to.be.false()
+          })
         })
       })
     })
@@ -193,12 +259,12 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      billingAccount.chargeVersions = [_chargeVersion(billingAccount.id, licence)]
+      billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
     })
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionService, 'go').throws()
+        Sinon.stub(GenerateTwoPartTariffTransactionService, 'go').throws()
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -211,134 +277,14 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.rejects()
+        sendTransactionsStub.rejects()
       })
 
-      it('throws a BillRunError with the correct code', async () => {
+      it('throws an error', async () => {
         const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+        expect(error).to.be.an.instanceOf(Error)
       })
     })
   })
 })
-
-function _billingAccount() {
-  return {
-    id: generateUUID(),
-    accountNumber: generateAccountNumber()
-  }
-}
-
-function _chargingModuleResponse(transactionId) {
-  return {
-    succeeded: true,
-    response: {
-      body: { transaction: { id: transactionId } }
-    }
-  }
-}
-
-function _chargeVersion(billingAccountId, licence) {
-  // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
-  // of processing the billing account.
-  const toJSON = () => {
-    return '{}'
-  }
-
-  return {
-    id: generateUUID(),
-    scheme: 'sroc',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
-    billingAccountId,
-    status: 'current',
-    licence,
-    chargeReferences: [
-      {
-        id: generateUUID(),
-        additionalCharges: { isSupplyPublicWater: false },
-        adjustments: {
-          s126: null,
-          s127: false,
-          s130: false,
-          charge: null,
-          winter: false,
-          aggregate: '0.562114443'
-        },
-        chargeCategory: {
-          id: 'b270718a-12c0-4fca-884b-3f8612dbe2f5',
-          reference: '4.4.5',
-          shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
-        },
-        chargeElements: [
-          {
-            id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '1d9050b2-09c8-4570-8173-7f55921437cc', amendedAllocated: 5 }],
-            toJSON
-          },
-          {
-            id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9', amendedAllocated: 10 }],
-            toJSON
-          }
-        ],
-        description: 'Lower Queenstown - Pittisham',
-        loss: 'low',
-        reviewChargeReferences: [
-          {
-            id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
-            amendedAggregate: 0.75,
-            amendedAuthorisedVolume: 20,
-            amendedChargeAdjustment: 0.6
-          }
-        ],
-        source: 'non-tidal',
-        volume: 20
-      }
-    ]
-  }
-}
-
-async function _fetchPersistedBill(billRunId) {
-  return BillModel.query()
-    .select(['accountNumber', 'address', 'billingAccountId', 'credit', 'financialYearEnding'])
-    .where('billRunId', billRunId)
-    .withGraphFetched('billLicences')
-    .modifyGraph('billLicences', (builder) => {
-      builder.select(['licenceId', 'licenceRef'])
-    })
-    .withGraphFetched('billLicences.transactions')
-    .modifyGraph('billLicences.transactions', (builder) => {
-      builder.select(['id'])
-    })
-}
-
-function _licence() {
-  const region = RegionHelper.select()
-
-  return {
-    id: generateUUID(),
-    licenceRef: generateLicenceRef(),
-    waterUndertaker: true,
-    historicalAreaCode: 'SAAR',
-    regionalChargeArea: 'Southern',
-    startDate: new Date('2022-01-01'),
-    expiredDate: null,
-    lapsedDate: null,
-    revokedDate: null,
-    region: {
-      id: region.id,
-      chargeRegionId: region.chargeRegionId
-    }
-  }
-}

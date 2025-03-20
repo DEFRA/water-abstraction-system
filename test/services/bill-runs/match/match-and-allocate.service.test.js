@@ -20,7 +20,7 @@ const PersistAllocatedLicenceToResultsService = require('../../../../app/service
 // Thing under test
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
-describe('Match And Allocate Service', () => {
+describe('Bill Runs - Match - Match And Allocate service', () => {
   let determineLicenceIssuesServiceStub
   let notifierStub
   let licences
