@@ -52,7 +52,7 @@ async function go(sessionId, payload) {
  * This code is intended as a temporary 'fix' to allow ad-hoc returns to use the returns reminders Notify template
  * (which requires the 'determinedReturnsPeriod' dates)
  *
- * This function alters the 'dueDate' but adding 28 days (this may not be the final state and should be regarded as a
+ * This function alters the 'dueDate' by adding 28 days to the current date (this may not be the final state and should be regarded as a
  * placeholder).
  *
  * This also, manually, sets gets the 'startDate' and 'endDate' for 'allYear' which represents the current financial
