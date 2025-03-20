@@ -5,7 +5,8 @@
  * @module DetermineBillingYearsService
  */
 
-const APRIL = 3
+const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
+
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 
 /**
@@ -25,9 +26,9 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 function go(startDate, endDate) {
   const years = []
 
-  const startYear = _adjustedFinancialYearEnd(startDate)
+  const startYear = determineFinancialYearEnd(startDate)
   // As some changes don't have an end date we need to take this into consideration
-  const endYear = _adjustedFinancialYearEnd(endDate || new Date())
+  const endYear = determineFinancialYearEnd(endDate || new Date())
 
   for (let year = startYear; year <= endYear; year++) {
     // SROC supplementary billing started in the financial year 2022/2023. Anything before this year is not considered
@@ -38,24 +39,6 @@ function go(startDate, endDate) {
   }
 
   return years
-}
-
-/**
- * When flagging a licence for the supplementary bill run, we need to consider which financial years have been
- * impacted by the change. We only care about the financial year ends. So if the startDate for a new chargeVersion is
- * `2022-05-31`, the financial year end is considered to be `2023` since the financial years run April to March. Same
- * goes for if a charge versions endDate is `2023-03-05`, the financial year end is `2023`.
- *
- * @private
- */
-function _adjustedFinancialYearEnd(date) {
-  let year = date.getFullYear()
-
-  if (date.getMonth() >= APRIL) {
-    year++
-  }
-
-  return year
 }
 
 module.exports = {

@@ -29,7 +29,7 @@ describe('Notifications Setup - Notify update presenter', () => {
       notifyId: '123',
       notifyStatus: 'created',
       plaintext: 'My dearest margery',
-      status: 'sent'
+      status: 'sending'
     })
   })
 
