@@ -99,7 +99,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           receivedDate: null,
           receivedDateDay: null,
           receivedDateMonth: null,
-          receivedDateOptions: 'custom-date',
+          receivedDateOptions: null,
           receivedDateYear: null,
           reported: 'abstraction-volumes',
           returnLogId: returnLog.id,

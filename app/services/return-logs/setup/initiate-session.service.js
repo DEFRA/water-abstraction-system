@@ -82,32 +82,28 @@ async function _fetchReturnLog(returnLogId) {
 }
 
 function _lines(returnsFrequency, startDate, endDate) {
-  let lines
-
   if (returnsFrequency === 'day') {
-    lines = daysFromPeriod(startDate, endDate)
+    return daysFromPeriod(startDate, endDate)
   }
 
   if (returnsFrequency === 'week') {
-    lines = weeksFromPeriod(startDate, endDate)
+    return weeksFromPeriod(startDate, endDate)
   }
 
   if (returnsFrequency === 'month') {
-    lines = monthsFromPeriod(startDate, endDate)
+    return monthsFromPeriod(startDate, endDate)
   }
-
-  return lines
 }
 
 function _meter(meter) {
   const multiplier = meter?.multiplier ? parseInt(meter?.multiplier) : null
 
   let meter10TimesDisplay = null
-  if (multiplier && multiplier === 10) {
+  if (multiplier === 10) {
     meter10TimesDisplay = 'yes'
   }
 
-  if (multiplier && multiplier === 1) {
+  if (multiplier === 1) {
     meter10TimesDisplay = 'no'
   }
 
@@ -191,10 +187,10 @@ function _submissionData(returnLog) {
     meterMake: meter.meterMake,
     meterProvided: meter.meterProvided,
     meterSerialNumber: meter.meterSerialNumber,
-    receivedDateOptions: 'custom-date',
-    receivedDateDay: `${returnLog.receivedDate.getDate()}`,
-    receivedDateMonth: `${returnLog.receivedDate.getMonth() + 1}`,
-    receivedDateYear: `${returnLog.receivedDate.getFullYear()}`,
+    receivedDateOptions: returnLog.receivedDate && 'custom-date',
+    receivedDateDay: returnLog.receivedDate && `${returnLog.receivedDate.getDate()}`,
+    receivedDateMonth: returnLog.receivedDate && `${returnLog.receivedDate.getMonth() + 1}`,
+    receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
     reported: method === 'oneMeter' ? 'meter-readings' : 'abstraction-volumes',
     startReading: meter.startReading,
     units: UNITS[metadata.units || unitNames.CUBIC_METRES]
@@ -205,10 +201,7 @@ function _submissionLines(returnSubmissionLines) {
   return returnSubmissionLines.map((returnSubmissionLine) => {
     const { endDate, quantity, reading, startDate, userUnit } = returnSubmissionLine
 
-    let convertedQuantity = null
-    if (quantity) {
-      convertedQuantity = quantity * returnUnits[userUnit].multiplier
-    }
+    const convertedQuantity = quantity * returnUnits[userUnit].multiplier ?? null
 
     return {
       endDate,
