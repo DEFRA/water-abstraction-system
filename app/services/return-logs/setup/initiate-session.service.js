@@ -5,8 +5,7 @@
  * @module InitiateSessionService
  */
 
-const { ref } = require('objection')
-
+const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { unitNames } = require('../../../lib/static-lookups.lib.js')
@@ -31,79 +30,97 @@ const UNITS = {
  *
  * @param {string} returnLogId - The UUID of the return log to be fetched
  *
- * @returns {Promise<module:SessionModel>} the newly created session record
+ * @returns {Promise<string>} the url to redirect to
  */
 async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
-  returnLog.returnSubmissions[0].$applyReadings()
 
-  // We use destructuring to discard things we've fetched that are needed to format data but not needed in the session
-  const { method, multiplier, nilReturn, returnSubmissions, ...data } = _data(returnLog)
+  const referenceData = _referenceData(returnLog)
+  const submissionData = _submissionData(returnLog)
 
-  return SessionModel.query().insert({ data }).returning('id')
-}
+  const data = { ...referenceData, ...submissionData }
 
-function _data(returnLog) {
-  Object.assign(returnLog, _returnSubmissionsData(returnLog.returnSubmissions[0]))
+  const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
 
-  return {
-    ...returnLog,
-    ..._receivedDate(returnLog.receivedDate),
-    beenReceived: returnLog.receivedDate !== null,
-    journey: returnLog.nilReturn ? 'nil-return' : 'enter-return',
-    lines: returnLog.returnSubmissions[0]?.returnSubmissionLines,
-    meter10TimesDisplay: _meter10TimesDisplay(returnLog.multiplier),
-    meterProvided: returnLog.meterMake && returnLog.meterSerialNumber ? 'yes' : 'no',
-    purposes: _purposes(returnLog.purposes),
-    reported: returnLog.method === 'abstractionVolumes' || null ? 'abstraction-volumes' : 'meter-readings',
-    units: UNITS[returnLog.units || unitNames.CUBIC_METRES]
-  }
+  const redirect = data.submissionType === 'edit' ? 'check' : 'received'
+
+  return `/system/return-logs/setup/${sessionId}/${redirect}`
 }
 
 async function _fetchReturnLog(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
-      'licence.id as licenceId',
-      'licence.licenceRef',
-      'returnLogs.id as returnLogId',
-      'returnLogs.startDate',
-      'returnLogs.endDate',
-      'returnLogs.receivedDate',
-      'returnLogs.returnReference',
-      'returnLogs.dueDate',
-      'returnLogs.status',
-      'returnLogs.underQuery',
-      'returnLogs.returnsFrequency',
-      ref('returnLogs.metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-      ref('returnLogs.metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-      ref('returnLogs.metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-      ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
-      ref('returnLogs.metadata:description').as('siteDescription'),
-      ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
+      'id',
+      'startDate',
+      'endDate',
+      'receivedDate',
+      'returnReference',
+      'dueDate',
+      'status',
+      'underQuery',
+      'returnsFrequency',
+      'metadata'
     )
-    .innerJoinRelated('licence')
-    .withGraphFetched('returnSubmissions.returnSubmissionLines')
-    .modifyGraph('returnSubmissions', (builder) => {
-      builder.select(['metadata', 'nilReturn']).where('returnSubmissions.current', true)
+    .where('id', returnLogId)
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
     })
-    .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
-      builder.select(['id', 'startDate', 'endDate', 'quantity', 'userUnit']).orderBy('startDate', 'asc')
+    .withGraphFetched('returnSubmissions')
+    .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
+      returnSubmissionsBuilder
+        .select(['metadata', 'nilReturn'])
+        .where('current', true)
+        .withGraphFetched('returnSubmissionLines')
+        .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
+          returnSubmissionLinesBuilder
+            .select(['id', 'startDate', 'endDate', 'quantity', 'userUnit'])
+            .orderBy('startDate', 'asc')
+        })
     })
-    .where('returnLogs.id', returnLogId)
 }
 
-function _meter10TimesDisplay(multiplier) {
-  if (multiplier === 10) {
-    return 'yes'
+function _lines(returnsFrequency, startDate, endDate) {
+  let lines
+
+  if (returnsFrequency === 'day') {
+    lines = daysFromPeriod(startDate, endDate)
   }
 
-  if (multiplier === 1) {
-    return 'no'
+  if (returnsFrequency === 'week') {
+    lines = weeksFromPeriod(startDate, endDate)
   }
 
-  return null
+  if (returnsFrequency === 'month') {
+    lines = monthsFromPeriod(startDate, endDate)
+  }
+
+  return lines
+}
+
+function _meter(meter) {
+  const multiplier = meter?.multiplier ? parseInt(meter?.multiplier) : null
+
+  let meter10TimesDisplay = null
+  if (multiplier && multiplier === 10) {
+    meter10TimesDisplay = 'yes'
+  }
+
+  if (multiplier && multiplier === 1) {
+    meter10TimesDisplay = 'no'
+  }
+
+  const meterMake = meter?.manufacturer || null
+  const meterSerialNumber = meter?.serialNumber || null
+
+  return {
+    meter10TimesDisplay,
+    meterMake,
+    meterProvided: meterMake && meterSerialNumber ? 'yes' : 'no',
+    meterSerialNumber,
+    startReading: meter?.startReading
+  }
 }
 
 function _purposes(purposes) {
@@ -112,32 +129,75 @@ function _purposes(purposes) {
   })
 }
 
-function _receivedDate(receivedDate) {
-  if (!receivedDate) {
-    return {}
-  }
+function _referenceData(returnLog) {
+  const {
+    dueDate,
+    endDate,
+    id: returnLogId,
+    licence,
+    metadata,
+    receivedDate,
+    returnsFrequency,
+    returnReference,
+    returnSubmissions,
+    startDate,
+    status,
+    underQuery
+  } = returnLog
 
   return {
-    receivedDateOptions: 'custom-date',
-    receivedDateDay: `${receivedDate.getDate()}`,
-    receivedDateMonth: `${receivedDate.getMonth() + 1}`,
-    receivedDateYear: `${receivedDate.getFullYear()}`
+    beenReceived: receivedDate !== null,
+    dueDate,
+    endDate,
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
+    lines: _lines(returnsFrequency, startDate, endDate),
+    periodEndDay: parseInt(metadata.nald.periodEndDay),
+    periodEndMonth: parseInt(metadata.nald.periodEndMonth),
+    periodStartDay: parseInt(metadata.nald.periodStartDay),
+    periodStartMonth: parseInt(metadata.nald.periodStartMonth),
+    purposes: _purposes(metadata.purposes),
+    receivedDate,
+    returnsFrequency,
+    returnReference,
+    returnLogId,
+    siteDescription: metadata.description,
+    startDate,
+    status,
+    submissionType: returnSubmissions.length > 0 ? 'edit' : 'submit',
+    twoPartTariff: metadata.isTwoPartTariff,
+    underQuery
   }
 }
 
-function _returnSubmissionsData(returnSubmission) {
-  const { metadata, nilReturn } = returnSubmission
+function _submissionData(returnLog) {
+  if (returnLog.returnSubmissions.length === 0) {
+    return {}
+  }
 
-  const meter = metadata?.meters?.[0]
+  const returnSubmission = returnLog.returnSubmissions[0]
+
+  returnSubmission.$applyReadings()
+
+  const { metadata, nilReturn, returnSubmissionLines } = returnSubmission
+  const meter = _meter(metadata?.meters?.[0])
+  const method = metadata?.method || null
 
   return {
+    journey: nilReturn ? 'nil-return' : 'enter-return',
+    lines: returnSubmissionLines,
     nilReturn,
-    meterMake: meter?.manufacturer || null,
-    meterSerialNumber: meter?.serialNumber || null,
-    method: metadata.method,
-    multiplier: meter?.multiplier || null,
-    startReading: meter?.startReading || null,
-    units: metadata.units
+    meter10TimesDisplay: meter.meter10TimesDisplay,
+    meterMake: meter.meterMake,
+    meterProvided: meter.meterProvided,
+    meterSerialNumber: meter.meterSerialNumber,
+    receivedDateOptions: 'custom-date',
+    receivedDateDay: `${returnLog.receivedDate.getDate()}`,
+    receivedDateMonth: `${returnLog.receivedDate.getMonth() + 1}`,
+    receivedDateYear: `${returnLog.receivedDate.getFullYear()}`,
+    reported: method === 'oneMeter' ? 'meter-readings' : 'abstraction-volumes',
+    startReading: meter.startReading,
+    units: UNITS[metadata.units || unitNames.CUBIC_METRES]
   }
 }
 

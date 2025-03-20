@@ -256,11 +256,9 @@ async function submitReported(request, h) {
 async function submitSetup(request, h) {
   const { returnLogId } = request.payload
 
-  const session = await InitiateSessionService.go(returnLogId)
+  const redirectUrl = await InitiateSessionService.go(returnLogId)
 
-  // TODO: Redirect to `/system/return-logs/setup/${session.id}/received` if there's no return ie. Submit was clicked
-
-  return h.redirect(`/system/return-logs/setup/${session.id}/check`)
+  return h.redirect(redirectUrl)
 }
 
 async function submitSingleVolume(request, h) {
