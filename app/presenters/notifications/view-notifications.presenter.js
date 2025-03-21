@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Formats communications data ready for presenting in the view communications page
- * @module ViewCommunicationsPresenter
+ * Formats notifications data ready for presenting in the view notifications page
+ * @module ViewNotificationsPresenter
  */
 
 /**
- * Formats communications data ready for presenting in the view communications page
+ * Formats notifications data ready for presenting in the view notifications page
  *
- * @param {module:ScheduledNotificationModel} communication - The related scheduled notification and related licence data
+ * @param {module:ScheduledNotificationModel} notification - The scheduled notification and related licence data
  *
  * @returns {object} The data formatted for the view template
  */
-function go(communication) {
-  const { messageType, plaintext, personalisation } = communication
+function go(notification) {
+  const { messageType, plaintext, personalisation } = notification
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : null,
