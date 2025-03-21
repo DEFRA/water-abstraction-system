@@ -19,10 +19,10 @@ const BillRunReviewRoutes = require('../routes/bill-runs-review.routes.js')
 const BillRunSetupRoutes = require('../routes/bill-runs-setup.routes.js')
 const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
 const CheckRoutes = require('../routes/check.routes.js')
-const CommunicationRoutes = require('../routes/communications.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
+const NotificationRoutes = require('../routes/notifications.routes.js')
 const NotificationsSetupRoutes = require('../routes/notifications-setup.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
@@ -48,7 +48,7 @@ const routes = [
   ...BillRunSetupRoutes,
   ...BillingAccountRoutes,
   ...CheckRoutes,
-  ...CommunicationRoutes,
+  ...NotificationRoutes,
   ...LicenceRoutes,
   ...LicenceEndDatesRoutes,
   ...JobRoutes,
