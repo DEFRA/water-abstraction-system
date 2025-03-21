@@ -11,9 +11,9 @@ const { expect } = Code
 const SplitMultipleEntriesService = require('../../../../app/services/return-logs/setup/split-multiple-entries.service.js')
 
 describe('Return Logs - Split Multiple Entries Service', () => {
-  describe('when passed a valid multiple entries string', () => {
-    let multipleEntries
+  let multipleEntries
 
+  describe('when passed a valid multiple entries string', () => {
     describe('thats been entered using new lines as the split', () => {
       before(() => {
         multipleEntries = '1.1,\r\n200,000,\r\n3,\r\n4,\r\n200.4,\r\n300,\r\n500,00\r\n6.6'
@@ -62,6 +62,18 @@ describe('Return Logs - Split Multiple Entries Service', () => {
           expect(result).to.equal([null, null, null, null])
         })
       })
+    })
+  })
+
+  describe('when passed an invalid multiple entries string', () => {
+    before(() => {
+      multipleEntries = 'invalid multiple entries string'
+    })
+
+    it('returns NaN', () => {
+      const result = SplitMultipleEntriesService.go(multipleEntries)
+
+      expect(result).to.equal([NaN])
     })
   })
 })
