@@ -963,7 +963,9 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
+      })
 
+      describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({
