@@ -242,6 +242,19 @@ describe('View Licence returns presenter', () => {
             expect(result.returns[1].status).to.equal('due')
           })
         })
+
+        describe('and the due date is 28 days or more from today', () => {
+          beforeEach(() => {
+            returnLogs[1].dueDate = new Date()
+            returnLogs[1].dueDate.setDate(returnLogs[1].dueDate.getDate() + 27)
+          })
+
+          it('returns "not due yet"', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+            expect(result.returns[1].status).to.equal('not due yet')
+          })
+        })
       })
 
       describe('when the return log has a status of "received"', () => {
