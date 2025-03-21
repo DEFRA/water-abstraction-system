@@ -17,7 +17,7 @@ const SessionModel = require('../../../../app/models/session.model.js')
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/return-logs/setup/initiate-session.service.js')
 
-describe.only('Return Logs - Setup - Initiate Session service', () => {
+describe('Return Logs - Setup - Initiate Session service', () => {
   let licence
   let metadata
 
