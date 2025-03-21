@@ -23,7 +23,7 @@ const { transformStringOfLicencesToArray, timestampForPostgres } = require('../.
  * @param {object[]} recipients
  * @param {object} returnsPeriod - the return period including the endDate, startDate and dueDate
  * @param {string} referenceCode - the unique code used to group the notifications in notify
- * @param {string} journey - the journey should be either "reminders" or "invitations"
+ * @param {string} journey - the journey should be one of "reminders", "invitations" or "ad-hoc"
  * @param {string} eventId - the event id to link all the notifications to an event
  *
  * @returns {object[]} - the recipients transformed into scheduled notifications
@@ -231,6 +231,18 @@ function _messageRef(journey, messageType, contactType) {
         'Licence holder': 'returns_reminder_licence_holder_letter',
         both: 'returns_reminder_licence_holder_letter',
         'Returns to': 'returns_reminder_returns_to_letter'
+      }
+    },
+    'ad-hoc': {
+      email: {
+        'Primary user': 'ad-hoc_primary_user_email',
+        both: 'ad-hoc_primary_user_email',
+        'Returns agent': 'ad-hoc_returns_agent_email'
+      },
+      letter: {
+        'Licence holder': 'ad-hoc_licence_holder_letter',
+        both: 'ad-hoc_licence_holder_letter',
+        'Returns to': 'ad-hoc_returns_to_letter'
       }
     }
   }
