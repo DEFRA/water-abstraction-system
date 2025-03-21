@@ -65,8 +65,9 @@ function _determinedReturnsPeriod() {
   const { returnsPeriod, summer } = DetermineReturnsPeriodService.go('allYear')
 
   const dueDate = new Date()
+  const twentyEightDays = 28
 
-  dueDate.setDate(dueDate.getDate() + 28)
+  dueDate.setDate(dueDate.getDate() + twentyEightDays)
 
   return {
     ...returnsPeriod,
