@@ -13,14 +13,15 @@ const { formatLongDate } = require('../../../../app/presenters/base.presenter.js
 // Thing under test
 const ReceivedPresenter = require('../../../../app/presenters/return-logs/setup/received.presenter.js')
 
-describe('Return Logs Setup - Received presenter', () => {
+describe('Return Logs - Setup - Received presenter', () => {
   let session
 
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345',
-      licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6'
+      licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6',
+      returnLogId: 'v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+      returnReference: '012345'
     }
   })
 
@@ -36,7 +37,7 @@ describe('Return Logs Setup - Received presenter', () => {
         receivedDateDay: null,
         receivedDateMonth: null,
         receivedDateYear: null,
-        backLink: '/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns',
+        backLink: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
         todaysDate: formatLongDate(new Date()),
         yesterdaysDate: _yesterdaysDate()
       })
@@ -57,16 +58,16 @@ describe('Return Logs Setup - Received presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it('returns a link back to the "Licence" page on the "Returns" tab', () => {
+      it('returns a link back to the view "Return Log" page', () => {
         const result = ReceivedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns')
+        expect(result.backLink).to.equal('/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31')
       })
     })
   })
 
   describe('the "receivedDate" properties', () => {
-    describe('when the user has previously selected todays date as the received date', () => {
+    describe("when the user has previously selected today's date as the received date", () => {
       beforeEach(() => {
         session.receivedDateOptions = 'today'
       })

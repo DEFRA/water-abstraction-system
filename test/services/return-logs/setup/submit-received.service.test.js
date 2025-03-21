@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitReceivedService = require('../../../../app/services/return-logs/setup/submit-received.service.js')
 
-describe('Return Logs Setup - Submit Received service', () => {
+describe('Return Logs - Setup - Submit Received service', () => {
   let payload
   let session
   let sessionData
@@ -24,9 +24,10 @@ describe('Return Logs Setup - Submit Received service', () => {
   beforeEach(async () => {
     sessionData = {
       data: {
+        licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
+        returnLogId: 'v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
         returnReference: '12345',
-        startDate: '2023-04-01T00:00:00.000Z',
-        licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8'
+        startDate: '2023-04-01T00:00:00.000Z'
       }
     }
 
@@ -153,7 +154,7 @@ describe('Return Logs Setup - Submit Received service', () => {
             receivedDateMonth: null,
             receivedDateYear: null,
             receivedDateOption: null,
-            backLink: `/system/licences/cd190dc7-912a-46a5-9421-2750fb1c7ac8/returns`,
+            backLink: `/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31`,
             returnReference: '12345'
           },
           { skip: ['sessionId', 'error', 'todaysDate', 'yesterdaysDate'] }
