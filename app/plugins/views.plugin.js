@@ -14,7 +14,7 @@ const path = require('path')
 const Nunjucks = require('nunjucks')
 const Vision = require('@hapi/vision')
 
-const { markdown } = require('../views/filters/markdown.js')
+const { markdown } = require('../views/filters/markdown.filter.js')
 
 const ServerConfig = require('../../config/server.config.js')
 const { enableSystemLicenceView } = require('../../config/feature-flags.config.js')
