@@ -136,6 +136,7 @@ function prepare(config, next) {
   // This gets assigned to Vision's compileOptions which is passed into `compile()` above as `options`.
   const environment = Nunjucks.configure(paths)
 
+  // Add custom filter to support rendering Notify notifications as HTML
   environment.addFilter('markdown', markdown)
 
   config.compileOptions.environment = environment
