@@ -953,17 +953,15 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
-        describe('and the page has not been visited previously', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({})
-          })
+        beforeEach(() => {
+          Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({})
+        })
 
-          it('redirects to the "check" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
-          })
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
 
         describe('and the validation fails', () => {

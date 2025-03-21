@@ -63,11 +63,11 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
     return item !== null
   })
 
-  for (let i = 0; i < filteredValues.length; i++) {
-    if (filteredValues[i] < startReading) {
-      return helpers.message(`The meter readings must be greater than or equal to the start reading of ${startReading}`)
-    }
+  if (filteredValues[0] < startReading) {
+    return helpers.message(`The meter readings must be greater than or equal to the start reading of ${startReading}`)
+  }
 
+  for (let i = 0; i < filteredValues.length; i++) {
     if (filteredValues[i] < filteredValues[i - 1]) {
       return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
     }
