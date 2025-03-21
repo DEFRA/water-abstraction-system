@@ -33,7 +33,8 @@
       {% endif %}
     </div>
 
-    {% for content in contents %}
+    {{ contents | markdown | safe }}
+    {# {% for content in contents %}
       {% if content.style == 'bold' %}
         <p class="govuk-!-font-weight-bold govuk-!-padding-bottom-0 govuk-!-margin-bottom-1"> {{ content.line }}</p>
       {% elif content.style == 'bulletPoint' %}
@@ -47,7 +48,7 @@
       {% else %}
         <p class="govuk-!-padding-bottom-0 govuk-!-margin-bottom-1"> {{ content.line }}</p>
       {% endif %}
-    {% endfor %}
+    {% endfor %} #}
 
   </div>
 {% endblock %}
