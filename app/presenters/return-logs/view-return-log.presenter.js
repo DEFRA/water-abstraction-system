@@ -37,7 +37,6 @@ function go(returnLog, auth) {
     returnsFrequency,
     returnSubmissions,
     siteDescription,
-    status,
     startDate,
     twoPartTariff,
     underQuery,
@@ -49,10 +48,11 @@ function go(returnLog, auth) {
 
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
+  const formattedStatus = formatStatus(returnLog)
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
-    actionButton: _actionButton(latest, auth, returnLog.id, status),
+    actionButton: _actionButton(latest, auth, returnLog.id, formattedStatus),
     backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
@@ -69,9 +69,10 @@ function go(returnLog, auth) {
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
+    showUnderQuery: formattedStatus !== 'not due yet',
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
-    status: formatStatus(returnLog),
+    status: formattedStatus,
     summaryTableData: _summaryTableData(selectedReturnSubmission, returnsFrequency),
     tableTitle: _tableTitle(returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
@@ -81,14 +82,14 @@ function go(returnLog, auth) {
   }
 }
 
-function _actionButton(latest, auth, returnLogId, status) {
+function _actionButton(latest, auth, returnLogId, formattedStatus) {
   // You cannot edit a previous version
   if (!latest) {
     return null
   }
 
   // You cannot edit a void return
-  if (status === 'void') {
+  if (formattedStatus === 'void') {
     return null
   }
 
@@ -97,8 +98,13 @@ function _actionButton(latest, auth, returnLogId, status) {
     return null
   }
 
+  // You cannot submit or edit a return that is 'not due yet'
+  if (formattedStatus === 'not due yet') {
+    return null
+  }
+
   // You can only edit a completed return
-  if (status === 'completed') {
+  if (formattedStatus === 'completed') {
     return {
       href: `/return/internal?returnId=${returnLogId}`,
       text: 'Edit return'
