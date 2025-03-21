@@ -14,6 +14,8 @@ const path = require('path')
 const Nunjucks = require('nunjucks')
 const Vision = require('@hapi/vision')
 
+const { markdown } = require('../views/filters/markdown.filter.js')
+
 const ServerConfig = require('../../config/server.config.js')
 const { enableSystemLicenceView } = require('../../config/feature-flags.config.js')
 
@@ -133,6 +135,9 @@ function prepare(config, next) {
   // see https://mozilla.github.io/nunjucks/api.html#environment) which is the central object for handling templates.
   // This gets assigned to Vision's compileOptions which is passed into `compile()` above as `options`.
   const environment = Nunjucks.configure(paths)
+
+  // Add custom filter to support rendering Notify notifications as HTML
+  environment.addFilter('markdown', markdown)
 
   config.compileOptions.environment = environment
 
