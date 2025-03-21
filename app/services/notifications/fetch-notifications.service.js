@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the matching communications and licence data needed for the view
- * @module FetchCommunicationsService
+ * Fetches the matching notification and licence data needed for the view
+ * @module FetchNotificationsService
  */
 
 const ScheduledNotificationsModel = require('../../models/scheduled-notification.model.js')
 
 /**
- * Fetches the matching communications and licence data needed for the view
+ * Fetches the matching notification and licence data needed for the view
  *
  * @param {string} id - The scheduledNotifications ID
  *
@@ -16,9 +16,9 @@ const ScheduledNotificationsModel = require('../../models/scheduled-notification
  * licence data
  */
 async function go(id) {
-  const communications = await _fetch(id)
+  const notification = await _fetch(id)
 
-  return communications
+  return notification
 }
 
 async function _fetch(id) {
