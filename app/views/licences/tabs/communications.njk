@@ -16,7 +16,7 @@
     <p class="govuk-body govuk-!-margin-bottom-0">{{ communication.type.label }}<span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span></p>
   {% else %}
     {# Testing new communications page link #}
-    <a href="/system/notifications/{{ communication.id }}?id=${id}" class="govuk-link">NEW TEST {{ communication.type.label }}
+    <a href="/system/notifications/{{ communication.id }}?id={{ licenceId }}" class="govuk-link">NEW TEST {{ communication.type.label }}
       <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
     </a>
   {% endif %}
