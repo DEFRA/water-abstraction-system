@@ -33,6 +33,20 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/notifications-status-updates',
+    options: {
+      handler: JobsController.notificationsStatusUpdates,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/session-cleanup',
     options: {
       handler: JobsController.sessionCleanup,
