@@ -8,9 +8,10 @@
 const ViewNotificationsService = require('../services/notifications/view-notifications.service.js')
 
 async function view(request, h) {
-  const { id } = request.params
+  const { id: notificationId } = request.params
+  const { id: licenceId } = request.query
 
-  const pageData = await ViewNotificationsService.go(id)
+  const pageData = await ViewNotificationsService.go(notificationId, licenceId)
 
   return h.view('notifications/view.njk', pageData)
 }
