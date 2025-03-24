@@ -9,14 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const { timestampForPostgres, generateUUID } = require('../../../../app/lib/general.lib.js')
+const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
 const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
 
 // Thing under test
 const UpdateNotificationsService = require('../../../../app/services/notifications/setup/update-notifications.service.js')
 
-describe.only('Notifications Setup - Update Notifications service', () => {
+describe('Notifications Setup - Update Notifications service', () => {
   let eventId
   let notifications
   let scheduledNotification
@@ -32,7 +32,6 @@ describe.only('Notifications Setup - Update Notifications service', () => {
 
     scheduledNotification = await ScheduledNotificationHelper.add({
       createdAt: timestampForPostgres(),
-      notifyId: generateUUID(),
       eventId,
       status: 'sending'
     })
@@ -88,7 +87,6 @@ describe.only('Notifications Setup - Update Notifications service', () => {
       scheduledNotification2 = await ScheduledNotificationHelper.add({
         createdAt: timestampForPostgres(),
         eventId,
-        notifyId: generateUUID(),
         status: 'sending'
       })
 
