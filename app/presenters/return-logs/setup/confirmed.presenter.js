@@ -13,10 +13,10 @@
  * @returns {object} page data needed by the view template
  */
 function go(returnLog) {
-  const { licenceId, licenceRef, purposes, returnReference, siteDescription, status, id } = returnLog
+  const { licenceId, licenceRef, purposes, returnLogId, returnReference, siteDescription, status } = returnLog
 
   return {
-    returnLogId: id,
+    returnLogId,
     licenceId,
     licenceRef,
     pageTitle: _pageTitle(returnReference, status),
