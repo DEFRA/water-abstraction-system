@@ -52,9 +52,9 @@ describe('Notifications Setup - Update Notifications service', () => {
     it("updates only the notification's required values", async () => {
       await UpdateNotificationsService.go(notifications)
 
-      const createdResult = await ScheduledNotificationModel.query().where('eventId', eventId)
+      const result = await scheduledNotification.$query()
 
-      expect(createdResult).equal([
+      expect(result).equal(
         {
           companyId: null,
           createdAt: new Date(scheduledNotification.createdAt),
