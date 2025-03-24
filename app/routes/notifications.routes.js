@@ -7,12 +7,7 @@ const routes = [
     method: 'GET',
     path: '/notifications/{id}',
     options: {
-      handler: NotificationsController.view,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
+      handler: NotificationsController.view
     }
   }
 ]
