@@ -24,6 +24,8 @@ async function go(returnLogId) {
       'licence.licenceRef',
       'returnLogs.id as returnLogId',
       'returnLogs.returnReference',
+      'returnLogs.status',
+      'returnLogs.id',
       ref('returnLogs.metadata:purposes').as('purposes'),
       ref('returnLogs.metadata:description').as('siteDescription')
     )
