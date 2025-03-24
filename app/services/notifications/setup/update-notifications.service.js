@@ -16,10 +16,9 @@ const ScheduledNotificationModel = require('../../../../app/models/scheduled-not
  *
  * @param {object} notifications
  *
- * @returns {object} - the Updated notifications
  */
 async function go(notifications) {
-  return ScheduledNotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
+  await ScheduledNotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
 }
 
 module.exports = {
