@@ -17,18 +17,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/confirm-received',
-    options: {
-      handler: ReturnLogsSetupController.confirmReceived,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/return-logs/setup/confirmed',
     options: {
       handler: ReturnLogsSetupController.confirmed,
