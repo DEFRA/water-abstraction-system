@@ -68,28 +68,18 @@ describe('Return Logs - Setup - Controller', () => {
   })
 
   describe('return-logs/setup', () => {
-    describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/return-logs/setup?returnLogId=v1:1:123:10021668:2022-04-01:2023-03-31',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
-        }
-      })
-
+    describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId, data: {} })
+          Sinon.stub(InitiateSessionService, 'go').resolves(`/system/return-logs/setup/${sessionId}/check`)
+          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } })
         })
 
-        it('redirects to the "received" page', async () => {
+        it('redirects to the returned page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/received`)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
     })

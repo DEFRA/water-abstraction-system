@@ -5,12 +5,17 @@
  * @module InitiateSessionService
  */
 
-const { ref } = require('objection')
-
 const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
-
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
+
+const UNITS = {
+  [unitNames.CUBIC_METRES]: 'cubic-metres',
+  [unitNames.LITRES]: 'litres',
+  [unitNames.MEGALITRES]: 'megalitres',
+  [unitNames.GALLONS]: 'gallons'
+}
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -25,75 +30,192 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} returnLogId - The UUID of the return log to be fetched
  *
- * @returns {Promise<module:SessionModel>} the newly created session record
+ * @returns {Promise<string>} the url to redirect to
  */
 async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
-  const data = _data(returnLog)
+  const referenceData = _referenceData(returnLog)
+  const submissionData = _submissionData(returnLog)
 
-  return SessionModel.query().insert({ data }).returning('id')
-}
+  const data = { ...referenceData, ...submissionData }
 
-function _data(returnLog) {
-  const formattedPurposes = _formatPurposes(returnLog.purposes)
-  const lines = _formatLines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
+  const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
 
-  returnLog.beenReceived = returnLog.receivedDate !== null
-  returnLog.purposes = formattedPurposes
-  returnLog.lines = lines
+  const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 
-  return returnLog
-}
-
-function _formatLines(frequency, startDate, endDate) {
-  let lines
-
-  if (frequency === 'day') {
-    lines = daysFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'week') {
-    lines = weeksFromPeriod(startDate, endDate)
-  }
-
-  if (frequency === 'month') {
-    lines = monthsFromPeriod(startDate, endDate)
-  }
-
-  return lines
+  return `/system/return-logs/setup/${sessionId}/${redirect}`
 }
 
 async function _fetchReturnLog(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
-      'licence.id as licenceId',
-      'licence.licenceRef',
-      'returnLogs.id as returnLogId',
-      'returnLogs.startDate',
-      'returnLogs.endDate',
-      'returnLogs.receivedDate',
-      'returnLogs.returnReference',
-      'returnLogs.dueDate',
-      'returnLogs.status',
-      'returnLogs.underQuery',
-      'returnLogs.returnsFrequency',
-      ref('returnLogs.metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-      ref('returnLogs.metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-      ref('returnLogs.metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-      ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
-      ref('returnLogs.metadata:description').as('siteDescription'),
-      ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
+      'id',
+      'startDate',
+      'endDate',
+      'receivedDate',
+      'returnReference',
+      'dueDate',
+      'status',
+      'underQuery',
+      'returnsFrequency',
+      'metadata'
     )
-    .innerJoinRelated('licence')
-    .where('returnLogs.id', returnLogId)
+    .where('id', returnLogId)
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
+    })
+    .withGraphFetched('returnSubmissions')
+    .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
+      returnSubmissionsBuilder
+        .select(['metadata', 'nilReturn'])
+        .where('current', true)
+        .withGraphFetched('returnSubmissionLines')
+        .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
+          returnSubmissionLinesBuilder
+            .select(['id', 'startDate', 'endDate', 'quantity', 'userUnit'])
+            .orderBy('startDate', 'asc')
+        })
+    })
 }
 
-function _formatPurposes(purposes) {
+function _lines(returnsFrequency, startDate, endDate) {
+  let lines
+
+  if (returnsFrequency === 'day') {
+    lines = daysFromPeriod(startDate, endDate)
+  }
+
+  if (returnsFrequency === 'week') {
+    lines = weeksFromPeriod(startDate, endDate)
+  }
+
+  if (returnsFrequency === 'month') {
+    lines = monthsFromPeriod(startDate, endDate)
+  }
+
+  return lines
+}
+
+function _meter(meter) {
+  const multiplier = meter?.multiplier ? parseInt(meter?.multiplier) : null
+
+  let meter10TimesDisplay = null
+  if (multiplier === 10) {
+    meter10TimesDisplay = 'yes'
+  }
+
+  if (multiplier === 1) {
+    meter10TimesDisplay = 'no'
+  }
+
+  const meterMake = meter?.manufacturer || null
+  const meterSerialNumber = meter?.serialNumber || null
+
+  return {
+    meter10TimesDisplay,
+    meterMake,
+    meterProvided: meterMake && meterSerialNumber ? 'yes' : 'no',
+    meterSerialNumber,
+    startReading: meter?.startReading
+  }
+}
+
+function _purposes(purposes) {
   return purposes.map((purpose) => {
     return purpose.tertiary.description
+  })
+}
+
+function _referenceData(returnLog) {
+  const {
+    dueDate,
+    endDate,
+    id: returnLogId,
+    licence,
+    metadata,
+    receivedDate,
+    returnsFrequency,
+    returnReference,
+    returnSubmissions,
+    startDate,
+    status,
+    underQuery
+  } = returnLog
+
+  return {
+    beenReceived: receivedDate !== null,
+    dueDate,
+    endDate,
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
+    lines: _lines(returnsFrequency, startDate, endDate),
+    periodEndDay: parseInt(metadata.nald.periodEndDay),
+    periodEndMonth: parseInt(metadata.nald.periodEndMonth),
+    periodStartDay: parseInt(metadata.nald.periodStartDay),
+    periodStartMonth: parseInt(metadata.nald.periodStartMonth),
+    purposes: _purposes(metadata.purposes),
+    receivedDate,
+    returnsFrequency,
+    returnReference,
+    returnLogId,
+    siteDescription: metadata.description,
+    startDate,
+    status,
+    submissionType: returnSubmissions.length > 0 ? 'edit' : 'submit',
+    twoPartTariff: metadata.isTwoPartTariff,
+    underQuery
+  }
+}
+
+function _submissionData(returnLog) {
+  if (returnLog.returnSubmissions.length === 0) {
+    return {}
+  }
+
+  const returnSubmission = returnLog.returnSubmissions[0]
+
+  returnSubmission.$applyReadings()
+
+  const { metadata, nilReturn, returnSubmissionLines } = returnSubmission
+  const meter = _meter(metadata?.meters?.[0])
+  const method = metadata?.method || null
+
+  return {
+    journey: nilReturn ? 'nil-return' : 'enter-return',
+    lines: _submissionLines(returnSubmissionLines),
+    nilReturn,
+    meter10TimesDisplay: meter.meter10TimesDisplay,
+    meterMake: meter.meterMake,
+    meterProvided: meter.meterProvided,
+    meterSerialNumber: meter.meterSerialNumber,
+    receivedDateOptions: returnLog.receivedDate && 'custom-date',
+    receivedDateDay: returnLog.receivedDate && `${returnLog.receivedDate.getDate()}`,
+    receivedDateMonth: returnLog.receivedDate && `${returnLog.receivedDate.getMonth() + 1}`,
+    receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
+    reported: method === 'oneMeter' ? 'meter-readings' : 'abstraction-volumes',
+    startReading: meter.startReading,
+    units: UNITS[metadata.units || unitNames.CUBIC_METRES]
+  }
+}
+
+function _submissionLines(returnSubmissionLines) {
+  return returnSubmissionLines.map((returnSubmissionLine) => {
+    const { endDate, quantity, reading, startDate, userUnit } = returnSubmissionLine
+
+    let convertedQuantity
+    if (quantity) {
+      convertedQuantity = quantity * returnUnits[userUnit].multiplier
+    }
+
+    return {
+      endDate,
+      quantity: convertedQuantity,
+      reading: reading ?? null,
+      startDate
+    }
   })
 }
 
