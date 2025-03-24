@@ -104,7 +104,7 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
   }
 
   // You can only edit a completed return
-  if (formattedStatus === 'completed') {
+  if (formattedStatus === 'complete') {
     return {
       value: returnLogId,
       text: 'Edit return'

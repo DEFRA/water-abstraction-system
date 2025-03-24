@@ -26,7 +26,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe.only('View Return Log presenter', () => {
+describe('View Return Log presenter', () => {
   let auth
   let testReturnLog
 
@@ -104,6 +104,20 @@ describe.only('View Return Log presenter', () => {
           value: testReturnLog.id,
           text: 'Edit return'
         })
+      })
+    })
+
+    describe('when the return is not due yet', () => {
+      beforeEach(() => {
+        const notDueUntilDate = new Date()
+        testReturnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        testReturnLog.status = 'due'
+      })
+
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.actionButton).to.be.null()
       })
     })
 
@@ -452,6 +466,34 @@ describe.only('View Return Log presenter', () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
       expect(result.returnPeriod).to.equal('1 April 2022 to 31 March 2023')
+    })
+  })
+
+  describe('the "showUnderQuery" property', () => {
+    describe('when the return has a status of "not due yet"', () => {
+      beforeEach(() => {
+        const notDueUntilDate = new Date()
+        testReturnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        testReturnLog.status = 'due'
+      })
+
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.showUnderQuery).to.be.false()
+      })
+    })
+
+    describe('when the returns status is not "not due yet"', () => {
+      beforeEach(() => {
+        testReturnLog.status = 'completed'
+      })
+
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.showUnderQuery).to.be.true()
+      })
     })
   })
 
