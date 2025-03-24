@@ -106,14 +106,14 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
   // You can only edit a completed return
   if (formattedStatus === 'completed') {
     return {
-      href: `/return/internal?returnId=${returnLogId}`,
+      value: returnLogId,
       text: 'Edit return'
     }
   }
 
   // Else you have a due or received return so can only submit the first return submission
   return {
-    href: `/system/return-logs/setup?returnLogId=${returnLogId}`,
+    value: returnLogId,
     text: 'Submit return'
   }
 }

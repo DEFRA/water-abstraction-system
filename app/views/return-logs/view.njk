@@ -114,30 +114,34 @@
 
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
-        <form method="post">
-          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-          {% if actionButton %}
-            {# The button group div goes inside the if because we only need a group when there's two buttons #}
-            <div class="govuk-button-group">
-              {# Submit/Edit return button #}
+        {% if actionButton %}
+          {# The button group div goes inside the if because we only need a group when there's two buttons #}
+          <div class="govuk-button-group">
+            {# Submit/Edit return button #}
+            <form method="post" action="/system/return-logs/setup">
+              <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
               {{
                 govukButton({
                   text: actionButton.text,
-                  preventDoubleClick: true,
-                  href: actionButton.href
+                  name: "returnLogId",
+                  value: actionButton.value,
+                  preventDoubleClick: true
                 })
               }}
-          {% endif %}
+            </form>
+        {% endif %}
 
-          {# Mark as under query / Resolve query button #}
-          {% if showUnderQuery %}
-            {% if underQuery %}
-              {% set queryButtonText = 'Resolve query' %}
-              {% set queryButtonValue = 'resolve' %}
-            {% else %}
-              {% set queryButtonText = 'Mark as under query' %}
-              {% set queryButtonValue = 'mark' %}
-            {% endif %}
+        {# Mark as under query / Resolve query button #}
+        {% if showUnderQuery %}
+          {% if underQuery %}
+            {% set queryButtonText = 'Resolve query' %}
+            {% set queryButtonValue = 'resolve' %}
+          {% else %}
+            {% set queryButtonText = 'Mark as under query' %}
+            {% set queryButtonValue = 'mark' %}
+          {% endif %}
+          <form method="post">
+            <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
             {{
               govukButton({
                 text: queryButtonText,
@@ -147,12 +151,12 @@
                 preventDoubleClick: true
               })
             }}
-          {% endif %}
+          </form>
+        {% endif %}
 
-          {% if actionButton %}
-            </div>
-          {% endif %}
-        </form>
+        {% if actionButton %}
+          </div>
+        {% endif %}
       </div>
     </div>
 
