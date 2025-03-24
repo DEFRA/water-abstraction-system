@@ -30,8 +30,8 @@ async function _fetchLicence(licenceId) {
 
 async function _fetchNotification(notificationId) {
   return ScheduledNotificationsModel.query()
-    .findById(id)
-    .select(['messageType', 'messageRef', 'personalisation', 'plaintext'])
+    .findById(notificationId)
+    .select(['messageType', 'messageRef', 'personalisation', 'plaintext', 'sendAfter'])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select(['createdAt', 'issuer', 'metadata', 'status', 'subtype', 'type'])
