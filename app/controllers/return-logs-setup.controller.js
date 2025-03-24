@@ -117,13 +117,6 @@ async function reported(request, h) {
   return h.view('return-logs/setup/reported.njk', pageData)
 }
 
-async function setup(request, h) {
-  const { returnLogId } = request.query
-  const session = await InitiateSessionService.go(returnLogId)
-
-  return h.redirect(`/system/return-logs/setup/${session.id}/received`)
-}
-
 async function singleVolume(request, h) {
   const { sessionId } = request.params
   const pageData = await SingleVolumeService.go(sessionId)
@@ -285,6 +278,14 @@ async function submitReported(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
+async function submitSetup(request, h) {
+  const { returnLogId } = request.payload
+
+  const redirectUrl = await InitiateSessionService.go(returnLogId)
+
+  return h.redirect(redirectUrl)
+}
+
 async function submitSingleVolume(request, h) {
   const {
     params: { sessionId },
@@ -382,7 +383,6 @@ module.exports = {
   periodUsed,
   received,
   reported,
-  setup,
   singleVolume,
   startReading,
   submission,
@@ -394,6 +394,7 @@ module.exports = {
   submitPeriodUsed,
   submitReceived,
   submitReported,
+  submitSetup,
   submitSingleVolume,
   submitStartReading,
   submitSubmission,
