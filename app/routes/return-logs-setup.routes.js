@@ -4,10 +4,10 @@ const ReturnLogsSetupController = require('../controllers/return-logs-setup.cont
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/return-logs/setup',
     options: {
-      handler: ReturnLogsSetupController.setup,
+      handler: ReturnLogsSetupController.submitSetup,
       auth: {
         access: {
           scope: ['billing']
