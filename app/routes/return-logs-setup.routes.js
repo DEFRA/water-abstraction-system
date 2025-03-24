@@ -326,6 +326,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.multipleEntries,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.submitMultipleEntries,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
