@@ -5,21 +5,27 @@
  * @module ViewNotificationsPresenter
  */
 
+const { formatLongDate, sentenceCase } = require('../base.presenter.js')
+
 /**
  * Formats notifications data ready for presenting in the view notifications page
  *
- * @param {module:ScheduledNotificationModel} notification - The scheduled notification and related licence data
+ * @param {module:ScheduledNotificationModel} notificationData - The scheduled notification and related licence data
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notification) {
-  const { messageType, plaintext, personalisation } = notification
+function go(notificationData) {
+  const { messageType, plaintext, personalisation, sendAfter } = notificationData.notification
+  const { id: licenceId, licenceRef } = notificationData.licence
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : null,
-    contents: _contents(plaintext),
+    contents: plaintext,
+    licenceId,
+    licenceRef,
     messageType,
-    pageTitle: 'Test page'
+    pageTitle: _pageTitle(notificationData.notification),
+    sentDate: formatLongDate(sendAfter)
   }
 }
 
@@ -38,43 +44,14 @@ function _address(personalisation) {
   return address.filter((line) => line)
 }
 
-function _contents(plaintext) {
-  const contents = plaintext.split(/\r?\n/)
+function _pageTitle(notification) {
+  if (notification.event.metadata.name === 'Water abstraction alert') {
+    return (
+      `${sentenceCase(notification.event.metadata.options.sendingAlertType)}` + ` - ${notification.event.metadata.name}`
+    )
+  }
 
-  return contents.map((line) => {
-    if (line === '') {
-      return {
-        style: 'space',
-        line: ''
-      }
-    }
-
-    if (line.charAt(0) === '#') {
-      return {
-        style: 'bold',
-        line: line.slice(1)
-      }
-    }
-
-    if (line.charAt(0) === '*') {
-      return {
-        style: 'bulletPoint',
-        line: line.slice(1)
-      }
-    }
-
-    if (line.charAt(0) === '^') {
-      return {
-        style: 'indent',
-        line: line.slice(1)
-      }
-    }
-
-    return {
-      style: 'normal',
-      line
-    }
-  })
+  return notification.event.metadata.name
 }
 
 module.exports = {
