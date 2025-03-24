@@ -11,14 +11,15 @@ const ViewNotificationsPresenter = require('../../presenters/notifications/view-
 /**
  * Orchestrates fetching and presenting the data needed for the view notifications page
  *
- * @param {string} id - The ID of the notifications to view
+ * @param {string} notificationId - The UUID of the notifications to view
+ * @param {string} licenceId - The UUID of the licence that relates to the notification
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notifications template.
  */
-async function go(id) {
-  const communication = await FetchNotificationsService.go(id)
+async function go(notificationId, licenceId) {
+  const notificationData = await FetchNotificationsService.go(notificationId, licenceId)
 
-  const pageData = ViewNotificationsPresenter.go(communication)
+  const pageData = ViewNotificationsPresenter.go(notificationData)
 
   return {
     activeNavBar: 'search',
