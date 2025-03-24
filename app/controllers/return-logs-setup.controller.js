@@ -8,7 +8,6 @@
 const CancelService = require('../services/return-logs/setup/cancel.service.js')
 const CheckService = require('../services/return-logs/setup/check.service.js')
 const ConfirmedService = require('../services/return-logs/setup/confirmed.service.js')
-const ConfirmReceivedService = require('../services/return-logs/setup/confirm-received.service.js')
 const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
@@ -48,13 +47,6 @@ async function check(request, h) {
   const pageData = await CheckService.go(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
-}
-
-async function confirmReceived(request, h) {
-  const { id: returnLogId } = request.query
-  const pageData = await ConfirmReceivedService.go(returnLogId)
-
-  return h.view('return-logs/setup/confirm-received.njk', pageData)
 }
 
 async function confirmed(request, h) {
@@ -391,7 +383,6 @@ module.exports = {
   cancel,
   check,
   confirmed,
-  confirmReceived,
   deleteNote,
   guidance,
   meterDetails,
