@@ -108,9 +108,9 @@ describe('Notifications Setup - Update Notifications service', () => {
     it('updates the notifications required values', async () => {
       await UpdateNotificationsService.go(notifications)
 
-      const createdResult = await ScheduledNotificationModel.query().where('eventId', eventId)
+      let result = await scheduledNotification.$query()
 
-      expect(createdResult).equal([
+      expect(result).equal(
         {
           companyId: null,
           createdAt: new Date(scheduledNotification.createdAt),
