@@ -7,6 +7,8 @@
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
@@ -16,7 +18,8 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
  */
 function go(communications) {
   return {
-    communications: _communications(communications)
+    communications: _communications(communications),
+    enableLicenceConditionsView: FeatureFlagsConfig.enableLicenceConditionsView
   }
 }
 
