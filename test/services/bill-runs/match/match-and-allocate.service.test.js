@@ -20,7 +20,7 @@ const PersistAllocatedLicenceToResultsService = require('../../../../app/service
 // Thing under test
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
-describe('Bill Runs - Match - Match And Allocate Service', () => {
+describe('Bill Runs - Match - Match And Allocate service', () => {
   let determineLicenceIssuesServiceStub
   let notifierStub
   let licences
@@ -79,11 +79,10 @@ describe('Bill Runs - Match - Match And Allocate Service', () => {
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
         })
 
-        it('returns the licences to be processed', async () => {
-          const results = await MatchAndAllocateService.go(billRun, billingPeriods)
+        it('returns "true" as there are licences to process', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-          expect(results.length).not.to.equal(0)
-          expect(results[0].licenceRef).to.equal('5/31/14/*S/0116A')
+          expect(result).to.be.true()
         })
       })
 
@@ -117,11 +116,10 @@ describe('Bill Runs - Match - Match And Allocate Service', () => {
           expect(chargeReference.chargeElements[1].allocatedQuantity).to.equal(2)
         })
 
-        it('returns the licences to be processed', async () => {
-          const results = await MatchAndAllocateService.go(billRun, billingPeriods)
+        it('returns "true" as there are licences to process', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-          expect(results.length).not.to.equal(0)
-          expect(results[0].licenceRef).to.equal('5/31/14/*S/0116A')
+          expect(result).to.be.true()
         })
       })
     })
@@ -154,10 +152,10 @@ describe('Bill Runs - Match - Match And Allocate Service', () => {
         expect(PersistAllocatedLicenceToResultsService.go.called).to.be.false()
       })
 
-      it('returns no licences to be processed', async () => {
-        const results = await MatchAndAllocateService.go(billRun, billingPeriods)
+      it('returns "false" as there are no licences to process', async () => {
+        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-        expect(results).to.be.empty()
+        expect(result).to.be.false()
       })
     })
   })

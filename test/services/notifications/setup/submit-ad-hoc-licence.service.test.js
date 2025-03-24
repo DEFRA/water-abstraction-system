@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,13 +14,21 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
 const SubmitAdHocLicenceService = require('../../../../app/services/notifications/setup/submit-ad-hoc-licence.service.js')
+const Sinon = require('sinon')
 
 describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
+  let clock
   let payload
   let session
 
   beforeEach(async () => {
     session = await SessionHelper.add({ data: { referenceCode: 'ADHC-1234' } })
+
+    clock = Sinon.useFakeTimers(new Date('2020-06-06'))
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   describe('when called', () => {
@@ -40,6 +48,20 @@ describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.licenceRef).to.equal('01/111')
+      })
+
+      it('saves the "determinedReturnsPeriod" with the "dueDate" set 28 days from "today"', async () => {
+        await SubmitAdHocLicenceService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.determinedReturnsPeriod).to.equal({
+          dueDate: '2020-07-04T00:00:00.000Z',
+          endDate: '2021-03-31T00:00:00.000Z',
+          name: 'allYear',
+          startDate: '2020-04-01T00:00:00.000Z',
+          summer: 'false'
+        })
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {

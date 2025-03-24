@@ -1,0 +1,14 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+
+{% block content %}
+  <div class="govuk-body">
+    {{ govukPanel({
+      titleText: pageTitle,
+      html: "Your reference number is <br><strong>" + referenceCode + "</strong>"
+    }) }}
+
+    <a class="govuk-link" href="{{ forwardLink }}">View notifications report</a>
+  </div>
+{% endblock %}

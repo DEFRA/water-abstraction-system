@@ -70,7 +70,7 @@ describe('Notifications Setup - Event presenter', () => {
         }
       },
       referenceCode: 'RINV-123',
-      status: 'started',
+      status: 'completed',
       subtype: 'returnInvitation'
     })
   })
@@ -192,6 +192,24 @@ describe('Notifications Setup - Event presenter', () => {
       const result = CreateEventPresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('returnReminder')
+    })
+  })
+
+  describe('when the journey is for "ad-hoc"', () => {
+    beforeEach(() => {
+      session.journey = 'ad-hoc'
+    })
+
+    it('correctly sets the "metadata.name"', () => {
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
+
+      expect(result.metadata.name).to.equal('Returns: ad-hoc')
+    })
+
+    it('correctly sets the "subtype"', () => {
+      const result = CreateEventPresenter.go(session, testRecipients, auth)
+
+      expect(result.subtype).to.equal('adHocReminder')
     })
   })
 

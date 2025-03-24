@@ -4,10 +4,10 @@ const ReturnLogsSetupController = require('../controllers/return-logs-setup.cont
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/return-logs/setup',
     options: {
-      handler: ReturnLogsSetupController.setup,
+      handler: ReturnLogsSetupController.submitSetup,
       auth: {
         access: {
           scope: ['billing']
@@ -344,6 +344,30 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/units',
     options: {
       handler: ReturnLogsSetupController.submitUnits,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.multipleEntries,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.submitMultipleEntries,
       auth: {
         access: {
           scope: ['billing']
