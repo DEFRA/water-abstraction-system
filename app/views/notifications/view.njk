@@ -17,38 +17,24 @@
   {# Main heading #}
   <div class="govuk-body">
     <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
       {{ pageTitle }}
     </h1>
 
     {{ govukInsetText({
-      text: "Sent "
+      attributes: { 'data-test': 'sent-date' },
+      classes: "govuk-!-margin-bottom-1 govuk-!-margin-top-1",
+      text: "Sent " + sentDate
     }) }}
   </div>
 
   <div class="message-preview govuk-body">
-    <div class="govuk-!-margin-bottom-3">
+    <div class="govuk-!-margin-bottom-5">
       {% if messageType === 'letter' %}
         {{ newLineArrayItems(address) }}
       {% endif %}
     </div>
 
     {{ contents | markdown | safe }}
-    {# {% for content in contents %}
-      {% if content.style == 'bold' %}
-        <p class="govuk-!-font-weight-bold govuk-!-padding-bottom-0 govuk-!-margin-bottom-1"> {{ content.line }}</p>
-      {% elif content.style == 'bulletPoint' %}
-        <ul>
-          <li class="govuk-!-padding-bottom-0 govuk-!-margin-bottom-1" >{{ content.line }}</li>
-        </ul>
-      {% elif content.style == 'indent' %}
-        <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-0 govuk-!-margin-bottom-1"> {{ content.line }}</p>
-      {% elif content.style == 'space' %}
-        <p class="govuk-!-padding-margin-3"></p>
-      {% else %}
-        <p class="govuk-!-padding-bottom-0 govuk-!-margin-bottom-1"> {{ content.line }}</p>
-      {% endif %}
-    {% endfor %} #}
-
   </div>
 {% endblock %}
