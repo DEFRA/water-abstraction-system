@@ -3,6 +3,8 @@
 const { formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Converts a quantity from a given unit to cubic metres and formats it
  *
@@ -78,7 +80,7 @@ function formatStatus(returnLog) {
     const notDueUntil = new Date(dueDate)
 
     // Calculate the start of the "due" period, which begins 27 days before the due date
-    notDueUntil.setDate(notDueUntil.getDate() - 27)
+    notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
 
     // If today is before the "due" period starts, the return is "not due yet"
     if (today < notDueUntil) {

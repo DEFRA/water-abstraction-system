@@ -8,6 +8,8 @@
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
  *
@@ -106,7 +108,7 @@ function _status(returnLog) {
     const notDueUntil = new Date(dueDate)
 
     // Calculate the start of the "due" period, which begins 27 days before the due date
-    notDueUntil.setDate(notDueUntil.getDate() - 27)
+    notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
 
     // If today is before the "due" period starts, the return is "not due yet"
     if (today < notDueUntil) {

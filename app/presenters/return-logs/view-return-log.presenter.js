@@ -88,18 +88,13 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
     return null
   }
 
-  // You cannot edit a void return
-  if (formattedStatus === 'void') {
+  // You cannot edit a void return or a return not due yet
+  if (formattedStatus === 'void' || formattedStatus === 'not due yet') {
     return null
   }
 
   // You cannot submit or edit if you do not have permission to
   if (!auth.credentials.scope.includes('returns')) {
-    return null
-  }
-
-  // You cannot submit or edit a return that is 'not due yet'
-  if (formattedStatus === 'not due yet') {
     return null
   }
 
