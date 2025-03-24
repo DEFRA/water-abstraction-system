@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helper
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewLicenceCommunicationsPresenter = require('../../../app/presenters/licences/view-licence-communications.presenter.js')
@@ -32,6 +36,8 @@ describe('View Licence Communications presenter', () => {
         }
       }
     ]
+
+    Sinon.stub(FeatureFlagsConfig, 'enableNotificationsView').value(true)
   })
 
   describe('when provided with populated communications data', () => {
@@ -51,7 +57,8 @@ describe('View Licence Communications presenter', () => {
               sentVia: 'sent 15 May 2024 via letter'
             }
           }
-        ]
+        ],
+        enableNotificationsView: true
       })
     })
 
