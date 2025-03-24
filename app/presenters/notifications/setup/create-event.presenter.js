@@ -11,6 +11,9 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
 /**
  * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
  *
+ * We set the event 'status' to 'complete' to allow the report to show on the 'notifications/report' page. This is
+ * dictated by the legacy code.
+ *
  * @param {SessionModel} session
  * @param {object[]} recipients
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -32,7 +35,7 @@ function go(session, recipients, auth) {
       returnCycle: _returnCycle(determinedReturnsPeriod)
     },
     referenceCode,
-    status: 'started',
+    status: 'completed',
     subtype: _subType(journey)
   }
 }
@@ -68,6 +71,8 @@ function _name(journey) {
     return 'Returns: invitation'
   } else if (journey === 'reminders') {
     return 'Returns: reminder'
+  } else if (journey === 'ad-hoc') {
+    return 'Returns: ad-hoc'
   } else {
     return ''
   }
@@ -104,6 +109,8 @@ function _subType(journey) {
     return 'returnInvitation'
   } else if (journey === 'reminders') {
     return 'returnReminder'
+  } else if (journey === 'ad-hoc') {
+    return 'adHocReminder'
   } else {
     return ''
   }

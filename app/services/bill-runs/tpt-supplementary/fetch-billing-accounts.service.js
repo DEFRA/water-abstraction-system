@@ -9,7 +9,6 @@ const { ref } = require('objection')
 
 const BillingAccountModel = require('../../../models/billing-account.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const FetchNonChargeableBillingAccountsService = require('./fetch-non-chargeable-billing-accounts.service.js')
 
 /**
  * Fetches all billing accounts linked to a bill run to be processed as part of supplementary two-part tariff billing
@@ -33,28 +32,21 @@ const FetchNonChargeableBillingAccountsService = require('./fetch-non-chargeable
  * they won't have gone through match & allocate, so won't have `review_charge_[]` records, because the new charge
  * versions are't two-part tariff (match and allocate only works with TPT charge versions).
  *
- * To make matters worse, non-chargeable charge versions don't get a billing account assigned, which kind of breaks a
- * service called `FetchBillingAccounts`! For these we have to call `FetchNonChargeableBillingAccounts`, which creates
- * 'mock' billing account records with linked charge versions, using those licences previous transactions as their data
- * source.
+ * This is why we do not filter charge versions by when they end, only by when they start. For example, licence 01/123
+ * has a 2PT charge version that starts 2022-04-01 with no end date. It is therefore included in the 2023-24 2PT annual
+ * bill run.
  *
- * The aim is to return a unique list of billing accounts, with charge versions containing the licence, and in most
- * cases, the match & allocate data, for processing into bills.
+ * The licence is then made non-chargeable by adding a new non-chargeable charge version starting on 2023-04-01. This
+ * will flag the licence for 2PT supplementary.
  *
- * So, the final step is dealing with the same billing account being spit out by both queries. This _could_ happen where
- * a billing account (WA00004321A) has two licences that were billed in 2023/24. Then the following changes are made:
+ * What users expect is that a credit will be raised that matches the 2023/24 2PT annual bill. Because we don't filter
+ * by a charge versions end date, `FetchBillingAccountsService` will still return the 2PT charge version that starts on
+ * 2022-04-01 and now ends 2023-03-31. `ProcessBillingPeriodService` will use the information to fetch previous 2PT
+ * transactions in the 2023/24 period, which means it will find the previous debit and reverse it to create the credit!
  *
- * - Licence 02/321 is amended (new chargeable charge version, or more likely the return is edited)
- * - Licence 02/123 is made non-chargeable starting from 2023-04-01
- *
- * WA00004321A will be returned by both queries, this service because of the change to licence 02/321, and
- * `FetchNonChargeableBillingAccounts` because of the change to licence 02/123.
- *
- * The supplementary engine isn't built to handle duplicate billing accounts, so the results need to be merged.
- *
- * For those processed by match & allocate `ProcessBillingPeriod` will combine the charge information with the result of
- * review in order to generate new transactions. For the rest, we just look at their previous transactions for possible
- * credits.
+ * For those that were processed by match & allocate, `ProcessBillingPeriod` will combine the charge information with
+ * the result of review in order to generate new transactions. For the rest, we just look at their previous transactions
+ * for possible credits.
  *
  * @param {string} billRunId - The UUID of the supplementary two-part tariff bill run to fetch billing accounts for
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
@@ -63,21 +55,7 @@ const FetchNonChargeableBillingAccountsService = require('./fetch-non-chargeable
  * charge element etc records, plus the two-part tariff review details needed to generate the bill run
  */
 async function go(billRunId, billingPeriod) {
-  const billingAccounts = await _fetch(billRunId, billingPeriod)
-
-  const nonChargeableBillingAccounts = await FetchNonChargeableBillingAccountsService.go(
-    billRunId,
-    billingPeriod,
-    billingAccounts
-  )
-
-  if (nonChargeableBillingAccounts.length === 0) {
-    return billingAccounts
-  }
-
-  _mergeBillingAccounts(billingAccounts, nonChargeableBillingAccounts)
-
-  return billingAccounts
+  return _fetch(billRunId, billingPeriod)
 }
 
 async function _fetch(billRunId, billingPeriod) {
@@ -87,7 +65,7 @@ async function _fetch(billRunId, billingPeriod) {
     .orderBy([{ column: 'billingAccounts.accountNumber' }])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.select([
+      builder.distinct([
         'chargeVersions.id',
         'chargeVersions.scheme',
         'chargeVersions.startDate',
@@ -190,34 +168,11 @@ async function _fetch(billRunId, billingPeriod) {
     })
 }
 
-function _mergeBillingAccounts(billingAccounts, nonChargeableBillingAccounts) {
-  for (const nonChargeableBillingAccount of nonChargeableBillingAccounts) {
-    const matchingBillingAccount = billingAccounts.find((billingAccount) => {
-      return billingAccount.id === nonChargeableBillingAccount.id
-    })
-
-    // If we have a match, we take the mock charge version and add it to the matching billing account. Because of how
-    // the query in FetchNonChargeableBillingAccountsService is written, we'll never encounter a matching billing
-    // account that also has a matching licence (represented as a charge version).
-    if (matchingBillingAccount) {
-      matchingBillingAccount.chargeVersions.push(...nonChargeableBillingAccount.chargeVersions)
-
-      continue
-    }
-
-    // If its not a match, we can just add it to the existing list
-    billingAccounts.push(nonChargeableBillingAccount)
-  }
-}
-
 function _whereClauseForChargeVersions(query, billRunId, billingPeriod) {
   return query
     .innerJoin('licenceSupplementaryYears', 'licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .where((builder) => {
-      builder.whereNull('chargeVersions.endDate').orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
-    })
     .where('licenceSupplementaryYears.billRunId', billRunId)
 }
 

@@ -14,6 +14,18 @@ const config = require('../../../config/notify.config.js')
  *
  * https://docs.notifications.service.gov.uk/node.html#get-message-status
  *
+ * > GOV.UK Notify has a retention period of 7 days. Whilst out system should not be checking statuses past this date it
+ * is technically possible to receive a status update where notification id does not exist:
+ *
+ * ```javascript
+ * [{
+ *  "error": "ValidationError",
+ *  "message": "id is not a valid UUID"
+ * }]
+ * ```
+ *
+ * https://docs.notifications.service.gov.uk/node.html#get-the-status-of-one-message-error-codes
+ *
  * @param {string} notificationId
  *
  * @returns {Promise<object>}

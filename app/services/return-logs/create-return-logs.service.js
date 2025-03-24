@@ -15,12 +15,13 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  *
  * @param {module:ReturnRequirementModel} returnRequirement - the return requirement to generate return logs for
  * @param {module:ReturnCycleModel} returnCycle - the return cycle to generate return logs against
+ * @param {Date} licenceEndDate - the licence end date if there is one
  *
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
-async function go(returnRequirement, returnCycle) {
+async function go(returnRequirement, returnCycle, licenceEndDate) {
   try {
-    const returnLogs = _generateReturnLogs(returnRequirement, returnCycle)
+    const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
     await _persistReturnLogs(returnLogs)
 
@@ -42,7 +43,7 @@ async function go(returnRequirement, returnCycle) {
  *
  * @private
  */
-function _generateReturnLogs(returnRequirement, returnCycle) {
+function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = null) {
   const isQuarterlyReturn = returnRequirement.returnVersion.quarterlyReturns
   const returnLogs = []
 
@@ -53,8 +54,10 @@ function _generateReturnLogs(returnRequirement, returnCycle) {
       const startDateInPeriod = returnRequirement.returnVersion.startDate <= period.endDate
       const endDateInPeriod = returnRequirement.returnVersion.endDate >= period.startDate
       const endDateIsNull = returnRequirement.returnVersion.endDate === null
+      const licenceEndDateIsNull = licenceEndDate === null
+      const licenceEndDateInPeriod = licenceEndDate > period.startDate
 
-      return startDateInPeriod && (endDateInPeriod || endDateIsNull)
+      return startDateInPeriod && (endDateInPeriod || endDateIsNull) && (licenceEndDateIsNull || licenceEndDateInPeriod)
     })
 
     for (const quarterlyReturnPeriod of periodsToProcess) {

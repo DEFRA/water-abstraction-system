@@ -101,7 +101,7 @@ describe('View Return Log presenter', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.actionButton).to.equal({
-          href: `/return/internal?returnId=${testReturnLog.id}`,
+          value: testReturnLog.id,
           text: 'Edit return'
         })
       })
@@ -117,7 +117,7 @@ describe('View Return Log presenter', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.actionButton).to.equal({
-          href: `/system/return-logs/setup?returnLogId=${testReturnLog.id}`,
+          value: testReturnLog.id,
           text: 'Submit return'
         })
       })

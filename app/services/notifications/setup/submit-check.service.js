@@ -21,23 +21,22 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  * @param {string} sessionId - The UUID for the notification setup session record
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
+ * @returns {Promise<string>} - the created eventId
  */
 async function go(sessionId, auth) {
-  try {
-    const startTime = currentTimeInNanoseconds()
+  const session = await SessionModel.query().findById(sessionId)
 
-    const session = await SessionModel.query().findById(sessionId)
+  const recipients = await _recipients(session)
 
-    const recipients = await _recipients(session)
+  const event = await _event(session, recipients, auth)
 
-    const { id: eventId } = await _event(session, recipients, auth)
+  const { determinedReturnsPeriod, referenceCode, journey } = session
 
-    await _notifications(session, recipients, eventId)
+  await session.$query().delete()
 
-    calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
-  } catch (error) {
-    global.GlobalNotifier.omfg('Send notifications failed', { sessionId }, error)
-  }
+  _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, event)
+
+  return event.id
 }
 
 async function _event(session, recipients, auth) {
@@ -46,14 +45,16 @@ async function _event(session, recipients, auth) {
   return CreateEventService.go(event)
 }
 
-async function _notifications(session, recipients, eventId) {
-  return BatchNotificationsService.go(
-    recipients,
-    session.determinedReturnsPeriod,
-    session.referenceCode,
-    session.journey,
-    eventId
-  )
+async function _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, event) {
+  try {
+    const startTime = currentTimeInNanoseconds()
+
+    await BatchNotificationsService.go(recipients, determinedReturnsPeriod, referenceCode, journey, event.id)
+
+    calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
+  } catch (error) {
+    global.GlobalNotifier.omfg('Send notifications failed', { event }, error)
+  }
 }
 
 async function _recipients(session) {
