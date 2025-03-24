@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,6 +28,10 @@ describe('Return Logs Setup - Submit Confirmed service', () => {
     returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
 
     Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a user submits the confirmed return to be marked for supplementary billing', () => {
