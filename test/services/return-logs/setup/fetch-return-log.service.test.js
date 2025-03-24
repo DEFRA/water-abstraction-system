@@ -57,7 +57,8 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
         purposes: returnLog.metadata.purposes,
-        siteDescription: returnLog.metadata.description
+        siteDescription: returnLog.metadata.description,
+        status: returnLog.status
       })
     })
   })

@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches return log data needed for the confirm-received view
- * @module FetchConfirmReceivedService
+ * Fetches return log data needed for the confirmed view
+ * @module FetchReturnLogService
  */
 
 const { ref } = require('objection')
@@ -10,7 +10,7 @@ const { ref } = require('objection')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Fetches return log data needed for the confirm-received view
+ * Fetches return log data needed for the confirmed view
  *
  * @param {string} returnLogId - The UUID of the return log to be fetched
  *
@@ -25,7 +25,6 @@ async function go(returnLogId) {
       'returnLogs.id as returnLogId',
       'returnLogs.returnReference',
       'returnLogs.status',
-      'returnLogs.id',
       ref('returnLogs.metadata:purposes').as('purposes'),
       ref('returnLogs.metadata:description').as('siteDescription')
     )
