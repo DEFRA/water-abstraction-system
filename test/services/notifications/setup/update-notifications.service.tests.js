@@ -130,32 +130,6 @@ describe('Notifications Setup - Update Notifications service', () => {
         status: 'sent',
         statusChecks: null
       })
-
-      const result2 = await scheduledNotification2.$query()
-
-      expect(result2).to.equal({
-        companyId: null,
-        createdAt: new Date(scheduledNotification2.createdAt),
-        eventId,
-        id: scheduledNotification2.id,
-        individualId: null,
-        jobId: null,
-        licences: null,
-        log: null,
-        messageRef: null,
-        messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
-        notifyId: null,
-        notifyStatus: null,
-        personalisation: null,
-        plaintext: null,
-        recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
-      })
     })
 
     it('updates the second notification', async () => {
