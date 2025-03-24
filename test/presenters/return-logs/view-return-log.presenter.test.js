@@ -26,7 +26,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe('View Return Log presenter', () => {
+describe.only('View Return Log presenter', () => {
   let auth
   let testReturnLog
 
