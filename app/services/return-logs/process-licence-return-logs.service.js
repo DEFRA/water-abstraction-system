@@ -104,7 +104,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
     // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
     for (const returnRequirement of requirementsToProcess) {
-      const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+      const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
 
       generatedReturnLogIds.push(...returnLogIds)
     }
