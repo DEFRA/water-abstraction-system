@@ -29,6 +29,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/confirmed',
+    options: {
+      handler: ReturnLogsSetupController.confirmed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/confirmed',
+    options: {
+      handler: ReturnLogsSetupController.submitConfirmed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/guidance',
     options: {
       handler: ReturnLogsSetupController.guidance,
