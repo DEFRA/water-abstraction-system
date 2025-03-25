@@ -20,6 +20,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
       returnReference: '10032788',
       status: 'received',
+      submissionCount: 0,
       purposes: [
         {
           alias: 'SPRAY IRRIGATION',
@@ -74,10 +75,23 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
         returnLog.status = 'completed'
       })
 
-      it('returns pageTitle as "Return submitted"', () => {
-        const result = ConfirmedPresenter.go(returnLog)
+      describe('and has 1 return submission', () => {
+        it('returns pageTitle as "Return submitted"', () => {
+          const result = ConfirmedPresenter.go(returnLog)
 
-        expect(result.pageTitle).to.equal('Return 10032788 submitted')
+          expect(result.pageTitle).to.equal('Return 10032788 submitted')
+        })
+      })
+
+      describe('and has more than 1 return submission', () => {
+        beforeEach(() => {
+          returnLog.submissionCount = 2
+        })
+        it('returns pageTitle as "Return edited"', () => {
+          const result = ConfirmedPresenter.go(returnLog)
+
+          expect(result.pageTitle).to.equal('Return 10032788 edited')
+        })
       })
     })
   })
