@@ -1,0 +1,40 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set panelContent %}
+  <div class="govuk-panel__body govuk-!-font-size-24">
+      Licence number <strong>{{ licenceRef }}</strong>
+  </div>
+  <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+    Site description <strong>{{ siteDescription }}</strong>
+  </div>
+  <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+    {{ purposeDetails.label }} <strong> {{ purposeDetails.value }}</strong>
+  </div>
+{% endset %}
+
+{% block content %}
+  {{ govukPanel({
+    titleText: pageTitle,
+    html: panelContent
+  }) }}
+
+  {% if status === 'received' %}
+    <div>
+      <a class="govuk-body" href="/system/licences/{{ licenceId }}/returns">View returns for {{ licenceRef }}</a>
+    </div>
+  {% else %}
+    <p class="govuk-body"><a href="/system/return-logs?id={{ returnLogId }}" + returnLogId class="govuk-link">View this return</a></p>
+    <p class="govuk-body">or</p>
+
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukButton({
+      text: "Mark for supplementary bill run",
+      preventDoubleClick: true
+    }) }}
+    </form>
+  {% endif %}
+{% endblock %}
