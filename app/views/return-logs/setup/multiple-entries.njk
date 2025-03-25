@@ -1,0 +1,67 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.text,
+          href: '#multiple-entries'
+        }
+      ]
+    }) }}
+  {% endif %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {# Main heading #}
+      <div>
+        <h1 class="govuk-label-wrapper">
+          <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+          <label class="govuk-label govuk-label--xl">{{ pageTitle }}</label>
+        </h1>
+        <div class="govuk-hint">
+          <p>Enter {{lineCount}} {{frequency}} {{measurementType}} starting with {{ startDate }} and ending with {{ endDate }}.</p>
+          <p>Copy and paste the values into the empty box.</p>
+          <p class="govuk-body">
+            <a href="/system/return-logs/setup/guidance" class="govuk-link" rel="noreferrer noopener" target="_blank">Help to enter multiple values (opens in a new tab)</a>
+          </p>
+        </div>
+      </div>
+
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        <div class="govuk-body">
+          {{ govukTextarea({
+            name: "multipleEntries",
+            id: "multiple-entries",
+            value: multipleEntries,
+            rows: "5",
+            errorMessage: {
+              text: error.text
+            } if error
+          }) }}
+
+          {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
+        </div>
+      </form>
+  </div>
+</div>
+{% endblock %}
