@@ -14,7 +14,7 @@ const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-
 // Thing under test
 const FetchEventNotificationsService = require('../../../../app/services/jobs/notifications/fetch-event-notifications.service.js')
 
-describe('Notifications Setup - Ad Hoc Licence service', () => {
+describe('Job - Notifications - Fetch event notifications service', () => {
   let event
   let scheduledNotification
 
