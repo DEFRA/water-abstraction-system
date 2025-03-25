@@ -13,7 +13,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  *
  * @param {string} returnId - The UUID of the return log
  *
- * @returns {string} The licenceId to use in the redirect
+ * @returns {Promise<string>} The licenceId to use in the redirect
  */
 async function go(returnId) {
   const { licenceId } = await ReturnLogModel.query()

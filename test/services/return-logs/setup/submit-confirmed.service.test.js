@@ -21,13 +21,14 @@ const SubmitConfirmedService = require('../../../../app/services/return-logs/set
 describe('Return Logs Setup - Submit Confirmed service', () => {
   let licence
   let returnLog
+  let ProcessBillingFlagServiceStub
 
   beforeEach(async () => {
     licence = await LicenceHelper.add()
 
     returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
 
-    Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    ProcessBillingFlagServiceStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -44,7 +45,7 @@ describe('Return Logs Setup - Submit Confirmed service', () => {
     it('sends the return to be processed by the "processBillingFlagsService"', async () => {
       await SubmitConfirmedService.go(returnLog.id)
 
-      expect(ProcessBillingFlagService.called).to.be.true()
+      expect(ProcessBillingFlagServiceStub.called).to.be.true()
     })
   })
 })
