@@ -5,6 +5,8 @@
     {% set color = 'govuk-tag--orange' %}
   {% elif status === 'void' %}
     {% set color = 'govuk-tag--grey' %}
+  {% elif status === 'not due yet' %}
+    {% set color = 'govuk-tag--grey' %}
   {% elif status === 'due' %}
     {% set color = 'govuk-tag--blue' %}
   {% elif status === 'received' %}
