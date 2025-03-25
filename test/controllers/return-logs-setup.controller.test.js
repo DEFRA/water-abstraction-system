@@ -14,7 +14,7 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const CancelService = require('../../app/services/return-logs/setup/cancel.service.js')
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
-const ConfirmReceivedService = require('../../app/services/return-logs/setup/confirm-received.service.js')
+const ConfirmedService = require('../../app/services/return-logs/setup/confirmed.service.js')
 const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
@@ -28,6 +28,7 @@ const SingleVolumeService = require('../../app/services/return-logs/setup/single
 const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
+const SubmitConfirmedService = require('../../app/services/return-logs/setup/submit-confirmed.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitMultipleEntriesService = require('../../app/services/return-logs/setup/submit-multiple-entries.service.js')
@@ -87,12 +88,12 @@ describe('Return Logs - Setup - Controller', () => {
     })
   })
 
-  describe('return-logs/setup/confirm-received', () => {
+  describe('return-logs/setup/confirmed', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/return-logs/setup/confirm-received?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+          url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -102,16 +103,18 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ConfirmReceivedService, 'go').resolves({
+          Sinon.stub(ConfirmedService, 'go').resolves({
             activeNavBar: 'search',
             licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
             licenceRef: '01/117',
+            returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
             pageTitle: 'Return 10032788 received',
             purposeDetails: {
               label: 'Purpose',
               value: 'Spray Irrigation - Direct'
             },
-            siteDescription: 'Addington Sandpits'
+            siteDescription: 'Addington Sandpits',
+            status: 'received'
           })
         })
 
@@ -121,6 +124,32 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Return 10032788 received')
           expect(response.payload).to.contain('View returns for 01/117')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          options = {
+            method: 'POST',
+            url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+
+          Sinon.stub(SubmitConfirmedService, 'go').resolves('91aff99a-3204-4727-86bd-7bdf3ef24533')
+        })
+
+        it('redirects to the licence returns page', async () => {
+          const response = await server.inject(
+            postRequestOptions('/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12')
+          )
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns')
         })
       })
     })
