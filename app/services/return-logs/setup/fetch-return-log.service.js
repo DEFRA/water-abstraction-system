@@ -26,7 +26,8 @@ async function go(returnLogId) {
       'returnLogs.returnReference',
       'returnLogs.status',
       ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:description').as('siteDescription')
+      ref('returnLogs.metadata:description').as('siteDescription'),
+      ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
     )
     .innerJoinRelated('licence')
     .where('returnLogs.id', returnLogId)
