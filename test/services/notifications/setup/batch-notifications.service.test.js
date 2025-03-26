@@ -378,7 +378,7 @@ describe('Notifications Setup - Batch notifications service', () => {
       expect(updatedResult.metadata.error).to.equal(1)
 
       expect(updatedResult).to.equal({
-        createdAt: updatedResult.createdAt,
+        createdAt: event.createdAt,
         entities: null,
         id: eventId,
         issuer: 'test.user@defra.gov.uk',
