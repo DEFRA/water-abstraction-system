@@ -27,6 +27,7 @@ describe('Notifications Setup - Batch notifications service', () => {
   const referenceCode = 'RINV-123'
 
   let determinedReturnsPeriod
+  let event
   let eventId
   let journey
   let recipients
@@ -54,7 +55,7 @@ describe('Notifications Setup - Batch notifications service', () => {
 
     testRecipients = [...Object.values(recipients)]
 
-    const event = await EventHelper.add({
+    event = await EventHelper.add({
       type: 'notification',
       subtype: 'returnsInvitation',
       referenceCode,
