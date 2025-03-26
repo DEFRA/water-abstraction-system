@@ -12,6 +12,7 @@ const NotifyEmailService = require('../../notify/notify-email.service.js')
 const NotifyLetterService = require('../../notify/notify-letter.service.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
 const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
+const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
 
@@ -38,13 +39,19 @@ const NotifyConfig = require('../../../../config/notify.config.js')
 async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
   const { batchSize, delay } = NotifyConfig
 
+  let error = 0
+
   for (let i = 0; i < recipients.length; i += batchSize) {
     const batchRecipients = recipients.slice(i, i + batchSize)
 
-    await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+    const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
     await _delay(delay)
+
+    error += batch.error
   }
+
+  await UpdateEventService.go(eventId, error)
 }
 
 async function _batch(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
@@ -63,7 +70,6 @@ async function _batch(recipients, determinedReturnsPeriod, referenceCode, journe
   await CreateNotificationsService.go(sentNotifications)
 
   return {
-    sent: sentNotifications.length,
     error: _errorCount(sentNotifications)
   }
 }
