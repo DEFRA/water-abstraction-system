@@ -15,8 +15,9 @@ const EventModel = require('../../../../app/models/event.model.js')
 const UpdateEventService = require('../../../../app/services/notifications/setup/update-event.service.js')
 
 describe('Notifications Setup - Update event service', () => {
-  let event
   const errorCount = 5
+  
+  let event
 
   beforeEach(async () => {
     event = await EventHelper.add({
