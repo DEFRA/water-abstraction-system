@@ -3,6 +3,8 @@
 const { formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Converts a quantity from a given unit to cubic metres and formats it
  *
@@ -44,8 +46,9 @@ function formatMeterDetails(meter) {
 /**
  * Formats the status for a return log, adjusting for specific conditions.
  *
- * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due' and the due
- * date has passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
+ * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due', but there are
+ * 28 days before the returns due date, it will display 'not due yet'. If the status is 'due' and the due date has
+ * passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
  *
  * @param {module:ReturnLogModel} returnLog - The return log containing status and due date information
  *
@@ -67,8 +70,22 @@ function formatStatus(returnLog) {
   // 'today' would be flagged as overdue when it is still due (just!)
   today.setHours(0, 0, 0, 0)
 
-  if (status === 'due' && dueDate < today) {
-    return 'overdue'
+  if (status === 'due') {
+    if (dueDate < today) {
+      return 'overdue'
+    }
+
+    // A return is considered "due" for 28 days, starting 28 days before the due date
+    // Any date before this period should be marked as "not due yet"
+    const notDueUntil = new Date(dueDate)
+
+    // Calculate the start of the "due" period, which begins 27 days before the due date
+    notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
+
+    // If today is before the "due" period starts, the return is "not due yet"
+    if (today < notDueUntil) {
+      return 'not due yet'
+    }
   }
 
   // For all other cases we can just return the status and the return-status-tag macro will know how to display it

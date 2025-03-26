@@ -5,6 +5,8 @@
  * @module EventModel
  */
 
+const { Model } = require('objection')
+
 const BaseModel = require('./base.model.js')
 const { Model } = require('objection')
 

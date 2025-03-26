@@ -63,10 +63,12 @@ describe('Fetch Return Submission service', () => {
       expect(result.metadata.units).to.equal('Ml')
     })
 
-    it('includes the return log id used for the back link', async () => {
+    it('includes the return log id, submission version and current version used for the back link', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
 
       expect(result.returnLogId).to.equal(testReturnSubmission.returnLogId)
+      expect(result.version).to.equal(testReturnSubmission.version)
+      expect(result.current).to.equal(testReturnSubmission.current)
     })
 
     it('includes the linked return submission lines, ordered by start date', async () => {
