@@ -14,11 +14,12 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const CancelService = require('../../app/services/return-logs/setup/cancel.service.js')
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
-const ConfirmReceivedService = require('../../app/services/return-logs/setup/confirm-received.service.js')
+const ConfirmedService = require('../../app/services/return-logs/setup/confirmed.service.js')
 const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
+const MultipleEntriesService = require('../../app/services/return-logs/setup/multiple-entries.service.js')
 const NoteService = require('../../app/services/return-logs/setup/note.service.js')
 const PeriodUsedService = require('../../app/services/return-logs/setup/period-used.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
@@ -27,8 +28,10 @@ const SingleVolumeService = require('../../app/services/return-logs/setup/single
 const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
+const SubmitConfirmedService = require('../../app/services/return-logs/setup/submit-confirmed.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
+const SubmitMultipleEntriesService = require('../../app/services/return-logs/setup/submit-multiple-entries.service.js')
 const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
 const SubmitPeriodUsedService = require('../../app/services/return-logs/setup/submit-period-used.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
@@ -85,12 +88,12 @@ describe('Return Logs - Setup - Controller', () => {
     })
   })
 
-  describe('return-logs/setup/confirm-received', () => {
+  describe('return-logs/setup/confirmed', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/return-logs/setup/confirm-received?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+          url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -100,16 +103,18 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ConfirmReceivedService, 'go').resolves({
+          Sinon.stub(ConfirmedService, 'go').resolves({
             activeNavBar: 'search',
             licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
             licenceRef: '01/117',
+            returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
             pageTitle: 'Return 10032788 received',
             purposeDetails: {
               label: 'Purpose',
               value: 'Spray Irrigation - Direct'
             },
-            siteDescription: 'Addington Sandpits'
+            siteDescription: 'Addington Sandpits',
+            status: 'received'
           })
         })
 
@@ -119,6 +124,32 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Return 10032788 received')
           expect(response.payload).to.contain('View returns for 01/117')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          options = {
+            method: 'POST',
+            url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+
+          Sinon.stub(SubmitConfirmedService, 'go').resolves('91aff99a-3204-4727-86bd-7bdf3ef24533')
+        })
+
+        it('redirects to the licence returns page', async () => {
+          const response = await server.inject(
+            postRequestOptions('/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12')
+          )
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns')
         })
       })
     })
@@ -910,6 +941,66 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select if meter details have been provided')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/multiple-entries', () => {
+    beforeEach(() => {
+      path = 'multiple-entries'
+    })
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(MultipleEntriesService, 'go').resolves({
+            sessionId,
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'Enter multiple daily volumes'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter multiple daily volumes')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({
+              error: { text: 'Enter 12 daily volumes' },
+              pageTitle: 'Enter multiple daily volumes',
+              sessionId
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Enter 12 daily volumes')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

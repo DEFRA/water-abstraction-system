@@ -17,9 +17,21 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/confirm-received',
+    path: '/return-logs/setup/confirmed',
     options: {
-      handler: ReturnLogsSetupController.confirmReceived,
+      handler: ReturnLogsSetupController.confirmed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/confirmed',
+    options: {
+      handler: ReturnLogsSetupController.submitConfirmed,
       auth: {
         access: {
           scope: ['billing']
@@ -320,6 +332,30 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/units',
     options: {
       handler: ReturnLogsSetupController.submitUnits,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.multipleEntries,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/multiple-entries',
+    options: {
+      handler: ReturnLogsSetupController.submitMultipleEntries,
       auth: {
         access: {
           scope: ['billing']
