@@ -38,7 +38,7 @@ describe('Notifications Setup - Update event service', () => {
     expect(updatedResult.metadata.error).to.equal(errorCount)
 
     expect(updatedResult).equal({
-      createdAt: updatedResult.createdAt,
+      createdAt: event.createdAt,
       entities: null,
       id: event.id,
       issuer: 'test.user@defra.gov.uk',
