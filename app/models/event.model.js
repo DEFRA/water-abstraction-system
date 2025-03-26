@@ -8,7 +8,6 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
-const { Model } = require('objection')
 
 class EventModel extends BaseModel {
   static get tableName() {

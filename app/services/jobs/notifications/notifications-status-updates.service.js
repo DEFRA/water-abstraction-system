@@ -9,6 +9,7 @@ const FetchService = require('./fetch-event-notifications.service.js')
 const NotifyStatusPresenter = require('../../../presenters/notifications/setup/notify-status.presenter.js')
 const NotifyStatusService = require('../../notify/notify-status.service.js')
 const UpdateNotificationsService = require('../../notifications/setup/update-notifications.service.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Updates the statuses of notifications
@@ -24,21 +25,23 @@ async function go() {
 async function _processEvent(event) {
   const notifications = []
 
-  // we can batch this here
   for (const scheduledNotification of event.scheduledNotifications) {
     const notifyResponse = await NotifyStatusService.go(scheduledNotification.notifyId)
-    const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, scheduledNotification)
 
-    // use status top be explicit - notifyResponse
-    if (notifyStatus.status) {
+    if (!notifyResponse.errors) {
+      const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, scheduledNotification)
+
       notifications.push({
         ...notifyStatus,
-        id: scheduledNotification.id
+        id: scheduledNotification.id,
+        createdAt: timestampForPostgres()
       })
     }
   }
 
-  await UpdateNotificationsService.go(notifications)
+  if (notifications.length > 0) {
+    await UpdateNotificationsService.go(notifications)
+  }
 }
 
 module.exports = {

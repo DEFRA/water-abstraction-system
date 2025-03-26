@@ -18,6 +18,7 @@ const ScheduledNotificationModel = require('../../../../app/models/scheduled-not
  *
  */
 async function go(notifications) {
+  // update update at ?
   await ScheduledNotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
 }
 
