@@ -33,10 +33,50 @@ describe('View Return Submissions presenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    it('returns the expected result', () => {
-      const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+    describe('when the return submission is the current version', () => {
+      it('returns the expected result', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-      expect(result.backLink).to.equal(`/system/return-logs?id=${testReturnSubmission.returnLogId}`)
+        expect(result.backLink).to.equal(`/system/return-logs?id=${testReturnSubmission.returnLogId}`)
+      })
+    })
+
+    describe('when the return submission is a previous version', () => {
+      beforeEach(() => {
+        testReturnSubmission = _createSubmission({ version: 2, current: false })
+      })
+
+      it('returns the expected result', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        expect(result.backLink).to.equal(
+          `/system/return-logs?id=${testReturnSubmission.returnLogId}&version=${testReturnSubmission.version}`
+        )
+      })
+    })
+  })
+
+  describe('the "backLinkText" property', () => {
+    describe('when the return submission is the current version', () => {
+      it('returns the expected result', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        expect(result.backLinkText).to.equal(`Go back to return ${testReturnSubmission.returnLog.returnReference}`)
+      })
+    })
+
+    describe('when the return submission is a previous version', () => {
+      beforeEach(() => {
+        testReturnSubmission = _createSubmission({ version: 2, current: false })
+      })
+
+      it('returns the expected result', () => {
+        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+
+        expect(result.backLinkText).to.equal(
+          `Go back to return ${testReturnSubmission.returnLog.returnReference} version ${testReturnSubmission.version}`
+        )
+      })
     })
   })
 
@@ -290,8 +330,14 @@ function _createInstance(model, helper, data = {}) {
   })
 }
 
-function _createSubmission({ userUnit = unitNames.CUBIC_METRES, readings = false, returnsFrequency = 'day' } = {}) {
-  const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper)
+function _createSubmission({
+  userUnit = unitNames.CUBIC_METRES,
+  readings = false,
+  returnsFrequency = 'day',
+  version = 1,
+  current = true
+} = {}) {
+  const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { version, current })
 
   testReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper, { returnsFrequency })
 

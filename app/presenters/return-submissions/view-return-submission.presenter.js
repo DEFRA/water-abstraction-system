@@ -30,6 +30,7 @@ function go(returnSubmission, yearMonth) {
 
   return {
     backLink: _backLink(returnSubmission),
+    backLinkText: _backLinkText(returnSubmission),
     displayReadings: method !== 'abstractionVolumes',
     displayUnits: units !== unitNames.CUBIC_METRES,
     pageTitle: _pageTitle(requestedMonthLines[0].endDate),
@@ -39,7 +40,19 @@ function go(returnSubmission, yearMonth) {
 }
 
 function _backLink(returnSubmission) {
-  return `/system/return-logs?id=${returnSubmission.returnLogId}`
+  if (returnSubmission.current) {
+    return `/system/return-logs?id=${returnSubmission.returnLogId}`
+  }
+
+  return `/system/return-logs?id=${returnSubmission.returnLogId}&version=${returnSubmission.version}`
+}
+
+function _backLinkText(returnSubmission) {
+  if (returnSubmission.current) {
+    return `Go back to return ${returnSubmission.returnLog.returnReference}`
+  }
+
+  return `Go back to return ${returnSubmission.returnLog.returnReference} version ${returnSubmission.version}`
 }
 
 function _determineRequestedYearAndMonth(yearMonth) {
