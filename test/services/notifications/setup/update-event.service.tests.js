@@ -16,7 +16,7 @@ const UpdateEventService = require('../../../../app/services/notifications/setup
 
 describe('Notifications Setup - Update event service', () => {
   const errorCount = 5
-  
+
   let event
 
   beforeEach(async () => {

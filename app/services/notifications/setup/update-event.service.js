@@ -6,6 +6,7 @@
  */
 
 const EventModel = require('../../../../app/models/event.model.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Update the 'metadata.error' field for a specific event.
@@ -26,7 +27,8 @@ async function go(id, errorCount) {
   await EventModel.query()
     .findById(id)
     .patch({
-      metadata: EventModel.raw('jsonb_set(metadata, ?, ?)', [`{error}`, JSON.stringify(errorCount)])
+      metadata: EventModel.raw('jsonb_set(metadata, ?, ?)', [`{error}`, JSON.stringify(errorCount)]),
+      updatedAt: timestampForPostgres()
     })
 }
 
