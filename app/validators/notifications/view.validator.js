@@ -23,21 +23,23 @@ function go(filters) {
   const hasFromDate = sentFromDay || sentFromMonth || sentFromYear
   const hasToDate = sentToDay || sentToMonth || sentToYear
   const hasSentBy = !!sentBy
-
+  console.log(sentFromYear)
   const fields = {
     ...(hasFromDate && { fromFullDate: _fullDate(sentFromDay, sentFromMonth, sentFromYear) }),
     ...(hasToDate && { toFullDate: _fullDate(sentToDay, sentToMonth, sentToYear) }),
     ...(hasSentBy && { sentBy })
   }
-  // console.log(dates)
+  console.log(fields)
   return _validate(fields)
 }
 
 function _fullDate(day, month, year) {
-  // console.log('day: ' + day)
-  const paddedMonth = month ? leftPadZeroes(month, 2) : ''
+  if (year === undefined || year === null || year === '') {
+    return new Date('Invalid Date')
+  }
+
+  const paddedMonth = month ? leftPadZeroes(month, 2) : null
   const paddedDay = day ? leftPadZeroes(day, 2) : null
-  // console.log('paddedDay: ' + paddedDay)
   return new Date(`${year}-${paddedMonth}-${paddedDay}`)
 }
 
