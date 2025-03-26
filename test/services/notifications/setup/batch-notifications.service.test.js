@@ -373,7 +373,7 @@ describe('Notifications Setup - Batch notifications service', () => {
     it('should update the "event.metadata.error"', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-      const updatedResult = await EventModel.query().where('id', eventId).first()
+      const updatedResult = await EventModel.query().findById(eventId)
 
       expect(updatedResult.metadata.error).to.equal(1)
 
