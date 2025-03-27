@@ -19,6 +19,7 @@ describe('Job - Notifications - Fetch event notifications service', () => {
   let scheduledNotification
   let unlikelyEvent
   let unlikelyEvent2
+  let olderThanRetentionEvent
 
   beforeEach(async () => {
     event = await EventHelper.add({
@@ -51,6 +52,22 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     await ScheduledNotificationHelper.add({
       eventId: unlikelyEvent2.id,
       status: 'error'
+    })
+
+    // An event that is valid but is older than 7 days (notify retention period)
+    const today = new Date()
+    const eightDaysAgo = new Date()
+    eightDaysAgo.setDate(today.getDate() - 8)
+
+    olderThanRetentionEvent = await EventHelper.add({
+      status: 'completed',
+      type: 'notification',
+      createdAt: eightDaysAgo
+    })
+
+    await ScheduledNotificationHelper.add({
+      eventId: olderThanRetentionEvent.id,
+      status: 'sending'
     })
   })
 
@@ -90,6 +107,16 @@ describe('Job - Notifications - Fetch event notifications service', () => {
       const result = await FetchEventNotificationsService.go()
 
       const foundEvent = result.find((resultEvent) => resultEvent.id === unlikelyEvent2.id)
+
+      expect(foundEvent).to.be.undefined()
+    })
+  })
+
+  describe('and the scheduled notification is older than 7 days', () => {
+    it('does not return the event', async () => {
+      const result = await FetchEventNotificationsService.go()
+
+      const foundEvent = result.find((resultEvent) => resultEvent.id === olderThanRetentionEvent.id)
 
       expect(foundEvent).to.be.undefined()
     })
