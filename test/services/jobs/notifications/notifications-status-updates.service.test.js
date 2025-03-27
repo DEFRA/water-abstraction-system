@@ -23,6 +23,7 @@ const ProcessNotificationsStatusUpdatesService = require('../../../../app/servic
 
 describe('Job - Notifications - Process notifications status updates service', () => {
   let event
+  let notifierStub
   let scheduledNotification
 
   beforeEach(async () => {
@@ -37,10 +38,14 @@ describe('Job - Notifications - Process notifications status updates service', (
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the status update is successful', () => {

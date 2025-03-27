@@ -57,11 +57,15 @@ async function _sendLetter(notifyClient, templateId, options) {
       statusText: response.statusText.toLowerCase()
     }
   } catch (error) {
-    return {
+    const errorDetails = {
       status: error.status,
       message: error.message,
       errors: error.response.data.errors
     }
+
+    global.GlobalNotifier.omfg('Notify send letter failed', errorDetails)
+
+    return errorDetails
   }
 }
 
