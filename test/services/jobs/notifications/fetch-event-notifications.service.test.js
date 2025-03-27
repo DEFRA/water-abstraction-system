@@ -17,6 +17,8 @@ const FetchEventNotificationsService = require('../../../../app/services/jobs/no
 describe('Job - Notifications - Fetch event notifications service', () => {
   let event
   let scheduledNotification
+  let unlikelyEvent
+  let unlikelyEvent2
 
   beforeEach(async () => {
     event = await EventHelper.add({
@@ -30,7 +32,7 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     })
 
     // An event with the wrong status but a 'scheduledNotification' status as 'sending'
-    const unlikelyEvent = await EventHelper.add({
+    unlikelyEvent = await EventHelper.add({
       type: 'notification',
       status: 'processing'
     })
@@ -41,7 +43,7 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     })
 
     // An event with the correct status but a 'scheduledNotification' status as 'error'
-    const unlikelyEvent2 = await EventHelper.add({
+    unlikelyEvent2 = await EventHelper.add({
       type: 'notification',
       status: 'completed'
     })
@@ -53,23 +55,43 @@ describe('Job - Notifications - Fetch event notifications service', () => {
   })
 
   describe('an event has "scheduledNotifications"', () => {
-    it('returns the data', async () => {
+    it('returns the event marked for "sending"', async () => {
       const result = await FetchEventNotificationsService.go()
 
-      expect(result).to.equal([
-        {
-          referenceCode: null,
-          scheduledNotifications: [
-            {
-              id: scheduledNotification.id,
-              log: null,
-              notifyId: null,
-              notifyStatus: null,
-              status: 'sending'
-            }
-          ]
-        }
-      ])
+      const foundEvent = result.find((resultEvent) => resultEvent.id === event.id)
+
+      expect(foundEvent).to.equal({
+        id: event.id,
+        scheduledNotifications: [
+          {
+            id: scheduledNotification.id,
+            log: null,
+            notifyId: null,
+            notifyStatus: null,
+            status: 'sending'
+          }
+        ]
+      })
+    })
+  })
+
+  describe('and the event status is "processing"', () => {
+    it('does not return the event', async () => {
+      const result = await FetchEventNotificationsService.go()
+
+      const foundEvent = result.find((resultEvent) => resultEvent.id === unlikelyEvent.id)
+
+      expect(foundEvent).to.be.undefined()
+    })
+  })
+
+  describe('and the scheduled notification status is "error"', () => {
+    it('does not return the event', async () => {
+      const result = await FetchEventNotificationsService.go()
+
+      const foundEvent = result.find((resultEvent) => resultEvent.id === unlikelyEvent2.id)
+
+      expect(foundEvent).to.be.undefined()
     })
   })
 })
