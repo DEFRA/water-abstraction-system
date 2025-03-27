@@ -30,6 +30,7 @@ describe('Notifications Setup - Batch notifications service', () => {
   let event
   let eventId
   let journey
+  let notifierStub
   let recipients
   let testRecipients
 
@@ -63,10 +64,14 @@ describe('Notifications Setup - Batch notifications service', () => {
     })
 
     eventId = event.id
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the batch is successful', () => {

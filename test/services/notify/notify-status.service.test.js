@@ -16,16 +16,20 @@ const { stubNotify } = require('../../../config/notify.config.js')
 const NotifyStatusService = require('../../../app/services/notify/notify-status.service.js')
 
 describe('Notify - Status service', () => {
-  let notifyStub
   let notificationId
+  let notifierStub
+  let notifyStub
 
   beforeEach(() => {
     // If you wish to test live notify replace this with a real notification id
     notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the call to "notify" is successful', () => {
