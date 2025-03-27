@@ -24,7 +24,7 @@ const EventModel = require('../../../models/event.model.js')
  */
 async function go() {
   return EventModel.query()
-    .select('id')
+    .select('referenceCode')
     .whereExists(EventModel.relatedQuery('scheduledNotifications').whereIn('status', ['sending']))
     .andWhere('status', 'completed')
     .andWhere('type', 'notification')
