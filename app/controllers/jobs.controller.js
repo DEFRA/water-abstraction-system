@@ -7,6 +7,7 @@
 
 const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
+const ProcessNotificationsStatusUpdatesService = require('../services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
@@ -32,6 +33,12 @@ async function exportDb(_request, h) {
 
 async function licenceUpdates(_request, h) {
   ProcessLicenceUpdates.go()
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
+async function notificationsStatusUpdates(_request, h) {
+  ProcessNotificationsStatusUpdatesService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -69,6 +76,7 @@ async function returnVersionMigration(request, h) {
 module.exports = {
   exportDb,
   licenceUpdates,
+  notificationsStatusUpdates,
   returnLogs,
   returnVersionMigration,
   sessionCleanup,

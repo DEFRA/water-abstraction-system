@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirm-received` page
- * @module ConfirmReceivedService
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
+ * @module ConfirmedService
  */
 
-const ConfirmReceivedPresenter = require('../../../presenters/return-logs/setup/confirm-received.presenter.js')
+const ConfirmedPresenter = require('../../../presenters/return-logs/setup/confirmed.presenter.js')
 const FetchReturnLogService = require('../../../services/return-logs/setup/fetch-return-log.service.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirm-received` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
  *
  * @param {string} returnLogId - The UUID of the return log
  *
@@ -18,7 +18,7 @@ const FetchReturnLogService = require('../../../services/return-logs/setup/fetch
 async function go(returnLogId) {
   const returnLog = await FetchReturnLogService.go(returnLogId)
 
-  const formattedData = ConfirmReceivedPresenter.go(returnLog)
+  const formattedData = ConfirmedPresenter.go(returnLog)
 
   return {
     activeNavBar: 'search',

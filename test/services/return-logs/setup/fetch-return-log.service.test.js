@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -57,7 +58,22 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
         purposes: returnLog.metadata.purposes,
-        siteDescription: returnLog.metadata.description
+        siteDescription: returnLog.metadata.description,
+        status: returnLog.status,
+        submissionCount: 0
+      })
+    })
+
+    describe('with multiple return submissions', () => {
+      before(async () => {
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 })
+      })
+
+      it('returns a count of the associated return submissions', async () => {
+        const result = await FetchReturnLogService.go(returnLog.id)
+
+        expect(result.submissionCount).to.equal(2)
       })
     })
   })
