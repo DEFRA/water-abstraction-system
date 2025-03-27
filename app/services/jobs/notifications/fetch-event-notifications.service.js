@@ -23,11 +23,16 @@ const EventModel = require('../../../models/event.model.js')
  * @returns {Promise<object[]>} - an 'event' with an array of 'scheduledNotifications'
  */
 async function go() {
+  const today = new Date()
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(today.getDate() - 7)
+
   return EventModel.query()
     .select('id')
     .whereExists(EventModel.relatedQuery('scheduledNotifications').whereIn('status', ['sending']))
     .andWhere('status', 'completed')
     .andWhere('type', 'notification')
+    .andWhere('createdAt', '>=', sevenDaysAgo)
     .withGraphFetched('scheduledNotifications')
     .modifyGraph('scheduledNotifications', (builder) => {
       builder.select(['id', 'notifyId', 'status', 'notifyStatus', 'log']).whereIn('status', ['sending'])
