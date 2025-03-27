@@ -8,6 +8,8 @@
 
 const EventModel = require('../../../models/event.model.js')
 
+const SEVEN_DAYS = 7
+
 /**
  * Fetches the scheduled notifications for events with a status of 'completed' and associated scheduled notifications
  * that have a status of 'sending'.
@@ -25,7 +27,7 @@ const EventModel = require('../../../models/event.model.js')
 async function go() {
   const today = new Date()
   const sevenDaysAgo = new Date()
-  sevenDaysAgo.setDate(today.getDate() - 7)
+  sevenDaysAgo.setDate(today.getDate() - SEVEN_DAYS)
 
   return EventModel.query()
     .select('id')
