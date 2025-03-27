@@ -23,6 +23,7 @@ describe('Notify - Status service', () => {
   beforeEach(() => {
     // If you wish to test live notify replace this with a real notification id
     notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
+
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
   })
