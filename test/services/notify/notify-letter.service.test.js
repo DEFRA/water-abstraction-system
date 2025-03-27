@@ -17,6 +17,7 @@ const { stubNotify } = require('../../../config/notify.config.js')
 const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
 
 describe('Notify - Letter service', () => {
+  let notifierStub
   let notifyStub
   let options
   let templateId
@@ -38,10 +39,14 @@ describe('Notify - Letter service', () => {
     }
 
     templateId = notifyTemplates.returns.invitations.licenceHolderLetter
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the call to "notify" is successful', () => {

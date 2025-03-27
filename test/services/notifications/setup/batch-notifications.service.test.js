@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
+const EventModel = require('../../../../app/models/event.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
@@ -26,8 +27,10 @@ describe('Notifications Setup - Batch notifications service', () => {
   const referenceCode = 'RINV-123'
 
   let determinedReturnsPeriod
+  let event
   let eventId
   let journey
+  let notifierStub
   let recipients
   let testRecipients
 
@@ -53,17 +56,22 @@ describe('Notifications Setup - Batch notifications service', () => {
 
     testRecipients = [...Object.values(recipients)]
 
-    const event = await EventHelper.add({
+    event = await EventHelper.add({
       type: 'notification',
       subtype: 'returnsInvitation',
-      referenceCode
+      referenceCode,
+      metadata: {}
     })
 
     eventId = event.id
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the batch is successful', () => {
@@ -366,6 +374,30 @@ describe('Notifications Setup - Batch notifications service', () => {
           createdAt: result[1].createdAt
         }
       ])
+    })
+
+    it('should update the "event.metadata.error"', async () => {
+      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+
+      const updatedResult = await EventModel.query().findById(eventId)
+
+      expect(updatedResult.metadata.error).to.equal(1)
+
+      expect(updatedResult).to.equal({
+        createdAt: event.createdAt,
+        entities: null,
+        id: eventId,
+        issuer: 'test.user@defra.gov.uk',
+        licences: null,
+        metadata: {
+          error: 1
+        },
+        referenceCode: 'RINV-123',
+        status: 'start',
+        subtype: 'returnsInvitation',
+        type: 'notification',
+        updatedAt: updatedResult.updatedAt
+      })
     })
   })
 })

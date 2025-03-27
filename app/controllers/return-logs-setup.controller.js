@@ -7,7 +7,7 @@
 
 const CancelService = require('../services/return-logs/setup/cancel.service.js')
 const CheckService = require('../services/return-logs/setup/check.service.js')
-const ConfirmReceivedService = require('../services/return-logs/setup/confirm-received.service.js')
+const ConfirmedService = require('../services/return-logs/setup/confirmed.service.js')
 const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
@@ -21,6 +21,7 @@ const ReportedService = require('../services/return-logs/setup/reported.service.
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
 const StartReadingService = require('../services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
+const SubmitConfirmedService = require('../services/return-logs/setup/submit-confirmed.service.js')
 const SubmitCancelService = require('../services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
@@ -50,11 +51,11 @@ async function check(request, h) {
   return h.view('return-logs/setup/check.njk', pageData)
 }
 
-async function confirmReceived(request, h) {
+async function confirmed(request, h) {
   const { id: returnLogId } = request.query
-  const pageData = await ConfirmReceivedService.go(returnLogId)
+  const pageData = await ConfirmedService.go(returnLogId)
 
-  return h.view('return-logs/setup/confirm-received.njk', pageData)
+  return h.view('return-logs/setup/confirmed.njk', pageData)
 }
 
 async function deleteNote(request, h) {
@@ -146,6 +147,14 @@ async function submission(request, h) {
   const pageData = await SubmissionService.go(sessionId)
 
   return h.view('return-logs/setup/submission.njk', pageData)
+}
+
+async function submitConfirmed(request, h) {
+  const { id: returnLogId } = request.query
+
+  const licenceId = await SubmitConfirmedService.go(returnLogId)
+
+  return h.redirect(`/system/licences/${licenceId}/returns`)
 }
 
 async function submitCancel(request, h) {
@@ -362,7 +371,7 @@ async function submitSubmission(request, h) {
   // NOTE: If the user selected 'Record receipt' on the submission page, then we mark the return log as received, delete
   // the session, and redirect to the confirm-received page
   if (pageData.redirect === 'confirm-received') {
-    return h.redirect(`/system/return-logs/setup/confirm-received?id=${pageData.returnLogId}`)
+    return h.redirect(`/system/return-logs/setup/confirmed?id=${pageData.returnLogId}`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
@@ -398,7 +407,7 @@ async function units(request, h) {
 module.exports = {
   cancel,
   check,
-  confirmReceived,
+  confirmed,
   deleteNote,
   guidance,
   meterDetails,
@@ -412,6 +421,7 @@ module.exports = {
   singleVolume,
   startReading,
   submission,
+  submitConfirmed,
   submitCancel,
   submitMeterDetails,
   submitMeterProvided,
