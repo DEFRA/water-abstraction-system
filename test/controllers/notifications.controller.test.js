@@ -41,7 +41,7 @@ describe('Notifications controller', () => {
       beforeEach(async () => {
         options = {
           method: 'GET',
-          url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3',
+          url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
