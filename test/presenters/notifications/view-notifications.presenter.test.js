@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+
 // Thing under test
 const ViewNotificationsPresenter = require('../../../app/presenters/notifications/view-notifications.presenter.js')
 
@@ -14,7 +17,7 @@ describe('View Notifications presenter', () => {
   let testNotification
 
   before(() => {
-    testNotification = _testNotification()
+    testNotification = NotificationsFixture.notification()
   })
 
   describe('when provided with a populated notification with related event and licence data', () => {
@@ -96,47 +99,3 @@ describe('View Notifications presenter', () => {
     })
   })
 })
-
-function _testNotification() {
-  return {
-    licence: {
-      id: '136bfed6-7e14-4144-a06f-35a21ceb4aa2',
-      licenceRef: '01/117'
-    },
-    notification: {
-      messageType: 'letter',
-      personalisation: {
-        postcode: 'ME15 0NE',
-        address_line_1: 'Ferns Surfacing Limited',
-        address_line_2: 'Tutsham Farm',
-        address_line_3: 'West Farleigh',
-        address_line_4: 'Maidstone',
-        address_line_5: 'Kent'
-      },
-      plaintext:
-        'Water Resources Act 1991\n' +
-        'Our reference: HOF-UPMJ7G\n' +
-        '\n' +
-        'Dear licence holder,\n' +
-        '\n' +
-        '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n' +
-        '\n' +
-        '# Why you are receiving this notification\n' +
-        '\n',
-      sendAfter: new Date('2024-07-02T16:52:17.000Z'),
-      event: {
-        metadata: {
-          name: 'Hands off flow: levels warning',
-          batch: {
-            id: '9fbf0817-1c54-4d40-9fb8-11faa6ca07bd',
-            region: {
-              id: '89eb360d-c9fb-479a-b22e-2a40b70c089d'
-            },
-            scheme: 'sroc',
-            type: 'annual'
-          }
-        }
-      }
-    }
-  }
-}
