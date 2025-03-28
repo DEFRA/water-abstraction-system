@@ -7,7 +7,6 @@
 
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -26,13 +25,14 @@ async function go(sessionId, payload, yar, yearMonth) {
   const validationResult = Object.keys(payload).length === 0 ? null : _validate(payload)
 
   if (!validationResult) {
-    const notification = _notification(session.returnsFrequency)
-
     await _save(session, payload, yearMonth)
 
-    if (notification) {
-      yar.flash('notification', notification)
+    const notification = {
+      text: 'Readings have been updated',
+      title: 'Updated'
     }
+
+    yar.flash('notification', notification)
 
     return {}
   }
@@ -49,13 +49,6 @@ function _determineRequestedYearAndMonth(yearMonth) {
   // Splitting a string like `2014-0` by the dash gives us an array of strings ['2014', '0']. We chain `.map(Number)` to
   // then create a new array, applying the Number() function to each one. The result is an array of numbers [2014, 0].
   return yearMonth.split('-').map(Number)
-}
-
-function _notification(returnsFrequency) {
-  return {
-    text: `A ${returnRequirementFrequencies[returnsFrequency]} reading has been updated`,
-    title: 'Updated'
-  }
 }
 
 /**
