@@ -14,7 +14,7 @@ const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-
 // Thing under test
 const FetchScheduledNotificationsService = require('../../../../app/services/jobs/notifications/fetch-scheduled-notifications.service.js')
 
-describe('Job - Notifications - Fetch event notifications service', () => {
+describe('Job - Notifications - Fetch scheduled notifications service', () => {
   let event
   let scheduledNotification
   let unlikelyEvent
