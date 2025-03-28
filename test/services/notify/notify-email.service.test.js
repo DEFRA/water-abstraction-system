@@ -18,6 +18,7 @@ const NotifyEmailService = require('../../../app/services/notify/notify-email.se
 
 describe('Notify - Email service', () => {
   let emailAddress
+  let notifierStub
   let notifyStub
   let options
   let templateId
@@ -36,10 +37,14 @@ describe('Notify - Email service', () => {
     }
 
     templateId = notifyTemplates.returns.invitations.primaryUserEmail
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the call to "notify" is successful', () => {

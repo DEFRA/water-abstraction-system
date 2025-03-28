@@ -44,11 +44,15 @@ async function _statusById(notifyClient, notificationId) {
       status: response.data.status
     }
   } catch (error) {
-    return {
+    const errorDetails = {
       status: error.status,
       message: error.message,
       errors: error.response.data.errors
     }
+
+    global.GlobalNotifier.omfg('Notify status update failed', errorDetails)
+
+    return errorDetails
   }
 }
 

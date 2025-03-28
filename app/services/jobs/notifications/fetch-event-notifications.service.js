@@ -8,6 +8,8 @@
 
 const EventModel = require('../../../models/event.model.js')
 
+const SEVEN_DAYS = 7
+
 /**
  * Fetches the scheduled notifications for events with a status of 'completed' and associated scheduled notifications
  * that have a status of 'sending'.
@@ -23,11 +25,16 @@ const EventModel = require('../../../models/event.model.js')
  * @returns {Promise<object[]>} - an 'event' with an array of 'scheduledNotifications'
  */
 async function go() {
+  const today = new Date()
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(today.getDate() - SEVEN_DAYS)
+
   return EventModel.query()
-    .select('referenceCode')
+    .select('id')
     .whereExists(EventModel.relatedQuery('scheduledNotifications').whereIn('status', ['sending']))
     .andWhere('status', 'completed')
     .andWhere('type', 'notification')
+    .andWhere('createdAt', '>=', sevenDaysAgo)
     .withGraphFetched('scheduledNotifications')
     .modifyGraph('scheduledNotifications', (builder) => {
       builder.select(['id', 'notifyId', 'status', 'notifyStatus', 'log']).whereIn('status', ['sending'])
