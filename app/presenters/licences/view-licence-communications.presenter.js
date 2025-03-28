@@ -19,7 +19,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(communications) {
   return {
     communications: _communications(communications),
-    enableLicenceConditionsView: FeatureFlagsConfig.enableLicenceConditionsView
+    enableNotificationsView: FeatureFlagsConfig.enableNotificationsView
   }
 }
 
