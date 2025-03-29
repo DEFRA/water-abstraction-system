@@ -162,7 +162,9 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected headers', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          const headers = result.tableData.headers.map((header) => header.text)
+          const headers = result.tableData.headers.map((header) => {
+            return header.text
+          })
 
           expect(headers).to.equal(['Day', 'Cubic metres'])
         })
@@ -196,7 +198,9 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected headers', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          const headers = result.tableData.headers.map((header) => header.text)
+          const headers = result.tableData.headers.map((header) => {
+            return header.text
+          })
 
           expect(headers).to.equal(['Day', 'Gallons', 'Cubic metres'])
         })
@@ -231,7 +235,9 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected headers', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        const headers = result.tableData.headers.map((header) => header.text)
+        const headers = result.tableData.headers.map((header) => {
+          return header.text
+        })
 
         expect(headers).to.equal(['Day', 'Reading', 'Cubic metres'])
       })
@@ -264,7 +270,9 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected headers', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        const headers = result.tableData.headers.map((header) => header.text)
+        const headers = result.tableData.headers.map((header) => {
+          return header.text
+        })
 
         expect(headers).to.equal(['Day', 'Reading', 'Gallons', 'Cubic metres'])
       })
@@ -279,7 +287,9 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected headers', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        const headers = result.tableData.headers.map((header) => header.text)
+        const headers = result.tableData.headers.map((header) => {
+          return header.text
+        })
 
         expect(headers).to.include('Day')
       })
@@ -303,7 +313,9 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected headers', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
 
-        const headers = result.tableData.headers.map((header) => header.text)
+        const headers = result.tableData.headers.map((header) => {
+          return header.text
+        })
 
         expect(headers).to.include('Week ending')
       })

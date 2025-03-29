@@ -75,7 +75,9 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     it('returns the event marked for "sending"', async () => {
       const result = await FetchEventNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.id === event.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.id === event.id
+      })
 
       expect(foundEvent).to.equal({
         id: event.id,
@@ -96,7 +98,9 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     it('does not return the event', async () => {
       const result = await FetchEventNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.id === unlikelyEvent.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.id === unlikelyEvent.id
+      })
 
       expect(foundEvent).to.be.undefined()
     })
@@ -106,7 +110,9 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     it('does not return the event', async () => {
       const result = await FetchEventNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.id === unlikelyEvent2.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.id === unlikelyEvent2.id
+      })
 
       expect(foundEvent).to.be.undefined()
     })
@@ -116,7 +122,9 @@ describe('Job - Notifications - Fetch event notifications service', () => {
     it('does not return the event', async () => {
       const result = await FetchEventNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.id === olderThanRetentionEvent.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.id === olderThanRetentionEvent.id
+      })
 
       expect(foundEvent).to.be.undefined()
     })

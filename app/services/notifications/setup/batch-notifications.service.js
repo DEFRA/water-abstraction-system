@@ -140,7 +140,9 @@ async function _sendEmail(scheduledNotification) {
 async function _sentNotifications(toSendNotifications) {
   const settledPromises = await Promise.allSettled(toSendNotifications)
 
-  return settledPromises.map((settledPromise) => settledPromise.value)
+  return settledPromises.map((settledPromise) => {
+    return settledPromise.value
+  })
 }
 
 /**

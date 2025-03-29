@@ -211,9 +211,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return the email address', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['primary.user@important.com'],
@@ -227,9 +227,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should convert the contact into an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
@@ -245,9 +245,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
               })
@@ -257,11 +257,14 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find(
-                  (recipient) =>
-                    JSON.stringify(recipient.licences) ===
-                    JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','))
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  const licences = JSON.stringify(recipient.licences)
+                  const licenceRefs = JSON.stringify(
+                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+                  )
+
+                  return licences === licenceRefs
+                })
 
                 expect(testRecipient.licences).to.equal(
                   testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
@@ -414,9 +417,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return the email address', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['primary.user@important.com'],
@@ -430,9 +433,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should convert the contact into an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
@@ -448,9 +451,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
               })
@@ -460,11 +463,14 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find(
-                  (recipient) =>
-                    JSON.stringify(recipient.licences) ===
-                    JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','))
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  const licences = JSON.stringify(recipient.licences)
+                  const licenceRefs = JSON.stringify(
+                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+                  )
+
+                  return licences === licenceRefs
+                })
 
                 expect(testRecipient.licences).to.equal(
                   testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
@@ -616,9 +622,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return the email address', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['primary.user@important.com'],
@@ -632,9 +638,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should convert the contact into an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient).to.equal({
                   contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
@@ -650,9 +656,9 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) =>
-                  recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+                })
 
                 expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
               })
@@ -662,11 +668,14 @@ describe('Notifications Setup - Check presenter', () => {
               it('should return licence numbers as an array', () => {
                 const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find(
-                  (recipient) =>
-                    JSON.stringify(recipient.licences) ===
-                    JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','))
-                )
+                const testRecipient = result.recipients.find((recipient) => {
+                  const licences = JSON.stringify(recipient.licences)
+                  const licenceRefs = JSON.stringify(
+                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+                  )
+
+                  return licences === licenceRefs
+                })
 
                 expect(testRecipient.licences).to.equal(
                   testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')

@@ -21,9 +21,9 @@ function go(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
-  const requestedMonthLines = returnSubmissionLines.filter(
-    (line) => line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
-  )
+  const requestedMonthLines = returnSubmissionLines.filter((line) => {
+    return line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
+  })
 
   const method = returnSubmission.$method()
   const units = returnSubmission.$units()
