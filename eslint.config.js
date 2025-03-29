@@ -39,9 +39,8 @@ module.exports = [
       jsdoc: jsdocPlugin,
       import: neostandard.plugins['import-x']
     },
+    // NOTE: Special case for arrow-body-style below
     rules: {
-      // Enforce braces around the function body of arrow functions
-      'arrow-body-style': ['error', 'always'],
       // Enforce .js extension when requiring files
       'import/extensions': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
@@ -86,7 +85,17 @@ module.exports = [
   // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared
   // above that conflict with prettier. That shouldn't be any, as we tell neostandard not to include any style rules
   // and the ones we've declared we've done as per eslint-config-prettier docs on special rules. As recommended by
-  // eslint-plugin-prettier, we declare this config last
+  // eslint-plugin-prettier, we declare this config last ... _almost_!
   // https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-new-eslintconfigjs
-  eslintPluginPrettierRecommended
+  eslintPluginPrettierRecommended,
+  // Normally this would be declared with the rest of the rules above. However, there is a known issue with
+  // eslint-plugin-prettier and the arrow-body-style rule. In _some_ cases, use of ESLint's autofix will result in code
+  // that prettier will deem invalid. There is no fix for this, so the plugin folks avoid the issue by disabling the
+  // rule. This means to get it back, we have to declare it _after_ the config eslint-plugin-prettier applies.
+  {
+    rules: {
+      // Enforce braces around the function body of arrow functions
+      'arrow-body-style': ['error', 'always']
+    }
+  }
 ]
