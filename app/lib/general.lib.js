@@ -289,8 +289,12 @@ function transformStringOfLicencesToArray(licences) {
   return licences
     .replace(/\n/g, ',') // Replace newlines with commas
     .split(',') // Split by commas
-    .map((item) => item.trim()) // Trim any leading/trailing spaces
-    .filter((item) => item !== '') // Remove empty strings if any
+    .map((item) => {
+      return item.trim()
+    }) // Trim any leading/trailing spaces
+    .filter((item) => {
+      return item !== ''
+    }) // Remove empty strings if any
 }
 
 module.exports = {

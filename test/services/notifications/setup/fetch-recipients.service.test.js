@@ -46,7 +46,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
         const result = await RecipientsService.go(session)
 
-        const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
+        const [testRecipient] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.primaryUser.licenceRef)
+        })
 
         expect(testRecipient).to.equal({
           licence_refs: recipients.primaryUser.licenceRef,
@@ -61,9 +63,9 @@ describe('Notifications Setup - Recipients service', () => {
         it('correctly returns the "returns agent" as well as the primary user', async () => {
           const result = await RecipientsService.go(session)
 
-          const [, testRecipientReturnsAgent] = result.filter((res) =>
-            res.licence_refs.includes(recipients.primaryUser.licenceRef)
-          )
+          const [, testRecipientReturnsAgent] = result.filter((res) => {
+            return res.licence_refs.includes(recipients.primaryUser.licenceRef)
+          })
 
           expect(testRecipientReturnsAgent).to.equal({
             licence_refs: recipients.primaryUser.licenceRef,
@@ -80,7 +82,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the licence holder data', async () => {
         const result = await RecipientsService.go(session)
 
-        const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.licenceHolder.licenceRef))
+        const [testRecipient] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.licenceHolder.licenceRef)
+        })
 
         expect(testRecipient).to.equal({
           licence_refs: recipients.licenceHolder.licenceRef,
@@ -111,9 +115,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the licence holder and returns to data', async () => {
         const result = await RecipientsService.go(session)
 
-        const [licenceHolder, returnsTo] = result.filter((res) =>
-          res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
-        )
+        const [licenceHolder, returnsTo] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
+        })
 
         expect(licenceHolder).to.equal({
           licence_refs: recipients.licenceHolderAndReturnTo.licenceRef,
@@ -173,7 +177,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns recipients without the "removeLicences"', async () => {
         const result = await RecipientsService.go(session)
 
-        const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
+        const [testRecipient] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.primaryUser.licenceRef)
+        })
 
         expect(testRecipient).to.be.undefined()
       })
@@ -189,7 +195,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
         const result = await RecipientsService.go(session)
 
-        const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
+        const [testRecipient] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.primaryUser.licenceRef)
+        })
 
         expect(testRecipient).to.equal({
           licence_refs: recipients.primaryUser.licenceRef,
@@ -208,9 +216,9 @@ describe('Notifications Setup - Recipients service', () => {
         it('correctly returns the "returns agent" as well as the primary user', async () => {
           const result = await RecipientsService.go(session)
 
-          const [, testRecipientReturnsAgent] = result.filter((res) =>
-            res.licence_refs.includes(recipients.primaryUser.licenceRef)
-          )
+          const [, testRecipientReturnsAgent] = result.filter((res) => {
+            return res.licence_refs.includes(recipients.primaryUser.licenceRef)
+          })
 
           expect(testRecipientReturnsAgent).to.equal({
             licence_refs: recipients.primaryUser.licenceRef,
@@ -231,7 +239,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the licence holder data', async () => {
         const result = await RecipientsService.go(session)
 
-        const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.licenceHolder.licenceRef))
+        const [testRecipient] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.licenceHolder.licenceRef)
+        })
 
         expect(testRecipient).to.equal({
           licence_refs: recipients.licenceHolder.licenceRef,
@@ -266,9 +276,9 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the licence holder and returns to data', async () => {
         const result = await RecipientsService.go(session)
 
-        const [licenceHolder, returnsTo] = result.filter((res) =>
-          res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
-        )
+        const [licenceHolder, returnsTo] = result.filter((res) => {
+          return res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
+        })
 
         expect(licenceHolder).to.equal({
           licence_refs: recipients.licenceHolderAndReturnTo.licenceRef,
