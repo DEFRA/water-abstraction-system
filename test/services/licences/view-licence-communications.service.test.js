@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helper
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 // Things we need to stub
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
 const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
@@ -32,8 +29,6 @@ describe('View Licence Communications service', () => {
       communications: [],
       pagination: { total: 1 }
     })
-
-    Sinon.stub(FeatureFlagsConfig, 'enableNotificationsView').value(true)
   })
 
   afterEach(() => {
@@ -47,7 +42,6 @@ describe('View Licence Communications service', () => {
       expect(result).to.equal({
         activeTab: 'communications',
         communications: [],
-        enableNotificationsView: true,
         licenceName: 'fake licence',
         pagination: {
           page: 1
