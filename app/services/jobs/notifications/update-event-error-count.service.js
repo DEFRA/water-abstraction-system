@@ -36,7 +36,7 @@ const { db } = require('../../../../db/db.js')
  *
  */
 async function go(eventIds) {
-  const query = _query(eventIds)
+  const query = _query()
 
   await db.raw(query, [eventIds])
 }
