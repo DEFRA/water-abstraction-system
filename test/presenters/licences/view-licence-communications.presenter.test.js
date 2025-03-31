@@ -16,6 +16,8 @@ const ViewLicenceCommunicationsPresenter = require('../../../app/presenters/lice
 
 describe('View Licence Communications presenter', () => {
   let communications
+  const licenceId = 'e7aefa9b-b832-41c8-9add-4e3e03cc1331'
+  const documentId = 'd5eacebe-ff92-4704-99f7-9e4e6112ab98'
 
   beforeEach(() => {
     communications = [
@@ -42,12 +44,13 @@ describe('View Licence Communications presenter', () => {
 
   describe('when provided with populated communications data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceCommunicationsPresenter.go(communications)
+      const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
 
       expect(result).to.equal({
         communications: [
           {
             id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
+            link: '/system/notifications/3ce7d0b6-610f-4cb2-9d4c-9761db797141?id=e7aefa9b-b832-41c8-9add-4e3e03cc1331',
             method: 'Letter',
             sender: 'admin-internal@wrls.gov.uk',
             sent: '15 May 2024',
@@ -62,6 +65,32 @@ describe('View Licence Communications presenter', () => {
       })
     })
 
+    describe('the "link" property', () => {
+      describe('when the "enableNotificationsView" is true', () => {
+        it('returns the link as "/system/notifications/communicationId?id=licenceId"', () => {
+          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
+
+          expect(result.communications[0].link).to.equal(
+            '/system/notifications/3ce7d0b6-610f-4cb2-9d4c-9761db797141?id=e7aefa9b-b832-41c8-9add-4e3e03cc1331'
+          )
+        })
+      })
+
+      describe('when the "enableNotificationsView" is false', () => {
+        beforeEach(() => {
+          Sinon.stub(FeatureFlagsConfig, 'enableNotificationsView').value(false)
+        })
+
+        it('returns the link as "/licences/documentId/communications/communicationId"', () => {
+          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
+
+          expect(result.communications[0].link).to.equal(
+            '/licences/d5eacebe-ff92-4704-99f7-9e4e6112ab98/communications/3ce7d0b6-610f-4cb2-9d4c-9761db797141'
+          )
+        })
+      })
+    })
+
     describe('the "messageRef" property', () => {
       describe('when the message ref contains pdf', () => {
         beforeEach(() => {
@@ -69,7 +98,7 @@ describe('View Licence Communications presenter', () => {
         })
 
         it('returns that communication type', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
 
           expect(result.communications[0].type).to.equal({
             label: 'Returns: invitation',
@@ -81,7 +110,7 @@ describe('View Licence Communications presenter', () => {
 
       describe('when the message ref does not contain pdf', () => {
         it('returns that communication type', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
 
           expect(result.communications[0].type).to.equal({
             label: 'Returns: invitation',
@@ -99,7 +128,7 @@ describe('View Licence Communications presenter', () => {
 
       describe('when the message type is present', () => {
         it('returns the method key in sentence case', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
 
           expect(result.communications[0].method).to.equal('I am in sentence case')
         })
