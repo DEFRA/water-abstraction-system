@@ -29,18 +29,6 @@ describe('Job - Notifications - Update event service', () => {
       eventId: event.id,
       status: 'sending'
     })
-
-    // This event contains errors but is not part of the events id's in the array to update the errors
-    const additionalEvent = await EventHelper.add({
-      type: 'notification',
-      status: 'completed',
-      metadata: {}
-    })
-
-    await ScheduledNotificationHelper.add({
-      eventId: additionalEvent.id,
-      status: 'error'
-    })
   })
 
   describe('when there are errors', () => {
@@ -111,6 +99,31 @@ describe('Job - Notifications - Update event service', () => {
 
         expect(result.metadata.error).to.be.undefined()
       })
+    })
+  })
+
+  describe('when an event is not in the array', () => {
+    let additionalEvent
+
+    beforeEach(async () => {
+      // This event contains errors but is not part of the events id's in the array to update the errors
+      additionalEvent = await EventHelper.add({
+        type: 'notification',
+        status: 'completed',
+        metadata: {}
+      })
+
+      await ScheduledNotificationHelper.add({
+        eventId: additionalEvent.id,
+        status: 'error'
+      })
+    })
+    it('should not change other events', async () => {
+      await UpdateEventErrorCountService.go([event.id])
+
+      const result = await EventModel.query().findById(additionalEvent.id)
+
+      expect(result).to.equal(additionalEvent)
     })
   })
 })
