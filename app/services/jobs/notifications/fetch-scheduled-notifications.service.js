@@ -12,7 +12,7 @@ const SEVEN_DAYS = 7
 /**
  * Fetches the scheduled notifications with the status 'sending'.
  *
- * The function returns a list of 'scheduledNotifications' that have a status of 'sending' and are lees than 7 days old.
+ * The function returns a list of 'scheduledNotifications' that have a status of 'sending' and are less than 7 days old.
  *
  * Notify has a retention period of 7 days, so we only want 'scheduledNotifications' created within the last 7 days.
  *
