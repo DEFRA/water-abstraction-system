@@ -20,21 +20,29 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  */
 function go(communications, documentId, licenceId) {
   return {
-    communications: _communications(communications),
-    enableNotificationsView: FeatureFlagsConfig.enableNotificationsView
+    communications: _communications(communications, documentId, licenceId)
   }
 }
 
-function _communications(communications) {
+function _communications(communications, documentId, licenceId) {
   return communications.map((communication) => {
     return {
       id: communication.id,
+      link: _link(communication.id, documentId, licenceId),
       type: _type(communication),
       sender: communication.event.issuer,
       sent: formatLongDate(new Date(communication.event.createdAt)),
       method: sentenceCase(communication.messageType)
     }
   })
+}
+
+function _link(communicationId, documentId, licenceId) {
+  if (FeatureFlagsConfig.enableNotificationsView) {
+    return `/system/notifications/${communicationId}?id=${licenceId}`
+  }
+
+  return `/licences/${documentId}/communications/${communicationId}`
 }
 
 function _type(communication) {
