@@ -58,7 +58,7 @@ function _query() {
     '{error}',
     to_jsonb(ec.error_count),
     true
-   )
+    )
   FROM error_counts ec
   WHERE e.id = ec.eventId
     AND e.type = 'notification'
