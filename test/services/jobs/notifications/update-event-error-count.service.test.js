@@ -66,7 +66,7 @@ describe('Job - Notifications - Update event service', () => {
       })
     })
 
-    describe('and the "scheduledNotification" have existing errors', () => {
+    describe('and the "scheduledNotifications" have existing errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
           type: 'notification',
