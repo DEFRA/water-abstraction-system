@@ -49,7 +49,7 @@ describe('Job - Notifications - Update event service', () => {
       })
     })
 
-    describe('and the "scheduledNotification" have multiple errors', () => {
+    describe('and the "scheduledNotifications" have multiple errors', () => {
       beforeEach(async () => {
         await ScheduledNotificationHelper.add({
           eventId: event.id,
