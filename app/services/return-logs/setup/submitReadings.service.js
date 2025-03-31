@@ -22,10 +22,13 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, payload, yar, yearMonth) {
   const session = await SessionModel.query().findById(sessionId)
-  const validationResult = Object.keys(payload).length === 0 ? null : _validate(payload)
+
+  const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
+
+  const validationResult = _validate(payload, session, requestedYear, requestedMonth)
 
   if (!validationResult) {
-    await _save(session, payload, yearMonth)
+    await _save(payload, session, requestedYear, requestedMonth)
 
     const notification = {
       text: 'Readings have been updated',
@@ -41,6 +44,7 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   return {
     activeNavBar: 'search',
+    error: validationResult,
     ...pageData
   }
 }
@@ -59,9 +63,7 @@ function _determineRequestedYearAndMonth(yearMonth) {
  *
  * @private
  */
-async function _save(session, payload, yearMonth) {
-  const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
-
+async function _save(payload, session, requestedYear, requestedMonth) {
   session.lines.forEach((line) => {
     const endDate = new Date(line.endDate)
 
@@ -73,9 +75,13 @@ async function _save(session, payload, yearMonth) {
   return session.$update()
 }
 
-function _validate(payload) {
-  // const validation = ReadingsValidator.go(payload)
-  const validation = {} // temporary thang
+function _validate(payload, session, requestedYear, requestedMonth) {
+  // If the payload is empty, we don't need to validate anything
+  if (Object.keys(payload).length === 0) {
+    return null
+  }
+
+  const validation = ReadingsValidator.go(payload, session, requestedYear, requestedMonth)
 
   if (!validation.error) {
     return null
