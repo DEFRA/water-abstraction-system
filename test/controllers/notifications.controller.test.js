@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const ViewNotificationsService = require('../../app/services/notifications/view-notifications.service.js')
+const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -51,7 +51,7 @@ describe('Notifications controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewNotificationsService, 'go').resolves(_viewNotification())
+          Sinon.stub(ViewNotificationService, 'go').resolves(_viewNotification())
         })
 
         it('returns the page successfully', async () => {
