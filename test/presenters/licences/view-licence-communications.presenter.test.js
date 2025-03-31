@@ -60,8 +60,7 @@ describe('View Licence Communications presenter', () => {
               sentVia: 'sent 15 May 2024 via letter'
             }
           }
-        ],
-        enableNotificationsView: true
+        ]
       })
     })
 
