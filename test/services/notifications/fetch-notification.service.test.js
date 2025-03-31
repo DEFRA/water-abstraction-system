@@ -13,9 +13,9 @@ const EventHelper = require('../../support/helpers/event.helper.js')
 const ScheduledNotificationsHelper = require('../../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
-const FetchNotificationsService = require('../../../app/services/notifications/fetch-notifications.service.js')
+const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
 
-describe('Fetch Notifications service', () => {
+describe('Fetch Notification service', () => {
   let event
   let licence
   let notification
@@ -48,7 +48,7 @@ describe('Fetch Notifications service', () => {
 
   describe('when a matching notification exists', () => {
     it('returns the matching notification with its related event and licence data', async () => {
-      const result = await FetchNotificationsService.go(notification.id, licence.id)
+      const result = await FetchNotificationService.go(notification.id, licence.id)
 
       expect(result).to.equal({
         licence: {

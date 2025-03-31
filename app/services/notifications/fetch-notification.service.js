@@ -2,7 +2,7 @@
 
 /**
  * Fetches the matching notification and licence data needed for the view
- * @module FetchNotificationsService
+ * @module FetchNotificationService
  */
 
 const LicenceModel = require('../../models/licence.model.js')

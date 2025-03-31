@@ -12,18 +12,18 @@ const { expect } = Code
 const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 
 // Things we need to stub
-const FetchNotificationsService = require('../../../app/services/notifications/fetch-notifications.service.js')
+const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
 
 // Thing under test
-const ViewNotificationsService = require('../../../app/services/notifications/view-notifications.service.js')
+const ViewNotificationService = require('../../../app/services/notifications/view-notification.service.js')
 
-describe('View Notifications service', () => {
+describe('View Notification service', () => {
   let testNotification
 
   before(() => {
     testNotification = NotificationsFixture.notification()
 
-    Sinon.stub(FetchNotificationsService, 'go').resolves(testNotification)
+    Sinon.stub(FetchNotificationService, 'go').resolves(testNotification)
   })
 
   afterEach(() => {
@@ -32,7 +32,7 @@ describe('View Notifications service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewNotificationsService.go(testNotification.notification.id, testNotification.licence.id)
+      const result = await ViewNotificationService.go(testNotification.notification.id, testNotification.licence.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',

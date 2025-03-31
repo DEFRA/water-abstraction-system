@@ -11,9 +11,9 @@ const { expect } = Code
 const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 
 // Thing under test
-const ViewNotificationsPresenter = require('../../../app/presenters/notifications/view-notifications.presenter.js')
+const ViewNotificationPresenter = require('../../../app/presenters/notifications/view-notification.presenter.js')
 
-describe('View Notifications presenter', () => {
+describe('View Notification presenter', () => {
   let testNotification
 
   before(() => {
@@ -22,7 +22,7 @@ describe('View Notifications presenter', () => {
 
   describe('when provided with a populated notification with related event and licence data', () => {
     it('correctly presents the data', () => {
-      const result = ViewNotificationsPresenter.go(testNotification)
+      const result = ViewNotificationPresenter.go(testNotification)
 
       expect(result).to.equal({
         address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
@@ -53,7 +53,7 @@ describe('View Notifications presenter', () => {
           })
 
           it('correctly formats the address data into an array with the populated values', () => {
-            const result = ViewNotificationsPresenter.go(testNotification)
+            const result = ViewNotificationPresenter.go(testNotification)
 
             expect(result.address).to.equal(['Tutsham Farm', 'Maidstone', 'Kent', 'ME15 0NE'])
           })
@@ -66,7 +66,7 @@ describe('View Notifications presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewNotificationsPresenter.go(testNotification)
+          const result = ViewNotificationPresenter.go(testNotification)
 
           expect(result.address).to.be.null()
         })
@@ -76,7 +76,7 @@ describe('View Notifications presenter', () => {
     describe('the "pageTitle" property', () => {
       describe('when the "event.metadata.name" is not "Water abstraction alert"', () => {
         it('returns the "event.metadata.name"', () => {
-          const result = ViewNotificationsPresenter.go(testNotification)
+          const result = ViewNotificationPresenter.go(testNotification)
 
           expect(result.pageTitle).to.equal('Hands off flow: levels warning')
         })
@@ -91,7 +91,7 @@ describe('View Notifications presenter', () => {
         })
 
         it('returns the "event.metadata.options.sendingAlertType" capitalised followed by the "event.name"', () => {
-          const result = ViewNotificationsPresenter.go(testNotification)
+          const result = ViewNotificationPresenter.go(testNotification)
 
           expect(result.pageTitle).to.equal('Warning - Water abstraction alert')
         })
