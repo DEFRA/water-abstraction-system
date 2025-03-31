@@ -23,7 +23,7 @@ async function go(licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const communications = await FetchCommunicationsService.go(commonData.licenceRef, page)
-  const communicationsData = ViewLicenceCommunicationsPresenter.go(communications.communications)
+  const communicationsData = ViewLicenceCommunicationsPresenter.go(communications.communications, commonData)
 
   const pagination = PaginatorPresenter.go(
     communications.pagination.total,
