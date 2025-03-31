@@ -5,15 +5,9 @@
   {% if communication.type.pdf %}
     <p class="govuk-body govuk-!-margin-bottom-0">{{ communication.type.label }}<span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span></p>
   {% else %}
-    {% if enableNotificationsView %}
-      <a href="/system/notifications/{{ communication.id }}?id={{ licenceId }}" class="govuk-link">{{ communication.type.label }}
-        <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
-      </a>
-    {% else %}
-      <a href="/licences/{{ documentId }}/communications/{{ communication.id }}" class="govuk-link">{{ communication.type.label }}
-        <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
-      </a>
-    {% endif %}
+    <a href={{communication.link}} class="govuk-link">{{ communication.type.label }}
+      <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
+    </a>
   {% endif %}
 {% endmacro %}
 
