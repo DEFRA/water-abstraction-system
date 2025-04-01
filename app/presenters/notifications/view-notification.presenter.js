@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats notifications data ready for presenting in the view notification page
+ * Formats notification data ready for presenting in the view notification page
  * @module ViewNotificationPresenter
  */
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
 /**
- * Formats notifications data ready for presenting in the view notification page
+ * Formats notification data ready for presenting in the view notification page
  *
  * @param {module:ScheduledNotificationModel} notificationData - The scheduled notification and related licence data
  *
