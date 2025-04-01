@@ -24,7 +24,8 @@ function go(payload, session, requestedYear, requestedMonth) {
   // Convert the payload object into an array of readings e.g. [10, 20, 30]
   const meterReadingsArray = Object.values(payload).map(Number)
 
-  const previousMeterReading = _previousMeterReading(lines, requestedYear, requestedMonth, startReading)
+  const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
+  const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth, startReading)
 
   const schema = Joi.array()
     .items(
@@ -35,16 +36,22 @@ function go(payload, session, requestedYear, requestedMonth) {
     )
     .custom((value, helpers) => {
       // We need to check the values are in increasing order
-      return _meterReadingsInIncreasingOrder(value, helpers, previousMeterReading)
+      return _meterReadingsInIncreasingOrder(value, helpers, previousHighestReading, subsequentLowestReading)
     })
 
   return schema.validate(meterReadingsArray, { abortEarly: false })
 }
 
-function _meterReadingsInIncreasingOrder(value, helpers, previousMeterReading) {
-  if (value[0] < previousMeterReading) {
+function _meterReadingsInIncreasingOrder(value, helpers, previousHighestReading, subsequentLowestReading) {
+  if (value[0] < previousHighestReading) {
     return helpers.message(
-      `The meter readings must be greater than or equal to the previous reading of ${previousMeterReading}`
+      `The meter readings must be greater than or equal to the previous reading of ${previousHighestReading}`
+    )
+  }
+
+  if (value[value.length - 1] > subsequentLowestReading) {
+    return helpers.message(
+      `The meter readings must be less than or equal to the subsequent reading of ${subsequentLowestReading}`
     )
   }
 
@@ -62,7 +69,7 @@ function _meterReadingsInIncreasingOrder(value, helpers, previousMeterReading) {
  *
  * @private
  */
-function _previousMeterReading(lines, requestedYear, requestedMonth, startReading) {
+function _previousHighestReading(lines, requestedYear, requestedMonth, startReading) {
   const previousLines = lines.filter((line) => {
     const endDate = new Date(line.endDate)
 
@@ -81,6 +88,32 @@ function _previousMeterReading(lines, requestedYear, requestedMonth, startReadin
   )
 
   return maxReading
+}
+
+/**
+ * Finds the lowest subsequent meter reading. This will be the MAX_SAFE_INTEGER if no subsequent meter readings exist
+ *
+ * @private
+ */
+function _subsequentLowestReading(lines, requestedYear, requestedMonth, startReading) {
+  const subsequentLines = lines.filter((line) => {
+    const endDate = new Date(line.endDate)
+
+    // Return lines that are after the requested year and month
+    return (
+      (endDate.getFullYear() === requestedYear && endDate.getMonth() > requestedMonth) ||
+      endDate.getFullYear() > requestedYear
+    )
+  })
+
+  const minReading = Math.min(
+    Number.MAX_SAFE_INTEGER,
+    ...subsequentLines
+      .map((previousLine) => previousLine.reading) // Extract the readings
+      .filter((reading) => reading != null) // Remove null or undefined readings
+  )
+
+  return minReading
 }
 
 module.exports = {
