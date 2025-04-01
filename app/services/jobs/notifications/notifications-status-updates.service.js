@@ -9,9 +9,9 @@ const { setTimeout } = require('node:timers/promises')
 
 const FetchScheduledNotificationsService = require('./fetch-scheduled-notifications.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
-const NotifyStatusPresenter = require('../../../presenters/notifications/setup/notify-status.presenter.js')
+const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
 const NotifyStatusService = require('../../notify/notify-status.service.js')
-const UpdateNotificationsService = require('../../notifications/setup/update-notifications.service.js')
+const UpdateNotificationsService = require('./update-notifications.service.js')
 
 /**
  * Orchestrates the process of fetching and updating the status of 'scheduledNotification' from the Notify service.
