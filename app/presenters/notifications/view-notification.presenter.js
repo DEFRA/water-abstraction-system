@@ -39,9 +39,13 @@ function _address(personalisation) {
     'postcode'
   ]
 
-  const address = addressLines.map((line) => personalisation[line])
+  const address = addressLines.map((line) => {
+    return personalisation[line]
+  })
 
-  return address.filter((line) => line)
+  return address.filter((line) => {
+    return line
+  })
 }
 
 function _pageTitle(notification) {
