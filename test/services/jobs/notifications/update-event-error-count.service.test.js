@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const EventModel = require('../../../../app/models/event.model.js')
 const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
@@ -43,9 +42,9 @@ describe('Job - Notifications - Update event service', () => {
       it('updates the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
-        const result = await EventModel.query().findById(event.id)
+        const refreshEvent = await event.$query()
 
-        expect(result.metadata.error).to.equal(1)
+        expect(refreshEvent.metadata.error).to.equal(1)
       })
     })
 
@@ -60,9 +59,9 @@ describe('Job - Notifications - Update event service', () => {
       it('updates the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
-        const result = await EventModel.query().findById(event.id)
+        const refreshEvent = await event.$query()
 
-        expect(result.metadata.error).to.equal(2)
+        expect(refreshEvent.metadata.error).to.equal(2)
       })
     })
 
@@ -83,9 +82,9 @@ describe('Job - Notifications - Update event service', () => {
       it('should override the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
-        const result = await EventModel.query().findById(event.id)
+        const refreshEvent = await event.$query()
 
-        expect(result.metadata.error).to.equal(1)
+        expect(refreshEvent.metadata.error).to.equal(1)
       })
     })
   })
@@ -95,9 +94,9 @@ describe('Job - Notifications - Update event service', () => {
       it('should not update the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
-        const result = await EventModel.query().findById(event.id)
+        const refreshEvent = await event.$query()
 
-        expect(result.metadata.error).to.be.undefined()
+        expect(refreshEvent.metadata.error).to.be.undefined()
       })
     })
   })
@@ -121,9 +120,9 @@ describe('Job - Notifications - Update event service', () => {
     it('should not change other events', async () => {
       await UpdateEventErrorCountService.go([event.id])
 
-      const result = await EventModel.query().findById(additionalEvent.id)
+      const refreshEvent = await additionalEvent.$query()
 
-      expect(result).to.equal(additionalEvent)
+      expect(refreshEvent).to.equal(additionalEvent)
     })
   })
 })
