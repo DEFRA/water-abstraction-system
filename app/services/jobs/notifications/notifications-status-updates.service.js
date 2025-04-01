@@ -73,7 +73,9 @@ async function _notificationStatus(scheduledNotification) {
 async function _updateNotifications(toSendNotifications) {
   const settledPromises = await Promise.allSettled(toSendNotifications)
 
-  return settledPromises.map((settledPromise) => settledPromise.value)
+  return settledPromises.map((settledPromise) => {
+    return settledPromise.value
+  })
 }
 
 function _toUpdateNotifications(scheduledNotifications) {

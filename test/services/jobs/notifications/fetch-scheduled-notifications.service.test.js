@@ -63,7 +63,9 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
     it('returns the event marked for "sending"', async () => {
       const result = await FetchScheduledNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.eventId === event.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.eventId === event.id
+      })
 
       expect(foundEvent).to.equal({
         createdAt: scheduledNotification.createdAt,
@@ -81,7 +83,9 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
     it('does not return the event', async () => {
       const result = await FetchScheduledNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.eventId === unlikelyEvent.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.eventId === unlikelyEvent.id
+      })
 
       expect(foundEvent).to.be.undefined()
     })
@@ -91,7 +95,9 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
     it('does not return the event', async () => {
       const result = await FetchScheduledNotificationsService.go()
 
-      const foundEvent = result.find((resultEvent) => resultEvent.eventId === olderThanRetentionEvent.id)
+      const foundEvent = result.find((resultEvent) => {
+        return resultEvent.eventId === olderThanRetentionEvent.id
+      })
 
       expect(foundEvent).to.be.undefined()
     })
