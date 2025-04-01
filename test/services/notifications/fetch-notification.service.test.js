@@ -8,8 +8,9 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 const ScheduledNotificationsHelper = require('../../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
@@ -19,30 +20,16 @@ describe('Fetch Notification service', () => {
   let event
   let licence
   let notification
+  let testNotification
 
   before(async () => {
     event = await EventHelper.add()
     licence = await LicenceHelper.add()
+    testNotification = NotificationsFixture.notification()
 
     notification = await ScheduledNotificationsHelper.add({
-      eventId: event.id,
-      messageType: 'letter',
-      messageRef: 'notification_letter',
-      personalisation: {
-        address_line_1: 'Ferns Surfacing Limited',
-        address_line_2: 'Tutsham Farm',
-        address_line_3: 'West Farleigh',
-        address_line_4: 'Maidstone',
-        address_line_5: 'Kent',
-        postcode: 'ME15 0NE'
-      },
-      plaintext:
-        'Water Resources Act 1991\n' +
-        'Our reference: HOF-UPMJ7G\n\n' +
-        'Dear licence holder,\n\n' +
-        '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n\n' +
-        '# Why you are receiving this notification\n\n',
-      sendAfter: new Date('2024-07-02 16:52:17.000')
+      ...testNotification.notification,
+      eventId: event.id
     })
   })
 
