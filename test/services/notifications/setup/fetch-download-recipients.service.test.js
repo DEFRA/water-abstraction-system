@@ -52,8 +52,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => item.contact_type === 'Primary user')
-          const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
+          const primaryUser = result.find((item) => {
+            return item.contact_type === 'Primary user'
+          })
+          const returnsAgent = result.find((item) => {
+            return item.contact_type === 'Returns agent'
+          })
 
           expect(primaryUser).to.equal({
             contact: null,
@@ -83,7 +87,9 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns "Licence holder" contact', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolder.licenceRef)
+          const found = result.filter((item) => {
+            return item.licence_ref === testRecipients.licenceHolder.licenceRef
+          })
 
           expect(found).to.equal([
             {
@@ -119,7 +125,9 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef)
+          const found = result.filter((item) => {
+            return item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef
+          })
 
           expect(found).to.equal([
             {
@@ -186,8 +194,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns recipients without the "removeLicences"', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => item.contact_type === 'Primary user')
-          const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
+          const primaryUser = result.find((item) => {
+            return item.contact_type === 'Primary user'
+          })
+          const returnsAgent = result.find((item) => {
+            return item.contact_type === 'Returns agent'
+          })
 
           expect(primaryUser).to.be.undefined()
 
@@ -207,8 +219,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => item.contact_type === 'Primary user')
-          const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
+          const primaryUser = result.find((item) => {
+            return item.contact_type === 'Primary user'
+          })
+          const returnsAgent = result.find((item) => {
+            return item.contact_type === 'Returns agent'
+          })
 
           expect(primaryUser).to.equal({
             contact: null,
@@ -242,7 +258,9 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns "Licence holder" contact', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolder.licenceRef)
+          const found = result.filter((item) => {
+            return item.licence_ref === testRecipients.licenceHolder.licenceRef
+          })
 
           expect(found).to.equal([
             {
@@ -282,7 +300,9 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
         it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef)
+          const found = result.filter((item) => {
+            return item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef
+          })
 
           expect(found).to.equal([
             {
