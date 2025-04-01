@@ -40,12 +40,12 @@ async function go(sessionId, payload, yar, yearMonth) {
     return {}
   }
 
-  const pageData = ReadingsPresenter.go(session, yearMonth)
+  const formattedData = ReadingsPresenter.go(session, yearMonth)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...pageData
+    ...formattedData
   }
 }
 
