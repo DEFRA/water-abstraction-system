@@ -22,7 +22,7 @@ const { NotifyClient } = require('notifications-node-client')
 // Thing under test
 const ProcessNotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
 
-describe('Job - Notifications - Process notifications status updates service', () => {
+describe.only('Job - Notifications - Process notifications status updates service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
 
   let event
@@ -40,8 +40,9 @@ describe('Job - Notifications - Process notifications status updates service', (
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
 
     event = await EventHelper.add({
-      type: 'notification',
-      status: 'completed'
+      metadata: {},
+      status: 'completed',
+      type: 'notification'
     })
 
     scheduledNotification = await ScheduledNotificationHelper.add({
@@ -59,6 +60,7 @@ describe('Job - Notifications - Process notifications status updates service', (
     })
 
     event2 = await EventHelper.add({
+      metadata: {},
       type: 'notification',
       status: 'completed'
     })
@@ -165,6 +167,36 @@ describe('Job - Notifications - Process notifications status updates service', (
       expect(result.status).to.equal('sending')
 
       expect(result).to.equal(scheduledNotification)
+    })
+  })
+
+  describe.only('when notify returns a status error', () => {
+    beforeEach(() => {
+      if (stubNotify) {
+        Sinon.stub(NotifyClient.prototype, 'getNotificationById')
+          .onFirstCall()
+          .resolves({
+            data: {
+              status: 'temporary-failure'
+            }
+          })
+          .resolves({
+            data: {
+              status: 'received'
+            }
+          })
+      }
+    })
+
+    it('updates the event error count ', async () => {
+      await ProcessNotificationsStatusUpdatesService.go()
+
+      const refreshedEvent = await event.$query()
+
+      expect(refreshedEvent).to.equal({
+        ...event,
+        metadata: { error: 1 }
+      })
     })
   })
 })
