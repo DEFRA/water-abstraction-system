@@ -46,9 +46,7 @@ function _address(personalisation) {
 
 function _pageTitle(notification) {
   if (notification.event.metadata.name === 'Water abstraction alert') {
-    return (
-      `${sentenceCase(notification.event.metadata.options.sendingAlertType)}` + ` - ${notification.event.metadata.name}`
-    )
+    return `${sentenceCase(notification.event.metadata.options.sendingAlertType)} - ${notification.event.metadata.name}`
   }
 
   return notification.event.metadata.name
