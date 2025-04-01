@@ -28,9 +28,9 @@ function go(session, yearMonth) {
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
+    inputLines: _inputLines(requestedMonthLines),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
-    returnReference,
-    inputLines: _inputLines(requestedMonthLines)
+    returnReference
   }
 }
 
@@ -51,8 +51,8 @@ function _inputLines(lines) {
     const { endDate, reading } = line
 
     const lineData = {
-      formattedEndDate: formatLongDate(new Date(endDate)),
       endDate,
+      formattedEndDate: formatLongDate(new Date(endDate)),
       reading
     }
 
