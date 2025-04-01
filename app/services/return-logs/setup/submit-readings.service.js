@@ -68,7 +68,7 @@ async function _save(payload, session, requestedYear, requestedMonth) {
     const endDate = new Date(line.endDate)
 
     if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
-      line.reading = Number(payload[line.endDate]) ?? null
+      line.reading = payload[line.endDate] ? Number(payload[line.endDate]) : null
     }
   })
 

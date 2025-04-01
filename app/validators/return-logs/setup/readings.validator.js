@@ -25,7 +25,7 @@ function go(payload, session, requestedYear, requestedMonth) {
   const meterReadingsArray = Object.values(payload).map(Number)
 
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
-  const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth, startReading)
+  const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
 
   const schema = Joi.array()
     .items(
@@ -95,7 +95,7 @@ function _previousHighestReading(lines, requestedYear, requestedMonth, startRead
  *
  * @private
  */
-function _subsequentLowestReading(lines, requestedYear, requestedMonth, startReading) {
+function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
   const subsequentLines = lines.filter((line) => {
     const endDate = new Date(line.endDate)
 
