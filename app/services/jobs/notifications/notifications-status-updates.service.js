@@ -43,7 +43,7 @@ async function go() {
     await _delay(delay)
   }
 
-  await _updateEventErrors(scheduledNotifications)
+  await _updateEventErrorCount(scheduledNotifications)
 }
 
 async function _batch(scheduledNotifications) {
@@ -79,7 +79,7 @@ async function _notificationStatus(scheduledNotification) {
  *
  * @private
  */
-async function _updateEventErrors(scheduledNotifications) {
+async function _updateEventErrorCount(scheduledNotifications) {
   const eventIds = scheduledNotifications.map((sn) => {
     return sn.eventId
   })
