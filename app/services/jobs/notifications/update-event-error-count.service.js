@@ -49,7 +49,7 @@ function _query() {
   COUNT(sn.status) AS error_count
   FROM public.scheduled_notifications sn
   WHERE sn.status = 'error'
-    AND sn.event_id IS NOT NULL
+    AND sn.event_id = ANY(?)
   GROUP BY sn.event_id
     )
   UPDATE public.events e
