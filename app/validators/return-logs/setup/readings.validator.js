@@ -66,7 +66,11 @@ function _previousMeterReading(lines, requestedYear, requestedMonth, startReadin
   const previousLines = lines.filter((line) => {
     const endDate = new Date(line.endDate)
 
-    return endDate.getFullYear() <= requestedYear && endDate.getMonth() < requestedMonth
+    // Return lines that are prior to the requested year and month
+    return (
+      (endDate.getFullYear() === requestedYear && endDate.getMonth() < requestedMonth) ||
+      endDate.getFullYear() < requestedYear
+    )
   })
 
   const maxReading = Math.max(
