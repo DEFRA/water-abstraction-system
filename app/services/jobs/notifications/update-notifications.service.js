@@ -5,7 +5,7 @@
  * @module UpdateNotificationsService
  */
 
-const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
+const ScheduledNotificationModel = require('../../../models/scheduled-notification.model.js')
 
 /**
  * Update notifications
