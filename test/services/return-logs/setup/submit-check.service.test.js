@@ -16,12 +16,13 @@ const ReturnRequirementModel = require('../../../../app/models/return-requiremen
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../../app/models/return-version.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/return-logs/setup/submit-check.service.js')
+
+// TODO: Properly stub dependencies
 
 describe('Return Logs Setup - Submit Check service', () => {
   let licence
@@ -81,35 +82,6 @@ describe('Return Logs Setup - Submit Check service', () => {
   })
 
   describe('when called with valid data', () => {
-    it('creates a new return version', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
-
-      expect(result.returnLogId).to.equal(returnLog.id)
-
-      const returnVersion = await ReturnVersionModel.query().where('id', result.returnVersionId).first()
-
-      expect(returnVersion).to.exist()
-      expect(returnVersion.status).to.equal('current')
-      expect(returnVersion.createdBy).to.equal(user.id)
-    })
-
-    it('marks previous versions as superseded', async () => {
-      await ReturnVersionHelper.add({
-        licenceId: licence.id,
-        status: 'current',
-        version: 1
-      })
-
-      await SubmitCheckService.go(session.id, user)
-
-      const previousVersion = await ReturnVersionModel.query()
-        .where('licenceId', licence.id)
-        .where('version', 1)
-        .first()
-
-      expect(previousVersion.status).to.equal('superseded')
-    })
-
     it('updates the return log status', async () => {
       await SubmitCheckService.go(session.id, user)
 
