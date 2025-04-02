@@ -79,8 +79,8 @@ function _sessionData() {
     lines: [
       {
         endDate: '2023-04-30T00:00:00.000Z',
-        startDate: '2023-04-01T00:00:00.000Z',
-        reading: 100
+        reading: 100,
+        startDate: '2023-04-01T00:00:00.000Z'
       },
       {
         endDate: '2023-05-31T00:00:00.000Z',
