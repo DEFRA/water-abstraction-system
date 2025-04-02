@@ -32,7 +32,7 @@ describe('Notifications Setup - Update Notifications service', () => {
     scheduledNotification = await ScheduledNotificationHelper.add({
       createdAt: timestampForPostgres(),
       eventId,
-      status: 'sending'
+      status: 'pending'
     })
   })
 
