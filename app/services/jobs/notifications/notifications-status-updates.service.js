@@ -11,6 +11,7 @@ const FetchScheduledNotificationsService = require('./fetch-scheduled-notificati
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
 const NotifyStatusService = require('../../notify/notify-status.service.js')
+const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
 /**
@@ -41,6 +42,8 @@ async function go() {
 
     await _delay(delay)
   }
+
+  await _updateEventErrorCount(scheduledNotifications)
 }
 
 async function _batch(scheduledNotifications) {
@@ -68,6 +71,22 @@ async function _notificationStatus(scheduledNotification) {
       ...notifyStatus
     }
   }
+}
+
+/**
+ * We need to dedupe the eventIds to ensure a performant query. Otherwise, we could have hundreds / thousands of
+ * notifications with the same event id all triggering the same update.
+ *
+ * @private
+ */
+async function _updateEventErrorCount(scheduledNotifications) {
+  const eventIds = scheduledNotifications.map((sn) => {
+    return sn.eventId
+  })
+
+  const dedupeEventIds = [...new Set(eventIds)]
+
+  await UpdateEventErrorCountService.go(dedupeEventIds)
 }
 
 async function _updateNotifications(toSendNotifications) {
