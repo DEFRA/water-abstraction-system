@@ -23,13 +23,13 @@ function go(filters) {
   const hasFromDate = sentFromDay || sentFromMonth || sentFromYear
   const hasToDate = sentToDay || sentToMonth || sentToYear
   const hasSentBy = !!sentBy
-  console.log(sentFromYear)
+
   const fields = {
     ...(hasFromDate && { fromFullDate: _fullDate(sentFromDay, sentFromMonth, sentFromYear) }),
     ...(hasToDate && { toFullDate: _fullDate(sentToDay, sentToMonth, sentToYear) }),
     ...(hasSentBy && { sentBy })
   }
-  console.log(fields)
+
   return _validate(fields)
 }
 
@@ -53,7 +53,7 @@ function _validate(fields) {
     toFullDate: Joi.date().iso().optional().max('now').messages({
       'date.base': 'Enter a valid to date',
       'date.format': 'Enter a valid to date',
-      'date.max': "From date must be either today's date or in the past"
+      'date.max': "To date must be either today's date or in the past"
     }),
     sentBy: Joi.string().email().optional().messages({
       'string.email': 'Enter a valid email'

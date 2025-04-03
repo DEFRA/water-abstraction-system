@@ -11,16 +11,12 @@ const { formatLongDate } = require('../base.presenter.js')
  * Formats data for the `/notifications` page
  *
  * @param {object} data - The object containing the notifcations sent
- * @param {object} filter - The object containing the notifcation filters
- * @param {object} validateResult - The object containing any validation errors
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(data, filter, validateResult) {
+function go(data) {
   return {
     backLink: '/manage',
-    error: validateResult,
-    filter,
     headers: _tableHeaders(),
     rows: _tableRows(data),
     pageTitle: 'View sent notices'

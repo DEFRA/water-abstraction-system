@@ -6,7 +6,6 @@
  */
 
 const { ref } = require('objection')
-const { db } = require('../../../db/db.js')
 
 const EventModel = require('../../models/event.model.js')
 
@@ -18,7 +17,6 @@ const EventModel = require('../../models/event.model.js')
  * @returns {Promise<object[]>}
  */
 async function go(filter) {
-  console.log(filter)
   const query = EventModel.query()
     .select([
       'id',
@@ -46,22 +44,25 @@ async function go(filter) {
   }
 
   if (filter.notifications) {
-    console.log(filter.notifications)
-    const alertTypes = _waterAbstractionAlerts(filter.notifications)
-    if (alertTypes.length > 0) {
+    const { hasAlert, alerts } = _waterAbstractionAlerts(filter.notifications)
+    if (hasAlert) {
       query.where('subtype', 'waterAbstractionAlerts')
-      query.whereRaw(`metadata->'options'->'linkages'->0->0->>'alertType' IN (?,?,?,?)`, alertTypes)
+      query.whereRaw(`metadata->'options'->'linkages'->0->0->>'alertType' IN (?,?,?,?)`, alerts)
+    }
+
+    if (filter.notifications.legacyNotifications) {
+      query.whereIn('subtype', ['hof-stop', 'hof-resume', 'hof-warning'])
     }
 
     if (filter.notifications.returnsPaperForm) {
       query.where('subtype', 'paperReturnForms')
     }
 
-    if (filter.notifications.returnsReminders) {
+    if (filter.notifications.returnReminders) {
       query.where('subtype', 'returnReminder')
     }
 
-    if (filter.notifications.returnsInvitation) {
+    if (filter.notifications.returnInvitation) {
       query.where('subtype', 'returnInvitation')
     }
   }
@@ -70,8 +71,9 @@ async function go(filter) {
 }
 
 function _waterAbstractionAlerts(filter) {
-  console.log(filter)
   const alerts = ['', '', '', '']
+  let hasAlert = false
+
   const {
     waterAbstractionAlertResume,
     waterAbstractionAlertStop,
@@ -81,21 +83,25 @@ function _waterAbstractionAlerts(filter) {
 
   if (waterAbstractionAlertResume) {
     alerts[0] = 'resume'
+    hasAlert = true
   }
 
   if (waterAbstractionAlertStop) {
     alerts[1] = 'stop'
+    hasAlert = true
   }
 
   if (waterAbstractionAlertReduce) {
     alerts[2] = 'reduce'
+    hasAlert = true
   }
 
   if (waterAbstractionAlertWarning) {
     alerts[3] = 'warning'
+    hasAlert = true
   }
 
-  return alerts
+  return { hasAlert, alerts }
 }
 
 module.exports = {

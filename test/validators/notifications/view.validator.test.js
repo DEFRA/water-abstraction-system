@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewNotificationsValidator = require('../../../app/validators/notifications/view.validator.js')
 
-describe.only('Notifications Report - filter validator', () => {
+describe('Notifications Report - filter validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
       const result = ViewNotificationsValidator.go({
@@ -104,6 +104,63 @@ describe.only('Notifications Report - filter validator', () => {
         expect(result.value).to.exist()
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('Enter a valid to date')
+      })
+    })
+
+    describe('because an invalid empty string "sentToYear" is given', () => {
+      it('fails validation', () => {
+        const result = ViewNotificationsValidator.go({
+          sentToDay: '4',
+          sentToMonth: '1',
+          sentToYear: ''
+        })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a valid to date')
+      })
+    })
+
+    describe('because an invalid null "sentToYear" is given', () => {
+      it('fails validation', () => {
+        const result = ViewNotificationsValidator.go({
+          sentToDay: '4',
+          sentToMonth: '1',
+          sentToYear: null
+        })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a valid to date')
+      })
+    })
+
+    describe('because an to date is before the from date', () => {
+      it('fails validation', () => {
+        const result = ViewNotificationsValidator.go({
+          sentFromDay: '1',
+          sentFromMonth: '4',
+          sentFromYear: '2024',
+          sentToDay: '28',
+          sentToMonth: '4',
+          sentToYear: '2023'
+        })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('From date must be before to date')
+      })
+    })
+
+    describe('because an invalid "sentBy" email address is given', () => {
+      it('fails validation', () => {
+        const result = ViewNotificationsValidator.go({
+          sentBy: 'notanemail'
+        })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a valid email')
       })
     })
   })

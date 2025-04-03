@@ -5,7 +5,7 @@
  * @module ViewNotificationsService
  */
 
-const FetchScheduledNotificationsService = require('./fetch-events-notifications.service.js')
+const FetchEventNotificationsService = require('./fetch-events-notifications.service.js')
 const ViewNotificationsPresenter = require('../../presenters/notifications/view.presenter.js')
 const ViewNotificationsValidator = require('../../validators/notifications/view.validator.js')
 
@@ -20,6 +20,7 @@ async function go(yar) {
   const filters = await _getFilters(yar)
 
   const { filterNotificationTypes } = filters
+
   const _filterNotificationTypes = filters.filterNotificationTypes
     ? _prepareNotifications(filterNotificationTypes)
     : filterNotificationTypes
@@ -37,13 +38,15 @@ async function go(yar) {
   let data = []
 
   if (!validateResult) {
-    data = await FetchScheduledNotificationsService.go(filter)
+    data = await FetchEventNotificationsService.go(filter)
   }
 
-  const formattedData = ViewNotificationsPresenter.go(data, filter, validateResult)
+  const formattedData = await ViewNotificationsPresenter.go(data)
 
   return {
     activeNavBar: 'manage',
+    error: validateResult,
+    filter,
     ...formattedData
   }
 }
@@ -60,22 +63,20 @@ async function _getFilters(yar) {
   const sentToYear = filters?.sentToYear
 
   return {
-    filterNotificationTypes,
-    sentBy,
-    sentFromDay,
-    sentFromMonth,
-    sentFromYear,
-    sentToDay,
-    sentToMonth,
-    sentToYear
+    ...(filterNotificationTypes && { filterNotificationTypes }),
+    ...(sentBy && { sentBy }),
+    ...(sentFromDay && { sentFromDay }),
+    ...(sentFromMonth && { sentFromMonth }),
+    ...(sentFromYear && { sentFromYear }),
+    ...(sentToDay && { sentToDay }),
+    ...(sentToMonth && { sentToMonth }),
+    ...(sentToYear && { sentToYear })
   }
 }
 
 function _openFilter(filter) {
   return (
-    (filter.fromFullDate ||
-      filter.toFullDate ||
-      filter.filterNotificationTypes ||
+    (filter.filterNotificationTypes ||
       filter.sentBy ||
       filter.sentFromDay ||
       filter.sentFromMonth ||
@@ -90,8 +91,8 @@ function _prepareNotifications(filterNotificationTypes) {
   return {
     legacyNotifications: filterNotificationTypes.includes('legacy-notifications'),
     returnsPaperForm: filterNotificationTypes.includes('returns-paper-form'),
-    returnsReminders: filterNotificationTypes.includes('returns-reminders'),
-    returnsInvitation: filterNotificationTypes.includes('returns-invitation'),
+    returnReminders: filterNotificationTypes.includes('returns-reminders'),
+    returnInvitation: filterNotificationTypes.includes('returns-invitation'),
     waterAbstractionAlertResume: filterNotificationTypes.includes('water-abstraction-alert-resume'),
     waterAbstractionAlertStop: filterNotificationTypes.includes('water-abstraction-alert-stop'),
     waterAbstractionAlertReduce: filterNotificationTypes.includes('water-abstraction-alert-reduce'),
@@ -107,6 +108,7 @@ function _validate(filters) {
   }
 
   const validation = ViewNotificationsValidator.go(filters)
+
   if (!validation.error) {
     return null
   }
