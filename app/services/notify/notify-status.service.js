@@ -5,9 +5,7 @@
  * @module NotifyStatusService
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientService = require('./notify-client.service.js')
 
 /**
  * Get the status of a notification from GOV.UK Notify
@@ -31,7 +29,7 @@ const config = require('../../../config/notify.config.js')
  * @returns {Promise<object>}
  */
 async function go(notificationId) {
-  const notifyClient = new NotifyClient(config.apiKey)
+  const notifyClient = NotifyClientService.go()
 
   return _statusById(notifyClient, notificationId)
 }

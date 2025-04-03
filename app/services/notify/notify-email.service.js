@@ -5,9 +5,7 @@
  * @module NotifyEmailService
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientService = require('./notify-client.service.js')
 
 /**
  * Send an email using GOV.UK Notify
@@ -37,7 +35,7 @@ const config = require('../../../config/notify.config.js')
  * @returns {Promise<object>}
  */
 async function go(templateId, emailAddress, options) {
-  const notifyClient = new NotifyClient(config.apiKey)
+  const notifyClient = NotifyClientService.go()
 
   return _sendEmail(notifyClient, templateId, emailAddress, options)
 }
