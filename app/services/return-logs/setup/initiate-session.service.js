@@ -185,7 +185,7 @@ function _submissionData(lines, returnLog) {
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: nilReturn ? lines : _submissionLines(returnSubmissionLines, nilReturn),
+    lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
