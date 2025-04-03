@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotifyStatusPresenter = require('../../../../app/presenters/notifications/setup/notify-status.presenter.js')
+const NotifyStatusPresenter = require('../../../../app/presenters/jobs/notifications/notify-status.presenter.js')
 
 describe('Notifications Setup - Notify status presenter', () => {
   let notifyStatus
@@ -18,7 +18,7 @@ describe('Notifications Setup - Notify status presenter', () => {
     beforeEach(() => {
       scheduledNotification = {
         messageType: 'email',
-        status: 'sending'
+        status: 'pending'
       }
     })
 
@@ -32,7 +32,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'created',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -47,7 +47,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'sending',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -134,7 +134,7 @@ describe('Notifications Setup - Notify status presenter', () => {
     beforeEach(() => {
       scheduledNotification = {
         messageType: 'letter',
-        status: 'sending'
+        status: 'pending'
       }
     })
 
@@ -163,7 +163,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'created',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -178,7 +178,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'sending',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })

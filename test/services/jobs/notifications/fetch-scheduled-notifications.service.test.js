@@ -28,7 +28,7 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
 
     scheduledNotification = await ScheduledNotificationHelper.add({
       eventId: event.id,
-      status: 'sending'
+      status: 'pending'
     })
 
     // The 'scheduledNotification' status is 'error'
@@ -74,7 +74,7 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
         log: null,
         notifyId: null,
         notifyStatus: null,
-        status: 'sending'
+        status: 'pending'
       })
     })
   })

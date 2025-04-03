@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
-const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
@@ -26,7 +25,6 @@ describe('Job - Notifications - Process notifications status updates service', (
   const ONE_HUNDRED_MILLISECONDS = 100
 
   let event
-  let event2
   let notifierStub
   let scheduledNotification
   let scheduledNotification2
@@ -40,32 +38,21 @@ describe('Job - Notifications - Process notifications status updates service', (
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
 
     event = await EventHelper.add({
-      type: 'notification',
-      status: 'completed'
+      metadata: {},
+      status: 'completed',
+      type: 'notification'
     })
 
     scheduledNotification = await ScheduledNotificationHelper.add({
       eventId: event.id,
-      status: 'sending',
+      status: 'pending',
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
 
     scheduledNotification2 = await ScheduledNotificationHelper.add({
       eventId: event.id,
-      status: 'sending',
-      notifyStatus: 'created',
-      createdAt: timestampForPostgres()
-    })
-
-    event2 = await EventHelper.add({
-      type: 'notification',
-      status: 'completed'
-    })
-
-    await ScheduledNotificationHelper.add({
-      eventId: event2.id,
-      status: 'sending',
+      status: 'pending',
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
@@ -151,6 +138,36 @@ describe('Job - Notifications - Process notifications status updates service', (
     })
   })
 
+  describe('when notify returns a status error', () => {
+    beforeEach(() => {
+      if (stubNotify) {
+        Sinon.stub(NotifyClient.prototype, 'getNotificationById')
+          .onFirstCall()
+          .resolves({
+            data: {
+              status: 'temporary-failure'
+            }
+          })
+          .resolves({
+            data: {
+              status: 'received'
+            }
+          })
+      }
+    })
+
+    it('updates the event error count ', async () => {
+      await ProcessNotificationsStatusUpdatesService.go()
+
+      const refreshedEvent = await event.$query()
+
+      expect(refreshedEvent).to.equal({
+        ...event,
+        metadata: { error: 1 }
+      })
+    })
+  })
+
   describe('when Notify returns an error (4xx, 5xx)', () => {
     beforeEach(() => {
       _stubUnSuccessfulNotify()
@@ -159,12 +176,12 @@ describe('Job - Notifications - Process notifications status updates service', (
     it('should not update the "scheduledNotification"', async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
-      const result = await ScheduledNotificationModel.query().findById(scheduledNotification.id)
+      const refreshScheduledNotification = await scheduledNotification.$query()
 
-      expect(result.notifyStatus).to.equal('created')
-      expect(result.status).to.equal('sending')
+      expect(refreshScheduledNotification.notifyStatus).to.equal('created')
+      expect(refreshScheduledNotification.status).to.equal('pending')
 
-      expect(result).to.equal(scheduledNotification)
+      expect(refreshScheduledNotification).to.equal(scheduledNotification)
     })
   })
 })
