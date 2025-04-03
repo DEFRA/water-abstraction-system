@@ -36,7 +36,7 @@ async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
-  const submissionData = _submissionData(returnLog)
+  const submissionData = _submissionData(referenceData.lines, returnLog)
 
   const data = { ...referenceData, ...submissionData }
 
@@ -170,7 +170,7 @@ function _referenceData(returnLog) {
   }
 }
 
-function _submissionData(returnLog) {
+function _submissionData(lines, returnLog) {
   if (returnLog.returnSubmissions.length === 0) {
     return {}
   }
@@ -185,7 +185,7 @@ function _submissionData(returnLog) {
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: _submissionLines(returnSubmissionLines),
+    lines: nilReturn ? lines : _submissionLines(returnSubmissionLines, nilReturn),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
