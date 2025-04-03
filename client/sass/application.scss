@@ -49,6 +49,22 @@ $govuk-global-styles: true;
 }
 
 // ========== ========== ========== ========== ==========
+// Message preview
+// ========== ========== ========== ========== ==========
+
+// message preview container
+.message-preview {
+  background-color: govuk-colour("light-grey");
+  border: 5px solid  $govuk-secondary-text-colour;
+  padding: 2rem;
+}
+
+.message-preview h1 {
+  font-size: 1.1875rem;
+  margin: 0;
+}
+
+// ========== ========== ========== ========== ==========
 // Nav bar
 // ========== ========== ========== ========== ==========
 

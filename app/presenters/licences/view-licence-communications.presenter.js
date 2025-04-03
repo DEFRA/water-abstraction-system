@@ -7,29 +7,42 @@
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
  * @param {module:WorkflowModel[]} communications - All in-progress workflow records for the licence
+ * @param {string} documentId - The UUID of the document
+ * @param {string} licenceId - The UUID of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(communications) {
+function go(communications, documentId, licenceId) {
   return {
-    communications: _communications(communications)
+    communications: _communications(communications, documentId, licenceId)
   }
 }
 
-function _communications(communications) {
+function _communications(communications, documentId, licenceId) {
   return communications.map((communication) => {
     return {
       id: communication.id,
+      link: _link(communication.id, documentId, licenceId),
       type: _type(communication),
       sender: communication.event.issuer,
       sent: formatLongDate(new Date(communication.event.createdAt)),
       method: sentenceCase(communication.messageType)
     }
   })
+}
+
+function _link(communicationId, documentId, licenceId) {
+  if (FeatureFlagsConfig.enableNotificationsView) {
+    return `/system/notifications/${communicationId}?id=${licenceId}`
+  }
+
+  return `/licences/${documentId}/communications/${communicationId}`
 }
 
 function _type(communication) {
