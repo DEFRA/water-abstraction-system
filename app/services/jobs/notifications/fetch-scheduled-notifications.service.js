@@ -25,7 +25,7 @@ async function go() {
 
   return ScheduledNotificationModel.query()
     .select(['id', 'notifyId', 'status', 'notifyStatus', 'log', 'eventId', 'createdAt'])
-    .where('status', 'sending')
+    .where('status', 'pending')
     .andWhere('createdAt', '>=', sevenDaysAgo)
 }
 

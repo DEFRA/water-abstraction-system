@@ -18,7 +18,7 @@ describe('Notifications Setup - Notify status presenter', () => {
     beforeEach(() => {
       scheduledNotification = {
         messageType: 'email',
-        status: 'sending'
+        status: 'pending'
       }
     })
 
@@ -32,7 +32,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'created',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -47,7 +47,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'sending',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -134,7 +134,7 @@ describe('Notifications Setup - Notify status presenter', () => {
     beforeEach(() => {
       scheduledNotification = {
         messageType: 'letter',
-        status: 'sending'
+        status: 'pending'
       }
     })
 
@@ -163,7 +163,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'created',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
@@ -178,7 +178,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'sending',
-          status: 'sending'
+          status: 'pending'
         })
       })
     })
