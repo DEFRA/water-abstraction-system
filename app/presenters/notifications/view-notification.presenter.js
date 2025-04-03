@@ -31,20 +31,16 @@ function go(notificationData) {
 
 function _address(personalisation) {
   const addressLines = [
-    'address_line_1',
-    'address_line_2',
-    'address_line_3',
-    'address_line_4',
-    'address_line_5',
-    'postcode'
+    personalisation['address_line_1'],
+    personalisation['address_line_2'],
+    personalisation['address_line_3'],
+    personalisation['address_line_4'],
+    personalisation['address_line_5'],
+    personalisation['postcode']
   ]
 
-  const address = addressLines.map((line) => {
-    return personalisation[line]
-  })
-
-  return address.filter((line) => {
-    return line
+  return addressLines.filter((addressLine) => {
+    return addressLine
   })
 }
 
