@@ -112,7 +112,12 @@ describe('Fetch Return Log service', () => {
       const result = await FetchReturnLogService.go(testReturnLog.id)
 
       expect(result.versions).to.have.length(3)
-      expect(result.versions.map((v) => v.version)).to.equal([3, 2, 1])
+
+      const versions = result.versions.map((v) => {
+        return v.version
+      })
+
+      expect(versions).to.equal([3, 2, 1])
     })
 
     it('applies readings to selected submission', async () => {

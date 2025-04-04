@@ -96,7 +96,7 @@ describe.only('Notifications controller', () => {
       describe('/notifications/{notificationId}', () => {
         describe('GET', () => {
           beforeEach(async () => {
-            options = {
+            getOptions = {
               method: 'GET',
               url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
               auth: {
@@ -112,7 +112,7 @@ describe.only('Notifications controller', () => {
             })
 
             it('returns the page successfully', async () => {
-              const response = await server.inject(options)
+              const response = await server.inject(getOptions)
 
               expect(response.statusCode).to.equal(200)
               expect(response.payload).to.contain('Licence 01/117')

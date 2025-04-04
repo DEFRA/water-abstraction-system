@@ -13,7 +13,7 @@ const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const UpdateNotificationsService = require('../../../../app/services/notifications/setup/update-notifications.service.js')
+const UpdateNotificationsService = require('../../../../app/services/jobs/notifications/update-notifications.service.js')
 
 describe('Notifications Setup - Update Notifications service', () => {
   let eventId
@@ -32,7 +32,7 @@ describe('Notifications Setup - Update Notifications service', () => {
     scheduledNotification = await ScheduledNotificationHelper.add({
       createdAt: timestampForPostgres(),
       eventId,
-      status: 'sending'
+      status: 'pending'
     })
   })
 

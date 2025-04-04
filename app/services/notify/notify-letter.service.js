@@ -5,9 +5,7 @@
  * @module NotifyLetterService
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientService = require('./notify-client.service.js')
 
 /**
  * Send a letter using GOV.UK Notify
@@ -41,7 +39,7 @@ const config = require('../../../config/notify.config.js')
  * @returns {Promise<object>}
  */
 async function go(templateId, options) {
-  const notifyClient = new NotifyClient(config.apiKey)
+  const notifyClient = NotifyClientService.go()
 
   return _sendLetter(notifyClient, templateId, options)
 }
@@ -57,11 +55,15 @@ async function _sendLetter(notifyClient, templateId, options) {
       statusText: response.statusText.toLowerCase()
     }
   } catch (error) {
-    return {
+    const errorDetails = {
       status: error.status,
       message: error.message,
       errors: error.response.data.errors
     }
+
+    global.GlobalNotifier.omfg('Notify send letter failed', errorDetails)
+
+    return errorDetails
   }
 }
 
