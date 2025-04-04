@@ -53,7 +53,7 @@ function _tableRows(data) {
       { html: `<a href="/notifications/report/${notification.id}">${name}</a>` },
       { text: notification.issuer },
       { text: notification.recipientCount, format: 'numeric' },
-      { text: notification.errorCount, format: 'numeric' }
+      { html: notification.errorCount ? `<strong class="govuk-tag govuk-tag--orange">ERROR</strong>` : '' }
     ])
   }
 
