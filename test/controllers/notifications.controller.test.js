@@ -18,7 +18,7 @@ const ViewNotificationService = require('../../app/services/notifications/view-n
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Notifications controller', () => {
+describe('Notifications controller', () => {
   const basePath = '/notifications'
 
   let getOptions
