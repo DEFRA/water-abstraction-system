@@ -231,6 +231,25 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data.journey).to.equal('nil-return')
       })
+
+      it('populates the lines array with placeholder data', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
+
+        expect(matchingSession.data.lines).to.equal([
+          {
+            endDate: '2022-04-30T00:00:00.000Z',
+            startDate: '2022-04-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-05-31T00:00:00.000Z',
+            startDate: '2022-05-01T00:00:00.000Z'
+          }
+        ])
+      })
     })
   })
 
