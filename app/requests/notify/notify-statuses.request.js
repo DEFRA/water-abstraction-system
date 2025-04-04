@@ -2,10 +2,10 @@
 
 /**
  * Get the statuses of notifications by unique reference from GOV.UK Notify
- * @module NotifyStatusesService
+ * @module NotifyStatusesRequest
  */
 
-const NotifyClientService = require('./notify-client.service.js')
+const NotifyClientRequest = require('./notify-client.request.js')
 
 /**
  * Get the statuses of notifications by unique reference from GOV.UK Notify
@@ -18,8 +18,8 @@ const NotifyClientService = require('./notify-client.service.js')
  *
  * @returns {Promise<object>}
  */
-async function go(olderThanNotificationId, referenceCode) {
-  const notifyClient = NotifyClientService.go()
+async function send(olderThanNotificationId, referenceCode) {
+  const notifyClient = NotifyClientRequest.go()
 
   return _statuses(notifyClient, olderThanNotificationId, referenceCode)
 }
@@ -44,5 +44,5 @@ async function _statuses(notifyClient, olderThanNotificationId, referenceCode) {
 }
 
 module.exports = {
-  go
+  send
 }

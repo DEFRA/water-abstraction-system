@@ -2,7 +2,7 @@
 
 /**
  * Creates a Notify Client
- * @module NotifyClientService
+ * @module NotifyClientRequest
  */
 
 const NotifyClient = require('notifications-node-client').NotifyClient

@@ -14,9 +14,9 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
-const NotifyLetterService = require('../../../app/services/notify/notify-letter.service.js')
+const NotifyLetterRequest = require('../../../app/requests/notify/notify-letter.request.js')
 
-describe('Notify - Letter service', () => {
+describe('Notify - Letter request', () => {
   let notifierStub
   let notifyStub
   let options
@@ -64,7 +64,7 @@ describe('Notify - Letter service', () => {
     })
 
     it('should call notify', async () => {
-      const result = await NotifyLetterService.go(templateId, options)
+      const result = await NotifyLetterRequest.send(templateId, options)
 
       expect(result).to.equal({
         id: result.id,
@@ -76,7 +76,7 @@ describe('Notify - Letter service', () => {
 
     if (stubNotify) {
       it('should use the notify client', async () => {
-        await NotifyLetterService.go(templateId, options)
+        await NotifyLetterRequest.send(templateId, options)
 
         expect(notifyStub.calledWith(templateId, options)).to.equal(true)
       })
@@ -110,7 +110,7 @@ describe('Notify - Letter service', () => {
         })
 
         it('should return an error', async () => {
-          const result = await NotifyLetterService.go(templateId, options)
+          const result = await NotifyLetterRequest.send(templateId, options)
 
           expect(result).to.equal({
             status: 400,
@@ -146,7 +146,7 @@ describe('Notify - Letter service', () => {
         })
 
         it('should return an error', async () => {
-          const result = await NotifyLetterService.go(templateId, options)
+          const result = await NotifyLetterRequest.send(templateId, options)
 
           expect(result).to.equal({
             status: 400,
