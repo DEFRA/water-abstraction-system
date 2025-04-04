@@ -113,9 +113,15 @@ function _validate(filters) {
     return null
   }
 
-  const toDateError = validation.error.details.find((detail) => detail.context.key === 'toFullDate')
-  const fromDateError = validation.error.details.find((detail) => detail.context.key === 'fromFullDate')
-  const sentByError = validation.error.details.find((detail) => detail.context.key === 'sentBy')
+  const toDateError = validation.error.details.find((detail) => {
+    return detail.context.key === 'toFullDate'
+  })
+  const fromDateError = validation.error.details.find((detail) => {
+    return detail.context.key === 'fromFullDate'
+  })
+  const sentByError = validation.error.details.find((detail) => {
+    return detail.context.key === 'sentBy'
+  })
 
   return {
     text: 'There was a problem with your filters.',
