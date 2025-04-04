@@ -7,6 +7,7 @@
 
 const NotificationsIndexService = require('../services/notifications/index.service.js')
 const SubmitNotificationsIndexService = require('../services/notifications/submit-index.service.js')
+const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 
 const basePath = 'notifications'
 
@@ -22,7 +23,17 @@ async function submitIndex(request, h) {
   return h.redirect('/system/notifications')
 }
 
+async function view(request, h) {
+  const { id: notificationId } = request.params
+  const { id: licenceId } = request.query
+
+  const pageData = await ViewNotificationService.go(notificationId, licenceId)
+
+  return h.view('notifications/view.njk', pageData)
+}
+
 module.exports = {
   index,
-  submitIndex
+  submitIndex,
+  view
 }
