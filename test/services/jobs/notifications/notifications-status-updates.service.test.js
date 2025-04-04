@@ -71,7 +71,7 @@ describe('Job - Notifications - Process notifications status updates service', (
       _stubSuccessfulNotify()
     })
 
-    it.only('returns the first scheduled notification data', { timeout: 3000 }, async () => {
+    it('returns the first scheduled notification data', { timeout: 3000 }, async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
       const updatedResult = await scheduledNotification.$query()
