@@ -10,10 +10,10 @@ const { expect } = Code
 
 // Things to stub
 const FetchEventNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
-const ViewNotificationsPresenter = require('../../../app/presenters/notifications/view.presenter.js')
+const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index.presenter.js')
 
 // Thing under test
-const ViewNotificationsService = require('../../../app/services/notifications/view.service.js')
+const NotificationsIndexService = require('../../../app/services/notifications/index.service.js')
 
 describe('Notifications - view', () => {
   let yarStub
@@ -28,7 +28,7 @@ describe('Notifications - view', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns({}) }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [],
@@ -37,7 +37,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -58,7 +58,7 @@ describe('Notifications - view', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns() }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -75,7 +75,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -117,7 +117,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -134,7 +134,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -186,7 +186,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -203,7 +203,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -247,7 +247,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -264,7 +264,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -304,7 +304,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -321,7 +321,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -362,7 +362,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -379,7 +379,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -420,7 +420,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -437,7 +437,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -477,7 +477,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -494,7 +494,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -534,7 +534,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -551,7 +551,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -592,7 +592,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -609,7 +609,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -650,7 +650,7 @@ describe('Notifications - view', () => {
         })
       }
       Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
-      Sinon.stub(ViewNotificationsPresenter, 'go').resolves({
+      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -667,7 +667,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await ViewNotificationsService.go(yarStub)
+      const result = await NotificationsIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',

@@ -11,8 +11,8 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const ViewNotificationsService = require('../../app/services/notifications/view.service.js')
-const SubmitViewNotificationsService = require('../../app/services/notifications/submit-view.service.js')
+const IndexNotificationsService = require('../../app/services/notifications/index.service.js')
+const SubmitIndexNotificationsService = require('../../app/services/notifications/submit-index.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -56,7 +56,7 @@ describe('Notifications controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewNotificationsService, 'go').returns({
+          Sinon.stub(IndexNotificationsService, 'go').returns({
             backLink: '/manage',
             error: null,
             filter: undefined,
@@ -95,7 +95,7 @@ describe('Notifications controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitViewNotificationsService, 'go').returns()
+          Sinon.stub(SubmitIndexNotificationsService, 'go').returns()
           postOptions = postRequestOptions(basePath, {})
         })
 

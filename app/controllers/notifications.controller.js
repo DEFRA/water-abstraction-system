@@ -5,24 +5,24 @@
  * @module NotificationsController
  */
 
-const ViewNotificationsService = require('../services/notifications/view.service.js')
-const SubmitViewNotificationsService = require('../services/notifications/submit-view.service.js')
+const NotificationsIndexService = require('../services/notifications/index.service.js')
+const SubmitNotificationsIndexService = require('../services/notifications/submit-index.service.js')
 
 const basePath = 'notifications'
 
-async function view(request, h) {
-  const pageData = await ViewNotificationsService.go(request.yar)
+async function index(request, h) {
+  const pageData = await NotificationsIndexService.go(request.yar)
 
-  return h.view(`${basePath}/view.njk`, pageData)
+  return h.view(`${basePath}/index.njk`, pageData)
 }
 
-async function submitView(request, h) {
-  await SubmitViewNotificationsService.go(request.payload, request.yar)
+async function submitIndex(request, h) {
+  await SubmitNotificationsIndexService.go(request.payload, request.yar)
 
   return h.redirect('/system/notifications')
 }
 
 module.exports = {
-  view,
-  submitView
+  index,
+  submitIndex
 }

@@ -6,8 +6,8 @@
  */
 
 const FetchEventNotificationsService = require('./fetch-events-notifications.service.js')
-const ViewNotificationsPresenter = require('../../presenters/notifications/view.presenter.js')
-const ViewNotificationsValidator = require('../../validators/notifications/view.validator.js')
+const NotificationsIndexPresenter = require('../../presenters/notifications/index.presenter.js')
+const NotificationsIndexValidator = require('../../validators/notifications/index.validator.js')
 
 /**
  * Orchestrates presenting the data for `/notifications` page
@@ -41,7 +41,7 @@ async function go(yar) {
     data = await FetchEventNotificationsService.go(filter)
   }
 
-  const formattedData = await ViewNotificationsPresenter.go(data)
+  const formattedData = await NotificationsIndexPresenter.go(data)
 
   return {
     activeNavBar: 'manage',
@@ -107,7 +107,7 @@ function _validate(filters) {
     return null
   }
 
-  const validation = ViewNotificationsValidator.go(filters)
+  const validation = NotificationsIndexValidator.go(filters)
 
   if (!validation.error) {
     return null

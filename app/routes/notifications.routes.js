@@ -9,7 +9,7 @@ const routes = [
     method: 'GET',
     path: basePath,
     options: {
-      handler: NotificationsController.view,
+      handler: NotificationsController.index,
       auth: {
         access: {
           scope: ['returns']
@@ -21,7 +21,7 @@ const routes = [
     method: 'POST',
     path: basePath,
     options: {
-      handler: NotificationsController.submitView,
+      handler: NotificationsController.submitIndex,
       auth: {
         access: {
           scope: ['returns']

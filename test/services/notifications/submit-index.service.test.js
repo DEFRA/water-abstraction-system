@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const SubmitViewService = require('../../../app/services/notifications/submit-view.service.js')
+const SubmitNotificationsIndexService = require('../../../app/services/notifications/submit-index.service.js')
 
 describe('Notifications - Submit view', () => {
   let payload
@@ -28,7 +28,7 @@ describe('Notifications - Submit view', () => {
       payload = {
         clearFilters: 'reset'
       }
-      await SubmitViewService.go(payload, yarStub)
+      await SubmitNotificationsIndexService.go(payload, yarStub)
 
       expect(yarStub.clear.called).to.be.true()
       expect(yarStub.set.called).to.be.false()
@@ -56,7 +56,7 @@ describe('Notifications - Submit view', () => {
         'sent-to-month': '12',
         'sent-to-year': '2025'
       }
-      await SubmitViewService.go(payload, yarStub)
+      await SubmitNotificationsIndexService.go(payload, yarStub)
 
       expect(yarStub.clear.called).to.be.false()
       expect(yarStub.set.called).to.be.true()
@@ -86,7 +86,7 @@ describe('Notifications - Submit view', () => {
     it('saves the submitted payload into yar', async () => {
       payload = {}
 
-      await SubmitViewService.go(payload, yarStub)
+      await SubmitNotificationsIndexService.go(payload, yarStub)
 
       expect(yarStub.clear.called).to.be.false()
       expect(yarStub.set.called).to.be.true()

@@ -2,7 +2,7 @@
 
 /**
  * Validates data submitted for the `/notifications` page
- * @module SentDatesValidator
+ * @module IndexValidator
  */
 
 const Joi = require('joi').extend(require('@joi/date'))
