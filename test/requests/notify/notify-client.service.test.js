@@ -16,9 +16,9 @@ const NotifyConfig = require('../../../config/notify.config.js')
 const RequestConfig = require('../../../config/request.config.js')
 
 // Thing under test
-const NotifyClientService = require('../../../app/services/notify/notify-client.service.js')
+const NotifyClientRequest = require('../../../app/requests/notify/notify-client.request.js')
 
-describe('Notify - Client service', () => {
+describe('Notify - Client request', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -29,7 +29,7 @@ describe('Notify - Client service', () => {
     })
 
     it('should create a notify client', () => {
-      const result = NotifyClientService.go()
+      const result = NotifyClientRequest.go()
 
       expect(result).to.equal(new NotifyClient(NotifyConfig.apiKey))
     })
@@ -41,7 +41,7 @@ describe('Notify - Client service', () => {
     })
 
     it('should create a notify client with the provided proxy url', () => {
-      const result = NotifyClientService.go()
+      const result = NotifyClientRequest.go()
 
       expect(result.apiClient.restClient.defaults.httpsAgent.proxy.host).to.equal('test.proxy.defra.gov.uk')
       expect(result.apiClient.restClient.defaults.httpsAgent.proxy.hostname).to.equal('test.proxy.defra.gov.uk')

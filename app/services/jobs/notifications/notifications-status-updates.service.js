@@ -10,7 +10,7 @@ const { setTimeout } = require('node:timers/promises')
 const FetchScheduledNotificationsService = require('./fetch-scheduled-notifications.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
-const NotifyStatusService = require('../../notify/notify-status.service.js')
+const NotifyStatusRequest = require('../../../requests/notify/notify-status.request.js')
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
@@ -59,7 +59,7 @@ async function _delay(delay) {
 }
 
 async function _notificationStatus(scheduledNotification) {
-  const notifyResponse = await NotifyStatusService.go(scheduledNotification.notifyId)
+  const notifyResponse = await NotifyStatusRequest.send(scheduledNotification.notifyId)
 
   if (notifyResponse.errors) {
     return scheduledNotification

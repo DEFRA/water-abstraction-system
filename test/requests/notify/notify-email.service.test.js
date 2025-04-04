@@ -14,9 +14,9 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
-const NotifyEmailService = require('../../../app/services/notify/notify-email.service.js')
+const NotifyEmailRequest = require('../../../app/requests/notify/notify-email.request.js')
 
-describe('Notify - Email service', () => {
+describe('Notify - Email request', () => {
   let emailAddress
   let notifierStub
   let notifyStub
@@ -62,7 +62,7 @@ describe('Notify - Email service', () => {
     })
 
     it('should call notify', async () => {
-      const result = await NotifyEmailService.go(templateId, emailAddress, options)
+      const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
 
       expect(result).to.equal({
         id: result.id,
@@ -74,7 +74,7 @@ describe('Notify - Email service', () => {
 
     if (stubNotify) {
       it('should use the notify client', async () => {
-        await NotifyEmailService.go(templateId, emailAddress, options)
+        await NotifyEmailRequest.send(templateId, emailAddress, options)
 
         expect(notifyStub.calledWith(templateId, emailAddress, options)).to.equal(true)
       })
@@ -104,7 +104,7 @@ describe('Notify - Email service', () => {
         })
 
         it('should return an error', async () => {
-          const result = await NotifyEmailService.go(templateId, emailAddress, options)
+          const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
 
           expect(result).to.equal({
             status: 400,
@@ -140,7 +140,7 @@ describe('Notify - Email service', () => {
         })
 
         it('should return an error', async () => {
-          const result = await NotifyEmailService.go(templateId, emailAddress, options)
+          const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
 
           expect(result).to.equal({
             status: 400,
