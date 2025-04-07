@@ -13,9 +13,9 @@ const { NotifyClient } = require('notifications-node-client')
 const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
-const NotifyStatusService = require('../../../app/services/notify/notify-status.service.js')
+const NotifyStatusRequest = require('../../../app/requests/notify/notify-status.request.js')
 
-describe('Notify - Status service', () => {
+describe('Notify - Status request', () => {
   let notificationId
   let notifierStub
   let notifyStub
@@ -39,7 +39,7 @@ describe('Notify - Status service', () => {
     })
 
     it('should call notify', async () => {
-      const result = await NotifyStatusService.go(notificationId)
+      const result = await NotifyStatusRequest.send(notificationId)
 
       expect(result).to.equal({
         status: 'received'
@@ -48,7 +48,7 @@ describe('Notify - Status service', () => {
 
     if (stubNotify) {
       it('should use the notify client', async () => {
-        await NotifyStatusService.go(notificationId)
+        await NotifyStatusRequest.send(notificationId)
 
         expect(notifyStub.calledWith(notificationId)).to.equal(true)
       })
@@ -64,7 +64,7 @@ describe('Notify - Status service', () => {
     })
 
     it('should return an error', async () => {
-      const result = await NotifyStatusService.go(notificationId)
+      const result = await NotifyStatusRequest.send(notificationId)
 
       expect(result).to.equal({
         status: 404,
