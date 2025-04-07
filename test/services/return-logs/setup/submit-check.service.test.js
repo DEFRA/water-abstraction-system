@@ -9,10 +9,15 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const PointHelper = require('../../../support/helpers/point.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
+const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
+const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
@@ -29,6 +34,7 @@ describe('Return Logs Setup - Submit Check service', () => {
   let returnLog
   let returnVersion
   let returnRequirement
+  let returnSubmission
   let session
   let sessionData
   let user
@@ -43,16 +49,36 @@ describe('Return Logs Setup - Submit Check service', () => {
       status: 'due'
     })
 
+    returnSubmission = await ReturnSubmissionHelper.add({
+      returnLogId: returnLog.id
+    })
+
     returnVersion = await ReturnVersionHelper.add({
       licenceId: licence.id,
       status: 'current',
       version: 1
     })
 
+    const returnRequirementLegacyId = _generateIdNumber()
     returnRequirement = await ReturnRequirementHelper.add({
       returnVersionId: returnVersion.id,
       returnsFrequency: 'month',
-      siteDescription: 'Test Site'
+      siteDescription: 'Test Site',
+      legacyId: returnRequirementLegacyId
+    })
+
+    const pointExternalId = _generateIdNumber()
+    const point = await PointHelper.add({ externalId: `9:${pointExternalId}` })
+    await ReturnRequirementPointHelper.add({
+      pointId: point.id,
+      returnRequirementId: returnRequirement.id,
+      externalId: `9:${returnRequirementLegacyId}:${pointExternalId}`
+    })
+
+    const purpose = await PurposeHelper.select()
+    await ReturnRequirementPurposeHelper.add({
+      purposeId: purpose.id,
+      returnRequirementId: returnRequirement.id
     })
 
     sessionData = {
@@ -61,6 +87,8 @@ describe('Return Logs Setup - Submit Check service', () => {
         licenceRef: licence.licenceRef,
         returnReference: returnLog.returnReference,
         returnLogId: returnLog.id,
+        returnSubmissionId: returnSubmission.id,
+        returnVersionId: returnVersion.id,
         startDate: '2023-01-01',
         endDate: '2023-12-31',
         lines: [
@@ -74,7 +102,8 @@ describe('Return Logs Setup - Submit Check service', () => {
             endDate: '2023-02-28',
             quantity: 200
           })
-        ]
+        ],
+        returnsFrequency: 'month'
       }
     }
 
@@ -103,7 +132,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
       const submissionLines = await ReturnSubmissionLineModel.query().where(
         'returnSubmissionId',
-        result.returnVersionId
+        result.returnSubmissionId
       )
 
       expect(submissionLines).to.have.length(2)
@@ -137,4 +166,12 @@ function _createInstance(model, helper, data = {}) {
     ...helper.defaults(),
     ...data
   })
+}
+
+// We need the return requirement and point to have known numbers so we have to
+// specify them otherwise the helper generates them randomly. However, the
+// numbers must be different for each test to avoid violating the external id
+// restraint. This helper function generates our random numbers
+function _generateIdNumber() {
+  return Math.floor(Math.random() * 9000) + 1000
 }
