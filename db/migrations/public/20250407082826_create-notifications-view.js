@@ -14,7 +14,7 @@ exports.up = function (knex) {
         'personalisation',
         // 'send_after',
         'status',
-        'log AS notify_error_message',
+        'log AS notify_error',
         'licences',
         // 'individual_entity_id AS individual_id',
         // 'company_entity_id AS company_id',

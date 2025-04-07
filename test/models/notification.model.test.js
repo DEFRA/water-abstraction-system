@@ -15,7 +15,7 @@ const NotificationHelper = require('../support/helpers/notification.helper.js')
 // Thing under test
 const NotificationModel = require('../../app/models/notification.model.js')
 
-describe.only('Notification model', () => {
+describe('Notification model', () => {
   let testRecord
 
   describe('Basic query', () => {
