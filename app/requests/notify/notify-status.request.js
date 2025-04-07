@@ -2,12 +2,10 @@
 
 /**
  * Get the status of a notification from GOV.UK Notify
- * @module NotifyStatusService
+ * @module NotifyStatusRequest
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientRequest = require('./notify-client.request.js')
 
 /**
  * Get the status of a notification from GOV.UK Notify
@@ -30,8 +28,8 @@ const config = require('../../../config/notify.config.js')
  *
  * @returns {Promise<object>}
  */
-async function go(notificationId) {
-  const notifyClient = new NotifyClient(config.apiKey)
+async function send(notificationId) {
+  const notifyClient = NotifyClientRequest.go()
 
   return _statusById(notifyClient, notificationId)
 }
@@ -57,5 +55,5 @@ async function _statusById(notifyClient, notificationId) {
 }
 
 module.exports = {
-  go
+  send
 }

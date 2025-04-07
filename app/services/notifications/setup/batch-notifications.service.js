@@ -8,8 +8,8 @@
 const { setTimeout } = require('node:timers/promises')
 
 const CreateNotificationsService = require('./create-notifications.service.js')
-const NotifyEmailService = require('../../notify/notify-email.service.js')
-const NotifyLetterService = require('../../notify/notify-letter.service.js')
+const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
+const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
 const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
@@ -116,7 +116,7 @@ function _scheduledNotification(scheduledNotification, notifyResponse) {
 }
 
 async function _sendLetter(scheduledNotification) {
-  const notifyResponse = await NotifyLetterService.go(scheduledNotification.templateId, {
+  const notifyResponse = await NotifyLetterRequest.send(scheduledNotification.templateId, {
     personalisation: scheduledNotification.personalisation,
     reference: scheduledNotification.reference
   })
@@ -125,7 +125,7 @@ async function _sendLetter(scheduledNotification) {
 }
 
 async function _sendEmail(scheduledNotification) {
-  const notifyResponse = await NotifyEmailService.go(
+  const notifyResponse = await NotifyEmailRequest.send(
     scheduledNotification.templateId,
     scheduledNotification.recipient,
     {

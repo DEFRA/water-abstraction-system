@@ -2,12 +2,10 @@
 
 /**
  * Send a letter using GOV.UK Notify
- * @module NotifyLetterService
+ * @module NotifyLetterRequest
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientRequest = require('./notify-client.request.js')
 
 /**
  * Send a letter using GOV.UK Notify
@@ -40,8 +38,8 @@ const config = require('../../../config/notify.config.js')
  *
  * @returns {Promise<object>}
  */
-async function go(templateId, options) {
-  const notifyClient = new NotifyClient(config.apiKey)
+async function send(templateId, options) {
+  const notifyClient = NotifyClientRequest.go()
 
   return _sendLetter(notifyClient, templateId, options)
 }
@@ -70,5 +68,5 @@ async function _sendLetter(notifyClient, templateId, options) {
 }
 
 module.exports = {
-  go
+  send
 }

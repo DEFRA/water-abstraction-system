@@ -2,12 +2,10 @@
 
 /**
  * Send an email using GOV.UK Notify
- * @module NotifyEmailService
+ * @module NotifyEmailRequest
  */
 
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const config = require('../../../config/notify.config.js')
+const NotifyClientRequest = require('./notify-client.request.js')
 
 /**
  * Send an email using GOV.UK Notify
@@ -36,8 +34,8 @@ const config = require('../../../config/notify.config.js')
  *
  * @returns {Promise<object>}
  */
-async function go(templateId, emailAddress, options) {
-  const notifyClient = new NotifyClient(config.apiKey)
+async function send(templateId, emailAddress, options) {
+  const notifyClient = NotifyClientRequest.go()
 
   return _sendEmail(notifyClient, templateId, emailAddress, options)
 }
@@ -66,5 +64,5 @@ async function _sendEmail(notifyClient, templateId, emailAddress, options) {
 }
 
 module.exports = {
-  go
+  send
 }

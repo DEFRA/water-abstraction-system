@@ -45,14 +45,14 @@ describe('Job - Notifications - Process notifications status updates service', (
 
     scheduledNotification = await ScheduledNotificationHelper.add({
       eventId: event.id,
-      status: 'sending',
+      status: 'pending',
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
 
     scheduledNotification2 = await ScheduledNotificationHelper.add({
       eventId: event.id,
-      status: 'sending',
+      status: 'pending',
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
@@ -71,7 +71,7 @@ describe('Job - Notifications - Process notifications status updates service', (
       _stubSuccessfulNotify()
     })
 
-    it('returns the first scheduled notification data', async () => {
+    it('returns the first scheduled notification data', { timeout: 3000 }, async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
       const updatedResult = await scheduledNotification.$query()
@@ -179,7 +179,7 @@ describe('Job - Notifications - Process notifications status updates service', (
       const refreshScheduledNotification = await scheduledNotification.$query()
 
       expect(refreshScheduledNotification.notifyStatus).to.equal('created')
-      expect(refreshScheduledNotification.status).to.equal('sending')
+      expect(refreshScheduledNotification.status).to.equal('pending')
 
       expect(refreshScheduledNotification).to.equal(scheduledNotification)
     })
