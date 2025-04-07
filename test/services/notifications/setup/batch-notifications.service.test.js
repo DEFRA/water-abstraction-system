@@ -12,7 +12,7 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const EventModel = require('../../../../app/models/event.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
 
 // Things we need to stub
@@ -35,8 +35,8 @@ describe('Notifications Setup - Batch notifications service', () => {
   let testRecipients
 
   beforeEach(async () => {
-    // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the scheduled
-    // notifications still saved in the database regardless of batch size
+    // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
+    // still saved in the database regardless of batch size
     Sinon.stub(NotifyConfig, 'batchSize').value(1)
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
@@ -88,10 +88,10 @@ describe('Notifications Setup - Batch notifications service', () => {
       })
     })
 
-    it('should persist the scheduled notifications', async () => {
+    it('should persist the notifications', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-      const result = await _getScheduledNotifications(eventId)
+      const result = await getNotifications(eventId)
 
       const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
@@ -106,21 +106,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[0].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [recipients.primaryUser.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: result[0].notifyId,
           notifyStatus: 'created',
           plaintext: result[0].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[0].createdAt
         },
         {
@@ -133,21 +125,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[1].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [recipients.returnsAgent.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: result[1].notifyId,
           notifyStatus: 'created',
           plaintext: result[1].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[1].createdAt
         },
         {
@@ -166,21 +150,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[2].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [recipients.licenceHolder.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: result[2].notifyId,
           notifyStatus: 'created',
           plaintext: result[2].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[2].createdAt
         },
         {
@@ -199,21 +175,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[3].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [recipients.returnsTo.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: result[3].notifyId,
           notifyStatus: 'created',
           plaintext: result[3].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[3].createdAt
         },
         {
@@ -232,21 +200,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             address_line_5: 'WD25 7LR',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[4].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [firstMultiple, secondMultiple],
-          individualId: null,
-          companyId: null,
           notifyId: result[4].notifyId,
           notifyStatus: 'created',
           plaintext: result[4].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[4].createdAt
         }
       ])
@@ -311,10 +271,10 @@ describe('Notifications Setup - Batch notifications service', () => {
       _stubUnSuccessfulNotify()
     })
 
-    it('should persist the scheduled notifications with the errors', async () => {
+    it('should persist the notifications with the errors', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-      const result = await _getScheduledNotifications(eventId)
+      const result = await getNotifications(eventId)
 
       expect(result).to.equal([
         // This should contain the error
@@ -328,24 +288,17 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[0].sendAfter,
           status: 'error',
-          log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
+          notifyError:
+            '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
           licences: [recipients.primaryUser.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: null,
           notifyStatus: null,
           plaintext: null,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[0].createdAt
         },
-        // Scheduled notifications without errors should still work
+        // notifications without errors should still work
         {
           id: result[1].id,
           recipient: 'returns.agent@important.com',
@@ -356,21 +309,13 @@ describe('Notifications Setup - Batch notifications service', () => {
             returnDueDate: '28 April 2025',
             periodStartDate: '1 April 2022'
           },
-          sendAfter: result[1].sendAfter,
           status: 'pending',
-          log: null,
+          notifyError: null,
           licences: [recipients.returnsAgent.licence_refs],
-          individualId: null,
-          companyId: null,
           notifyId: result[1].notifyId,
           notifyStatus: 'created',
           plaintext: result[1].plaintext,
           eventId,
-          metadata: null,
-          statusChecks: null,
-          nextStatusCheck: null,
-          notificationType: null,
-          jobId: null,
           createdAt: result[1].createdAt
         }
       ])
@@ -402,8 +347,8 @@ describe('Notifications Setup - Batch notifications service', () => {
   })
 })
 
-async function _getScheduledNotifications(eventId) {
-  return ScheduledNotificationModel.query().where('eventId', eventId)
+async function getNotifications(eventId) {
+  return NotificationModel.query().where('eventId', eventId)
 }
 
 function _stubSuccessfulNotify(response) {
