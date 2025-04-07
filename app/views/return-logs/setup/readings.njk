@@ -60,7 +60,8 @@
           classes: "govuk-input--width-10",
           id: 'reading-' + rowIndex,
           name: line.endDate,
-          value: line.reading
+          value: line.reading,
+          inputMode: 'numeric'
         }) }}
       {% endfor %}
     {% endcall %}
