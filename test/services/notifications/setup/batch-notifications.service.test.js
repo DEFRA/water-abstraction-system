@@ -91,7 +91,7 @@ describe('Notifications Setup - Batch notifications service', () => {
     it('should persist the notifications', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-      const result = await getNotifications(eventId)
+      const result = await _getNotifications(eventId)
 
       const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
@@ -274,7 +274,7 @@ describe('Notifications Setup - Batch notifications service', () => {
     it('should persist the notifications with the errors', async () => {
       await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-      const result = await getNotifications(eventId)
+      const result = await _getNotifications(eventId)
 
       expect(result).to.equal([
         // This should contain the error
@@ -347,7 +347,7 @@ describe('Notifications Setup - Batch notifications service', () => {
   })
 })
 
-async function getNotifications(eventId) {
+async function _getNotifications(eventId) {
   return NotificationModel.query().where('eventId', eventId)
 }
 
