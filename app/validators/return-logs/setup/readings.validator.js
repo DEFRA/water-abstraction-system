@@ -21,42 +21,55 @@ const Joi = require('joi')
 function go(payload, session, requestedYear, requestedMonth) {
   const { lines, startReading } = session
 
-  // Convert the payload object into an array of readings e.g. [10, 20, 30]
-  const meterReadingsArray = Object.values(payload).map(Number)
-
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
   const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
 
-  const schema = Joi.array()
-    .items(
-      Joi.number().min(0).allow(null).messages({
+  const schema = Joi.object().pattern(
+    /^reading-\d+$/, // Regex to match keys like 'reading-1', 'reading-3', etc.
+    Joi.number()
+      .min(0)
+      .custom((value, helpers) => {
+        // We need to check the values are in increasing order
+        return _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading)
+      })
+      .messages({
         'number.base': 'Meter readings must be a number or blank',
         'number.min': 'Meter readings must be a positive number'
       })
-    )
-    .custom((value, helpers) => {
-      // We need to check the values are in increasing order
-      return _meterReadingsInIncreasingOrder(value, helpers, previousHighestReading, subsequentLowestReading)
-    })
+  )
 
-  return schema.validate(meterReadingsArray, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
-function _meterReadingsInIncreasingOrder(value, helpers, previousHighestReading, subsequentLowestReading) {
-  if (value[0] < previousHighestReading) {
+function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading) {
+  const key = helpers.state.path[0] // Get the current key being validated
+
+  // Convert the payload into an array e.g. [{ key: 'reading-0', reading: 10 }, { key: 'reading-2', reading: 30 }]
+  const meterReadingsArray = Object.entries(payload).map(([key, reading]) => {
+    return {
+      key,
+      reading: Number(reading)
+    }
+  })
+
+  const currentKeyIndex = meterReadingsArray.findIndex((item) => {
+    return item.key === key
+  })
+
+  if (value < previousHighestReading) {
     return helpers.message(
       `The meter readings must be greater than or equal to the previous reading of ${previousHighestReading}`
     )
   }
 
-  if (value[value.length - 1] > subsequentLowestReading) {
+  if (value > subsequentLowestReading) {
     return helpers.message(
       `The meter readings must be less than or equal to the subsequent reading of ${subsequentLowestReading}`
     )
   }
 
-  for (let i = 1; i < value.length; i++) {
-    if (value[i] < value[i - 1]) {
+  if (currentKeyIndex > 0) {
+    if (value < meterReadingsArray[currentKeyIndex - 1].reading) {
       return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
     }
   }
