@@ -11,7 +11,7 @@ const CreateNotificationsService = require('./create-notifications.service.js')
 const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
 const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
-const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
+const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/notifications.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')

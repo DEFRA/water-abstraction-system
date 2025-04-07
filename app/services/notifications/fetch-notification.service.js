@@ -6,15 +6,15 @@
  */
 
 const LicenceModel = require('../../models/licence.model.js')
-const ScheduledNotificationsModel = require('../../models/scheduled-notification.model.js')
+const NotificationsModel = require('../../models/notification.model.js')
 
 /**
  * Fetches the matching notification and licence data needed for the view
  *
- * @param {string} notificationId - The UUID for the scheduledNotification
+ * @param {string} notificationId - The UUID for the notification
  * @param {string} licenceId - The UUID for the related licence
  *
- * @returns {Promise<module:ScheduledNotificationsModel>} the matching `ScheduledNotificationsModel` instance and
+ * @returns {Promise<module:NotificationModel>} the matching `NotificationsModel` instance and
  * licence data
  */
 async function go(notificationId, licenceId) {
@@ -29,9 +29,9 @@ async function _fetchLicence(licenceId) {
 }
 
 async function _fetchNotification(notificationId) {
-  return ScheduledNotificationsModel.query()
+  return NotificationsModel.query()
     .findById(notificationId)
-    .select(['messageType', 'personalisation', 'plaintext', 'sendAfter'])
+    .select(['messageType', 'personalisation', 'plaintext', 'createdAt'])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select(['metadata'])

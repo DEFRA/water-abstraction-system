@@ -50,7 +50,7 @@ function notification() {
       '\n' +
       '# Why you are receiving this notification\n' +
       '\n',
-    sendAfter: new Date('2024-07-02T16:52:17.000Z'),
+    createdAt: new Date('2024-07-02T16:52:17.000Z'),
     event
   })
 

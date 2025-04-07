@@ -12,9 +12,9 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const ScheduledNotificationsPresenter = require('../../../../app/presenters/notifications/setup/scheduled-notifications.presenter.js')
+const NotificationsPresenter = require('../../../../app/presenters/notifications/setup/notifications.presenter.js')
 
-describe('Notifications Setup - Scheduled Notifications Presenter', () => {
+describe('Notifications Setup - Notifications Presenter', () => {
   const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
@@ -47,13 +47,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
   })
 
   it('correctly transform the recipients into notifications', () => {
-    const result = ScheduledNotificationsPresenter.go(
-      testRecipients,
-      determinedReturnsPeriod,
-      referenceCode,
-      journey,
-      eventId
-    )
+    const result = NotificationsPresenter.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
     const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
@@ -168,7 +162,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -203,7 +197,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -238,7 +232,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -275,7 +269,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -315,7 +309,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -355,7 +349,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -403,7 +397,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -438,7 +432,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -473,7 +467,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -510,7 +504,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -550,7 +544,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -590,7 +584,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -638,7 +632,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -673,7 +667,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -708,7 +702,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -745,7 +739,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -785,7 +779,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -825,7 +819,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,

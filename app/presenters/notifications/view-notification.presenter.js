@@ -10,12 +10,12 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 /**
  * Formats notification data ready for presenting in the view notification page
  *
- * @param {module:ScheduledNotificationModel} notificationData - The scheduled notification and related licence data
+ * @param {module:NotificationModel} notificationData - The notification and related licence data
  *
  * @returns {object} The data formatted for the view template
  */
 function go(notificationData) {
-  const { messageType, plaintext, personalisation, sendAfter } = notificationData.notification
+  const { messageType, plaintext, personalisation, createdAt } = notificationData.notification
   const { id: licenceId, licenceRef } = notificationData.licence
 
   return {
@@ -25,7 +25,7 @@ function go(notificationData) {
     licenceRef,
     messageType,
     pageTitle: _pageTitle(notificationData.notification),
-    sentDate: formatLongDate(sendAfter)
+    sentDate: formatLongDate(createdAt)
   }
 }
 
