@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const { stubNotify } = require('../../../../config/notify.config.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
@@ -26,12 +26,12 @@ describe('Job - Notifications - Process notifications status updates service', (
 
   let event
   let notifierStub
-  let scheduledNotification
-  let scheduledNotification2
+  let notification
+  let notification2
 
   beforeEach(async () => {
-    // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the scheduled
-    // notifications still updated in the database regardless of batch size
+    // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
+    // still updated in the database regardless of batch size
     Sinon.stub(NotifyConfig, 'batchSize').value(1)
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
@@ -43,14 +43,14 @@ describe('Job - Notifications - Process notifications status updates service', (
       type: 'notification'
     })
 
-    scheduledNotification = await ScheduledNotificationHelper.add({
+    notification = await NotificationHelper.add({
       eventId: event.id,
       status: 'pending',
       notifyStatus: 'created',
       createdAt: timestampForPostgres()
     })
 
-    scheduledNotification2 = await ScheduledNotificationHelper.add({
+    notification2 = await NotificationHelper.add({
       eventId: event.id,
       status: 'pending',
       notifyStatus: 'created',
@@ -71,69 +71,53 @@ describe('Job - Notifications - Process notifications status updates service', (
       _stubSuccessfulNotify()
     })
 
-    it('returns the first scheduled notification data', { timeout: 3000 }, async () => {
+    it('returns the first notification data', { timeout: 3000 }, async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
-      const updatedResult = await scheduledNotification.$query()
+      const updatedResult = await notification.$query()
 
       expect(updatedResult.notifyStatus).to.equal('received')
       expect(updatedResult.status).to.equal('sent')
 
       expect(updatedResult).to.equal({
-        companyId: null,
-        createdAt: scheduledNotification.createdAt,
+        createdAt: notification.createdAt,
         eventId: event.id,
-        id: scheduledNotification.id,
-        individualId: null,
-        jobId: null,
+        id: notification.id,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: 'received',
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
+        status: 'sent'
       })
     })
 
-    it('returns the second scheduled notification data', async () => {
+    it('returns the second notification data', async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
-      const updatedResult = await scheduledNotification2.$query()
+      const updatedResult = await notification2.$query()
 
       expect(updatedResult.notifyStatus).to.equal('received')
       expect(updatedResult.status).to.equal('sent')
 
       expect(updatedResult).to.equal({
-        companyId: null,
-        createdAt: scheduledNotification2.createdAt,
+        createdAt: notification2.createdAt,
         eventId: event.id,
-        id: scheduledNotification2.id,
-        individualId: null,
-        jobId: null,
+        id: notification2.id,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: 'received',
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
+        status: 'sent'
       })
     })
   })
@@ -173,15 +157,15 @@ describe('Job - Notifications - Process notifications status updates service', (
       _stubUnSuccessfulNotify()
     })
 
-    it('should not update the "scheduledNotification"', async () => {
+    it('should not update the "notification"', async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
-      const refreshScheduledNotification = await scheduledNotification.$query()
+      const refreshnotification = await notification.$query()
 
-      expect(refreshScheduledNotification.notifyStatus).to.equal('created')
-      expect(refreshScheduledNotification.status).to.equal('pending')
+      expect(refreshnotification.notifyStatus).to.equal('created')
+      expect(refreshnotification.status).to.equal('pending')
 
-      expect(refreshScheduledNotification).to.equal(scheduledNotification)
+      expect(refreshnotification).to.equal(notification)
     })
   })
 })
