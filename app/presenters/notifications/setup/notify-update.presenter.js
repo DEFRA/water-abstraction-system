@@ -36,7 +36,7 @@ function go(notify) {
 
 function _error(notify) {
   return {
-    log: JSON.stringify(notify),
+    notifyError: JSON.stringify(notify),
     status: 'error'
   }
 }

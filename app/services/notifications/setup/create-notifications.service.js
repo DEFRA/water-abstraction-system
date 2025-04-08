@@ -5,7 +5,7 @@
  * @module CreateNotificationsService
  */
 
-const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
 
 /**
  * Create notifications
@@ -21,7 +21,7 @@ const ScheduledNotificationModel = require('../../../../app/models/scheduled-not
  * @returns {object} - the created notifications
  */
 async function go(notifications) {
-  return ScheduledNotificationModel.query().insert(notifications)
+  return NotificationModel.query().insert(notifications)
 }
 
 module.exports = {

@@ -12,9 +12,9 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const ScheduledNotificationsPresenter = require('../../../../app/presenters/notifications/setup/scheduled-notifications.presenter.js')
+const NotificationsPresenter = require('../../../../app/presenters/notifications/setup/notifications.presenter.js')
 
-describe('Notifications Setup - Scheduled Notifications Presenter', () => {
+describe('Notifications Setup - Notifications Presenter', () => {
   const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
@@ -47,13 +47,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
   })
 
   it('correctly transform the recipients into notifications', () => {
-    const result = ScheduledNotificationsPresenter.go(
-      testRecipients,
-      determinedReturnsPeriod,
-      referenceCode,
-      journey,
-      eventId
-    )
+    const result = NotificationsPresenter.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
     const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
@@ -71,7 +65,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         },
         recipient: 'primary.user@important.com',
         reference: 'TEST-123',
-        sendAfter: '2025-01-01T00:00:00.000Z',
         templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
       {
@@ -87,7 +80,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         },
         reference: 'TEST-123',
         recipient: 'returns.agent@important.com',
-        sendAfter: '2025-01-01T00:00:00.000Z',
         templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
       },
       {
@@ -108,7 +100,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         reference: 'TEST-123',
-        sendAfter: '2025-01-01T00:00:00.000Z',
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       },
       {
@@ -129,7 +120,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         reference: 'TEST-123',
-        sendAfter: '2025-01-01T00:00:00.000Z',
         templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
       },
       {
@@ -150,7 +140,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         reference: 'TEST-123',
-        sendAfter: '2025-01-01T00:00:00.000Z',
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       }
     ])
@@ -168,7 +157,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -190,7 +179,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
             }
           ])
@@ -203,7 +191,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -225,7 +213,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'returns.agent@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
             }
           ])
@@ -238,7 +225,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -260,7 +247,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
             }
           ])
@@ -275,7 +261,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -302,7 +288,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
             }
           ])
@@ -315,7 +300,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -342,7 +327,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
             }
           ])
@@ -355,7 +339,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -382,7 +366,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
             }
           ])
@@ -403,7 +386,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -425,7 +408,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
             }
           ])
@@ -438,7 +420,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -460,7 +442,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'returns.agent@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a'
             }
           ])
@@ -473,7 +454,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -495,7 +476,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
             }
           ])
@@ -510,7 +490,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -537,7 +517,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
             }
           ])
@@ -550,7 +529,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -577,7 +556,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
             }
           ])
@@ -590,7 +568,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -617,7 +595,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
             }
           ])
@@ -638,7 +615,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -660,7 +637,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
             }
           ])
@@ -673,7 +649,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -695,7 +671,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'returns.agent@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
             }
           ])
@@ -708,7 +683,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -730,7 +705,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
               },
               recipient: 'primary.user@important.com',
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
             }
           ])
@@ -745,7 +719,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -772,7 +746,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
             }
           ])
@@ -785,7 +758,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -812,7 +785,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
             }
           ])
@@ -825,7 +797,7 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
         })
 
         it('correctly transforms the recipient to a notification', () => {
-          const result = ScheduledNotificationsPresenter.go(
+          const result = NotificationsPresenter.go(
             testRecipients,
             determinedReturnsPeriod,
             referenceCode,
@@ -852,7 +824,6 @@ describe('Notifications Setup - Scheduled Notifications Presenter', () => {
                 returnDueDate: '28 April 2025'
               },
               reference: 'TEST-123',
-              sendAfter: '2025-01-01T00:00:00.000Z',
               templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
             }
           ])

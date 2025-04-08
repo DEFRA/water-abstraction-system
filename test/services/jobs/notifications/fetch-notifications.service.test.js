@@ -9,14 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const FetchScheduledNotificationsService = require('../../../../app/services/jobs/notifications/fetch-scheduled-notifications.service.js')
+const FetchNotificationsService = require('../../../../app/services/jobs/notifications/fetch-notifications.service.js')
 
-describe('Job - Notifications - Fetch scheduled notifications service', () => {
+describe('Job - Notifications - Fetch notifications service', () => {
   let event
-  let scheduledNotification
+  let notification
   let unlikelyEvent
   let olderThanRetentionEvent
 
@@ -26,23 +26,23 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
       status: 'completed'
     })
 
-    scheduledNotification = await ScheduledNotificationHelper.add({
+    notification = await NotificationHelper.add({
       eventId: event.id,
       status: 'pending'
     })
 
-    // The 'scheduledNotification' status is 'error'
+    // The 'notification' status is 'error'
     unlikelyEvent = await EventHelper.add({
       type: 'notification',
       status: 'completed'
     })
 
-    await ScheduledNotificationHelper.add({
+    await NotificationHelper.add({
       eventId: unlikelyEvent.id,
       status: 'error'
     })
 
-    // The 'scheduledNotification' status is older than 7 days (notify retention period)
+    // The 'notification' status is older than 7 days (notify retention period)
     olderThanRetentionEvent = await EventHelper.add({
       status: 'completed',
       type: 'notification'
@@ -52,36 +52,36 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
     const eightDaysAgo = new Date()
     eightDaysAgo.setDate(today.getDate() - 8)
 
-    await ScheduledNotificationHelper.add({
+    await NotificationHelper.add({
       eventId: olderThanRetentionEvent.id,
       status: 'sending',
       createdAt: eightDaysAgo
     })
   })
 
-  describe('an event has "scheduledNotifications"', () => {
+  describe('an event has "notifications"', () => {
     it('returns the event marked for "sending"', async () => {
-      const result = await FetchScheduledNotificationsService.go()
+      const result = await FetchNotificationsService.go()
 
       const foundEvent = result.find((resultEvent) => {
         return resultEvent.eventId === event.id
       })
 
       expect(foundEvent).to.equal({
-        createdAt: scheduledNotification.createdAt,
+        createdAt: notification.createdAt,
         eventId: event.id,
-        id: scheduledNotification.id,
-        log: null,
+        id: notification.id,
         notifyId: null,
         notifyStatus: null,
+        notifyError: null,
         status: 'pending'
       })
     })
   })
 
-  describe('and the scheduled notification status is "error"', () => {
+  describe('and the notification status is "error"', () => {
     it('does not return the event', async () => {
-      const result = await FetchScheduledNotificationsService.go()
+      const result = await FetchNotificationsService.go()
 
       const foundEvent = result.find((resultEvent) => {
         return resultEvent.eventId === unlikelyEvent.id
@@ -91,9 +91,9 @@ describe('Job - Notifications - Fetch scheduled notifications service', () => {
     })
   })
 
-  describe('and the scheduled notification is older than 7 days', () => {
+  describe('and the notification is older than 7 days', () => {
     it('does not return the event', async () => {
-      const result = await FetchScheduledNotificationsService.go()
+      const result = await FetchNotificationsService.go()
 
       const foundEvent = result.find((resultEvent) => {
         return resultEvent.eventId === olderThanRetentionEvent.id
