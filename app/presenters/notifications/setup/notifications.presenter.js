@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats recipients into scheduled notifications for a returns invitation or reminder
- * @module ScheduledNotificationsPresenter
+ * Formats recipients into notifications for a returns invitation or reminder
+ * @module NotificationsPresenter
  */
 
 const { contactName, contactAddress } = require('../../crm.presenter.js')
@@ -11,12 +11,12 @@ const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
- * Formats recipients into scheduled notifications for a returns invitation or reminder
+ * Formats recipients into notifications for a returns invitation or reminder
  *
  * This function prepares data for both sending notifications via a notification service (e.g., Notify)
- * and storing scheduled notification records in a database (e.g., 'water.scheduled_notifications').
+ * and storing notification records in a database (e.g., 'water.scheduled_notifications').
  * It aligns with legacy practices by including parts of the Notify payload and response directly
- * within the scheduled notification objects.
+ * within the notification objects.
  *
  * The output of this function is designed to be used directly for both notification delivery and persistent storage.
  *
@@ -26,20 +26,20 @@ const { transformStringOfLicencesToArray, timestampForPostgres } = require('../.
  * @param {string} journey - the journey should be one of "reminders", "invitations" or "ad-hoc"
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {object[]} - the recipients transformed into scheduled notifications
+ * @returns {object[]} - the recipients transformed into notifications
  */
 function go(recipients, returnsPeriod, referenceCode, journey, eventId) {
-  const scheduledNotifications = []
+  const notifications = []
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      scheduledNotifications.push(_email(recipient, returnsPeriod, referenceCode, journey, eventId))
+      notifications.push(_email(recipient, returnsPeriod, referenceCode, journey, eventId))
     } else {
-      scheduledNotifications.push(_letter(recipient, returnsPeriod, referenceCode, journey, eventId))
+      notifications.push(_letter(recipient, returnsPeriod, referenceCode, journey, eventId))
     }
   }
 
-  return scheduledNotifications
+  return notifications
 }
 
 /**
@@ -66,7 +66,6 @@ function _common(referenceCode, templateId, eventId) {
     createdAt,
     eventId,
     reference: referenceCode,
-    sendAfter: createdAt,
     templateId
   }
 }
@@ -87,7 +86,7 @@ function _common(referenceCode, templateId, eventId) {
  *    }
  * ```
  *
- * A scheduled notification saves the 'emailAddress' as 'recipient' and so is used as the variables name.
+ * A notification saves the 'emailAddress' as 'recipient' and so is used as the variables name.
  *
  * @private
  */

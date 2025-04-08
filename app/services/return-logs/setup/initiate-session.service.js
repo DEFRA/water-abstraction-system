@@ -10,6 +10,8 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
+const FeatureFlags = require('../../../../config/feature-flags.config.js')
+
 const UNITS = {
   [unitNames.CUBIC_METRES]: 'cubic-metres',
   [unitNames.LITRES]: 'litres',
@@ -33,6 +35,10 @@ const UNITS = {
  * @returns {Promise<string>} the url to redirect to
  */
 async function go(returnLogId) {
+  if (!FeatureFlags.enableSystemReturnsSubmit) {
+    return `/return/internal?returnId=${returnLogId}`
+  }
+
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
