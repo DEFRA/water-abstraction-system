@@ -12,11 +12,11 @@ const NotifyStatusPresenter = require('../../../../app/presenters/jobs/notificat
 
 describe('Notifications Setup - Notify status presenter', () => {
   let notifyStatus
-  let scheduledNotification
+  let notification
 
   describe('when the "messageType" is an "email"', () => {
     beforeEach(() => {
-      scheduledNotification = {
+      notification = {
         messageType: 'email',
         status: 'pending'
       }
@@ -28,7 +28,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'created',
@@ -43,7 +43,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'sending',
@@ -58,7 +58,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'delivered',
@@ -74,7 +74,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'permanent-failure',
@@ -89,7 +89,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'technical-failure',
@@ -104,7 +104,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'temporary-failure',
@@ -119,7 +119,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'error',
@@ -132,7 +132,7 @@ describe('Notifications Setup - Notify status presenter', () => {
 
   describe('when the "messageType" is a "letter"', () => {
     beforeEach(() => {
-      scheduledNotification = {
+      notification = {
         messageType: 'letter',
         status: 'pending'
       }
@@ -144,7 +144,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'accepted',
@@ -159,7 +159,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'created',
@@ -174,7 +174,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'sending',
@@ -189,7 +189,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'delivered',
@@ -204,7 +204,7 @@ describe('Notifications Setup - Notify status presenter', () => {
       })
 
       it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
           notifyStatus: 'received',
@@ -220,7 +220,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'permanent-failure',
@@ -235,7 +235,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'technical-failure',
@@ -250,7 +250,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'temporary-failure',
@@ -265,7 +265,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'validation-failed',
@@ -280,7 +280,7 @@ describe('Notifications Setup - Notify status presenter', () => {
         })
 
         it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, scheduledNotification)
+          const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
           expect(result).to.equal({
             notifyStatus: 'error',
