@@ -5,7 +5,7 @@
  * @module UpdateNotificationsService
  */
 
-const ScheduledNotificationModel = require('../../../models/scheduled-notification.model.js')
+const NotificationModel = require('../../../models/notification.model.js')
 
 /**
  * Update notifications
@@ -18,7 +18,7 @@ const ScheduledNotificationModel = require('../../../models/scheduled-notificati
  *
  */
 async function go(notifications) {
-  await ScheduledNotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
+  await NotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
 }
 
 module.exports = {

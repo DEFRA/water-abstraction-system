@@ -17,10 +17,10 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * The event's metadata is a JSON object, and this function specifically updates the
  * 'error' key in that metadata. This is used to track the number of errors for the
- * related 'scheduledNotifications'.
+ * related 'notifications'.
  *
  * @param {string} id
- * @param {number} errorCount - The number of errors that occurred for the related 'scheduledNotifications'.
+ * @param {number} errorCount - The number of errors that occurred for the related 'notifications'.
  *
  */
 async function go(id, errorCount) {

@@ -51,7 +51,8 @@ describe('Notifications Setup - Notify update presenter', () => {
       const result = NotifyUpdatePresenter.go(notifyResponse)
 
       expect(result).to.equal({
-        log: '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
+        notifyError:
+          '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
         status: 'error'
       })
     })
