@@ -5,15 +5,14 @@
  * @module SubmitCheckService
  */
 
+const { generateUUID } = require('../../../lib/general.lib.js')
+const CreateNewReturnVersionService = require('./create-new-return-version.service.js')
+const LicenceModel = require('../../../models/licence.model.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 const SessionModel = require('../../../models/session.model.js')
-
-const { generateUUID } = require('../../../lib/general.lib.js')
-const LicenceModel = require('../../../models/licence.model.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
-const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
 
 /**
  * TODO: Document
@@ -27,22 +26,12 @@ async function go(sessionId) {
 
   const { licenceId, lines, returnSubmissionId, returnLogId } = session
 
-  const currentReturnVersion = await ReturnVersionModel.query()
-    .where('licenceId', session.licenceId)
-    .where('status', 'current')
-    .orderBy('startDate', 'desc')
-    .first()
+  const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId)
 
   const currentReturnRequirements = await ReturnRequirementModel.query().where({
-    returnVersionId: currentReturnVersion.id
+    returnVersionId: currentReturnVersionId
   })
-
-  // TOOD: Confirm this is correct
-  const nextReturnVersionStartDate = new Date()
-  const newReturnVersion = await _cloneReturnVersion(licenceId, currentReturnVersion, nextReturnVersionStartDate)
-  await _markPreviousVersionAsSuperseded(currentReturnVersion, nextReturnVersionStartDate)
-
-  const newReturnRequirements = await _cloneReturnRequirements(licenceId, currentReturnVersion, newReturnVersion)
+  const newReturnRequirements = await _cloneReturnRequirements(licenceId, currentReturnVersionId, newReturnVersionId)
   await _cloneReturnRequirementPoints(currentReturnRequirements, newReturnRequirements)
 
   await _createReturnLines(lines, returnSubmissionId)
@@ -53,27 +42,13 @@ async function go(sessionId) {
   return {
     returnLogId,
     returnSubmissionId,
-    returnVersionId: newReturnVersion.id
+    returnVersionId: newReturnVersionId
   }
 }
 
-async function _cloneReturnVersion(licenceId, currentReturnVersion, startDate) {
-  const nextVersionNumber = await _nextVersionNumber(licenceId)
-
-  // TODO: Confirm what needs doing with externalId. We can see it's in the form `naldRegion:SOME_NUMBER:version`; we may
-  // just be able to split by : and replace the version with the new one, then re-join with :
-  return ReturnVersionModel.query().insert({
-    ...currentReturnVersion,
-    startDate,
-    version: nextVersionNumber,
-    externalId: null,
-    id: undefined
-  })
-}
-
-async function _cloneReturnRequirements(licenceId, currentReturnVersion, newReturnVersion) {
+async function _cloneReturnRequirements(licenceId, currentReturnVersionId, newReturnVersionId) {
   const currentReturnRequirements = await ReturnRequirementModel.query().where({
-    returnVersionId: currentReturnVersion.id
+    returnVersionId: currentReturnVersionId
   })
 
   const naldRegionId = await _fetchNaldRegionId(licenceId)
@@ -84,7 +59,7 @@ async function _cloneReturnRequirements(licenceId, currentReturnVersion, newRetu
     ...returnRequirement,
     legacyId,
     externalId: `${naldRegionId}:${legacyId}`,
-    returnVersionId: newReturnVersion.id,
+    returnVersionId: newReturnVersionId,
     id: undefined
   }))
 
@@ -147,23 +122,6 @@ async function _nextLegacyId(naldRegionId) {
 
   if (lastLegacyId) {
     return lastLegacyId + 1
-  }
-
-  return 1
-}
-
-async function _markPreviousVersionAsSuperseded(returnVersion, nextReturnVersionStartDate) {
-  await returnVersion.$query().patch({ status: 'superseded', endDate: nextReturnVersionStartDate })
-}
-
-async function _nextVersionNumber(licenceId) {
-  const { lastVersionNumber } = await ReturnVersionModel.query()
-    .max('version as lastVersionNumber')
-    .where({ licenceId })
-    .first()
-
-  if (lastVersionNumber) {
-    return lastVersionNumber + 1
   }
 
   return 1

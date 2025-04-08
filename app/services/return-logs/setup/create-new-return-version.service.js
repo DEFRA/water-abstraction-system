@@ -1,74 +1,66 @@
 'use strict'
 
 /**
- * Creates a new return version from session data and marks the previous return version as superseded
- * @module CreateNewReturnVersionService
+ * Creates a new return version and supersedes the previous one for a given licence id, duplicating all details from the
+ * current return version
+ * @module CreateNewReturnVersion
  */
 
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 /**
  * TODO: Document
- *
- * @param session
- * @returns
+ * TODO: Confirm if we need to set `externalId` now or if this is set later
+ * @param licenceId
  */
-async function go(session) {
-  const returnVersion = await _createReturnVersion(session)
+async function go(licenceId) {
+  const newReturnVersionStartDate = new Date()
 
-  await _markPreviousVersionAsSuperseded(session.data.licenceId, returnVersion.id)
+  const currentReturnVersion = await _fetchCurrentReturnVersion(licenceId)
+  const newReturnVersion = await _duplicateReturnVersion(licenceId, currentReturnVersion, newReturnVersionStartDate)
 
-  return returnVersion
+  await _markPreviousVersionAsSuperseded(currentReturnVersion, newReturnVersionStartDate)
+
+  return { currentReturnVersionId: currentReturnVersion.id, newReturnVersionId: newReturnVersion.id }
 }
 
-/**
- * Marks the previous return version as superseded
- *
- * @param {string} licenceId - The ID of the licence
- * @param {string} newVersionId - The ID of the newly created version to exclude
- * @returns {Promise<void>}
- */
-async function _markPreviousVersionAsSuperseded(licenceId, newVersionId) {
-  await ReturnVersionModel.query()
-    .patch({ status: 'superseded' })
-    .where({ licenceId, status: 'current' })
-    .whereNot('id', newVersionId)
+async function _fetchCurrentReturnVersion(licenceId) {
+  return await ReturnVersionModel.query()
+    .where('licenceId', licenceId)
+    .where('status', 'current')
+    .orderBy('startDate', 'desc')
+    .first()
 }
 
-/**
- * Creates a new return version from the session data
- *
- * @param {object} session - The session data containing return information
- * @returns {Promise<object>} - The created return version
- */
-async function _createReturnVersion(session) {
-  const nextVersionNumber = await _nextVersionNumber(session.data.licenceId)
+async function _duplicateReturnVersion(licenceId, currentReturnVersion, startDate) {
+  const nextVersionNumber = await _nextVersionNumber(licenceId)
 
-  // TODO: Confirm externalId, reason, multipleUploads, quarterlyReturns
-  const returnVersion = {
-    licenceId: session.data.licenceId,
+  // TODO: Confirm what needs doing with externalId. We can see it's in the form `naldRegion:SOME_NUMBER:version`; we may
+  // just be able to split by : and replace the version with the new one, then re-join with :
+  return ReturnVersionModel.query().insert({
+    ...currentReturnVersion,
+    startDate,
     version: nextVersionNumber,
-    status: 'current',
-    startDate: new Date(session.data.startDate),
-    endDate: session.data.endDate ? new Date(session.data.endDate) : null
-  }
-
-  return ReturnVersionModel.query().insert(returnVersion)
+    externalId: null,
+    id: undefined
+  })
 }
 
-/**
- * Determines the next version number for a return version
- *
- * @param {string} licenceId - The ID of the licence
- * @returns {Promise<number>} - The next version number
- */
+async function _markPreviousVersionAsSuperseded(returnVersion, endDate) {
+  await returnVersion.$query().patch({ status: 'superseded', endDate })
+}
+
 async function _nextVersionNumber(licenceId) {
   const { lastVersionNumber } = await ReturnVersionModel.query()
     .max('version as lastVersionNumber')
     .where({ licenceId })
     .first()
 
-  return (lastVersionNumber || 0) + 1
+  if (lastVersionNumber) {
+    return lastVersionNumber + 1
+  }
+
+  return 1
 }
 
 module.exports = {
