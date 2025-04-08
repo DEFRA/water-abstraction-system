@@ -100,12 +100,12 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate)
  * |----|------------|------------|---------|
  * | 1  | 2024-04-21 |            | current |
  *
- * The user adds a new return version statring 2024-04-01. The end result would be
+ * The user adds a new return version starting 2024-04-01. The end result would be
  *
  * | Id | Start date | End date   | Status  |
  * |----|------------|------------|---------|
  * | 1  | 2024-04-01 | 2024-04-20 | current |
- * | 3  | 2022-04-21 |            | current |
+ * | 2  | 2022-04-21 |            | current |
  *
  * This function generates the end date of the return version being the day before the start date of the existing one.
  *
