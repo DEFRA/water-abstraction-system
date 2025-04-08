@@ -12,6 +12,7 @@ const { expect } = Code
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Things we need to stub
+const FetchPointsService = require('../../../../../app/services/return-versions/setup/fetch-points.service.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/persist-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
@@ -115,6 +116,69 @@ describe('Return Versions Setup - Submit Check service', () => {
         const result = await SubmitCheckService.go(sessionId)
 
         expect(result).to.equal({ licenceId: session.data.licence.id })
+      })
+    })
+  })
+
+  describe('When a user submits a return marked quarterly return submissions with requirements of summer return cycle', () => {
+    beforeEach(async () => {
+      session = await SessionHelper.add({
+        data: {
+          checkPageVisited: false,
+          licence: {
+            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+            endDate: null,
+            licenceRef: '01/ABC',
+            licenceHolder: 'Turbo Kid',
+            returnVersions: [],
+            startDate: '2022-04-01T00:00:00.000Z'
+          },
+          journey: 'returns-required',
+          requirements: [
+            {
+              returnsCycle: 'summer'
+            }
+          ],
+          startDateOptions: 'licenceStartDate',
+          reason: 'major-change',
+          quarterlyReturns: true
+        }
+      })
+
+      sessionId = session.id
+
+      Sinon.stub(FetchPointsService, 'go').resolves()
+    })
+
+    it('returns the page data needed to reload the check page and the error message', async () => {
+      const result = await SubmitCheckService.go(sessionId)
+
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        error: {
+          text: "Quarterly returns submissions can't be set for returns in the summer cycle."
+        },
+        licenceRef: '01/ABC',
+        multipleUpload: undefined,
+        note: {
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
+        },
+        pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: true,
+        reason: 'Major change',
+        reasonLink: `/system/return-versions/setup/${sessionId}/reason`,
+        requirements: [],
+        returnsRequired: true,
+        sessionId,
+        startDate: 'Invalid Date'
       })
     })
   })
