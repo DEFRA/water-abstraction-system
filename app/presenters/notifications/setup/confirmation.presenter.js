@@ -36,7 +36,7 @@ function _type(subType) {
   const subTypes = {
     returnInvitation: 'invitations',
     returnReminder: 'reminders',
-    adHoc: 'ad-hoc'
+    adHocReminder: 'ad-hoc'
   }
 
   return subTypes[subType]
