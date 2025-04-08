@@ -27,8 +27,10 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   const validationResult = _validate(payload, session, requestedYear, requestedMonth)
 
+  _addPayloadToSession(payload, session, requestedYear, requestedMonth)
+
   if (!validationResult) {
-    await _save(payload, session, requestedYear, requestedMonth)
+    await session.$update()
 
     const notification = {
       text: 'Readings have been updated',
@@ -49,30 +51,35 @@ async function go(sessionId, payload, yar, yearMonth) {
   }
 }
 
+function _addPayloadToSession(payload, session, requestedYear, requestedMonth) {
+  // Extract the lines from the session data for the selected year and month
+  const requestedMonthLines = session.lines.filter((line) => {
+    const endDate = new Date(line.endDate)
+
+    return endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth
+  })
+
+  // Updates the readings for the specified year/month. As the payload will not contain lines where there is no reading
+  // entered. We update all the lines for the specified year/month and assign a null reading where it does not exist in
+  // the payload. We do this because if a line previously had a reading which was then subsequently removed there would
+  // be no entry for that line in the payload. We therefore need to set the reading to null in that situation
+  for (let i = 0; i < requestedMonthLines.length; i++) {
+    requestedMonthLines[i].reading = payload[`reading-${i}`] ? Number(payload[`reading-${i}`]) : null
+  }
+
+  // We then update the session lines with the readings derived from the payload
+  requestedMonthLines.forEach((requestedMonthLine) => {
+    const matchedSessionLine = session.lines.find((line) => {
+      return line.endDate === requestedMonthLine.endDate
+    })
+    matchedSessionLine.reading = requestedMonthLine.reading
+  })
+}
+
 function _determineRequestedYearAndMonth(yearMonth) {
   // Splitting a string like `2014-0` by the dash gives us an array of strings ['2014', '0']. We chain `.map(Number)` to
   // then create a new array, applying the Number() function to each one. The result is an array of numbers [2014, 0].
   return yearMonth.split('-').map(Number)
-}
-
-/**
- * Saves the readings for the specified yearMonth. As the payload will not contain lines where there is no reading
- * entered. We update all the session lines for the specified yearMonth and assign a null reading where it does not
- * exist in the payload. We do this because if a line previously had a reading which was then subsequently removed
- * there would be no entry for that line in the payload. We therefore need to set the reading to null in that situation.
- *
- * @private
- */
-async function _save(payload, session, requestedYear, requestedMonth) {
-  session.lines.forEach((line) => {
-    const endDate = new Date(line.endDate)
-
-    if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
-      line.reading = payload[line.endDate] ? Number(payload[line.endDate]) : null
-    }
-  })
-
-  return session.$update()
 }
 
 function _validate(payload, session, requestedYear, requestedMonth) {
