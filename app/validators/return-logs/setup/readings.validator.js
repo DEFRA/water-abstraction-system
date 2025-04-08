@@ -126,8 +126,8 @@ function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
   const minReading = Math.min(
     Number.MAX_SAFE_INTEGER,
     ...subsequentLines
-      .map((previousLine) => {
-        return previousLine.reading // Extract the readings
+      .map((subsequentLine) => {
+        return subsequentLine.reading // Extract the readings
       })
       .filter((reading) => {
         return reading != null // Remove null or undefined readings
