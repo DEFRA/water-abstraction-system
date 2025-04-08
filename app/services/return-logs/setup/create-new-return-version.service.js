@@ -12,6 +12,7 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
  * TODO: Document
  * TODO: Confirm if we need to set `externalId` now or if this is set later
  * @param licenceId
+ * @returns
  */
 async function go(licenceId) {
   const newReturnVersionStartDate = new Date()

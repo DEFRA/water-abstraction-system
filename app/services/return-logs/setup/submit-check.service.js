@@ -5,12 +5,11 @@
  * @module SubmitCheckService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
+const CreateNewReturnLinesService = require('./create-new-return-lines.service.js')
 const CreateNewReturnRequirementPointsService = require('./create-new-return-requirement-points.service.js')
 const CreateNewReturnRequirementsService = require('./create-new-return-requirements.service.js')
 const CreateNewReturnVersionService = require('./create-new-return-version.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -26,16 +25,14 @@ async function go(sessionId) {
   const { licenceId, lines, returnSubmissionId, returnLogId } = session
 
   const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId)
-
   const { currentReturnRequirements, newReturnRequirements } = await CreateNewReturnRequirementsService.go(
     licenceId,
     currentReturnVersionId,
     newReturnVersionId
   )
-
   await CreateNewReturnRequirementPointsService.go(currentReturnRequirements, newReturnRequirements)
+  await CreateNewReturnLinesService.go(lines, returnSubmissionId)
 
-  await _createReturnLines(lines, returnSubmissionId)
   await _markReturnLogAsSubmitted(returnLogId)
   await _cleanupSession(sessionId)
 
@@ -45,27 +42,6 @@ async function go(sessionId) {
     returnSubmissionId,
     returnVersionId: newReturnVersionId
   }
-}
-
-/**
- * Creates return lines from the session data
- *
- * @param {object[]} lines - The array of lines to create
- * @param {string} returnSubmissionId - The ID of the return submission
- * @returns {Promise<void>}
- */
-async function _createReturnLines(lines, returnSubmissionId) {
-  if (!lines || !lines.length) {
-    return
-  }
-
-  const returnLines = lines.map((line) => ({
-    ...line,
-    id: generateUUID(),
-    returnSubmissionId
-  }))
-
-  await ReturnSubmissionLineModel.query().insert(returnLines)
 }
 
 /**
