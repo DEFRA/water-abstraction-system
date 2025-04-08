@@ -327,7 +327,7 @@ describe('Base Return Logs presenter', () => {
     })
   })
 
-  describe.only('#generateSummaryTableRows()', () => {
+  describe('#generateSummaryTableRows()', () => {
     const id = 'e3cb54dc-f895-4918-bab7-0819fd870a1f'
 
     let frequency
