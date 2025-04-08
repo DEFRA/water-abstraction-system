@@ -16,6 +16,7 @@ const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
 const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPointModel = require('../../../../app/models/return-requirement-point.model.js')
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
@@ -34,6 +35,7 @@ describe('Return Logs Setup - Submit Check service', () => {
   let returnLog
   let returnVersion
   let returnRequirement
+  let returnRequirementPoint
   let returnSubmission
   let session
   let sessionData
@@ -69,7 +71,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
     const pointExternalId = _generateIdNumber()
     const point = await PointHelper.add({ externalId: `9:${pointExternalId}` })
-    await ReturnRequirementPointHelper.add({
+    returnRequirementPoint = await ReturnRequirementPointHelper.add({
       pointId: point.id,
       returnRequirementId: returnRequirement.id,
       externalId: `9:${returnRequirementLegacyId}:${pointExternalId}`
@@ -154,6 +156,19 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(newRequirement.returnsFrequency).to.equal(returnRequirement.returnsFrequency)
       expect(newRequirement.siteDescription).to.equal(returnRequirement.siteDescription)
     })
+
+    it('creates new return requirement points based on existing ones', async () => {
+      const result = await SubmitCheckService.go(session.id, user)
+
+      const newRequirement = await ReturnRequirementModel.query()
+        .where('returnVersionId', result.returnVersionId)
+        .first()
+      const newRequirementPoint = await ReturnRequirementPointModel.query()
+        .where('returnRequirementId', newRequirement.id)
+        .first()
+
+      expect(newRequirementPoint.pointId).to.equal(returnRequirementPoint.pointId)
+    })
   })
 })
 
@@ -168,10 +183,9 @@ function _createInstance(model, helper, data = {}) {
   })
 }
 
-// We need the return requirement and point to have known numbers so we have to
-// specify them otherwise the helper generates them randomly. However, the
-// numbers must be different for each test to avoid violating the external id
-// restraint. This helper function generates our random numbers
+// We need the return requirement and point to have known numbers so we have to specify them otherwise the helper
+// generates them randomly. However the numbers must be different for each test to avoid violating the external id
+// constraint, so we use a helper function to generate our random numbers
 function _generateIdNumber() {
   return Math.floor(Math.random() * 9000) + 1000
 }

@@ -25,6 +25,8 @@ async function go(sessionId) {
   // TODO: Consider error handling
   const session = await SessionModel.query().findById(sessionId)
 
+  const { licenceId, lines, returnSubmissionId, returnLogId } = session
+
   const currentReturnVersion = await ReturnVersionModel.query()
     .where('licenceId', session.licenceId)
     .where('status', 'current')
@@ -37,26 +39,26 @@ async function go(sessionId) {
 
   // TOOD: Confirm this is correct
   const nextReturnVersionStartDate = new Date()
-
-  const newReturnVersion = await _cloneReturnVersion(session, currentReturnVersion, nextReturnVersionStartDate)
+  const newReturnVersion = await _cloneReturnVersion(licenceId, currentReturnVersion, nextReturnVersionStartDate)
   await _markPreviousVersionAsSuperseded(currentReturnVersion, nextReturnVersionStartDate)
-  const newReturnRequirements = await _cloneReturnRequirements(session, currentReturnVersion, newReturnVersion)
+
+  const newReturnRequirements = await _cloneReturnRequirements(licenceId, currentReturnVersion, newReturnVersion)
   await _cloneReturnRequirementPoints(currentReturnRequirements, newReturnRequirements)
 
-  await _createReturnLines(session, session.returnSubmissionId)
-  await _markReturnLogAsSubmitted(session.returnLogId)
+  await _createReturnLines(lines, returnSubmissionId)
+  await _markReturnLogAsSubmitted(returnLogId)
   await _cleanupSession(sessionId)
 
   // TODO: Confirm how we want to exit the service
   return {
-    returnLogId: session.returnLogId,
-    returnSubmissionId: session.returnSubmissionId,
+    returnLogId,
+    returnSubmissionId,
     returnVersionId: newReturnVersion.id
   }
 }
 
-async function _cloneReturnVersion(sessionData, currentReturnVersion, startDate) {
-  const nextVersionNumber = await _nextVersionNumber(sessionData.licenceId)
+async function _cloneReturnVersion(licenceId, currentReturnVersion, startDate) {
+  const nextVersionNumber = await _nextVersionNumber(licenceId)
 
   // TODO: Confirm what needs doing with externalId. We can see it's in the form `naldRegion:SOME_NUMBER:version`; we may
   // just be able to split by : and replace the version with the new one, then re-join with :
@@ -69,12 +71,12 @@ async function _cloneReturnVersion(sessionData, currentReturnVersion, startDate)
   })
 }
 
-async function _cloneReturnRequirements(sessionData, currentReturnVersion, newReturnVersion) {
+async function _cloneReturnRequirements(licenceId, currentReturnVersion, newReturnVersion) {
   const currentReturnRequirements = await ReturnRequirementModel.query().where({
     returnVersionId: currentReturnVersion.id
   })
 
-  const naldRegionId = await _fetchNaldRegionId(sessionData.licenceId)
+  const naldRegionId = await _fetchNaldRegionId(licenceId)
 
   const legacyId = await _nextLegacyId(naldRegionId)
 
@@ -170,13 +172,11 @@ async function _nextVersionNumber(licenceId) {
 /**
  * Creates return lines from the session data
  *
- * @param {object} session - The session data containing line information
+ * @param {object[]} lines - The array of lines to create
  * @param {string} returnSubmissionId - The ID of the return submission
  * @returns {Promise<void>}
  */
-async function _createReturnLines(session, returnSubmissionId) {
-  const { lines } = session
-
+async function _createReturnLines(lines, returnSubmissionId) {
   if (!lines || !lines.length) {
     return
   }
