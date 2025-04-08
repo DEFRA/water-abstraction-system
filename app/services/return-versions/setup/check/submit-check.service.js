@@ -26,7 +26,8 @@ const VoidReturnLogsService = require('../../../return-logs/void-return-logs.ser
  * @param {string} sessionId - The UUID for return requirement setup session record
  * @param {number} userId - The id of the logged in user
  *
- * @returns {string} The licence ID
+ * @returns {Promise<object>} An object containing the licenceId if there are no errors else the page data for the
+ * check page including the validation error details
  */
 async function go(sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)
