@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,6 +14,9 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/return-logs/setup/initiate-session.service.js')
@@ -46,6 +50,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     licence = await LicenceHelper.add()
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when the return log has been received and submitted', () => {
     let returnLog
     let returnSubmission
@@ -63,6 +71,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         metadata: { method: 'abstractionVolumes' }
       })
       await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
+    })
+
+    beforeEach(() => {
+      // Enable our new submit/edit journey
+      Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsSubmit').value(true)
     })
 
     it('creates a new session record containing details of the return log', async () => {
@@ -265,6 +278,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
     })
 
+    beforeEach(() => {
+      // Enable our new submit/edit journey
+      Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsSubmit').value(true)
+    })
+
     it('sets beenReceived to true', async () => {
       const result = await InitiateSessionService.go(returnLog.id)
 
@@ -307,6 +325,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
     })
 
+    beforeEach(() => {
+      // Enable our new submit/edit journey
+      Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsSubmit').value(true)
+    })
+
     it('sets beenReceived to false', async () => {
       const result = await InitiateSessionService.go(returnLog.id)
 
@@ -339,6 +362,23 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         'startReading',
         'units'
       ])
+    })
+  })
+
+  describe('when the system submit/edit feature is not enabled', () => {
+    let returnLog
+
+    beforeEach(() => {
+      // Disable our new submit/edit journey
+      Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsSubmit').value(false)
+
+      returnLog = { id: ReturnLogHelper.generateReturnLogId() }
+    })
+
+    it('the redirect URL it returns points to the legacy edit page', async () => {
+      const result = await InitiateSessionService.go(returnLog.id)
+
+      expect(result).to.equal(`/return/internal?returnId=${returnLog.id}`)
     })
   })
 })
