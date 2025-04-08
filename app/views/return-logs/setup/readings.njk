@@ -21,12 +21,7 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.text,
-          href: '#reading-0'
-        }
-      ]
+      errorList: error
     }) }}
   {% endif %}
 

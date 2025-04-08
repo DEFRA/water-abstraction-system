@@ -94,11 +94,12 @@ function _validate(payload, session, requestedYear, requestedMonth) {
     return null
   }
 
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return validation.error.details.map((error) => {
+    return {
+      text: error.message,
+      href: `#${error.path[0]}`
+    }
+  })
 }
 
 module.exports = {
