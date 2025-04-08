@@ -6,10 +6,9 @@
  */
 
 const { generateUUID } = require('../../../lib/general.lib.js')
+const CreateNewReturnRequirementsService = require('./create-new-return-requirements.service.js')
 const CreateNewReturnVersionService = require('./create-new-return-version.service.js')
-const LicenceModel = require('../../../models/licence.model.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
 const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -28,10 +27,12 @@ async function go(sessionId) {
 
   const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId)
 
-  const currentReturnRequirements = await ReturnRequirementModel.query().where({
-    returnVersionId: currentReturnVersionId
-  })
-  const newReturnRequirements = await _cloneReturnRequirements(licenceId, currentReturnVersionId, newReturnVersionId)
+  const { currentReturnRequirements, newReturnRequirements } = await CreateNewReturnRequirementsService.go(
+    licenceId,
+    currentReturnVersionId,
+    newReturnVersionId
+  )
+
   await _cloneReturnRequirementPoints(currentReturnRequirements, newReturnRequirements)
 
   await _createReturnLines(lines, returnSubmissionId)
@@ -44,26 +45,6 @@ async function go(sessionId) {
     returnSubmissionId,
     returnVersionId: newReturnVersionId
   }
-}
-
-async function _cloneReturnRequirements(licenceId, currentReturnVersionId, newReturnVersionId) {
-  const currentReturnRequirements = await ReturnRequirementModel.query().where({
-    returnVersionId: currentReturnVersionId
-  })
-
-  const naldRegionId = await _fetchNaldRegionId(licenceId)
-
-  const legacyId = await _nextLegacyId(naldRegionId)
-
-  const clonedReturnRequirementsData = currentReturnRequirements.map((returnRequirement) => ({
-    ...returnRequirement,
-    legacyId,
-    externalId: `${naldRegionId}:${legacyId}`,
-    returnVersionId: newReturnVersionId,
-    id: undefined
-  }))
-
-  return ReturnRequirementModel.query().insert(clonedReturnRequirementsData)
 }
 
 async function _cloneReturnRequirementPoints(currentReturnRequirements, newReturnRequirements) {
@@ -103,28 +84,6 @@ async function _cloneReturnRequirementPoints(currentReturnRequirements, newRetur
   })
 
   return ReturnRequirementPointModel.query().insert(newPointsToInsert)
-}
-
-async function _fetchNaldRegionId(licenceId) {
-  const { naldRegionId } = await LicenceModel.query()
-    .findById(licenceId)
-    .select('region.naldRegionId')
-    .innerJoinRelated('region')
-
-  return naldRegionId
-}
-
-async function _nextLegacyId(naldRegionId) {
-  const { lastLegacyId } = await ReturnRequirementModel.query()
-    .max('legacyId as lastLegacyId')
-    .whereLike('externalId', `${naldRegionId}%`)
-    .first()
-
-  if (lastLegacyId) {
-    return lastLegacyId + 1
-  }
-
-  return 1
 }
 
 /**

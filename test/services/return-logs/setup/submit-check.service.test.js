@@ -28,8 +28,8 @@ const UserHelper = require('../../../support/helpers/user.helper.js')
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/return-logs/setup/submit-check.service.js')
 
-// TODO: Properly stub dependencies
-
+// TODO: Correctly stub dependencies
+// TODO: Move tests into individual service test suites files
 describe('Return Logs Setup - Submit Check service', () => {
   let licence
   let returnLog

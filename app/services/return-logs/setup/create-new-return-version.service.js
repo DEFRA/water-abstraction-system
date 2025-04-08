@@ -3,7 +3,7 @@
 /**
  * Creates a new return version and supersedes the previous one for a given licence id, duplicating all details from the
  * current return version
- * @module CreateNewReturnVersion
+ * @module CreateNewReturnVersionService
  */
 
 const ReturnVersionModel = require('../../../models/return-version.model.js')
