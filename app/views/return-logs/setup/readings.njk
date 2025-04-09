@@ -56,7 +56,10 @@
           id: 'reading-' + rowIndex,
           name: 'reading-' + rowIndex,
           value: line.reading,
-          inputmode: 'numeric'
+          inputmode: 'numeric',
+          errorMessage: {
+              text: line.error
+            } if line.error
         }) }}
       {% endfor %}
     {% endcall %}
