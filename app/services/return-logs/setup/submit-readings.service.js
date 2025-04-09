@@ -65,7 +65,7 @@ function _addResultToSession(payload, session, requestedYear, requestedMonth, va
   // then subsequently removed there would be no entry for that line in the payload. We therefore need to set the
   // reading to null in that situation
   for (let i = 0; i < requestedMonthLines.length; i++) {
-    requestedMonthLines[i].reading = payload[`reading-${i}`] ? Number(payload[`reading-${i}`]) : null
+    requestedMonthLines[i].reading = payload[`reading-${i}`] ? _toNumberOrOriginal(payload[`reading-${i}`]) : null
 
     if (validationResult) {
       const error = validationResult.find((error) => {
@@ -115,6 +115,16 @@ function _validate(payload, session, requestedYear, requestedMonth) {
       href: `#${error.path[0]}`
     }
   })
+}
+
+/**
+ * Converts the given value to a number if possible.
+ * If the conversion results in NaN, the original value is returned.
+ * @private
+ */
+function _toNumberOrOriginal(value) {
+  const converted = Number(value)
+  return isNaN(converted) ? value : converted
 }
 
 module.exports = {
