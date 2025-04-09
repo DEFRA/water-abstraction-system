@@ -87,7 +87,7 @@ describe('Return Versions Setup - Submit Note service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({text: 'Note added', title: 'Added'})
+          expect(notification).to.equal({ text: 'Note added', title: 'Added' })
         })
       })
 
