@@ -56,6 +56,10 @@ function _inputLines(lines) {
       reading
     }
 
+    if (line.error) {
+      lineData.error = line.error
+    }
+
     return lineData
   })
 }
