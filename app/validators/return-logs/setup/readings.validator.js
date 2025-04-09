@@ -41,20 +41,28 @@ function go(payload, session, requestedYear, requestedMonth) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading) {
-  const key = helpers.state.path[0] // Get the current key being validated
+function _currentKeyIndex(helpers, meterReadingsArray) {
+  const currentKey = helpers.state.path[0] // Get the current key being validated
 
-  // Convert the payload into an array e.g. [{ key: 'reading-0', reading: 10 }, { key: 'reading-2', reading: 30 }]
-  const meterReadingsArray = Object.entries(payload).map(([key, reading]) => {
+  meterReadingsArray.findIndex((item) => {
+    return item.key === currentKey
+  })
+}
+
+function _meterReadingsArray(payload) {
+  return Object.entries(payload).map(([key, reading]) => {
     return {
       key,
       reading: Number(reading)
     }
   })
+}
 
-  const currentKeyIndex = meterReadingsArray.findIndex((item) => {
-    return item.key === key
-  })
+function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading) {
+  // Convert the payload into an array e.g. [{ key: 'reading-0', reading: 10 }, { key: 'reading-2', reading: 30 }]
+  const meterReadingsArray = _meterReadingsArray(payload)
+
+  const currentKeyIndex = _currentKeyIndex(helpers, meterReadingsArray)
 
   if (value < previousHighestReading) {
     return helpers.message(
@@ -68,10 +76,8 @@ function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighes
     )
   }
 
-  if (currentKeyIndex > 0) {
-    if (value < meterReadingsArray[currentKeyIndex - 1].reading) {
-      return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
-    }
+  if (currentKeyIndex > 0 && value < meterReadingsArray[currentKeyIndex - 1].reading) {
+    return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
   }
 
   return value

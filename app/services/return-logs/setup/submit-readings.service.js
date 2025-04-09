@@ -32,10 +32,7 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!validationResult) {
     await session.$update()
 
-    const notification = {
-      text: 'Readings have been updated',
-      title: 'Updated'
-    }
+    const notification = { text: 'Readings have been updated', title: 'Updated' }
 
     yar.flash('notification', notification)
 
