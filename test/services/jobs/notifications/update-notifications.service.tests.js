@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -18,8 +18,8 @@ const UpdateNotificationsService = require('../../../../app/services/jobs/notifi
 describe('Notifications Setup - Update Notifications service', () => {
   let eventId
   let notifications
-  let scheduledNotification
-  let scheduledNotification2
+  let notification
+  let notification2
 
   beforeEach(async () => {
     const event = await EventHelper.add({
@@ -29,7 +29,7 @@ describe('Notifications Setup - Update Notifications service', () => {
 
     eventId = event.id
 
-    scheduledNotification = await ScheduledNotificationHelper.add({
+    notification = await NotificationHelper.add({
       createdAt: timestampForPostgres(),
       eventId,
       status: 'pending'
@@ -40,8 +40,8 @@ describe('Notifications Setup - Update Notifications service', () => {
     beforeEach(async () => {
       notifications = [
         {
-          createdAt: new Date(scheduledNotification.createdAt),
-          id: scheduledNotification.id,
+          createdAt: new Date(notification.createdAt),
+          id: notification.id,
           notifyStatus: 'received',
           status: 'sent'
         }
@@ -51,37 +51,29 @@ describe('Notifications Setup - Update Notifications service', () => {
     it("updates only the notification's required values", async () => {
       await UpdateNotificationsService.go(notifications)
 
-      const result = await scheduledNotification.$query()
+      const result = await notification.$query()
 
       expect(result).equal({
-        companyId: null,
-        createdAt: new Date(scheduledNotification.createdAt),
+        createdAt: new Date(notification.createdAt),
         eventId,
-        id: scheduledNotification.id,
-        individualId: null,
-        jobId: null,
+        id: notification.id,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: 'received',
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
+        status: 'sent'
       })
     })
   })
 
   describe('when updating multiple notifications', () => {
     beforeEach(async () => {
-      scheduledNotification2 = await ScheduledNotificationHelper.add({
+      notification2 = await NotificationHelper.add({
         createdAt: timestampForPostgres(),
         eventId,
         status: 'sending'
@@ -89,14 +81,14 @@ describe('Notifications Setup - Update Notifications service', () => {
 
       notifications = [
         {
-          createdAt: new Date(scheduledNotification.createdAt),
-          id: scheduledNotification.id,
+          createdAt: new Date(notification.createdAt),
+          id: notification.id,
           notifyStatus: 'received',
           status: 'sent'
         },
         {
-          createdAt: new Date(scheduledNotification2.createdAt),
-          id: scheduledNotification2.id,
+          createdAt: new Date(notification2.createdAt),
+          id: notification2.id,
           status: 'sent'
         }
       ]
@@ -105,60 +97,44 @@ describe('Notifications Setup - Update Notifications service', () => {
     it('updates the first notification', async () => {
       await UpdateNotificationsService.go(notifications)
 
-      const result = await scheduledNotification.$query()
+      const result = await notification.$query()
 
       expect(result).equal({
-        companyId: null,
-        createdAt: new Date(scheduledNotification.createdAt),
+        createdAt: new Date(notification.createdAt),
         eventId,
-        id: scheduledNotification.id,
-        individualId: null,
-        jobId: null,
+        id: notification.id,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: 'received',
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
+        status: 'sent'
       })
     })
 
     it('updates the second notification', async () => {
       await UpdateNotificationsService.go(notifications)
 
-      const result = await scheduledNotification2.$query()
+      const result = await notification2.$query()
 
       expect(result).to.equal({
-        companyId: null,
-        createdAt: new Date(scheduledNotification2.createdAt),
+        createdAt: new Date(notification2.createdAt),
         eventId,
-        id: scheduledNotification2.id,
-        individualId: null,
-        jobId: null,
+        id: notification2.id,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: null,
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: 'sent',
-        statusChecks: null
+        status: 'sent'
       })
     })
   })

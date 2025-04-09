@@ -333,7 +333,6 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
     it('does not duplicate the results', async () => {
       const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
-      // console.dir(results, { depth: null, colors: true })
 
       expect(results).to.have.length(1)
 

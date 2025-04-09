@@ -5,7 +5,7 @@
  * @module NotifyStatusPresenter
  */
 
-const SCHEDULED_NOTIFICATIONS_STATUS = {
+const NOTIFICATIONS_STATUS = {
   pending: 'pending',
   sent: 'sent',
   error: 'error'
@@ -26,16 +26,16 @@ const SCHEDULED_NOTIFICATIONS_STATUS = {
  *
  * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
  * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial
- * 'notifyStatus' value set for a 'scheduledNotification' (when no error has occurred), and the 'status' is set to
+ * 'notifyStatus' value set for a 'notification' (when no error has occurred), and the 'status' is set to
  * pending.
  *
  * @param {string} notifyStatus - the status from notify
- * @param {string} scheduledNotification - a 'scheduled notification'
+ * @param {string} notification - a 'notification'
  *
- * @returns {object} - updates 'status' and 'notifyStatus' for a scheduled notification
+ * @returns {object} - updates 'status' and 'notifyStatus' for a notification
  */
-function go(notifyStatus, scheduledNotification) {
-  if (scheduledNotification.messageType === 'email') {
+function go(notifyStatus, notification) {
+  if (notification.messageType === 'email') {
     return _emailStatus(notifyStatus)
   } else {
     return _letterStatus(notifyStatus)
@@ -62,13 +62,13 @@ function go(notifyStatus, scheduledNotification) {
  */
 function _emailStatus(notifyStatus) {
   const emailStatuses = {
-    created: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    sending: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    delivered: SCHEDULED_NOTIFICATIONS_STATUS.sent,
-    'permanent-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    'technical-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    'temporary-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    error: SCHEDULED_NOTIFICATIONS_STATUS.error
+    created: NOTIFICATIONS_STATUS.pending,
+    sending: NOTIFICATIONS_STATUS.pending,
+    delivered: NOTIFICATIONS_STATUS.sent,
+    'permanent-failure': NOTIFICATIONS_STATUS.error,
+    'technical-failure': NOTIFICATIONS_STATUS.error,
+    'temporary-failure': NOTIFICATIONS_STATUS.error,
+    error: NOTIFICATIONS_STATUS.error
   }
 
   return {
@@ -90,16 +90,16 @@ function _emailStatus(notifyStatus) {
  */
 function _letterStatus(notifyStatus) {
   const letterStatuses = {
-    accepted: SCHEDULED_NOTIFICATIONS_STATUS.sent,
-    created: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    sending: SCHEDULED_NOTIFICATIONS_STATUS.pending,
-    delivered: SCHEDULED_NOTIFICATIONS_STATUS.sent,
-    received: SCHEDULED_NOTIFICATIONS_STATUS.sent,
-    'permanent-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    'technical-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    'temporary-failure': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    'validation-failed': SCHEDULED_NOTIFICATIONS_STATUS.error,
-    error: SCHEDULED_NOTIFICATIONS_STATUS.error
+    accepted: NOTIFICATIONS_STATUS.sent,
+    created: NOTIFICATIONS_STATUS.pending,
+    sending: NOTIFICATIONS_STATUS.pending,
+    delivered: NOTIFICATIONS_STATUS.sent,
+    received: NOTIFICATIONS_STATUS.sent,
+    'permanent-failure': NOTIFICATIONS_STATUS.error,
+    'technical-failure': NOTIFICATIONS_STATUS.error,
+    'temporary-failure': NOTIFICATIONS_STATUS.error,
+    'validation-failed': NOTIFICATIONS_STATUS.error,
+    error: NOTIFICATIONS_STATUS.error
   }
 
   return {
