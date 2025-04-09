@@ -92,13 +92,13 @@ describe('Return Versions Setup - Submit Start Date service', () => {
           })
         })
 
-        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+        it('sets the notification message title to "Updated" and the text to "Return version updated" ', async () => {
           await SubmitStartDateService.go(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+          expect(notification).to.equal({ title: 'Updated', text: 'Return version updated' })
         })
       })
     })
