@@ -8,7 +8,7 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const CheckValidator = require('../../../../app/validators/return-versions/check/check.validator.js')
+const CheckValidator = require('../../../../../app/validators/return-versions/setup/check/check.validator.js')
 
 describe('Check validator', () => {
   describe('when valid data is provided', () => {
