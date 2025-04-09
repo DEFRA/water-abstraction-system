@@ -93,7 +93,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
       describe('and a reading has been entered', () => {
         beforeEach(() => {
-          payload = { '2023-06-30T00:00:00.000Z': '200' }
+          payload = { 'reading-0': '200' }
           yearMonth = '2023-5' // June 2023
         })
 
@@ -133,7 +133,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
     describe('with an invalid payload', () => {
       beforeEach(() => {
-        payload = { '2023-04-30T00:00:00.000Z': 'INVALID' }
+        payload = { 'reading-0': 'INVALID' }
         yearMonth = '2023-3' // April 2023
       })
 
@@ -142,13 +142,19 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
-          error: { text: 'Meter readings must be a number or blank' },
+          error: [
+            {
+              href: '#reading-0',
+              text: 'Meter readings must be a number or blank'
+            }
+          ],
           backLink: `/system/return-logs/setup/${session.id}/check`,
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
+              error: 'Meter readings must be a number or blank',
               formattedEndDate: '30 April 2023',
-              reading: 100
+              reading: 'INVALID'
             }
           ],
           pageTitle: 'Water abstracted April 2023',
@@ -160,7 +166,12 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(result.error).to.equal({ text: 'Meter readings must be a number or blank' })
+          expect(result.error).to.equal([
+            {
+              href: '#reading-0',
+              text: 'Meter readings must be a number or blank'
+            }
+          ])
         })
       })
     })
