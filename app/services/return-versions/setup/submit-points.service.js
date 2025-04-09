@@ -39,7 +39,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
