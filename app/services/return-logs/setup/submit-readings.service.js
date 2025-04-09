@@ -56,24 +56,7 @@ function _addResultToSession(payload, session, requestedYear, requestedMonth, va
     return endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth
   })
 
-  // Updates the readings for the specified year/month and adds any validation errors. As the payload will not contain
-  // lines where there is no reading entered. We update all the lines for the specified year/month and assign a null
-  // reading where it does not exist in the payload. We do this because if a line previously had a reading which was
-  // then subsequently removed there would be no entry for that line in the payload. We therefore need to set the
-  // reading to null in that situation
-  for (let i = 0; i < requestedMonthLines.length; i++) {
-    requestedMonthLines[i].reading = payload[`reading-${i}`] ? _toNumberOrOriginal(payload[`reading-${i}`]) : null
-
-    if (validationResult) {
-      const error = validationResult.find((error) => {
-        return error.href === `#reading-${i}`
-      })
-
-      if (error) {
-        requestedMonthLines[i].error = error.text
-      }
-    }
-  }
+  _updateRequestedMonthLines(payload, requestedMonthLines, validationResult)
 
   // We then update the session lines with the readings derived from the payload and add any errors
   requestedMonthLines.forEach((requestedMonthLine) => {
@@ -112,6 +95,30 @@ function _validate(payload, session, requestedYear, requestedMonth) {
       href: `#${error.path[0]}`
     }
   })
+}
+
+/**
+ * Updates the readings for the specified year/month and adds any validation errors. As the payload will not contain
+ * lines where there is no reading entered. We update all the lines for the specified year/month and assign a null
+ * reading where it does not exist in the payload. We do this because if a line previously had a reading which was
+ * then subsequently removed there would be no entry for that line in the payload. We therefore need to set the
+ * reading to null in that situation
+ * @private
+ */
+function _updateRequestedMonthLines(payload, requestedMonthLines, validationResult) {
+  for (let i = 0; i < requestedMonthLines.length; i++) {
+    requestedMonthLines[i].reading = payload[`reading-${i}`] ? _toNumberOrOriginal(payload[`reading-${i}`]) : null
+
+    if (validationResult) {
+      const error = validationResult.find((validationError) => {
+        return validationError.href === `#reading-${i}`
+      })
+
+      if (error) {
+        requestedMonthLines[i].error = error.text
+      }
+    }
+  }
 }
 
 /**
