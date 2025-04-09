@@ -5,6 +5,7 @@
  * @module SubmitReadingsService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -32,9 +33,7 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!validationResult) {
     await session.$update()
 
-    const notification = { text: 'Readings have been updated', title: 'Updated' }
-
-    yar.flash('notification', notification)
+    GeneralLib.flashNotification(yar, 'Updated', 'Readings have been updated')
 
     return {}
   }
