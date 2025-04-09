@@ -103,7 +103,7 @@ describe('Return Versions Setup - Submit Points service', () => {
           })
         })
 
-        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+        it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
           await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
