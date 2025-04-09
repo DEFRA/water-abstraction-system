@@ -124,6 +124,7 @@ function _validate(payload, session, requestedYear, requestedMonth) {
  */
 function _toNumberOrOriginal(value) {
   const converted = Number(value)
+
   return isNaN(converted) ? value : converted
 }
 
