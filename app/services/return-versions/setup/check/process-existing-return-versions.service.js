@@ -22,7 +22,7 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  */
 async function go(licenceId, newVersionStartDate) {
   const previousVersions = await _previousVersions(licenceId)
-  const previousVersionEndDate = _previousVersionEndDate(newVersionStartDate)
+  const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
 
@@ -34,6 +34,11 @@ async function go(licenceId, newVersionStartDate) {
   result = await _endLatestVersion(previousVersions, newVersionStartDate, previousVersionEndDate)
   if (result) {
     return null
+  }
+
+  result = await _insertBeforeVersions(previousVersions, newVersionStartDate)
+  if (result) {
+    return result
   }
 
   result = await _insertBetweenVersions(previousVersions, newVersionStartDate, previousVersionEndDate)
@@ -60,7 +65,7 @@ async function go(licenceId, newVersionStartDate) {
  * | 2  | 2019-05-13 | 2022-03-31 | current |
  * | 3  | 2022-04-01 |            | current |
  *
- * The user adds a new return version staring 2024-08-01. The end result would be
+ * The user adds a new return version starting 2024-08-01. The end result would be
  *
  * | Id | Start date | End date   | Status  |
  * |----|------------|------------|---------|
@@ -87,6 +92,40 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate)
 }
 
 /**
+ * Update the end date of a return version whose start date is less than the earliest existing one
+ *
+ * For example, imagine these are the existing return versions
+ *
+ * | Id | Start date | End date   | Status  |
+ * |----|------------|------------|---------|
+ * | 1  | 2024-04-21 |            | current |
+ *
+ * The user adds a new return version starting 2024-04-01. The end result would be
+ *
+ * | Id | Start date | End date   | Status  |
+ * |----|------------|------------|---------|
+ * | 1  | 2024-04-01 | 2024-04-20 | current |
+ * | 2  | 2022-04-21 |            | current |
+ *
+ * This function generates the end date of the return version being the day before the start date of the existing one.
+ *
+ * @private
+ */
+async function _insertBeforeVersions(previousVersions, newVersionStartDate) {
+  const matchedReturnVersion = previousVersions.findLast((previousVersion) => {
+    return previousVersion.startDate > newVersionStartDate
+  })
+
+  if (!matchedReturnVersion) {
+    return null
+  }
+
+  const newVersionEndDate = _calculateEndDate(matchedReturnVersion.startDate)
+
+  return newVersionEndDate
+}
+
+/**
  * Update the end date of a previous version whose start date is less than the new one and whose end date is greater
  *
  * For example, imagine these are the existing return versions
@@ -97,7 +136,7 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate)
  * | 2  | 2019-05-13 | 2022-03-31 | current |
  * | 3  | 2022-04-01 |            | current |
  *
- * The user adds a new return version staring 2021-07-01. The end result would be
+ * The user adds a new return version starting 2021-07-01. The end result would be
  *
  * | Id | Start date | End date   | Status  |
  * |----|------------|------------|---------|
@@ -128,14 +167,13 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
   return newVersionEndDate
 }
 
-function _previousVersionEndDate(newVersionStartDate) {
-  // NOTE: You have to create a new date from newVersionStartDate else when we call setDate we amend the source
-  // newVersionStartDate passed to the service.
-  const previousVersionEndDate = new Date(newVersionStartDate)
+function _calculateEndDate(changeDate) {
+  // NOTE: You have to create a new date from changeDate else when we call setDate we change the original date object.
+  const newEndDate = new Date(changeDate)
 
-  previousVersionEndDate.setDate(previousVersionEndDate.getDate() - 1)
+  newEndDate.setDate(newEndDate.getDate() - 1)
 
-  return previousVersionEndDate
+  return newEndDate
 }
 
 function _previousVersions(licenceId) {
@@ -157,7 +195,7 @@ function _previousVersions(licenceId) {
  * | 2  | 2019-05-13 | 2022-03-31 | current |
  * | 3  | 2022-04-01 |            | current |
  *
- * The user adds a new return version staring 2022-04-01. The end result would be
+ * The user adds a new return version starting 2022-04-01. The end result would be
  *
  * | Id | Start date | End date   | Status     |
  * |----|------------|------------|------------|
@@ -198,7 +236,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
  * | 2  | 2019-05-13 | 2022-03-31 | current |
  * | 3  | 2022-04-01 |            | current |
  *
- * The user adds a new return version staring 2019-05-13. The end result would be
+ * The user adds a new return version starting 2019-05-13. The end result would be
  *
  * | Id | Start date | End date   | Status     |
  * |----|------------|------------|------------|

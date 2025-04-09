@@ -218,11 +218,14 @@ function _groupLinesByMonth(lines) {
     if (!acc[key]) {
       acc[key] = {
         endDate,
-        quantity: 0,
+        quantity: null,
         userUnit
       }
     }
-    acc[key].quantity += quantity
+
+    if (quantity) {
+      acc[key].quantity += quantity
+    }
 
     if (reading) {
       acc[key].reading = reading
