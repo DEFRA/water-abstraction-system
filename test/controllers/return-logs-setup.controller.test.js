@@ -374,7 +374,12 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReadingsService, 'go').resolves({
-              error: { text: 'Meter readings must be a number or blank' },
+              error: [
+                {
+                  href: '#reading-0',
+                  text: 'Meter readings must be a number or blank'
+                }
+              ],
               pageTitle: 'Water abstracted April 2023'
             })
           })
