@@ -6,7 +6,7 @@
  */
 
 const CheckPresenter = require('../../../../presenters/return-versions/setup/check/check.presenter.js')
-const CheckValidation = require('../../../../validators/return-versions/check/check.validator.js')
+const CheckValidation = require('../../../../validators/return-versions/setup/check/check.validator.js')
 const FetchPointsService = require('../fetch-points.service.js')
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const PersistReturnVersionService = require('./persist-return-version.service.js')
