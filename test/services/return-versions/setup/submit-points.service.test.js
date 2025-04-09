@@ -109,7 +109,7 @@ describe('Return Versions Setup - Submit Points service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+          expect(notification).to.equal({ title: 'Updated', text: 'Requirements for returns updated' })
         })
       })
     })
