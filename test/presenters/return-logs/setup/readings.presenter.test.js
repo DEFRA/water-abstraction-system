@@ -55,6 +55,24 @@ describe('Return Logs Setup - Readings presenter', () => {
           }
         ])
       })
+      describe('and a validation error exists on the line', () => {
+        beforeEach(() => {
+          session.lines[0].error = 'There is an error on this line'
+        })
+
+        it('includes the error message in the line data', () => {
+          const result = ReadingsPresenter.go(session, yearMonth)
+
+          expect(result.inputLines).to.equal([
+            {
+              endDate: '2023-04-30T00:00:00.000Z',
+              formattedEndDate: '30 April 2023',
+              reading: 100,
+              error: 'There is an error on this line'
+            }
+          ])
+        })
+      })
     })
   })
 
