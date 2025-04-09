@@ -71,7 +71,7 @@ function _notification(session, payload) {
 
   if (additionalSubmissionOptions !== payload.additionalSubmissionOptions) {
     return {
-      text: 'Changes updated',
+      text: 'Additional submission options updated',
       title: 'Updated'
     }
   }
