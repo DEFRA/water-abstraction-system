@@ -44,7 +44,7 @@ function go(payload, session, requestedYear, requestedMonth) {
 function _currentKeyIndex(helpers, meterReadingsArray) {
   const currentKey = helpers.state.path[0] // Get the current key being validated
 
-  meterReadingsArray.findIndex((item) => {
+  return meterReadingsArray.findIndex((item) => {
     return item.key === currentKey
   })
 }
