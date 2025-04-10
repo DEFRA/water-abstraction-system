@@ -15,23 +15,25 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
  * @param licenceId
  * @param currentReturnVersionId
  * @param newReturnVersionId
+ * @param trx
  *
  * @returns
  */
-async function go(licenceId, currentReturnVersionId, newReturnVersionId) {
-  const currentReturnRequirements = await _fetchReturnRequirements(currentReturnVersionId)
+async function go(licenceId, currentReturnVersionId, newReturnVersionId, trx = null) {
+  const currentReturnRequirements = await _fetchReturnRequirements(currentReturnVersionId, trx)
   const newReturnRequirements = await _duplicateReturnRequirements(
     currentReturnRequirements,
     licenceId,
-    newReturnVersionId
+    newReturnVersionId,
+    trx
   )
 
   return { currentReturnRequirements, newReturnRequirements }
 }
 
-async function _duplicateReturnRequirements(currentReturnRequirements, licenceId, newReturnVersionId) {
-  const naldRegionId = await _fetchNaldRegionId(licenceId)
-  const legacyId = await _nextLegacyId(naldRegionId)
+async function _duplicateReturnRequirements(currentReturnRequirements, licenceId, newReturnVersionId, trx) {
+  const naldRegionId = await _fetchNaldRegionId(licenceId, trx)
+  const legacyId = await _nextLegacyId(naldRegionId, trx)
 
   const duplicateReturnRequirementsData = currentReturnRequirements.map((returnRequirement) => ({
     ...returnRequirement,
@@ -41,15 +43,15 @@ async function _duplicateReturnRequirements(currentReturnRequirements, licenceId
     id: undefined
   }))
 
-  return ReturnRequirementModel.query().insert(duplicateReturnRequirementsData)
+  return ReturnRequirementModel.query(trx).insert(duplicateReturnRequirementsData)
 }
 
-async function _fetchReturnRequirements(returnVersionId) {
-  return await ReturnRequirementModel.query().where({ returnVersionId })
+async function _fetchReturnRequirements(returnVersionId, trx) {
+  return ReturnRequirementModel.query(trx).where({ returnVersionId })
 }
 
-async function _fetchNaldRegionId(licenceId) {
-  const { naldRegionId } = await LicenceModel.query()
+async function _fetchNaldRegionId(licenceId, trx) {
+  const { naldRegionId } = await LicenceModel.query(trx)
     .findById(licenceId)
     .select('region.naldRegionId')
     .innerJoinRelated('region')
@@ -57,8 +59,8 @@ async function _fetchNaldRegionId(licenceId) {
   return naldRegionId
 }
 
-async function _nextLegacyId(naldRegionId) {
-  const { lastLegacyId } = await ReturnRequirementModel.query()
+async function _nextLegacyId(naldRegionId, trx) {
+  const { lastLegacyId } = await ReturnRequirementModel.query(trx)
     .max('legacyId as lastLegacyId')
     .whereLike('externalId', `${naldRegionId}%`)
     .first()

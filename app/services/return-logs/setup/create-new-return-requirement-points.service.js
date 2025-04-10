@@ -12,12 +12,13 @@ const ReturnRequirementPointModel = require('../../../models/return-requirement-
  *
  * @param currentReturnRequirements
  * @param newReturnRequirements
+ * @param trx
  * @returns
  */
-async function go(currentReturnRequirements, newReturnRequirements) {
+async function go(currentReturnRequirements, newReturnRequirements, trx = null) {
   const currentReturnRequirementIds = currentReturnRequirements.map((returnRequirement) => returnRequirement.id)
 
-  const currentReturnRequirementPoints = await ReturnRequirementPointModel.query().whereIn(
+  const currentReturnRequirementPoints = await ReturnRequirementPointModel.query(trx).whereIn(
     'returnRequirementId',
     currentReturnRequirementIds
   )
@@ -51,7 +52,7 @@ async function go(currentReturnRequirements, newReturnRequirements) {
     }
   })
 
-  return ReturnRequirementPointModel.query().insert(newPointsToInsert)
+  return ReturnRequirementPointModel.query(trx).insert(newPointsToInsert)
 }
 
 module.exports = {

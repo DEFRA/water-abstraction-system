@@ -13,10 +13,11 @@ const ReturnSubmissionLineModel = require('../../../models/return-submission-lin
  *
  * @param lines
  * @param returnSubmissionId
+ * @param trx
  *
  * @returns
  */
-async function go(lines, returnSubmissionId) {
+async function go(lines, returnSubmissionId, trx = null) {
   if (!lines || !lines.length) {
     return
   }
@@ -27,7 +28,7 @@ async function go(lines, returnSubmissionId) {
     returnSubmissionId
   }))
 
-  return ReturnSubmissionLineModel.query().insert(returnLines)
+  return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
 
 module.exports = {

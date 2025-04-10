@@ -24,17 +24,21 @@ async function go(sessionId) {
 
   const { licenceId, lines, returnSubmissionId, returnLogId } = session
 
-  const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId)
-  const { currentReturnRequirements, newReturnRequirements } = await CreateNewReturnRequirementsService.go(
-    licenceId,
-    currentReturnVersionId,
-    newReturnVersionId
-  )
-  await CreateNewReturnRequirementPointsService.go(currentReturnRequirements, newReturnRequirements)
-  await CreateNewReturnLinesService.go(lines, returnSubmissionId)
+  await ReturnLogModel.transaction(async (trx) => {
+    const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId, trx)
+    const { currentReturnRequirements, newReturnRequirements } = await CreateNewReturnRequirementsService.go(
+      licenceId,
+      currentReturnVersionId,
+      newReturnVersionId,
+      trx
+    )
 
-  await _markReturnLogAsSubmitted(returnLogId)
-  await _cleanupSession(sessionId)
+    await CreateNewReturnRequirementPointsService.go(currentReturnRequirements, newReturnRequirements, trx)
+    await CreateNewReturnLinesService.go(lines, returnSubmissionId, trx)
+
+    await _markReturnLogAsSubmitted(returnLogId, trx)
+    await _cleanupSession(sessionId, trx)
+  })
 
   // TODO: Confirm how we want to exit the service
   return returnLogId
@@ -44,20 +48,22 @@ async function go(sessionId) {
  * Updates the return log status to reflect submission
  *
  * @param {string} returnLogId - The ID of the return log
+ * @param trx
  * @returns {Promise<void>}
  */
-async function _markReturnLogAsSubmitted(returnLogId) {
-  await ReturnLogModel.query().patch({ status: 'submitted' }).where({ id: returnLogId })
+async function _markReturnLogAsSubmitted(returnLogId, trx) {
+  await ReturnLogModel.query(trx).patch({ status: 'submitted' }).where({ id: returnLogId })
 }
 
 /**
  * Cleans up the session after submission
  *
  * @param {string} sessionId - The ID of the session to delete
+ * @param trx
  * @returns {Promise<void>}
  */
-async function _cleanupSession(sessionId) {
-  await SessionModel.query().deleteById(sessionId)
+async function _cleanupSession(sessionId, trx) {
+  await SessionModel.query(trx).deleteById(sessionId)
 }
 
 module.exports = {
