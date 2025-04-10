@@ -84,11 +84,7 @@ function _validate(session) {
     return null
   }
 
-  const returnCycles = requirements.map((requirement) => {
-    return requirement.returnsCycle
-  })
-
-  const validation = CheckValidation.go(returnCycles)
+  const validation = CheckValidation.go(requirements)
 
   if (!validation.error) {
     return null
