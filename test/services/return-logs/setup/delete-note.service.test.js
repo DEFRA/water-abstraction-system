@@ -42,12 +42,12 @@ describe('Return Logs Setup - Delete Note service', () => {
     expect(refreshedSession.note).to.be.undefined()
   })
 
-  it('sets the notification message to "Removed"', async () => {
+  it('sets the notification message to "Deleted"', async () => {
     await DeleteNoteService.go(session.id, yarStub)
 
     const [flashType, notification] = yarStub.flash.args[0]
 
     expect(flashType).to.equal('notification')
-    expect(notification).to.equal({ title: 'Removed', text: 'Note removed' })
+    expect(notification).to.equal({ title: 'Deleted', text: 'Note deleted' })
   })
 })
