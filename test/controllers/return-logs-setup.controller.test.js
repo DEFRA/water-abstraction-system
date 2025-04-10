@@ -28,6 +28,7 @@ const SingleVolumeService = require('../../app/services/return-logs/setup/single
 const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../../app/services/return-logs/setup/submit-check.service.js')
 const SubmitConfirmedService = require('../../app/services/return-logs/setup/submit-confirmed.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
@@ -84,6 +85,23 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/check', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        Sinon.stub(SubmitCheckService, 'go').resolves('TEST_RETURN_LOG_ID')
+      })
+
+      it('redirects to the confirmed page on success', async () => {
+        options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
       })
     })
   })

@@ -310,17 +310,20 @@
   {% endif %}
 
   {# "Confirm" & "Cancel" buttons #}
-  <div class="govuk-button-group">
-    {{ govukButton({
-      text: "Confirm",
-      preventDoubleClick: true
-    }) }}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Confirm",
+        preventDoubleClick: true
+      }) }}
 
-    {{ govukButton({
-      text: "Cancel",
-      classes: "govuk-button--secondary",
-      preventDoubleClick: true,
-      href: links.cancel
-    }) }}
-  </div>
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true,
+        href: links.cancel
+      }) }}
+    </div>
+  </form>
 {% endblock %}
