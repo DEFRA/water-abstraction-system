@@ -22,6 +22,7 @@ const ReturnSubmissionHelper = require('../../../support/helpers/return-submissi
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
+const ReturnVersionModel = require('../../../../app/models/return-version.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
@@ -129,13 +130,24 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(deletedSession).to.not.exist()
     })
 
-    it('creates return submission lines', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+    it('creates a new return version', async () => {
+      await SubmitCheckService.go(session.id, user)
 
-      const submissionLines = await ReturnSubmissionLineModel.query().where(
-        'returnSubmissionId',
-        result.returnSubmissionId
-      )
+      const newReturnVersion = await ReturnVersionModel.query()
+        .joinRelated('licence')
+        .where('licence.licenceRef', returnLog.licenceRef)
+        .where('version', 2)
+        .first()
+
+      expect(newReturnVersion).to.exist()
+    })
+
+    it('creates return submission lines', async () => {
+      await SubmitCheckService.go(session.id, user)
+
+      const submissionLines = await ReturnSubmissionLineModel.query()
+        .joinRelated('returnSubmission')
+        .where('returnSubmission.returnLogId', returnLog.id)
 
       expect(submissionLines).to.have.length(2)
 
@@ -149,20 +161,28 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     it('creates new return requirements based on existing ones', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService.go(session.id, user)
 
-      const [newRequirement] = await ReturnRequirementModel.query().where('returnVersionId', result.returnVersionId)
+      const newReturnVersion = await ReturnVersionModel.query()
+        .joinRelated('licence')
+        .where('licence.licenceRef', returnLog.licenceRef)
+        .where('version', 2)
+        .first()
+      const newRequirement = await ReturnRequirementModel.query().where('returnVersionId', newReturnVersion.id).first()
 
       expect(newRequirement.returnsFrequency).to.equal(returnRequirement.returnsFrequency)
       expect(newRequirement.siteDescription).to.equal(returnRequirement.siteDescription)
     })
 
     it('creates new return requirement points based on existing ones', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService.go(session.id, user)
 
-      const newRequirement = await ReturnRequirementModel.query()
-        .where('returnVersionId', result.returnVersionId)
+      const newReturnVersion = await ReturnVersionModel.query()
+        .joinRelated('licence')
+        .where('licence.licenceRef', returnLog.licenceRef)
+        .where('version', 2)
         .first()
+      const newRequirement = await ReturnRequirementModel.query().where('returnVersionId', newReturnVersion.id).first()
       const newRequirementPoint = await ReturnRequirementPointModel.query()
         .where('returnRequirementId', newRequirement.id)
         .first()
