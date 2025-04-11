@@ -8,7 +8,7 @@
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats meter reading data ready for presenting in the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
+ * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  *
  * @param {module:SessionModel} session - The returns log session instance
  * @param {string} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
