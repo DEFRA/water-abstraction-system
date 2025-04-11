@@ -14,16 +14,44 @@ const {
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
- * Given a return cycle type, it generates the cycle data based on the current date and creates it
- *
- * @param {boolean} summer - true if creating the current summer return cycle, else false
+ * Verify that the town most recent return cycles are the most current ones. If they're not create the missing cycles.
  *
  * @returns {Promise<module:ReturnCycleModel>} the created return cycle
  */
-async function go(summer) {
-  const data = _generateData(summer)
+async function go() {
+  const returnCycles = await _fetchMostRecentCycles()
 
-  return ReturnCycleModel.query().insert(data).returning('*')
+  const summerStartDate = determineCycleStartDate(false)
+  const winterStartDate = determineCycleStartDate(true)
+
+  const hasCurrentSummerCycle = returnCycles.find((cycle) => {
+    return cycle.startDate.getTime() === summerStartDate.getTime()
+  })
+
+  const hasCurrentWinterCycle = returnCycles.find((cycle) => {
+    return cycle.startDate.getTime() === winterStartDate.getTime()
+  })
+
+  const data = []
+
+  if (!hasCurrentSummerCycle) {
+    data.push(_generateData(true))
+  }
+
+  if (!hasCurrentWinterCycle) {
+    data.push(_generateData(false))
+  }
+
+  if (data.length > 0) {
+    await ReturnCycleModel.query().insert(data)
+  }
+}
+
+async function _fetchMostRecentCycles() {
+  return ReturnCycleModel.query()
+    .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+    .orderBy('startDate', 'DESC')
+    .limit(2)
 }
 
 function _generateData(summer) {

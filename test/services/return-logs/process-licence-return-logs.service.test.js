@@ -18,6 +18,7 @@ const {
 } = require('../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
+const CreateCurrentReturnCycleService = require('../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
 const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
@@ -26,7 +27,7 @@ const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/
 // Thing under test
 const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
-describe('Process licence return logs service', () => {
+describe.only('Process licence return logs service', () => {
   const changeDate = new Date('2024-05-26')
   const currentDate = new Date('2024-07-15')
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
@@ -230,6 +231,7 @@ describe('Process licence return logs service', () => {
       returnCycleModelStub.resolves()
       createReturnLogsStub.resolves()
       voidReturnLogsStub.resolves()
+      Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves()
     })
 
     it('does not attempt to process the licence', async () => {
@@ -248,6 +250,7 @@ describe('Process licence return logs service', () => {
       fetchReturnRequirementsStub.resolves([])
       createReturnLogsStub.resolves()
       voidReturnLogsStub.resolves()
+      Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves()
     })
 
     it('defaults to using the current date as the change date', async () => {

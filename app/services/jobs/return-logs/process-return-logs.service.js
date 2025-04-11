@@ -35,6 +35,8 @@ async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 
+    await CreateCurrentReturnCycleService.go()
+
     const returnCycle = await _fetchReturnCycle(cycle)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
@@ -50,13 +52,8 @@ async function go(cycle) {
 
 async function _fetchReturnCycle(cycle) {
   const summer = cycle === 'summer'
-  const returnCycle = await FetchCurrentReturnCycleService.go(summer)
 
-  if (returnCycle) {
-    return returnCycle
-  }
-
-  return CreateCurrentReturnCycleService.go(summer)
+  return FetchCurrentReturnCycleService.go(summer)
 }
 
 module.exports = {

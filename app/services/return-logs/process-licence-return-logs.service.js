@@ -6,6 +6,7 @@
  */
 
 const { determineEarliestDate } = require('../../lib/dates.lib.js')
+const CreateCurrentReturnCycleService = require('../jobs/return-logs/create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchLicenceReturnRequirementsService = require('./fetch-licence-return-requirements.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
@@ -43,6 +44,7 @@ const VoidLicenceReturnLogsService = require('./void-licence-return-logs.service
 async function go(licenceId, changeDate = null) {
   if (!changeDate) {
     changeDate = new Date()
+    await CreateCurrentReturnCycleService.go()
   }
 
   const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
