@@ -26,7 +26,7 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
-  const validationResult = _validate(payload, session, requestedYear, requestedMonth)
+  const validationResult = _validate(payload, requestedYear, requestedMonth, session)
 
   _addResultToSession(payload, session, requestedYear, requestedMonth, validationResult)
 
@@ -76,13 +76,13 @@ function _determineRequestedYearAndMonth(yearMonth) {
   return yearMonth.split('-').map(Number)
 }
 
-function _validate(payload, session, requestedYear, requestedMonth) {
+function _validate(payload, requestedYear, requestedMonth, session) {
   // If the payload is empty, we don't need to validate anything
   if (Object.keys(payload).length === 0) {
     return null
   }
 
-  const validation = ReadingsValidator.go(payload, session, requestedYear, requestedMonth)
+  const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
   if (!validation.error) {
     return null

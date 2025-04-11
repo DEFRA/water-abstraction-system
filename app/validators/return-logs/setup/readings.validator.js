@@ -11,14 +11,14 @@ const Joi = require('joi')
  * Validates data submitted for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {module:SessionModel} session - The returns log session instance
  * @param {number} requestedYear - The requested year
  * @param {number} requestedMonth - The requested month. This is a zero-indexed month, January is 0 and December is 11
+ * @param {module:SessionModel} session - The returns log session instance
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, session, requestedYear, requestedMonth) {
+function go(payload, requestedYear, requestedMonth, session) {
   const { lines, startReading } = session
 
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
