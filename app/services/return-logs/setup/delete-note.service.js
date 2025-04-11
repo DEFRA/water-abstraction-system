@@ -5,6 +5,7 @@
  * @module DeleteNoteService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -18,12 +19,8 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const notification = {
-    title: 'Removed',
-    text: 'Note removed'
-  }
 
-  yar.flash('notification', notification)
+  GeneralLib.flashNotification(yar, 'Deleted', 'Note deleted')
 
   await _save(session)
 }
