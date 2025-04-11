@@ -40,12 +40,6 @@ function _determineRequestedYearAndMonth(yearMonth) {
   return yearMonth.split('-').map(Number)
 }
 
-function _pageTitle(date) {
-  const titleDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
-
-  return `Water abstracted ${titleDate}`
-}
-
 function _inputLines(lines) {
   return lines.map((line) => {
     const { endDate, reading } = line
@@ -62,6 +56,12 @@ function _inputLines(lines) {
 
     return lineData
   })
+}
+
+function _pageTitle(date) {
+  const titleDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
+
+  return `Water abstracted ${titleDate}`
 }
 
 module.exports = {
