@@ -27,7 +27,7 @@ const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/
 // Thing under test
 const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
-describe.only('Process licence return logs service', () => {
+describe('Process licence return logs service', () => {
   const changeDate = new Date('2024-05-26')
   const currentDate = new Date('2024-07-15')
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
