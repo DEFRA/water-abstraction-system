@@ -116,13 +116,13 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
             expect(result).to.equal({ checkPageVisited: true, meterProvided: 'no', reported: 'abstraction-volumes' })
           })
 
-          it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
             await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
             const [flashType, notification] = yarStub.flash.args[0]
 
             expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+            expect(notification).to.equal({ title: 'Updated', text: 'Reporting details changed' })
           })
         })
       })
