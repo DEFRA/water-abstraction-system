@@ -73,6 +73,10 @@ function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighes
   const meterReadingsArray = _meterReadingsArray(payload)
   const currentKeyIndex = _currentKeyIndex(helpers, meterReadingsArray)
 
+  if (currentKeyIndex > 0 && value < meterReadingsArray[currentKeyIndex - 1].reading) {
+    return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
+  }
+
   if (value < previousHighestReading) {
     return helpers.message(
       `The meter readings must be greater than or equal to the previous reading of ${previousHighestReading}`
@@ -83,10 +87,6 @@ function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighes
     return helpers.message(
       `The meter readings must be less than or equal to the subsequent reading of ${subsequentLowestReading}`
     )
-  }
-
-  if (currentKeyIndex > 0 && value < meterReadingsArray[currentKeyIndex - 1].reading) {
-    return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
   }
 
   return value
