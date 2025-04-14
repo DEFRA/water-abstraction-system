@@ -103,20 +103,17 @@ function _previousHighestReading(lines, requestedYear, requestedMonth, startRead
 
     // Return lines that are prior to the requested year and month
     return (
-      (endDate.getFullYear() === requestedYear && endDate.getMonth() < requestedMonth) ||
-      endDate.getFullYear() < requestedYear
+      line.reading != null && // Remove null or undefined readings
+      ((endDate.getFullYear() === requestedYear && endDate.getMonth() < requestedMonth) ||
+        endDate.getFullYear() < requestedYear)
     )
   })
 
   const maxReading = Math.max(
     startReading,
-    ...previousLines
-      .map((previousLine) => {
-        return previousLine.reading // Extract the readings
-      })
-      .filter((reading) => {
-        return reading != null // Remove null or undefined readings
-      })
+    ...previousLines.map((previousLine) => {
+      return previousLine.reading // Extract the readings
+    })
   )
 
   return maxReading
@@ -133,20 +130,17 @@ function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
 
     // Return lines that are after the requested year and month
     return (
-      (endDate.getFullYear() === requestedYear && endDate.getMonth() > requestedMonth) ||
-      endDate.getFullYear() > requestedYear
+      line.reading != null && // Remove null or undefined readings
+      ((endDate.getFullYear() === requestedYear && endDate.getMonth() > requestedMonth) ||
+        endDate.getFullYear() > requestedYear)
     )
   })
 
   const minReading = Math.min(
     Number.MAX_SAFE_INTEGER,
-    ...subsequentLines
-      .map((subsequentLine) => {
-        return subsequentLine.reading // Extract the readings
-      })
-      .filter((reading) => {
-        return reading != null // Remove null or undefined readings
-      })
+    ...subsequentLines.map((subsequentLine) => {
+      return subsequentLine.reading // Extract the readings
+    })
   )
 
   return minReading
