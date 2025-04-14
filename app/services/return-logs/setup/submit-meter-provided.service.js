@@ -34,7 +34,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited && payload.meterProvided === 'no') {
-      GeneralLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
