@@ -54,7 +54,7 @@ function _addValidationResultToSession(payload, session, requestedYear, requeste
     if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
       // Unlike when the session is saved, we do not convert the reading to a number here. This is because we want to
       // return what was submitted in the payload to the view following failed validation, which could be a string
-      line.reading = payload[line.endDate] ? payload[line.endDate] : null
+      line.reading = payload[line.endDate] ?? null
       line.error = _lineError(line, validationResult)
     }
   })
