@@ -71,13 +71,13 @@ describe('Return Logs Setup - Submit Reported service', () => {
           })
         })
 
-        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+        it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
           await SubmitReportedService.go(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+          expect(notification).to.equal({ title: 'Updated', text: 'Reporting details changed' })
         })
       })
     })
