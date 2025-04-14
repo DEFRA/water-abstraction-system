@@ -93,7 +93,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
       describe('and a reading has been entered', () => {
         beforeEach(() => {
-          payload = { 'reading-0': '200' }
+          payload = { '2023-06-30T00:00:00.000Z': '200' }
           yearMonth = '2023-5' // June 2023
         })
 
@@ -133,7 +133,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
     describe('with an invalid payload', () => {
       beforeEach(() => {
-        payload = { 'reading-0': 'INVALID' }
+        payload = { '2023-04-30T00:00:00.000Z': 'INVALID' }
         yearMonth = '2023-3' // April 2023
       })
 
@@ -144,7 +144,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           activeNavBar: 'search',
           error: [
             {
-              href: '#reading-0',
+              href: '#2023-04-30T00:00:00.000Z',
               text: 'Meter readings must be a number or blank'
             }
           ],
@@ -168,7 +168,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
           expect(result.error).to.equal([
             {
-              href: '#reading-0',
+              href: '#2023-04-30T00:00:00.000Z',
               text: 'Meter readings must be a number or blank'
             }
           ])
