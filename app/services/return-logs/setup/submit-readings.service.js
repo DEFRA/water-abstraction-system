@@ -28,15 +28,15 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   const validationResult = _validate(payload, requestedYear, requestedMonth, session)
 
-  _addResultToSession(payload, session, requestedYear, requestedMonth, validationResult)
-
   if (!validationResult) {
-    await session.$update()
+    await _save(payload, session, requestedYear, requestedMonth)
 
     GeneralLib.flashNotification(yar, 'Updated', 'Readings have been updated')
 
     return {}
   }
+
+  _addValidationResultToSession(payload, session, requestedYear, requestedMonth, validationResult)
 
   const formattedData = ReadingsPresenter.go(session, yearMonth)
 
@@ -47,25 +47,15 @@ async function go(sessionId, payload, yar, yearMonth) {
   }
 }
 
-function _addResultToSession(payload, session, requestedYear, requestedMonth, validationResult) {
-  // Extract the lines from the session data for the selected year and month
-  const requestedMonthLines = session.lines.filter((line) => {
+function _addValidationResultToSession(payload, session, requestedYear, requestedMonth, validationResult) {
+  session.lines.forEach((line) => {
     const endDate = new Date(line.endDate)
 
-    return endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth
-  })
-
-  _updateRequestedMonthLines(payload, requestedMonthLines, validationResult)
-
-  // We then update the session lines with the readings derived from the payload and add any errors
-  requestedMonthLines.forEach((requestedMonthLine) => {
-    const matchedSessionLine = session.lines.find((line) => {
-      return line.endDate === requestedMonthLine.endDate
-    })
-    matchedSessionLine.reading = requestedMonthLine.reading
-
-    if (requestedMonthLine.error) {
-      matchedSessionLine.error = requestedMonthLine.error
+    if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
+      // Unlike when the session is saved, we do not convert the reading to a number here. This is because we want to
+      // return what was submitted in the payload to the view following failed validation, which could be a string
+      line.reading = payload[line.endDate] ? payload[line.endDate] : null
+      line.error = _lineError(line, validationResult)
     }
   })
 }
@@ -74,6 +64,39 @@ function _determineRequestedYearAndMonth(yearMonth) {
   // Splitting a string like `2014-0` by the dash gives us an array of strings ['2014', '0']. We chain `.map(Number)` to
   // then create a new array, applying the Number() function to each one. The result is an array of numbers [2014, 0].
   return yearMonth.split('-').map(Number)
+}
+
+function _lineError(line, validationResult) {
+  const error = validationResult.find((validationError) => {
+    return validationError.href === `#${line.endDate}`
+  })
+
+  if (error) {
+    return error.text
+  }
+
+  return null
+}
+
+/**
+ * Saves the readings for the specified yearMonth. As the payload will not contain lines where there is no reading
+ * entered. We update all the session lines for the specified yearMonth and assign a null reading where it does not
+ * exist in the payload. We do this because if a line previously had a reading which was then subsequently removed
+ * there would be no entry for that line in the payload. We therefore need to set the reading to null in that situation.
+ *
+ * @private
+ */
+async function _save(payload, session, requestedYear, requestedMonth) {
+  session.lines.forEach((line) => {
+    const endDate = new Date(line.endDate)
+
+    if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
+      // The readings are always in text format in the payload so we convert to a number before updating the session
+      line.reading = payload[line.endDate] ? Number(payload[line.endDate]) : null
+    }
+  })
+
+  return session.$update()
 }
 
 function _validate(payload, requestedYear, requestedMonth, session) {
@@ -94,41 +117,6 @@ function _validate(payload, requestedYear, requestedMonth, session) {
       href: `#${error.path[0]}`
     }
   })
-}
-
-/**
- * Updates the readings for the specified year/month and adds any validation errors. As the payload will not contain
- * lines where there is no reading entered. We update all the lines for the specified year/month and assign a null
- * reading where it does not exist in the payload. We do this because if a line previously had a reading which was
- * then subsequently removed there would be no entry for that line in the payload. We therefore need to set the
- * reading to null in that situation
- * @private
- */
-function _updateRequestedMonthLines(payload, requestedMonthLines, validationResult) {
-  for (let i = 0; i < requestedMonthLines.length; i++) {
-    requestedMonthLines[i].reading = payload[`reading-${i}`] ? _toNumberOrOriginal(payload[`reading-${i}`]) : null
-
-    if (validationResult) {
-      const error = validationResult.find((validationError) => {
-        return validationError.href === `#reading-${i}`
-      })
-
-      if (error) {
-        requestedMonthLines[i].error = error.text
-      }
-    }
-  }
-}
-
-/**
- * Converts the given value to a number if possible.
- * If the conversion results in NaN, the original value is returned.
- * @private
- */
-function _toNumberOrOriginal(value) {
-  const converted = Number(value)
-
-  return isNaN(converted) ? value : converted
 }
 
 module.exports = {

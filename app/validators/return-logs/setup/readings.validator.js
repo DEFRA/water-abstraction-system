@@ -25,7 +25,7 @@ function go(payload, requestedYear, requestedMonth, session) {
   const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
 
   const schema = Joi.object().pattern(
-    /^reading-\d+$/, // Regex to match keys like 'reading-1', 'reading-3', etc.
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
     Joi.number()
       .min(0)
       .custom((value, helpers) => {
@@ -41,6 +41,11 @@ function go(payload, requestedYear, requestedMonth, session) {
   return schema.validate(payload, { abortEarly: false })
 }
 
+/**
+ * Used to determine the index in the meter readings array of the value currently being validated
+ *
+ * @private
+ */
 function _currentKeyIndex(helpers, meterReadingsArray) {
   const currentKey = helpers.state.path[0] // Get the current key being validated
 
@@ -49,6 +54,12 @@ function _currentKeyIndex(helpers, meterReadingsArray) {
   })
 }
 
+/**
+ * Convert the payload into an array e.g.
+ * [{ key: '2024-04-01T00:00:00.000Z', reading: 10 }, { key: '2024-04-02T00:00:00.000Z', reading: 30 }]
+ *
+ * @private
+ */
 function _meterReadingsArray(payload) {
   return Object.entries(payload).map(([key, reading]) => {
     return {
@@ -59,9 +70,7 @@ function _meterReadingsArray(payload) {
 }
 
 function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading) {
-  // Convert the payload into an array e.g. [{ key: 'reading-0', reading: 10 }, { key: 'reading-2', reading: 30 }]
   const meterReadingsArray = _meterReadingsArray(payload)
-
   const currentKeyIndex = _currentKeyIndex(helpers, meterReadingsArray)
 
   if (value < previousHighestReading) {

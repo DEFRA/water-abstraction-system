@@ -43,17 +43,14 @@
       }) %}
 
       {% for line in inputLines %}
-        {# Set an easier to use index #}
-        {% set rowIndex = loop.index0 %}
-
         {# Create the input fields #}
         {{ govukInput({
           label: {
             text: line.formattedEndDate
           },
           classes: "govuk-input--width-10",
-          id: 'reading-' + rowIndex,
-          name: 'reading-' + rowIndex,
+          id: line.endDate,
+          name: line.endDate,
           value: line.reading,
           inputmode: 'numeric',
           errorMessage: {
