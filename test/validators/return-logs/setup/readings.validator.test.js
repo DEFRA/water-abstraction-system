@@ -38,7 +38,7 @@ describe('Return Logs Setup - Readings validator', () => {
   describe('when a valid payload is provided', () => {
     describe('because the user entered a valid meter reading', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '200' }
+        payload = { '2023-05-31T00:00:00.000Z': '200' }
         requestedMonth = 4 // May
       })
 
@@ -53,7 +53,7 @@ describe('Return Logs Setup - Readings validator', () => {
   describe('when an invalid payload is provided', () => {
     describe('because the user did not enter a number', () => {
       beforeEach(() => {
-        payload = { 'reading-0': 'INVALID' }
+        payload = { '2023-05-31T00:00:00.000Z': 'INVALID' }
         requestedMonth = 4 // May
       })
 
@@ -67,7 +67,7 @@ describe('Return Logs Setup - Readings validator', () => {
 
     describe('because the user entered a negative number', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '-200' }
+        payload = { '2023-05-31T00:00:00.000Z': '-200' }
         requestedMonth = 4 // May
       })
 
@@ -81,7 +81,7 @@ describe('Return Logs Setup - Readings validator', () => {
 
     describe('because the user entered a reading less than the start reading of 10', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '5' }
+        payload = { '2023-04-30T00:00:00.000Z': '5' }
         requestedMonth = 3 // April
       })
 
@@ -97,7 +97,7 @@ describe('Return Logs Setup - Readings validator', () => {
 
     describe('because the user entered a reading less than the previous months highest reading of 100', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '50' }
+        payload = { '2023-05-31T00:00:00.000Z': '50' }
         requestedMonth = 4 // May
       })
 
@@ -113,7 +113,7 @@ describe('Return Logs Setup - Readings validator', () => {
 
     describe('because the user entered a reading higher than the next months lowest reading of 300', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '400' }
+        payload = { '2023-05-31T00:00:00.000Z': '400' }
         requestedMonth = 4 // May
       })
 
@@ -129,7 +129,7 @@ describe('Return Logs Setup - Readings validator', () => {
 
     describe('because the user entered meter readings not in increasing order', () => {
       beforeEach(() => {
-        payload = { 'reading-0': '200', 'reading-1': '150' }
+        payload = { '2023-05-30T00:00:00.000Z': '200', '2023-05-31T00:00:00.000Z': '150' }
         requestedMonth = 4 // May
       })
 
