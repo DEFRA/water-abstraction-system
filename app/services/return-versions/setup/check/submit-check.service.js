@@ -15,6 +15,8 @@ const ReturnRequirementsPresenter = require('../../../../presenters/return-versi
 const SessionModel = require('../../../../models/session.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 
+const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
+
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
  *
