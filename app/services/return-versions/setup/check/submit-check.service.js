@@ -37,23 +37,7 @@ async function go(sessionId, userId) {
   const validationResult = _validate(session)
 
   if (!validationResult) {
-    const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
-
-    await PersistReturnVersionService.go(returnVersionData)
-
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000
-    const changeDate = new Date(returnVersionData.returnVersion.startDate)
-    changeDate.setTime(changeDate.getTime() - oneDayInMilliseconds)
-
-    if (session.data.journey === 'no-returns-required') {
-      await VoidReturnLogsService.go(
-        session.data.licence.licenceRef,
-        returnVersionData.returnVersion.startDate,
-        returnVersionData.returnVersion.endDate
-      )
-    }
-
-    await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
+    await _processReturnVersion(session, userId)
 
     await SessionModel.query().deleteById(sessionId)
 
@@ -69,6 +53,25 @@ async function go(sessionId, userId) {
     ...returnRequirements,
     ...submittedSessionData
   }
+}
+
+async function _processReturnVersion(session, userId) {
+  const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
+
+  await PersistReturnVersionService.go(returnVersionData)
+
+  const changeDate = new Date(returnVersionData.returnVersion.startDate)
+  changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
+
+  if (session.data.journey === 'no-returns-required') {
+    await VoidReturnLogsService.go(
+      session.data.licence.licenceRef,
+      returnVersionData.returnVersion.startDate,
+      returnVersionData.returnVersion.endDate
+    )
+  }
+
+  await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
 }
 
 async function _returnRequirements(session) {
