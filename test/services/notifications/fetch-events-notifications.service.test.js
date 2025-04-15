@@ -12,7 +12,7 @@ const EventHelper = require('../../support/helpers/event.helper.js')
 const EventModel = require('../../../app/models/event.model.js')
 
 // Thing under test
-const FetchEventsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
+const FetchEventsNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
 
 describe('Fetch Events service', () => {
   let testEvent
@@ -34,7 +34,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         filterNotificationTypes: undefined,
         sentBy: undefined,
         sentFromDay: undefined,
@@ -88,7 +88,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({ sentBy: 'test.user@defra.gov.uk' })
+      const result = await FetchEventsNotificationsService.go({ sentBy: 'test.user@defra.gov.uk' })
 
       expect(result).to.contain(
         EventModel.fromJson({
@@ -132,7 +132,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         sentFromDay: 1,
         sentFromMonth: 1,
         sentFromYear: new Date().getFullYear()
@@ -191,7 +191,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         sentToDay: 1,
         sentToMonth: 11,
         sentToYear: new Date().getFullYear()
@@ -240,7 +240,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           waterAbstractionAlertResume: true
         }
@@ -278,7 +278,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           waterAbstractionAlertStop: true
         }
@@ -316,7 +316,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           waterAbstractionAlertReduce: true
         }
@@ -354,7 +354,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           waterAbstractionAlertWarning: true
         }
@@ -388,7 +388,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           returnsPaperForm: true
         }
@@ -422,7 +422,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           returnReminders: true
         }
@@ -456,7 +456,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           returnInvitation: true
         }
@@ -490,7 +490,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           legacyNotifications: true
         }
@@ -524,7 +524,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           legacyNotifications: true
         }
@@ -558,7 +558,7 @@ describe('Fetch Events service', () => {
     })
 
     it('fetches the matching events', async () => {
-      const result = await FetchEventsService.go({
+      const result = await FetchEventsNotificationsService.go({
         notifications: {
           legacyNotifications: true
         }
