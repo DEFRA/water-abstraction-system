@@ -49,6 +49,7 @@ function go(session) {
     ...alwaysRequiredPageData,
     displayReadings: reported === 'meter-readings',
     displayUnits: units !== 'cubic-metres',
+    enterMultipleLinkText: _enterMultipleLinkText(reported, returnsFrequency),
     meter10TimesDisplay,
     meterMake,
     meterProvided,
@@ -85,6 +86,7 @@ function _alwaysRequiredPageData(session) {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
+      multipleEntries: `/system/return-logs/setup/${sessionId}/multiple-entries`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
       nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
       received: `/system/return-logs/setup/${sessionId}/received`,
@@ -102,6 +104,13 @@ function _alwaysRequiredPageData(session) {
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }
+}
+
+function _enterMultipleLinkText(reported, returnsFrequency) {
+  const frequency = returnRequirementFrequencies[returnsFrequency]
+  const method = reported === 'abstraction-volumes' ? 'volumes' : 'readings'
+
+  return `Enter multiple ${frequency} ${method}`
 }
 
 /**
@@ -240,7 +249,7 @@ function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) 
 
 function _tableTitle(reported, returnsFrequency) {
   const frequency = returnRequirementFrequencies[returnsFrequency]
-  const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
+  const method = reported === 'abstraction-volumes' ? 'volumes' : 'readings'
 
   return `Summary of ${frequency} ${method}`
 }
