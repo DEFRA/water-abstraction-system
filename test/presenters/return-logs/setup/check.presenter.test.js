@@ -25,9 +25,11 @@ describe('Return Logs Setup - Check presenter', () => {
         abstractionPeriod: '1 January to 31 December',
         displayReadings: false,
         displayUnits: true,
+        enterMultipleLinkText: 'Enter multiple monthly volumes',
         links: {
           cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
           meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
+          multipleEntries: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/multiple-entries',
           nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
           received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
           reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
@@ -104,7 +106,7 @@ describe('Return Logs Setup - Check presenter', () => {
             }
           ]
         },
-        tableTitle: 'Summary of monthly abstraction volumes',
+        tableTitle: 'Summary of monthly volumes',
         tariff: 'Standard',
         totalCubicMetres: '0',
         totalQuantity: '0',
@@ -125,6 +127,7 @@ describe('Return Logs Setup - Check presenter', () => {
           links: {
             cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
             meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
+            multipleEntries: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/multiple-entries',
             nilReturn: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/submission',
             received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
             reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported',
@@ -201,6 +204,42 @@ describe('Return Logs Setup - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.displayUnits).to.be.true()
+      })
+    })
+  })
+
+  describe('the "enterMultipleLinkText" property', () => {
+    beforeEach(() => {
+      session.returnsFrequency = 'month'
+    })
+
+    it('returns the frequency in the link text', () => {
+      const result = CheckPresenter.go(session)
+
+      expect(result.enterMultipleLinkText).to.contain('monthly')
+    })
+
+    describe('when the values are reported using "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'abstraction-volumes'
+      })
+
+      it('returns "volumes" in the link text', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.enterMultipleLinkText).to.equal('Enter multiple monthly volumes')
+      })
+    })
+
+    describe('when the reporting method is not "abstraction-volumes"', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns "readings" in the link text', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.enterMultipleLinkText).to.equal('Enter multiple monthly readings')
       })
     })
   })
@@ -813,7 +852,7 @@ describe('Return Logs Setup - Check presenter', () => {
       it('returns "abstraction volumes" in the title', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
+        expect(result.tableTitle).to.equal('Summary of monthly volumes')
       })
     })
 
@@ -825,7 +864,7 @@ describe('Return Logs Setup - Check presenter', () => {
       it('returns "meter readings" in the title', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.tableTitle).to.equal('Summary of monthly meter readings')
+        expect(result.tableTitle).to.equal('Summary of monthly readings')
       })
     })
   })
