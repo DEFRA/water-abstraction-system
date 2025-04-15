@@ -77,7 +77,7 @@ async function go(filter) {
  *
  * @param {object} filter - an object containing the different filters
  *
- * @returns {Promise<[string]>} an array of alert types from the filter
+ * @returns {Promise<string[]>} an array of alert types from the filter
  */
 function _waterAbstractionAlerts(filter) {
   const alerts = ['', '', '', '']
