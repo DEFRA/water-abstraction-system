@@ -282,9 +282,13 @@ async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { id: userId } = request.auth.credentials.user
 
-  const licenceId = await SubmitCheckService.go(sessionId, userId)
+  const pageData = await SubmitCheckService.go(sessionId, userId)
 
-  return h.redirect(`/system/return-versions/setup/${licenceId}/approved`)
+  if (pageData.error) {
+    return h.view('return-versions/setup/check.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-versions/setup/${pageData.licenceId}/approved`)
 }
 
 async function submitExisting(request, h) {

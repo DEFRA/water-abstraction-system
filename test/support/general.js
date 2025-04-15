@@ -52,7 +52,15 @@ function postRequestOptions(
   }
 
   if (scope) {
-    options.auth = { strategy: 'session', credentials: { scope } }
+    options.auth = {
+      strategy: 'session',
+      credentials: {
+        scope,
+        user: {
+          id: 1000
+        }
+      }
+    }
   }
 
   if (crumb) {
