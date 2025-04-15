@@ -86,8 +86,8 @@ function _alwaysRequiredPageData(session) {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
-      multipleEntries: `/system/return-logs/setup/${sessionId}/multiple-entries`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
+      multipleEntries: `/system/return-logs/setup/${sessionId}/multiple-entries`,
       nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
       received: `/system/return-logs/setup/${sessionId}/received`,
       reported: `/system/return-logs/setup/${sessionId}/reported`,
