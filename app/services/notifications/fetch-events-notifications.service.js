@@ -2,7 +2,7 @@
 
 /**
  * Fetches the notifications for the `/notifications` page
- * @module FetchEventNotificationsService
+ * @module FetchEventsNotificationsService
  */
 
 const { ref } = require('objection')
