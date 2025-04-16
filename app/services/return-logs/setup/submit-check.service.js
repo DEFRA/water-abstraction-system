@@ -6,9 +6,7 @@
  */
 
 const CreateNewReturnLinesService = require('./create-new-return-lines.service.js')
-const CreateNewReturnRequirementPointsService = require('./create-new-return-requirement-points.service.js')
-const CreateNewReturnRequirementsService = require('./create-new-return-requirements.service.js')
-const CreateNewReturnVersionService = require('./create-new-return-version.service.js')
+const CreateReturnSubmissionService = require('./create-return-submission.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -16,32 +14,46 @@ const SessionModel = require('../../../models/session.model.js')
  * TODO: Document
  *
  * @param {string} sessionId - The ID of the session containing the return data
+ * @param {module:UserModel} user - Instance representing the user that originated the request
+ *
  * @returns {Promise<object>} - The result of the submission process
  */
-async function go(sessionId) {
+async function go(sessionId, user) {
   // TODO: Consider error handling
   const session = await SessionModel.query().findById(sessionId)
 
-  const { licenceId, lines, returnSubmissionId, returnLogId } = session
+  const metadata = _generateMetadata(session)
 
   await ReturnLogModel.transaction(async (trx) => {
-    const { currentReturnVersionId, newReturnVersionId } = await CreateNewReturnVersionService.go(licenceId, trx)
-    const { currentReturnRequirements, newReturnRequirements } = await CreateNewReturnRequirementsService.go(
-      licenceId,
-      currentReturnVersionId,
-      newReturnVersionId,
+    const returnSubmission = await CreateReturnSubmissionService.go(
+      session.returnLogId,
+      user.username,
+      'internal',
+      metadata,
+      session.nilReturn,
       trx
     )
 
-    await CreateNewReturnRequirementPointsService.go(currentReturnRequirements, newReturnRequirements, trx)
-    await CreateNewReturnLinesService.go(lines, returnSubmissionId, trx)
+    await CreateNewReturnLinesService.go(
+      session.lines,
+      returnSubmission.id,
+      session.returnsFrequency,
+      session.units,
+      session.reported,
+      trx
+    )
 
-    await _markReturnLogAsSubmitted(returnLogId, trx)
+    await _markReturnLogAsSubmitted(session.returnLogId, trx)
     await _cleanupSession(sessionId, trx)
   })
 
   // TODO: Confirm how we want to exit the service
-  return returnLogId
+  return session.returnLogId
+}
+
+// TODO: Confirm metadata format and implement
+function _generateMetadata(session) {
+  return {}
 }
 
 /**
@@ -52,7 +64,7 @@ async function go(sessionId) {
  * @returns {Promise<void>}
  */
 async function _markReturnLogAsSubmitted(returnLogId, trx) {
-  await ReturnLogModel.query(trx).patch({ status: 'submitted' }).where({ id: returnLogId })
+  await ReturnLogModel.query(trx).patch({ status: 'completed' }).where({ id: returnLogId })
 }
 
 /**
