@@ -83,7 +83,7 @@ async function _save(session, payload, user) {
 }
 
 function _submittedSessionData(session, payload) {
-  session.note = payload.note ? payload.note : null
+  session.note = { content: payload.note ? payload.note : null }
 
   return NotePresenter.go(session)
 }

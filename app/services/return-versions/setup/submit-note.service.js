@@ -55,18 +55,17 @@ function _notification(session, newNote) {
   const {
     data: { note }
   } = session
-  const text = 'Changes made'
 
   if (!note && newNote) {
     return {
-      text,
+      text: 'Note added',
       title: 'Added'
     }
   }
 
   if (note?.content !== newNote) {
     return {
-      text,
+      text: 'Note updated',
       title: 'Updated'
     }
   }

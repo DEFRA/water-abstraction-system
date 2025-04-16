@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const ScheduledNotificationModel = require('../../../../app/models/scheduled-notification.model.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -30,36 +30,28 @@ describe('Notifications Setup - Create notification service', () => {
 
   describe('when inserting a single notification', () => {
     beforeEach(async () => {
-      notifications = [{ eventId, metadata: {}, createdAt: timestampForPostgres() }]
+      notifications = [{ eventId, createdAt: timestampForPostgres() }]
     })
 
     it('should create a single notification (and only set the required values)', async () => {
       const result = await CreateNotificationsService.go(notifications)
 
-      const createdResult = await ScheduledNotificationModel.query().findById(result[0].id)
+      const createdResult = await NotificationModel.query().findById(result[0].id)
 
       expect(createdResult).equal({
-        companyId: null,
         createdAt: createdResult.createdAt,
         eventId,
         id: result[0].id,
-        individualId: null,
-        jobId: null,
         licences: null,
-        log: null,
+        notifyError: null,
         messageRef: null,
         messageType: null,
-        metadata: {},
-        nextStatusCheck: null,
-        notificationType: null,
         notifyId: null,
         notifyStatus: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        sendAfter: null,
-        status: null,
-        statusChecks: null
+        status: null
       })
     })
   })
@@ -67,8 +59,8 @@ describe('Notifications Setup - Create notification service', () => {
   describe('when inserting multiple notifications', () => {
     beforeEach(() => {
       notifications = [
-        { eventId, metadata: {}, createdAt: timestampForPostgres() },
-        { eventId, metadata: {}, createdAt: timestampForPostgres() }
+        { eventId, createdAt: timestampForPostgres() },
+        { eventId, createdAt: timestampForPostgres() }
       ]
     })
 
@@ -79,14 +71,12 @@ describe('Notifications Setup - Create notification service', () => {
         {
           createdAt: result[0].createdAt,
           eventId,
-          id: result[0].id,
-          metadata: {}
+          id: result[0].id
         },
         {
           createdAt: result[1].createdAt,
           eventId,
-          id: result[1].id,
-          metadata: {}
+          id: result[1].id
         }
       ])
     })

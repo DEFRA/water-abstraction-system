@@ -10,6 +10,8 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
+const FeatureFlags = require('../../../../config/feature-flags.config.js')
+
 const UNITS = {
   [unitNames.CUBIC_METRES]: 'cubic-metres',
   [unitNames.LITRES]: 'litres',
@@ -33,10 +35,14 @@ const UNITS = {
  * @returns {Promise<string>} the url to redirect to
  */
 async function go(returnLogId) {
+  if (!FeatureFlags.enableSystemReturnsSubmit) {
+    return `/return/internal?returnId=${returnLogId}`
+  }
+
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
-  const submissionData = _submissionData(returnLog)
+  const submissionData = _submissionData(referenceData.lines, returnLog)
 
   const data = { ...referenceData, ...submissionData }
 
@@ -170,7 +176,7 @@ function _referenceData(returnLog) {
   }
 }
 
-function _submissionData(returnLog) {
+function _submissionData(lines, returnLog) {
   if (returnLog.returnSubmissions.length === 0) {
     return {}
   }
@@ -185,7 +191,7 @@ function _submissionData(returnLog) {
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: _submissionLines(returnSubmissionLines),
+    lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,

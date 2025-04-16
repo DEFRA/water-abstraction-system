@@ -9,6 +9,7 @@ const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = 
 const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
+const ABSTRACTION_VOLUMES_METHOD = 'abstraction-volumes'
 const UNIT_NAMES = {
   'cubic-metres': 'm³',
   litres: 'l',
@@ -47,13 +48,14 @@ function go(session) {
 
   return {
     ...alwaysRequiredPageData,
-    displayReadings: reported === 'meter-readings',
+    displayReadings: reported !== ABSTRACTION_VOLUMES_METHOD,
     displayUnits: units !== 'cubic-metres',
+    enterMultipleLinkText: _enterMultipleLinkText(reported, returnsFrequency),
     meter10TimesDisplay,
     meterMake,
     meterProvided,
     meterSerialNumber,
-    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    reportingFigures: reported === ABSTRACTION_VOLUMES_METHOD ? 'Volumes' : 'Meter readings',
     startReading,
     summaryTableData: _summaryTableData(formattedLines, session, unitName),
     tableTitle: _tableTitle(reported, returnsFrequency),
@@ -86,6 +88,7 @@ function _alwaysRequiredPageData(session) {
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
+      multipleEntries: `/system/return-logs/setup/${sessionId}/multiple-entries`,
       nilReturn: `/system/return-logs/setup/${sessionId}/submission`,
       received: `/system/return-logs/setup/${sessionId}/received`,
       reported: `/system/return-logs/setup/${sessionId}/reported`,
@@ -102,6 +105,13 @@ function _alwaysRequiredPageData(session) {
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }
+}
+
+function _enterMultipleLinkText(reported, returnsFrequency) {
+  const frequency = returnRequirementFrequencies[returnsFrequency]
+  const method = reported === ABSTRACTION_VOLUMES_METHOD ? 'volumes' : 'readings'
+
+  return `Enter multiple ${frequency} ${method}`
 }
 
 /**
@@ -123,7 +133,7 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
       unitName
     }
 
-    if (reported === 'abstraction-volumes') {
+    if (reported === ABSTRACTION_VOLUMES_METHOD) {
       formattedLine.quantity = line.quantity ?? null
     } else {
       formattedLine.reading = line.reading ?? null
@@ -209,7 +219,7 @@ function _summaryTableData(formattedLines, session, unitName) {
   const { id: sessionId, reported, returnsFrequency } = session
 
   const alwaysDisplayLinkHeader = true
-  const method = reported === 'abstraction-volumes' ? 'abstractionVolumes' : reported
+  const method = reported === ABSTRACTION_VOLUMES_METHOD ? 'abstractionVolumes' : reported
 
   return {
     headers: generateSummaryTableHeaders(method, returnsFrequency, unitName, alwaysDisplayLinkHeader),
@@ -240,7 +250,7 @@ function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) 
 
 function _tableTitle(reported, returnsFrequency) {
   const frequency = returnRequirementFrequencies[returnsFrequency]
-  const method = reported === 'abstraction-volumes' ? 'abstraction volumes' : 'meter readings'
+  const method = reported === ABSTRACTION_VOLUMES_METHOD ? 'volumes' : 'readings'
 
   return `Summary of ${frequency} ${method}`
 }

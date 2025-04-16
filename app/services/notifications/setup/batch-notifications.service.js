@@ -8,10 +8,10 @@
 const { setTimeout } = require('node:timers/promises')
 
 const CreateNotificationsService = require('./create-notifications.service.js')
-const NotifyEmailService = require('../../notify/notify-email.service.js')
-const NotifyLetterService = require('../../notify/notify-letter.service.js')
+const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
+const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
-const ScheduledNotificationsPresenter = require('../../../presenters/notifications/setup/scheduled-notifications.presenter.js')
+const notificationsPresenter = require('../../../presenters/notifications/setup/notifications.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -55,15 +55,9 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
 }
 
 async function _batch(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
-  const scheduledNotifications = ScheduledNotificationsPresenter.go(
-    recipients,
-    determinedReturnsPeriod,
-    referenceCode,
-    journey,
-    eventId
-  )
+  const notifications = notificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
-  const toSendNotifications = _toSendNotifications(scheduledNotifications)
+  const toSendNotifications = _toSendNotifications(notifications)
 
   const sentNotifications = await _sentNotifications(toSendNotifications)
 
@@ -105,36 +99,32 @@ async function _delay(delay) {
   return setTimeout(delay)
 }
 
-function _scheduledNotification(scheduledNotification, notifyResponse) {
-  delete scheduledNotification.reference
-  delete scheduledNotification.templateId
+function _notification(notification, notifyResponse) {
+  delete notification.reference
+  delete notification.templateId
 
   return {
-    ...scheduledNotification,
+    ...notification,
     ...NotifyUpdatePresenter.go(notifyResponse)
   }
 }
 
-async function _sendLetter(scheduledNotification) {
-  const notifyResponse = await NotifyLetterService.go(scheduledNotification.templateId, {
-    personalisation: scheduledNotification.personalisation,
-    reference: scheduledNotification.reference
+async function _sendLetter(notification) {
+  const notifyResponse = await NotifyLetterRequest.send(notification.templateId, {
+    personalisation: notification.personalisation,
+    reference: notification.reference
   })
 
-  return _scheduledNotification(scheduledNotification, notifyResponse)
+  return _notification(notification, notifyResponse)
 }
 
-async function _sendEmail(scheduledNotification) {
-  const notifyResponse = await NotifyEmailService.go(
-    scheduledNotification.templateId,
-    scheduledNotification.recipient,
-    {
-      personalisation: scheduledNotification.personalisation,
-      reference: scheduledNotification.reference
-    }
-  )
+async function _sendEmail(notification) {
+  const notifyResponse = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
+    personalisation: notification.personalisation,
+    reference: notification.reference
+  })
 
-  return _scheduledNotification(scheduledNotification, notifyResponse)
+  return _notification(notification, notifyResponse)
 }
 
 async function _sentNotifications(toSendNotifications) {
@@ -150,14 +140,14 @@ async function _sentNotifications(toSendNotifications) {
  *
  * @private
  */
-function _toSendNotifications(scheduledNotifications) {
+function _toSendNotifications(notifications) {
   const sentNotifications = []
 
-  for (const scheduledNotification of scheduledNotifications) {
-    if (scheduledNotification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(scheduledNotification))
+  for (const notification of notifications) {
+    if (notification.messageType === 'email') {
+      sentNotifications.push(_sendEmail(notification))
     } else {
-      sentNotifications.push(_sendLetter(scheduledNotification))
+      sentNotifications.push(_sendLetter(notification))
     }
   }
 

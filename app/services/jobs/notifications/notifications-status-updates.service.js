@@ -1,29 +1,29 @@
 'use strict'
 
 /**
- * Orchestrates the process of fetching and updating the status of 'scheduledNotification' from the Notify service.
+ * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
  * @module ProcessNotificationsStatusUpdatesService
  */
 
 const { setTimeout } = require('node:timers/promises')
 
-const FetchScheduledNotificationsService = require('./fetch-scheduled-notifications.service.js')
+const FetchNotificationsService = require('./fetch-notifications.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
-const NotifyStatusService = require('../../notify/notify-status.service.js')
+const NotifyStatusRequest = require('../../../requests/notify/notify-status.request.js')
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
 /**
- * Orchestrates the process of fetching and updating the status of 'scheduledNotification' from the Notify service.
+ * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
  *
- * This function retrieves a list of 'scheduledNotifications' and iterates over them to update their status
+ * This function retrieves a list of 'notifications' and iterates over them to update their status
  * according to the latest information from Notify.
  *
  * The updates are done in batches to comply with rate-limiting constraints imposed by the Notify service.
  * The rate limit is set to 3,000 messages per minute, which the service respects during processing.
  *
- * If the number of 'scheduledNotifications' exceeds the internal batch size limit, the notifications are split into
+ * If the number of 'notifications' exceeds the internal batch size limit, the notifications are split into
  * smaller batches for processing. This ensures efficient processing while adhering to the rate limit.
  *
  * After all notifications are updated, any notifications with an event that has failed (Notify error, not a 4xx or 5xx
@@ -33,21 +33,21 @@ const UpdateNotificationsService = require('./update-notifications.service.js')
 async function go() {
   const { batchSize, delay } = NotifyConfig
 
-  const scheduledNotifications = await FetchScheduledNotificationsService.go()
+  const notifications = await FetchNotificationsService.go()
 
-  for (let i = 0; i < scheduledNotifications.length; i += batchSize) {
-    const batchScheduledNotifications = scheduledNotifications.slice(i, i + batchSize)
+  for (let i = 0; i < notifications.length; i += batchSize) {
+    const batchNotifications = notifications.slice(i, i + batchSize)
 
-    await _batch(batchScheduledNotifications)
+    await _batch(batchNotifications)
 
     await _delay(delay)
   }
 
-  await _updateEventErrorCount(scheduledNotifications)
+  await _updateEventErrorCount(notifications)
 }
 
-async function _batch(scheduledNotifications) {
-  const toUpdateNotifications = _toUpdateNotifications(scheduledNotifications)
+async function _batch(notifications) {
+  const toUpdateNotifications = _toUpdateNotifications(notifications)
 
   const updatedNotifications = await _updateNotifications(toUpdateNotifications)
 
@@ -58,16 +58,16 @@ async function _delay(delay) {
   return setTimeout(delay)
 }
 
-async function _notificationStatus(scheduledNotification) {
-  const notifyResponse = await NotifyStatusService.go(scheduledNotification.notifyId)
+async function _notificationStatus(notification) {
+  const notifyResponse = await NotifyStatusRequest.send(notification.notifyId)
 
   if (notifyResponse.errors) {
-    return scheduledNotification
+    return notification
   } else {
-    const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, scheduledNotification)
+    const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, notification)
 
     return {
-      ...scheduledNotification,
+      ...notification,
       ...notifyStatus
     }
   }
@@ -79,8 +79,8 @@ async function _notificationStatus(scheduledNotification) {
  *
  * @private
  */
-async function _updateEventErrorCount(scheduledNotifications) {
-  const eventIds = scheduledNotifications.map((sn) => {
+async function _updateEventErrorCount(notifications) {
+  const eventIds = notifications.map((sn) => {
     return sn.eventId
   })
 
@@ -97,11 +97,11 @@ async function _updateNotifications(toSendNotifications) {
   })
 }
 
-function _toUpdateNotifications(scheduledNotifications) {
+function _toUpdateNotifications(notifications) {
   const updateNotifications = []
 
-  for (const scheduledNotification of scheduledNotifications) {
-    updateNotifications.push(_notificationStatus(scheduledNotification))
+  for (const notification of notifications) {
+    updateNotifications.push(_notificationStatus(notification))
   }
 
   return updateNotifications

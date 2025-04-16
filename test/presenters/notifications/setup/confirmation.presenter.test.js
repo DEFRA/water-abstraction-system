@@ -18,7 +18,7 @@ describe('Notifications Setup - Confirmation presenter', () => {
   beforeEach(() => {
     event = {
       id: '123',
-      subtype: 'adHoc',
+      subtype: 'adHocReminder',
       referenceCode
     }
   })

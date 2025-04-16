@@ -12,9 +12,9 @@ const { expect } = Code
 const { NotifyClient } = require('notifications-node-client')
 
 // Thing under test
-const NotifyStatusesService = require('../../../app/services/notify/notify-statuses.service.js')
+const NotifyStatusesRequest = require('../../../app/requests/notify/notify-statuses.request.js')
 
-describe('Notify - Statuses service', () => {
+describe('Notify - Statuses request', () => {
   let notificationId
   let notifyStub
   let referenceCode
@@ -38,7 +38,7 @@ describe('Notify - Statuses service', () => {
     })
 
     it('should call notify', async () => {
-      const result = await NotifyStatusesService.go(notificationId, referenceCode)
+      const result = await NotifyStatusesRequest.send(notificationId, referenceCode)
 
       expect(result).to.equal({
         data: [
@@ -51,7 +51,7 @@ describe('Notify - Statuses service', () => {
     })
 
     it('should use the notify client', async () => {
-      await NotifyStatusesService.go(notificationId, referenceCode)
+      await NotifyStatusesRequest.send(notificationId, referenceCode)
 
       expect(notifyStub.calledWith(null, null, referenceCode, notificationId)).to.equal(true)
     })
@@ -69,7 +69,7 @@ describe('Notify - Statuses service', () => {
     })
 
     it('should return an empty array', async () => {
-      const result = await NotifyStatusesService.go(notificationId, referenceCode)
+      const result = await NotifyStatusesRequest.send(notificationId, referenceCode)
 
       expect(result).to.equal({
         data: []
@@ -83,7 +83,7 @@ describe('Notify - Statuses service', () => {
     })
 
     it('should return an error', async () => {
-      const result = await NotifyStatusesService.go(notificationId, referenceCode)
+      const result = await NotifyStatusesRequest.send(notificationId, referenceCode)
 
       expect(result).to.equal({
         status: 404,
