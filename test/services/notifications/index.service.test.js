@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things to stub
 const FetchEventsNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
-const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index.presenter.js')
+const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index-notifications.presenter.js')
 
 // Thing under test
 const NotificationsIndexService = require('../../../app/services/notifications/index.service.js')

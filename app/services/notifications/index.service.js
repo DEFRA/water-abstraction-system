@@ -6,7 +6,7 @@
  */
 
 const FetchEventsNotificationsService = require('./fetch-events-notifications.service.js')
-const NotificationsIndexPresenter = require('../../presenters/notifications/index.presenter.js')
+const NotificationsIndexPresenter = require('../../presenters/notifications/index-notifications.presenter.js')
 const NotificationsIndexValidator = require('../../validators/notifications/index.validator.js')
 
 /**

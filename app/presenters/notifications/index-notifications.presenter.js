@@ -44,20 +44,17 @@ function _tableHeaders() {
 }
 
 function _tableRows(data) {
-  const rows = []
+  return data.map((notification) => {
+    const name = notification.alertType === 'warning' ? `Warning - ${notification.name}` : notification.name
 
-  for (const notification of data) {
-    const name = notification.alertType === 'warning' ? 'Warning - ' + notification.name : notification.name
-    rows.push([
+    return [
       { text: formatLongDate(notification.createdAt) },
       { html: `<a href="/notifications/report/${notification.id}">${name}</a>` },
       { text: notification.issuer },
       { text: notification.recipientCount, format: 'numeric' },
       { html: notification.errorCount ? `<strong class="govuk-tag govuk-tag--orange">ERROR</strong>` : '' }
-    ])
-  }
-
-  return rows
+    ]
+  })
 }
 
 module.exports = {
