@@ -5,7 +5,7 @@
  * @module ViewNotificationsService
  */
 
-const FetchEventNotificationsService = require('./fetch-events-notifications.service.js')
+const FetchEventsNotificationsService = require('./fetch-events-notifications.service.js')
 const NotificationsIndexPresenter = require('../../presenters/notifications/index.presenter.js')
 const NotificationsIndexValidator = require('../../validators/notifications/index.validator.js')
 
@@ -38,7 +38,7 @@ async function go(yar) {
   let data = []
 
   if (!validateResult) {
-    data = await FetchEventNotificationsService.go(filter)
+    data = await FetchEventsNotificationsService.go(filter)
   }
 
   const formattedData = await NotificationsIndexPresenter.go(data)

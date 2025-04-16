@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things to stub
-const FetchEventNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
+const FetchEventsNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
 const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index.presenter.js')
 
 // Thing under test
@@ -27,7 +27,7 @@ describe('Notifications - view', () => {
   describe('when called with no filters and no notifications', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns({}) }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -57,7 +57,7 @@ describe('Notifications - view', () => {
   describe('when called with no filters and some notifications', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns() }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -116,7 +116,7 @@ describe('Notifications - view', () => {
           ]
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -185,7 +185,7 @@ describe('Notifications - view', () => {
           sentBy: 'test@test'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -246,7 +246,7 @@ describe('Notifications - view', () => {
           sentToYear: '2024'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -303,7 +303,7 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -361,7 +361,7 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -419,7 +419,7 @@ describe('Notifications - view', () => {
           sentFromMonth: '1'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -476,7 +476,7 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -533,7 +533,7 @@ describe('Notifications - view', () => {
           sentToYear: '2025'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -591,7 +591,7 @@ describe('Notifications - view', () => {
           sentToYear: '2025'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
@@ -649,7 +649,7 @@ describe('Notifications - view', () => {
           sentToMonth: '12'
         })
       }
-      Sinon.stub(FetchEventNotificationsService, 'go').resolves([])
+      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
       Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),

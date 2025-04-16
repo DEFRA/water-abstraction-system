@@ -2,7 +2,7 @@
 
 /**
  * Fetches the notifications for the `/notifications` page
- * @module FetchEventsService
+ * @module FetchEventsNotificationsService
  */
 
 const { ref } = require('objection')
@@ -14,7 +14,7 @@ const EventModel = require('../../models/event.model.js')
  *
  * @param {object} filter - an object containing the different filters
  *
- * @returns {Promise<object[]>}
+ * @returns {Promise<object[]>} an array of matching events
  */
 async function go(filter) {
   const query = EventModel.query()
@@ -70,6 +70,15 @@ async function go(filter) {
   return query
 }
 
+/**
+ * Using the provided filter object this function creates an array to be used in the whereRaw clause above.
+ * Various attempts where made to try to get it working passing in a dynamic array but this was the only way to get it
+ * to work.
+ *
+ * @param {object} filter - an object containing the different filters
+ *
+ * @returns {Promise<string[]>} an array of alert types from the filter
+ */
 function _waterAbstractionAlerts(filter) {
   const alerts = ['', '', '', '']
   let hasAlert = false
