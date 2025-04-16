@@ -8,7 +8,7 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index.presenter.js')
+const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index-notifications.presenter.js')
 
 describe('View Notifications presenter', () => {
   describe('when the "data" is empty and there are no filters or validation results', () => {
