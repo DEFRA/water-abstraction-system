@@ -62,15 +62,20 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       returnLog = await ReturnLogHelper.add({
         licenceRef: licence.licenceRef,
         metadata,
-        receivedDate: new Date('2025-03-06'),
-        endDate: new Date('2022-06-01')
+        receivedDate: new Date('2023-04-12')
       })
 
       returnSubmission = await ReturnSubmissionHelper.add({
         returnLogId: returnLog.id,
         metadata: { method: 'abstractionVolumes' }
       })
-      await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
+
+      await ReturnSubmissionLineHelper.add({
+        returnSubmissionId: returnSubmission.id,
+        timePeriod: 'month',
+        startDate: new Date('2022-09-01'),
+        endDate: new Date('2022-09-30')
+      })
     })
 
     beforeEach(() => {
@@ -88,16 +93,60 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       expect(matchingSession.data).to.equal({
         beenReceived: true,
         dueDate: '2023-04-28T00:00:00.000Z',
-        endDate: '2022-06-01T00:00:00.000Z',
+        endDate: '2023-03-31T00:00:00.000Z',
         journey: 'enter-return',
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         lines: [
           {
-            startDate: '2021-12-26T00:00:00.000Z',
-            endDate: '2022-01-01T00:00:00.000Z',
+            endDate: '2022-04-30T00:00:00.000Z',
+            startDate: '2022-04-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-05-31T00:00:00.000Z',
+            startDate: '2022-05-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-06-30T00:00:00.000Z',
+            startDate: '2022-06-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-07-31T00:00:00.000Z',
+            startDate: '2022-07-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-08-31T00:00:00.000Z',
+            startDate: '2022-08-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-09-30T00:00:00.000Z',
+            reading: null,
             quantity: 4380,
-            reading: null
+            startDate: '2022-09-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-10-31T00:00:00.000Z',
+            startDate: '2022-10-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-11-30T00:00:00.000Z',
+            startDate: '2022-11-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-12-31T00:00:00.000Z',
+            startDate: '2022-12-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2023-01-31T00:00:00.000Z',
+            startDate: '2023-01-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2023-02-28T00:00:00.000Z',
+            startDate: '2023-02-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2023-03-31T00:00:00.000Z',
+            startDate: '2023-03-01T00:00:00.000Z'
           }
         ],
         meter10TimesDisplay: null,
@@ -110,11 +159,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         periodEndDay: returnLog.metadata.nald.periodEndDay,
         periodEndMonth: returnLog.metadata.nald.periodEndMonth,
         purposes: ['Test description'],
-        receivedDate: '2025-03-06T00:00:00.000Z',
-        receivedDateDay: '6',
-        receivedDateMonth: '3',
+        receivedDate: '2023-04-12T00:00:00.000Z',
+        receivedDateDay: '12',
+        receivedDateMonth: '4',
         receivedDateOptions: 'custom-date',
-        receivedDateYear: '2025',
+        receivedDateYear: '2023',
         reported: 'abstraction-volumes',
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
@@ -320,7 +369,6 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       returnLog = await ReturnLogHelper.add({
         licenceRef: licence.licenceRef,
         metadata,
-        receivedDate: null,
         endDate: new Date('2022-06-01')
       })
     })
