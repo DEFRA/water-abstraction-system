@@ -40,11 +40,13 @@ async function go(returnLogId) {
   }
 
   const returnLog = await _fetchReturnLog(returnLogId)
+  const returnSubmission = _getReturnSubmission(returnLog)
 
-  const referenceData = _referenceData(returnLog)
-  const submissionData = _submissionData(returnLog)
-
-  const data = { ...referenceData, ...submissionData, lines: _mergeLines(referenceData, submissionData) }
+  const data = {
+    ..._referenceData(returnLog),
+    ..._submissionData(returnLog, returnSubmission),
+    lines: _generateLines(returnLog, returnSubmission)
+  }
 
   const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
 
@@ -53,21 +55,31 @@ async function go(returnLogId) {
   return `/system/return-logs/setup/${sessionId}/${redirect}`
 }
 
-function _mergeLines(referenceData, submissionData) {
-  if (!submissionData.lines) {
-    return referenceData.lines
+function _generateLines(returnLog, returnSubmission) {
+  // We create a hashmap of lines using the end date as the key. We add the reference lines first, then the
+  // submission lines, so that any submission data will overwrite the reference placeholder data.
+  const lines = {}
+
+  const referenceLines = _lines(returnLog.returnsFrequency, returnLog.startDate, returnLog.endDate)
+  const submissionLines = returnSubmission ? _submissionLines(returnSubmission.returnSubmissionLines) : []
+  const linesToCombine = [...referenceLines, ...submissionLines]
+
+  linesToCombine.forEach((line) => {
+    const endDate = new Date(line.endDate).getTime()
+    lines[endDate] = line
+  })
+
+  return Object.values(lines)
+}
+
+function _getReturnSubmission(returnLog) {
+  const returnSubmission = returnLog.returnSubmissions[0] ?? null
+
+  if (returnSubmission) {
+    returnSubmission.$applyReadings()
   }
 
-  return referenceData.lines.map((refLine) => {
-    const submissionLine = submissionData.lines.find((subLine) => {
-      return new Date(subLine.endDate).getTime() === new Date(refLine.endDate).getTime()
-    })
-
-    return {
-      ...refLine,
-      ...(submissionLine ? { ...submissionLine } : {})
-    }
-  })
+  return returnSubmission
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -174,7 +186,6 @@ function _referenceData(returnLog) {
     endDate,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    lines: _lines(returnsFrequency, startDate, endDate),
     periodEndDay: parseInt(metadata.nald.periodEndDay),
     periodEndMonth: parseInt(metadata.nald.periodEndMonth),
     periodStartDay: parseInt(metadata.nald.periodStartDay),
@@ -193,22 +204,17 @@ function _referenceData(returnLog) {
   }
 }
 
-function _submissionData(returnLog) {
-  if (returnLog.returnSubmissions.length === 0) {
+function _submissionData(returnLog, returnSubmission) {
+  if (!returnSubmission) {
     return {}
   }
 
-  const returnSubmission = returnLog.returnSubmissions[0]
-
-  returnSubmission.$applyReadings()
-
-  const { metadata, nilReturn, returnSubmissionLines } = returnSubmission
+  const { metadata, nilReturn } = returnSubmission
   const meter = _meter(metadata?.meters?.[0])
   const method = metadata?.method || null
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: nilReturn ? undefined : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
