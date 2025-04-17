@@ -8,20 +8,18 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const UniqueViolationError = require('objection').UniqueViolationError
+// Things to stub
 const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 
 // Thing under test
 const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 
-describe('Jobs - Return Logs - Create Return Cycle service', () => {
+describe('Jobs - Return Logs - Create Current Return Cycle service', () => {
   let clock
   let insertStub
-  let summer
 
   beforeEach(() => {
-    insertStub = Sinon.stub().returnsThis()
+    clock = Sinon.useFakeTimers(new Date('2024-05-01'))
   })
 
   afterEach(() => {
@@ -29,149 +27,161 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
     clock.restore()
   })
 
-  describe('when summer is "false"', () => {
+  describe('when there is no matching return cycles for the current date', () => {
     before(() => {
-      summer = false
-    })
-
-    describe('and the current date is for a return cycle that has not yet been created', () => {
-      beforeEach(() => {
-        Sinon.stub(ReturnCycleModel, 'query').returns({
-          insert: insertStub,
-          returning: Sinon.stub().withArgs('*').resolves()
-        })
-      })
-
-      describe('and the current date is after the end of April (2024-05-01)', () => {
-        beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date('2024-05-01'))
-        })
-
-        it('creates the correct "all year" return cycle', async () => {
-          await CreateCurrentReturnCycleService.go(summer)
-
-          // Check we create the return cycle as expected
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertObject).to.equal(
-            {
-              dueDate: new Date(`2025-04-28`),
-              endDate: new Date('2025-03-31'),
-              summer,
-              submittedInWrls: true,
-              startDate: new Date('2024-04-01')
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-        })
-      })
-
-      describe('and the current date is before the end of April (2024-01-01)', () => {
-        beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date('2024-01-01'))
-        })
-
-        it('creates the correct "all year" return cycle', async () => {
-          await CreateCurrentReturnCycleService.go(summer)
-
-          // Check we create the return cycle as expected
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertObject).to.equal(
-            {
-              dueDate: new Date('2024-04-28'),
-              endDate: new Date('2024-03-31'),
-              summer,
-              submittedInWrls: true,
-              startDate: new Date('2023-04-01')
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-        })
+      insertStub = Sinon.stub().returnsThis()
+      Sinon.stub(ReturnCycleModel, 'query').returns({
+        select: Sinon.stub().returnsThis(),
+        orderBy: Sinon.stub().returnsThis(),
+        limit: Sinon.stub().resolves([]),
+        insert: insertStub
       })
     })
 
-    // NOTE: We test for this by simply removing all our stubbing. We know the current return cycles are seeded when the
-    // test suite is started, so the current return cycles will already exist causing the service to fail as expected.
-    describe('and the current date is for a return cycle that has already been created', () => {
-      it('throws an error', async () => {
-        const result = await expect(CreateCurrentReturnCycleService.go(summer)).to.reject()
+    it('creates both the all year and summer return cycles', async () => {
+      await CreateCurrentReturnCycleService.go()
 
-        expect(result).to.be.instanceOf(UniqueViolationError)
-      })
+      const [insertObject] = insertStub.args[0]
+
+      expect(insertStub.callCount).to.equal(1)
+      expect(insertObject[0]).to.equal(
+        {
+          dueDate: new Date('2024-11-28T00:00:00.000Z'),
+          endDate: new Date('2024-10-31T00:00:00.000Z'),
+          startDate: new Date('2023-11-01T00:00:00.000Z'),
+          summer: true,
+          submittedInWrls: true
+        },
+        { skip: ['createdAt', 'updatedAt'] }
+      )
+
+      expect(insertObject[1]).to.equal(
+        {
+          dueDate: new Date('2025-04-28T00:00:00.000Z'),
+          endDate: new Date('2025-03-31T00:00:00.000Z'),
+          startDate: new Date('2024-04-01T00:00:00.000Z'),
+          summer: false,
+          submittedInWrls: true
+        },
+        { skip: ['createdAt', 'updatedAt'] }
+      )
     })
   })
 
-  describe('when summer is "true"', () => {
+  describe('when there is only a matching summer return cycle for the current date', () => {
     before(() => {
-      summer = true
-    })
-
-    describe('and the current date is for a return cycle that has not yet been created', () => {
-      beforeEach(() => {
-        Sinon.stub(ReturnCycleModel, 'query').returns({
-          insert: insertStub,
-          returning: Sinon.stub().withArgs('*').resolves()
-        })
-      })
-
-      describe('and the current date is after the end of October (2024-12-01)', () => {
-        beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date('2024-12-01'))
-        })
-
-        it('creates the correct "summer" return cycle', async () => {
-          await CreateCurrentReturnCycleService.go(summer)
-
-          // Check we create the return cycle as expected
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertObject).to.equal(
-            {
-              dueDate: new Date('2025-11-28'),
-              endDate: new Date('2025-10-31'),
-              summer,
-              submittedInWrls: true,
-              startDate: new Date('2024-11-01')
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-        })
-      })
-
-      describe('and the current date is before the end of October (2024-09-01)', () => {
-        beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date('2024-09-01'))
-        })
-
-        it('creates the correct "summer" return cycle', async () => {
-          await CreateCurrentReturnCycleService.go(summer)
-
-          // Check we create the return cycle as expected
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertObject).to.equal(
-            {
-              dueDate: new Date('2024-11-28'),
-              endDate: new Date('2024-10-31'),
-              summer,
-              submittedInWrls: true,
-              startDate: new Date('2023-11-01')
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-        })
+      insertStub = Sinon.stub().returnsThis()
+      Sinon.stub(ReturnCycleModel, 'query').returns({
+        select: Sinon.stub().returnsThis(),
+        orderBy: Sinon.stub().returnsThis(),
+        limit: Sinon.stub().resolves([
+          {
+            createdAt: new Date('2024-05-01T00:00:00.000Z'),
+            dueDate: new Date('2024-11-28T00:00:00.000Z'),
+            endDate: new Date('2024-10-31T00:00:00.000Z'),
+            summer: true,
+            submittedInWrls: true,
+            startDate: new Date('2023-11-01T00:00:00.000Z'),
+            updatedAt: new Date('2024-05-01T00:00:00.000Z')
+          }
+        ]),
+        insert: insertStub
       })
     })
 
-    // NOTE: We test for this by simply removing all our stubbing. We know the current return cycles are seeded when the
-    // test suite is started, so the current return cycles will already exist causing the service to fail as expected.
-    describe('and the current date is for a return cycle that has already been created', () => {
-      it('throws an error', async () => {
-        const result = await expect(CreateCurrentReturnCycleService.go(summer)).to.reject()
+    it('creates the all year return cycles', async () => {
+      await CreateCurrentReturnCycleService.go()
 
-        expect(result).to.be.instanceOf(UniqueViolationError)
+      const [insertObject] = insertStub.args[0]
+
+      expect(insertStub.callCount).to.equal(1)
+      expect(insertObject[0]).to.equal(
+        {
+          dueDate: new Date('2024-11-28T00:00:00.000Z'),
+          endDate: new Date('2024-10-31T00:00:00.000Z'),
+          startDate: new Date('2023-11-01T00:00:00.000Z'),
+          summer: true,
+          submittedInWrls: true
+        },
+        { skip: ['createdAt', 'updatedAt'] }
+      )
+    })
+  })
+
+  describe('when there is only a matching all year return cycle for the current date', () => {
+    before(() => {
+      insertStub = Sinon.stub().returnsThis()
+      Sinon.stub(ReturnCycleModel, 'query').returns({
+        select: Sinon.stub().returnsThis(),
+        orderBy: Sinon.stub().returnsThis(),
+        limit: Sinon.stub().resolves([
+          {
+            createdAt: new Date('2024-05-01T00:00:00.000Z'),
+            dueDate: new Date('2025-04-28T00:00:00.000Z'),
+            endDate: new Date('2025-03-31T00:00:00.000Z'),
+            summer: false,
+            submittedInWrls: true,
+            startDate: new Date('2024-04-01T00:00:00.000Z'),
+            updatedAt: new Date('2024-05-01T00:00:00.000Z')
+          }
+        ]),
+        insert: insertStub
       })
+    })
+
+    it('creates the summer return cycles', async () => {
+      await CreateCurrentReturnCycleService.go()
+
+      const [insertObject] = insertStub.args[0]
+
+      expect(insertStub.callCount).to.equal(1)
+      expect(insertObject[0]).to.equal(
+        {
+          dueDate: new Date('2025-04-28T00:00:00.000Z'),
+          endDate: new Date('2025-03-31T00:00:00.000Z'),
+          startDate: new Date('2024-04-01T00:00:00.000Z'),
+          summer: false,
+          submittedInWrls: true
+        },
+        { skip: ['createdAt', 'updatedAt'] }
+      )
+    })
+  })
+
+  describe('when there is both a matching all year and summer return cycles for the current date', () => {
+    before(() => {
+      insertStub = Sinon.stub().returnsThis()
+      Sinon.stub(ReturnCycleModel, 'query').returns({
+        select: Sinon.stub().returnsThis(),
+        orderBy: Sinon.stub().returnsThis(),
+        limit: Sinon.stub().resolves([
+          {
+            createdAt: new Date('2024-05-01T00:00:00.000Z'),
+            dueDate: new Date('2025-04-28T00:00:00.000Z'),
+            endDate: new Date('2025-03-31T00:00:00.000Z'),
+            summer: false,
+            submittedInWrls: true,
+            startDate: new Date('2024-04-01T00:00:00.000Z'),
+            updatedAt: new Date('2024-05-01T00:00:00.000Z')
+          },
+          {
+            createdAt: new Date('2024-05-01T00:00:00.000Z'),
+            dueDate: new Date('2024-11-28T00:00:00.000Z'),
+            endDate: new Date('2024-10-31T00:00:00.000Z'),
+            summer: true,
+            submittedInWrls: true,
+            startDate: new Date('2023-11-01T00:00:00.000Z'),
+            updatedAt: new Date('2024-05-01T00:00:00.000Z')
+          }
+        ]),
+        insert: insertStub
+      })
+    })
+
+    it('does not insert anything in the database', async () => {
+      await CreateCurrentReturnCycleService.go()
+
+      expect(insertStub.callCount).to.equal(0)
     })
   })
 })

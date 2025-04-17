@@ -8,7 +8,7 @@
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
-const FetchCurrentReturnCycleService = require('./fetch-current-return-cycle.service.js')
+const CheckReturnCycleService = require('../../return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 
 /**
@@ -35,6 +35,8 @@ async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 
+    await CreateCurrentReturnCycleService.go()
+
     const returnCycle = await _fetchReturnCycle(cycle)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
@@ -50,13 +52,8 @@ async function go(cycle) {
 
 async function _fetchReturnCycle(cycle) {
   const summer = cycle === 'summer'
-  const returnCycle = await FetchCurrentReturnCycleService.go(summer)
 
-  if (returnCycle) {
-    return returnCycle
-  }
-
-  return CreateCurrentReturnCycleService.go(summer)
+  return CheckReturnCycleService.go(summer)
 }
 
 module.exports = {
