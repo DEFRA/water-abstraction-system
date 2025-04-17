@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats meter reading data ready for presenting in the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
+ * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  * @module ReadingsPresenter
  */
 
