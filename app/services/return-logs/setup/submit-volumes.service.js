@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module SubmitVolumesService
  */
 
@@ -11,7 +11,7 @@ const VolumesValidator = require('../../../validators/return-logs/setup/volumes.
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data

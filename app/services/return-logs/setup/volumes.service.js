@@ -1,8 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}`
- * page
+ * Orchestrates fetching and presenting the data needed for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module VolumesService
  */
 
@@ -10,8 +9,7 @@ const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}`
- * page
+ * Orchestrates fetching and presenting the data needed for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {string} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
