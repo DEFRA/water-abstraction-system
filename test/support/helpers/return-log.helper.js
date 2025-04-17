@@ -21,7 +21,7 @@ const { generateLegacyId } = require('./return-requirement.helper.js')
  * - `endDate` - 2023-03-31
  * - `licenceRef` - [randomly generated - 1/23/45/76/3672]
  * - `metadata` - {}
- * - `receivedDate` - 2023-04-12
+ * - `receivedDate` - null
  * - `returnReference` - [randomly generated - 10000321]
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
