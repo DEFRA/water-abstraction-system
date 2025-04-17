@@ -221,6 +221,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/volumes/{yearMonth}',
+    options: {
+      handler: ReturnLogsSetupController.volumes,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/volumes/{yearMonth}',
+    options: {
+      handler: ReturnLogsSetupController.submitVolumes,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
       handler: ReturnLogsSetupController.received,
