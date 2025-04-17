@@ -26,7 +26,7 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
-  const validationResult = _validate(payload, requestedYear, requestedMonth, session)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(payload, session, requestedYear, requestedMonth)
@@ -99,13 +99,13 @@ async function _save(payload, session, requestedYear, requestedMonth) {
   return session.$update()
 }
 
-function _validate(payload, requestedYear, requestedMonth, session) {
+function _validate(payload) {
   // If the payload is empty, we don't need to validate anything
   if (Object.keys(payload).length === 0) {
     return null
   }
 
-  const validation = VolumesValidator.go(payload, requestedYear, requestedMonth, session)
+  const validation = VolumesValidator.go(payload)
 
   if (!validation.error) {
     return null
