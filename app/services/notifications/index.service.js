@@ -17,23 +17,10 @@ const NotificationsIndexValidator = require('../../validators/notifications/inde
  * @returns {Promise<object>} The view data for the notifications page
  */
 async function go(yar) {
-  const filters = await _getFilters(yar)
+  const savedFilters = await _filters(yar)
 
-  const { filterNotificationTypes } = filters
-
-  const _filterNotificationTypes = filters.filterNotificationTypes
-    ? _prepareNotifications(filterNotificationTypes)
-    : filterNotificationTypes
-
-  const validateResult = _validate(filters)
-
-  const filter = {
-    notifications: _filterNotificationTypes,
-    ...filters
-  }
-
-  // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filter.openFilter = _openFilter(filter)
+  const filter = _convertTypesToBooleanFlags(savedFilters)
+  const validateResult = _validate(savedFilters)
 
   let data = []
 
@@ -51,7 +38,32 @@ async function go(yar) {
   }
 }
 
-async function _getFilters(yar) {
+function _convertTypesToBooleanFlags(filters) {
+  const { filterNotificationTypes } = filters
+
+  const _filterNotificationTypes = filters.filterNotificationTypes
+    ? _prepareNotifications(filterNotificationTypes)
+    : filterNotificationTypes
+
+  const filter = {
+    notifications: _filterNotificationTypes,
+    ...filters
+  }
+
+  // this opens the filter on the page if any filter data has been received so the user can see the applied filters
+  filter.openFilter = _openFilter(filter)
+
+  return filter
+}
+
+function _errorySummary(text, href) {
+  return {
+    text,
+    href
+  }
+}
+
+async function _filters(yar) {
   const filters = yar.get('notifications-filter')
   const filterNotificationTypes = filters?.filterNotificationTypes
   const sentBy = filters?.sentBy
@@ -62,6 +74,8 @@ async function _getFilters(yar) {
   const sentToMonth = filters?.sentToMonth
   const sentToYear = filters?.sentToYear
 
+  // NOTE: This bit of JavaScript magic will only add the value as a property to the object we're returning,
+  // if the value exists. In this case, it avoids having masses of if () {} statements.
   return {
     ...(filterNotificationTypes && { filterNotificationTypes }),
     ...(sentBy && { sentBy }),
@@ -113,6 +127,9 @@ function _validate(filters) {
     return null
   }
 
+  const error = {}
+  const errorSummary = []
+
   const toDateError = validation.error.details.find((detail) => {
     return detail.context.key === 'toFullDate'
   })
@@ -123,12 +140,24 @@ function _validate(filters) {
     return detail.context.key === 'sentBy'
   })
 
-  return {
-    text: 'There was a problem with your filters.',
-    ...(fromDateError && { fromFullDate: { message: fromDateError.message } }),
-    ...(toDateError && { toFullDate: { message: toDateError.message } }),
-    ...(sentByError && { sentBy: { message: sentByError.message } })
+  if (toDateError) {
+    errorSummary.push(_errorySummary(toDateError.message, '#sent-to'))
+    error.toFullDate = { message: toDateError.message }
   }
+
+  if (fromDateError) {
+    errorSummary.push(_errorySummary(fromDateError.message, '#sent-from'))
+    error.fromFullDate = { message: fromDateError.message }
+  }
+
+  if (sentByError) {
+    errorSummary.push(_errorySummary(sentByError.message, '#sent-by'))
+    error.sentByError = { message: sentByError.message }
+  }
+
+  error.summary = errorSummary
+
+  return error
 }
 
 module.exports = {

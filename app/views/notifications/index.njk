@@ -19,12 +19,7 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#returnsPeriod-error"
-        }
-      ]
+      errorList: error.summary
     }) }}
   {% endif %}
 
@@ -146,7 +141,7 @@
 
       {# To #}
       {{ govukDateInput({
-        id: 'sent-To',
+        id: 'sent-to',
         namePrefix: 'sent-to',
         errorMessage: {
           text: error.toFullDate.message

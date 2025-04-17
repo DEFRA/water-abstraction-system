@@ -17,6 +17,7 @@ const EventModel = require('../../models/event.model.js')
  * @returns {Promise<object[]>} an array of matching events
  */
 async function go(filter) {
+  console.log(filter)
   const query = EventModel.query()
     .select([
       'id',
