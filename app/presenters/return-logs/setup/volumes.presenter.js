@@ -2,7 +2,7 @@
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
- * @module ReadingsPresenter
+ * @module VolumesPresenter
  */
 
 const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
