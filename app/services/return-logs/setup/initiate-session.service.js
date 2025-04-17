@@ -42,15 +42,32 @@ async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
-  const submissionData = _submissionData(referenceData.lines, returnLog)
+  const submissionData = _submissionData(returnLog)
 
-  const data = { ...referenceData, ...submissionData }
+  const data = { ...referenceData, ...submissionData, lines: _mergeLines(referenceData, submissionData) }
 
   const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
 
   const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 
   return `/system/return-logs/setup/${sessionId}/${redirect}`
+}
+
+function _mergeLines(referenceData, submissionData) {
+  if (!submissionData.lines) {
+    return referenceData.lines
+  }
+
+  return referenceData.lines.map((refLine) => {
+    const submissionLine = submissionData.lines.find((subLine) => {
+      return new Date(subLine.endDate).getTime() === new Date(refLine.endDate).getTime()
+    })
+
+    return {
+      ...refLine,
+      ...(submissionLine ? { ...submissionLine } : {})
+    }
+  })
 }
 
 async function _fetchReturnLog(returnLogId) {
@@ -176,7 +193,7 @@ function _referenceData(returnLog) {
   }
 }
 
-function _submissionData(lines, returnLog) {
+function _submissionData(returnLog) {
   if (returnLog.returnSubmissions.length === 0) {
     return {}
   }
@@ -191,7 +208,7 @@ function _submissionData(lines, returnLog) {
 
   return {
     journey: nilReturn ? 'nil-return' : 'enter-return',
-    lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
+    lines: nilReturn ? undefined : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
