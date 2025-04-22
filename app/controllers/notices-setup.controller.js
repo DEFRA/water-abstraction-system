@@ -5,19 +5,19 @@
  * @module NoticesSetupController
  */
 
-const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
-const CancelService = require('../services/notifications/setup/cancel.service.js')
-const ConfirmationService = require('../services/notifications/setup/confirmation.service.js')
-const CheckService = require('../services/notifications/setup/check.service.js')
-const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
-const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
-const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
-const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
-const SubmitAdHocLicenceService = require('../services/notifications/setup/submit-ad-hoc-licence.service.js')
-const SubmitCancelService = require('../services/notifications/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../services/notifications/setup/submit-check.service.js')
-const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
+const AdHocLicenceService = require('../services/notices/setup/ad-hoc-licence.service.js')
+const CancelService = require('../services/notices/setup/cancel.service.js')
+const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
+const CheckService = require('../services/notices/setup/check.service.js')
+const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
+const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
+const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
+const ReturnsPeriodService = require('../services/notices/setup/returns-period.service.js')
+const SubmitAdHocLicenceService = require('../services/notices/setup/submit-ad-hoc-licence.service.js')
+const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
+const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
+const SubmitReturnsPeriodService = require('../services/notices/setup/submit-returns-period.service.js')
 
 const basePath = 'notices/setup'
 
