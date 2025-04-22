@@ -17,10 +17,11 @@
   {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
-      titleText: "There is a problem",
+      titleText: 'There is a problem',
       errorList: [
         {
-          text: error.text
+          text: error.text,
+          href: '#additionalSubmissionOptions'
         }
       ]
     }) }}
@@ -330,7 +331,7 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div class="govuk-body">
+    <div class="govuk-body" id="additionalSubmissionOptions">
       {% if returnsRequired %}
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-10',
