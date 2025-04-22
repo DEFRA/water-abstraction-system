@@ -6,9 +6,9 @@
  */
 
 const GeneralLib = require('../../../lib/general.lib.js')
+const SessionModel = require('../../../models/session.model.js')
 const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page

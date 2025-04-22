@@ -5,8 +5,8 @@
  * @module VolumesService
  */
 
-const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
