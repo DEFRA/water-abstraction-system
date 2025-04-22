@@ -26,11 +26,7 @@ async function go(sessionId, page = 1) {
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 
-  const pagination = PaginatorPresenter.go(
-    recipients.length,
-    Number(page),
-    `/system/notifications/setup/${sessionId}/check`
-  )
+  const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
 
   const formattedData = CheckPresenter.go(recipients, page, pagination, session)
 

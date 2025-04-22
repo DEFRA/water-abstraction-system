@@ -68,14 +68,14 @@ function _formatRecipients(recipients) {
 }
 function _links(sessionId, journey) {
   const links = {
-    back: `/system/notifications/setup/${sessionId}/returns-period`,
-    cancel: `/system/notifications/setup/${sessionId}/cancel`,
-    download: `/system/notifications/setup/${sessionId}/download`,
-    removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
+    back: `/system/notices/setup/${sessionId}/returns-period`,
+    cancel: `/system/notices/setup/${sessionId}/cancel`,
+    download: `/system/notices/setup/${sessionId}/download`,
+    removeLicences: `/system/notices/setup/${sessionId}/remove-licences`
   }
 
   if (journey === 'ad-hoc') {
-    links.back = `/system/notifications/setup/${sessionId}/ad-hoc-licence`
+    links.back = `/system/notices/setup/${sessionId}/ad-hoc-licence`
     links.removeLicences = ''
   }
 

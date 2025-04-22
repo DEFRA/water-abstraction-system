@@ -18,7 +18,7 @@ function go(session) {
   const { referenceCode } = session
 
   return {
-    backLink: `/system/notifications/setup/${session.id}/check`,
+    backLink: `/system/notices/setup/${session.id}/check`,
     pageTitle: 'You are about to cancel this notification',
     referenceCode,
     summaryList: _summaryList(session)
