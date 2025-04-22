@@ -10,8 +10,8 @@ const { setTimeout } = require('node:timers/promises')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
 const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
-const NotifyUpdatePresenter = require('../../../presenters/notifications/setup/notify-update.presenter.js')
-const notificationsPresenter = require('../../../presenters/notifications/setup/notifications.presenter.js')
+const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
+const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -55,7 +55,7 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
 }
 
 async function _batch(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
-  const notifications = notificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+  const notifications = NotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
   const toSendNotifications = _toSendNotifications(notifications)
 

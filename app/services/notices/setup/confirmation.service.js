@@ -5,7 +5,7 @@
  * @module ConfirmationService
  */
 
-const ConfirmationPresenter = require('../../../presenters/notifications/setup/confirmation.presenter.js')
+const ConfirmationPresenter = require('../../../presenters/notices/setup/confirmation.presenter.js')
 const EventModel = require('../../../models/event.model.js')
 
 /**

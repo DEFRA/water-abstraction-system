@@ -6,7 +6,7 @@
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
-const AdHocLicencePresenter = require('../../../presenters/notifications/setup/ad-hoc-licence.presenter.js')
+const AdHocLicencePresenter = require('../../../presenters/notices/setup/ad-hoc-licence.presenter.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const AdHocLicenceValidator = require('../../../validators/notices/setup/ad-hoc-licence.validator.js')

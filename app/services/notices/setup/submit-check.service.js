@@ -6,7 +6,7 @@
  */
 
 const BatchNotificationsService = require('./batch-notifications.service.js')
-const CreateEventPresenter = require('../../../presenters/notifications/setup/create-event.presenter.js')
+const CreateEventPresenter = require('../../../presenters/notices/setup/create-event.presenter.js')
 const CreateEventService = require('./create-event.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const RecipientsService = require('./fetch-recipients.service.js')

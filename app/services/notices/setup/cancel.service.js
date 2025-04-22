@@ -5,7 +5,7 @@
  * @module CancelService
  */
 
-const CancelPresenter = require('../../../presenters/notifications/setup/cancel.presenter.js')
+const CancelPresenter = require('../../../presenters/notices/setup/cancel.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

@@ -5,7 +5,7 @@
  * @module ReturnsPeriodService
  */
 
-const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
+const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = NotificationsPresenter.go(session)
+  const formattedData = ReturnsPeriodPresenter.go(session)
 
   return {
     activeNavBar: 'manage',

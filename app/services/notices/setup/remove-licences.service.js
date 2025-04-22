@@ -5,7 +5,7 @@
  * @module RemoveLicencesService
  */
 
-const RemoveLicencesPresenter = require('../../../presenters/notifications/setup/remove-licences.presenter.js')
+const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

@@ -6,7 +6,7 @@
  */
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
-const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
+const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -23,7 +23,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (validationResult) {
-    const formattedData = NotificationsPresenter.go(session)
+    const formattedData = ReturnsPeriodPresenter.go(session)
 
     return {
       activeNavBar: 'manage',

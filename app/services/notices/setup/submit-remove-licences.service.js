@@ -6,7 +6,7 @@
  */
 
 const FetchReturnsDueService = require('./fetch-returns-due.service.js')
-const RemoveLicencesPresenter = require('../../../presenters/notifications/setup/remove-licences.presenter.js')
+const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
 const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')

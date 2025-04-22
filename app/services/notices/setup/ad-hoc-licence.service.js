@@ -5,7 +5,7 @@
  * @module AdHocLicenceService
  */
 
-const AdHocLicencePresenter = require('../../../presenters/notifications/setup/ad-hoc-licence.presenter.js')
+const AdHocLicencePresenter = require('../../../presenters/notices/setup/ad-hoc-licence.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

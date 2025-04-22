@@ -5,7 +5,7 @@
  * @module DownloadRecipientsService
  */
 
-const DownloadRecipientsPresenter = require('../../../presenters/notifications/setup/download-recipients.presenter.js')
+const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
