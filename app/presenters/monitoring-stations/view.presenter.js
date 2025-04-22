@@ -6,6 +6,7 @@
  */
 
 const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../base.presenter.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
@@ -41,6 +42,7 @@ function go(monitoringStation, auth) {
   } = monitoringStation
 
   return {
+    links: _links(monitoringStationId),
     gridReference: gridReference ?? '',
     monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
@@ -82,6 +84,18 @@ function _alert(status, statusUpdatedAt) {
   }
 
   return sentenceCase(status)
+}
+
+function _links(monitoringStationId) {
+  let createAlert = `/system/notifications/setup?journey=abstraction-alert&monitoringStationId=${monitoringStationId}`
+
+  if (!FeatureFlagsConfig.enableMonitoringStationsAlertNotifications) {
+    createAlert = '/monitoring-stations/' + monitoringStationId + '/send-alert/alert-type'
+  }
+
+  return {
+    createAlert
+  }
 }
 
 function _restriction(restrictionType) {
