@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
+ * Formats a notice `SessionModel` instance into the data needed for a 'EventModel' record
  * @module CreateEventPresenter
  */
 
@@ -9,7 +9,7 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats a notification `SessionModel` instance into the data needed for a 'EventModel' record
+ * Formats a notice `SessionModel` instance into the data needed for a 'EventModel' record
  *
  * We set the event 'status' to 'complete' to allow the report to show on the 'notifications/report' page. This is
  * dictated by the legacy code.
