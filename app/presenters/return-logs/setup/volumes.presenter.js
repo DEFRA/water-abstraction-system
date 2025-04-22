@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
- * @module ReadingsPresenter
+ * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
+ * @module VolumesPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
 
 /**
- * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
+ * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  *
  * @param {module:SessionModel} session - The returns log session instance
  * @param {string} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
@@ -16,7 +16,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {object} page data needed by the view template
  */
 function go(session, yearMonth) {
-  const { id: sessionId, lines, returnReference } = session
+  const { id: sessionId, lines, returnReference, units } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
@@ -30,7 +30,8 @@ function go(session, yearMonth) {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
     inputLines: _inputLines(requestedMonthLines),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
-    returnReference
+    returnReference,
+    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 
@@ -42,12 +43,12 @@ function _determineRequestedYearAndMonth(yearMonth) {
 
 function _inputLines(lines) {
   return lines.map((line) => {
-    const { endDate, reading } = line
+    const { endDate, quantity } = line
 
     const lineData = {
       endDate,
       formattedEndDate: formatLongDate(new Date(endDate)),
-      reading
+      quantity
     }
 
     if (line.error) {

@@ -35,7 +35,9 @@ const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-
 const SubmitStartReadingService = require('../services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
+const SubmitVolumesService = require('../services/return-logs/setup/submit-volumes.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
+const VolumesService = require('../services/return-logs/setup/volumes.service.js')
 
 async function cancel(request, h) {
   const { sessionId } = request.params
@@ -397,11 +399,34 @@ async function submitUnits(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
 }
 
+async function submitVolumes(request, h) {
+  const {
+    params: { sessionId, yearMonth },
+    payload,
+    yar
+  } = request
+
+  const pageData = await SubmitVolumesService.go(sessionId, payload, yar, yearMonth)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/volumes.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+}
+
 async function units(request, h) {
   const { sessionId } = request.params
   const pageData = await UnitsService.go(sessionId)
 
   return h.view('return-logs/setup/units.njk', pageData)
+}
+
+async function volumes(request, h) {
+  const { sessionId, yearMonth } = request.params
+  const pageData = await VolumesService.go(sessionId, yearMonth)
+
+  return h.view('return-logs/setup/volumes.njk', pageData)
 }
 
 module.exports = {
@@ -436,5 +461,7 @@ module.exports = {
   submitStartReading,
   submitSubmission,
   submitUnits,
-  units
+  submitVolumes,
+  units,
+  volumes
 }
