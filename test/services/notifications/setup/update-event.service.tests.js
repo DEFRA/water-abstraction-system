@@ -25,7 +25,7 @@ describe('Notifications Setup - Update event service', () => {
         name: 'some existing data'
       },
       status: 'completed',
-      subtype: 'returnsReminder',
+      subtype: 'returnReminder',
       type: 'notification'
     })
   })
@@ -49,7 +49,7 @@ describe('Notifications Setup - Update event service', () => {
       },
       referenceCode: null,
       status: 'completed',
-      subtype: 'returnsReminder',
+      subtype: 'returnReminder',
       type: 'notification',
       updatedAt: updatedResult.updatedAt
     })

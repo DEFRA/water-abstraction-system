@@ -9,22 +9,36 @@ const SessionModel = require('../../../models/session.model.js')
 
 const NOTIFICATION_TYPES = {
   invitations: {
-    prefix: 'RINV-',
-    type: 'Returns invitation',
     journey: 'invitations',
-    redirectPath: 'returns-period'
+    name: 'Returns: invitation',
+    prefix: 'RINV-',
+    redirectPath: 'returns-period',
+    subType: 'returnInvitation',
+    type: 'Returns invitation'
   },
   reminders: {
-    prefix: 'RREM-',
-    type: 'Returns reminder',
     journey: 'reminders',
-    redirectPath: 'returns-period'
+    name: 'Returns: reminder',
+    prefix: 'RREM-',
+    redirectPath: 'returns-period',
+    subType: 'returnReminder',
+    type: 'Returns reminder'
   },
   'ad-hoc': {
-    prefix: 'ADHC-',
-    type: 'Ad hoc',
     journey: 'ad-hoc',
-    redirectPath: 'ad-hoc-licence'
+    name: 'Returns: ad-hoc',
+    prefix: 'ADHC-',
+    redirectPath: 'ad-hoc-licence',
+    subType: 'adHocReminder',
+    type: 'Ad hoc'
+  },
+  'abstraction-alert': {
+    journey: 'abstraction-alert',
+    name: 'Water abstraction alert',
+    prefix: 'WAA-',
+    redirectPath: 'abstraction-alert',
+    subType: 'waterAbstractionAlerts',
+    type: 'Abstraction alert'
   }
 }
 
@@ -47,14 +61,16 @@ const NOTIFICATION_TYPES = {
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(notificationType) {
-  const { prefix, type, journey, redirectPath } = NOTIFICATION_TYPES[notificationType]
+  const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
 
   const session = await SessionModel.query()
     .insert({
       data: {
-        referenceCode: _generateReferenceCode(prefix),
+        journey,
+        name,
         notificationType: type,
-        journey
+        referenceCode: _generateReferenceCode(prefix),
+        subType
       }
     })
     .returning('id')

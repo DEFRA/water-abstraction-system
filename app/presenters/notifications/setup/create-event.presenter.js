@@ -21,13 +21,13 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients, auth) {
-  const { referenceCode, determinedReturnsPeriod, journey, removeLicences = [] } = session
+  const { referenceCode, determinedReturnsPeriod, removeLicences, subType, name } = session
 
   return {
-    licences: _licences(recipients),
     issuer: auth.credentials.user.username,
+    licences: _licences(recipients),
     metadata: {
-      name: _name(journey),
+      name,
       options: {
         excludeLicences: removeLicences
       },
@@ -36,7 +36,7 @@ function go(session, recipients, auth) {
     },
     referenceCode,
     status: 'completed',
-    subtype: _subType(journey)
+    subtype: subType
   }
 }
 
@@ -57,62 +57,12 @@ function _licences(recipients) {
   return JSON.stringify(formattedRecipients)
 }
 
-/**
- * This name is used in the legacy UI to render the notification type on '/notifications/report'.
- * This has been done to allow all types of notifications to be rendered in the UI. The data is taken straight from the
- * metadata and rendered in the view.
- *
- * We need to be consistent with this pattern.
- *
- * @private
- */
-function _name(journey) {
-  if (journey === 'invitations') {
-    return 'Returns: invitation'
-  } else if (journey === 'reminders') {
-    return 'Returns: reminder'
-  } else if (journey === 'ad-hoc') {
-    return 'Returns: ad-hoc'
-  } else {
-    return ''
-  }
-}
-
 function _returnCycle(returnsPeriod) {
   return {
     dueDate: formatDateObjectToISO(new Date(returnsPeriod.dueDate)),
     endDate: formatDateObjectToISO(new Date(returnsPeriod.endDate)),
     isSummer: returnsPeriod.summer === 'true',
     startDate: formatDateObjectToISO(new Date(returnsPeriod.startDate))
-  }
-}
-
-/**
- *
- * The legacy code has the concept of 'subType' this is used when querying to get notifications.
- *
- * Below is an example of a query used in 'water-abstraction-service'.
- *
- * ```sql
- * SELECT * FROM water.scheduled_notification
- *     WHERE event_id = (SELECT event_id FROM water.events
- *       WHERE subtype = 'returnInvitation'
- *       AND status = 'completed'
- *       ORDER BY created DESC LIMIT 1)
- *     AND licences \\? :licenceRef
- * ```
- *
- * @private
- */
-function _subType(journey) {
-  if (journey === 'invitations') {
-    return 'returnInvitation'
-  } else if (journey === 'reminders') {
-    return 'returnReminder'
-  } else if (journey === 'ad-hoc') {
-    return 'adHocReminder'
-  } else {
-    return ''
   }
 }
 

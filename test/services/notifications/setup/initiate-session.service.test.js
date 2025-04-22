@@ -32,8 +32,10 @@ describe('Notifications Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'invitations',
+          name: 'Returns: invitation',
           notificationType: 'Returns invitation',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'returnInvitation'
         })
       })
 
@@ -66,8 +68,10 @@ describe('Notifications Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'reminders',
+          name: 'Returns: reminder',
           notificationType: 'Returns reminder',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'returnReminder'
         })
       })
 
@@ -100,8 +104,10 @@ describe('Notifications Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'ad-hoc',
+          name: 'Returns: ad-hoc',
           notificationType: 'Ad hoc',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'adHocReminder'
         })
       })
 
@@ -122,6 +128,42 @@ describe('Notifications Setup - Initiate Session service', () => {
 
           expect(matchingSession.referenceCode).to.include('ADHC-')
           expect(matchingSession.referenceCode.length).to.equal(11)
+        })
+      })
+    })
+
+    describe('when the "notificationType" is "abstraction-alert"', () => {
+      it('creates a new session record', async () => {
+        const result = await InitiateSessionService.go('abstraction-alert')
+
+        const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+        expect(matchingSession.data).to.equal({
+          journey: 'abstraction-alert',
+          name: 'Water abstraction alert',
+          notificationType: 'Abstraction alert',
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'waterAbstractionAlerts'
+        })
+      })
+
+      it('correctly returns the redirect path and session id', async () => {
+        const result = await InitiateSessionService.go('abstraction-alert')
+
+        expect(result).to.equal({
+          sessionId: result.sessionId,
+          path: 'abstraction-alert'
+        })
+      })
+
+      describe('the "referenceCode" property', () => {
+        it('returns a reference code for an "ad-hoc" notification', async () => {
+          const result = await InitiateSessionService.go('abstraction-alert')
+
+          const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+          expect(matchingSession.referenceCode).to.include('WAA-')
+          expect(matchingSession.referenceCode.length).to.equal(10)
         })
       })
     })
