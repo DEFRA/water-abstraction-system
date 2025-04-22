@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Controller for /notifications/setup endpoints
- * @module NotificationsSetupController
+ * Controller for /notices/setup endpoints
+ * @module NoticesSetupController
  */
 
 const AdHocLicenceService = require('../services/notifications/setup/ad-hoc-licence.service.js')
@@ -19,7 +19,7 @@ const SubmitCheckService = require('../services/notifications/setup/submit-check
 const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
-const basePath = 'notifications/setup'
+const basePath = 'notices/setup'
 
 async function downloadRecipients(request, h) {
   const {

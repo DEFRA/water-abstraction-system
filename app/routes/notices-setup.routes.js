@@ -1,15 +1,15 @@
 'use strict'
 
-const NotificationsSetupController = require('../controllers/notifications-setup.controller.js')
+const NoticesSetupController = require('../controllers/notices-setup.controller.js')
 
-const basePath = '/notifications/setup'
+const basePath = '/notices/setup'
 
 const routes = [
   {
     method: 'GET',
     path: basePath,
     options: {
-      handler: NotificationsSetupController.setup,
+      handler: NoticesSetupController.setup,
       auth: {
         access: {
           scope: ['returns']
@@ -21,7 +21,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/download',
     options: {
-      handler: NotificationsSetupController.downloadRecipients,
+      handler: NoticesSetupController.downloadRecipients,
       auth: {
         access: {
           scope: ['returns']
@@ -33,7 +33,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {
-      handler: NotificationsSetupController.viewLicence,
+      handler: NoticesSetupController.viewLicence,
       auth: {
         access: {
           scope: ['returns']
@@ -45,7 +45,7 @@ const routes = [
     method: 'POST',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {
-      handler: NotificationsSetupController.submitLicence,
+      handler: NoticesSetupController.submitLicence,
       auth: {
         access: {
           scope: ['returns']
@@ -57,7 +57,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/cancel',
     options: {
-      handler: NotificationsSetupController.viewCancel,
+      handler: NoticesSetupController.viewCancel,
       auth: {
         access: {
           scope: ['returns']
@@ -69,7 +69,7 @@ const routes = [
     method: 'POST',
     path: basePath + '/{sessionId}/cancel',
     options: {
-      handler: NotificationsSetupController.submitCancel,
+      handler: NoticesSetupController.submitCancel,
       auth: {
         access: {
           scope: ['returns']
@@ -81,7 +81,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/check',
     options: {
-      handler: NotificationsSetupController.viewCheck,
+      handler: NoticesSetupController.viewCheck,
       auth: {
         access: {
           scope: ['returns']
@@ -93,7 +93,7 @@ const routes = [
     method: 'POST',
     path: basePath + '/{sessionId}/check',
     options: {
-      handler: NotificationsSetupController.submitCheck,
+      handler: NoticesSetupController.submitCheck,
       auth: {
         access: {
           scope: ['returns']
@@ -105,7 +105,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{eventId}/confirmation',
     options: {
-      handler: NotificationsSetupController.viewConfirmation,
+      handler: NoticesSetupController.viewConfirmation,
       auth: {
         access: {
           scope: ['returns']
@@ -117,7 +117,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
-      handler: NotificationsSetupController.viewReturnsPeriod,
+      handler: NoticesSetupController.viewReturnsPeriod,
       auth: {
         access: {
           scope: ['returns']
@@ -129,7 +129,7 @@ const routes = [
     method: 'GET',
     path: basePath + '/{sessionId}/remove-licences',
     options: {
-      handler: NotificationsSetupController.viewRemoveLicences,
+      handler: NoticesSetupController.viewRemoveLicences,
       auth: {
         access: {
           scope: ['returns']
@@ -141,7 +141,7 @@ const routes = [
     method: 'POST',
     path: basePath + '/{sessionId}/remove-licences',
     options: {
-      handler: NotificationsSetupController.submitRemoveLicences,
+      handler: NoticesSetupController.submitRemoveLicences,
       auth: {
         access: {
           scope: ['returns']
@@ -153,7 +153,7 @@ const routes = [
     method: 'POST',
     path: basePath + '/{sessionId}/returns-period',
     options: {
-      handler: NotificationsSetupController.submitReturnsPeriod,
+      handler: NoticesSetupController.submitReturnsPeriod,
       auth: {
         access: {
           scope: ['returns']
