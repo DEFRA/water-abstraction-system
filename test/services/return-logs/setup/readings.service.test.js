@@ -32,6 +32,7 @@ describe('Return Logs Setup - Readings service', () => {
             startDate: '2023-05-01T00:00:00.000Z'
           }
         ],
+        returnsFrequency: 'month',
         returnReference: '1234'
       }
     })
@@ -47,7 +48,7 @@ describe('Return Logs Setup - Readings service', () => {
         inputLines: [
           {
             endDate: '2023-04-30T00:00:00.000Z',
-            formattedEndDate: '30 April 2023',
+            label: 'April 2023',
             reading: 100
           }
         ],
