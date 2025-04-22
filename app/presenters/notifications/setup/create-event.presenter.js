@@ -21,7 +21,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients, auth) {
-  const { referenceCode, determinedReturnsPeriod, removeLicences, subType, name } = session
+  const { referenceCode, determinedReturnsPeriod, removeLicences = [], subType, name } = session
 
   return {
     issuer: auth.credentials.user.username,
