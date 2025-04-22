@@ -114,7 +114,7 @@ describe('Return Versions Setup - Submit Check service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: {
-              text: "Quarterly returns submissions can't be set for returns in the summer cycle."
+              text: "Quarterly returns submissions can't be set for returns in the summer cycle"
             },
             licenceRef: '01/ABC',
             multipleUpload: undefined,
