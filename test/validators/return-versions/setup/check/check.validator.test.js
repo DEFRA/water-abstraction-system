@@ -37,7 +37,7 @@ describe('Check validator', () => {
       expect(result.value).to.exist()
       expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal(
-        "Quarterly returns submissions can't be set for returns in the summer cycle."
+        "Quarterly returns submissions can't be set for returns in the summer cycle"
       )
     })
   })
