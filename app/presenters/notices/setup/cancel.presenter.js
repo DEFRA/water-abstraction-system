@@ -19,7 +19,7 @@ function go(session) {
 
   return {
     backLink: `/system/notices/setup/${session.id}/check`,
-    pageTitle: 'You are about to cancel this notification',
+    pageTitle: 'You are about to cancel this notice',
     referenceCode,
     summaryList: _summaryList(session)
   }
