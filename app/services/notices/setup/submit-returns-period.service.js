@@ -7,7 +7,7 @@
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
-const ReturnsPeriodValidator = require('../../../validators/notifications/setup/returns-periods.validator.js')
+const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
