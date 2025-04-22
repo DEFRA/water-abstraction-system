@@ -5,8 +5,8 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../base.presenter.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
