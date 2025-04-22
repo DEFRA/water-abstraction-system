@@ -7,6 +7,18 @@
 
 const SessionModel = require('../../../models/session.model.js')
 
+/**
+ * Defines the configuration for supported notification types.
+ *
+ * This structure enables consistent handling and display of different notification types
+ * across the system. Each type includes legacy fields (`name` and `subType`) required for backwards compatibility.
+ *
+ * Legacy context:
+ * - `name` is used in the legacy UI to render the notification type on `/notifications/report`
+ * - `subType` is used when querying notifications in the legacy system
+ *
+ * @private
+ */
 const NOTIFICATION_TYPES = {
   invitations: {
     journey: 'invitations',
