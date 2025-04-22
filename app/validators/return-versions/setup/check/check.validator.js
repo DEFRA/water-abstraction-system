@@ -20,7 +20,7 @@ const Joi = require('joi')
  * `error:` property will also exist detailing what the issue is.
  */
 function go(requirements) {
-  const errorMessage = "Quarterly returns submissions can't be set for returns in the summer cycle."
+  const errorMessage = "Quarterly returns submissions can't be set for returns in the summer cycle"
 
   const schema = Joi.array().items(
     Joi.object({
