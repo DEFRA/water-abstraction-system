@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notifications/setup/returns-period` page
+ * Orchestrates validating the data for `/notices/setup/returns-period` page
  * @module SubmitReturnsPeriodService
  */
 
@@ -11,11 +11,13 @@ const ReturnsPeriodValidator = require('../../../validators/notices/setup/return
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Formats data for the `/notifications/setup/returns-period` page
+ * Formats data for the `/notices/setup/returns-period` page
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {object} payload
- * @returns {object} The view data for the returns period page, inc error/redirect when applicable
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {object} An object containing where to redirect to if there are no errors else the page data for the view
+ * including the validation error details
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)

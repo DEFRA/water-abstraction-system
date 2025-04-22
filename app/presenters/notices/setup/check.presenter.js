@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/check` page
+ * Formats data for the `/notices/setup/check` page
  * @module CheckPresenter
  */
 
@@ -15,7 +15,7 @@ const NOTIFICATION_TYPES = {
 }
 
 /**
- * Formats data for the `/notifications/setup/check` page
+ * Formats data for the `/notices/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page

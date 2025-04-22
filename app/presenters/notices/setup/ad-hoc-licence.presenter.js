@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * Formats data for the `/notices/setup/{sessionId}/ad-hoc-licence` page
  * @module AdHocLicencePresenter
  */
 
 /**
- * Formats data for the `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * Formats data for the `/notices/setup/{sessionId}/ad-hoc-licence` page
  *
  * @param {string} licenceRef
  * @param {string} referenceCode - the unique generated reference code

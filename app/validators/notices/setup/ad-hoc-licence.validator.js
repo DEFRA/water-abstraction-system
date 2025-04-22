@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notifications/setup/licence` page
+ * Validates data submitted for the `/notices/setup/licence` page
  * @module AdHocLicenceValidator
  */
 
@@ -10,7 +10,7 @@ const Joi = require('joi')
 const errorMessage = 'Enter a licence number'
 
 /**
- * Validates data submitted for the `/notifications/setup/licence` page
+ * Validates data submitted for the `/notices/setup/licence` page
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {boolean} licenceExists - the result of checking if the licence ref is present in the database

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the notifications setup remove licences page
+ * Orchestrates validating the data for the notice setup remove licences page
  * @module SubmitRemoveLicencesService
  */
 
@@ -12,12 +12,13 @@ const SessionModel = require('../../../models/session.model.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Orchestrates validating the data for the notifications setup remove licences page
+ * Orchestrates validating the data for the notice setup remove licences page
  *
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
- * @param {object} payload
+ * @param {string} sessionId - The UUID for setup notice session record
+ * @param {object} payload - The submitted form data
  *
- * @returns {object} The view data for the remove licences page
+ * @returns {object} An object containing where to redirect to if there are no errors else the page data for the view
+ * including the validation error details
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)

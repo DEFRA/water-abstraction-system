@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and formatting the data needed for the notifications setup download link
+ * Orchestrates fetching and formatting the data needed for the notices setup download link
  * @module DownloadRecipientsService
  */
 
@@ -10,12 +10,12 @@ const FetchDownloadRecipientsService = require('./fetch-download-recipients.serv
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and formatting the data needed for the notifications setup download link
+ * Orchestrates fetching and formatting the data needed for the notices setup download link
  *
  * This service creates a csv file of recipient for the user to download. It does not seem necessary to use a `Stream`
  * to create the csv as the data is relatively small.
  *
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} sessionId - The UUID for setup returns notice session record
  *
  * @returns {Promise<object>} The data for the download link (csv string, filename and type)
  */

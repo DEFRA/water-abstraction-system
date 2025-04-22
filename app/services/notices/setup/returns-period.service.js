@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup returns period page
+ * Orchestrates fetching and presenting the data needed for the notices setup returns period page
  * @module ReturnsPeriodService
  */
 
@@ -9,7 +9,7 @@ const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/return
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup returns period page
+ * Orchestrates fetching and presenting the data needed for the notices setup returns period page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  *

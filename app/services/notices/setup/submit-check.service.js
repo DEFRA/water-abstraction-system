@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
+ * Orchestrates handling the data for `/notices/setup/{sessionId}/check` page
  * @module SubmitCheckService
  */
 
@@ -14,11 +14,11 @@ const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
- * Orchestrates handling the data for `/notifications/setup/{sessionId}/check` page
+ * Orchestrates handling the data for `/notices/setup/{sessionId}/check` page
  *
  * This service will transform the recipients into notifications and start processing notifications.
  *
- * @param {string} sessionId - The UUID for the notification setup session record
+ * @param {string} sessionId - The UUID for the notice setup session record
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<string>} - the created eventId

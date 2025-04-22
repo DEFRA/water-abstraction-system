@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the returns due for the `/notifications/setup/remove-licences` page
+ * Fetches the returns due for the `/notices/setup/remove-licences` page
  * @module FetchReturnsDueService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Fetches the returns due for the `/notifications/setup/remove-licences` page
+ * Fetches the returns due for the `/notices/setup/remove-licences` page
  *
  * This function is part of the validation for excluding licences from the list of recipients and download link.
  *

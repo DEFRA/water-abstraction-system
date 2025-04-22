@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notifications/setup/remove-licences` page
+ * Validates data submitted for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesValidator
  */
 
@@ -10,7 +10,7 @@ const Joi = require('joi')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Validates data submitted for the `/notifications/setup/remove-licences` page
+ * Validates data submitted for the `/notices/setup/remove-licences` page
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {object[]} validLicences - The licences that that have due returns for the selected notification period

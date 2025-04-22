@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notifications/setup/returns-period` page
+ * Validates data submitted for the `/notices/setup/returns-period` page
  * @module ReturnsPeriodValidator
  */
 
@@ -11,7 +11,7 @@ const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
 const errorMessage = 'Select the returns periods for the invitations'
 
 /**
- * Validates data submitted for the `/notifications/setup/returns-period` page
+ * Validates data submitted for the `/notices/setup/returns-period` page
  *
  * @param {object} payload - The payload from the request to be validated
  *

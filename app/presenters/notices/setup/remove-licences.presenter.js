@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/remove-licences` page
+ * Formats data for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesPresenter
  */
 
 /**
- * Formats data for the `/notifications/setup/remove-licences` page
+ * Formats data for the `/notices/setup/remove-licences` page
  *
  * @param {string[]} removeLicences - List of licences to remove from the recipients list
  * @param {string} referenceCode - the unique generated reference code

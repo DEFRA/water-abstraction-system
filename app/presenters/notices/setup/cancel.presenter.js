@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/{sessionId}/cancel` page
+ * Formats data for the `/notices/setup/{sessionId}/cancel` page
  * @module CancelPresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats data for the `/notifications/setup/{sessionId}/cancel` page
+ * Formats data for the `/notices/setup/{sessionId}/cancel` page
  *
  * @param {module:SessionModel} session - The session instance
  *

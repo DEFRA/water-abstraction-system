@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/ad-hoc-licence` page
  * @module SubmitAdHocLicenceService
  */
 
@@ -13,7 +13,7 @@ const AdHocLicenceValidator = require('../../../validators/notices/setup/ad-hoc-
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 
 /**
- * Orchestrates validating the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/ad-hoc-licence` page
  *
  * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
  * error. If they have we check if it exists in the database. If it doesn't exist we return an the same error.

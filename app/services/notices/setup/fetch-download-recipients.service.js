@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/download` link
+ * Fetches the recipients data for the `/notices/setup/download` CSV file
  * @module FetchDownloadRecipientsService
  */
 
@@ -9,7 +9,7 @@ const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats the contact data from which recipients will be determined for the `/notifications/setup/download` link
+ * Fetches the recipients data for the `/notices/setup/download` CSV file
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/returns-period` page
+ * Formats data for the `/notices/setup/returns-period` page
  * @module ReturnsPeriodPresenter
  */
 
@@ -9,7 +9,7 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats data for the `/notifications/setup/returns-period` page
+ * Formats data for the `/notices/setup/returns-period` page
  *
  * @param {module:SessionModel} session - The session instance to format
  * @param {module:SessionModel} session.returnsPeriod - The returns period saved from a previous submission

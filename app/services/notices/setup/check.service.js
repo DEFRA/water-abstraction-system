@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup check page
+ * Orchestrates fetching and presenting the data needed for the notices setup check page
  * @module CheckService
  */
 
@@ -12,9 +12,9 @@ const RecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the notifications setup check page
+ * Orchestrates fetching and presenting the data needed for the notices setup check page
  *
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} sessionId - The UUID for returns notices session record
  * @param {number|string} [page=1] - The currently selected page (if paginated)
  *
  * @returns {object} The view data for the review page

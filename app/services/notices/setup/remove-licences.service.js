@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the licences to remove for the notifications setup remove licences page
+ * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
  * @module RemoveLicencesService
  */
 
@@ -9,9 +9,9 @@ const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remov
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the licences to remove for the notifications setup remove licences page
+ * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
  *
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} sessionId - The UUID for setup returns notice session record
  *
  * @returns {object} The view data for the remove licences page
  */

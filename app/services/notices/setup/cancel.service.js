@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for `/notifications/setup/{sessionId}/cancel` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/cancel` page
  * @module CancelService
  */
 
@@ -9,11 +9,11 @@ const CancelPresenter = require('../../../presenters/notices/setup/cancel.presen
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates presenting the data for `/notifications/setup/{sessionId}/cancel` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/cancel` page
  *
- * @param {string} sessionId - The UUID for the notification setup session record
+ * @param {string} sessionId - The UUID for the notice setup session record
  *
- * @returns {Promise<object>} The view data for the licence page
+ * @returns {Promise<object>} The view data for the cancel page
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)

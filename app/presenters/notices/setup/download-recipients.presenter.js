@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/download` link
+ * Formats data for the `/notices/setup/download` link
  * @module DownloadRecipientsPresenter
  */
 
@@ -29,7 +29,7 @@ const HEADERS = [
 ]
 
 /**
- * Formats data for the `/notifications/setup/download` link
+ * Formats data for the `/notices/setup/download` link
  *
  * This function takes an array of recipient objects and transforms it into a CSV string suitable for download.
  *

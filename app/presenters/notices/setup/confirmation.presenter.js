@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/{eventId}/confirmation` page
+ * Formats data for the `/notices/setup/{eventId}/confirmation` page
  * @module ConfirmationPresenter
  */
 
 /**
- * Formats data for the `/notifications/setup/{eventId}/confirmation` page
+ * Formats data for the `/notices/setup/{eventId}/confirmation` page
  *
  * @param {module:EventModel} event
  *
