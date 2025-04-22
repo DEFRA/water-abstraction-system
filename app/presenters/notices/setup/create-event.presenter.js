@@ -42,7 +42,7 @@ function go(session, recipients, auth) {
 
 /**
  * All the licences associated with an event (licences that will receive notifications) are stored in
- * `water.events.licences`. It is not clear where theses are used. But to be consistent we follow the established
+ * `water.events.licences`. It is not clear where these are used. But to be consistent we follow the established
  * pattern.
  *
  * These licences are stored as 'jsonb' so we need to stringify the array to match the schema.
@@ -59,6 +59,7 @@ function _licences(recipients) {
 
 /**
  * This name is used in the legacy UI to render the notification type on '/notifications/report'.
+ *
  * This has been done to allow all types of notifications to be rendered in the UI. The data is taken straight from the
  * metadata and rendered in the view.
  *
