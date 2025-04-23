@@ -32,6 +32,7 @@ describe('Return Logs Setup - Volumes service', () => {
             startDate: '2023-05-01T00:00:00.000Z'
           }
         ],
+        returnsFrequency: 'month',
         returnReference: '1234',
         units: 'cubic-metres'
       }
@@ -48,7 +49,7 @@ describe('Return Logs Setup - Volumes service', () => {
         inputLines: [
           {
             endDate: '2023-04-30T00:00:00.000Z',
-            formattedEndDate: '30 April 2023',
+            label: 'April 2023',
             quantity: 100
           }
         ],
