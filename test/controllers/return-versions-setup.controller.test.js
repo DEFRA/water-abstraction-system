@@ -33,7 +33,6 @@ const SiteDescriptionService = require('../../app/services/return-versions/setup
 const StartDateService = require('../../app/services/return-versions/setup/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-versions/setup/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../../app/services/return-versions/setup/submit-agreements-exceptions.service.js')
-const SubmitCheckService = require('../../app/services/return-versions/setup/check/submit-check.service.js')
 const SubmitExistingService = require('../../app/services/return-versions/setup/existing/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-versions/setup/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-versions/setup/submit-frequency-reported.service.js')
@@ -322,38 +321,6 @@ describe('Return Versions controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the return requirements for')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        describe('and the validation fails', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitCheckService, 'go').resolves({ error: {} })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-
-        describe('and the validation succeeds', () => {
-          const licenceId = '08dd6483-8816-4ed1-9a54-a5286af6522e'
-
-          beforeEach(async () => {
-            Sinon.stub(SubmitCheckService, 'go').resolves({ licenceId })
-          })
-
-          it('redirects to /system/return-versions/setup/{licenceId}/approved', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + licenceId + '/approved')
-          })
         })
       })
     })
