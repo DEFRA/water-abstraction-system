@@ -14,7 +14,7 @@ const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
 // Thing under test
 const CheckReturnCycleService = require('../../../app/services/return-logs/check-return-cycle.service.js')
 
-describe.only('Return Logs - Check Return Cycle service', () => {
+describe('Return Logs - Check Return Cycle service', () => {
   const changeDate = new Date('2024-05-01')
   let clock
   let insertStub
