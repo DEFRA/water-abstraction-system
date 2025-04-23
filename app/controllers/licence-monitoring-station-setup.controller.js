@@ -39,10 +39,10 @@ async function submitThresholdAndUnit(request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/monitoring-station-tags/${sessionId}/check`)
+    return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/monitoring-station-tags/${sessionId}/stop-or-reduce`)
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`)
 }
 
 module.exports = {
