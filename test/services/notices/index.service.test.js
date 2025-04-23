@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things to stub
-const FetchEventsNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
-const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index-notifications.presenter.js')
+const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
+const NoticesIndexPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
 // Thing under test
-const NotificationsIndexService = require('../../../app/services/notifications/index.service.js')
+const NoticesIndexService = require('../../../app/services/notices/index.service.js')
 
-describe('Notifications - view', () => {
+describe('Notices - view', () => {
   let yarStub
 
   beforeEach(async () => {})
@@ -27,8 +27,8 @@ describe('Notifications - view', () => {
   describe('when called with no filters and no notifications', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns({}) }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [],
@@ -37,7 +37,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -57,8 +57,8 @@ describe('Notifications - view', () => {
   describe('when called with no filters and some notifications', () => {
     before(() => {
       yarStub = { get: Sinon.stub().returns() }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -75,7 +75,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -116,8 +116,8 @@ describe('Notifications - view', () => {
           ]
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -134,7 +134,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -185,8 +185,8 @@ describe('Notifications - view', () => {
           sentBy: 'test@test'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -203,15 +203,20 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
         error: {
-          sentBy: {
+          sentByError: {
             message: 'Enter a valid email'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-by',
+              text: 'Enter a valid email'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -246,8 +251,8 @@ describe('Notifications - view', () => {
           sentToYear: '2024'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -264,7 +269,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -303,8 +308,8 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -321,7 +326,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -329,7 +334,12 @@ describe('Notifications - view', () => {
           fromFullDate: {
             message: 'Enter a valid from date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-from',
+              text: 'Enter a valid from date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -361,8 +371,8 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -379,7 +389,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -387,7 +397,12 @@ describe('Notifications - view', () => {
           fromFullDate: {
             message: 'Enter a valid from date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-from',
+              text: 'Enter a valid from date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -419,8 +434,8 @@ describe('Notifications - view', () => {
           sentFromMonth: '1'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -437,7 +452,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -445,7 +460,12 @@ describe('Notifications - view', () => {
           fromFullDate: {
             message: 'Enter a valid from date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-from',
+              text: 'Enter a valid from date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -476,8 +496,8 @@ describe('Notifications - view', () => {
           sentFromYear: '2025'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -494,7 +514,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -502,7 +522,12 @@ describe('Notifications - view', () => {
           fromFullDate: {
             message: 'Enter a valid from date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-from',
+              text: 'Enter a valid from date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -533,8 +558,8 @@ describe('Notifications - view', () => {
           sentToYear: '2025'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -551,7 +576,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -559,7 +584,12 @@ describe('Notifications - view', () => {
           toFullDate: {
             message: 'Enter a valid to date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-to',
+              text: 'Enter a valid to date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -591,8 +621,8 @@ describe('Notifications - view', () => {
           sentToYear: '2025'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -609,7 +639,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -617,7 +647,12 @@ describe('Notifications - view', () => {
           toFullDate: {
             message: 'Enter a valid to date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-to',
+              text: 'Enter a valid to date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,
@@ -649,8 +684,8 @@ describe('Notifications - view', () => {
           sentToMonth: '12'
         })
       }
-      Sinon.stub(FetchEventsNotificationsService, 'go').resolves([])
-      Sinon.stub(NotificationsIndexPresenter, 'go').resolves({
+      Sinon.stub(FetchNoticesService, 'go').resolves([])
+      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
         backLink: '/manage',
         headers: _tableHeaders(),
         rows: [
@@ -667,7 +702,7 @@ describe('Notifications - view', () => {
     })
 
     it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NotificationsIndexService.go(yarStub)
+      const result = await NoticesIndexService.go(yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -675,7 +710,12 @@ describe('Notifications - view', () => {
           toFullDate: {
             message: 'Enter a valid to date'
           },
-          text: 'There was a problem with your filters.'
+          summary: [
+            {
+              href: '#sent-to',
+              text: 'Enter a valid to date'
+            }
+          ]
         },
         filter: {
           notifications: undefined,

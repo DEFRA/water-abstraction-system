@@ -7,31 +7,7 @@ const basePath = '/notifications'
 const routes = [
   {
     method: 'GET',
-    path: basePath,
-    options: {
-      handler: NotificationsController.index,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: basePath,
-    options: {
-      handler: NotificationsController.submitIndex,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notifications/{id}',
+    path: basePath + '/{id}',
     options: {
       handler: NotificationsController.view
     }

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notifications` page
+ * Validates data submitted for the `/notices` page
  * @module IndexValidator
  */
 
@@ -10,7 +10,7 @@ const Joi = require('joi').extend(require('@joi/date'))
 const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 
 /**
- * Validates data submitted for the `/notifications` page
+ * Validates data submitted for the `/notices` page
  *
  * @param {object} filters - The filters from the request to be validated
  *

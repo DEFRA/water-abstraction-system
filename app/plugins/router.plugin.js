@@ -22,6 +22,7 @@ const CheckRoutes = require('../routes/check.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
+const NoticesRoutes = require('../routes/notices.routes.js')
 const NoticesSetupRoutes = require('../routes/notices-setup.routes.js')
 const NotificationRoutes = require('../routes/notifications.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
@@ -58,6 +59,7 @@ const routes = [
   ...ReturnSubmissionsRoutes,
   ...ReturnVersionsRoutes,
   ...ReturnVersionsSetupRoutes,
+  ...NoticesRoutes,
   ...NoticesSetupRoutes,
   ...DataRoutes
 ]

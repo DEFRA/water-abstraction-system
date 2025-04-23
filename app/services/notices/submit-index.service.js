@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Updates the session cookie with the filter data needed for the notifications page
- * @module SubmitNotificationsIndexService
+ * Updates the session cookie with the filter data needed for the notices page
+ * @module SubmitNoticesIndexService
  */
 
 /**
- * Updates the session cookie with the filter data needed for the notifications page
+ * Updates the session cookie with the filter data needed for the notices page
  *
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
@@ -25,9 +25,9 @@ async function go(payload, yar) {
   const sentBy = payload?.sentBy
 
   if (clearFilters) {
-    yar.clear('notifications-filter')
+    yar.clear('notices-filter')
   } else {
-    yar.set('notifications-filter', {
+    yar.set('notices-filter', {
       filterNotificationTypes,
       sentBy,
       sentFromDay,

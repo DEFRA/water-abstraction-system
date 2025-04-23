@@ -2,19 +2,19 @@
 
 /**
  * Orchestrates presenting the data for `/notifications` page
- * @module ViewNotificationsService
+ * @module ViewNoticesService
  */
 
-const FetchEventsNotificationsService = require('./fetch-events-notifications.service.js')
-const NotificationsIndexPresenter = require('../../presenters/notifications/index-notifications.presenter.js')
-const NotificationsIndexValidator = require('../../validators/notifications/index.validator.js')
+const FetchNoticesService = require('./fetch-notices.service.js')
+const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
+const NoticesIndexValidator = require('../../validators/notices/index.validator.js')
 
 /**
- * Orchestrates presenting the data for `/notifications` page
+ * Orchestrates presenting the data for `/notices` page
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} The view data for the notifications page
+ * @returns {Promise<object>} The view data for the notices page
  */
 async function go(yar) {
   const savedFilters = await _filters(yar)
@@ -25,10 +25,10 @@ async function go(yar) {
   let data = []
 
   if (!validateResult) {
-    data = await FetchEventsNotificationsService.go(filter)
+    data = await FetchNoticesService.go(filter)
   }
 
-  const formattedData = await NotificationsIndexPresenter.go(data)
+  const formattedData = await NoticesIndexPresenter.go(data)
 
   return {
     activeNavBar: 'manage',
@@ -64,7 +64,7 @@ function _errorySummary(text, href) {
 }
 
 async function _filters(yar) {
-  const filters = yar.get('notifications-filter')
+  const filters = yar.get('notices-filter')
   const filterNotificationTypes = filters?.filterNotificationTypes
   const sentBy = filters?.sentBy
   const sentFromDay = filters?.sentFromDay
@@ -121,7 +121,7 @@ function _validate(filters) {
     return null
   }
 
-  const validation = NotificationsIndexValidator.go(filters)
+  const validation = NoticesIndexValidator.go(filters)
 
   if (!validation.error) {
     return null

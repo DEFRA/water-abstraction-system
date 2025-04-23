@@ -8,11 +8,7 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { postRequestOptions } = require('../support/general.js')
-
 // Things we need to stub
-const IndexNotificationsService = require('../../app/services/notifications/index.service.js')
-const SubmitIndexNotificationsService = require('../../app/services/notifications/submit-index.service.js')
 const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
 
 // For running our service
@@ -22,7 +18,6 @@ describe('Notifications controller', () => {
   const basePath = '/notifications'
 
   let getOptions
-  let postOptions
   let server
 
   // Create server before running the tests
@@ -56,43 +51,6 @@ describe('Notifications controller', () => {
         }
       })
 
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(IndexNotificationsService, 'go').returns({
-            backLink: '/manage',
-            error: null,
-            filter: undefined,
-            headers: [
-              {
-                text: 'Date'
-              },
-              {
-                text: 'Notification type'
-              },
-              {
-                text: 'Sent by'
-              },
-              {
-                text: 'Recipients'
-              },
-              {
-                text: 'Problems'
-              }
-            ],
-            rows: [],
-            pageTitle: 'View sent notices'
-          })
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(getOptions)
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('manage')
-          expect(response.payload).to.contain('View sent notices')
-        })
-      })
-
       describe('/notifications/{notificationId}', () => {
         describe('GET', () => {
           beforeEach(async () => {
@@ -101,7 +59,7 @@ describe('Notifications controller', () => {
               url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
               auth: {
                 strategy: 'session',
-                credentials: { scope: ['billing'] }
+                credentials: { scope: ['returns'] }
               }
             }
           })
@@ -119,22 +77,6 @@ describe('Notifications controller', () => {
               expect(response.payload).to.contain('Hands off flow: levels warning')
             })
           })
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          Sinon.stub(SubmitIndexNotificationsService, 'go').returns()
-          postOptions = postRequestOptions(basePath, {})
-        })
-
-        it('redirects the to the next page', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notifications`)
         })
       })
     })
