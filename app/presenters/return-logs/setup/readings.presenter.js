@@ -5,7 +5,7 @@
  * @module ReadingsPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatDateMonthYear, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -66,14 +66,14 @@ function _lineLabel(endDate, returnsFrequency) {
   }
 
   if (returnsFrequency === 'month') {
-    return labelDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+    return formatDateMonthYear(labelDate)
   }
 
   return formatLongDate(labelDate)
 }
 
 function _pageTitle(date) {
-  const titleDate = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+  const titleDate = formatDateMonthYear(date)
 
   return `Water abstracted ${titleDate}`
 }
