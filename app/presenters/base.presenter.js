@@ -103,6 +103,17 @@ function formatChargingModuleDate(date) {
 }
 
 /**
+ * Formats a date into a human readable month and year string, for example, 'September 2021'
+ *
+ * @param {Date} date - The date to be formatted
+ *
+ * @returns {string} The date formatted as a 'MMMM YYYY' string
+ */
+function formatDateMonthYear(date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
+}
+
+/**
  * Formats the financial year ending of a bill run for display in a view
  *
  * If a bill runs financial year ending is 2024 this function will return '2023 to 2024'.
@@ -265,6 +276,7 @@ module.exports = {
   formatAbstractionDate,
   formatAbstractionPeriod,
   formatChargingModuleDate,
+  formatDateMonthYear,
   formatFinancialYear,
   formatLongDate,
   formatLongDateTime,

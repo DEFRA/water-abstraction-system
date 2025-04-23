@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
 
 // Thing under test
@@ -55,6 +56,7 @@ describe('Monitoring Stations - View service', () => {
       ]
     }
 
+    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(true)
     Sinon.stub(FetchMonitoringStationService, 'go').resolves(monitoringStation)
   })
 
@@ -69,6 +71,9 @@ describe('Monitoring Stations - View service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         gridReference: 'TL2664640047',
+        links: {
+          createAlert: `/system/notifications/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+        },
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         pageTitle: 'BUSY POINT',
         permissionToManageLinks: true,
@@ -88,6 +93,20 @@ describe('Monitoring Stations - View service', () => {
         ],
         stationReference: '',
         wiskiId: ''
+      })
+    })
+  })
+
+  describe('when the "enableMonitoringStationsAlertNotifications" is false', () => {
+    beforeEach(() => {
+      Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(false)
+    })
+
+    it('returns the link for the legacy water abstraction alert page', async () => {
+      const result = await ViewService.go(monitoringStation.id, auth)
+
+      expect(result.links).to.equal({
+        createAlert: `/monitoring-stations/${monitoringStation.id}/send-alert/alert-type`
       })
     })
   })
