@@ -42,7 +42,9 @@ const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/
 const SubmitStartReadingService = require('../../app/services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
+const SubmitVolumesService = require('../../app/services/return-logs/setup/submit-volumes.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
+const VolumesService = require('../../app/services/return-logs/setup/volumes.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -376,7 +378,7 @@ describe('Return Logs - Setup - Controller', () => {
             Sinon.stub(SubmitReadingsService, 'go').resolves({
               error: [
                 {
-                  href: '#reading-0',
+                  href: '#2023-04-30T00:00:00.000Z',
                   text: 'Meter readings must be a number or blank'
                 }
               ],
@@ -1613,6 +1615,65 @@ describe('Return Logs - Setup - Controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Select which units were used')
             expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/volumes/{yearMonth}', () => {
+    const path = 'volumes/2023-3'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(VolumesService, 'go').resolves({ pageTitle: 'Water abstracted April 2023' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Water abstracted April 2023')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation passes', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitVolumesService, 'go').resolves({})
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitVolumesService, 'go').resolves({
+              error: [
+                {
+                  href: '#2023-04-30T00:00:00.000Z',
+                  text: 'Volumes must be a number or blank'
+                }
+              ],
+              pageTitle: 'Water abstracted April 2023'
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Water abstracted April 2023')
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Volumes must be a number or blank')
           })
         })
       })
