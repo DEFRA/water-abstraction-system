@@ -38,7 +38,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar, 'Updated', 'Return version updated')
     }
 
     return {

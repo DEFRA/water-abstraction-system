@@ -66,6 +66,28 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
   })
 
+  describe('When a "current" return version has a "startDate" > "newVersionStartDate" and no "endDate"', () => {
+    beforeEach(async () => {
+      existingReturnVersionId = generateUUID()
+      licenceId = generateUUID()
+      newVersionStartDate = new Date('2024-04-01')
+
+      await ReturnVersionHelper.add({
+        id: existingReturnVersionId,
+        licenceId,
+        startDate: new Date('2024-04-21')
+      })
+    })
+
+    it('an "endDate" is returned for the new return version', async () => {
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
+
+      expect(result).to.equal(new Date('2024-04-20'))
+      expect(existingReturnVersion.endDate).to.equal(null)
+    })
+  })
+
   describe('When a "current" return version has a "startDate" === "newVersionStartDate" and no "endDate"', () => {
     beforeEach(async () => {
       existingReturnVersionId = generateUUID()

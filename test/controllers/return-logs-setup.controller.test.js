@@ -22,6 +22,7 @@ const MeterProvidedService = require('../../app/services/return-logs/setup/meter
 const MultipleEntriesService = require('../../app/services/return-logs/setup/multiple-entries.service.js')
 const NoteService = require('../../app/services/return-logs/setup/note.service.js')
 const PeriodUsedService = require('../../app/services/return-logs/setup/period-used.service.js')
+const ReadingsService = require('../../app/services/return-logs/setup/readings.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
@@ -35,13 +36,16 @@ const SubmitMeterProvidedService = require('../../app/services/return-logs/setup
 const SubmitMultipleEntriesService = require('../../app/services/return-logs/setup/submit-multiple-entries.service.js')
 const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
 const SubmitPeriodUsedService = require('../../app/services/return-logs/setup/submit-period-used.service.js')
+const SubmitReadingsService = require('../../app/services/return-logs/setup/submit-readings.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
 const SubmitStartReadingService = require('../../app/services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
+const SubmitVolumesService = require('../../app/services/return-logs/setup/submit-volumes.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
+const VolumesService = require('../../app/services/return-logs/setup/volumes.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -348,6 +352,65 @@ describe('Return Logs - Setup - Controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/readings/{yearMonth}', () => {
+    const path = 'readings/2023-3'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ReadingsService, 'go').resolves({ pageTitle: 'Water abstracted April 2023' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Water abstracted April 2023')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation passes', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReadingsService, 'go').resolves({})
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReadingsService, 'go').resolves({
+              error: [
+                {
+                  href: '#2023-04-30T00:00:00.000Z',
+                  text: 'Meter readings must be a number or blank'
+                }
+              ],
+              pageTitle: 'Water abstracted April 2023'
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Water abstracted April 2023')
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Meter readings must be a number or blank')
           })
         })
       })
@@ -1570,6 +1633,65 @@ describe('Return Logs - Setup - Controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Select which units were used')
             expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/volumes/{yearMonth}', () => {
+    const path = 'volumes/2023-3'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(VolumesService, 'go').resolves({ pageTitle: 'Water abstracted April 2023' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Water abstracted April 2023')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation passes', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitVolumesService, 'go').resolves({})
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitVolumesService, 'go').resolves({
+              error: [
+                {
+                  href: '#2023-04-30T00:00:00.000Z',
+                  text: 'Volumes must be a number or blank'
+                }
+              ],
+              pageTitle: 'Water abstracted April 2023'
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Water abstracted April 2023')
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Volumes must be a number or blank')
           })
         })
       })

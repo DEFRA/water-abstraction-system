@@ -21,15 +21,16 @@ function go(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
-  const requestedMonthLines = returnSubmissionLines.filter(
-    (line) => line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
-  )
+  const requestedMonthLines = returnSubmissionLines.filter((line) => {
+    return line.endDate.getFullYear() === requestedYear && line.endDate.getMonth() === requestedMonth
+  })
 
   const method = returnSubmission.$method()
   const units = returnSubmission.$units()
 
   return {
     backLink: _backLink(returnSubmission),
+    backLinkText: _backLinkText(returnSubmission),
     displayReadings: method !== 'abstractionVolumes',
     displayUnits: units !== unitNames.CUBIC_METRES,
     pageTitle: _pageTitle(requestedMonthLines[0].endDate),
@@ -39,7 +40,19 @@ function go(returnSubmission, yearMonth) {
 }
 
 function _backLink(returnSubmission) {
-  return `/system/return-logs?id=${returnSubmission.returnLogId}`
+  if (returnSubmission.current) {
+    return `/system/return-logs?id=${returnSubmission.returnLogId}`
+  }
+
+  return `/system/return-logs?id=${returnSubmission.returnLogId}&version=${returnSubmission.version}`
+}
+
+function _backLinkText(returnSubmission) {
+  if (returnSubmission.current) {
+    return `Go back to return ${returnSubmission.returnLog.returnReference}`
+  }
+
+  return `Go back to return ${returnSubmission.returnLog.returnReference} version ${returnSubmission.version}`
 }
 
 function _determineRequestedYearAndMonth(yearMonth) {

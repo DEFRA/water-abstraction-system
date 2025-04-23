@@ -26,7 +26,7 @@ async function go(returnSubmissionId) {
 async function _fetch(returnSubmissionId) {
   return ReturnSubmissionModel.query()
     .findById(returnSubmissionId)
-    .select(['id', 'metadata', 'returnLogId'])
+    .select(['id', 'metadata', 'returnLogId', 'version', 'current'])
     .withGraphFetched('returnSubmissionLines')
     .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
       returnSubmissionLinesBuilder

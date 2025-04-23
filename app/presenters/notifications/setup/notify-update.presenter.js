@@ -30,13 +30,13 @@ function go(notify) {
     notifyId: notify.id,
     notifyStatus: notify.statusText,
     plaintext: notify.plaintext,
-    status: 'sending'
+    status: 'pending'
   }
 }
 
 function _error(notify) {
   return {
-    log: JSON.stringify(notify),
+    notifyError: JSON.stringify(notify),
     status: 'error'
   }
 }

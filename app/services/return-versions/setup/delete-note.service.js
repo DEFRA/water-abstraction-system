@@ -19,8 +19,8 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const notification = {
-    title: 'Removed',
-    text: 'Note removed'
+    title: 'Deleted',
+    text: 'Note deleted'
   }
 
   yar.flash('notification', notification)

@@ -411,6 +411,34 @@ describe('Base Return Logs presenter', () => {
             expect(result[1].unitTotal).to.equal('109,984.624')
           })
         })
+
+        describe('and the lines being processed contain a null "quantity"', () => {
+          beforeEach(() => {
+            sampleLines[1].quantity = null
+          })
+
+          it('still returns the monthlyTotal as null for the line with a null "quantity"', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.equal('400')
+            expect(result[1].monthlyTotal).to.be.null()
+          })
+        })
+
+        describe('and all the lines being processed contain a null "quantity"', () => {
+          beforeEach(() => {
+            sampleLines.forEach((sampleLine) => {
+              sampleLine.quantity = null
+            })
+          })
+
+          it('returns the monthlyTotal as null for all lines', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.be.null()
+            expect(result[1].monthlyTotal).to.be.null()
+          })
+        })
       })
 
       describe('and the abstraction method is not "abstractionVolumes"', () => {
@@ -510,6 +538,32 @@ describe('Base Return Logs presenter', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
             expect(result[0].unitTotal).to.equal('329,953.872')
+          })
+        })
+
+        describe('and the lines being processed contain a null "quantity"', () => {
+          beforeEach(() => {
+            sampleLines[1].quantity = null
+          })
+
+          it('still returns the monthlyTotal as a formatted string', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.equal('1,000')
+          })
+        })
+
+        describe('and all the lines being processed contain a null "quantity"', () => {
+          beforeEach(() => {
+            sampleLines.forEach((sampleLine) => {
+              sampleLine.quantity = null
+            })
+          })
+
+          it('returns the monthlyTotal as null', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.be.null()
           })
         })
       })
