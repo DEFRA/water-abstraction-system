@@ -159,11 +159,17 @@
 
   {% if permissionToManageLinks %}
     <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Tag a licence",
-        href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
-        classes: "govuk-button--secondary"
-      }) }}
+      <form method="post" action="/system/licence-monitoring-station/setup">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        {{
+          govukButton({
+            text: 'Tag a licence',
+            name: "monitoringStationId",
+            value: monitoringStationId,
+            preventDoubleClick: true,
+            classes: "govuk-button--secondary"
+          })
+        }}
 
       {% if restrictions.length > 0 %}
         {{ govukButton({
@@ -172,6 +178,7 @@
           classes: "govuk-button--secondary"
         }) }}
       {% endif %}
+      </form>
     </div>
   {% endif %}
 {% endblock %}
