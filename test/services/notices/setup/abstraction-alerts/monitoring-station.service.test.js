@@ -8,16 +8,29 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceHelper = require('../../../../support/helpers/licence.helper.js')
+const LicenceMonitoringStationModel = require('../../../../support/helpers/licence-monitoring-station.helper.js')
 const MonitoringStationHelper = require('../../../../support/helpers/monitoring-station.helper.js')
 
 // Thing under test
 const MonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
 
-describe('Notices Setup - Abstraction alerts - Monitoring station service', () => {
+describe.only('Notices Setup - Abstraction alerts - Monitoring station service', () => {
   let monitoringStation
 
   beforeEach(async () => {
     monitoringStation = await MonitoringStationHelper.add()
+
+    const l1 = await LicenceHelper.add()
+
+    await LicenceMonitoringStationModel.add({
+      licenceId: l1.id,
+      monitoringStationId: monitoringStation.id
+    })
+
+    await LicenceMonitoringStationModel.add({
+      monitoringStationId: monitoringStation.id
+    })
   })
 
   it('correctly returns the data', async () => {
