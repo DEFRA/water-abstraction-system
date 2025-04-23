@@ -171,7 +171,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
   describe('the "subType" property', () => {
     it('correctly returns the "subType"', () => {
-      const result = CreateEventPresenter.go(session, testRecipients, auth)
+      const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('returnInvitation')
     })
