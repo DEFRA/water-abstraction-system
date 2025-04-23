@@ -31,7 +31,6 @@ function go(options, session) {
     .custom((value, helpers) => {
       return _noQuarterlyReturnsForSummerCycle(value, helpers, session)
     }, 'No quarterly returns for summer cycle')
-
     .messages({
       'any.required': errorMessage,
       'array.sparse': errorMessage,
@@ -44,11 +43,11 @@ function go(options, session) {
 function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {
   const { additionalSubmissionOptions } = value
 
-  const hasSummerCycle = session.requirements?.some((requirement) => {
+  const hasSummerCycle = session.data.requirements?.some((requirement) => {
     return requirement.returnsCycle === 'summer'
   })
 
-  const checkPageVisited = session.checkPageVisited === true
+  const checkPageVisited = session.data.checkPageVisited === true
   const includesQuarterly = additionalSubmissionOptions?.includes('quarterly-returns')
 
   if (checkPageVisited && hasSummerCycle && includesQuarterly) {
