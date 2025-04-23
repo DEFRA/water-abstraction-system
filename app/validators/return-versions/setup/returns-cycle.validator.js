@@ -20,7 +20,6 @@ const Joi = require('joi')
  * If any errors are found the `error:` property will also exist detailing what the issue is.
  */
 function go(payload, session) {
-  console.log('🚀🚀🚀 ~ session:', session)
   const returnsCycle = payload.returnsCycle
 
   const VALID_VALUES = ['summer', 'winter-and-all-year']
@@ -51,8 +50,8 @@ function _noSummerCycleWithQuarterlyReturns(value, helpers, session) {
   const { returnsCycle } = value
 
   const isSummer = returnsCycle === 'summer'
-  const hasQuarterlyReturns = session.quarterlyReturns === true
-  const checkPageVisited = session.checkPageVisited === true
+  const hasQuarterlyReturns = session.data.quarterlyReturns === true
+  const checkPageVisited = session.data.checkPageVisited === true
 
   if (checkPageVisited && hasQuarterlyReturns && isSummer) {
     return helpers.error('any.invalid')
