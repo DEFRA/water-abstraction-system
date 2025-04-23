@@ -28,7 +28,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         inputLines: [
           {
             endDate: '2023-05-31T00:00:00.000Z',
-            formattedEndDate: '31 May 2023',
+            label: 'May 2023',
             quantity: undefined
           }
         ],
@@ -51,11 +51,48 @@ describe('Return Logs Setup - Volumes presenter', () => {
         expect(result.inputLines).to.equal([
           {
             endDate: '2023-04-30T00:00:00.000Z',
-            formattedEndDate: '30 April 2023',
+            label: 'April 2023',
             quantity: 100
           }
         ])
       })
+
+      describe('and the return frequency is daily', () => {
+        beforeEach(() => {
+          session.returnsFrequency = 'day'
+        })
+
+        it('correctly formats the line label', () => {
+          const result = VolumesPresenter.go(session, yearMonth)
+
+          expect(result.inputLines[0].label).to.equal('30 April 2023')
+        })
+      })
+
+      describe('and the return frequency is weekly', () => {
+        beforeEach(() => {
+          session.returnsFrequency = 'week'
+        })
+
+        it('correctly formats the line label', () => {
+          const result = VolumesPresenter.go(session, yearMonth)
+
+          expect(result.inputLines[0].label).to.equal('Week ending 30 April 2023')
+        })
+      })
+
+      describe('and the return frequency is monthly', () => {
+        beforeEach(() => {
+          session.returnsFrequency = 'month'
+        })
+
+        it('correctly formats the line label', () => {
+          const result = VolumesPresenter.go(session, yearMonth)
+
+          expect(result.inputLines[0].label).to.equal('April 2023')
+        })
+      })
+
       describe('and a validation error exists on the line', () => {
         beforeEach(() => {
           session.lines[0].error = 'There is an error on this line'
@@ -67,7 +104,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
           expect(result.inputLines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
-              formattedEndDate: '30 April 2023',
+              label: 'April 2023',
               quantity: 100,
               error: 'There is an error on this line'
             }
@@ -160,6 +197,7 @@ function _sessionData() {
         startDate: '2023-06-01T00:00:00.000Z'
       }
     ],
+    returnsFrequency: 'month',
     returnReference: '1234',
     units: 'cubic-metres'
   }

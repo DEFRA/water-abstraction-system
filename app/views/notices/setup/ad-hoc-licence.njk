@@ -1,0 +1,53 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: "/manage"
+  }) }}
+{% endblock %}
+
+{% block content %}
+{# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#licence"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <div class="govuk-body">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">Notice {{referenceCode}} </span>
+
+            {{ govukInput({
+            label: {
+              text: pageTitle,
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            value: licenceRef,
+            id: "licence-ref",
+            name: "licenceRef",
+            errorMessage: error
+            }) }}
+
+            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+          </div>
+        </div>
+    </form>
+  </div>
+{% endblock %}

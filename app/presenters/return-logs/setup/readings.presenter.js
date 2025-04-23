@@ -5,7 +5,7 @@
  * @module ReadingsPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatDateMonthYear, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -16,7 +16,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {object} page data needed by the view template
  */
 function go(session, yearMonth) {
-  const { id: sessionId, lines, returnReference } = session
+  const { id: sessionId, lines, returnsFrequency, returnReference } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
@@ -28,7 +28,7 @@ function go(session, yearMonth) {
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
-    inputLines: _inputLines(requestedMonthLines),
+    inputLines: _inputLines(requestedMonthLines, returnsFrequency),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
     returnReference
   }
@@ -40,13 +40,13 @@ function _determineRequestedYearAndMonth(yearMonth) {
   return yearMonth.split('-').map(Number)
 }
 
-function _inputLines(lines) {
+function _inputLines(lines, returnsFrequency) {
   return lines.map((line) => {
     const { endDate, reading } = line
 
     const lineData = {
       endDate,
-      formattedEndDate: formatLongDate(new Date(endDate)),
+      label: _lineLabel(endDate, returnsFrequency),
       reading
     }
 
@@ -58,8 +58,22 @@ function _inputLines(lines) {
   })
 }
 
+function _lineLabel(endDate, returnsFrequency) {
+  const labelDate = new Date(endDate)
+
+  if (returnsFrequency === 'week') {
+    return `Week ending ${formatLongDate(labelDate)}`
+  }
+
+  if (returnsFrequency === 'month') {
+    return formatDateMonthYear(labelDate)
+  }
+
+  return formatLongDate(labelDate)
+}
+
 function _pageTitle(date) {
-  const titleDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
+  const titleDate = formatDateMonthYear(date)
 
   return `Water abstracted ${titleDate}`
 }
