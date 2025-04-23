@@ -34,7 +34,7 @@ describe('Notices - Setup - Cancel presenter', () => {
 
     expect(result).to.equal({
       backLink: `/system/notices/setup/${session.id}/check`,
-      pageTitle: 'You are about to cancel this notification',
+      pageTitle: 'You are about to cancel this notice',
       referenceCode: 'ADHC-1234',
       summaryList: {
         text: 'Licence number',

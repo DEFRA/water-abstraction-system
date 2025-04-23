@@ -32,7 +32,7 @@ describe('Notices - Setup - Cancel service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/check`,
-        pageTitle: 'You are about to cancel this notification',
+        pageTitle: 'You are about to cancel this notice',
         referenceCode: 'ADHC-1234',
         summaryList: {
           text: 'Licence number',
