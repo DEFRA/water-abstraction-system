@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches the notifications for the `/notifications` page
- * @module FetchEventsNotificationsService
+ * Fetches the notices for the `/notices` page
+ * @module FetchNoticesService
  */
 
 const { ref } = require('objection')
@@ -10,11 +10,11 @@ const { ref } = require('objection')
 const EventModel = require('../../models/event.model.js')
 
 /**
- * Fetches the notifications for the `/notifications` page
+ * Fetches the notices for the `/notices` page
  *
- * @param {object} filter - an object containing the different filters
+ * @param {object} filter - an object containing the different filters to apply to the query
  *
- * @returns {Promise<object[]>} an array of matching events
+ * @returns {Promise<object[]>} an array of matching notices
  */
 async function go(filter) {
   const query = EventModel.query()
@@ -72,7 +72,7 @@ async function go(filter) {
 
 /**
  * Using the provided filter object this function creates an array to be used in the whereRaw clause above.
- * Various attempts where made to try to get it working passing in a dynamic array but this was the only way to get it
+ * Various attempts were made to try to get it working passing in a dynamic array but this was the only way to get it
  * to work.
  *
  * @param {object} filter - an object containing the different filters

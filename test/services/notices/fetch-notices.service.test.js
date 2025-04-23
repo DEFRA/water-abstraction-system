@@ -12,13 +12,13 @@ const EventHelper = require('../../support/helpers/event.helper.js')
 const EventModel = require('../../../app/models/event.model.js')
 
 // Thing under test
-const FetchEventsNotificationsService = require('../../../app/services/notifications/fetch-events-notifications.service.js')
+const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
-describe('Fetch Events service', () => {
+describe('Notices - Fetch Notices service', () => {
   let testEvent
   let secondTestEvent
 
-  describe('when an event exists and there are no filters applied', () => {
+  describe('when a notice exists and there are no filters applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -33,8 +33,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         filterNotificationTypes: undefined,
         sentBy: undefined,
         sentFromDay: undefined,
@@ -60,7 +60,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a sent by filter applied', () => {
+  describe('when a notice exists and there is a "sent by" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -87,8 +87,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({ sentBy: 'test.user@defra.gov.uk' })
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({ sentBy: 'test.user@defra.gov.uk' })
 
       expect(result).to.contain(
         EventModel.fromJson({
@@ -104,7 +104,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a sentFromDay filter applied', () => {
+  describe('when a notice exists and there is a "sentFromDay" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -131,8 +131,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         sentFromDay: 1,
         sentFromMonth: 1,
         sentFromYear: new Date().getFullYear()
@@ -163,7 +163,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a sentToDay filter applied', () => {
+  describe('when a notice exists and there is a "sentToDay" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -190,8 +190,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         sentToDay: 1,
         sentToMonth: 11,
         sentToYear: new Date().getFullYear()
@@ -222,7 +222,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a waterAbstractionAlerts with a resume filter applied', () => {
+  describe('when a notice exists and there is a "waterAbstractionAlerts" with a "resume" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -239,8 +239,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           waterAbstractionAlertResume: true
         }
@@ -260,7 +260,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a waterAbstractionAlerts with a stop filter applied', () => {
+  describe('when a notice exists and there is a "waterAbstractionAlerts" with a stop "filter" applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -277,8 +277,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           waterAbstractionAlertStop: true
         }
@@ -298,7 +298,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a waterAbstractionAlertReduce with a reduce filter applied', () => {
+  describe('when a notice exists and there is a "waterAbstractionAlertReduce" with a "reduce" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -315,8 +315,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           waterAbstractionAlertReduce: true
         }
@@ -336,7 +336,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a waterAbstractionAlertWarning with a warning filter applied', () => {
+  describe('when a notice exists and there is a "waterAbstractionAlertWarning" with a "warning" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -353,8 +353,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           waterAbstractionAlertWarning: true
         }
@@ -374,7 +374,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a returnsPaperForm filter applied', () => {
+  describe('when a notice exists and there is a "returnsPaperForm" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -387,8 +387,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           returnsPaperForm: true
         }
@@ -408,7 +408,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a returnReminders filter applied', () => {
+  describe('when a notice exists and there is a "returnReminders" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -421,8 +421,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           returnReminders: true
         }
@@ -442,7 +442,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists and there is a returnInvitation filter applied', () => {
+  describe('when a notice exists and there is a "returnInvitation" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -455,8 +455,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           returnInvitation: true
         }
@@ -476,7 +476,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists with a subtype of with a hof-stop and there is a legacyNotifications filter applied', () => {
+  describe('when a notice exists with a subtype of "hof-stop" and there is a "legacyNotifications" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -489,8 +489,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           legacyNotifications: true
         }
@@ -510,7 +510,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists with a subtype of with a hof-resume and there is a legacyNotifications filter applied', () => {
+  describe('when a notice exists with a subtype of "hof-resume" and there is a "legacyNotifications" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -523,8 +523,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           legacyNotifications: true
         }
@@ -544,7 +544,7 @@ describe('Fetch Events service', () => {
     })
   })
 
-  describe('when an event exists with a subtype of with a hof-warning and there is a legacyNotifications filter applied', () => {
+  describe('when a notice exists with a subtype of "hof-warning" and there is a "legacyNotifications" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
         type: 'notification',
@@ -557,8 +557,8 @@ describe('Fetch Events service', () => {
       })
     })
 
-    it('fetches the matching events', async () => {
-      const result = await FetchEventsNotificationsService.go({
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go({
         notifications: {
           legacyNotifications: true
         }
