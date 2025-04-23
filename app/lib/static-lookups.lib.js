@@ -139,6 +139,21 @@ const returnUnits = {
 
 const sources = ['nald', 'wrls']
 
+const thresholdUnits = {
+  MEGALITRES_PER_DAY: 'Ml/d',
+  CUBIC_METRES_PER_SECOND: 'm3/s',
+  CUBIC_METRES_PER_DAY: 'm3/d',
+  LITRES_PER_SECOND: 'l/s',
+  METRES_ABOVE_ORDNANCE_DATUM: 'mAOD',
+  METRES_BELOW_ORDNANCE_DATUM: 'mBOD',
+  METRES_ABOVE_SEA_DATUM: 'mASD',
+  METRES: 'm',
+  SOUTH_LEVEL_DATUM: 'SLD',
+  CUBIC_FOOT_PER_SECOND: 'ft3/s',
+  GALLONS_PER_DAY: 'gpd',
+  MILLION_GALLONS_PER_DAY: 'Mgpd'
+}
+
 const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',
   'aggregate-factor': 'Aggregate',
@@ -167,6 +182,7 @@ module.exports = {
   returnRequirementReasons,
   returnUnits,
   sources,
+  thresholdUnits,
   twoPartTariffReviewIssues,
   quarterlyReturnPeriods,
   unitNames
