@@ -8,12 +8,12 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotificationsIndexPresenter = require('../../../app/presenters/notifications/index-notifications.presenter.js')
+const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
-describe('View Notifications presenter', () => {
+describe('Notices - Index Notices presenter', () => {
   describe('when the "data" is empty and there are no filters or validation results', () => {
     it('returns the correct information', () => {
-      const result = NotificationsIndexPresenter.go([])
+      const result = IndexNoticesPresenter.go([])
 
       expect(result).to.equal({
         backLink: '/manage',
@@ -26,7 +26,7 @@ describe('View Notifications presenter', () => {
 
   describe('when there is some "data"', () => {
     it('returns it formatted for display on the page', () => {
-      const result = NotificationsIndexPresenter.go([
+      const result = IndexNoticesPresenter.go([
         {
           id: '809aa951-e5eb-4300-8492-9e0f2bcb5b98',
           createdAt: new Date('2025-02-21T14:52:18.000Z'),
@@ -68,7 +68,7 @@ describe('View Notifications presenter', () => {
 
   describe('when there is some "data" with an error', () => {
     it('returns it formatted for display on the page', () => {
-      const result = NotificationsIndexPresenter.go([
+      const result = IndexNoticesPresenter.go([
         {
           id: '809aa951-e5eb-4300-8492-9e0f2bcb5b98',
           createdAt: new Date('2025-02-21T14:52:18.000Z'),
@@ -115,7 +115,7 @@ function _tableHeaders() {
       text: 'Date'
     },
     {
-      text: 'Notification type'
+      text: 'Notice type'
     },
     {
       text: 'Sent by'
