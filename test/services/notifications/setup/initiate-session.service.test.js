@@ -125,5 +125,40 @@ describe('Notifications Setup - Initiate Session service', () => {
         })
       })
     })
+
+    describe('when the "notificationType" is "abstraction-alert"', () => {
+      it('creates a new session record', async () => {
+        const result = await InitiateSessionService.go('abstraction-alert')
+
+        const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+        expect(matchingSession.data).to.equal({
+          journey: 'abstraction-alert',
+          notificationType: 'Abstraction alert',
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'waterAbstractionAlerts'
+        })
+      })
+
+      it('correctly returns the redirect path and session id', async () => {
+        const result = await InitiateSessionService.go('abstraction-alert')
+
+        expect(result).to.equal({
+          sessionId: result.sessionId,
+          path: 'abstraction-alert'
+        })
+      })
+
+      describe('the "referenceCode" property', () => {
+        it('returns a reference code for an "ad-hoc" notification', async () => {
+          const result = await InitiateSessionService.go('abstraction-alert')
+
+          const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+          expect(matchingSession.referenceCode).to.include('WAA-')
+          expect(matchingSession.referenceCode.length).to.equal(10)
+        })
+      })
+    })
   })
 })
