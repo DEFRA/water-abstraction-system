@@ -1,24 +1,24 @@
 'use strict'
 
 /**
- * Formats a notice `SessionModel` instance into the data needed for a 'EventModel' record
- * @module CreateEventPresenter
+ * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
+ * @module CreateNoticePresenter
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Formats a notice `SessionModel` instance into the data needed for a 'EventModel' record
+ * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
  *
- * We set the event 'status' to 'complete' to allow the report to show on the 'notifications/report' page. This is
+ * We set the notice 'status' to 'complete' to allow the report to show on the 'notifications/report' page. This is
  * dictated by the legacy code.
  *
- * @param {SessionModel} session
- * @param {object[]} recipients
+ * @param {SessionModel} session - The session instance
+ * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {object} - The data formatted for the view template
+ * @returns {object} The data formatted persisting as a `notice` record
  */
 function go(session, recipients, auth) {
   const { referenceCode, determinedReturnsPeriod, journey, removeLicences = [] } = session

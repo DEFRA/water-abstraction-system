@@ -6,8 +6,8 @@
  */
 
 const BatchNotificationsService = require('./batch-notifications.service.js')
-const CreateEventPresenter = require('../../../presenters/notices/setup/create-event.presenter.js')
-const CreateEventService = require('./create-event.service.js')
+const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
+const CreateNoticeService = require('./create-notice.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -21,39 +21,39 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  * @param {string} sessionId - The UUID for the notice setup session record
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Promise<string>} - the created eventId
+ * @returns {Promise<string>} - the created notice Id
  */
 async function go(sessionId, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipients = await _recipients(session)
 
-  const event = await _event(session, recipients, auth)
+  const notice = await _notice(session, recipients, auth)
 
   const { determinedReturnsPeriod, referenceCode, journey } = session
 
   await session.$query().delete()
 
-  _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, event)
+  _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, notice)
 
-  return event.id
+  return notice.id
 }
 
-async function _event(session, recipients, auth) {
-  const event = CreateEventPresenter.go(session, recipients, auth)
+async function _notice(session, recipients, auth) {
+  const event = CreateNoticePresenter.go(session, recipients, auth)
 
-  return CreateEventService.go(event)
+  return CreateNoticeService.go(event)
 }
 
-async function _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, event) {
+async function _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, notice) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await BatchNotificationsService.go(recipients, determinedReturnsPeriod, referenceCode, journey, event.id)
+    await BatchNotificationsService.go(recipients, determinedReturnsPeriod, referenceCode, journey, notice.id)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
-    global.GlobalNotifier.omfg('Send notifications failed', { event }, error)
+    global.GlobalNotifier.omfg('Send notifications failed', { notice }, error)
   }
 }
 

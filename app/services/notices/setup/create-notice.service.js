@@ -1,17 +1,20 @@
 'use strict'
 
 /**
- * Create a 'returnInvitation' or 'returnReminder' notification event
- * @module CreateEventService
+ * Create a 'returnInvitation' or 'returnReminder' notice
+ * @module CreateNoticeService
  */
 
 const EventModel = require('../../../../app/models/event.model.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
- * Create a 'returnInvitation' or 'returnReminder' notification event
+ * Create a 'returnInvitation' or 'returnReminder' notice
  *
- * An event for a 'returnInvitation' or 'returnReminder' should look like this:
+ * > Notices are event records with a type as `notification`. In the future we intend to move them to their own
+ * > `water.notices` table. But for now this explains why the `EventModel` suddenly makes an appearance!
+ *
+ * A notice for a 'returnInvitation' or 'returnReminder' should look like this:
  *
  * ```javascript
  * const event = {
@@ -30,22 +33,18 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *  }
  * ```
  *
- * These events are structured in way that legacy UI can render any notification straight into the view.
+ * These notices are structured in way that legacy UI can render any notice straight into the view.
  *
- * @param {object} event
+ * @param {object} noticeData - An object representing the notice to be created
  *
- * @returns {object} - the created event
+ * @returns {object} the created notice
  */
-async function go(event) {
-  return _createEvent(event)
-}
-
-async function _createEvent(event) {
+async function go(noticeData) {
   return EventModel.query().insert({
     type: 'notification',
     createdAt: timestampForPostgres(),
     updatedAt: timestampForPostgres(),
-    ...event
+    ...noticeData
   })
 }
 

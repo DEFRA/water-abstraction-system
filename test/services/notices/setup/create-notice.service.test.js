@@ -11,17 +11,17 @@ const { expect } = Code
 const EventModel = require('../../../../app/models/event.model.js')
 
 // Thing under test
-const CreateEventService = require('../../../../app/services/notices/setup/create-event.service.js')
+const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
 
-describe('Notices - Setup - Create event service', () => {
+describe('Notices - Setup - Create Notice service', () => {
   let event
 
   beforeEach(() => {
     event = {}
   })
 
-  it('should create the event (required values)', async () => {
-    const result = await CreateEventService.go(event)
+  it('should create the notice (required values)', async () => {
+    const result = await CreateNoticeService.go(event)
 
     const createdResult = await EventModel.query().findById(result.id)
 
@@ -33,7 +33,7 @@ describe('Notices - Setup - Create event service', () => {
     })
   })
 
-  describe('when the event is for a returns notification', () => {
+  describe('when the notice is for a returns notification', () => {
     const referenceCode = 'ABC-123'
 
     beforeEach(() => {
@@ -53,8 +53,8 @@ describe('Notices - Setup - Create event service', () => {
       }
     })
 
-    it('should create the event', async () => {
-      const result = await CreateEventService.go(event)
+    it('should create the notice', async () => {
+      const result = await CreateNoticeService.go(event)
 
       const createdResult = await EventModel.query().findById(result.id)
 
