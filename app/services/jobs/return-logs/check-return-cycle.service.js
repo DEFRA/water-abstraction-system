@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Given a return cycle type, it checks if the cycle exists and if not creates it then returns the return cycle
+ * Check if the current summer or all year return cycle exists, and if not create it, then return the result
  * @module CheckReturnCycleService
  */
 
@@ -14,49 +14,60 @@ const {
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
- * Given a return cycle type, it checks if the cycle exists and if not creates it then returns the return cycle
+ * Check if the current summer or all year return cycle exists, and if not create it, then return the result
  *
- * @param {boolean} summer - If it's a summer or all year cycle
- * @param {Date} [changeDate] - A change date to use when determining which return cycle to use
+ * Each year when the job runs the first thing it needs to do is check if the return cycle for that year has been
+ * created.
  *
- * @returns {Promise<module:ReturnCycleModel>} the created return cycle
+ * This service does the checking, and if no matching return cycle is found it creates it. Either the matching or new
+ * return cycle is returned to `ProcessReturnLogsService`.
+ *
+ * If everything is running fine, we would expect this service to find no match and so create the new record. But just
+ * in case there is an issue, and we need to run the job multiple times, we have it first check rather than assume it
+ * is always creating the return cycle.
+ *
+ * @param {boolean} summer - true if checking for the current summer return cycle else false for all year
+ *
+ * @returns {Promise<module:ReturnCycleModel>} either the matching or newly created return cycle
  */
-async function go(summer, changeDate = new Date()) {
-  const startDate = determineCycleStartDate(summer, changeDate)
-  const endDate = determineCycleEndDate(summer, changeDate)
+async function go(summer) {
+  const currentDate = new Date()
+  const startDate = determineCycleStartDate(summer, currentDate)
+  const endDate = determineCycleEndDate(summer, currentDate)
 
-  const returnCycle = await _fetchReturnCycle(startDate, endDate, summer)
+  const matchingReturnCycle = await _matchingReturnCycle(startDate, endDate, summer)
 
-  if (!returnCycle) {
-    const data = _generateData(summer, changeDate)
-
-    return ReturnCycleModel.query().insert(data).returning(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+  if (matchingReturnCycle) {
+    return matchingReturnCycle
   }
 
-  return returnCycle
+  return _createReturnCycle(startDate, endDate, summer)
 }
 
-async function _fetchReturnCycle(startDate, endDate, summer) {
+async function _createReturnCycle(startDate, endDate, summer) {
+  const timestamp = timestampForPostgres()
+
+  return ReturnCycleModel.query()
+    .insert({
+      createdAt: timestamp,
+      dueDate: determineCycleDueDate(summer, endDate),
+      endDate,
+      startDate,
+      submittedInWrls: true,
+      summer,
+      updatedAt: timestamp
+    })
+    .returning(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+}
+
+async function _matchingReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('startDate', '>=', startDate)
     .where('endDate', '<=', endDate)
     .where('summer', summer)
+    .limit(1)
     .first()
-}
-
-function _generateData(summer, changeDate) {
-  const timestamp = timestampForPostgres()
-
-  return {
-    createdAt: timestamp,
-    dueDate: determineCycleDueDate(summer, changeDate),
-    endDate: determineCycleEndDate(summer, changeDate),
-    summer,
-    submittedInWrls: true,
-    startDate: determineCycleStartDate(summer, changeDate),
-    updatedAt: timestamp
-  }
 }
 
 module.exports = {

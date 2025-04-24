@@ -15,13 +15,14 @@ const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
 
 describe('Jobs - Return Logs - Check Return Cycle service', () => {
-  const changeDate = new Date('2024-05-01')
+  const currentDate = new Date('2024-05-01')
+
   let clock
   let insertStub
   let summer
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date('2024-05-01'))
+    clock = Sinon.useFakeTimers(currentDate)
   })
 
   afterEach(() => {
@@ -40,6 +41,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         Sinon.stub(ReturnCycleModel, 'query').returns({
           select: Sinon.stub().returnsThis(),
           where: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
           first: Sinon.stub().resolves(undefined),
           returning: Sinon.stub().resolves({
             id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
@@ -53,7 +55,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('creates summer return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer, changeDate)
+        const result = await CheckReturnCycleService.go(summer)
 
         const [insertObject] = insertStub.args[0]
 
@@ -84,6 +86,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         Sinon.stub(ReturnCycleModel, 'query').returns({
           select: Sinon.stub().returnsThis(),
           where: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
           first: Sinon.stub().resolves({
             id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
             dueDate: new Date('2024-11-28T00:00:00.000Z'),
@@ -96,7 +99,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('returns the summer cycles', async () => {
-        const result = await CheckReturnCycleService.go(summer, changeDate)
+        const result = await CheckReturnCycleService.go(summer)
 
         expect(result).to.equal({
           id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
@@ -120,6 +123,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         Sinon.stub(ReturnCycleModel, 'query').returns({
           select: Sinon.stub().returnsThis(),
           where: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
           first: Sinon.stub().resolves(undefined),
           returning: Sinon.stub().resolves({
             id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
@@ -133,7 +137,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('creates all year return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer, changeDate)
+        const result = await CheckReturnCycleService.go(summer)
 
         const [insertObject] = insertStub.args[0]
 
@@ -164,6 +168,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         Sinon.stub(ReturnCycleModel, 'query').returns({
           select: Sinon.stub().returnsThis(),
           where: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
           first: Sinon.stub().resolves({
             id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
             dueDate: new Date('2025-04-28T00:00:00.000Z'),
@@ -176,7 +181,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('creates the all year return cycles', async () => {
-        const result = await CheckReturnCycleService.go(summer, changeDate)
+        const result = await CheckReturnCycleService.go(summer)
 
         expect(result).to.equal({
           id: '0055799f-8b6a-4753-ac78-57c61a6ef80b',
