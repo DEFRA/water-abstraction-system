@@ -33,7 +33,7 @@ function go(session) {
 function _total(session) {
   const total = {
     totalFlag: !!session.singleVolume,
-    total: session.singleVolume ? 12345 : null, // TODO: Dummy value, check where we get this from
+    total: session.singleVolume ? session.singleVolumeQuantity : null,
     totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
   }
 

@@ -75,6 +75,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
   describe('when session.singleVolume is true', () => {
     beforeEach(async () => {
       sessionData.singleVolume = true
+      sessionData.singleVolumeQuantity = 12345
     })
 
     it('sets totalFlag to true', () => {
@@ -83,8 +84,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       expect(result.totalFlag).to.equal(true)
     })
 
-    // TODO: Confirm where this value comes from
-    it('sets total as 12345', () => {
+    it('sets total as session.singleVolumeQuantity', () => {
       const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
       expect(result.total).to.equal(12345)
