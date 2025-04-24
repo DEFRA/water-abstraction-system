@@ -84,7 +84,6 @@ describe('Notices Setup - Abstraction alerts - Monitoring station service', () =
         abstraction_period_start_day: 1,
         abstraction_period_start_month: 1,
         label: 'MONITOR PLACE',
-
         licence_id: licenceWithVersionPurpose.id,
         licence_ref: licenceWithVersionPurpose.licenceRef,
         licence_version_purpose_condition_id: licenceVersionPurposeCondition.id,
@@ -108,7 +107,6 @@ describe('Notices Setup - Abstraction alerts - Monitoring station service', () =
         abstraction_period_start_day: 1,
         abstraction_period_start_month: 1,
         label: 'MONITOR PLACE',
-
         licence_id: licenceWithVersionPurpose.id,
         licence_ref: licenceWithVersionPurpose.licenceRef,
         licence_version_purpose_condition_id: licenceVersionPurposeCondition.id,
