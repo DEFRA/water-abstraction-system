@@ -11,7 +11,7 @@ const { db } = require('../../../../../db/db.js')
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
  *
  * @param {string} id
- * @returns {object} - the monitoring station data
+ * @returns {Promise<{object}>}
  */
 async function go(id) {
   const data = await _fetch(id)
@@ -52,6 +52,7 @@ function _query() {
     lms.abstraction_period_start_month,
     lms.abstraction_period_end_day,
     lms.abstraction_period_end_month,
+    lms.measure_type,
     lms.restriction_type,
     lms.threshold_value,
     lms.threshold_unit,
@@ -78,6 +79,7 @@ select
     lvp.abstraction_period_start_month,
     lvp.abstraction_period_end_day,
     lvp.abstraction_period_end_month,
+    lms.measure_type,
     lms.restriction_type,
     lms.threshold_value,
     lms.threshold_unit,
