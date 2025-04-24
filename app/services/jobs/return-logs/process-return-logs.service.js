@@ -7,7 +7,7 @@
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
-const CheckReturnCycleService = require('../../return-logs/check-return-cycle.service.js')
+const CheckReturnCycleService = require('./check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 
 /**

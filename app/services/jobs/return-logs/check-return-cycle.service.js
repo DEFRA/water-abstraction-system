@@ -5,13 +5,13 @@
  * @module CheckReturnCycleService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
-} = require('../../lib/return-cycle-dates.lib.js')
-const ReturnCycleModel = require('../../models/return-cycle.model.js')
+} = require('../../../lib/return-cycle-dates.lib.js')
+const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
  * Given a return cycle type, it checks if the cycle exists and if not creates it then returns the return cycle

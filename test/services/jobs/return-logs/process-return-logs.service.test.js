@@ -13,7 +13,7 @@ const { returnCycle, returnRequirement } = require('../../../fixtures/return-log
 
 // Things we need to stub
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
-const CheckReturnCycleService = require('../../../../app/services/return-logs/check-return-cycle.service.js')
+const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
 // Thing under test
