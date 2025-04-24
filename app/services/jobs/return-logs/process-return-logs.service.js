@@ -6,7 +6,6 @@
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
 const CheckReturnCycleService = require('../../return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
@@ -35,9 +34,8 @@ async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await CreateCurrentReturnCycleService.go()
-
-    const returnCycle = await _fetchReturnCycle(cycle)
+    const summer = cycle === 'summer'
+    const returnCycle = await CheckReturnCycleService.go(summer)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
@@ -48,12 +46,6 @@ async function go(cycle) {
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
   }
-}
-
-async function _fetchReturnCycle(cycle) {
-  const summer = cycle === 'summer'
-
-  return CheckReturnCycleService.go(summer)
 }
 
 module.exports = {

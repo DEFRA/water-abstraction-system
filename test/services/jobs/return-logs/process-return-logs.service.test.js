@@ -12,7 +12,6 @@ const { expect } = Code
 const { returnCycle, returnRequirement } = require('../../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
-const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
 const CheckReturnCycleService = require('../../../../app/services/return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
@@ -43,7 +42,6 @@ describe('Jobs - Return Logs - Process return logs service', () => {
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
       Sinon.stub(CheckReturnCycleService, 'go').resolves(returnCycle())
-      Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves()
     })
 
     describe('and there are return requirements that need return logs created', () => {
