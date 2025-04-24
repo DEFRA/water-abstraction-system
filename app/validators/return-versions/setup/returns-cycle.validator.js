@@ -23,25 +23,18 @@ function go(payload, session) {
   const returnsCycle = payload.returnsCycle
 
   const VALID_VALUES = ['summer', 'winter-and-all-year']
-
   const errorMessage = 'Select the returns cycle for the requirements for returns'
 
   const schema = Joi.object({
     returnsCycle: Joi.string()
       .required()
       .valid(...VALID_VALUES)
-      .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage
-      })
+      .messages({ 'any.required': errorMessage, 'any.only': errorMessage, 'string.empty': errorMessage })
   })
     .custom((value, helpers) => {
       return _noSummerCycleWithQuarterlyReturns(value, helpers, session)
     }, 'No summer cycle if quarterly returns is selected')
-    .messages({
-      'any.invalid': "Quarterly returns submissions can't be set for returns in the summer cycle"
-    })
+    .messages({ 'any.invalid': "Quarterly returns submissions can't be set for returns in the summer cycle" })
 
   return schema.validate({ returnsCycle }, { abortEarly: false })
 }
