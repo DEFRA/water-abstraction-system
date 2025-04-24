@@ -18,10 +18,10 @@ const MonitoringStationHelper = require('../../../../support/helpers/monitoring-
 const MonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
 
 describe('Notices Setup - Abstraction alerts - Monitoring station service', () => {
-  let monitoringStation
   let licence
-  let licenceWithVersionPurpose
   let licenceVersionPurposeCondition
+  let licenceWithVersionPurpose
+  let monitoringStation
 
   beforeEach(async () => {
     monitoringStation = await MonitoringStationHelper.add()
@@ -61,89 +61,42 @@ describe('Notices Setup - Abstraction alerts - Monitoring station service', () =
   it('correctly returns the data', async () => {
     const result = await MonitoringStationService.go(monitoringStation.id)
 
-    expect(result).to.equal([
-      {
-        abstraction_period_end_day: 1,
-        abstraction_period_end_month: 1,
-        abstraction_period_start_day: 1,
-        abstraction_period_start_month: 2,
-        label: 'MONITOR PLACE',
-        licence_id: licence.id,
-        licence_ref: licence.licenceRef,
-        licence_version_purpose_condition_id: null,
-        measure_type: 'flow',
-        restriction_type: 'reduce',
-        start_date: new Date('2022-01-01'),
-        status: 'resume',
-        status_updated_at: null,
-        threshold_unit: 'm3/s',
-        threshold_value: 100
-      },
-      {
-        abstraction_period_end_day: 31,
-        abstraction_period_end_month: 3,
-        abstraction_period_start_day: 1,
-        abstraction_period_start_month: 1,
-        label: 'MONITOR PLACE',
-        licence_id: licenceWithVersionPurpose.id,
-        licence_ref: licenceWithVersionPurpose.licenceRef,
-        licence_version_purpose_condition_id: licenceVersionPurposeCondition.id,
-        measure_type: 'flow',
-        restriction_type: 'reduce',
-        start_date: new Date('2022-01-01'),
-        status: 'resume',
-        status_updated_at: null,
-        threshold_unit: 'm3/s',
-        threshold_value: 100
-      }
-    ])
-  })
-
-  describe('when the licence has a licence version purpose', () => {
-    it('correctly returns the data', async () => {
-      const result = await MonitoringStationService.go(monitoringStation.id)
-
-      expect(result[1]).to.equal({
-        abstraction_period_end_day: 31,
-        abstraction_period_end_month: 3,
-        abstraction_period_start_day: 1,
-        abstraction_period_start_month: 1,
-        label: 'MONITOR PLACE',
-        licence_id: licenceWithVersionPurpose.id,
-        licence_ref: licenceWithVersionPurpose.licenceRef,
-        licence_version_purpose_condition_id: licenceVersionPurposeCondition.id,
-        measure_type: 'flow',
-        restriction_type: 'reduce',
-        start_date: new Date('2022-01-01'),
-        status: 'resume',
-        status_updated_at: null,
-        threshold_unit: 'm3/s',
-        threshold_value: 100
-      })
-    })
-  })
-
-  describe('when the licence does not have a licence version purpose', () => {
-    it('correctly returns the data', async () => {
-      const result = await MonitoringStationService.go(monitoringStation.id)
-
-      expect(result[0]).to.equal({
-        abstraction_period_end_day: 1,
-        abstraction_period_end_month: 1,
-        abstraction_period_start_day: 1,
-        abstraction_period_start_month: 2,
-        label: 'MONITOR PLACE',
-        licence_id: licence.id,
-        licence_ref: licence.licenceRef,
-        licence_version_purpose_condition_id: null,
-        measure_type: 'flow',
-        restriction_type: 'reduce',
-        start_date: new Date('2022-01-01'),
-        status: 'resume',
-        status_updated_at: null,
-        threshold_unit: 'm3/s',
-        threshold_value: 100
-      })
+    expect(result).to.equal({
+      licenceMonitoringStations: [
+        {
+          abstraction_period_end_day: 1,
+          abstraction_period_end_month: 1,
+          abstraction_period_start_day: 1,
+          abstraction_period_start_month: 2,
+          licence_id: licence.id,
+          licence_ref: licence.licenceRef,
+          licence_version_purpose_condition_id: null,
+          measure_type: 'flow',
+          restriction_type: 'reduce',
+          start_date: new Date('2022-01-01'),
+          status: 'resume',
+          status_updated_at: null,
+          threshold_unit: 'm3/s',
+          threshold_value: 100
+        },
+        {
+          abstraction_period_end_day: 31,
+          abstraction_period_end_month: 3,
+          abstraction_period_start_day: 1,
+          abstraction_period_start_month: 1,
+          licence_id: licenceWithVersionPurpose.id,
+          licence_ref: licenceWithVersionPurpose.licenceRef,
+          licence_version_purpose_condition_id: licenceVersionPurposeCondition.id,
+          measure_type: 'flow',
+          restriction_type: 'reduce',
+          start_date: new Date('2022-01-01'),
+          status: 'resume',
+          status_updated_at: null,
+          threshold_unit: 'm3/s',
+          threshold_value: 100
+        }
+      ],
+      monitoringStationName: 'MONITOR PLACE'
     })
   })
 })
