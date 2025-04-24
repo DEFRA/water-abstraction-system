@@ -32,16 +32,18 @@ async function go(lines, returnSubmissionId, returnsFrequency, units, reported, 
     return
   }
 
-  const returnLines = lines.map((line) => ({
-    ...line,
-    reading: undefined,
-    createdAt: timestampForPostgres(),
-    id: generateUUID(),
-    returnSubmissionId,
-    timePeriod: returnsFrequency,
-    readingType: reported === 'abstraction-volumes' ? 'estimated' : 'measured',
-    userUnit: UNIT_NAMES[units]
-  }))
+  const returnLines = lines.map((line) => {
+    return {
+      ...line,
+      reading: undefined,
+      createdAt: timestampForPostgres(),
+      id: generateUUID(),
+      returnSubmissionId,
+      timePeriod: returnsFrequency,
+      readingType: reported === 'abstraction-volumes' ? 'estimated' : 'measured',
+      userUnit: UNIT_NAMES[units]
+    }
+  })
 
   return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
