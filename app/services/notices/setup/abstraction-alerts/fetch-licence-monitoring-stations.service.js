@@ -46,7 +46,7 @@ async function _fetch(id) {
  * @private
  */
 function _query() {
-  return `select
+  return `SELECT
     ms.label,
     lms.abstraction_period_start_day,
     lms.abstraction_period_start_month,
@@ -62,18 +62,18 @@ function _query() {
     l.licence_id,
     l.licence_ref,
     l.start_date
-from
+FROM
     public.monitoring_stations ms
-        join public.licence_monitoring_stations lms on
+        JOIN public.licence_monitoring_stations lms ON
         (lms.monitoring_station_id = ms.id)
-        join water.licences l on
+        JOIN water.licences l ON
         (l.licence_id = lms.licence_id)
-where
-    lms.licence_version_purpose_condition_id is null
-  and lms.deleted_at is null
-  and  ms.id=?
-union all
-select
+WHERE
+    lms.licence_version_purpose_condition_id IS NULL
+  AND lms.deleted_at IS NULL
+  AND  ms.id=?
+UNION ALL
+SELECT
     ms.label,
     lvp.abstraction_period_start_day,
     lvp.abstraction_period_start_month,
@@ -89,20 +89,20 @@ select
     l.licence_id,
     l.licence_ref,
     l.start_date
-from
+FROM
     public.monitoring_stations ms
-        join public.licence_monitoring_stations lms on
+        JOIN public.licence_monitoring_stations lms ON
         (lms.monitoring_station_id = ms.id)
-        join water.licences l on
+        JOIN water.licences l ON
         (l.licence_id = lms.licence_id)
-        join public.licence_version_purpose_conditions lvpc on
+        JOIN public.licence_version_purpose_conditions lvpc ON
         lvpc.id = lms.licence_version_purpose_condition_id
-        join public.licence_version_purposes lvp on
+        JOIN public.licence_version_purposes lvp ON
         lvp.id = lvpc.licence_version_purpose_id
-where
-    lms.licence_version_purpose_condition_id is not null
-  and lms.deleted_at is null
-  and  ms.id=?`
+WHERE
+    lms.licence_version_purpose_condition_id IS NOT NULL
+  AND lms.deleted_at IS NULL
+  AND  ms.id=?`
 }
 
 module.exports = {
