@@ -53,11 +53,11 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
       session.data.quarterlyReturns = true
     })
 
-    it("fails validation with the error message 'Quarterly returns submissions can't be set for returns in the summer cycle'", () => {
+    it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
       expect(result.error.details[0].message).to.equal(
-        "Quarterly returns submissions can't be set for returns in the summer cycle"
+        'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
       )
     })
   })
