@@ -32,8 +32,10 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'invitations',
+          name: 'Returns: invitation',
           notificationType: 'Returns invitation',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'returnInvitation'
         })
       })
 
@@ -66,8 +68,10 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'reminders',
+          name: 'Returns: reminder',
           notificationType: 'Returns reminder',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'returnReminder'
         })
       })
 
@@ -100,8 +104,10 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'ad-hoc',
+          name: 'Returns: ad-hoc',
           notificationType: 'Ad hoc',
-          referenceCode: matchingSession.referenceCode // randomly generated
+          referenceCode: matchingSession.referenceCode, // randomly generated
+          subType: 'adHocReminder'
         })
       })
 
@@ -134,6 +140,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'abstraction-alert',
+          name: 'Water abstraction alert',
           notificationType: 'Abstraction alert',
           referenceCode: matchingSession.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts'
