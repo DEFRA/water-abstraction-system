@@ -34,7 +34,7 @@ function go(options, session) {
     .messages({
       'any.required': errorMessage,
       'array.sparse': errorMessage,
-      'any.invalid': "Quarterly returns submissions can't be set for returns in the summer cycle"
+      'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
     })
 
   return schema.validate({ additionalSubmissionOptions }, { abortEarly: false })
