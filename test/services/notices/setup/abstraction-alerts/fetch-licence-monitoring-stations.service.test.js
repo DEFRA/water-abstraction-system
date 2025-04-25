@@ -17,7 +17,7 @@ const MonitoringStationHelper = require('../../../../support/helpers/monitoring-
 // Thing under test
 const FetchLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-licence-monitoring-stations.service.js')
 
-describe('Notices Setup - Abstraction alerts - Fetch licence monitoring stations service', () => {
+describe('Notices Setup - Abstraction Alerts - Fetch Licence Monitoring Stations service', () => {
   let licence
   let licenceVersionPurposeCondition
   let licenceWithVersionPurpose

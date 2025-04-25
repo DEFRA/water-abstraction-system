@@ -70,11 +70,11 @@ const NOTIFICATION_TYPES = {
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
  * @param {string} notificationType - A string relating to one of the keys for `NOTIFICATION_TYPES`
- * @param {string} monitoringStationId
+ * @param {string} [monitoringStationId=null] - The UUID of the monitoring station we are creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(notificationType, monitoringStationId) {
+async function go(notificationType, monitoringStationId = null) {
   const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
 
   let additionalData = {}
