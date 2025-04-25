@@ -12,9 +12,11 @@ const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 async function seed() {
   let year = 1959
 
-  let determinationDate = new Date(`${year}-04-01`)
+  let determinationDate
 
-  while (determinationDate < new Date()) {
+  do {
+    determinationDate = new Date(`${year}-04-01`)
+
     const summerReturnCycle = _generateReturnCycle(true, determinationDate)
     const allYearReturnCycle = _generateReturnCycle(false, determinationDate)
 
@@ -26,8 +28,7 @@ async function seed() {
     await _upsert(allYearReturnCycle)
 
     year++
-    determinationDate = new Date(`${year}-04-01`)
-  }
+  } while (determinationDate < new Date())
 }
 
 function _generateReturnCycle(summer, determinationDate) {
