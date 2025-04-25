@@ -5,7 +5,7 @@
  * @module InitiateSessionService
  */
 
-const MonitoringStationService = require('./abstraction-alerts/monitoring-station.service.js')
+const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -80,7 +80,7 @@ async function go(notificationType, monitoringStationId) {
   let additionalData = {}
 
   if (monitoringStationId) {
-    additionalData = await MonitoringStationService.go(monitoringStationId)
+    additionalData = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
   }
 
   const session = await SessionModel.query()

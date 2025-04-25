@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Things we need to stub
-const MonitoringStationService = require('../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
+const DetermineLicenceMonitoringStationsService = require('../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/notices/setup/initiate-session.service.js')
@@ -149,7 +149,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       beforeEach(() => {
         monitoringStationData = AbstractionAlertSessionData.monitoringStation()
 
-        Sinon.stub(MonitoringStationService, 'go').resolves(monitoringStationData)
+        Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
       })
 
       it('creates a new session record', async () => {

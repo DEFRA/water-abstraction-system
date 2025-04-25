@@ -13,9 +13,9 @@ const LicenceMonitoringStationModel = require('../../../../support/helpers/licen
 const MonitoringStationHelper = require('../../../../support/helpers/monitoring-station.helper.js')
 
 // Thing under test
-const MonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
+const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
 
-describe('Notices Setup - Abstraction alerts - Monitoring station service', () => {
+describe('Notices Setup - Abstraction alerts - Determine licence monitoring stations service', () => {
   let licence
   let monitoringStation
 
@@ -35,7 +35,7 @@ describe('Notices Setup - Abstraction alerts - Monitoring station service', () =
   })
 
   it('correctly returns the data', async () => {
-    const result = await MonitoringStationService.go(monitoringStation.id)
+    const result = await DetermineLicenceMonitoringStationsService.go(monitoringStation.id)
 
     expect(result).to.equal({
       licenceMonitoringStations: [
@@ -62,7 +62,7 @@ describe('Notices Setup - Abstraction alerts - Monitoring station service', () =
 
   describe('the "monitoringStationName" property', () => {
     it('should return the monitoring station name', async () => {
-      const result = await MonitoringStationService.go(monitoringStation.id)
+      const result = await DetermineLicenceMonitoringStationsService.go(monitoringStation.id)
 
       expect(result.monitoringStationName).to.equal('MONITOR PLACE')
     })

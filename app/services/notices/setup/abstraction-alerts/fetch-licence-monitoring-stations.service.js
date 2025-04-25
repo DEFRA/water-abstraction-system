@@ -2,7 +2,7 @@
 
 /**
  * Fetches the data needed for the monitoring station abstraction alert journey
- * @module FetchMonitoringStationService
+ * @module FetchLicenceMonitoringStationsService
  */
 
 const { db } = require('../../../../../db/db.js')
