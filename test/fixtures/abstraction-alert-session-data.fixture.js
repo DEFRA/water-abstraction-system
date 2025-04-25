@@ -1,7 +1,7 @@
 'use strict'
 
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
  * Represents a complete response from `MonitoringStationService`
