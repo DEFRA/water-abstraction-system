@@ -9,10 +9,10 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const AdHocLicenceService = require('../../../../app/services/notices/setup/ad-hoc-licence.service.js')
+const AdHocLicenceService = require('../../../../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 
 describe('Notices - Setup - Ad Hoc Licence service', () => {
   let session

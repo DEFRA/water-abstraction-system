@@ -16,14 +16,14 @@ const CheckService = require('../../app/services/notices/setup/check.service.js'
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
-const LicenceService = require('../../app/services/notices/setup/ad-hoc-licence.service.js')
+const LicenceService = require('../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
-const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period.service.js')
+const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
-const SubmitLicenceService = require('../../app/services/notices/setup/submit-ad-hoc-licence.service.js')
+const SubmitLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../../app/services/notices/setup/submit-returns-period.service.js')
+const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
