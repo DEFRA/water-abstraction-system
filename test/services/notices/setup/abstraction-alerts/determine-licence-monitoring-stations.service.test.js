@@ -15,7 +15,7 @@ const MonitoringStationHelper = require('../../../../support/helpers/monitoring-
 // Thing under test
 const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
 
-describe('Notices Setup - Abstraction alerts - Determine licence monitoring stations service', () => {
+describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stations service', () => {
   let licence
   let monitoringStation
 
