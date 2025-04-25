@@ -34,7 +34,9 @@ function go(payload, session) {
     .custom((value, helpers) => {
       return _noSummerCycleWithQuarterlyReturns(value, helpers, session)
     }, 'No summer cycle if quarterly returns is selected')
-    .messages({ 'any.invalid': "Quarterly returns submissions can't be set for returns in the summer cycle" })
+    .messages({
+      'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
+    })
 
   return schema.validate({ returnsCycle }, { abortEarly: false })
 }
