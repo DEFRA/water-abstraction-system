@@ -8,7 +8,7 @@
 const { db } = require('../../../../../db/db.js')
 
 /**
- * Orchestrates fetching the data needed for the Monitoring station journey
+ * Fetches the data needed for the monitoring station abstraction alert journey
  *
  * @param {string} id
  * @returns {Promise<object[]>}
