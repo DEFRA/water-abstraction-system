@@ -58,13 +58,13 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
       }
     })
 
-    it("fails validation with the error message 'Quarterly returns submissions can't be set for returns in the summer cycle'", () => {
+    it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
       const result = AdditionalSubmissionOptionsValidator.go(payload, session)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal(
-        "Quarterly returns submissions can't be set for returns in the summer cycle"
+        'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
       )
     })
   })
