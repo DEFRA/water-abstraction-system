@@ -5,8 +5,8 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
+const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
+const { formatLongDate } = require('../../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page

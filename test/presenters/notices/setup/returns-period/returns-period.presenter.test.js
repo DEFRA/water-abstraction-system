@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ReturnsPeriodPresenter = require('../../../../app/presenters/notices/setup/returns-period.presenter.js')
+const ReturnsPeriodPresenter = require('../../../../../app/presenters/notices/setup/returns-period/returns-period.presenter.js')
 
 describe('Notices - Setup - Returns Period presenter', () => {
   const currentYear = 2025

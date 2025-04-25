@@ -5,8 +5,8 @@
  * @module AdHocLicenceService
  */
 
-const AdHocLicencePresenter = require('../../../presenters/notices/setup/ad-hoc-licence.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const AdHocLicencePresenter = require('../../../../presenters/notices/setup/ad-hoc/ad-hoc-licence.presenter.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/ad-hoc-licence` page
