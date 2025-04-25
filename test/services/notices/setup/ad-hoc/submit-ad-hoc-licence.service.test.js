@@ -8,12 +8,12 @@ const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const LicenceHelper = require('../../../../support/helpers/licence.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const SubmitAdHocLicenceService = require('../../../../app/services/notices/setup/submit-ad-hoc-licence.service.js')
+const SubmitAdHocLicenceService = require('../../../../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const Sinon = require('sinon')
 
 describe('Notices - Setup - Submit Ad Hoc Licence service', () => {

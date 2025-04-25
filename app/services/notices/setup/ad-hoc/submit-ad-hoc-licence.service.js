@@ -5,12 +5,12 @@
  * @module SubmitAdHocLicenceService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
-const AdHocLicencePresenter = require('../../../presenters/notices/setup/ad-hoc-licence.presenter.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
-const AdHocLicenceValidator = require('../../../validators/notices/setup/ad-hoc-licence.validator.js')
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const LicenceModel = require('../../../../models/licence.model.js')
+const AdHocLicencePresenter = require('../../../../presenters/notices/setup/ad-hoc/ad-hoc-licence.presenter.js')
+const ReturnLogModel = require('../../../../models/return-log.model.js')
+const SessionModel = require('../../../../models/session.model.js')
+const AdHocLicenceValidator = require('../../../../validators/notices/setup/ad-hoc-licence.validator.js')
+const DetermineReturnsPeriodService = require('../determine-returns-period.service.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/ad-hoc-licence` page
