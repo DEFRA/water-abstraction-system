@@ -9,8 +9,8 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionModel = require('../../../../app/models/session.model.js')
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 
 // Things we need to stub
 const MonitoringStationService = require('../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
@@ -143,12 +143,13 @@ describe('Notices - Setup - Initiate Session service', () => {
 
     describe('when the "notificationType" is "abstraction-alert"', () => {
       const monitoringStationId = '1234'
-      let monitoringStationsData
+
+      let monitoringStationData
 
       beforeEach(() => {
-        monitoringStationsData = AbstractionAlertSessionData.monitoringStation()
+        monitoringStationData = AbstractionAlertSessionData.monitoringStation()
 
-        Sinon.stub(MonitoringStationService, 'go').resolves(monitoringStationsData)
+        Sinon.stub(MonitoringStationService, 'go').resolves(monitoringStationData)
       })
 
       it('creates a new session record', async () => {
@@ -162,7 +163,7 @@ describe('Notices - Setup - Initiate Session service', () => {
           notificationType: 'Abstraction alert',
           referenceCode: matchingSession.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts',
-          ...monitoringStationsData
+          ...monitoringStationData
         })
       })
 
