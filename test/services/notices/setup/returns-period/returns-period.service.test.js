@@ -9,10 +9,10 @@ const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ReturnsPeriodService = require('../../../../app/services/notices/setup/returns-period.service.js')
+const ReturnsPeriodService = require('../../../../../app/services/notices/setup/returns-period/returns-period.service.js')
 
 describe('Notices - Setup - Returns Period service', () => {
   let clock
