@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AdHocLicencePresenter = require('../../../../app/presenters/notices/setup/ad-hoc-licence.presenter.js')
+const AdHocLicencePresenter = require('../../../../../app/presenters/notices/setup/ad-hoc/ad-hoc-licence.presenter.js')
 
 describe('Notices - Setup - Ad Hoc Licence presenter', () => {
   const referenceCode = 'ADHC-1234'
