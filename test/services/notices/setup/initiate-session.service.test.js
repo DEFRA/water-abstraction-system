@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModel = require('../../../../app/models/session.model.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 
 // Things we need to stub
 const MonitoringStationService = require('../../../../app/services/notices/setup/abstraction-alerts/monitoring-station.service.js')
@@ -142,9 +143,12 @@ describe('Notices - Setup - Initiate Session service', () => {
 
     describe('when the "notificationType" is "abstraction-alert"', () => {
       const monitoringStationId = '1234'
+      let monitoringStationsData
 
       beforeEach(() => {
-        Sinon.stub(MonitoringStationService, 'go').resolves({ label: 'Death star' })
+        monitoringStationsData = AbstractionAlertSessionData.monitoringStation()
+
+        Sinon.stub(MonitoringStationService, 'go').resolves(monitoringStationsData)
       })
 
       it('creates a new session record', async () => {
@@ -154,11 +158,11 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           journey: 'abstraction-alert',
-          label: 'Death star',
           name: 'Water abstraction alert',
           notificationType: 'Abstraction alert',
           referenceCode: matchingSession.referenceCode, // randomly generated
-          subType: 'waterAbstractionAlerts'
+          subType: 'waterAbstractionAlerts',
+          ...monitoringStationsData
         })
       })
 
@@ -167,7 +171,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data.label).to.equal('Death star')
+        expect(matchingSession.data.monitoringStationName).to.equal('Death star')
       })
 
       it('correctly returns the redirect path and session id', async () => {
