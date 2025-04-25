@@ -17,44 +17,9 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
     sessionData = {
       reported: 'abstraction-volumes',
       units: 'cubic-metres',
-      singleVolume: false
+      singleVolume: false,
+      meterProvided: 'no'
     }
-  })
-
-  describe('when session.reported is abstraction-volumes', () => {
-    beforeEach(async () => {
-      sessionData.reported = 'abstraction-volumes'
-    })
-
-    it('type is estimated', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-      expect(result.type).to.equal('estimated')
-    })
-
-    it('method is abstractionVolumes', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-      expect(result.method).to.equal('abstractionVolumes')
-    })
-  })
-
-  describe('when session.reported is not abstraction-volumes', () => {
-    beforeEach(async () => {
-      sessionData.reported = 'meter-readings'
-    })
-
-    it('type is estimated', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-      expect(result.type).to.equal('measured')
-    })
-
-    it('method is oneMeter', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-      expect(result.method).to.equal('oneMeter')
-    })
   })
 
   it('correctly sets units', () => {
@@ -70,6 +35,30 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
     })
 
     expect(results).to.equal(['m³', 'l', 'Ml', 'gal'])
+  })
+
+  describe('when session.reported is abstraction-volumes', () => {
+    beforeEach(async () => {
+      sessionData.reported = 'abstraction-volumes'
+    })
+
+    it('sets method as abstractionVolumes', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.method).to.equal('abstractionVolumes')
+    })
+  })
+
+  describe('when session.reported is not abstraction-volumes', () => {
+    beforeEach(async () => {
+      sessionData.reported = 'meter-readings'
+    })
+
+    it('sets method as oneMeter', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.method).to.equal('oneMeter')
+    })
   })
 
   describe('when session.singleVolume is true', () => {
@@ -158,6 +147,71 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
       expect(result.totalCustomDateStart).to.be.undefined()
       expect(result.totalCustomDateEnd).to.be.undefined()
+    })
+  })
+
+  describe('when session.meterProvided is no', () => {
+    beforeEach(async () => {
+      sessionData.meterProvided = 'no'
+    })
+
+    it('sets type as estimated', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.type).to.equal('estimated')
+    })
+
+    it('returns an empty array for meters', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.meters).to.equal([])
+    })
+  })
+
+  describe('when session.meterProvided is yes', () => {
+    beforeEach(async () => {
+      sessionData.meterProvided = 'yes'
+      sessionData.meterMake = 'Make'
+      sessionData.meterSerialNumber = '123456789'
+      sessionData.meterStartReading = 1000
+      sessionData.meter10TimesDisplay = 'no'
+      sessionData.lines = [
+        {
+          startDate: '2023-01-01',
+          endDate: '2023-01-31',
+          quantity: 100
+        },
+        {
+          startDate: '2023-02-01',
+          endDate: '2023-02-28',
+          quantity: 200
+        }
+      ]
+    })
+
+    it('sets type as measured', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.type).to.equal('measured')
+    })
+
+    it('returns an array with meter details', () => {
+      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+      expect(result.meters).to.equal([
+        {
+          units: 'm³',
+          meterDetailsProvided: true,
+          multiplier: 1,
+          manufacturer: 'Make',
+          serialNumber: '123456789',
+          startReading: 1000,
+          readings: {
+            '2023-01-01_2023-01-31': 100,
+            '2023-02-01_2023-02-28': 200
+          }
+        }
+      ])
     })
   })
 })

@@ -5,6 +5,8 @@
  * @module GenerateReturnSubmissionMetadata
  */
 
+const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+
 const UNIT_NAMES = {
   'cubic-metres': 'm³',
   litres: 'l',
@@ -13,21 +15,49 @@ const UNIT_NAMES = {
 }
 
 /**
- * TODO: Implement and document
+ * TODO: Document
  *
  * @param session
  *
- * @param trx
  * @returns
  */
 function go(session) {
   return {
-    type: session.reported === 'abstraction-volumes' ? 'estimated' : 'measured',
+    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
     units: UNIT_NAMES[session.units],
-    meters: [], // TODO: Implement this
+    meters: _meters(session),
     ..._total(session)
   }
+}
+
+function _formatReadings(lines) {
+  return lines.reduce((acc, line) => {
+    const { startDate, endDate, quantity } = line
+
+    const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
+    acc[key] = quantity
+
+    return acc
+  }, {})
+}
+
+function _meters(session) {
+  if (session.meterProvided === 'no') {
+    return []
+  }
+
+  return [
+    {
+      units: UNIT_NAMES[session.units],
+      meterDetailsProvided: true, // We hardcode this to true as we only return meter details if meterProvided is `yes`
+      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+      manufacturer: session.meterMake,
+      serialNumber: session.meterSerialNumber,
+      startReading: session.meterStartReading,
+      readings: _formatReadings(session.lines)
+    }
+  ]
 }
 
 function _total(session) {
