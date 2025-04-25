@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching the data needed for the Monitoring station journey
+ * Fetches the data needed for the monitoring station abstraction alert journey
  * @module FetchMonitoringStationService
  */
 
