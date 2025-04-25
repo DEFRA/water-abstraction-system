@@ -102,7 +102,7 @@ FROM
 WHERE
     lms.licence_version_purpose_condition_id IS NOT NULL
   AND lms.deleted_at IS NULL
-  AND  ms.id=?`
+  AND  ms.id=?;`
 }
 
 module.exports = {
