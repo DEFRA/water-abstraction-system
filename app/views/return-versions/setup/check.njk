@@ -1,7 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
@@ -13,18 +12,6 @@
       text: notification.text
     }) }}
   {% endif %}
-
-  {# Error summary #}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text
-        }
-      ]
-    }) }}
-  {%endif%}
 
   {# Main heading #}
   <div class="govuk-body">

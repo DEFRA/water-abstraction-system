@@ -30,7 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session)
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
@@ -59,8 +59,8 @@ async function _save(session, requirementIndex, payload) {
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = ReturnsCycleValidator.go(payload)
+function _validate(payload, session) {
+  const validation = ReturnsCycleValidator.go(payload, session)
 
   if (!validation.error) {
     return null
