@@ -11,7 +11,7 @@ const { db } = require('../../../../../db/db.js')
  * Orchestrates fetching the data needed for the Monitoring station journey
  *
  * @param {string} id
- * @returns {Promise<{object}>}
+ * @returns {Promise<object[]>}
  */
 async function go(id) {
   const { rows } = await _fetch(id)
