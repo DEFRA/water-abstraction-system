@@ -10,19 +10,23 @@ const {
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
 async function seed() {
-  const today = new Date()
-  const day = today.getDay()
-  const month = today.getMonth()
-  const year = today.getFullYear()
+  let year = 1959
 
-  for (let i = 0; i < 5; i++) {
-    const determinationDate = new Date(year - i, month, day)
+  let determinationDate = new Date(`${year}-04-01`)
 
+  while (determinationDate < new Date()) {
     const summerReturnCycle = _generateReturnCycle(true, determinationDate)
     const allYearReturnCycle = _generateReturnCycle(false, determinationDate)
 
+    if (allYearReturnCycle.startDate === new Date('2019-04-01')) {
+      allYearReturnCycle.dueDate = new Date('2020-10-16')
+    }
+
     await _upsert(summerReturnCycle)
     await _upsert(allYearReturnCycle)
+
+    year++
+    determinationDate = new Date(`${year}-04-01`)
   }
 }
 
