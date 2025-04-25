@@ -7,27 +7,46 @@
 
 const SessionModel = require('../../../models/session.model.js')
 
+/**
+ * Defines the configuration for supported notification types.
+ *
+ * This structure enables consistent handling and display of different notification types
+ * across the system. Each type includes legacy fields (`name` and `subType`) required for backwards compatibility.
+ *
+ * Legacy context:
+ * - `name` is used in the legacy UI to render the notification type on `/notifications/report`
+ * - `subType` is used when querying notifications in the legacy system
+ *
+ * @private
+ */
 const NOTIFICATION_TYPES = {
   invitations: {
     journey: 'invitations',
+    name: 'Returns: invitation',
     prefix: 'RINV-',
     redirectPath: 'returns-period',
+    subType: 'returnInvitation',
     type: 'Returns invitation'
   },
   reminders: {
     journey: 'reminders',
+    name: 'Returns: reminder',
     prefix: 'RREM-',
     redirectPath: 'returns-period',
+    subType: 'returnReminder',
     type: 'Returns reminder'
   },
   'ad-hoc': {
     journey: 'ad-hoc',
+    name: 'Returns: ad-hoc',
     prefix: 'ADHC-',
     redirectPath: 'ad-hoc-licence',
+    subType: 'adHocReminder',
     type: 'Ad hoc'
   },
   'abstraction-alert': {
     journey: 'abstraction-alert',
+    name: 'Water abstraction alert',
     prefix: 'WAA-',
     redirectPath: 'abstraction-alert',
     subType: 'waterAbstractionAlerts',
@@ -54,14 +73,15 @@ const NOTIFICATION_TYPES = {
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(notificationType) {
-  const { prefix, type, journey, redirectPath, subType } = NOTIFICATION_TYPES[notificationType]
+  const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
 
   const session = await SessionModel.query()
     .insert({
       data: {
-        referenceCode: _generateReferenceCode(prefix),
-        notificationType: type,
         journey,
+        name,
+        notificationType: type,
+        referenceCode: _generateReferenceCode(prefix),
         subType
       }
     })
