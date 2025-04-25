@@ -74,7 +74,7 @@ const NOTIFICATION_TYPES = {
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(notificationType, monitoringStationId) {
+async function go(notificationType, monitoringStationId = null) {
   const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
 
   let additionalData = {}
