@@ -33,7 +33,9 @@ describe('Notices - Setup - Create Notice presenter', () => {
         endDate: new Date(`2025-06-30`),
         startDate: new Date(`2025-04-01`),
         summer: 'true'
-      }
+      },
+      subType: 'returnInvitation',
+      name: 'Returns: invitation'
     }
 
     auth = {
@@ -98,6 +100,14 @@ describe('Notices - Setup - Create Notice presenter', () => {
   })
 
   describe('the "metadata" property', () => {
+    describe('the "name" property', () => {
+      it('correctly returns the "name"', () => {
+        const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+        expect(result.metadata.name).to.equal('Returns: invitation')
+      })
+    })
+
     describe('the "options.excludeLicences" property', () => {
       describe('when there licences excluded from the recipients list', () => {
         beforeEach(() => {
@@ -159,75 +169,11 @@ describe('Notices - Setup - Create Notice presenter', () => {
     })
   })
 
-  describe('when the journey is for "invitations"', () => {
-    beforeEach(() => {
-      session.journey = 'invitations'
-    })
-
-    it('correctly sets the "metadata.name"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.metadata.name).to.equal('Returns: invitation')
-    })
-
-    it('correctly sets the "subtype"', () => {
+  describe('the "subType" property', () => {
+    it('correctly returns the "subType"', () => {
       const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
       expect(result.subtype).to.equal('returnInvitation')
-    })
-  })
-
-  describe('when the journey is for "reminders"', () => {
-    beforeEach(() => {
-      session.journey = 'reminders'
-    })
-
-    it('correctly sets the "metadata.name"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.metadata.name).to.equal('Returns: reminder')
-    })
-
-    it('correctly sets the "subtype"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.subtype).to.equal('returnReminder')
-    })
-  })
-
-  describe('when the journey is for "ad-hoc"', () => {
-    beforeEach(() => {
-      session.journey = 'ad-hoc'
-    })
-
-    it('correctly sets the "metadata.name"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.metadata.name).to.equal('Returns: ad-hoc')
-    })
-
-    it('correctly sets the "subtype"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.subtype).to.equal('adHocReminder')
-    })
-  })
-
-  describe('when the journey is not recognised', () => {
-    beforeEach(() => {
-      session.journey = ''
-    })
-
-    it('correctly sets the "metadata.name"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.metadata.name).to.equal('')
-    })
-
-    it('correctly sets the "subtype"', () => {
-      const result = CreateNoticePresenter.go(session, testRecipients, auth)
-
-      expect(result.subtype).to.equal('')
     })
   })
 })
