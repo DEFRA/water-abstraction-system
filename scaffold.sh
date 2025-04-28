@@ -21,6 +21,8 @@
 #   - __MODULENAME__       → PascalCase + Service/Presenter
 #   - __REQUIRE_PATH__     → Relative path to source file (for tests)
 #   - __DESCRIBE_LABEL__   → Human-readable name for test suite
+#   - __PRESENTERNAME__    → PascalCase Presenter name (for services)
+#   - __PRESENTER_PATH__   → Relative require path to the presenter
 #
 # 📁 Required Templates:
 #   - templates/service.js
@@ -40,6 +42,9 @@ fi
 
 RAW_NAME=$(basename "$INPUT_PATH")
 REL_DIR=$(dirname "$INPUT_PATH")
+if [ "$REL_DIR" = "." ]; then
+  REL_DIR=""
+fi
 
 to_pascal_case() {
   echo "$1" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1' | tr -d ' '
@@ -67,7 +72,13 @@ render_template() {
     file_name="${RAW_NAME}.${suffix_lower}.test.js"
   fi
 
-  local output_path="${output_dir}/${REL_DIR}/${file_name}"
+  local output_path=""
+  if [ -n "$REL_DIR" ]; then
+    output_path="${output_dir}/${REL_DIR}/${file_name}"
+  else
+    output_path="${output_dir}/${file_name}"
+  fi
+
   mkdir -p "$(dirname "$output_path")"
 
   if [ -f "$output_path" ]; then
@@ -76,8 +87,12 @@ render_template() {
   fi
 
   local require_path=""
+  local presenter_path=""
   if [ "$is_test" = "true" ]; then
     require_path="../../../../app/${suffix_lower}s/${REL_DIR}/${RAW_NAME}.${suffix_lower}.js"
+  fi
+  if [ "$suffix" = "Service" ]; then
+    presenter_path="../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
   fi
 
   local readable_label="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $suffix"
@@ -85,6 +100,8 @@ render_template() {
   sed -e "s/__MODULENAME__/${module_name}/g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
       -e "s/__DESCRIBE_LABEL__/${readable_label}/g" \
+      -e "s/__PRESENTERNAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -94,6 +111,6 @@ render_template() {
 render_template "$TEMPLATE_SERVICE"   "app/services"    "Service"   "false"
 render_template "$TEMPLATE_PRESENTER" "app/presenters"  "Presenter" "false"
 
-# Test files (using separate templates)
+# Test files
 render_template "$TEMPLATE_TEST_SERVICE"   "test/services"   "Service"   "true"
 render_template "$TEMPLATE_TEST_PRESENTER" "test/presenters" "Presenter" "true"
