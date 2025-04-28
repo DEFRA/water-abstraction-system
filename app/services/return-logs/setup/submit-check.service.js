@@ -7,6 +7,7 @@
 
 const CreateNewReturnLinesService = require('./create-new-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
+const GenerateReturnSubmissionMetadata = require('./generate-return-submission-metadata.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -19,10 +20,10 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} - The result of the submission process
  */
 async function go(sessionId, user) {
-  // TODO: Consider error handling
+  // TODO: Consider validation
   const session = await SessionModel.query().findById(sessionId)
 
-  const metadata = _generateMetadata(session)
+  const metadata = GenerateReturnSubmissionMetadata.go(session)
 
   await ReturnLogModel.transaction(async (trx) => {
     const returnSubmission = await CreateReturnSubmissionService.go(
@@ -49,11 +50,6 @@ async function go(sessionId, user) {
 
   // TODO: Confirm how we want to exit the service
   return session.returnLogId
-}
-
-// TODO: Confirm metadata format and implement
-function _generateMetadata(session) {
-  return {}
 }
 
 /**
