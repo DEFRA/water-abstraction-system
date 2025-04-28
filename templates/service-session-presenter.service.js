@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module __MODULENAME__
+ * @module __MODULE_NAME__
  */
 
 const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')

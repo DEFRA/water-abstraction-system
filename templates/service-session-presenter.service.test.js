@@ -11,7 +11,7 @@ const { expect } = Code
 const SessionHelper = require('')
 
 // Thing under test
-const __MODULENAME__ = require('__REQUIRE_PATH__')
+const __MODULE_NAME__ = require('__REQUIRE_PATH__')
 
 describe('__DESCRIBE_LABEL__', () => {
   let session
@@ -24,7 +24,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await __MODULENAME__.go(session.id)
+      const result = await __MODULE_NAME__.go(session.id)
 
       expect(result).to.equal({})
     })

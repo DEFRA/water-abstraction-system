@@ -3,7 +3,7 @@
 # ==============================================================================
 # 🛠 Scaffold Script for Services, Presenters & Fetch Services
 # ------------------------------------------------------------------------------
-# Quickly generates source files and corresponding test files from templates.
+# Quickly generates source files and matching test files based on templates.
 #
 # ✅ Usage
 # ------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 #     → app/services/notices/setup/fella/my-module.service.js
 #     → test/services/notices/setup/fella/my-module.service.test.js
 #
-# 🧩 Templates required
+# 🧩 Templates Required
 # ------------------------------------------------------------------------------
 #   templates/service.js
 #   templates/service.test.js
@@ -38,42 +38,49 @@
 # ------------------------------------------------------------------------------
 # After running, you'll be prompted to choose:
 #
-#   1) service Service only
+#   1) Service only
 #   2) Service + Presenter
-#   3) Service + Presenter + FetchService
+#   3) Service + Presenter + Fetch
 #   4) Presenter only
 #   5) Service + Presenter + Session
 #
-# ➡ Different templates are selected automatically depending on choice.
+# ➡ Different templates and setup paths are selected automatically based on your choice.
 #
-# 🛠 Special Handling
+# 🛠 Key Features
 # ------------------------------------------------------------------------------
-# - **Relative import paths** inside service/test files are dynamically calculated.
-# - **SessionModel import** is correctly handled, even for deeply nested services.
-# - **Test file paths** adjust automatically based on service location.
-# - **Existing files** are skipped (no overwrites).
+# - Always generates both source files and corresponding test files.
+# - Correct `require()` paths are dynamically calculated based on folder depth.
+# - Handles nested folder structures under `services/` cleanly.
+# - Correct relative pathing for `SessionModel` imports inside services.
+# - Skips file creation if the file already exists (safe by default).
+#
+# 🧠 Special Handling
+# ------------------------------------------------------------------------------
+# - **render_file()**: Renders the actual source file (Service, Presenter, FetchService).
+# - **render_test_file()**: Renders the corresponding test file.
+# - **SessionModel imports** are dynamically resolved based on service file depth.
 #
 # 🛠 Path Calculation Rules
 # ------------------------------------------------------------------------------
-# - **build_up_path()**: Calculates the number of `../` needed for test file `require()` imports.
-# - **build_session_model_path()**: Calculates the number of `../` needed for importing SessionModel inside a service file.
+# - **build_up_path()**: Calculates how many `../` are needed in tests to require the correct source file.
+# - **build_session_model_path()**: Calculates how many `../` are needed to correctly import `models/session.model.js` inside a service.
 #
 # Example:
-#   - Service file:  `app/services/a/b/c/my-service.service.js`
-#   - Needs import:  `../../../../models/session.model.js`
+#   - Service at: `app/services/a/b/c/my-service.service.js`
+#   - Will import: `../../../../models/session.model.js`
 #
-# 📋 Placeholders Replaced
+# 📋 Placeholders Replaced in Templates
 # ------------------------------------------------------------------------------
-# In templates, these placeholders are replaced automatically:
+# These placeholders are automatically replaced inside templates:
 #
-#   - `__MODULENAME__`           → PascalCase service/presenter class name
-#   - `__REQUIRE_PATH__`          → Test file require() path to the module under test
-#   - `__DESCRIBE_LABEL__`        → Human-readable label for test descriptions
-#   - `__PRESENTERNAME__`         → PascalCase presenter class name
-#   - `__PRESENTER_PATH__`        → Path to the presenter for services
-#   - `__FETCH_NAME__`            → PascalCase FetchService class name
-#   - `__FETCH_PATH__`            → Path to FetchService for services/tests
-#   - `__SESSION_MODEL_PATH__`    → Path to SessionModel for services/tests
+#   - `__MODULE_NAME__`            → PascalCase Service, Presenter, or FetchService name
+#   - `__REQUIRE_PATH__`           → Test file require() path to the module under test
+#   - `__DESCRIBE_LABEL__`         → Human-readable label for test `describe()` blocks
+#   - `__PRESENTER_NAME__`         → PascalCase presenter class name
+#   - `__PRESENTER_PATH__`         → Path to the Presenter module (for services)
+#   - `__FETCH_NAME__`             → PascalCase FetchService class name
+#   - `__FETCH_PATH__`             → Path to the FetchService (for services/tests)
+#   - `__SESSION_MODEL_PATH__`     → Correct path to import SessionModel
 #
 # ==============================================================================
 
@@ -163,8 +170,34 @@ render_file() {
   local template="$1"
   local output_path="$2"
   local module_name="$3"
+  local presenter_path="$4"
+  local fetch_path="$5"
+  local session_model_path="$6"
+
+  mkdir -p "$(dirname "$output_path")"
+
+  if [ -f "$output_path" ]; then
+    echo "⚠️  Skipped (already exists): $output_path"
+    return
+  fi
+
+  sed -e "s/__MODULE_NAME__/${module_name}/g" \
+      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
+      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
+      -e "s#__FETCH_PATH__#${fetch_path}#g" \
+      -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
+      "$template" > "$output_path"
+
+  echo "✅ Created $output_path"
+}
+
+render_test_file() {
+  local template="$1"
+  local output_path="$2"
+  local module_name="$3"
   local require_path="$4"
-  local readable_label="$5"
+  local describe_label="$5"
   local presenter_path="$6"
   local fetch_path="$7"
   local session_model_path="$8"
@@ -176,11 +209,11 @@ render_file() {
     return
   fi
 
-  sed -e "s/__MODULENAME__/${module_name}/g" \
+  sed -e "s/__MODULE_NAME__/${module_name}/g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
-      -e "s/__DESCRIBE_LABEL__/${readable_label}/g" \
-      -e "s/__PRESENTERNAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__DESCRIBE_LABEL__/${describe_label}/g" \
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
+      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
@@ -196,10 +229,13 @@ generate_paths() {
   TYPE="$type"
   TYPE_LOWER=$(echo "$TYPE" | tr '[:upper:]' '[:lower:]')
 
+  MODULE_NAME="${PASCAL_NAME}${TYPE}"
+  SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.js"
+  TEST_FILE="${RAW_NAME}.${TYPE_LOWER}.test.js"
+
    if [ "$TYPE" = "Service" ]; then
-      MODULE_NAME="${PASCAL_NAME}Service"
-      SOURCE_FILE="${RAW_NAME}.service.js"
-      TEST_FILE="${RAW_NAME}.service.test.js"
+      APP_SUBFOLDER="services"
+      TEST_SUBFOLDER="services"
 
       case "$service_variant" in
         service)
@@ -217,6 +253,18 @@ generate_paths() {
         presenter-session)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_PRESENTER_SESSION"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_PRESENTER_SESSION"
+          # Additional input
+          SESSION_MODEL_PATH=$(build_session_model_path)
+          ;;
+        fetch)
+            SOURCE_TEMPLATE="$TEMPLATE_FETCH"
+            TEST_TEMPLATE="$TEMPLATE_TEST_FETCH"
+            # Additional input
+            FETCH_PATH="./fetch-${RAW_NAME}.service.js"
+            # We prefix our fetch services with 'fetch'
+            MODULE_NAME="Fetch${MODULE_NAME}"
+            SOURCE_FILE="fetch-${SOURCE_FILE}"
+            TEST_FILE="fetch-${TEST_FILE}"
           ;;
         *)
           echo "❌ Unknown service variant: $service_variant"
@@ -225,34 +273,17 @@ generate_paths() {
       esac
 
     elif [ "$TYPE" = "Presenter" ]; then
-      MODULE_NAME="${PASCAL_NAME}Presenter"
-      SOURCE_FILE="${RAW_NAME}.presenter.js"
-      TEST_FILE="${RAW_NAME}.presenter.test.js"
-
       SOURCE_TEMPLATE="$TEMPLATE_PRESENTER"
       TEST_TEMPLATE="$TEMPLATE_TEST_PRESENTER"
 
-    elif [ "$TYPE" = "FetchService" ]; then
-      MODULE_NAME="Fetch${PASCAL_NAME}Service"
-      SOURCE_FILE="fetch-${RAW_NAME}.service.js"
-      TEST_FILE="fetch-${RAW_NAME}.service.test.js"
-
-      SOURCE_TEMPLATE="$TEMPLATE_FETCH"
-      TEST_TEMPLATE="$TEMPLATE_TEST_FETCH"
-
+      APP_SUBFOLDER="presenters"
+      TEST_SUBFOLDER="presenters"
     else
       echo "❌ Unknown type: $TYPE"
       exit 1
     fi
 
-  if [ "$TYPE" = "Presenter" ]; then
-    APP_SUBFOLDER="presenters"
-    TEST_SUBFOLDER="presenters"
-  else
-    APP_SUBFOLDER="services"
-    TEST_SUBFOLDER="services"
-  fi
-
+  # When a folder path is supplied
   if [ -n "$REL_DIR" ]; then
     SOURCE_OUTPUT="app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
     TEST_OUTPUT="test/${TEST_SUBFOLDER}/${REL_DIR}/${TEST_FILE}"
@@ -261,20 +292,16 @@ generate_paths() {
     TEST_OUTPUT="test/${TEST_SUBFOLDER}/${TEST_FILE}"
   fi
 
+  # Helper
   UP_PATH=$(build_up_path)
+
+  # Test variables
+  DESCRIBE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE" # Test describe block
   REQUIRE_PATH="${UP_PATH}app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+  TEST_FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
 
-  PRESENTER_PATH=""
-  FETCH_PATH=""
-
-  if [ "$TYPE" = "Service" ]; then
-    PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
-    FETCH_PATH="./fetch-${RAW_NAME}.service.js"
-    SESSION_MODEL_PATH=$(build_session_model_path)
-  fi
-
-
-  READABLE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE"
+  # Additional paths
+  PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js" # Not all require this
 }
 
 render_source_and_test() {
@@ -283,13 +310,11 @@ render_source_and_test() {
 
   generate_paths "$type" "$service_variant"
 
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
+  # Render source file
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
 
-  if [ "$TYPE" = "Service" ]; then
-    FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
-  fi
-
-  render_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
+  # Render test file
+  render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
 }
 
 # ------------------------------------------------------------------------------
@@ -300,7 +325,7 @@ echo ""
 echo "What do you want to scaffold?"
 echo "1) Service only"
 echo "2) Service + Presenter"
-echo "3) Service + Presenter + FetchService"
+echo "3) Service + Presenter + Fetch"
 echo "4) Presenter only"
 echo "5) Service + Presenter + Session"
 echo ""
@@ -318,10 +343,10 @@ case "$choice" in
     render_source_and_test "Presenter" ""
     ;;
   3)
-    echo "📦 Generating Service + Presenter + FetchService..."
+    echo "📦 Generating Service + Presenter + Fetch..."
     render_source_and_test "Service" "fetch-presenter"
     render_source_and_test "Presenter" ""
-    render_source_and_test "FetchService" ""
+    render_source_and_test "Service" "fetch"
     ;;
   4)
     echo "📦 Generating Presenter only..."

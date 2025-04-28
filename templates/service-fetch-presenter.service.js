@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module __MODULENAME__
+ * @module __MODULE_NAME__
  */
 
 const __FETCH_NAME__ = require('__FETCH_PATH__')
