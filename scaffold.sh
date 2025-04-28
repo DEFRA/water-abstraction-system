@@ -3,6 +3,79 @@
 # ==============================================================================
 # 🛠 Scaffold Script for Services, Presenters & Fetch Services
 # ------------------------------------------------------------------------------
+# Quickly generates source files and corresponding test files from templates.
+#
+# ✅ Usage
+# ------------------------------------------------------------------------------
+#   ./scaffold.sh <name> or <path/to/name>
+#
+# 📋 Examples
+# ------------------------------------------------------------------------------
+#   ./scaffold.sh my-module
+#     → app/services/my-module.service.js
+#     → test/services/my-module.service.test.js
+#
+#   ./scaffold.sh notices/setup/fella/my-module
+#     → app/services/notices/setup/fella/my-module.service.js
+#     → test/services/notices/setup/fella/my-module.service.test.js
+#
+# 🧩 Templates required
+# ------------------------------------------------------------------------------
+#   templates/service.js
+#   templates/service.test.js
+#   templates/service-and-presenter.service.js
+#   templates/service-and-presenter.service.test.js
+#   templates/service-fetch-presenter.service.js
+#   templates/service-fetch-presenter.service.test.js
+#   templates/service-session-presenter.service.js
+#   templates/service-session-presenter.service.test.js
+#   templates/fetch.js
+#   templates/fetch.test.js
+#   templates/presenter.js
+#   templates/presenter.test.js
+#
+# 📦 Scaffold Options
+# ------------------------------------------------------------------------------
+# After running, you'll be prompted to choose:
+#
+#   1) service Service only
+#   2) Service + Presenter
+#   3) Service + Presenter + FetchService
+#   4) Presenter only
+#   5) Service + Presenter + Session
+#
+# ➡ Different templates are selected automatically depending on choice.
+#
+# 🛠 Special Handling
+# ------------------------------------------------------------------------------
+# - **Relative import paths** inside service/test files are dynamically calculated.
+# - **SessionModel import** is correctly handled, even for deeply nested services.
+# - **Test file paths** adjust automatically based on service location.
+# - **Existing files** are skipped (no overwrites).
+#
+# 🛠 Path Calculation Rules
+# ------------------------------------------------------------------------------
+# - **build_up_path()**: Calculates the number of `../` needed for test file `require()` imports.
+# - **build_session_model_path()**: Calculates the number of `../` needed for importing SessionModel inside a service file.
+#
+# Example:
+#   - Service file:  `app/services/a/b/c/my-service.service.js`
+#   - Needs import:  `../../../../models/session.model.js`
+#
+# 📋 Placeholders Replaced
+# ------------------------------------------------------------------------------
+# In templates, these placeholders are replaced automatically:
+#
+#   - `__MODULENAME__`           → PascalCase service/presenter class name
+#   - `__REQUIRE_PATH__`          → Test file require() path to the module under test
+#   - `__DESCRIBE_LABEL__`        → Human-readable label for test descriptions
+#   - `__PRESENTERNAME__`         → PascalCase presenter class name
+#   - `__PRESENTER_PATH__`        → Path to the presenter for services
+#   - `__FETCH_NAME__`            → PascalCase FetchService class name
+#   - `__FETCH_PATH__`            → Path to FetchService for services/tests
+#   - `__SESSION_MODEL_PATH__`    → Path to SessionModel for services/tests
+#
+# ==============================================================================
 
 set -e
 
@@ -123,24 +196,13 @@ generate_paths() {
   TYPE="$type"
   TYPE_LOWER=$(echo "$TYPE" | tr '[:upper:]' '[:lower:]')
 
-  if [ "$TYPE" = "FetchService" ]; then
-    MODULE_NAME="Fetch${PASCAL_NAME}Service"
-    SOURCE_FILE="fetch-${RAW_NAME}.service.js"
-    TEST_FILE="fetch-${RAW_NAME}.service.test.js"
-    SOURCE_TEMPLATE="$TEMPLATE_FETCH"
-    TEST_TEMPLATE="$TEMPLATE_TEST_FETCH"
-  else
-    MODULE_NAME="${PASCAL_NAME}${TYPE}"
-    SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.js"
-    TEST_FILE="${RAW_NAME}.${TYPE_LOWER}.test.js"
+   if [ "$TYPE" = "Service" ]; then
+      MODULE_NAME="${PASCAL_NAME}Service"
+      SOURCE_FILE="${RAW_NAME}.service.js"
+      TEST_FILE="${RAW_NAME}.service.test.js"
 
-    if [ "$TYPE" = "Presenter" ]; then
-      SOURCE_TEMPLATE="$TEMPLATE_PRESENTER"
-      TEST_TEMPLATE="$TEMPLATE_TEST_PRESENTER"
-    else
-      # Decide service variant
       case "$service_variant" in
-        plain)
+        service)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
           ;;
@@ -156,9 +218,32 @@ generate_paths() {
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_PRESENTER_SESSION"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_PRESENTER_SESSION"
           ;;
+        *)
+          echo "❌ Unknown service variant: $service_variant"
+          exit 1
+          ;;
       esac
+
+    elif [ "$TYPE" = "Presenter" ]; then
+      MODULE_NAME="${PASCAL_NAME}Presenter"
+      SOURCE_FILE="${RAW_NAME}.presenter.js"
+      TEST_FILE="${RAW_NAME}.presenter.test.js"
+
+      SOURCE_TEMPLATE="$TEMPLATE_PRESENTER"
+      TEST_TEMPLATE="$TEMPLATE_TEST_PRESENTER"
+
+    elif [ "$TYPE" = "FetchService" ]; then
+      MODULE_NAME="Fetch${PASCAL_NAME}Service"
+      SOURCE_FILE="fetch-${RAW_NAME}.service.js"
+      TEST_FILE="fetch-${RAW_NAME}.service.test.js"
+
+      SOURCE_TEMPLATE="$TEMPLATE_FETCH"
+      TEST_TEMPLATE="$TEMPLATE_TEST_FETCH"
+
+    else
+      echo "❌ Unknown type: $TYPE"
+      exit 1
     fi
-  fi
 
   if [ "$TYPE" = "Presenter" ]; then
     APP_SUBFOLDER="presenters"
@@ -213,7 +298,7 @@ render_source_and_test() {
 
 echo ""
 echo "What do you want to scaffold?"
-echo "1) Plain Service only"
+echo "1) Service only"
 echo "2) Service + Presenter"
 echo "3) Service + Presenter + FetchService"
 echo "4) Presenter only"
@@ -224,8 +309,8 @@ read -rp "> " choice
 
 case "$choice" in
   1)
-    echo "📦 Generating plain Service..."
-    render_source_and_test "Service" "plain"
+    echo "📦 Generating Service..."
+    render_source_and_test "Service" "service"
     ;;
   2)
     echo "📦 Generating Service + Presenter..."
