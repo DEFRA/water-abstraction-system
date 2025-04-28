@@ -180,7 +180,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(result).to.equal({
           sessionId: result.sessionId,
-          path: 'abstraction-alert'
+          path: 'abstraction-alert/alert-type'
         })
       })
 
