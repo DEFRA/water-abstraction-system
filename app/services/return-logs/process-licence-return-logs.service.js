@@ -40,11 +40,7 @@ const VoidLicenceReturnLogsService = require('./void-licence-return-logs.service
  * @param {string} licenceId - The UUID of the licence to create return logs for
  * @param {Date} [changeDate] - An optional change date to use when determining which return logs to void and reissue
  */
-async function go(licenceId, changeDate = null) {
-  if (!changeDate) {
-    changeDate = new Date()
-  }
-
+async function go(licenceId, changeDate = new Date()) {
   const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
 
   if (returnRequirements.length === 0) {

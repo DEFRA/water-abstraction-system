@@ -11,6 +11,8 @@ const ProcessLicenceReturnLogsService = require('../../../return-logs/process-li
 const SessionModel = require('../../../../models/session.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 
+const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
+
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
  *
@@ -22,18 +24,25 @@ const VoidReturnLogsService = require('../../../return-logs/void-return-logs.ser
  * @param {string} sessionId - The UUID for return requirement setup session record
  * @param {number} userId - The id of the logged in user
  *
- * @returns {string} The licence ID
+ * @returns {Promise<string>} The licence Id
  */
 async function go(sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)
 
+  await _processReturnVersion(session, userId)
+
+  await SessionModel.query().deleteById(sessionId)
+
+  return session.licence.id
+}
+
+async function _processReturnVersion(session, userId) {
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
 
   await PersistReturnVersionService.go(returnVersionData)
 
-  const oneDayInMilliseconds = 24 * 60 * 60 * 1000
   const changeDate = new Date(returnVersionData.returnVersion.startDate)
-  changeDate.setTime(changeDate.getTime() - oneDayInMilliseconds)
+  changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
 
   if (session.data.journey === 'no-returns-required') {
     await VoidReturnLogsService.go(
@@ -44,10 +53,6 @@ async function go(sessionId, userId) {
   }
 
   await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
-
-  await SessionModel.query().deleteById(sessionId)
-
-  return session.licence.id
 }
 
 module.exports = {
