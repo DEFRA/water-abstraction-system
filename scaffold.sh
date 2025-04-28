@@ -115,7 +115,7 @@ render_file() {
   sed -e "s/__MODULENAME__/${module_name}/g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
       -e "s/__DESCRIBE_LABEL__/${readable_label}/g" \
-      -e "s/__PRESENTERNAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \

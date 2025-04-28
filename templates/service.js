@@ -5,7 +5,7 @@
  */
 
 const __FETCH_NAME__ = require('__FETCH_PATH__')
-const __PRESENTERNAME__ = require('__PRESENTER_PATH__')
+const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
 
 /**
  * @returns {object} - The data formatted for the view template
@@ -13,7 +13,7 @@ const __PRESENTERNAME__ = require('__PRESENTER_PATH__')
 async function go() {
   const data = await __FETCH_NAME__.go()
 
-  const pageData = __PRESENTERNAME__.go(data)
+  const pageData = __PRESENTER_NAME__.go(data)
 
   return {
     ...pageData
