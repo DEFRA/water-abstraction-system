@@ -36,10 +36,14 @@ PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 TEMPLATE_SERVICE="templates/service.js"
 TEMPLATE_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.js"
 TEMPLATE_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.js"
+TEMPLATE_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.js"
+
 
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
 TEMPLATE_TEST_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.test.js"
 TEMPLATE_TEST_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.test.js"
+TEMPLATE_TEST_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.test.js"
+
 
 TEMPLATE_FETCH="templates/fetch.js"
 TEMPLATE_TEST_FETCH="templates/fetch.test.js"
@@ -65,6 +69,23 @@ build_up_path() {
   echo "$result"
 }
 
+build_session_model_path() {
+  local depth=2 # Always 2 minimum: services/ + leaving services/
+
+  if [ -n "$REL_DIR" ]; then
+    local slash_count
+    slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
+    depth=$((slash_count + 2))
+  fi
+
+  local result=""
+  for ((i=0; i<depth; i++)); do
+    result="../$result"
+  done
+
+  echo "${result}models/session.model.js"
+}
+
 render_file() {
   local template="$1"
   local output_path="$2"
@@ -73,6 +94,7 @@ render_file() {
   local readable_label="$5"
   local presenter_path="$6"
   local fetch_path="$7"
+  local session_model_path="$8"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -88,6 +110,7 @@ render_file() {
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
+      -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -117,7 +140,7 @@ generate_paths() {
     else
       # Decide service variant
       case "$service_variant" in
-        service)
+        plain)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
           ;;
@@ -128,6 +151,10 @@ generate_paths() {
         fetch-presenter)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_FETCH_PRESENTER"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_FETCH_PRESENTER"
+          ;;
+        presenter-session)
+          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_PRESENTER_SESSION"
+          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_PRESENTER_SESSION"
           ;;
       esac
     fi
@@ -158,7 +185,9 @@ generate_paths() {
   if [ "$TYPE" = "Service" ]; then
     PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
     FETCH_PATH="./fetch-${RAW_NAME}.service.js"
+    SESSION_MODEL_PATH=$(build_session_model_path)
   fi
+
 
   READABLE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE"
 }
@@ -169,13 +198,13 @@ render_source_and_test() {
 
   generate_paths "$type" "$service_variant"
 
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
 
   if [ "$TYPE" = "Service" ]; then
     FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
   fi
 
-  render_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH"
+  render_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
 }
 
 # ------------------------------------------------------------------------------
@@ -184,33 +213,39 @@ render_source_and_test() {
 
 echo ""
 echo "What do you want to scaffold?"
-echo "1) Service only"
+echo "1) Plain Service only"
 echo "2) Service + Presenter"
 echo "3) Service + Presenter + FetchService"
 echo "4) Presenter only"
+echo "5) Service + Presenter + Session"
 echo ""
 
 read -rp "> " choice
 
 case "$choice" in
   1)
-    echo "📦 Generating Service..."
-    render_source_and_test "Service" "service"
+    echo "📦 Generating plain Service..."
+    render_source_and_test "Service" "plain"
     ;;
   2)
     echo "📦 Generating Service + Presenter..."
     render_source_and_test "Service" "presenter"
-    render_source_and_test "Presenter"
+    render_source_and_test "Presenter" ""
     ;;
   3)
     echo "📦 Generating Service + Presenter + FetchService..."
     render_source_and_test "Service" "fetch-presenter"
-    render_source_and_test "Presenter"
-    render_source_and_test "FetchService"
+    render_source_and_test "Presenter" ""
+    render_source_and_test "FetchService" ""
     ;;
   4)
     echo "📦 Generating Presenter only..."
-    render_source_and_test "Presenter"
+    render_source_and_test "Presenter" ""
+    ;;
+  5)
+    echo "📦 Generating Service + Presenter + Session..."
+    render_source_and_test "Service" "presenter-session"
+    render_source_and_test "Presenter" ""
     ;;
   *)
     echo "❌ Invalid selection. Exiting."
