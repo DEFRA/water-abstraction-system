@@ -107,10 +107,52 @@ render_template() {
   echo "✅ Created $output_path"
 }
 
-# Main files
-render_template "$TEMPLATE_SERVICE"   "app/services"    "Service"   "false"
-render_template "$TEMPLATE_PRESENTER" "app/presenters"  "Presenter" "false"
+# ==============================================================================
+# Interactive Prompt
+# ==============================================================================
 
-# Test files
-render_template "$TEMPLATE_TEST_SERVICE"   "test/services"   "Service"   "true"
-render_template "$TEMPLATE_TEST_PRESENTER" "test/presenters" "Presenter" "true"
+echo ""
+echo "What do you want to scaffold?"
+echo "1) Service only"
+echo "2) Presenter only"
+echo "3) Service + Presenter"
+echo ""
+
+read -rp "> " choice
+
+case "$choice" in
+  1)
+    echo "📦 Generating Service only..."
+    render_template "$TEMPLATE_SERVICE"        "app/services"    "Service"   "false"
+    render_template "$TEMPLATE_TEST_SERVICE"    "test/services"   "Service"   "true"
+    ;;
+  2)
+    echo "📦 Generating Presenter only..."
+    render_template "$TEMPLATE_PRESENTER"       "app/presenters"  "Presenter" "false"
+    render_template "$TEMPLATE_TEST_PRESENTER"   "test/presenters" "Presenter" "true"
+    ;;
+  3)
+    echo "📦 Generating Service + Presenter..."
+    render_template "$TEMPLATE_SERVICE"         "app/services"    "Service"   "false"
+    render_template "$TEMPLATE_PRESENTER"        "app/presenters"  "Presenter" "false"
+    render_template "$TEMPLATE_TEST_SERVICE"     "test/services"   "Service"   "true"
+    render_template "$TEMPLATE_TEST_PRESENTER"   "test/presenters" "Presenter" "true"
+    ;;
+  *)
+    echo "❌ Invalid selection. Exiting."
+    exit 1
+    ;;
+esac
+
+
+# ==============================================================================
+# Create all no Interactive Prompt
+# ==============================================================================
+
+## Main files
+#render_template "$TEMPLATE_SERVICE"   "app/services"    "Service"   "false"
+#render_template "$TEMPLATE_PRESENTER" "app/presenters"  "Presenter" "false"
+#
+## Test files
+#render_template "$TEMPLATE_TEST_SERVICE"   "test/services"   "Service"   "true"
+#render_template "$TEMPLATE_TEST_PRESENTER" "test/presenters" "Presenter" "true"
