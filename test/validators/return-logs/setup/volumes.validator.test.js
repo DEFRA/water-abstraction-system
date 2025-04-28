@@ -53,5 +53,20 @@ describe('Return Logs Setup - Volumes validator', () => {
         expect(result.error.details[0].message).to.equal('Volumes must be a positive number')
       })
     })
+
+    describe('because the user entered a number the exceeds the maximum safe number of "9007199254740991"', () => {
+      beforeEach(() => {
+        payload = { '2023-05-31T00:00:00.000Z': '9007199254740992' }
+      })
+
+      it('fails validation with the message "Volume entered exceeds the maximum safe number 9007199254740991"', () => {
+        const result = VolumesValidator.go(payload)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal(
+          'Volume entered exceeds the maximum safe number 9007199254740991'
+        )
+      })
+    })
   })
 })
