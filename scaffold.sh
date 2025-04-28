@@ -3,7 +3,7 @@
 # ==============================================================================
 # 🛠 Scaffold Script for Services, Presenters & Fetch Services
 # ------------------------------------------------------------------------------
-# Generates boilerplate files + corresponding test files.
+# Generates boilerplate source files + corresponding test files.
 #
 # ✅ USAGE:
 #   ./scaffold.sh <name> or <path/to/name>
@@ -18,19 +18,31 @@
 #     → test/services/notices/setup/ad-hoc-licence.service.test.js
 #
 # 🧠 Template placeholders replaced:
-#   - __MODULENAME__       → PascalCase + Service/Presenter/FetchService
+#   - __MODULENAME__       → PascalCase + Service/Presenter/FetchService name
 #   - __REQUIRE_PATH__     → Relative path to source file (for tests)
 #   - __DESCRIBE_LABEL__   → Human-readable name for test suite
 #   - __PRESENTERNAME__    → PascalCase Presenter name (for services)
 #   - __PRESENTER_PATH__   → Relative require path to the presenter
+#   - __FETCH_NAME__       → PascalCase FetchService class name
+#   - __FETCH_PATH__       → Relative require path to the fetch service
 #
 # 📁 Required Templates:
-#   - templates/service.js
-#   - templates/service.test.js
-#   - templates/fetch.js
-#   - templates/fetch.test.js
-#   - templates/presenter.js
-#   - templates/presenter.test.js
+#   - templates/service.js         (Service source)
+#   - templates/service.test.js    (Service test)
+#   - templates/fetch.js           (Fetch service source)
+#   - templates/fetch.test.js      (Fetch service test)
+#   - templates/presenter.js       (Presenter source)
+#   - templates/presenter.test.js  (Presenter test)
+#
+# 📋 Options (interactive prompt after running):
+#   1) Service only
+#   2) Presenter only
+#   3) Service + Presenter
+#   4) Service + Presenter + FetchService
+#
+#   → Files are created under `app/` and `test/` folders based on your choice.
+#   → Directories are auto-created if needed.
+#   → Existing files are skipped (with a warning).
 # ==============================================================================
 
 set -e
