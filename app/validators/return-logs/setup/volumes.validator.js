@@ -18,10 +18,13 @@ const Joi = require('joi')
 function go(payload) {
   const schema = Joi.object().pattern(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
-    Joi.number().min(0).messages({
-      'number.base': 'Volumes must be a number or blank',
-      'number.min': 'Volumes must be a positive number'
-    })
+    Joi.number()
+      .min(0)
+      .messages({
+        'number.base': 'Volumes must be a number or blank',
+        'number.min': 'Volumes must be a positive number',
+        'number.unsafe': `Volume entered exceeds the maximum safe number ${Number.MAX_SAFE_INTEGER}`
+      })
   )
 
   return schema.validate(payload, { abortEarly: false })
