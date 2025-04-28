@@ -3,40 +3,6 @@
 # ==============================================================================
 # 🛠 Scaffold Script for Services, Presenters & Fetch Services
 # ------------------------------------------------------------------------------
-# Generates boilerplate source files and matching test files based on templates.
-#
-# ✅ USAGE:
-#   ./scaffold.sh <name> or <path/to/name>
-#
-# 🔤 Examples:
-#   ./scaffold.sh my-module
-#     → app/services/my-module.service.js
-#     → test/services/my-module.service.test.js
-#
-#   ./scaffold.sh notices/setup/fella/my-module
-#     → app/services/notices/setup/fella/my-module.service.js
-#     → test/services/notices/setup/fella/my-module.service.test.js
-#
-# 📁 Required Templates:
-#   - templates/service.js
-#   - templates/service.test.js
-#   - templates/fetch.js
-#   - templates/fetch.test.js
-#   - templates/presenter.js
-#   - templates/presenter.test.js
-#
-# 📋 Options (interactive prompt after running):
-#   1) Service only
-#   2) Presenter only
-#   3) Service + Presenter
-#   4) Service + Presenter + FetchService
-#
-# 🧠 Key Features:
-#   - Always creates both source file and matching test file.
-#   - Correct relative `require()` paths for tests.
-#   - Handles any nested folder structures.
-#   - Skips existing files with a warning.
-# ==============================================================================
 
 set -e
 
@@ -51,13 +17,12 @@ if [ -z "$INPUT_PATH" ]; then
   exit 1
 fi
 
-RAW_NAME=$(basename "$INPUT_PATH")  # Last part of the path (file name without path)
-REL_DIR=$(dirname "$INPUT_PATH")    # Folder path relative to root
+RAW_NAME=$(basename "$INPUT_PATH")
+REL_DIR=$(dirname "$INPUT_PATH")
 if [ "$REL_DIR" = "." ]; then
   REL_DIR=""
 fi
 
-# Converts kebab-case or snake_case to PascalCase
 to_pascal_case() {
   echo "$1" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1' | tr -d ' '
 }
@@ -69,19 +34,24 @@ PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 # ------------------------------------------------------------------------------
 
 TEMPLATE_SERVICE="templates/service.js"
-TEMPLATE_FETCH="templates/fetch.js"
-TEMPLATE_PRESENTER="templates/presenter.js"
+TEMPLATE_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.js"
+TEMPLATE_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.js"
+
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
+TEMPLATE_TEST_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.test.js"
+TEMPLATE_TEST_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.test.js"
+
+TEMPLATE_FETCH="templates/fetch.js"
 TEMPLATE_TEST_FETCH="templates/fetch.test.js"
+TEMPLATE_PRESENTER="templates/presenter.js"
 TEMPLATE_TEST_PRESENTER="templates/presenter.test.js"
 
 # ------------------------------------------------------------------------------
 # Helper Functions
 # ------------------------------------------------------------------------------
 
-# Calculates the correct number of ../ for relative import paths in tests
 build_up_path() {
-  local depth=3 # Always 3 for test/services + REL_DIR slashes
+  local depth=3
   if [ -n "$REL_DIR" ]; then
     local slash_count
     slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
@@ -95,7 +65,6 @@ build_up_path() {
   echo "$result"
 }
 
-# Renders a template into a real file
 render_file() {
   local template="$1"
   local output_path="$2"
@@ -115,7 +84,7 @@ render_file() {
   sed -e "s/__MODULENAME__/${module_name}/g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
       -e "s/__DESCRIBE_LABEL__/${readable_label}/g" \
-      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__PRESENTERNAME__/${PASCAL_NAME}Presenter/g" \
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
@@ -125,9 +94,10 @@ render_file() {
 }
 
 generate_paths() {
-  local type="$1"   # Service, Presenter, FetchService
+  local type="$1"    # Service, Presenter, FetchService
+  local service_variant="$2"  # service, presenter, fetch-presenter
 
-  TYPE="$type"   # Pass back as globals (Bash style)
+  TYPE="$type"
   TYPE_LOWER=$(echo "$TYPE" | tr '[:upper:]' '[:lower:]')
 
   if [ "$TYPE" = "FetchService" ]; then
@@ -140,16 +110,29 @@ generate_paths() {
     MODULE_NAME="${PASCAL_NAME}${TYPE}"
     SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.js"
     TEST_FILE="${RAW_NAME}.${TYPE_LOWER}.test.js"
+
     if [ "$TYPE" = "Presenter" ]; then
       SOURCE_TEMPLATE="$TEMPLATE_PRESENTER"
       TEST_TEMPLATE="$TEMPLATE_TEST_PRESENTER"
     else
-      SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
-      TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
+      # Decide service variant
+      case "$service_variant" in
+        service)
+          SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
+          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
+          ;;
+        presenter)
+          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_AND_PRESENTER"
+          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_AND_PRESENTER"
+          ;;
+        fetch-presenter)
+          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_FETCH_PRESENTER"
+          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_FETCH_PRESENTER"
+          ;;
+      esac
     fi
   fi
 
-  # Target folders
   if [ "$TYPE" = "Presenter" ]; then
     APP_SUBFOLDER="presenters"
     TEST_SUBFOLDER="presenters"
@@ -158,7 +141,6 @@ generate_paths() {
     TEST_SUBFOLDER="services"
   fi
 
-  # Output paths
   if [ -n "$REL_DIR" ]; then
     SOURCE_OUTPUT="app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
     TEST_OUTPUT="test/${TEST_SUBFOLDER}/${REL_DIR}/${TEST_FILE}"
@@ -167,12 +149,9 @@ generate_paths() {
     TEST_OUTPUT="test/${TEST_SUBFOLDER}/${TEST_FILE}"
   fi
 
-  # Up path for test requires
   UP_PATH=$(build_up_path)
-
   REQUIRE_PATH="${UP_PATH}app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
 
-  # Presenter / Fetch paths
   PRESENTER_PATH=""
   FETCH_PATH=""
 
@@ -181,37 +160,34 @@ generate_paths() {
     FETCH_PATH="./fetch-${RAW_NAME}.service.js"
   fi
 
-  # Readable label
   READABLE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE"
 }
 
 render_source_and_test() {
   local type="$1"
+  local service_variant="$2"
 
-  generate_paths "$type"
+  generate_paths "$type" "$service_variant"
 
-  # Create source file
   render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH"
 
-  # Adjust fetch path for tests if needed
   if [ "$TYPE" = "Service" ]; then
     FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
   fi
 
-  # Create test file
   render_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$READABLE_LABEL" "$PRESENTER_PATH" "$FETCH_PATH"
 }
 
 # ------------------------------------------------------------------------------
-# Interactive CLI Prompt
+# CLI Prompt
 # ------------------------------------------------------------------------------
 
 echo ""
 echo "What do you want to scaffold?"
 echo "1) Service only"
-echo "2) Presenter only"
-echo "3) Service + Presenter"
-echo "4) Service + Presenter + FetchService"
+echo "2) Service + Presenter"
+echo "3) Service + Presenter + FetchService"
+echo "4) Presenter only"
 echo ""
 
 read -rp "> " choice
@@ -219,22 +195,22 @@ read -rp "> " choice
 case "$choice" in
   1)
     echo "📦 Generating Service..."
-    render_source_and_test "Service"
+    render_source_and_test "Service" "service"
     ;;
   2)
-    echo "📦 Generating Presenter..."
+    echo "📦 Generating Service + Presenter..."
+    render_source_and_test "Service" "presenter"
     render_source_and_test "Presenter"
     ;;
   3)
-    echo "📦 Generating Service + Presenter..."
-    render_source_and_test "Service"
-    render_source_and_test "Presenter"
-    ;;
-  4)
     echo "📦 Generating Service + Presenter + FetchService..."
-    render_source_and_test "Service"
+    render_source_and_test "Service" "fetch-presenter"
     render_source_and_test "Presenter"
     render_source_and_test "FetchService"
+    ;;
+  4)
+    echo "📦 Generating Presenter only..."
+    render_source_and_test "Presenter"
     ;;
   *)
     echo "❌ Invalid selection. Exiting."
