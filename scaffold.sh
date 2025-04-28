@@ -112,9 +112,10 @@ render_template() {
   local require_path=""
   if [ "$is_test" = "true" ]; then
     if [ "$suffix" = "FetchService" ]; then
-      require_path="../../../../app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
+      require_path="../../../app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
     else
-      require_path="../../../../app/${suffix_lower}s/${REL_DIR}/${RAW_NAME}.${suffix_lower}.js"
+
+      require_path="../../../app/${suffix_lower}s/${REL_DIR}/${RAW_NAME}.${suffix_lower}.js"
     fi
   fi
 
@@ -122,6 +123,16 @@ render_template() {
   if [ "$suffix" = "Service" ]; then
     presenter_path="../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
   fi
+
+local fetch_require_path=""
+if [ "$suffix" = "Service" ]; then
+  if [ "$is_test" = "true" ]; then
+    fetch_require_path="../../../app/services/${REL_DIR}/fetch-${RAW_NAME}.service.js"
+  else
+    fetch_require_path="./fetch-${RAW_NAME}.service.js"
+  fi
+fi
+
 
   local readable_label="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $suffix"
 
@@ -131,7 +142,7 @@ sed -e "s/__MODULENAME__/${module_name}/g" \
     -e "s/__PRESENTERNAME__/${PASCAL_NAME}Presenter/g" \
     -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
     -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
-    -e "s#__FETCH_PATH__#../../services/${REL_DIR}/fetch-${RAW_NAME}.service.js#g" \
+   -e "s#__FETCH_PATH__#${fetch_require_path}#g" \
     "$template" > "$output_path"
 
   echo "✅ Created $output_path"

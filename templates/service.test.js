@@ -8,13 +8,18 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Things we need to stub
+const __FETCH_NAME__ = require('__FETCH_PATH__')
+
 // Thing under test
 const __MODULENAME__ = require('__REQUIRE_PATH__')
 
 describe('__DESCRIBE_LABEL__', () => {
   let session
 
-  beforeEach(async () => {})
+  beforeEach(async () => {
+    Sinon.stub(__FETCH_NAME__, 'go').resolves({})
+  })
 
   afterEach(() => {
     Sinon.restore()
