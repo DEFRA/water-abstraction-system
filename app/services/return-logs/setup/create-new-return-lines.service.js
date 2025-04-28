@@ -22,12 +22,12 @@ const UNIT_NAMES = {
  * @param returnSubmissionId
  * @param returnsFrequency
  * @param units
- * @param reported
+ * @param meterProvided
  * @param trx
  *
  * @returns
  */
-async function go(lines, returnSubmissionId, returnsFrequency, units, reported, trx = null) {
+async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvided, trx = null) {
   if (!lines || !lines.length) {
     return
   }
@@ -40,7 +40,7 @@ async function go(lines, returnSubmissionId, returnsFrequency, units, reported, 
       id: generateUUID(),
       returnSubmissionId,
       timePeriod: returnsFrequency,
-      readingType: reported === 'abstraction-volumes' ? 'estimated' : 'measured',
+      readingType: meterProvided === 'no' ? 'estimated' : 'measured',
       userUnit: UNIT_NAMES[units]
     }
   })

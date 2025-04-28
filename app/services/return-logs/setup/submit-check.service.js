@@ -39,7 +39,7 @@ async function go(sessionId, user) {
       returnSubmission.id,
       session.returnsFrequency,
       session.units,
-      session.reported,
+      session.meterProvided,
       trx
     )
 
