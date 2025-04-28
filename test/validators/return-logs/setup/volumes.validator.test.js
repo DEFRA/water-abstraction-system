@@ -54,7 +54,7 @@ describe('Return Logs Setup - Volumes validator', () => {
       })
     })
 
-    describe('because the user entered a number the exceeds the maximum safe number of "9007199254740991"', () => {
+    describe('because the user entered a number that exceeds the maximum safe number "9007199254740991"', () => {
       beforeEach(() => {
         payload = { '2023-05-31T00:00:00.000Z': '9007199254740992' }
       })
