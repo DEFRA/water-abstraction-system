@@ -35,6 +35,7 @@ TEMPLATE_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.js"
 TEMPLATE_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.js"
 TEMPLATE_SUBMIT_SERVICE="templates/submit.service.js"
 TEMPLATE_VALIDATOR="templates/validator.js"
+TEMPLATE_VIEW="templates/view.njk"
 
 
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
@@ -94,6 +95,8 @@ render_file() {
   local fetch_path="$5"
   local session_model_path="$6"
   local validator_path="$7"
+  local service_path="$8"
+  local view_path="$9"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -110,6 +113,11 @@ render_file() {
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
       -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
+      -e "s#__SERVICE_PATH__#${service_path}#g" \
+      -e "s/__SERVICE_NAME__/${PASCAL_NAME}Service/g" \
+      -e "s#__VIEW_PATH__#${view_path}#g" \
+      -e "s/__CONTROLLER_NAME__/${PASCAL_NAME}Controller/g" \
+      -e "s/__NAME__/${PASCAL_NAME}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -144,6 +152,29 @@ render_test_file() {
 
   echo "✅ Created $output_path"
 }
+
+generate_controller_snippet() {
+  local snippet_template="templates/helper.js"
+
+  if [ -f "$snippet_template" ]; then
+    echo ""
+    echo "Here is your ready-to-use controller + router snippet:"
+    echo ""
+
+    sed -e "s|__SERVICE_NAME__|${PASCAL_NAME}Service|g" \
+        -e "s|__SERVICE_PATH__|${SERVICE_PATH}|g" \
+        -e "s|__NAME__|${PASCAL_NAME}|g" \
+        -e "s|__VIEW_PATH__|${VIEW_PATH}|g" \
+        -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
+        -e "s|__CONTROLLER_PATH__|${CONTROLLER_PATH}|g" \
+        "$snippet_template"
+
+    echo ""
+  else
+    echo "❌ Snippet template not found: $snippet_template"
+  fi
+}
+
 
 generate_paths() {
   local type="$1"    # Service, Presenter, FetchService
@@ -216,6 +247,13 @@ generate_paths() {
 
         APP_SUBFOLDER="validators"
         TEST_SUBFOLDER="validators"
+
+   elif [ "$TYPE" = "View" ]; then
+        SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.njk"
+        SOURCE_TEMPLATE="$TEMPLATE_VIEW"
+
+        APP_SUBFOLDER="views"
+        TEST_SUBFOLDER="views"
     else
       echo "❌ Unknown type: $TYPE"
       exit 1
@@ -239,8 +277,11 @@ generate_paths() {
   TEST_FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
 
   # Additional paths
-  PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js" # Not all require this
-  VALIDATOR_PATH="../../../../validators/${REL_DIR}/${RAW_NAME}.validator.js" # Not all require this
+  PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
+  VALIDATOR_PATH="../../../../validators/${REL_DIR}/${RAW_NAME}.validator.js"
+  SERVICE_PATH="../../../../services/${REL_DIR}/${RAW_NAME}.service.js"
+  CONTROLLER_PATH="../../../../controllers/${REL_DIR}/${RAW_NAME}.controller.js"
+  VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
 }
 
 render_source_and_test() {
@@ -250,7 +291,7 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$SERVICE_PATH" "$VIEW_PATH"
 
   # Render test file
   render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
@@ -276,13 +317,18 @@ case "$choice" in
   1)
     echo "📦 Generating complete journey..."
     render_source_and_test "Presenter" ""
+    render_source_and_test "View" ""
     render_source_and_test "Service" "presenter-session"
     render_source_and_test "Service" "submit"
     render_source_and_test "Validator" ""
+
+    # Now you can generate the controller
+    generate_controller_snippet
     ;;
   2)
     echo "📦 Generating view journey..."
     render_source_and_test "Presenter" ""
+    render_source_and_test "View" ""
     render_source_and_test "Service" "presenter-session"
     ;;
   3)
