@@ -156,7 +156,7 @@ generate_paths() {
   SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.js"
   TEST_FILE="${RAW_NAME}.${TYPE_LOWER}.test.js"
 
-   if [ "$TYPE" = "Service" ]; then
+    if [ "$TYPE" = "Service" ]; then
       APP_SUBFOLDER="services"
       TEST_SUBFOLDER="services"
 
@@ -189,7 +189,7 @@ generate_paths() {
             SOURCE_FILE="fetch-${SOURCE_FILE}"
             TEST_FILE="fetch-${TEST_FILE}"
           ;;
-         submit)
+        submit)
             SOURCE_TEMPLATE="$TEMPLATE_SUBMIT_SERVICE"
             TEST_TEMPLATE="$TEMPLATE_TEST_SUBMIT_SERVICE"
             # We prefix our submit services with 'submit'
@@ -210,7 +210,7 @@ generate_paths() {
       APP_SUBFOLDER="presenters"
       TEST_SUBFOLDER="presenters"
 
-   elif [ "$TYPE" = "Validator" ]; then
+    elif [ "$TYPE" = "Validator" ]; then
         SOURCE_TEMPLATE="$TEMPLATE_VALIDATOR"
         TEST_TEMPLATE="$TEMPLATE_TEST_VALIDATOR"
 
