@@ -264,7 +264,9 @@ render_source_and_test() {
   render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$SERVICE_PATH" "$VIEW_PATH"
 
   # Render test file
-  render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
+  if [ -n "$TEST_TEMPLATE" ]; then
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
+  fi
 }
 
 # ------------------------------------------------------------------------------
