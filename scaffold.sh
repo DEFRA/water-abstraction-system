@@ -1,76 +1,5 @@
 #!/bin/bash
 
-# ==============================================================================
-# 🛠 Scaffold Script for Services, Presenters & Fetch Services
-# ------------------------------------------------------------------------------
-# Quickly generates source files and matching test files based on templates.
-#
-# ✅ Usage
-# ------------------------------------------------------------------------------
-#   ./scaffold.sh <name> or <path/to/name>
-#
-# 📋 Examples
-# ------------------------------------------------------------------------------
-#   ./scaffold.sh my-module
-#     → app/services/my-module.service.js
-#     → test/services/my-module.service.test.js
-#
-#   ./scaffold.sh notices/setup/fella/my-module
-#     → app/services/notices/setup/fella/my-module.service.js
-#     → test/services/notices/setup/fella/my-module.service.test.js
-#
-# 📦 Scaffold Options
-# ------------------------------------------------------------------------------
-# After running, you'll be prompted to choose:
-#
-#   1) Service only
-#   2) Service + Presenter
-#   3) Service + Presenter + Fetch
-#   4) Presenter only
-#   6) Submit Service + Validator
-#
-# ➡ Templates are selected and filled automatically depending on your choice.
-#
-# 🛠 Key Features
-# ------------------------------------------------------------------------------
-# - Always generates both source files and corresponding test files.
-# - Correct `require()` paths are dynamically calculated based on folder depth.
-# - Handles nested folder structures under `services/` cleanly.
-# - Correct relative pathing for `SessionModel` imports inside services.
-# - Skips file creation if the file already exists (safe by default).
-#
-# 🧠 Special Handling
-# ------------------------------------------------------------------------------
-# - **render_file()**: Renders the actual source file (Service, Presenter, FetchService).
-# - **render_test_file()**: Renders the corresponding test file.
-# - **SessionModel imports** are dynamically resolved based on service file depth.
-#
-# 🛠 Path Calculation Rules
-# ------------------------------------------------------------------------------
-# - **build_up_path()**: Calculates how many `../` are needed in tests to require the correct source file.
-# - **build_session_model_path()**: Calculates how many `../` are needed to correctly import `models/session.model.js` inside a service.
-#
-# Example:
-#   - Service at: `app/services/a/b/c/my-service.service.js`
-#   - Will import: `../../../../models/session.model.js`
-#
-# 📋 Placeholders Replaced in Templates
-# ------------------------------------------------------------------------------
-# These placeholders are automatically replaced inside templates:
-#
-#   - `__MODULE_NAME__`         → PascalCase name of the module or module
-#   - `__REQUIRE_PATH__`        → Path to the source file from test file
-#   - `__DESCRIBE_LABEL__`      → Test suite name for `describe()`
-#   - `__PRESENTER_NAME__`      → PascalCase Presenter module name
-#   - `__PRESENTER_PATH__`      → Path to Presenter file
-#   - `__FETCH_NAME__`          → PascalCase FetchService module name
-#   - `__FETCH_PATH__`          → Path to FetchService file
-#   - `__SESSION_MODEL_PATH__`  → Path to `models/session.model.js`
-#   - `__VALIDATOR_NAME__`      → PascalCase Validator module name
-#   - `__VALIDATOR_PATH__`      → Path to Validator file
-#
-# ==============================================================================
-
 set -e
 
 # ------------------------------------------------------------------------------
@@ -333,46 +262,46 @@ render_source_and_test() {
 
 echo ""
 echo "What do you want to scaffold?"
-echo "1) Service only"
-echo "2) Service + Presenter"
-echo "3) Service + Presenter + Fetch"
+echo "1) Journey - Complete"
+echo "2) Journey - View"
+echo "3) Journey - Submit"
 echo "4) Presenter only"
-echo "5) Service + Presenter + Session"
-echo "6) Submit + Validator"
+echo "5) Service only"
+echo "6) Service withFetch"
 echo ""
 
 read -rp "> " choice
 
 case "$choice" in
   1)
-    echo "📦 Generating Service..."
-    render_source_and_test "Service" "service"
+    echo "📦 Generating complete journey..."
+    render_source_and_test "Presenter" ""
+    render_source_and_test "Service" "presenter-session"
+    render_source_and_test "Service" "submit"
+    render_source_and_test "Validator" ""
     ;;
   2)
-    echo "📦 Generating Service + Presenter..."
-    render_source_and_test "Service" "presenter"
+    echo "📦 Generating view journey..."
     render_source_and_test "Presenter" ""
+    render_source_and_test "Service" "presenter-session"
     ;;
   3)
-    echo "📦 Generating Service + Presenter + Fetch..."
-    render_source_and_test "Service" "fetch-presenter"
-    render_source_and_test "Presenter" ""
-    render_source_and_test "Service" "fetch"
+    echo "📦 Generating submit journey..."
+    render_source_and_test "Service" "submit"
+    render_source_and_test "Validator" ""
     ;;
   4)
     echo "📦 Generating Presenter only..."
     render_source_and_test "Presenter" ""
     ;;
   5)
-    echo "📦 Generating Service + Presenter + Session..."
-    render_source_and_test "Service" "presenter-session"
-    render_source_and_test "Presenter" ""
+    echo "📦 Generating Service only..."
+    render_source_and_test "Service" "service"
     ;;
   6)
-    echo "📦 Generating Submit service + validator..."
-    render_source_and_test "Service" "submit"
-    render_source_and_test "Validator" ""
-    render_source_and_test "Presenter" "" # This should already exists based on our workflow
+    echo "📦 Generating Service with Fetch..."
+    render_source_and_test "Service" ""
+    render_source_and_test "Service" "fetch"
     ;;
   *)
     echo "❌ Invalid selection. Exiting."
