@@ -19,21 +19,6 @@
 #     → app/services/notices/setup/fella/my-module.service.js
 #     → test/services/notices/setup/fella/my-module.service.test.js
 #
-# 🧩 Templates Required
-# ------------------------------------------------------------------------------
-#   templates/service.js
-#   templates/service.test.js
-#   templates/service-and-presenter.service.js
-#   templates/service-and-presenter.service.test.js
-#   templates/service-fetch-presenter.service.js
-#   templates/service-fetch-presenter.service.test.js
-#   templates/service-session-presenter.service.js
-#   templates/service-session-presenter.service.test.js
-#   templates/fetch.js
-#   templates/fetch.test.js
-#   templates/presenter.js
-#   templates/presenter.test.js
-#
 # 📦 Scaffold Options
 # ------------------------------------------------------------------------------
 # After running, you'll be prompted to choose:
@@ -42,9 +27,9 @@
 #   2) Service + Presenter
 #   3) Service + Presenter + Fetch
 #   4) Presenter only
-#   5) Service + Presenter + Session
+#   6) Submit Service + Validator
 #
-# ➡ Different templates and setup paths are selected automatically based on your choice.
+# ➡ Templates are selected and filled automatically depending on your choice.
 #
 # 🛠 Key Features
 # ------------------------------------------------------------------------------
@@ -73,14 +58,16 @@
 # ------------------------------------------------------------------------------
 # These placeholders are automatically replaced inside templates:
 #
-#   - `__MODULE_NAME__`            → PascalCase Service, Presenter, or FetchService name
-#   - `__REQUIRE_PATH__`           → Test file require() path to the module under test
-#   - `__DESCRIBE_LABEL__`         → Human-readable label for test `describe()` blocks
-#   - `__PRESENTER_NAME__`         → PascalCase presenter class name
-#   - `__PRESENTER_PATH__`         → Path to the Presenter module (for services)
-#   - `__FETCH_NAME__`             → PascalCase FetchService class name
-#   - `__FETCH_PATH__`             → Path to the FetchService (for services/tests)
-#   - `__SESSION_MODEL_PATH__`     → Correct path to import SessionModel
+#   - `__MODULE_NAME__`         → PascalCase name of the module or module
+#   - `__REQUIRE_PATH__`        → Path to the source file from test file
+#   - `__DESCRIBE_LABEL__`      → Test suite name for `describe()`
+#   - `__PRESENTER_NAME__`      → PascalCase Presenter module name
+#   - `__PRESENTER_PATH__`      → Path to Presenter file
+#   - `__FETCH_NAME__`          → PascalCase FetchService module name
+#   - `__FETCH_PATH__`          → Path to FetchService file
+#   - `__SESSION_MODEL_PATH__`  → Path to `models/session.model.js`
+#   - `__VALIDATOR_NAME__`      → PascalCase Validator module name
+#   - `__VALIDATOR_PATH__`      → Path to Validator file
 #
 # ==============================================================================
 
