@@ -227,7 +227,7 @@ generate_paths() {
 
         SUBFOLDER="validators"
 
-   elif [ "$TYPE" = "View" ]; then
+    elif [ "$TYPE" = "View" ]; then
         SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.njk"
         SOURCE_TEMPLATE="$TEMPLATE_VIEW"
 
