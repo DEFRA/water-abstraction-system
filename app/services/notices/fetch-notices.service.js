@@ -9,14 +9,17 @@ const { ref } = require('objection')
 
 const EventModel = require('../../models/event.model.js')
 
+const DatabaseConfig = require('../../../config/database.config.js')
+
 /**
  * Fetches the notices for the `/notices` page
  *
  * @param {object} filter - an object containing the different filters to apply to the query
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object[]>} an array of matching notices
  */
-async function go(filter) {
+async function go(filter, page) {
   const query = EventModel.query()
     .select([
       'id',
@@ -30,6 +33,7 @@ async function go(filter) {
     .where('type', 'notification')
     .whereIn('status', ['sent', 'completed', 'sending'])
     .orderBy('createdAt', 'desc')
+    .page(page - 1, DatabaseConfig.defaultPageSize)
 
   if (filter.sentBy) {
     query.where('issuer', filter.sentBy)

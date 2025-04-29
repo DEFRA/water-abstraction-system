@@ -8,33 +8,40 @@
 const FetchNoticesService = require('./fetch-notices.service.js')
 const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const NoticesIndexValidator = require('../../validators/notices/index.validator.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
 /**
  * Orchestrates presenting the data for `/notices` page
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar) {
+async function go(yar, page) {
   const savedFilters = await _filters(yar)
 
   const filter = _convertTypesToBooleanFlags(savedFilters)
   const validateResult = _validate(savedFilters)
 
   let data = []
+  let numberOfNotices = 0
 
   if (!validateResult) {
-    data = await FetchNoticesService.go(filter)
+    const { results, total } = await FetchNoticesService.go(filter, page)
+    data = results
+    numberOfNotices = total
   }
 
   const formattedData = await NoticesIndexPresenter.go(data)
+  const pagination = PaginatorPresenter.go(numberOfNotices, Number(page), `/system/notices`)
 
   return {
     activeNavBar: 'manage',
     error: validateResult,
     filter,
-    ...formattedData
+    ...formattedData,
+    pagination
   }
 }
 

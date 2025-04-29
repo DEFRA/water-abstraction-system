@@ -11,7 +11,11 @@ const SubmitNoticesIndexService = require('../services/notices/submit-index.serv
 const basePath = 'notices'
 
 async function index(request, h) {
-  const pageData = await NoticesIndexService.go(request.yar)
+  const {
+    query: { page = 1 }
+  } = request
+
+  const pageData = await NoticesIndexService.go(request.yar, page)
 
   return h.view(`${basePath}/index.njk`, pageData)
 }
