@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
 
 // Thing under test
@@ -19,6 +20,8 @@ describe('Monitoring Stations - View service', () => {
   let monitoringStation
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
+
     auth = auth = {
       credentials: {
         scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
@@ -68,6 +71,7 @@ describe('Monitoring Stations - View service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        enableLicenceMonitoringStationsSetup: true,
         gridReference: 'TL2664640047',
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         pageTitle: 'BUSY POINT',
