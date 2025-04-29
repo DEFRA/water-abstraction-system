@@ -19,7 +19,7 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
-    displayUnits: _units(thresholdUnits, sessionUnit),
+    displayUnits: _units(sessionUnit),
     monitoringStationLabel: label,
     pageTitle: 'What is the licence hands-off flow or level threshold?',
     sessionId,
@@ -37,8 +37,8 @@ function _backLink(session) {
   return `/system/monitoring-stations/${monitoringStationId}`
 }
 
-function _units(thresholdUnits, sessionUnit) {
-  const mappedUnits = Object.entries(thresholdUnits).map(([key, value]) => {
+function _units(sessionUnit) {
+  const mappedUnits = Object.entries(thresholdUnits).map(([_key, value]) => {
     return {
       value,
       text: value,
