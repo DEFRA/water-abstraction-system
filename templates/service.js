@@ -5,7 +5,7 @@
  */
 
 /**
- * @returns {object} - The data formatted for the view template
+ * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go() {
   return ''
