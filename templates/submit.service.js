@@ -1,6 +1,8 @@
 'use strict'
 
 /**
+ * Orchestrates validating the data for `` page
+ *
  * @module __MODULE_NAME__
  */
 
@@ -9,6 +11,8 @@ const __VALIDATOR_NAME__ = require('__VALIDATOR_PATH__')
 const SessionModel = require('__SESSION_MODEL_PATH__')
 
 /**
+ * Orchestrates validating the data for `` page
+ *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
  *
