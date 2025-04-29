@@ -88,19 +88,19 @@ render_file() {
     return
   fi
 
-  sed -e "s/__MODULE_NAME__/${module_name}/g" \
+  sed -e "s#__FETCH_PATH__#${fetch_path}#g" \
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
-      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
-      -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
-      -e "s#__FETCH_PATH__#${fetch_path}#g" \
+      -e "s#__SERVICE_PATH__#${service_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
-      -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
-      -e "s#__SERVICE_PATH__#${service_path}#g" \
-      -e "s/__SERVICE_NAME__/${PASCAL_NAME}Service/g" \
       -e "s#__VIEW_PATH__#${view_path}#g" \
       -e "s/__CONTROLLER_NAME__/${PASCAL_NAME}Controller/g" \
+      -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s/__NAME__/${PASCAL_NAME}/g" \
+      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__SERVICE_NAME__/${PASCAL_NAME}Service/g" \
+      -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
+      -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
