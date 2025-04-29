@@ -57,11 +57,11 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "Meter readings must be a number or blank"', () => {
+      it('fails validation with the message "Reading must be a number or blank"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Meter readings must be a number or blank')
+        expect(result.error.details[0].message).to.equal('Reading must be a number or blank')
       })
     })
 
@@ -71,11 +71,11 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "Meter readings must be a positive number"', () => {
+      it('fails validation with the message "Reading must be a positive number"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Meter readings must be a positive number')
+        expect(result.error.details[0].message).to.equal('Reading must be a positive number')
       })
     })
 
@@ -85,12 +85,12 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 3 // April
       })
 
-      it('fails validation with the message "The meter readings must be greater than or equal to the previous reading of 10"', () => {
+      it('fails validation with the message "The reading must be greater than or equal to the previous reading of 10"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal(
-          'The meter readings must be greater than or equal to the previous reading of 10'
+          'The reading must be greater than or equal to the previous reading of 10'
         )
       })
     })
@@ -101,12 +101,12 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "The meter readings must be greater than or equal to the previous reading of 100"', () => {
+      it('fails validation with the message "The reading must be greater than or equal to the previous reading of 100"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal(
-          'The meter readings must be greater than or equal to the previous reading of 100'
+          'The reading must be greater than or equal to the previous reading of 100'
         )
       })
     })
@@ -117,12 +117,12 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "The meter readings must be less than or equal to the subsequent reading of 300"', () => {
+      it('fails validation with the message "The reading must be less than or equal to the subsequent reading of 300"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal(
-          'The meter readings must be less than or equal to the subsequent reading of 300'
+          'The reading must be less than or equal to the subsequent reading of 300'
         )
       })
     })
@@ -133,13 +133,41 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "Each meter reading must be greater than or equal to the previous reading"', () => {
+      it('fails validation with the message "Each reading must be greater than or equal to the previous reading"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal(
-          'Each meter reading must be greater than or equal to the previous reading'
+          'Each reading must be greater than or equal to the previous reading'
         )
+      })
+    })
+
+    describe('because the user entered a number that exceeds the maximum allowed reading of "99999999999"', () => {
+      beforeEach(() => {
+        payload = { '2023-05-31T00:00:00.000Z': '999999999991' }
+        requestedMonth = 4 // May
+      })
+
+      it('fails validation with the message "Reading entered exceeds the maximum of 99999999999"', () => {
+        const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Reading entered exceeds the maximum of 99999999999')
+      })
+    })
+
+    describe('because the user entered a number that exceeds the maximum safe number "9007199254740991"', () => {
+      beforeEach(() => {
+        payload = { '2023-05-31T00:00:00.000Z': '9007199254740992' }
+        requestedMonth = 4 // May
+      })
+
+      it('fails validation with the message "Reading entered exceeds the maximum of 99999999999"', () => {
+        const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Reading entered exceeds the maximum of 99999999999')
       })
     })
   })
