@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('')
+const SessionHelper = require('__SESSION_HELPER_PATH__')
 
 // Thing under test
 const __MODULE_NAME__ = require('__REQUIRE_PATH__')

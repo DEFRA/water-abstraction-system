@@ -108,6 +108,7 @@ render_test_file() {
   local presenter_path="$6"
   local fetch_path="$7"
   local session_model_path="$8"
+  local session_helper_path="$9"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -124,6 +125,7 @@ render_test_file() {
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
+      -e "s#__SESSION_HELPER_PATH__#${session_helper_path}#g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -251,6 +253,7 @@ generate_paths() {
   SUBMIT_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/submit-${RAW_NAME}.service.js"
   CONTROLLER_PATH="${RELATIVE_UP_PATH}app/controllers/${REL_DIR}/${RAW_NAME}.controller.js"
   SESSION_MODEL_PATH="${RELATIVE_UP_PATH}app/models/session.model.js"
+  SESSION_HELPER_PATH="${RELATIVE_UP_PATH}test/support/helpers/session.helper.js"
   VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
 }
 
@@ -265,7 +268,7 @@ render_source_and_test() {
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then
-    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH" "$SESSION_HELPER_PATH"
   fi
 }
 
