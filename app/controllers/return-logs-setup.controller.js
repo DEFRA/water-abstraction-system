@@ -15,6 +15,7 @@ const MeterProvidedService = require('../services/return-logs/setup/meter-provid
 const MultipleEntriesService = require('../services/return-logs/setup/multiple-entries.service.js')
 const NoteService = require('../services/return-logs/setup/note.service.js')
 const PeriodUsedService = require('../services/return-logs/setup/period-used.service.js')
+const ReadingsService = require('../services/return-logs/setup/readings.service.js')
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
@@ -27,13 +28,16 @@ const SubmitMeterProvidedService = require('../services/return-logs/setup/submit
 const SubmitMultipleEntriesService = require('../services/return-logs/setup/submit-multiple-entries.service.js')
 const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
 const SubmitPeriodUsedService = require('../services/return-logs/setup/submit-period-used.service.js')
+const SubmitReadingsService = require('../services/return-logs/setup/submit-readings.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
 const SubmitStartReadingService = require('../services/return-logs/setup/submit-start-reading.service.js')
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
+const SubmitVolumesService = require('../services/return-logs/setup/submit-volumes.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
+const VolumesService = require('../services/return-logs/setup/volumes.service.js')
 
 async function cancel(request, h) {
   const { sessionId } = request.params
@@ -102,6 +106,13 @@ async function periodUsed(request, h) {
   const pageData = await PeriodUsedService.go(sessionId)
 
   return h.view('return-logs/setup/period-used.njk', pageData)
+}
+
+async function readings(request, h) {
+  const { sessionId, yearMonth } = request.params
+  const pageData = await ReadingsService.go(sessionId, yearMonth)
+
+  return h.view('return-logs/setup/readings.njk', pageData)
 }
 
 async function received(request, h) {
@@ -242,6 +253,22 @@ async function submitPeriodUsed(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
+async function submitReadings(request, h) {
+  const {
+    params: { sessionId, yearMonth },
+    payload,
+    yar
+  } = request
+
+  const pageData = await SubmitReadingsService.go(sessionId, payload, yar, yearMonth)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/readings.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+}
+
 async function submitReceived(request, h) {
   const {
     params: { sessionId },
@@ -372,11 +399,34 @@ async function submitUnits(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
 }
 
+async function submitVolumes(request, h) {
+  const {
+    params: { sessionId, yearMonth },
+    payload,
+    yar
+  } = request
+
+  const pageData = await SubmitVolumesService.go(sessionId, payload, yar, yearMonth)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/volumes.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+}
+
 async function units(request, h) {
   const { sessionId } = request.params
   const pageData = await UnitsService.go(sessionId)
 
   return h.view('return-logs/setup/units.njk', pageData)
+}
+
+async function volumes(request, h) {
+  const { sessionId, yearMonth } = request.params
+  const pageData = await VolumesService.go(sessionId, yearMonth)
+
+  return h.view('return-logs/setup/volumes.njk', pageData)
 }
 
 module.exports = {
@@ -390,6 +440,7 @@ module.exports = {
   multipleEntries,
   note,
   periodUsed,
+  readings,
   received,
   reported,
   singleVolume,
@@ -402,6 +453,7 @@ module.exports = {
   submitMultipleEntries,
   submitNote,
   submitPeriodUsed,
+  submitReadings,
   submitReceived,
   submitReported,
   submitSetup,
@@ -409,5 +461,7 @@ module.exports = {
   submitStartReading,
   submitSubmission,
   submitUnits,
-  units
+  submitVolumes,
+  units,
+  volumes
 }

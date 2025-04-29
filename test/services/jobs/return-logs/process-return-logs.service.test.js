@@ -12,9 +12,8 @@ const { expect } = Code
 const { returnCycle, returnRequirement } = require('../../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
-const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
-const FetchCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-current-return-cycle.service.js')
+const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
 // Thing under test
@@ -23,7 +22,6 @@ const ProcessReturnLogsService = require('../../../../app/services/jobs/return-l
 describe('Jobs - Return Logs - Process return logs service', () => {
   const cycle = 'all-year'
 
-  let createReturnCycleStub
   let createReturnLogsStub
   let notifierStub
 
@@ -43,8 +41,7 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      Sinon.stub(FetchCurrentReturnCycleService, 'go').resolves(returnCycle())
-      createReturnCycleStub = Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves()
+      Sinon.stub(CheckReturnCycleService, 'go').resolves(returnCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {
@@ -52,23 +49,12 @@ describe('Jobs - Return Logs - Process return logs service', () => {
         Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement()])
       })
 
-      it('does not create a new return cycle', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        expect(createReturnCycleStub.called).to.be.false()
-      })
-
-      it('creates the return logs', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        expect(createReturnLogsStub.called).to.be.true()
-      })
-
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService.go(cycle)
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
+        expect(createReturnLogsStub.called).to.be.true()
         expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
@@ -80,12 +66,6 @@ describe('Jobs - Return Logs - Process return logs service', () => {
     describe('but there are no return requirements that need return logs created', () => {
       beforeEach(() => {
         Sinon.stub(FetchReturnRequirementsService, 'go').resolves([])
-      })
-
-      it('does not create any return logs', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        expect(createReturnCycleStub.called).to.be.false()
       })
 
       it('still logs the time taken in milliseconds and seconds', async () => {
@@ -102,46 +82,9 @@ describe('Jobs - Return Logs - Process return logs service', () => {
     })
   })
 
-  describe('when the requested return cycle does not exist', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchCurrentReturnCycleService, 'go').resolves()
-      createReturnCycleStub = Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves(returnCycle())
-    })
-
-    describe('and there are return requirements that need return logs created', () => {
-      beforeEach(() => {
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement()])
-      })
-
-      it('creates a new return cycle', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        expect(createReturnCycleStub.called).to.be.true()
-      })
-
-      it('creates the return logs', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        expect(createReturnLogsStub.called).to.be.true()
-      })
-
-      it('logs the time taken in milliseconds and seconds', async () => {
-        await ProcessReturnLogsService.go(cycle)
-
-        const logDataArg = notifierStub.omg.firstCall.args[1]
-
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.count).to.equal(1)
-        expect(logDataArg.cycle).to.equal(cycle)
-      })
-    })
-  })
-
   describe('when the service errors', () => {
     beforeEach(() => {
-      Sinon.stub(FetchCurrentReturnCycleService, 'go').rejects()
+      Sinon.stub(CheckReturnCycleService, 'go').rejects()
     })
 
     it('handles the error', async () => {

@@ -30,7 +30,7 @@ async function go(sessionId, payload, yar) {
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session)
 
   if (!validationResult) {
     const notification = _notification(session, payload)
@@ -95,8 +95,8 @@ function _submittedSessionData(session, payload) {
   return AdditionalSubmissionOptionsPresenter.go(session)
 }
 
-function _validate(payload) {
-  const validation = AdditionalSubmissionOptionsValidator.go(payload)
+function _validate(payload, session) {
+  const validation = AdditionalSubmissionOptionsValidator.go(payload, session)
 
   if (!validation.error) {
     return null

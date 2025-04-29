@@ -22,7 +22,6 @@ const SubmitCheckService = require('../../../../../app/services/return-versions/
 
 describe('Return Versions Setup - Submit Check service', () => {
   let session
-  let sessionId
 
   describe('Return Versions Setup - return-required', () => {
     beforeEach(async () => {
@@ -44,7 +43,6 @@ describe('Return Versions Setup - Submit Check service', () => {
           reason: 'major-change'
         }
       })
-      sessionId = session.id
 
       Sinon.stub(GenerateReturnVersionService, 'go').resolves({
         returnVersion: {
@@ -62,7 +60,7 @@ describe('Return Versions Setup - Submit Check service', () => {
 
     describe('When called with a licence that has not ended', () => {
       it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(sessionId)
+        const result = await SubmitCheckService.go(session.id)
 
         expect(result).to.equal(session.data.licence.id)
       })
@@ -70,7 +68,7 @@ describe('Return Versions Setup - Submit Check service', () => {
 
     describe('When called with an licence that has ended (expired, lapsed or revoked)', () => {
       it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(sessionId)
+        const result = await SubmitCheckService.go(session.id)
 
         expect(result).to.equal(session.data.licence.id)
       })
@@ -98,7 +96,6 @@ describe('Return Versions Setup - Submit Check service', () => {
             reason: 'major-change'
           }
         })
-        sessionId = session.id
 
         Sinon.stub(GenerateReturnVersionService, 'go').resolves({
           returnVersion: {
@@ -112,7 +109,7 @@ describe('Return Versions Setup - Submit Check service', () => {
       })
 
       it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(sessionId)
+        const result = await SubmitCheckService.go(session.id)
 
         expect(result).to.equal(session.data.licence.id)
       })
