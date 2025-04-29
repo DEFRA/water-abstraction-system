@@ -276,11 +276,13 @@ generate_paths() {
   REQUIRE_PATH="${UP_PATH}app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
   TEST_FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
 
+  RELATIVE_UP_PATH=$(build_up_path)
+
   # Additional paths
-  PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
-  VALIDATOR_PATH="../../../../validators/${REL_DIR}/${RAW_NAME}.validator.js"
-  SERVICE_PATH="../../../../services/${REL_DIR}/${RAW_NAME}.service.js"
-  CONTROLLER_PATH="../../../../controllers/${REL_DIR}/${RAW_NAME}.controller.js"
+  PRESENTER_PATH="${RELATIVE_UP_PATH}app/presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
+  VALIDATOR_PATH="${RELATIVE_UP_PATH}app/validators/${REL_DIR}/${RAW_NAME}.validator.js"
+  SERVICE_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/${RAW_NAME}.service.js"
+  CONTROLLER_PATH="${RELATIVE_UP_PATH}app/controllers/${REL_DIR}/${RAW_NAME}.controller.js"
   VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
 }
 
