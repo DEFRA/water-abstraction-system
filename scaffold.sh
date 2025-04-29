@@ -49,23 +49,17 @@ TEMPLATE_TEST_FETCH="templates/fetch.test.js"
 TEMPLATE_PRESENTER="templates/presenter.js"
 TEMPLATE_TEST_PRESENTER="templates/presenter.test.js"
 
+
 # ------------------------------------------------------------------------------
 # Helper Functions
 # ------------------------------------------------------------------------------
 
 build_up_path() {
-  local depth=3
+  local slash_count=0
   if [ -n "$REL_DIR" ]; then
-    local slash_count
     slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
-    depth=$((slash_count + 3))
   fi
-
-  local result=""
-  for ((i=0; i<depth; i++)); do
-    result="../$result"
-  done
-  echo "$result"
+  printf '../%.0s' $(seq 1 $((slash_count + 3)))
 }
 
 render_file() {
