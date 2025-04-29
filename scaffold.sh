@@ -117,12 +117,16 @@ TEMPLATE_SERVICE="templates/service.js"
 TEMPLATE_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.js"
 TEMPLATE_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.js"
 TEMPLATE_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.js"
+TEMPLATE_SUBMIT_SERVICE="templates/submit.service.js"
+TEMPLATE_VALIDATOR="templates/validator.js"
 
 
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
 TEMPLATE_TEST_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.test.js"
 TEMPLATE_TEST_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.test.js"
 TEMPLATE_TEST_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.test.js"
+TEMPLATE_TEST_SUBMIT_SERVICE="templates/submit.service.test.js"
+TEMPLATE_TEST_VALIDATOR="templates/validator.test.js"
 
 
 TEMPLATE_FETCH="templates/fetch.js"
@@ -173,6 +177,7 @@ render_file() {
   local presenter_path="$4"
   local fetch_path="$5"
   local session_model_path="$6"
+  local validator_path="$7"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -187,6 +192,8 @@ render_file() {
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
+      -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
+      -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -237,6 +244,10 @@ generate_paths() {
       APP_SUBFOLDER="services"
       TEST_SUBFOLDER="services"
 
+      # Additional input
+      FETCH_PATH="./fetch-${RAW_NAME}.service.js"
+      SESSION_MODEL_PATH=$(build_session_model_path)
+
       case "$service_variant" in
         service)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
@@ -253,18 +264,22 @@ generate_paths() {
         presenter-session)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_PRESENTER_SESSION"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_PRESENTER_SESSION"
-          # Additional input
-          SESSION_MODEL_PATH=$(build_session_model_path)
           ;;
         fetch)
             SOURCE_TEMPLATE="$TEMPLATE_FETCH"
             TEST_TEMPLATE="$TEMPLATE_TEST_FETCH"
-            # Additional input
-            FETCH_PATH="./fetch-${RAW_NAME}.service.js"
             # We prefix our fetch services with 'fetch'
             MODULE_NAME="Fetch${MODULE_NAME}"
             SOURCE_FILE="fetch-${SOURCE_FILE}"
             TEST_FILE="fetch-${TEST_FILE}"
+          ;;
+         submit)
+            SOURCE_TEMPLATE="$TEMPLATE_SUBMIT_SERVICE"
+            TEST_TEMPLATE="$TEMPLATE_TEST_SUBMIT_SERVICE"
+            # We prefix our submit services with 'submit'
+            MODULE_NAME="Submit${MODULE_NAME}"
+            SOURCE_FILE="submit-${SOURCE_FILE}"
+            TEST_FILE="submit-${TEST_FILE}"
           ;;
         *)
           echo "❌ Unknown service variant: $service_variant"
@@ -278,6 +293,13 @@ generate_paths() {
 
       APP_SUBFOLDER="presenters"
       TEST_SUBFOLDER="presenters"
+
+   elif [ "$TYPE" = "Validator" ]; then
+        SOURCE_TEMPLATE="$TEMPLATE_VALIDATOR"
+        TEST_TEMPLATE="$TEMPLATE_TEST_VALIDATOR"
+
+        APP_SUBFOLDER="validators"
+        TEST_SUBFOLDER="validators"
     else
       echo "❌ Unknown type: $TYPE"
       exit 1
@@ -302,6 +324,7 @@ generate_paths() {
 
   # Additional paths
   PRESENTER_PATH="../../../../presenters/${REL_DIR}/${RAW_NAME}.presenter.js" # Not all require this
+  VALIDATOR_PATH="../../../../validators/${REL_DIR}/${RAW_NAME}.validator.js" # Not all require this
 }
 
 render_source_and_test() {
@@ -311,7 +334,7 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH"
 
   # Render test file
   render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH"
@@ -328,6 +351,7 @@ echo "2) Service + Presenter"
 echo "3) Service + Presenter + Fetch"
 echo "4) Presenter only"
 echo "5) Service + Presenter + Session"
+echo "6) Submit + Validator"
 echo ""
 
 read -rp "> " choice
@@ -356,6 +380,12 @@ case "$choice" in
     echo "📦 Generating Service + Presenter + Session..."
     render_source_and_test "Service" "presenter-session"
     render_source_and_test "Presenter" ""
+    ;;
+  6)
+    echo "📦 Generating Submit service + validator..."
+    render_source_and_test "Service" "submit"
+    render_source_and_test "Validator" ""
+    render_source_and_test "Presenter" "" # This should already exists based on our workflow
     ;;
   *)
     echo "❌ Invalid selection. Exiting."
