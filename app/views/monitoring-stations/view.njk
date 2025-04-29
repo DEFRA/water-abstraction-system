@@ -159,17 +159,25 @@
 
   {% if permissionToManageLinks %}
     <div class="govuk-button-group">
-      <form method="post" action="/system/licence-monitoring-station/setup">
-        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-        {{
-          govukButton({
-            text: 'Tag a licence',
-            name: "monitoringStationId",
-            value: monitoringStationId,
-            preventDoubleClick: true,
-            classes: "govuk-button--secondary"
-          })
-        }}
+      {% if enableLicenceMonitoringStationsSetup %}
+        <form method="post" action="/system/licence-monitoring-station/setup">
+          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+          {{
+            govukButton({
+              text: 'Tag a licence',
+              name: "monitoringStationId",
+              value: monitoringStationId,
+              preventDoubleClick: true,
+              classes: "govuk-button--secondary"
+            })
+          }}
+      {% else %}
+        {{ govukButton({
+          text: "Tag a licence",
+          href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
 
       {% if restrictions.length > 0 %}
         {{ govukButton({
