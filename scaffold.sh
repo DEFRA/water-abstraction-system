@@ -30,7 +30,6 @@ PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 # ------------------------------------------------------------------------------
 
 TEMPLATE_SERVICE="templates/service.js"
-TEMPLATE_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.js"
 TEMPLATE_SERVICE_FETCH="templates/service-fetch.service.js"
 TEMPLATE_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.js"
 TEMPLATE_SUBMIT_SERVICE="templates/submit.service.js"
@@ -39,7 +38,6 @@ TEMPLATE_VIEW="templates/view.njk"
 
 
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
-TEMPLATE_TEST_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.test.js"
 TEMPLATE_TEST_SERVICE_FETCH="templates/service-fetch.service.test.js"
 TEMPLATE_TEST_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.test.js"
 TEMPLATE_TEST_SUBMIT_SERVICE="templates/submit.service.test.js"
@@ -162,7 +160,7 @@ generate_controller_snippet() {
 }
 
 generate_paths() {
-  local type="$1"    # Service, Presenter, FetchService
+  local type="$1"    # Service, Presenter,
   local service_variant="$2"  # service, presenter, fetch-presenter
 
   TYPE="$type"
@@ -182,10 +180,6 @@ generate_paths() {
         service)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
-          ;;
-        presenter)
-          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_AND_PRESENTER"
-          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_AND_PRESENTER"
           ;;
         service-with-fetch)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_FETCH"
