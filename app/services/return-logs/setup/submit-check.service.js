@@ -22,6 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, user) {
   // TODO: Consider validation
   const session = await SessionModel.query().findById(sessionId)
+  console.log('🚀 ~ go ~ session:', session)
 
   const metadata = GenerateReturnSubmissionMetadata.go(session)
 
@@ -31,7 +32,7 @@ async function go(sessionId, user) {
       user.username,
       'internal',
       metadata,
-      session.nilReturn,
+      session.journey === 'nil-return',
       trx
     )
 
