@@ -24,17 +24,24 @@ function go(payload, requestedYear, requestedMonth, session) {
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
   const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
 
+  const maxAllowedReading = 99999999999
+
   const schema = Joi.object().pattern(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
     Joi.number()
+      .integer()
       .min(0)
+      .max(maxAllowedReading)
       .custom((value, helpers) => {
         // We need to check the values are in increasing order
         return _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading)
       })
       .messages({
-        'number.base': 'Meter readings must be a number or blank',
-        'number.min': 'Meter readings must be a positive number'
+        'number.base': 'Reading must be a number or blank',
+        'number.integer': 'Reading must be a whole number',
+        'number.min': 'Reading must be a positive number',
+        'number.max': `Reading entered exceeds the maximum of ${maxAllowedReading}`,
+        'number.unsafe': `Reading entered exceeds the maximum of ${maxAllowedReading}`
       })
   )
 
@@ -74,18 +81,18 @@ function _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighes
   const currentKeyIndex = _currentKeyIndex(helpers, meterReadingsArray)
 
   if (currentKeyIndex > 0 && value < meterReadingsArray[currentKeyIndex - 1].reading) {
-    return helpers.message(`Each meter reading must be greater than or equal to the previous reading`)
+    return helpers.message(`Each reading must be greater than or equal to the previous reading`)
   }
 
   if (value < previousHighestReading) {
     return helpers.message(
-      `The meter readings must be greater than or equal to the previous reading of ${previousHighestReading}`
+      `The reading must be greater than or equal to the previous reading of ${previousHighestReading}`
     )
   }
 
   if (value > subsequentLowestReading) {
     return helpers.message(
-      `The meter readings must be less than or equal to the subsequent reading of ${subsequentLowestReading}`
+      `The reading must be less than or equal to the subsequent reading of ${subsequentLowestReading}`
     )
   }
 
@@ -120,7 +127,7 @@ function _previousHighestReading(lines, requestedYear, requestedMonth, startRead
 }
 
 /**
- * Finds the lowest subsequent meter reading. This will be the MAX_SAFE_INTEGER if no subsequent meter readings exist
+ * Finds the lowest subsequent meter reading. `Math.min` returns `Infinity` if no subsequent meter readings exist
  *
  * @private
  */
@@ -137,7 +144,6 @@ function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
   })
 
   const minReading = Math.min(
-    Number.MAX_SAFE_INTEGER,
     ...subsequentLines.map((subsequentLine) => {
       return subsequentLine.reading // Extract the readings
     })
