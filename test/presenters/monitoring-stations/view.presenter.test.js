@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/monitoring-stations/view.presenter.js')
@@ -15,6 +19,8 @@ describe('Monitoring Stations - View presenter', () => {
   let monitoringStation
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
+
     auth = {
       credentials: {
         scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
@@ -57,6 +63,7 @@ describe('Monitoring Stations - View presenter', () => {
       const result = ViewPresenter.go(monitoringStation, auth)
 
       expect(result).to.equal({
+        enableLicenceMonitoringStationsSetup: true,
         gridReference: 'TL2664640047',
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         pageTitle: 'BUSY POINT',
