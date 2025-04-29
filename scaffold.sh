@@ -31,7 +31,7 @@ PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 
 TEMPLATE_SERVICE="templates/service.js"
 TEMPLATE_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.js"
-TEMPLATE_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.js"
+TEMPLATE_SERVICE_FETCH="templates/service-fetch.service.js"
 TEMPLATE_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.js"
 TEMPLATE_SUBMIT_SERVICE="templates/submit.service.js"
 TEMPLATE_VALIDATOR="templates/validator.js"
@@ -40,7 +40,7 @@ TEMPLATE_VIEW="templates/view.njk"
 
 TEMPLATE_TEST_SERVICE="templates/service.test.js"
 TEMPLATE_TEST_SERVICE_AND_PRESENTER="templates/service-and-presenter.service.test.js"
-TEMPLATE_TEST_SERVICE_FETCH_PRESENTER="templates/service-fetch-presenter.service.test.js"
+TEMPLATE_TEST_SERVICE_FETCH="templates/service-fetch.service.test.js"
 TEMPLATE_TEST_SERVICE_PRESENTER_SESSION="templates/service-session-presenter.service.test.js"
 TEMPLATE_TEST_SUBMIT_SERVICE="templates/submit.service.test.js"
 TEMPLATE_TEST_VALIDATOR="templates/validator.test.js"
@@ -68,23 +68,6 @@ build_up_path() {
     result="../$result"
   done
   echo "$result"
-}
-
-build_session_model_path() {
-  local depth=2 # Always 2 minimum: services/ + leaving services/
-
-  if [ -n "$REL_DIR" ]; then
-    local slash_count
-    slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
-    depth=$((slash_count + 2))
-  fi
-
-  local result=""
-  for ((i=0; i<depth; i++)); do
-    result="../$result"
-  done
-
-  echo "${result}models/session.model.js"
 }
 
 render_file() {
@@ -188,12 +171,10 @@ generate_paths() {
   TEST_FILE="${RAW_NAME}.${TYPE_LOWER}.test.js"
 
     if [ "$TYPE" = "Service" ]; then
-      APP_SUBFOLDER="services"
-      TEST_SUBFOLDER="services"
+      SUBFOLDER="services"
 
       # Additional input
       FETCH_PATH="./fetch-${RAW_NAME}.service.js"
-      SESSION_MODEL_PATH=$(build_session_model_path)
 
       case "$service_variant" in
         service)
@@ -204,9 +185,9 @@ generate_paths() {
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_AND_PRESENTER"
           TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_AND_PRESENTER"
           ;;
-        fetch-presenter)
-          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_FETCH_PRESENTER"
-          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_FETCH_PRESENTER"
+        service-with-fetch)
+          SOURCE_TEMPLATE="$TEMPLATE_SERVICE_FETCH"
+          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE_FETCH"
           ;;
         presenter-session)
           SOURCE_TEMPLATE="$TEMPLATE_SERVICE_PRESENTER_SESSION"
@@ -238,22 +219,19 @@ generate_paths() {
       SOURCE_TEMPLATE="$TEMPLATE_PRESENTER"
       TEST_TEMPLATE="$TEMPLATE_TEST_PRESENTER"
 
-      APP_SUBFOLDER="presenters"
-      TEST_SUBFOLDER="presenters"
+      SUBFOLDER="presenters"
 
     elif [ "$TYPE" = "Validator" ]; then
         SOURCE_TEMPLATE="$TEMPLATE_VALIDATOR"
         TEST_TEMPLATE="$TEMPLATE_TEST_VALIDATOR"
 
-        APP_SUBFOLDER="validators"
-        TEST_SUBFOLDER="validators"
+        SUBFOLDER="validators"
 
    elif [ "$TYPE" = "View" ]; then
         SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.njk"
         SOURCE_TEMPLATE="$TEMPLATE_VIEW"
 
-        APP_SUBFOLDER="views"
-        TEST_SUBFOLDER="views"
+        SUBFOLDER="views"
     else
       echo "❌ Unknown type: $TYPE"
       exit 1
@@ -261,28 +239,27 @@ generate_paths() {
 
   # When a folder path is supplied
   if [ -n "$REL_DIR" ]; then
-    SOURCE_OUTPUT="app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
-    TEST_OUTPUT="test/${TEST_SUBFOLDER}/${REL_DIR}/${TEST_FILE}"
+    SOURCE_OUTPUT="app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+    TEST_OUTPUT="test/${SUBFOLDER}/${REL_DIR}/${TEST_FILE}"
   else
-    SOURCE_OUTPUT="app/${APP_SUBFOLDER}/${SOURCE_FILE}"
-    TEST_OUTPUT="test/${TEST_SUBFOLDER}/${TEST_FILE}"
+    SOURCE_OUTPUT="app/${SUBFOLDER}/${SOURCE_FILE}"
+    TEST_OUTPUT="test/${SUBFOLDER}/${TEST_FILE}"
   fi
 
   # Helper
-  UP_PATH=$(build_up_path)
-
-  # Test variables
-  DESCRIBE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE" # Test describe block
-  REQUIRE_PATH="${UP_PATH}app/${APP_SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
-  TEST_FETCH_PATH="${UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
-
   RELATIVE_UP_PATH=$(build_up_path)
+
+  # Test
+  DESCRIBE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE" # Test describe block
+  REQUIRE_PATH="${RELATIVE_UP_PATH}app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+  TEST_FETCH_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
 
   # Additional paths
   PRESENTER_PATH="${RELATIVE_UP_PATH}app/presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
   VALIDATOR_PATH="${RELATIVE_UP_PATH}app/validators/${REL_DIR}/${RAW_NAME}.validator.js"
   SERVICE_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/${RAW_NAME}.service.js"
   CONTROLLER_PATH="${RELATIVE_UP_PATH}app/controllers/${REL_DIR}/${RAW_NAME}.controller.js"
+  SESSION_MODEL_PATH="${RELATIVE_UP_PATH}app/models/session.model.js"
   VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
 }
 
@@ -310,7 +287,7 @@ echo "2) Journey - View"
 echo "3) Journey - Submit"
 echo "4) Presenter only"
 echo "5) Service only"
-echo "6) Service withFetch"
+echo "6) Service with Fetch"
 echo ""
 
 read -rp "> " choice
@@ -348,7 +325,7 @@ case "$choice" in
     ;;
   6)
     echo "📦 Generating Service with Fetch..."
-    render_source_and_test "Service" ""
+    render_source_and_test "Service" "service-with-fetch"
     render_source_and_test "Service" "fetch"
     ;;
   *)
