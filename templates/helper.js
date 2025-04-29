@@ -1,4 +1,4 @@
-'use strict'
+/* eslint-disable camelcase, no-unused-vars, strict */
 
 // Controller code
 const __SERVICE_NAME__ = require('__SERVICE_PATH__')
