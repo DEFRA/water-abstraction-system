@@ -99,6 +99,7 @@ render_file() {
       -e "s/__NAME__/${PASCAL_NAME}/g" \
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s/__SERVICE_NAME__/${PASCAL_NAME}Service/g" \
+      -e "s/__SUBMIT_NAME__/Submit${PASCAL_NAME}Service/g" \
       -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
       -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
@@ -145,11 +146,13 @@ generate_controller_snippet() {
     echo ""
 
     sed -e "s|__SERVICE_NAME__|${PASCAL_NAME}Service|g" \
+        -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_PATH__|${SERVICE_PATH}|g" \
         -e "s|__NAME__|${PASCAL_NAME}|g" \
         -e "s|__VIEW_PATH__|${VIEW_PATH}|g" \
         -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
         -e "s|__CONTROLLER_PATH__|${CONTROLLER_PATH}|g" \
+        -e "s|__SUBMIT_PATH__|${SUBMIT_PATH}|g" \
         "$snippet_template"
 
     echo ""
@@ -157,7 +160,6 @@ generate_controller_snippet() {
     echo "❌ Snippet template not found: $snippet_template"
   fi
 }
-
 
 generate_paths() {
   local type="$1"    # Service, Presenter, FetchService
@@ -258,6 +260,7 @@ generate_paths() {
   PRESENTER_PATH="${RELATIVE_UP_PATH}app/presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
   VALIDATOR_PATH="${RELATIVE_UP_PATH}app/validators/${REL_DIR}/${RAW_NAME}.validator.js"
   SERVICE_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/${RAW_NAME}.service.js"
+  SUBMIT_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/submit-${RAW_NAME}.service.js"
   CONTROLLER_PATH="${RELATIVE_UP_PATH}app/controllers/${REL_DIR}/${RAW_NAME}.controller.js"
   SESSION_MODEL_PATH="${RELATIVE_UP_PATH}app/models/session.model.js"
   VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
