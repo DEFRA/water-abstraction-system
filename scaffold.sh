@@ -59,7 +59,7 @@ build_up_path() {
   if [ -n "$REL_DIR" ]; then
     slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
   fi
-  printf '../%.0s' $(seq 1 $((slash_count + 3)))
+  printf '../%.0s' $(seq 1 $((slash_count + 2)))
 }
 
 render_file() {
@@ -70,8 +70,7 @@ render_file() {
   local fetch_path="$5"
   local session_model_path="$6"
   local validator_path="$7"
-  local service_path="$8"
-  local view_path="$9"
+  local view_path="$8"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -82,7 +81,6 @@ render_file() {
 
   sed -e "s#__FETCH_PATH__#${fetch_path}#g" \
       -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
-      -e "s#__SERVICE_PATH__#${service_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
       -e "s#__VIEW_PATH__#${view_path}#g" \
@@ -107,8 +105,7 @@ render_test_file() {
   local describe_label="$5"
   local presenter_path="$6"
   local fetch_path="$7"
-  local session_model_path="$8"
-  local session_helper_path="$9"
+  local session_helper_path="$8"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -124,7 +121,6 @@ render_test_file() {
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
       -e "s#__FETCH_PATH__#${fetch_path}#g" \
-      -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       -e "s#__SESSION_HELPER_PATH__#${session_helper_path}#g" \
       "$template" > "$output_path"
 
@@ -139,13 +135,16 @@ generate_helper_snippet() {
     echo "Here is your ready-to-use controller + router snippet:"
     echo ""
 
+    local service_path="../services/${REL_DIR}/${RAW_NAME}.service.js"
+    local submit_service_path="../services/${REL_DIR}/submit-${RAW_NAME}.service.js"
+
     sed -e "s|__SERVICE_NAME__|${PASCAL_NAME}Service|g" \
         -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
-        -e "s|__SERVICE_PATH__|${SERVICE_PATH}|g" \
+        -e "s|__SERVICE_PATH__|${service_path}|g" \
         -e "s|__NAME__|${PASCAL_NAME}|g" \
         -e "s|__VIEW_PATH__|${VIEW_PATH}|g" \
         -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
-        -e "s|__SUBMIT_PATH__|${SUBMIT_PATH}|g" \
+        -e "s|__SUBMIT_PATH__|${submit_service_path}|g" \
         "$snippet_template"
 
     echo ""
@@ -246,16 +245,15 @@ generate_paths() {
 
   # Test
   DESCRIBE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE" # Test describe block
-  REQUIRE_PATH="${RELATIVE_UP_PATH}app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
-  TEST_FETCH_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
+  REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+  TEST_FETCH_PATH="${RELATIVE_UP_PATH}../app/services/${REL_DIR}/fetch-${SOURCE_FILE}"
+  SESSION_HELPER_PATH="${RELATIVE_UP_PATH}support/helpers/session.helper.js"
 
   # Additional paths
-  PRESENTER_PATH="${RELATIVE_UP_PATH}app/presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
-  VALIDATOR_PATH="${RELATIVE_UP_PATH}app/validators/${REL_DIR}/${RAW_NAME}.validator.js"
-  SERVICE_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/${RAW_NAME}.service.js"
-  SUBMIT_PATH="${RELATIVE_UP_PATH}app/services/${REL_DIR}/submit-${RAW_NAME}.service.js"
-  SESSION_MODEL_PATH="${RELATIVE_UP_PATH}app/models/session.model.js"
-  SESSION_HELPER_PATH="${RELATIVE_UP_PATH}test/support/helpers/session.helper.js"
+  PRESENTER_PATH="${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
+  VALIDATOR_PATH="${RELATIVE_UP_PATH}validators/${REL_DIR}/${RAW_NAME}.validator.js"
+  SESSION_MODEL_PATH="${RELATIVE_UP_PATH}models/session.model.js"
+
   VIEW_PATH="${REL_DIR}/${RAW_NAME}.njk" # The view path for the controllers `h.view()`
 }
 
@@ -266,11 +264,11 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$SERVICE_PATH" "$VIEW_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$FETCH_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$VIEW_PATH"
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then
-    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_MODEL_PATH" "$SESSION_HELPER_PATH"
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$TEST_FETCH_PATH" "$SESSION_HELPER_PATH"
   fi
 }
 
