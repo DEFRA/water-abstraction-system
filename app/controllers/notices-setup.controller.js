@@ -6,9 +6,10 @@
  */
 
 const AdHocLicenceService = require('../services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
+const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
-const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
+const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
@@ -34,6 +35,16 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewAlertType(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await AlertTypeService.go(sessionId)
+
+  return h.view(`${basePath}/abstraction-alerts/alert-type.njk`, pageData)
 }
 
 async function viewCancel(request, h) {
@@ -92,9 +103,9 @@ async function viewCheck(request, h) {
 }
 
 async function setup(request, h) {
-  const { journey } = request.query
+  const { journey, monitoringStationId } = request.query
 
-  const { sessionId, path } = await InitiateSessionService.go(journey)
+  const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
@@ -123,7 +134,7 @@ async function submitLicence(request, h) {
 
   const pageData = await SubmitAdHocLicenceService.go(sessionId, request.payload)
 
-  if (pageData.error || pageData.notification) {
+  if (pageData.error) {
     return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
   }
 
@@ -162,6 +173,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewAlertType,
   viewCancel,
   viewConfirmation,
   viewLicence,

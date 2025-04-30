@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
@@ -21,7 +22,7 @@ const RemoveLicencesService = require('../../app/services/notices/setup/remove-l
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
-const SubmitLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
@@ -232,6 +233,36 @@ describe('Notices Setup controller', () => {
     })
   })
 
+  describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
+    describe('/alert-type', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-type`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(AlertTypeService, 'go').resolves({
+            pageTitle: 'Alert page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Alert page')
+          })
+        })
+      })
+    })
+  })
+
   describe('notices/setup/{sessionId}/ad-hoc-licence', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -264,7 +295,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '01/115' })
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({})
+          Sinon.stub(SubmitAdHocLicenceService, 'go').resolves({})
         })
 
         it('returns the same page', async () => {
@@ -279,7 +310,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '' })
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({
+          Sinon.stub(SubmitAdHocLicenceService, 'go').resolves({
             licenceRef: '01/115',
             error: { text: 'Enter a Licence number' }
           })

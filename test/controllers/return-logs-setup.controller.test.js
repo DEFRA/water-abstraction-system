@@ -884,6 +884,25 @@ describe('Return Logs - Setup - Controller', () => {
           })
         })
 
+        describe('and the reporting type is "abstraction-volumes" but the page has been visited', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              checkPageVisited: true,
+              reported: 'abstraction-volumes',
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
+            })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          })
+        })
+
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
@@ -1526,6 +1545,22 @@ describe('Return Logs - Setup - Controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
+          })
+        })
+
+        describe('and the user selected "Record receipt" on the submission page', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({
+              redirect: 'confirm-received',
+              returnLogId: '123'
+            })
+          })
+
+          it('redirects to the "reported" page', async () => {
+            const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/confirmed?id=123`)
           })
         })
 
