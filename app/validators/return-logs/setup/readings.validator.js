@@ -21,10 +21,9 @@ const Joi = require('joi')
 function go(payload, requestedYear, requestedMonth, session) {
   const { lines, startReading } = session
 
+  const maxAllowedReading = 99999999999
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
   const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
-
-  const maxAllowedReading = 99999999999
 
   const schema = Joi.object().pattern(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
