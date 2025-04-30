@@ -56,6 +56,7 @@ describe('Monitoring Stations - View presenter', () => {
     }
 
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
   })
 
   describe('when provided with the result of the fetch monitoring service', () => {
