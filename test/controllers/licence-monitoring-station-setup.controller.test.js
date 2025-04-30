@@ -49,9 +49,13 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(InitiateSessionService, 'go').resolves('b0ebf12a-c238-4c48-9526-64513a8df935')
-          options = postRequestOptions(`/licence-monitoring-station/setup`, {
-            payload: { monitoringStationId: '3c59382a-df8a-4c1b-827d-f4a2d0d8b4f4' }
-          })
+          options = postRequestOptions(
+            `/licence-monitoring-station/setup`,
+            {
+              payload: { monitoringStationId: '3c59382a-df8a-4c1b-827d-f4a2d0d8b4f4' }
+            },
+            'manage_gauging_station_licence_links'
+          )
         })
 
         it('redirects to the returned page', async () => {
@@ -152,11 +156,15 @@ function _getOptions(path) {
     url,
     auth: {
       strategy: 'session',
-      credentials: { scope: [] }
+      credentials: { scope: ['manage_gauging_station_licence_links'] }
     }
   }
 }
 
 function _postOptions(path, payload) {
-  return postRequestOptions(`/licence-monitoring-station/setup/${sessionId}/${path}`, payload)
+  return postRequestOptions(
+    `/licence-monitoring-station/setup/${sessionId}/${path}`,
+    payload,
+    'manage_gauging_station_licence_links'
+  )
 }
