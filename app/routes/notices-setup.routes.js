@@ -42,6 +42,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
+    options: {
+      handler: NoticesSetupController.submitAlertType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {
