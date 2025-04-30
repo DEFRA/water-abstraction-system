@@ -1,0 +1,189 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bills',
+      href:  '/system/licences/' + licenceId + '/bills'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l"> Billing account {{ accountNumber }} </span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+      {{ pageTitle }}
+    </h1>
+  </div>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  {# Billing account details #}
+  <div class="govuk-body">
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border",
+      rows: [
+        {
+          key: {
+            text: "Created date"
+          },
+          value: {
+            text: createdDate
+          }
+        },
+        {
+          key: {
+            text: "Customer file"
+          },
+          value: {
+            text: customerFile
+          }
+        },
+        {
+          key: {
+            text: "Last updated"
+          },
+          value: {
+            text: lastUpdated
+          }
+        },
+        {
+          key: {
+            text: "Address"
+          },
+          value: {
+            html: newLineArrayItems(address)
+          }
+        }
+      ]
+    }) }}
+
+    {{ govukButton({
+      text: "Change address",
+      classes: "govuk-button--secondary",
+      href: "/billing-account-entry/change-address-" + billingAccountId + "/select-account"
+    }) }}
+  </div>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  {# Bill details #}
+  {% if bills.length <= 0 %}
+    <div class="govuk-body govuk-!-padding-top-3">
+      <p>No sent bills for this billing account</p>
+    </div>
+  {% elif bills.length > 0 %}
+    {% set tableRows = [] %}
+
+    {% for bill in bills %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+      {% set tableRow = []%}
+
+      {# Bill number cell #}
+      {% set billNumberCell =
+        {
+          html: '<a class="govuk-link govuk-body-m" href="/system/bills/' + bill.billId + '">' + bill.billNumber + '</a>',
+          attributes: { 'data-test': 'bill-number-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(billNumberCell), tableRow) %}
+
+      {# Date created cell #}
+      {% set dateCreatedCell =
+        {
+          text: bill.dateCreated,
+          attributes: { 'data-test': 'date-created-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(dateCreatedCell), tableRow) %}
+
+      {# Bill run type cell #}
+      {% set billRunTypeCell =
+        {
+          text: bill.billRunType,
+          attributes: { 'data-test': 'bill-run-type-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(billRunTypeCell), tableRow) %}
+
+      {# Bill run number cell #}
+      {% set billRunNumberCell =
+        {
+          text: bill.billRunNumber,
+          attributes: { 'data-test': 'bill-run-number-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(billRunNumberCell), tableRow) %}
+
+      {# Financial year cell #}
+      {% set financialYearCell =
+        {
+          text: bill.financialYear,
+          attributes: { 'data-test': 'financial-year-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(financialYearCell), tableRow) %}
+
+      {# Bill total cell #}
+      {% set billTotalCell =
+        {
+          text: bill.billTotal,
+          attributes: { 'data-test': 'bill-total-' + rowIndex }
+        }
+      %}
+
+      {% set tableRow = (tableRow.push(billTotalCell), tableRow) %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    <div class="govuk-body">
+      {{ govukTable({
+        caption: "Sent bills",
+        captionClasses: "govuk-table__caption--l",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Bill number"
+          },
+          {
+            text: "Date created"
+          },
+          {
+            text: "Bill run type"
+          },
+          {
+            text: "Bill run number"
+          },
+          {
+            text: "Financial year"
+          },
+          {
+            text: "Bill total"
+          }
+        ],
+        rows: tableRows
+      }) }}
+    </div>
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
