@@ -27,6 +27,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
       expect(result).to.equal({
         alertTypeOptions: [
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
             },
@@ -34,6 +35,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
             value: 'warning'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they can take water at a reduced amount.'
             },
@@ -41,6 +43,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
             value: 'reduce'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they must stop taking water.'
             },
@@ -48,6 +51,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
             value: 'stop'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they can take water at the normal amount.'
             },

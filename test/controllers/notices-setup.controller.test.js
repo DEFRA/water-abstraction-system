@@ -20,6 +20,7 @@ const InitiateSessionService = require('../../app/services/notices/setup/initiat
 const LicenceService = require('../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
+const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
@@ -257,6 +258,44 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Alert page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`
+            )
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Alert page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Alert page')
+            expect(response.payload).to.contain('There is a problem')
           })
         })
       })
