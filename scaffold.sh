@@ -223,6 +223,10 @@ generate_paths() {
         SOURCE_FILE="${RAW_NAME}.${TYPE_LOWER}.njk"
         SOURCE_TEMPLATE="$TEMPLATE_VIEW"
 
+        # Do nto generate a view test file
+        TEST_TEMPLATE=""
+        TEST_FILE=""
+
         SUBFOLDER="views"
     else
       echo "❌ Unknown type: $TYPE"
