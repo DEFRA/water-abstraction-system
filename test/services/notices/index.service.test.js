@@ -15,7 +15,7 @@ const NoticesIndexPresenter = require('../../../app/presenters/notices/index-not
 // Thing under test
 const NoticesIndexService = require('../../../app/services/notices/index.service.js')
 
-describe.only('Notices - view', () => {
+describe('Notices - view', () => {
   let yarStub
 
   beforeEach(async () => {})
