@@ -114,7 +114,7 @@ function _prepareNotifications(filterNotificationTypes) {
     returnsPaperForm: filterNotificationTypes.includes('returns-paper-form'),
     returnReminders: filterNotificationTypes.includes('returns-reminders'),
     returnInvitation: filterNotificationTypes.includes('returns-invitation'),
-    adHocReminders: filterNotificationTypes.includes('ad-hoc-remiders'),
+    adHocReminders: filterNotificationTypes.includes('ad-hoc-reminders'),
     waterAbstractionAlertResume: filterNotificationTypes.includes('water-abstraction-alert-resume'),
     waterAbstractionAlertStop: filterNotificationTypes.includes('water-abstraction-alert-stop'),
     waterAbstractionAlertReduce: filterNotificationTypes.includes('water-abstraction-alert-reduce'),
