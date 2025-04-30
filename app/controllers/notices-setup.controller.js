@@ -15,6 +15,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
@@ -110,6 +111,21 @@ async function setup(request, h) {
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
 
+async function submitAlertType(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitAlertTypeService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`${basePath}/abstraction-alerts/alert-type.njk`, pageData)
+  }
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`)
+}
+
 async function submitCancel(request, h) {
   const { sessionId } = request.params
 
@@ -181,6 +197,7 @@ module.exports = {
   viewRemoveLicences,
   viewReturnsPeriod,
   setup,
+  submitAlertType,
   submitCancel,
   submitCheck,
   submitLicence,

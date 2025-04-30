@@ -15,16 +15,17 @@
  */
 function go(session) {
   return {
-    alertTypeOptions: _alertTypeOptions(),
+    alertTypeOptions: _alertTypeOptions(session.alertType),
     backLink: `/system/monitoring-stations/${session.monitoringStationId}`,
     caption: session.monitoringStationName,
     pageTitle: 'Select the type of alert you need to send'
   }
 }
 
-function _alertTypeOptions() {
+function _alertTypeOptions(alertType) {
   return [
     {
+      checked: alertType === 'warning',
       value: 'warning',
       text: 'Warning',
       hint: {
@@ -32,6 +33,7 @@ function _alertTypeOptions() {
       }
     },
     {
+      checked: alertType === 'reduce',
       value: 'reduce',
       text: 'Reduce',
       hint: {
@@ -39,6 +41,7 @@ function _alertTypeOptions() {
       }
     },
     {
+      checked: alertType === 'stop',
       value: 'stop',
       text: 'Stop',
       hint: {
@@ -46,6 +49,7 @@ function _alertTypeOptions() {
       }
     },
     {
+      checked: alertType === 'resume',
       value: 'resume',
       text: 'Resume',
       hint: {
