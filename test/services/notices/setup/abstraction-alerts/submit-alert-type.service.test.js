@@ -22,6 +22,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
   beforeEach(async () => {
     payload = { 'alert-type': 'stop' }
     sessionData = AbstractionAlertSessionData.monitoringStation()
+
     session = await SessionHelper.add({ data: sessionData })
   })
 
