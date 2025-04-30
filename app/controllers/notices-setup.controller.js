@@ -130,7 +130,7 @@ async function submitAlertThresholds(request, h) {
   const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
+    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
   }
 
   return h.redirect('')
