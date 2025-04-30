@@ -89,7 +89,7 @@ function _alert(status, statusUpdatedAt) {
 }
 
 function _links(monitoringStationId) {
-  let createAlert = `/system/notifications/setup?journey=abstraction-alert&monitoringStationId=${monitoringStationId}`
+  let createAlert = `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStationId}`
 
   if (!FeatureFlagsConfig.enableMonitoringStationsAlertNotifications) {
     createAlert = '/monitoring-stations/' + monitoringStationId + '/send-alert/alert-type'

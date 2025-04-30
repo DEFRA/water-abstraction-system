@@ -66,7 +66,7 @@ describe('Monitoring Stations - View presenter', () => {
       expect(result).to.equal({
         enableLicenceMonitoringStationsSetup: true,
         links: {
-          createAlert: `/system/notifications/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+          createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
         },
         gridReference: 'TL2664640047',
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
@@ -99,7 +99,7 @@ describe('Monitoring Stations - View presenter', () => {
           const result = ViewPresenter.go(monitoringStation, auth)
 
           expect(result.links.createAlert).to.equal(
-            `/system/notifications/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+            `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
           )
         })
       })

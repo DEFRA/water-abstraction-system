@@ -46,6 +46,7 @@ function monitoringStation() {
         threshold_value: 100
       }
     ],
+    monitoringStationId: generateUUID(),
     monitoringStationName: 'Death star'
   }
 }
