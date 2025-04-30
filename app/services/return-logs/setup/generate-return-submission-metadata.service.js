@@ -22,6 +22,11 @@ const UNIT_NAMES = {
  * @returns
  */
 function go(session) {
+  // Metadata is not required for nil returns
+  if (session.journey === 'nil-return') {
+    return {}
+  }
+
   return {
     type: session.meterProvided === 'no' ? 'estimated' : 'measured',
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
