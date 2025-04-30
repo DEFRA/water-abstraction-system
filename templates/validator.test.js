@@ -32,7 +32,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a licence number')
+      expect(result.error.details[0].message).to.equal('')
     })
   })
 })
