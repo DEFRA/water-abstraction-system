@@ -503,6 +503,43 @@ describe('Notices - Fetch Notices service', () => {
     })
   })
 
+  describe('when a notice exists and there is a "adHocReminders" filter applied', () => {
+    beforeEach(async () => {
+      testEvent = await EventHelper.add({
+        type: 'notification',
+        subtype: 'adHocReminder',
+        status: 'sent',
+        metadata: {
+          name: 'Returns: ad-hoc',
+          recipients: 1
+        }
+      })
+    })
+
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            adHocReminders: true
+          }
+        },
+        1
+      )
+
+      expect(result.results).to.contain(
+        EventModel.fromJson({
+          id: testEvent.id,
+          createdAt: testEvent.createdAt,
+          issuer: testEvent.issuer,
+          name: testEvent.metadata.name,
+          alertType: null,
+          recipientCount: testEvent.metadata.recipients,
+          errorCount: null
+        })
+      )
+    })
+  })
+
   describe('when a notice exists with a subtype of "hof-stop" and there is a "legacyNotifications" filter applied', () => {
     beforeEach(async () => {
       testEvent = await EventHelper.add({
