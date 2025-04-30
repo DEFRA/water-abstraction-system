@@ -28,7 +28,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     })
   })
 
-  describe('when called with valid data', () => {
+  describe('when called with invalid data', () => {
     beforeEach(() => {
       payload = {}
     })
