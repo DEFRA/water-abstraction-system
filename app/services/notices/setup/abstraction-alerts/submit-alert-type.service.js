@@ -6,9 +6,9 @@
  * @module SubmitAlertTypeService
  */
 
-const AlertTypePresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
-const AlertTypeValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-type.validator.js')
-const SessionModel = require('../../../../../app/models/session.model.js')
+const AlertTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
+const AlertTypeValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-type.validator.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
