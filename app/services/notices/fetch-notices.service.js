@@ -48,10 +48,11 @@ async function go(filter, page) {
   }
 
   if (filter.notifications) {
-    const { hasAlert, alerts } = _waterAbstractionAlerts(filter.notifications)
-    if (hasAlert) {
+    const alerts = _waterAbstractionAlerts(filter.notifications)
+
+    if (alerts.length > 0) {
       query.where('subtype', 'waterAbstractionAlerts')
-      query.whereRaw(`metadata->'options'->'linkages'->0->0->>'alertType' IN (?,?,?,?)`, alerts)
+      query.whereRaw(`metadata->'options'->'linkages'->0->0->>'alertType' = ANY (?)`, [alerts])
     }
 
     if (filter.notifications.legacyNotifications) {
@@ -69,6 +70,10 @@ async function go(filter, page) {
     if (filter.notifications.returnInvitation) {
       query.where('subtype', 'returnInvitation')
     }
+
+    if (filter.notifications.adHocReminders) {
+      query.where('subtype', 'adHocReminder')
+    }
   }
 
   return query
@@ -84,8 +89,7 @@ async function go(filter, page) {
  * @returns {Promise<string[]>} an array of alert types from the filter
  */
 function _waterAbstractionAlerts(filter) {
-  const alerts = ['', '', '', '']
-  let hasAlert = false
+  const alerts = []
 
   const {
     waterAbstractionAlertResume,
@@ -95,26 +99,22 @@ function _waterAbstractionAlerts(filter) {
   } = filter
 
   if (waterAbstractionAlertResume) {
-    alerts[0] = 'resume'
-    hasAlert = true
+    alerts.push('resume')
   }
 
   if (waterAbstractionAlertStop) {
-    alerts[1] = 'stop'
-    hasAlert = true
+    alerts.push('stop')
   }
 
   if (waterAbstractionAlertReduce) {
-    alerts[2] = 'reduce'
-    hasAlert = true
+    alerts.push('reduce')
   }
 
   if (waterAbstractionAlertWarning) {
-    alerts[3] = 'warning'
-    hasAlert = true
+    alerts.push('warning')
   }
 
-  return { hasAlert, alerts }
+  return alerts
 }
 
 module.exports = {
