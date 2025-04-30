@@ -134,7 +134,7 @@ async function submitLicence(request, h) {
 
   const pageData = await SubmitAdHocLicenceService.go(sessionId, request.payload)
 
-  if (pageData.error || pageData.notification) {
+  if (pageData.error) {
     return h.view(`${basePath}/ad-hoc-licence.njk`, pageData)
   }
 

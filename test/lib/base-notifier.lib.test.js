@@ -8,6 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Things we need to stub
+const AirbrakeModule = require('@airbrake/node')
+const AirbrakeConfig = require('../../config/airbrake.config.js')
+
 // Thing under test
 const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
 
@@ -271,6 +275,33 @@ describe('BaseNotifierLib class', () => {
       testNotifier.flush()
 
       expect(airbrakeFake.flush.called).to.be.true()
+    })
+  })
+
+  describe('when no notifier is passed to the constructor', () => {
+    beforeEach(() => {
+      Sinon.replace(AirbrakeConfig, 'host', 'air')
+      Sinon.replace(AirbrakeConfig, 'projectKey', 'hosts')
+      Sinon.replace(AirbrakeConfig, 'projectId', 1)
+      Sinon.replace(AirbrakeConfig, 'environment', 'plane')
+
+      // Stub the Notifier constructor
+      Sinon.stub(AirbrakeModule, 'Notifier').returns({
+        notify: Sinon.fake(),
+        flush: Sinon.fake()
+      })
+    })
+
+    it('creates a new Airbrake Notifier instance with config', () => {
+      const testNotifier = new BaseNotifierLib(pinoFake)
+
+      expect(testNotifier._notifier._opt).to.include({
+        host: 'air',
+        projectKey: 'hosts',
+        projectId: 1,
+        environment: 'plane',
+        performanceStats: false
+      })
     })
   })
 })
