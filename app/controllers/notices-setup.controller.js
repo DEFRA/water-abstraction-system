@@ -6,6 +6,7 @@
  */
 
 const AdHocLicenceService = require('../services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
+const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -15,6 +16,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
@@ -36,6 +38,14 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewAlertThresholds(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AlertThresholdsService.go(sessionId)
+
+  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
 }
 
 async function viewAlertType(request, h) {
@@ -109,6 +119,21 @@ async function setup(request, h) {
   const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
+}
+
+async function submitAlertThresholds(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
+  }
+
+  return h.redirect('')
 }
 
 async function submitAlertType(request, h) {
@@ -189,6 +214,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewAlertThresholds,
   viewAlertType,
   viewCancel,
   viewConfirmation,
@@ -197,6 +223,7 @@ module.exports = {
   viewRemoveLicences,
   viewReturnsPeriod,
   setup,
+  submitAlertThresholds,
   submitAlertType,
   submitCancel,
   submitCheck,
