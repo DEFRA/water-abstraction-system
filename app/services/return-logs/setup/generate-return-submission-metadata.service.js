@@ -61,8 +61,14 @@ function _meters(session) {
 }
 
 function _total(session) {
+  if (!session.singleVolume) {
+    return {
+      totalFlag: false
+    }
+  }
+
   const total = {
-    totalFlag: !!session.singleVolume,
+    totalFlag: true,
     total: session.singleVolume ? session.singleVolumeQuantity : null,
     totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
   }

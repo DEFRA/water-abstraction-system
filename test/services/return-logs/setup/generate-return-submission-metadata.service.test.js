@@ -136,15 +136,10 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       expect(result.totalFlag).to.equal(false)
     })
 
-    it('sets total as null', () => {
+    it('does not include total, totalCustomDateStart or totalCustomEndDate', () => {
       const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
-      expect(result.total).to.be.null()
-    })
-
-    it('does not include totalCustomDateStart or totalCustomEndDate', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
+      expect(result.total).to.be.undefined()
       expect(result.totalCustomDateStart).to.be.undefined()
       expect(result.totalCustomDateEnd).to.be.undefined()
     })
