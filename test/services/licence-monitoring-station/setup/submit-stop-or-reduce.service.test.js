@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitStopOrReduceService = require('../../../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
