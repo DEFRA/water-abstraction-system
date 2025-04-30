@@ -68,6 +68,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           threshold_value: 100
         }
       ],
+      monitoringStationId: monitoringStation.id,
       monitoringStationName: 'MONITOR PLACE'
     })
   })

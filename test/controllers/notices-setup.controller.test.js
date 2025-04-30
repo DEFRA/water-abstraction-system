@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
@@ -227,6 +228,36 @@ describe('Notices Setup controller', () => {
           expect(response.headers['content-type']).to.equal('type/csv')
           expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
           expect(response.payload).to.equal('test')
+        })
+      })
+    })
+  })
+
+  describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
+    describe('/alert-type', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-type`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(AlertTypeService, 'go').resolves({
+            pageTitle: 'Alert page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Alert page')
+          })
         })
       })
     })
