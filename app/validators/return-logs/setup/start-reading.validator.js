@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const MAX_ALLOWED_READING = 99999999999
+
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/start-reading` page
  *
@@ -17,12 +19,10 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, lines) {
-  const maxAllowedReading = 99999999999
+  // Use the `MAX_ALLOWED_READING` if no meter reading exists in the return submission
+  const maxMeterReading = _maxMeterReading(lines) || MAX_ALLOWED_READING
 
-  // Use the `maxAllowedReading` if no meter reading exists in the return submission
-  const maxMeterReading = _maxMeterReading(lines) || maxAllowedReading
-
-  const maxValidationMessage = _maxValidationMessage(maxAllowedReading, maxMeterReading)
+  const maxValidationMessage = _maxValidationMessage(maxMeterReading)
 
   const schema = Joi.object({
     startReading: Joi.number()
@@ -34,7 +34,7 @@ function go(payload, lines) {
         'any.required': 'Enter a start meter reading',
         'number.base': 'Start meter reading must be a positive number',
         'number.max': maxValidationMessage,
-        'number.unsafe': `Start meter reading exceeds the maximum of ${maxAllowedReading}`,
+        'number.unsafe': `Start meter reading exceeds the maximum of ${MAX_ALLOWED_READING}`,
         'number.positive': 'Start meter reading must be a positive number',
         'number.integer': 'Start meter reading must be a whole number'
       })
@@ -45,13 +45,13 @@ function go(payload, lines) {
 
 /**
  * Generates the validation message for when the start reading is greater than the maximum allowed. The message differs
- * depending on if the maximum reading is a reading taken from the submission lines or the `maxAllowedReading`
+ * depending on if the maximum reading is a reading taken from the submission lines or the `MAX_ALLOWED_READING`
  *
  * @private
  */
-function _maxValidationMessage(maxAllowedReading, maxMeterReading) {
-  if (maxAllowedReading === maxMeterReading) {
-    return `Start meter reading exceeds the maximum of ${maxAllowedReading}`
+function _maxValidationMessage(maxMeterReading) {
+  if (MAX_ALLOWED_READING === maxMeterReading) {
+    return `Start meter reading exceeds the maximum of ${MAX_ALLOWED_READING}`
   }
 
   return `Please enter a reading which is equal to or lower than the next reading of ${maxMeterReading}`

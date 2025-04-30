@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const MAX_ALLOWED_READING = 99999999999
+
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  *
@@ -21,7 +23,6 @@ const Joi = require('joi')
 function go(payload, requestedYear, requestedMonth, session) {
   const { lines, startReading } = session
 
-  const maxAllowedReading = 99999999999
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)
   const subsequentLowestReading = _subsequentLowestReading(lines, requestedYear, requestedMonth)
 
@@ -30,7 +31,7 @@ function go(payload, requestedYear, requestedMonth, session) {
     Joi.number()
       .integer()
       .min(0)
-      .max(maxAllowedReading)
+      .max(MAX_ALLOWED_READING)
       .custom((value, helpers) => {
         // We need to check the values are in increasing order
         return _meterReadingsInIncreasingOrder(value, helpers, payload, previousHighestReading, subsequentLowestReading)
@@ -39,8 +40,8 @@ function go(payload, requestedYear, requestedMonth, session) {
         'number.base': 'Reading must be a number or blank',
         'number.integer': 'Reading must be a whole number',
         'number.min': 'Reading must be a positive number',
-        'number.max': `Reading entered exceeds the maximum of ${maxAllowedReading}`,
-        'number.unsafe': `Reading entered exceeds the maximum of ${maxAllowedReading}`
+        'number.max': `Reading entered exceeds the maximum of ${MAX_ALLOWED_READING}`,
+        'number.unsafe': `Reading entered exceeds the maximum of ${MAX_ALLOWED_READING}`
       })
   )
 
