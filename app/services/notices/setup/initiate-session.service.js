@@ -49,7 +49,7 @@ const NOTIFICATION_TYPES = {
     journey: 'abstraction-alert',
     name: 'Water abstraction alert',
     prefix: 'WAA-',
-    redirectPath: 'abstraction-alert',
+    redirectPath: 'abstraction-alerts/alert-type',
     subType: 'waterAbstractionAlerts',
     type: 'Abstraction alert'
   }
