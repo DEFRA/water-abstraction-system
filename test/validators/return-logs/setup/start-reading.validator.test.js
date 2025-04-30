@@ -101,11 +101,11 @@ describe('Return Logs Setup - Start Reading validator', () => {
         payload = { startReading: '1.1' }
       })
 
-      it('fails validation with the message "Enter a whole number"', () => {
+      it('fails validation with the message "Start meter reading must be a whole number"', () => {
         const result = StartReadingValidator.go(payload, lines)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a whole number')
+        expect(result.error.details[0].message).to.equal('Start meter reading must be a whole number')
       })
     })
 
@@ -116,28 +116,41 @@ describe('Return Logs Setup - Start Reading validator', () => {
           lines[0].reading = '10000'
         })
 
-        it('fails validation with the message "Please enter a reading which is equal to or lower than the next reading"', () => {
+        it('fails validation with the message "Please enter a reading which is equal to or lower than the next reading of 10000"', () => {
           const result = StartReadingValidator.go(payload, lines)
 
           expect(result.error).to.exist()
           expect(result.error.details[0].message).to.equal(
-            'Please enter a reading which is equal to or lower than the next reading'
+            'Please enter a reading which is equal to or lower than the next reading of 10000'
           )
         })
       })
     })
 
     describe('because the return lines do not have an initial reading', () => {
-      describe('and the user entered a number greater than the default maximum', () => {
+      describe('and the user entered a number greater than the default maximum allowed reading of 99999999999', () => {
         beforeEach(() => {
-          payload = { startReading: '9007199254740995' }
+          payload = { startReading: '999999999991' }
         })
 
-        it('fails validation with the message "Enter a reading that is 9007199254740991 or fewer"', () => {
+        it('fails validation with the message "Start meter reading exceeds the maximum of 99999999999"', () => {
           const result = StartReadingValidator.go(payload, lines)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a reading that is 9007199254740991 or fewer')
+          expect(result.error.details[0].message).to.equal('Start meter reading exceeds the maximum of 99999999999')
+        })
+      })
+
+      describe('and the user entered a number greater than the the maximum safe number 9007199254740991', () => {
+        beforeEach(() => {
+          payload = { startReading: '9007199254740992' }
+        })
+
+        it('fails validation with the message "Start meter reading exceeds the maximum of 99999999999"', () => {
+          const result = StartReadingValidator.go(payload, lines)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Start meter reading exceeds the maximum of 99999999999')
         })
       })
     })
