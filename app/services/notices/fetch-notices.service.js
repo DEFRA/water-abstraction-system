@@ -70,6 +70,10 @@ async function go(filter, page) {
     if (filter.notifications.returnInvitation) {
       query.where('subtype', 'returnInvitation')
     }
+
+    if (filter.notifications.adHocReminders) {
+      query.where('subtype', 'adHocReminder')
+    }
   }
 
   return query
