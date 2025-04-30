@@ -54,7 +54,7 @@ function _meters(session) {
 
   return [
     {
-      units: UNIT_NAMES[session.units],
+      units: session.lines.length > 0 ? UNIT_NAMES[session.units] : undefined, // Only required if there are readings
       meterDetailsProvided: true, // We hardcode this to true as we only return meter details if meterProvided is `yes`
       multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       manufacturer: session.meterMake,

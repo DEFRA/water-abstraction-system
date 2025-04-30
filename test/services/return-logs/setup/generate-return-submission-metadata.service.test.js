@@ -225,6 +225,24 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
           }
         ])
       })
+
+      describe('and there are no readings', () => {
+        beforeEach(() => {
+          sessionData.lines = []
+        })
+
+        it('returns an empty array for readings', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.meters[0].readings).to.equal({})
+        })
+
+        it('does not include the units', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.meters[0].units).to.be.undefined()
+        })
+      })
     })
   })
 })
