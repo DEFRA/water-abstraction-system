@@ -24,7 +24,9 @@ const config = {
   enableSystemLicenceView: String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true' || false,
   enableSystemReturnsSubmit: String(process.env.ENABLE_SYSTEM_RETURNS_SUBMIT) === 'true' || false,
   enableSystemReturnsView: String(process.env.ENABLE_SYSTEM_RETURNS_VIEW) === 'true' || false,
-  enableTwoPartTariffSupplementary: String(process.env.ENABLE_TWO_PART_TARIFF_SUPPLEMENTARY) === 'true' || false
+  enableTwoPartTariffSupplementary: String(process.env.ENABLE_TWO_PART_TARIFF_SUPPLEMENTARY) === 'true' || false,
+  enableLicenceMonitoringStationsView: String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_VIEW) === 'true' || false,
+  enableLicenceMonitoringStationsSetup: String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_SETUP) === 'true' || false
 }
 
 module.exports = config
