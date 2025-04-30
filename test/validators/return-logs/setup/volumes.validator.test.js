@@ -33,11 +33,11 @@ describe('Return Logs Setup - Volumes validator', () => {
         payload = { '2023-05-31T00:00:00.000Z': 'INVALID' }
       })
 
-      it('fails validation with the message "Volumes must be a number or blank"', () => {
+      it('fails validation with the message "Volume must be a number or blank"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volumes must be a number or blank')
+        expect(result.error.details[0].message).to.equal('Volume must be a number or blank')
       })
     })
 
@@ -46,11 +46,24 @@ describe('Return Logs Setup - Volumes validator', () => {
         payload = { '2023-05-31T00:00:00.000Z': '-200' }
       })
 
-      it('fails validation with the message "Volumes must be a positive number"', () => {
+      it('fails validation with the message "Volume must be a positive number"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volumes must be a positive number')
+        expect(result.error.details[0].message).to.equal('Volume must be a positive number')
+      })
+    })
+
+    describe('because the user entered a number that exceeds the maximum allowed volume of "9999999999"', () => {
+      beforeEach(() => {
+        payload = { '2023-05-31T00:00:00.000Z': '99999999991' }
+      })
+
+      it('fails validation with the message "Volume entered exceeds the maximum of 9999999999"', () => {
+        const result = VolumesValidator.go(payload)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Volume entered exceeds the maximum of 9999999999')
       })
     })
 
@@ -59,13 +72,11 @@ describe('Return Logs Setup - Volumes validator', () => {
         payload = { '2023-05-31T00:00:00.000Z': '9007199254740992' }
       })
 
-      it('fails validation with the message "Volume entered exceeds the maximum safe number 9007199254740991"', () => {
+      it('fails validation with the message "Volume entered exceeds the maximum of 9999999999"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
-          'Volume entered exceeds the maximum safe number 9007199254740991'
-        )
+        expect(result.error.details[0].message).to.equal('Volume entered exceeds the maximum of 9999999999')
       })
     })
   })

@@ -15,6 +15,7 @@ const ProcessNotificationsStatusUpdatesServiceService = require('../../app/servi
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
+const ReturnVersionMigrationService = require('../../app/services/jobs/return-logs/return-version-migration.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -192,6 +193,26 @@ describe('Jobs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(404)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/return-version-migration', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/return-version-migration' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ReturnVersionMigrationService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
         })
       })
     })

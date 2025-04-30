@@ -147,14 +147,14 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           error: [
             {
               href: '#2023-04-30T00:00:00.000Z',
-              text: 'Volumes must be a number or blank'
+              text: 'Volume must be a number or blank'
             }
           ],
           backLink: `/system/return-logs/setup/${session.id}/check`,
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
-              error: 'Volumes must be a number or blank',
+              error: 'Volume must be a number or blank',
               label: 'April 2023',
               quantity: 'INVALID'
             }
@@ -172,7 +172,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           expect(result.error).to.equal([
             {
               href: '#2023-04-30T00:00:00.000Z',
-              text: 'Volumes must be a number or blank'
+              text: 'Volume must be a number or blank'
             }
           ])
         })
