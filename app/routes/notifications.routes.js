@@ -2,10 +2,12 @@
 
 const NotificationsController = require('../controllers/notifications.controller.js')
 
+const basePath = '/notifications'
+
 const routes = [
   {
     method: 'GET',
-    path: '/notifications/{id}',
+    path: basePath + '/{id}',
     options: {
       handler: NotificationsController.view
     }

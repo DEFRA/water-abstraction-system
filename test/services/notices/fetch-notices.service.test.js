@@ -46,7 +46,7 @@ describe('Notices - Fetch Notices service', () => {
         openFilter: undefined
       })
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -88,9 +88,9 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({ sentBy: 'test.user@defra.gov.uk' })
+      const result = await FetchNoticesService.go({ sentBy: 'test.user@defra.gov.uk' }, 1)
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -132,13 +132,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        sentFromDay: 1,
-        sentFromMonth: 1,
-        sentFromYear: new Date().getFullYear()
-      })
+      const result = await FetchNoticesService.go(
+        {
+          sentFromDay: 1,
+          sentFromMonth: 1,
+          sentFromYear: new Date().getFullYear()
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -149,7 +152,7 @@ describe('Notices - Fetch Notices service', () => {
           errorCount: null
         })
       )
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: secondTestEvent.id,
           createdAt: secondTestEvent.createdAt,
@@ -191,13 +194,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        sentToDay: 1,
-        sentToMonth: 11,
-        sentToYear: new Date().getFullYear()
-      })
+      const result = await FetchNoticesService.go(
+        {
+          sentToDay: 1,
+          sentToMonth: 11,
+          sentToYear: new Date().getFullYear()
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -208,7 +214,7 @@ describe('Notices - Fetch Notices service', () => {
           errorCount: null
         })
       )
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: secondTestEvent.id,
           createdAt: secondTestEvent.createdAt,
@@ -240,13 +246,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          waterAbstractionAlertResume: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            waterAbstractionAlertResume: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -278,13 +287,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          waterAbstractionAlertStop: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            waterAbstractionAlertStop: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -316,13 +328,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          waterAbstractionAlertReduce: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            waterAbstractionAlertReduce: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -354,13 +369,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          waterAbstractionAlertWarning: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            waterAbstractionAlertWarning: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -388,13 +406,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          returnsPaperForm: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            returnsPaperForm: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -422,13 +443,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          returnReminders: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            returnReminders: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -456,13 +480,53 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          returnInvitation: true
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            returnInvitation: true
+          }
+        },
+        1
+      )
+
+      expect(result.results).to.contain(
+        EventModel.fromJson({
+          id: testEvent.id,
+          createdAt: testEvent.createdAt,
+          issuer: testEvent.issuer,
+          name: testEvent.metadata.name,
+          alertType: null,
+          recipientCount: testEvent.metadata.recipients,
+          errorCount: null
+        })
+      )
+    })
+  })
+
+  describe('when a notice exists and there is a "adHocReminders" filter applied', () => {
+    beforeEach(async () => {
+      testEvent = await EventHelper.add({
+        type: 'notification',
+        subtype: 'adHocReminder',
+        status: 'sent',
+        metadata: {
+          name: 'Returns: ad-hoc',
+          recipients: 1
         }
       })
+    })
 
-      expect(result).to.contain(
+    it('fetches the matching notices', async () => {
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            adHocReminders: true
+          }
+        },
+        1
+      )
+
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -490,13 +554,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          legacyNotifications: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            legacyNotifications: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -524,13 +591,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          legacyNotifications: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            legacyNotifications: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,
@@ -558,13 +628,16 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        notifications: {
-          legacyNotifications: true
-        }
-      })
+      const result = await FetchNoticesService.go(
+        {
+          notifications: {
+            legacyNotifications: true
+          }
+        },
+        1
+      )
 
-      expect(result).to.contain(
+      expect(result.results).to.contain(
         EventModel.fromJson({
           id: testEvent.id,
           createdAt: testEvent.createdAt,

@@ -19,8 +19,9 @@ async function go(id) {
   const monitoringStationName = licenceMonitoringStations[0].label
 
   return {
-    monitoringStationName,
-    licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations)
+    licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),
+    monitoringStationId: id,
+    monitoringStationName
   }
 }
 
