@@ -13,16 +13,21 @@ async function view__NAME__(request, h) {
 }
 
 async function submit__NAME__(request, h) {
-  const { sessionId } = request.params
+  const {
+    payload,
+    params: { sessionId }
+  } = request
 
-  await __SUBMIT_NAME__.go(sessionId)
+  const pageData = await __SUBMIT_NAME__.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`__VIEW_PATH__`, pageData)
+  }
 
   return h.redirect('')
 }
 
 // router code
-
-const __CONTROLLER_NAME__ = require('__CONTROLLER_PATH__')
 
 const routes = [
   {
