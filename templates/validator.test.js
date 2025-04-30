@@ -11,23 +11,28 @@ const { expect } = Code
 const __MODULE_NAME__ = require('__REQUIRE_PATH__')
 
 describe('__DESCRIBE_LABEL__', () => {
-  let session
+  let payload
 
-  beforeEach(async () => {})
-
-  describe('when called with valid data', () => {
-    it('returns with no errors', () => {
-      const result = __MODULE_NAME__.go(session.id)
-
-      expect(result).to.equal({})
-    })
+  beforeEach(() => {
+    payload = {}
   })
 
   describe('when called with valid data', () => {
-    it('returns with errors', () => {
-      const result = __MODULE_NAME__.go(session.id)
+    it('returns with no errors', () => {
+      const result = __MODULE_NAME__.go(payload)
 
-      expect(result).to.equal({})
+      expect(result.value).to.exist()
+      expect(result.error).not.to.exist()
+    })
+  })
+
+  describe('when called with invalid data', () => {
+    it('returns with errors', () => {
+      const result = __MODULE_NAME__.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter a licence number')
     })
   })
 })
