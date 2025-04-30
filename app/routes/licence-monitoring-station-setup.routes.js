@@ -43,7 +43,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: StopOrReduceController.stopOrReduce,
+      handler: LicenceMonitoringStationSetupController.stopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -55,7 +55,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: StopOrReduceController.submitStopOrReduce,
+      handler: LicenceMonitoringStationSetupController.submitStopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']

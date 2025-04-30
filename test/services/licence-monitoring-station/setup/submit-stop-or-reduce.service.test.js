@@ -11,7 +11,7 @@ const { expect } = Code
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitStopOrReduceService = require('../../../../../app/services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
+const SubmitStopOrReduceService = require('../../../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 
 describe('Stop Or Reduce Service', () => {
   let payload

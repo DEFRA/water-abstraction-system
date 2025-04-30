@@ -5,8 +5,8 @@
  * @module StopOrReduceService
  */
 
-const SessionModel = require('../../../../models/session.model.js')
-const StopOrReducePresenter = require('../../../../presenters//licence-monitoring-station/setup/stop-or-reduce.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
+const StopOrReducePresenter = require('../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
 
 /**
  * Orchestrates presenting the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page

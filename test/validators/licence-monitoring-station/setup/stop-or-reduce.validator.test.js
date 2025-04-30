@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const StopOrReduceValidator = require('../../../../../app/validators//licence-monitoring-station/setup/stop-or-reduce.validator.js')
+const StopOrReduceValidator = require('../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
 
 describe('Stop Or Reduce Validator', () => {
   let payload

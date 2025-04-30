@@ -6,9 +6,9 @@
  * @module SubmitStopOrReduceService
  */
 
-const StopOrReducePresenter = require('../../../../presenters//licence-monitoring-station/setup/stop-or-reduce.presenter.js')
-const StopOrReduceValidator = require('../../../../validators//licence-monitoring-station/setup/stop-or-reduce.validator.js')
-const SessionModel = require('../../../../models/session.model.js')
+const StopOrReducePresenter = require('../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
+const StopOrReduceValidator = require('../../../validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `` page

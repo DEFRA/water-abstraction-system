@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const StopOrReducePresenter = require('../../../../../app/presenters//licence-monitoring-station/setup/stop-or-reduce.presenter.js')
+const StopOrReducePresenter = require('../../../../app/presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
 
 describe('Stop Or Reduce Presenter', () => {
   let session
