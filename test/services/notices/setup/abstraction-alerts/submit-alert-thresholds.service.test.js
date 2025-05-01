@@ -19,7 +19,7 @@ describe('Alert Thresholds Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
+    payload = { thresholds: [] }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
@@ -42,10 +42,18 @@ describe('Alert Thresholds Service', () => {
   })
 
   describe('when validation fails', () => {
+    beforeEach(async () => {
+      payload = {}
+    })
+
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        error: {
+          text: '"thresholds" is required'
+        }
+      })
     })
   })
 })

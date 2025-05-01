@@ -14,7 +14,7 @@ describe('Alert Thresholds Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = {}
+    payload = { thresholds: [] }
   })
 
   describe('when called with valid data', () => {
@@ -27,6 +27,10 @@ describe('Alert Thresholds Validator', () => {
   })
 
   describe('when called with invalid data', () => {
+    beforeEach(() => {
+      payload = {}
+    })
+
     it('returns with errors', () => {
       const result = AlertThresholdsValidator.go(payload)
 
