@@ -31,7 +31,7 @@ describe('Alert Thresholds Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal()
+      expect(refreshedSession).to.equal(session)
     })
 
     it('continues the journey', async () => {

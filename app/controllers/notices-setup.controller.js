@@ -133,7 +133,7 @@ async function submitAlertThresholds(request, h) {
     return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
   }
 
-  return h.redirect('')
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check`)
 }
 
 async function submitAlertType(request, h) {

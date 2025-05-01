@@ -32,7 +32,7 @@ describe('Alert Thresholds Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('')
+      expect(result.error.details[0].message).to.equal('"thresholds" is required')
     })
   })
 })

@@ -17,7 +17,9 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const schema = Joi.object({})
+  const schema = Joi.object({
+    thresholds: Joi.array().required()
+  })
 
   return schema.validate(payload, { abortEarly: false })
 }
