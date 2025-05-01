@@ -31,7 +31,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal()
+      expect(refreshedSession).to.equal(session)
     })
 
     it('continues the journey', async () => {
