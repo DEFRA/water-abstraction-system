@@ -7,21 +7,46 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
+
 // Thing under test
 const AlertThresholdsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
 
-describe('Alert Thresholds Presenter', () => {
+describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = AbstractionAlertSessionData.monitoringStation()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = AlertThresholdsPresenter.go(session)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.monitoringStationId}/abstraction-alerts/alert-type`,
+        caption: 'Death star',
+        pageTitle: 'Which thresholds do you need to send an alert for?',
+        thresholdOptions: [
+          {
+            checked: false,
+            hint: {
+              text: 'Flow thresholds for this station (m)'
+            },
+            text: '1000 m',
+            value: '123/567-100m'
+          },
+          {
+            checked: false,
+            hint: {
+              text: 'Level thresholds for this station (m3/s)'
+            },
+            text: '100 m3/s',
+            value: '123/567-100m'
+          }
+        ]
+      })
     })
   })
 })

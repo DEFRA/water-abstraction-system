@@ -10,11 +10,11 @@ const { expect } = Code
 // Thing under test
 const AlertThresholdsValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-thresholds.validator.js')
 
-describe('Alert Thresholds Validator', () => {
+describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { thresholds: [] }
+    payload = { 'alert-thresholds': [] }
   })
 
   describe('when called with valid data', () => {
@@ -36,7 +36,7 @@ describe('Alert Thresholds Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"thresholds" is required')
+      expect(result.error.details[0].message).to.equal('Select applicable threshold(s)')
     })
   })
 })
