@@ -38,7 +38,9 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.alertThresholds = Array.isArray(payload['alert-thresholds']) ? payload['alert-thresholds'] : []
+  session.alertThresholds = Array.isArray(payload['alert-thresholds'])
+    ? payload['alert-thresholds']
+    : [payload['alert-thresholds']]
 
   return session.$update()
 }

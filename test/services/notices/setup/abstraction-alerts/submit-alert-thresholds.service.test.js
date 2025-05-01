@@ -30,18 +30,38 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
   })
 
   describe('when called', () => {
-    it('saves the submitted value', async () => {
-      await SubmitAlertThresholdsService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.alertThresholds).to.equal(['0', '1'])
-    })
-
     it('continues the journey', async () => {
       const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
       expect(result).to.equal({})
+    })
+
+    describe('and updates the session ', () => {
+      describe('and one threshold has been selected ', () => {
+        beforeEach(() => {
+          payload = {
+            'alert-thresholds': sessionData.licenceMonitoringStations[0].id
+          }
+        })
+
+        it('saves the submitted value as an array', async () => {
+          await SubmitAlertThresholdsService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.alertThresholds).to.equal(['0'])
+        })
+      })
+
+      describe('and more than one threshold has been selected ', () => {
+        it('saves the submitted values as an array', async () => {
+          await SubmitAlertThresholdsService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.alertThresholds).to.equal(['0', '1'])
+        })
+      })
     })
   })
 
