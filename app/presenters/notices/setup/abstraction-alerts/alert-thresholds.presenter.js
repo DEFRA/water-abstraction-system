@@ -19,15 +19,15 @@ function go(session) {
     backLink: `/system/notices/setup/${session.monitoringStationId}/abstraction-alerts/alert-type`,
     caption: session.monitoringStationName,
     pageTitle: 'Which thresholds do you need to send an alert for?',
-    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations)
+    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertThresholds)
   }
 }
 
-function _thresholdOptions(licenceMonitoringStations) {
+function _thresholdOptions(licenceMonitoringStations, alertThresholds = []) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
-      checked: false,
-      value: '123/567-100m',
+      checked: alertThresholds.includes(licenceMonitoringStation.id),
+      value: licenceMonitoringStation.id,
       text: `${licenceMonitoringStation.threshold_value} ${licenceMonitoringStation.threshold_unit}`,
       hint: {
         text: `${titleCase(licenceMonitoringStation.measure_type)} thresholds for this station (${licenceMonitoringStation.threshold_unit})`

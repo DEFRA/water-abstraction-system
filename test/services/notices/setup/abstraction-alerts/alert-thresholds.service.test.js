@@ -39,7 +39,7 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
               text: 'Flow thresholds for this station (m)'
             },
             text: '1000 m',
-            value: '123/567-100m'
+            value: '0'
           },
           {
             checked: false,
@@ -47,7 +47,7 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
               text: 'Level thresholds for this station (m3/s)'
             },
             text: '100 m3/s',
-            value: '123/567-100m'
+            value: '1'
           }
         ]
       })

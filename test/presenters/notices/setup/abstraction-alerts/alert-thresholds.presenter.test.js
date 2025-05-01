@@ -35,7 +35,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               text: 'Flow thresholds for this station (m)'
             },
             text: '1000 m',
-            value: '123/567-100m'
+            value: '0'
           },
           {
             checked: false,
@@ -43,9 +43,39 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               text: 'Level thresholds for this station (m3/s)'
             },
             text: '100 m3/s',
-            value: '123/567-100m'
+            value: '1'
           }
         ]
+      })
+    })
+
+    describe('the "thresholdOptions" property', () => {
+      describe('when there are already selected thresholds', () => {
+        beforeEach(() => {
+          session.alertThresholds = ['0']
+        })
+        it('returns page data for the view, with the thresholds checked', () => {
+          const result = AlertThresholdsPresenter.go(session)
+
+          expect(result.thresholdOptions).to.equal([
+            {
+              checked: true,
+              hint: {
+                text: 'Flow thresholds for this station (m)'
+              },
+              text: '1000 m',
+              value: '0'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Level thresholds for this station (m3/s)'
+              },
+              text: '100 m3/s',
+              value: '1'
+            }
+          ])
+        })
       })
     })
   })

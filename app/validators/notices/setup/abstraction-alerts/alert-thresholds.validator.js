@@ -20,9 +20,11 @@ const errorMessage = 'Select applicable threshold(s)'
  */
 function go(payload) {
   const schema = Joi.object({
-    'alert-thresholds': Joi.array().required().messages({
+    'alert-thresholds': Joi.alternatives().try(Joi.string(), Joi.array()).required().messages({
       'any.required': errorMessage,
-      'any.only': errorMessage
+      'alternatives.types': errorMessage,
+      'string.base': errorMessage,
+      'array.base': errorMessage
     })
   })
 

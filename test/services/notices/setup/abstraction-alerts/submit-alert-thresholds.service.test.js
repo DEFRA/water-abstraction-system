@@ -20,8 +20,11 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
   let sessionData
 
   beforeEach(async () => {
-    payload = { 'alert-thresholds': ['124-67'] }
     sessionData = AbstractionAlertSessionData.monitoringStation()
+
+    payload = {
+      'alert-thresholds': [sessionData.licenceMonitoringStations[0].id, sessionData.licenceMonitoringStations[1].id]
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -32,7 +35,7 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal({})
+      expect(refreshedSession.alertThresholds).to.equal(['0', '1'])
     })
 
     it('continues the journey', async () => {
@@ -58,7 +61,7 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
         thresholdOptions: [
           {
             checked: false,
-            value: '123/567-100m',
+            value: '0',
             text: '1000 m',
             hint: {
               text: 'Flow thresholds for this station (m)'
@@ -66,7 +69,7 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
           },
           {
             checked: false,
-            value: '123/567-100m',
+            value: '1',
             text: '100 m3/s',
             hint: {
               text: 'Level thresholds for this station (m3/s)'
