@@ -8,6 +8,9 @@ Quickly generates source files and matching test files based on predefined templ
 ./scaffold.sh <name> or <path/to/name>
 ```
 
+- **Write the tests**: test files are generated alongside each module with the correct `require()` paths and a `describe()` block, you will need to update the describe block.
+- **Use the helper snippet**: after scaffolding, a controller and route helper snippet is printed to the terminal — copy and paste into the correct location.
+
 ## 📋 Examples
 
 ```bash
