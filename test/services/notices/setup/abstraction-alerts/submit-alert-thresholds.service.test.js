@@ -8,19 +8,20 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionHelper = require('../../../../../test/support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 
-describe('Alert Thresholds Service', () => {
+describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () => {
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { thresholds: [] }
-    sessionData = {}
+    payload = { 'alert-thresholds': ['124-67'] }
+    sessionData = AbstractionAlertSessionData.monitoringStation()
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +32,7 @@ describe('Alert Thresholds Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({})
     })
 
     it('continues the journey', async () => {
@@ -50,9 +51,28 @@ describe('Alert Thresholds Service', () => {
       const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
       expect(result).to.equal({
-        error: {
-          text: '"thresholds" is required'
-        }
+        error: { text: 'Select applicable threshold(s)' },
+        backLink: `/system/notices/setup/${sessionData.monitoringStationId}/abstraction-alerts/alert-type`,
+        caption: 'Death star',
+        pageTitle: 'Which thresholds do you need to send an alert for?',
+        thresholdOptions: [
+          {
+            checked: false,
+            value: '123/567-100m',
+            text: '1000 m',
+            hint: {
+              text: 'Flow thresholds for this station (m)'
+            }
+          },
+          {
+            checked: false,
+            value: '123/567-100m',
+            text: '100 m3/s',
+            hint: {
+              text: 'Level thresholds for this station (m3/s)'
+            }
+          }
+        ]
       })
     })
   })
