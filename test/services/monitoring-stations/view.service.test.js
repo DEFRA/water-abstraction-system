@@ -20,6 +20,8 @@ describe('Monitoring Stations - View service', () => {
   let monitoringStation
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
+
     auth = auth = {
       credentials: {
         scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
@@ -70,6 +72,7 @@ describe('Monitoring Stations - View service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        enableLicenceMonitoringStationsSetup: true,
         gridReference: 'TL2664640047',
         links: {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`

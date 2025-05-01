@@ -1,0 +1,64 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: error.errorList
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </span>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    <div class="govuk-body">
+      {{ govukInput({
+        label: {
+          text: "Threshold"
+        },
+        classes: "govuk-input--width-10",
+        value: threshold,
+        errorMessage: {
+          text: error.threshold.message
+        } if error.threshold,
+        id: "threshold",
+        name: "threshold"
+      }) }}
+
+      {{ govukSelect({
+        id: "unit",
+        name: "unit",
+        label: {
+          text: "Unit of measurement"
+        },
+        errorMessage: {
+          text: error.unit.message
+        } if error.unit,
+        items: displayUnits
+      }) }}
+
+
+      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
+    </div>
+  </form>
+{% endblock %}

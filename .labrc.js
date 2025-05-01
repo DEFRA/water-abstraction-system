@@ -13,7 +13,8 @@ module.exports = {
     'app/plugins/hapi-pino.plugin.js',
     'app/plugins/stop.plugin.js',
     'app/plugins/views.plugin.js',
-    'config/notify.config.js'
+    'config/notify.config.js',
+    'templates'
   ],
   // lcov reporter required for SonarQube
   reporter: ['console', 'html', 'lcov'],

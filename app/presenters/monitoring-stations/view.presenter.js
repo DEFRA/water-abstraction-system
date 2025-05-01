@@ -43,6 +43,7 @@ function go(monitoringStation, auth) {
   } = monitoringStation
 
   return {
+    enableLicenceMonitoringStationsSetup: FeatureFlagsConfig.enableLicenceMonitoringStationsSetup,
     links: _links(monitoringStationId),
     gridReference: gridReference ?? '',
     monitoringStationId,

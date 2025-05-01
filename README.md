@@ -31,6 +31,10 @@ Check out [.env.example](/.env.example) for details of the required things you'l
 
 Refer to the [config files](config) for details of all the configuration used.
 
+## Scaffolding
+
+We use a set of tooling referred to as [Scaffolding](templates/README.md) to generate boilerplate templates. This system is designed for ongoing use to ensure consistency and alignment with our project standards whenever features / journeys are added.
+
 ## Contributing to this project
 
 If you have an idea you'd like to contribute please log an issue.

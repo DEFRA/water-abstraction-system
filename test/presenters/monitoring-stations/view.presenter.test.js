@@ -56,6 +56,7 @@ describe('Monitoring Stations - View presenter', () => {
     }
 
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
   })
 
   describe('when provided with the result of the fetch monitoring service', () => {
@@ -63,6 +64,7 @@ describe('Monitoring Stations - View presenter', () => {
       const result = ViewPresenter.go(monitoringStation, auth)
 
       expect(result).to.equal({
+        enableLicenceMonitoringStationsSetup: true,
         links: {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
         },
