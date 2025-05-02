@@ -32,7 +32,13 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({
+        ...session,
+        ...sessionData,
+        data: {
+          ...sessionData
+        }
+      })
     })
 
     it('continues the journey', async () => {
