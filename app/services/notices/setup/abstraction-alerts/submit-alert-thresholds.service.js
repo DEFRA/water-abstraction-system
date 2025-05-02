@@ -40,9 +40,11 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.alertThresholds = Array.isArray(payload['alert-thresholds'])
-    ? payload['alert-thresholds']
-    : [payload['alert-thresholds']]
+  const alertThresholdsKey = 'alert-thresholds'
+
+  session.alertThresholds = Array.isArray(payload[alertThresholdsKey])
+    ? payload[alertThresholdsKey]
+    : [payload[alertThresholdsKey]]
 
   return session.$update()
 }
