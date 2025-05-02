@@ -60,7 +60,7 @@
   <div class="divider govuk-!-margin-bottom-7"></div>
 
   {% if restrictions.length > 0 %}
-    {# Create rows for lincences linked to the monitoring station #}
+    {# Create rows for licences linked to the monitoring station #}
     {% set tableRows = []%}
 
     {% for restriction in restrictions %}
@@ -130,8 +130,8 @@
       {% if enableLicenceMonitoringStationsView %}
         {% set actionCell =
           {
-            html: '<a class="govuk-link" href="'+ restriction.viewLink +'">View</a>',
-            attributes: { 'data-test': 'action' + rowIndex }
+            html: '<a href="'+ restriction.viewLink +'" class="govuk-link">View</a>',
+            attributes: { 'data-test': 'action-' + rowIndex }
           }
         %}
         {% set tableRow = (tableRow.push(actionCell), tableRow) %}
