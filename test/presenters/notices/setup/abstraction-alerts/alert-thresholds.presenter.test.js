@@ -52,8 +52,12 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
     describe('the "thresholdOptions" property', () => {
       describe('when there are already selected thresholds', () => {
         beforeEach(() => {
-          session.alertThresholds = ['0']
+          session = {
+            ...AbstractionAlertSessionData.monitoringStation(),
+            alertThresholds: ['0']
+          }
         })
+
         it('returns page data for the view, with the thresholds checked', () => {
           const result = AlertThresholdsPresenter.go(session)
 
