@@ -14,7 +14,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
   let payload
 
   beforeEach(() => {
-    payload = { thresholds: [] }
+    payload = { 'alert-thresholds': ['0'] }
   })
 
   describe('when called with valid data', () => {
@@ -24,19 +24,65 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
     })
+
+    describe('and the "alert-thresholds"', () => {
+      describe('is a string', () => {
+        beforeEach(() => {
+          payload = { 'alert-thresholds': '0' }
+        })
+
+        it('returns with errors', () => {
+          const result = AlertThresholdsValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).not.to.exist()
+        })
+      })
+
+      describe('is an array', () => {
+        beforeEach(() => {
+          payload = { 'alert-thresholds': ['0'] }
+        })
+
+        it('returns with errors', () => {
+          const result = AlertThresholdsValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).not.to.exist()
+        })
+      })
+    })
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
-    })
+    describe('and the "alert-thresholds"', () => {
+      describe('is not present', () => {
+        beforeEach(() => {
+          payload = {}
+        })
 
-    it('returns with errors', () => {
-      const result = AlertThresholdsValidator.go(payload)
+        it('returns with errors', () => {
+          const result = AlertThresholdsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"thresholds" is required')
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Select applicable threshold(s)')
+        })
+      })
+
+      describe('is not an array or a string', () => {
+        beforeEach(() => {
+          payload = { 'alert-thresholds': 42 }
+        })
+
+        it('returns with errors', () => {
+          const result = AlertThresholdsValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Select applicable threshold(s)')
+        })
+      })
     })
   })
 })

@@ -19,7 +19,12 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: '#alert-thresholds'
+        }
+      ]
     }) }}
   {%endif%}
 
@@ -31,6 +36,7 @@
 
       {{ govukCheckboxes({
         name: "alert-thresholds",
+        errorMessage: error,
         fieldset: {
           legend: {
             text: pageTitle,
