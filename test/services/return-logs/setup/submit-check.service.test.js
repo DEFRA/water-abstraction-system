@@ -13,7 +13,6 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnSubmissionModel = require('../../../../app/models/return-submission.model.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
@@ -56,18 +55,21 @@ describe('Return Logs Setup - Submit Check service', () => {
         endDate: '2023-12-31',
         journey: 'enter-return',
         lines: [
-          _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-            startDate: '2023-01-01',
-            endDate: '2023-01-31',
-            quantity: 100
-          }),
-          _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-            startDate: '2023-02-01',
-            endDate: '2023-02-28',
-            quantity: 200
-          })
+          {
+            startDate: '2023-01-01T00:00:00.000Z',
+            endDate: '2023-01-31T00:00:00.000Z',
+            quantity: 100,
+            reading: null
+          },
+          {
+            startDate: '2023-02-01T00:00:00.000Z',
+            endDate: '2023-02-28T00:00:00.000Z',
+            quantity: 200,
+            reading: null
+          }
         ],
-        returnsFrequency: 'month'
+        returnsFrequency: 'month',
+        units: 'cubic-metres'
       }
     }
 
@@ -121,14 +123,3 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
   })
 })
-
-// Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
-// allows us to pass in the expected models without having to touch the db at all.
-function _createInstance(model, helper, data = {}) {
-  return model.fromJson({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    ...helper.defaults(),
-    ...data
-  })
-}
