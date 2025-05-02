@@ -20,6 +20,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
 
   beforeEach(async () => {
     sessionData = AbstractionAlertSessionData.monitoringStation()
+
     session = await SessionHelper.add({ data: sessionData })
   })
 
