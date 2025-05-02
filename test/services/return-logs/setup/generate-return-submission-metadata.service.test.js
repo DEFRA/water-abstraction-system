@@ -191,12 +191,14 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
           {
             startDate: '2023-01-01',
             endDate: '2023-01-31',
-            quantity: 100
+            quantity: 100,
+            reading: 1100
           },
           {
             startDate: '2023-02-01',
             endDate: '2023-02-28',
-            quantity: 200
+            quantity: 200,
+            reading: 1300
           }
         ]
       })
@@ -219,8 +221,8 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
             serialNumber: '123456789',
             startReading: 1000,
             readings: {
-              '2023-01-01_2023-01-31': 100,
-              '2023-02-01_2023-02-28': 200
+              '2023-01-01_2023-01-31': 1100,
+              '2023-02-01_2023-02-28': 1300
             }
           }
         ])

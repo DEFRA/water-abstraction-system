@@ -38,10 +38,10 @@ function go(session) {
 
 function _formatReadings(lines) {
   return lines.reduce((acc, line) => {
-    const { startDate, endDate, quantity } = line
+    const { startDate, endDate, reading } = line
 
     const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
-    acc[key] = quantity
+    acc[key] = reading
 
     return acc
   }, {})
