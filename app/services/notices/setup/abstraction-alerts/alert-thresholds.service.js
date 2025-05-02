@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = AlertThresholdsPresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     ...pageData
   }
 }

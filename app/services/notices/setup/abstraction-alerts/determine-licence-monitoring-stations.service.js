@@ -26,10 +26,13 @@ async function go(id) {
 }
 
 function _licenceMonitoringStations(licenceMonitoringStations) {
-  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+  return licenceMonitoringStations.map((licenceMonitoringStation, index) => {
     delete licenceMonitoringStation.label
 
-    return licenceMonitoringStation
+    return {
+      id: `${index}`,
+      ...licenceMonitoringStation
+    }
   })
 }
 

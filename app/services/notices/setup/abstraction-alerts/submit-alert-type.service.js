@@ -32,6 +32,7 @@ async function go(sessionId, payload) {
   const pageData = AlertTypePresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     error: validationResult,
     ...pageData
   }
