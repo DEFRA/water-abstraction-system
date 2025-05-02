@@ -25,7 +25,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
       const result = AlertThresholdsPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.monitoringStationId}/abstraction-alerts/alert-type`,
+        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
         caption: 'Death star',
         pageTitle: 'Which thresholds do you need to send an alert for?',
         thresholdOptions: [

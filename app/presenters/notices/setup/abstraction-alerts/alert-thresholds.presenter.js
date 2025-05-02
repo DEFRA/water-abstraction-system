@@ -16,7 +16,7 @@ const { titleCase } = require('../../../base.presenter.js')
  */
 function go(session) {
   return {
-    backLink: `/system/notices/setup/${session.monitoringStationId}/abstraction-alerts/alert-type`,
+    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
     caption: session.monitoringStationName,
     pageTitle: 'Which thresholds do you need to send an alert for?',
     thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertThresholds)

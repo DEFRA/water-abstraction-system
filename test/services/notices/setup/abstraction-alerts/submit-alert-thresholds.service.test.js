@@ -19,17 +19,17 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
   let session
   let sessionData
 
-  beforeEach(async () => {
-    sessionData = AbstractionAlertSessionData.monitoringStation()
-
-    payload = {
-      'alert-thresholds': [sessionData.licenceMonitoringStations[0].id, sessionData.licenceMonitoringStations[1].id]
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
-  })
-
   describe('when called', () => {
+    beforeEach(async () => {
+      sessionData = AbstractionAlertSessionData.monitoringStation()
+
+      payload = {
+        'alert-thresholds': [sessionData.licenceMonitoringStations[0].id, sessionData.licenceMonitoringStations[1].id]
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
     it('continues the journey', async () => {
       const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
@@ -66,36 +66,86 @@ describe('Notices Setup - Abstraction Alerts -  Alert Thresholds Service', () =>
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = {}
+    describe('and there are no previous "alertThresholds"', () => {
+      beforeEach(async () => {
+        sessionData = AbstractionAlertSessionData.monitoringStation()
+
+        payload = {}
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitAlertThresholdsService.go(session.id, payload)
+
+        expect(result).to.equal({
+          error: { text: 'Select applicable threshold(s)' },
+          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
+          caption: 'Death star',
+          pageTitle: 'Which thresholds do you need to send an alert for?',
+          thresholdOptions: [
+            {
+              checked: false,
+              value: '0',
+              text: '1000 m',
+              hint: {
+                text: 'Flow thresholds for this station (m)'
+              }
+            },
+            {
+              checked: false,
+              value: '1',
+              text: '100 m3/s',
+              hint: {
+                text: 'Level thresholds for this station (m3/s)'
+              }
+            }
+          ]
+        })
+      })
     })
 
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAlertThresholdsService.go(session.id, payload)
+    describe('and there are previous "alertThresholds"', () => {
+      beforeEach(async () => {
+        const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
 
-      expect(result).to.equal({
-        error: { text: 'Select applicable threshold(s)' },
-        backLink: `/system/notices/setup/${sessionData.monitoringStationId}/abstraction-alerts/alert-type`,
-        caption: 'Death star',
-        pageTitle: 'Which thresholds do you need to send an alert for?',
-        thresholdOptions: [
-          {
-            checked: false,
-            value: '0',
-            text: '1000 m',
-            hint: {
-              text: 'Flow thresholds for this station (m)'
+        sessionData = {
+          ...abstractionAlertSessionData,
+          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id]
+        }
+
+        payload = {}
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view, with errors, and all the thresholds unselected', async () => {
+        const result = await SubmitAlertThresholdsService.go(session.id, payload)
+
+        expect(result).to.equal({
+          error: { text: 'Select applicable threshold(s)' },
+          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
+          caption: 'Death star',
+          pageTitle: 'Which thresholds do you need to send an alert for?',
+          thresholdOptions: [
+            {
+              checked: false,
+              value: '0',
+              text: '1000 m',
+              hint: {
+                text: 'Flow thresholds for this station (m)'
+              }
+            },
+            {
+              checked: false,
+              value: '1',
+              text: '100 m3/s',
+              hint: {
+                text: 'Level thresholds for this station (m3/s)'
+              }
             }
-          },
-          {
-            checked: false,
-            value: '1',
-            text: '100 m3/s',
-            hint: {
-              text: 'Level thresholds for this station (m3/s)'
-            }
-          }
-        ]
+          ]
+        })
       })
     })
   })

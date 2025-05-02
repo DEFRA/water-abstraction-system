@@ -29,6 +29,8 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.alertThresholds = []
+
   const pageData = AlertThresholdsPresenter.go(session)
 
   return {
