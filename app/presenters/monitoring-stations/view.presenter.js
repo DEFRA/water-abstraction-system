@@ -34,6 +34,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(monitoringStation, auth) {
   const {
     id: monitoringStationId,
+    catchmentName,
     gridReference,
     label: monitoringStationName,
     licenceMonitoringStations,
@@ -43,9 +44,10 @@ function go(monitoringStation, auth) {
   } = monitoringStation
 
   return {
+    catchmentName,
     enableLicenceMonitoringStationsSetup: FeatureFlagsConfig.enableLicenceMonitoringStationsSetup,
-    links: _links(monitoringStationId),
     gridReference: gridReference ?? '',
+    links: _links(monitoringStationId),
     monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),

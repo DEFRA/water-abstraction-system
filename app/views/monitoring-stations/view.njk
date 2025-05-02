@@ -17,9 +17,11 @@
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      {{ pageTitle }}
-    </h1>
+    {% if catchmentName %}
+      <span class="govuk-caption-l">{{ catchmentName }}</span>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
   </div>
 
   <div class="govuk-!-margin-bottom-7">
