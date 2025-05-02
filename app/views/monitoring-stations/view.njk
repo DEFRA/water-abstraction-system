@@ -127,6 +127,16 @@
       %}
       {% set tableRow = (tableRow.push(alertDateCell), tableRow) %}
 
+      {% if enableLicenceMonitoringStationsView %}
+        {% set actionCell =
+          {
+            html: '<a class="govuk-link" href="'+ restriction.viewLink +'">View</a>',
+            attributes: { 'data-test': 'action' + rowIndex }
+          }
+        %}
+        {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+      {% endif %}
+
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
@@ -151,7 +161,10 @@
             text: "Last type of alert sent and date issued",
             classes: 'govuk-!-width-one-quarter',
             colspan: 2
-          }
+          },
+          {
+            text: "Action"
+          } if enableLicenceMonitoringStationsView
         ],
         rows: tableRows
       }) }}
