@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AlertThresholdsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
 
-describe('Alert Thresholds Presenter', () => {
+describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () => {
   let session
 
   beforeEach(() => {

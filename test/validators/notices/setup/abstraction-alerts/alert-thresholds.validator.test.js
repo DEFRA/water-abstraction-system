@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AlertThresholdsValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-thresholds.validator.js')
 
-describe('Alert Thresholds Validator', () => {
+describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () => {
   let payload
 
   beforeEach(() => {
