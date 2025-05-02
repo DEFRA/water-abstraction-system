@@ -48,7 +48,6 @@ async function go(sessionId, user) {
     await _cleanupSession(sessionId, trx)
   })
 
-  // TODO: Confirm how we want to exit the service
   return session.returnLogId
 }
 
