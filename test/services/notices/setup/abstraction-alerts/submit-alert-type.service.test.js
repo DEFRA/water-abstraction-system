@@ -51,6 +51,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
       const result = await SubmitAlertTypeService.go(session.id, payload)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         alertTypeOptions: [
           {
             checked: false,
