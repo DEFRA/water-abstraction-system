@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Generates metadata for a new return submission
+ * Generates return submission metatadata
  * @module GenerateReturnSubmissionMetadata
  */
 
@@ -15,11 +15,11 @@ const UNIT_NAMES = {
 }
 
 /**
- * TODO: Document
+ * Generates return submission metatadata
  *
- * @param session
+ * @param {object} session - Session object containing the return submission data
  *
- * @returns
+ * @returns {object} The return submission metadata
  */
 function go(session) {
   // Metadata is not required for nil returns

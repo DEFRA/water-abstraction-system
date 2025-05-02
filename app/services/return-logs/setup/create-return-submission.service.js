@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates new return submission, superseding a previous one if it exists
+ * Creates a new return submission, superseding a previous one if it exists
  * @module CreateReturnSubmissionService
  */
 
@@ -9,16 +9,18 @@ const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib
 const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
 
 /**
- * TODO: Document
+ * Creates a new return submission. If a previous submission exists for this return log ID, it marks that submission as
+ * superseded and creates this return submission with the next version number. Otherwise, the version number is 1.
  *
- * @param returnLogId
- * @param userId
- * @param userType
- * @param metadata
- * @param nilReturn
- * @param trx
+ * @param {string} returnLogId - ID of the return log (typically something like
+ * 'v1:6:01/234:12345678:2024-11-01:2025-10-31')
+ * @param {string} userId - ID of the user creating the return submission (typically an email address)
+ * @param {string} userType - Type of user (eg. 'internal' or 'external')
+ * @param {object} metadata - Metadata for the return submission
+ * @param {boolean} nilReturn - Indicates if the return is a nil return
+ * @param {objection.transaction} [trx] - Optional transaction object
  *
- * @returns
+ * @returns {module:ReturnSubmissionModel} - The created return submission
  */
 async function go(returnLogId, userId, userType, metadata, nilReturn, trx = null) {
   const { version, previousVersion } = await _getVersionNumber(returnLogId, trx)

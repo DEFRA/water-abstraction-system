@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates new return lines
+ * Creates new return lines by formatting the provided lines and inserting them into the database.
  * @module CreateNewReturnLinesService
  */
 
@@ -11,16 +11,16 @@ const ReturnSubmissionLineModel = require('../../../models/return-submission-lin
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * TODO: Document
+ * Creates new return lines by formatting the provided lines and inserting them into the database.
  *
- * @param lines
- * @param returnSubmissionId
- * @param returnsFrequency
- * @param units
- * @param meterProvided
- * @param trx
+ * @param {object[]} lines - An array of line objects to be processed.
+ * @param {string} returnSubmissionId - The ID of the return submission.
+ * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.).
+ * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.).
+ * @param {string} meterProvided - Indicates if a meter was provided ('yes' or 'no').
+ * @param {objection.transaction} [trx] - Optional transaction object.
  *
- * @returns
+ * @returns {module:ReturnSubmissionLineModel[]} - The created return lines.
  */
 async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvided, trx = null) {
   if (!lines || !lines.length) {

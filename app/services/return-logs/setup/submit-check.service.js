@@ -12,12 +12,17 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * TODO: Document
+ * Service to handle the submission of the check page in the return logs setup flow.
+ *
+ * This function orchestrates the submission process. It generates metadata, creates a return submission, creates new
+ * return lines, marks the return log as submitted, and cleans up the session.
+ *
+ * All of this is wrapped in a transaction so that if any part of it fails, the entire process is rolled back.
  *
  * @param {string} sessionId - The ID of the session containing the return data
  * @param {module:UserModel} user - Instance representing the user that originated the request
  *
- * @returns {Promise<object>} - The result of the submission process
+ * @returns {Promise<string>} - The ID of the submitted return log
  */
 async function go(sessionId, user) {
   // TODO: Consider validation
@@ -51,24 +56,10 @@ async function go(sessionId, user) {
   return session.returnLogId
 }
 
-/**
- * Updates the return log status to reflect submission
- *
- * @param {string} returnLogId - The ID of the return log
- * @param trx
- * @returns {Promise<void>}
- */
 async function _markReturnLogAsSubmitted(returnLogId, trx) {
   await ReturnLogModel.query(trx).patch({ status: 'completed' }).where({ id: returnLogId })
 }
 
-/**
- * Cleans up the session after submission
- *
- * @param {string} sessionId - The ID of the session to delete
- * @param trx
- * @returns {Promise<void>}
- */
 async function _cleanupSession(sessionId, trx) {
   await SessionModel.query(trx).deleteById(sessionId)
 }
