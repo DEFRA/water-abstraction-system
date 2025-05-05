@@ -5,6 +5,8 @@
  * @module GeneralHelper
  */
 
+const { randomInt } = require('node:crypto')
+
 /**
  * Generate the POST request options needed for `server.inject()`
  *
@@ -77,12 +79,10 @@ function postRequestOptions(
  * @param {number} min - lowest number (integer) in the range (inclusive)
  * @param {number} max - largest number (integer) in the range (inclusive)
  *
- * Credit https://stackoverflow.com/a/7228322
- *
  * @returns a number between min and max (inclusive)
  */
 function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
+  return randomInt(min, max)
 }
 
 /**
