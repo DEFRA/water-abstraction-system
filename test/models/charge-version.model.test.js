@@ -19,7 +19,7 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
-const { randomInteger } = require('../support/general.js')
+const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
@@ -288,8 +288,8 @@ describe('Charge Version model', () => {
 
     describe('when the charge version has mod log history', () => {
       beforeEach(async () => {
-        const regionCode = randomInteger(1, 9)
-        const firstNaldId = randomInteger(100, 99998)
+        const regionCode = generateRandomInteger(1, 9)
+        const firstNaldId = generateRandomInteger(100, 99998)
 
         await ModLogHelper.add({
           externalId: `${regionCode}:${firstNaldId}`,
@@ -374,8 +374,8 @@ describe('Charge Version model', () => {
 
       describe('and has mod log history', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, chargeVersionId, userId: 'FIRST' })
           await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, chargeVersionId, userId: 'SECOND' })
@@ -448,8 +448,8 @@ describe('Charge Version model', () => {
       describe('and has mod log history', () => {
         describe('but none of the mod log history has notes', () => {
           beforeEach(async () => {
-            const regionCode = randomInteger(1, 9)
-            const firstNaldId = randomInteger(100, 99998)
+            const regionCode = generateRandomInteger(1, 9)
+            const firstNaldId = generateRandomInteger(100, 99998)
 
             await ModLogHelper.add({
               externalId: `${regionCode}:${firstNaldId}`,
@@ -475,8 +475,8 @@ describe('Charge Version model', () => {
 
         describe('and some of the mod log history has notes', () => {
           beforeEach(async () => {
-            const regionCode = randomInteger(1, 9)
-            const firstNaldId = randomInteger(100, 99998)
+            const regionCode = generateRandomInteger(1, 9)
+            const firstNaldId = generateRandomInteger(100, 99998)
 
             await ModLogHelper.add({
               externalId: `${regionCode}:${firstNaldId}`,
@@ -539,8 +539,8 @@ describe('Charge Version model', () => {
       describe('and has mod log history', () => {
         describe('but the mod log history has no reason description recorded in the first entry', () => {
           beforeEach(async () => {
-            const regionCode = randomInteger(1, 9)
-            const firstNaldId = randomInteger(100, 99998)
+            const regionCode = generateRandomInteger(1, 9)
+            const firstNaldId = generateRandomInteger(100, 99998)
 
             await ModLogHelper.add({
               externalId: `${regionCode}:${firstNaldId}`,
@@ -566,8 +566,8 @@ describe('Charge Version model', () => {
 
       describe('and the mod log history has a reason description recorded in the first entry', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({
             externalId: `${regionCode}:${firstNaldId}`,

@@ -4,8 +4,7 @@
  * @module LicenceDocumentHelper
  */
 
-const { randomInteger } = require('../general.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
 
@@ -44,7 +43,7 @@ async function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     regimeEntityId: generateUUID(),
-    naldId: randomInteger(1000, 199999),
+    naldId: generateRandomInteger(1000, 199999),
     licenceRef: generateLicenceRef(),
     metadata: _metadata()
   }
