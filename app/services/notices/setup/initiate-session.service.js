@@ -5,6 +5,8 @@
  * @module InitiateSessionService
  */
 
+const { randomInt } = require('node:crypto')
+
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -115,7 +117,7 @@ function _generateReferenceCode(prefix) {
   let text = ''
 
   for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
+    text += possible.charAt(randomInt(0, 32))
   }
   return prefix + text
 }
