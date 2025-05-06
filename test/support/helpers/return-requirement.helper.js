@@ -4,8 +4,7 @@
  * @module ReturnRequirementHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const ReturnRequirementModel = require('../../../app/models/return-requirement.model.js')
 
 /**
@@ -77,7 +76,7 @@ function defaults(data = {}) {
  * @returns {number}
  */
 function generateLegacyId() {
-  return randomInteger(100, 19999999)
+  return generateRandomInteger(100, 19999999)
 }
 
 module.exports = {

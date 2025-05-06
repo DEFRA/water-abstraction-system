@@ -4,8 +4,8 @@
  * @module ReturnVersionHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { randomInteger, randomRegionCode } = require('../general.js')
+const { randomRegionCode } = require('../general.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 /**
@@ -46,7 +46,7 @@ function defaults(data = {}) {
   const version = data.version ? data.version : 100
 
   const defaults = {
-    externalId: `${randomRegionCode()}:${randomInteger(100, 99999)}:${version}`,
+    externalId: `${randomRegionCode()}:${generateRandomInteger(100, 99999)}:${version}`,
     licenceId: generateUUID(),
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
