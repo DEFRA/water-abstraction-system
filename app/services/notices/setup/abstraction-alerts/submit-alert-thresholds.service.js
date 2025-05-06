@@ -13,7 +13,7 @@ const SessionModel = require('../../../../models/session.model.js')
 const ALERT_THRESHOLDS_KEY = 'alert-thresholds'
 
 /**
-* Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
