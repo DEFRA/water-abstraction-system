@@ -4,8 +4,8 @@
  * @module UserHelper
  */
 
-const { randomInteger, selectRandomEntry } = require('../general.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { selectRandomEntry } = require('../general.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const UserModel = require('../../../app/models/user.model.js')
 const { data: users } = require('../../../db/seeds/data/users.js')
 
@@ -69,7 +69,7 @@ function defaults(data = {}) {
  */
 function generateUserId() {
   // The last ID in the pre-seeded users is 100010
-  return randomInteger(100011, 199999)
+  return generateRandomInteger(100011, 199999)
 }
 
 /**

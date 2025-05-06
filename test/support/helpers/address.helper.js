@@ -5,7 +5,7 @@
  */
 
 const AddressModel = require('../../../app/models/address.model.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new address
@@ -67,7 +67,7 @@ function defaults(data = {}) {
  * @returns {string} - A random UPRN
  */
 function generateUprn() {
-  return randomInteger(100, 999999)
+  return generateRandomInteger(100, 999999)
 }
 
 /**
@@ -78,8 +78,8 @@ function generateUprn() {
  * @returns {string} - A random external id
  */
 function generateExternalId() {
-  const regionCode = randomInteger(1, 9)
-  const addressId = randomInteger(100, 99998)
+  const regionCode = generateRandomInteger(1, 9)
+  const addressId = generateRandomInteger(100, 99998)
 
   return `${regionCode}:${addressId}`
 }
