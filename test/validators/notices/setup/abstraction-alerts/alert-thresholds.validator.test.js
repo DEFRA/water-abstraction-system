@@ -26,19 +26,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
     })
 
     describe('and the "alert-thresholds"', () => {
-      describe('is a string', () => {
-        beforeEach(() => {
-          payload = { 'alert-thresholds': '0' }
-        })
-
-        it('returns with errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
-
-          expect(result.value).to.exist()
-          expect(result.error).not.to.exist()
-        })
-      })
-
       describe('is an array', () => {
         beforeEach(() => {
           payload = { 'alert-thresholds': ['0'] }
@@ -70,9 +57,9 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
         })
       })
 
-      describe('is not an array or a string', () => {
+      describe('is not an array', () => {
         beforeEach(() => {
-          payload = { 'alert-thresholds': 42 }
+          payload = { 'alert-thresholds': '42' }
         })
 
         it('returns with errors', () => {

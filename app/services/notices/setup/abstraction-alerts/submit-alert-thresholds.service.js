@@ -23,6 +23,8 @@ const ALERT_THRESHOLDS_KEY = 'alert-thresholds'
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
+  _handleOneOptionSelected(payload)
+
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -55,7 +57,7 @@ function _handleOneOptionSelected(payload) {
 }
 
 async function _save(session, payload) {
-  session.alertThresholds = _handleOneOptionSelected(payload)
+  session.alertThresholds = payload[ALERT_THRESHOLDS_KEY]
 
   return session.$update()
 }
