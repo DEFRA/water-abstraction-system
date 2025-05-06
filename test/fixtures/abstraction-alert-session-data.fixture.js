@@ -11,6 +11,9 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
  * @returns {object} an object representing the monitoring stations service
  */
 function monitoringStation() {
+  const licenceWithMultipleThresholdsLicenceRef = generateLicenceRef()
+  const licenceWithMultipleThresholdsLicenceId = generateUUID()
+
   return {
     licenceMonitoringStations: [
       {
@@ -36,8 +39,8 @@ function monitoringStation() {
         abstraction_period_start_day: 1,
         abstraction_period_start_month: 1,
         id: '1',
-        licence_id: generateUUID(),
-        licence_ref: generateLicenceRef(),
+        licence_id: licenceWithMultipleThresholdsLicenceId,
+        licence_ref: licenceWithMultipleThresholdsLicenceRef,
         licence_version_purpose_condition_id: generateUUID(),
         measure_type: 'level',
         restriction_type: 'reduce',
@@ -46,6 +49,23 @@ function monitoringStation() {
         status_updated_at: null,
         threshold_unit: 'm3/s',
         threshold_value: 100
+      },
+      {
+        abstraction_period_end_day: 28,
+        abstraction_period_end_month: 4,
+        abstraction_period_start_day: 4,
+        abstraction_period_start_month: 2,
+        id: '2',
+        licence_id: licenceWithMultipleThresholdsLicenceId,
+        licence_ref: licenceWithMultipleThresholdsLicenceRef,
+        licence_version_purpose_condition_id: generateUUID(),
+        measure_type: 'level',
+        restriction_type: 'stop',
+        start_date: new Date('2022-01-01').toISOString(),
+        status: 'resume',
+        status_updated_at: null,
+        threshold_unit: 'm',
+        threshold_value: 1000
       }
     ],
     monitoringStationId: generateUUID(),
