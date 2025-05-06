@@ -47,7 +47,7 @@
           value: {
             text: customerFile
           }
-        },
+        } if lastUpdated,
         {
           key: {
             text: "Last updated"
@@ -55,7 +55,7 @@
           value: {
             text: lastUpdated
           }
-        },
+        } if lastUpdated,
         {
           key: {
             text: "Address"
@@ -63,14 +63,13 @@
           value: {
             html: newLineArrayItems(address)
           }
+        },
+        {
+          value: {
+            html: '<a class="govuk-button govuk-button--secondary" href="/billing-account-entry/change-address-' + billingAccountId + '/select-account">Change address</a>'
+          }
         }
       ]
-    }) }}
-
-    {{ govukButton({
-      text: "Change address",
-      classes: "govuk-button--secondary",
-      href: "/billing-account-entry/change-address-" + billingAccountId + "/select-account"
     }) }}
   </div>
 
@@ -123,6 +122,7 @@
       {% set billRunNumberCell =
         {
           text: bill.billRunNumber,
+          format: 'numeric',
           attributes: { 'data-test': 'bill-run-number-' + rowIndex }
         }
       %}
@@ -133,6 +133,7 @@
       {% set financialYearCell =
         {
           text: bill.financialYear,
+          format: 'numeric',
           attributes: { 'data-test': 'financial-year-' + rowIndex }
         }
       %}
@@ -143,6 +144,7 @@
       {% set billTotalCell =
         {
           text: bill.billTotal,
+          format: 'numeric',
           attributes: { 'data-test': 'bill-total-' + rowIndex }
         }
       %}
@@ -168,13 +170,16 @@
             text: "Bill run type"
           },
           {
-            text: "Bill run number"
+            text: "Bill run number",
+            format: 'numeric'
           },
           {
-            text: "Financial year"
+            text: "Financial year",
+            format: 'numeric'
           },
           {
-            text: "Bill total"
+            text: "Bill total",
+            format: 'numeric'
           }
         ],
         rows: tableRows
