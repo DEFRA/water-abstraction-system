@@ -4,8 +4,7 @@
  * @module ReturnRequirementPurposeHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
 const PurposeHelper = require('./purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
@@ -49,7 +48,7 @@ function defaults(data = {}) {
   const primaryPurpose = PrimaryPurposeHelper.select()
   const secondaryPurpose = SecondaryPurposeHelper.select()
 
-  const externalId = `9:${randomInteger(100, 99999)}:${primaryPurpose.legacyId}:${secondaryPurpose.legacyId}:${purpose.legacyId}`
+  const externalId = `9:${generateRandomInteger(100, 99999)}:${primaryPurpose.legacyId}:${secondaryPurpose.legacyId}:${purpose.legacyId}`
 
   const defaults = {
     externalId,

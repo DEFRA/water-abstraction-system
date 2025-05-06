@@ -4,10 +4,9 @@
  * @module LicenceVersionPurposeConditionHelper
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const LicenceVersionPurposeConditionModel = require('../../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeConditionTypeHelper = require('./licence-version-purpose-condition-type.helper.js')
-const { randomInteger } = require('../general.js')
 
 /**
  * Add a new licence version purpose condition
@@ -17,7 +16,7 @@ const { randomInteger } = require('../general.js')
  * - `licenceVersionPurposeConditionId` - [random UUID]
  * - `licenceVersionPurposeId` - [random UUID]
  * - `licenceVersionPurposeConditionTypeId` - [randomly selected UUID from licence version purpose condition types]
- * - `externalId` - [9:${randomInteger(10000, 99999)}:1:0]
+ * - `externalId` - [9:${generateRandomInteger(10000, 99999)}:1:0]
  * - `source` - [nald]
  * - `dateCreated` - new Date()
  * - `dateUpdated` - new Date()
@@ -51,7 +50,7 @@ function defaults(data = {}) {
   const defaults = {
     licenceVersionPurposeId: generateUUID(),
     licenceVersionPurposeConditionTypeId,
-    externalId: `9:${randomInteger(10000, 99999)}:1:0`,
+    externalId: `9:${generateRandomInteger(10000, 99999)}:1:0`,
     source: 'nald',
     createdAt: timestamp,
     updatedAt: timestamp
