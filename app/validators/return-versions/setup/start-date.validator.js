@@ -55,7 +55,7 @@ function _fullDate(payload) {
 function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   let minDate = licenceStartDate
   let minMessage = 'Start date must be on or after the original licence start date'
-console.log(licenceStartDate)
+
   if (new Date(licenceStartDate) < new Date('1959-04-01')) {
     minDate = '1959-04-01'
     minMessage = 'Start date must be on or after 1 April 1959'
