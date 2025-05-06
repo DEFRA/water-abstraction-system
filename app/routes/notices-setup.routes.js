@@ -4,6 +4,8 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 
 const basePath = '/notices/setup'
 
+const ABSTRACTION_ALERTS_PATH = 'abstraction-alerts'
+
 const routes = [
   {
     method: 'GET',
@@ -31,7 +33,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
+    path: basePath + `/{sessionId}/${ABSTRACTION_ALERTS_PATH}/alert-type`,
     options: {
       handler: NoticesSetupController.viewAlertType,
       auth: {
@@ -43,7 +45,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
+    path: basePath + `/{sessionId}/${ABSTRACTION_ALERTS_PATH}/alert-type`,
     options: {
       handler: NoticesSetupController.submitAlertType,
       auth: {
@@ -55,7 +57,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    path: basePath + `/{sessionId}/${ABSTRACTION_ALERTS_PATH}/alert-thresholds`,
     options: {
       handler: NoticesSetupController.viewAlertThresholds,
       auth: {
@@ -67,9 +69,21 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    path: basePath + `/{sessionId}/${ABSTRACTION_ALERTS_PATH}/alert-thresholds`,
     options: {
       handler: NoticesSetupController.submitAlertThresholds,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + `/{sessionId}/${ABSTRACTION_ALERTS_PATH}/check-licence-matches`,
+    options: {
+      handler: NoticesSetupController.viewCheckLicenceMatches,
       auth: {
         access: {
           scope: ['returns']
