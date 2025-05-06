@@ -10,8 +10,10 @@ const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/a
 const AlertThresholdsValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-thresholds.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
 
+const ALERT_THRESHOLDS_KEY = 'alert-thresholds'
+
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+* Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -39,12 +41,21 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
-  const alertThresholdsKey = 'alert-thresholds'
+/**
+ * When a single point is checked by the user, it returns as a string. When multiple alert thresholds are checked, the
+ * 'alert-thresholds' is returned as an array. This function works to make those single selected string 'alert-thresholds' into an array
+ * for uniformity.
+ *
+ * @private
+ */
+function _handleOneOptionSelected(payload) {
+  if (!Array.isArray(payload[ALERT_THRESHOLDS_KEY])) {
+    payload[ALERT_THRESHOLDS_KEY] = [payload[ALERT_THRESHOLDS_KEY]]
+  }
+}
 
-  session.alertThresholds = Array.isArray(payload[alertThresholdsKey])
-    ? payload[alertThresholdsKey]
-    : [payload[alertThresholdsKey]]
+async function _save(session, payload) {
+  session.alertThresholds = _handleOneOptionSelected(payload)
 
   return session.$update()
 }

@@ -8,7 +8,7 @@
 
 const Joi = require('joi')
 
-const errorMessage = 'Select applicable threshold(s)'
+const ERROR_MESSAGE = 'Select applicable threshold(s)'
 
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
@@ -21,10 +21,10 @@ const errorMessage = 'Select applicable threshold(s)'
 function go(payload) {
   const schema = Joi.object({
     'alert-thresholds': Joi.alternatives().try(Joi.string(), Joi.array()).required().messages({
-      'any.required': errorMessage,
-      'alternatives.types': errorMessage,
-      'string.base': errorMessage,
-      'array.base': errorMessage
+      'any.required': ERROR_MESSAGE,
+      'alternatives.types': ERROR_MESSAGE,
+      'string.base': ERROR_MESSAGE,
+      'array.base': ERROR_MESSAGE
     })
   })
 
