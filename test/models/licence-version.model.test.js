@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { randomInteger } = require('../support/general.js')
+const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
@@ -150,8 +150,8 @@ describe('Licence Version model', () => {
 
     describe('when the licence version has mod log history', () => {
       beforeEach(async () => {
-        const regionCode = randomInteger(1, 9)
-        const firstNaldId = randomInteger(100, 99998)
+        const regionCode = generateRandomInteger(1, 9)
+        const firstNaldId = generateRandomInteger(100, 99998)
 
         await ModLogHelper.add({
           externalId: `${regionCode}:${firstNaldId}`,
@@ -190,8 +190,8 @@ describe('Licence Version model', () => {
 
     describe('when the licence version has mod log history', () => {
       beforeEach(async () => {
-        const regionCode = randomInteger(1, 9)
-        const firstNaldId = randomInteger(100, 99998)
+        const regionCode = generateRandomInteger(1, 9)
+        const firstNaldId = generateRandomInteger(100, 99998)
 
         await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, licenceVersionId, userId: 'FIRST' })
         await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, licenceVersionId, userId: 'SECOND' })
@@ -224,8 +224,8 @@ describe('Licence Version model', () => {
     describe('when the licence version has mod log history', () => {
       describe('but none of the mod log history has notes', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({
             externalId: `${regionCode}:${firstNaldId}`,
@@ -251,8 +251,8 @@ describe('Licence Version model', () => {
 
       describe('and some of the mod log history has notes', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({
             externalId: `${regionCode}:${firstNaldId}`,
@@ -293,8 +293,8 @@ describe('Licence Version model', () => {
     describe('when the licence version has mod log history', () => {
       describe('but the mod log history has no reason description recorded in the first entry', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({
             externalId: `${regionCode}:${firstNaldId}`,
@@ -319,8 +319,8 @@ describe('Licence Version model', () => {
 
       describe('and the mod log history has a reason description recorded in the first entry', () => {
         beforeEach(async () => {
-          const regionCode = randomInteger(1, 9)
-          const firstNaldId = randomInteger(100, 99998)
+          const regionCode = generateRandomInteger(1, 9)
+          const firstNaldId = generateRandomInteger(100, 99998)
 
           await ModLogHelper.add({
             externalId: `${regionCode}:${firstNaldId}`,

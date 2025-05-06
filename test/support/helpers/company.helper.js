@@ -5,7 +5,7 @@
  */
 
 const CompanyModel = require('../../../app/models/company.model.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new company
@@ -55,7 +55,7 @@ function defaults(data = {}) {
  * @returns {int} - A random company number
  */
 function generateCompanyNumber() {
-  return randomInteger(1000000, 9999999).toString()
+  return generateRandomInteger(1000000, 9999999).toString()
 }
 
 /**
@@ -66,8 +66,8 @@ function generateCompanyNumber() {
  * @returns {string} - A random external id
  */
 function generateExternalId() {
-  const regionCode = randomInteger(1, 9)
-  const partyId = randomInteger(100, 9999998)
+  const regionCode = generateRandomInteger(1, 9)
+  const partyId = generateRandomInteger(100, 9999998)
 
   return `${regionCode}:${partyId}`
 }
