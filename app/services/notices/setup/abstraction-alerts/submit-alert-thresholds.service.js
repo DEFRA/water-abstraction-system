@@ -44,7 +44,7 @@ async function go(sessionId, payload) {
 }
 
 /**
- * When a single point is checked by the user, it returns as a string. When multiple alert thresholds are checked, the
+ * When a single alert threshold is checked by the user, it returns as a string. When multiple alert thresholds are checked, the
  * 'alert-thresholds' is returned as an array. This function works to make those single selected string 'alert-thresholds' into an array
  * for uniformity.
  *

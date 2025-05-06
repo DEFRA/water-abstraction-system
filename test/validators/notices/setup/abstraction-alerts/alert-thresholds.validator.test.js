@@ -57,9 +57,9 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
         })
       })
 
-      describe('is not an array', () => {
+      describe('is an array with no items', () => {
         beforeEach(() => {
-          payload = { 'alert-thresholds': '42' }
+          payload = { 'alert-thresholds': [undefined] }
         })
 
         it('returns with errors', () => {
