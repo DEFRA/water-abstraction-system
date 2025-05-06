@@ -34,6 +34,12 @@ function _threshold(licenceMonitoringStation) {
   }
 }
 
+/**
+ * Groups licence monitoring stations by licence reference and collects threshold data for stations whose IDs match the
+ * provided alert thresholds.
+ *
+ * @private
+ */
 function _licences(alertThresholds, licenceMonitoringStations) {
   const grouped = {}
 
