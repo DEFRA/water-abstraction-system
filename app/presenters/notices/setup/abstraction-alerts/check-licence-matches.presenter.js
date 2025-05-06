@@ -5,6 +5,8 @@
  * @module CheckLicenceMatchesPresenter
  */
 
+const { formatAbstractionPeriod } = require('../../../base.presenter.js')
+
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alert/check-licence-matches` page
  *
@@ -19,10 +21,38 @@ function go(session) {
   }
 }
 
+function _threshold(licenceMonitoringStation) {
+  return {
+    abstractionPeriod: formatAbstractionPeriod(
+      licenceMonitoringStation.abstraction_period_start_day,
+      licenceMonitoringStation.abstraction_period_start_month,
+      licenceMonitoringStation.abstraction_period_end_month,
+      licenceMonitoringStation.abstraction_period_end_month
+    ),
+    flow: licenceMonitoringStation.restriction_type,
+    threshold: `${licenceMonitoringStation.threshold_value} ${licenceMonitoringStation.threshold_unit}`
+  }
+}
+
 function _licences(alertThresholds, licenceMonitoringStations) {
-  return licenceMonitoringStations.filter((lms) => {
-    return alertThresholds.includes(lms.id)
-  })
+  const grouped = {}
+
+  for (const licenceMonitoringStation of licenceMonitoringStations) {
+    if (alertThresholds.includes(licenceMonitoringStation.id)) {
+      const key = licenceMonitoringStation.licence_ref
+
+      if (!grouped[key]) {
+        grouped[key] = {
+          licenceRef: key,
+          thresholds: []
+        }
+      }
+
+      grouped[key].thresholds.push(_threshold(licenceMonitoringStation))
+    }
+  }
+
+  return Object.values(grouped)
 }
 
 module.exports = {

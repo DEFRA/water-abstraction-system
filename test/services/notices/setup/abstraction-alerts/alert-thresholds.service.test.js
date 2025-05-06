@@ -49,6 +49,14 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
             },
             text: '100 m3/s',
             value: '1'
+          },
+          {
+            checked: false,
+            hint: {
+              text: 'Level thresholds for this station (m)'
+            },
+            text: '1000 m',
+            value: '2'
           }
         ]
       })
