@@ -17,19 +17,27 @@ const { formatBillRunType } = require('../billing.presenter.js')
  */
 function go(billingAccountData) {
   const { billingAccount, bills, licenceId, pagination } = billingAccountData
+  const {
+    accountNumber,
+    billingAccountAddresses,
+    company,
+    createdAt,
+    id,
+    lastTransactionFile,
+    lastTransactionFileCreatedAt
+  } = billingAccount
 
   return {
-    accountNumber: billingAccount.accountNumber,
-    address: _address(billingAccount.billingAccountAddresses[0].address, billingAccount.company),
-    billingAccountId: billingAccount.id,
+    accountNumber,
+    address: _address(billingAccountAddresses[0].address, company),
+    billingAccountId: id,
     bills: _bills(bills),
-    createdDate: formatLongDate(billingAccount.createdAt),
-    customerFile: 'Test customer file',
-    lastUpdated: 'Test 12 June 2030',
+    createdDate: formatLongDate(createdAt),
+    customerFile: lastTransactionFile,
+    lastUpdated: lastTransactionFileCreatedAt ? formatLongDate(lastTransactionFileCreatedAt) : null,
     licenceId,
-    pageTitle: 'Billing account for ' + titleCase(billingAccount.company.name),
-    pagination,
-    source: _source(billingAccount)
+    pageTitle: 'Billing account for ' + titleCase(company.name),
+    pagination
   }
 }
 
@@ -67,11 +75,6 @@ function _bills(bills) {
       financialYear: bill.financialYear
     }
   })
-}
-
-// TODO: Implement
-function _source() {
-  return 'NALD'
 }
 
 module.exports = {
