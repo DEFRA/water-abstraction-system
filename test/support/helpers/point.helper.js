@@ -4,7 +4,7 @@
  * @module PointHelper
  */
 
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const PointModel = require('../../../app/models/point.model.js')
 const SourceHelper = require('./source.helper.js')
 
@@ -68,7 +68,7 @@ function generateNationalGridReference() {
   // square references that cover the majority of the UK (sorry far North!)
   const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
 
-  return `${codes[randomInteger(0, 16)]} ${randomInteger(100, 999)} ${randomInteger(100, 999)}`
+  return `${codes[generateRandomInteger(0, 16)]} ${generateRandomInteger(100, 999)} ${generateRandomInteger(100, 999)}`
 }
 
 /**
@@ -77,7 +77,7 @@ function generateNationalGridReference() {
  * @returns {string} - A randomly generated point ID
  */
 function generateNaldPointId() {
-  return randomInteger(1, 99999)
+  return generateRandomInteger(1, 99999)
 }
 
 module.exports = {

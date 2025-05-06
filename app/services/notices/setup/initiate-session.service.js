@@ -5,6 +5,7 @@
  * @module InitiateSessionService
  */
 
+const { generateRandomInteger } = require('../../../lib/general.lib.js')
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -112,10 +113,11 @@ async function go(notificationType, monitoringStationId = null) {
 function _generateReferenceCode(prefix) {
   const possible = 'ABCDEFGHJKLMNPQRTUVWXYZ0123456789'
   const length = 6
+
   let text = ''
 
   for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
+    text += possible.charAt(generateRandomInteger(0, possible.length))
   }
   return prefix + text
 }
