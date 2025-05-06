@@ -19,7 +19,7 @@ function go(session) {
     backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
     caption: session.monitoringStationName,
     pageTitle: 'Which thresholds do you need to send an alert for?',
-    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertThresholds, session.alertType)
+    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertType, session.alertThresholds)
   }
 }
 
@@ -40,7 +40,7 @@ function _relevantLicenceMonitoringStations(stations, alertType) {
   })
 }
 
-function _thresholdOptions(licenceMonitoringStations, alertThresholds = [], alertType) {
+function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
 
   return relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
