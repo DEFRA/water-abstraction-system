@@ -142,7 +142,7 @@ async function submitAlertThresholds(request, h) {
     return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check`)
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 async function submitAlertType(request, h) {
