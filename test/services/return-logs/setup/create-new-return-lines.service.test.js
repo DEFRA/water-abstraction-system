@@ -59,4 +59,12 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
       expect(result.readingType).to.equal('measured')
     })
   })
+
+  describe('when called with no lines', () => {
+    it('returns an empty array', async () => {
+      const result = await CreateNewReturnLinesService.go([], returnSubmissionId, 'week', 'cubic-metres', 'no')
+
+      expect(result).to.equal([])
+    })
+  })
 })
