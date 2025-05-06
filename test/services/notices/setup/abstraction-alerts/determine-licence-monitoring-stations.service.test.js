@@ -56,6 +56,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstraction_period_end_month: 1,
           abstraction_period_start_day: 1,
           abstraction_period_start_month: 2,
+          id: '0',
           licence_id: '123',
           licence_ref: '123/456',
           licence_version_purpose_condition_id: null,
@@ -70,6 +71,14 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       ],
       monitoringStationId: monitoringStation.id,
       monitoringStationName: 'MONITOR PLACE'
+    })
+  })
+
+  describe('the "licenceMonitoringStations" property', () => {
+    it('should add an id to the licence station', async () => {
+      const result = await DetermineLicenceMonitoringStationsService.go(monitoringStation.id)
+
+      expect(result.licenceMonitoringStations[0].id).to.equal('0')
     })
   })
 
