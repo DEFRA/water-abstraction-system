@@ -21,7 +21,11 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
   beforeEach(async () => {
     payload = { thresholds: [] }
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+
+    sessionData = {
+      ...AbstractionAlertSessionData.monitoringStation(),
+      alertType: 'stop'
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -65,18 +69,18 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
           {
             checked: false,
             hint: {
-              text: 'Flow thresholds for this station (m)'
+              text: 'Flow thresholds for this station (m3/s)'
             },
-            text: '1000 m',
-            value: '0'
+            text: '100 m3/s',
+            value: '1'
           },
           {
             checked: false,
             hint: {
-              text: 'Level thresholds for this station (m3/s)'
+              text: 'Level thresholds for this station (m)'
             },
-            text: '100 m3/s',
-            value: '1'
+            text: '100 m',
+            value: '2'
           }
         ]
       })

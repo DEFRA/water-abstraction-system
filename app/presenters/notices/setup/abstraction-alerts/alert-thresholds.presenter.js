@@ -19,12 +19,31 @@ function go(session) {
     backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
     caption: session.monitoringStationName,
     pageTitle: 'Which thresholds do you need to send an alert for?',
-    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertThresholds)
+    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertThresholds, session.alertType)
   }
 }
 
-function _thresholdOptions(licenceMonitoringStations, alertThresholds = []) {
-  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+/**
+ * Filters licence monitoring stations based on alert type.
+ *
+ * When the alert type is not 'stop' or 'reduce', all stations with any restriction are included.
+ *
+ * @private
+ */
+function _relevantLicenceMonitoringStations(stations, alertType) {
+  return stations.filter((station) => {
+    if (alertType === 'stop' || alertType === 'reduce') {
+      return station.restriction_type === alertType
+    }
+
+    return Boolean(station.restriction_type)
+  })
+}
+
+function _thresholdOptions(licenceMonitoringStations, alertThresholds = [], alertType) {
+  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
+
+  return relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
       checked: alertThresholds.includes(licenceMonitoringStation.id),
       value: licenceMonitoringStation.id,
