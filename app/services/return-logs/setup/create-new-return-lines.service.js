@@ -23,20 +23,20 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @returns {module:ReturnSubmissionLineModel[]} - The created return lines (empty if no lines were provided).
  */
 async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvided, trx = null) {
-  if (!lines || !lines.length) {
+  if (!lines?.length) {
     return []
   }
 
   const returnLines = lines.map((line) => {
     return {
       ...line,
-      quantity: line.quantity ? _convertToCubicMetres(line.quantity, units) : undefined,
-      reading: undefined,
-      createdAt: timestampForPostgres(),
+      reading: undefined, // This needs to be removed by setting it as undefined as it isn't a valid column in the db
       id: generateUUID(),
+      createdAt: timestampForPostgres(),
+      quantity: line.quantity ? _convertToCubicMetres(line.quantity, units) : undefined,
+      readingType: meterProvided === 'no' ? 'estimated' : 'measured',
       returnSubmissionId,
       timePeriod: returnsFrequency,
-      readingType: meterProvided === 'no' ? 'estimated' : 'measured',
       userUnit: _getUserUnit(units)
     }
   })
