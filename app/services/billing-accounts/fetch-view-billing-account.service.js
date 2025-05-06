@@ -40,7 +40,7 @@ async function go(billingAccountId, page) {
 async function _fetchBillingAccount(billingAccountId) {
   return BillingAccountModel.query()
     .findById(billingAccountId)
-    .select(['id', 'accountNumber', 'createdAt'])
+    .select(['id', 'accountNumber', 'createdAt', 'lastTransactionFile', 'lastTransactionFileCreatedAt'])
     .withGraphFetched('billingAccountAddresses')
     .modifyGraph('billingAccountAddresses', (builder) => {
       builder.select('id')
@@ -62,8 +62,8 @@ async function _fetchBills(billingAccountId, page) {
       'createdAt',
       'credit',
       'invoiceNumber',
-      ref('bills.metadata:FIN_YEAR').castInt().as('financialYear'),
-      'netAmount'
+      'netAmount',
+      ref('bills.metadata:FIN_YEAR').castInt().as('financialYear')
     ])
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
@@ -83,8 +83,8 @@ async function _fetchLicence(billingAccountId) {
     .select('l.id AS licenceId')
     .distinct()
     .from('licences AS l')
-    .innerJoin('billLicences as bl', 'l.id', '=', 'bl.licenceId')
-    .innerJoin('bills as b', 'bl.billId', '=', 'b.id')
+    .innerJoin('billLicences AS bl', 'l.id', '=', 'bl.licenceId')
+    .innerJoin('bills AS b', 'bl.billId', '=', 'b.id')
     .where('b.billingAccountId', '=', billingAccountId)
 
   return result[0].licenceId
