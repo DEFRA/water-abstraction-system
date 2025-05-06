@@ -20,6 +20,9 @@ describe('Monitoring Stations - View service', () => {
   let monitoringStation
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsView').value(true)
+
     auth = auth = {
       credentials: {
         scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
@@ -28,6 +31,7 @@ describe('Monitoring Stations - View service', () => {
 
     monitoringStation = {
       id: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
+      catchmentName: null,
       gridReference: 'TL2664640047',
       label: 'BUSY POINT',
       riverName: null,
@@ -70,6 +74,9 @@ describe('Monitoring Stations - View service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        catchmentName: null,
+        enableLicenceMonitoringStationsSetup: true,
+        enableLicenceMonitoringStationsView: true,
         gridReference: 'TL2664640047',
         links: {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
@@ -88,7 +95,8 @@ describe('Monitoring Stations - View service', () => {
             licenceRef: 'AT/TEST',
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100 m3/s',
+            viewLink: '/system/licence-monitoring-station/3ee344db-784c-4d21-8d53-e50833f7e848'
           }
         ],
         stationReference: '',

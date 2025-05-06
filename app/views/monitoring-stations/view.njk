@@ -17,9 +17,11 @@
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      {{ pageTitle }}
-    </h1>
+    {% if catchmentName %}
+      <span class="govuk-caption-l">{{ catchmentName }}</span>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
   </div>
 
   <div class="govuk-!-margin-bottom-7">
@@ -58,7 +60,7 @@
   <div class="divider govuk-!-margin-bottom-7"></div>
 
   {% if restrictions.length > 0 %}
-    {# Create rows for lincences linked to the monitoring station #}
+    {# Create rows for licences linked to the monitoring station #}
     {% set tableRows = []%}
 
     {% for restriction in restrictions %}
@@ -125,6 +127,16 @@
       %}
       {% set tableRow = (tableRow.push(alertDateCell), tableRow) %}
 
+      {% if enableLicenceMonitoringStationsView %}
+        {% set actionCell =
+          {
+            html: '<a href="'+ restriction.viewLink +'" class="govuk-link">View</a>',
+            attributes: { 'data-test': 'action-' + rowIndex }
+          }
+        %}
+        {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+      {% endif %}
+
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
@@ -149,7 +161,10 @@
             text: "Last type of alert sent and date issued",
             classes: 'govuk-!-width-one-quarter',
             colspan: 2
-          }
+          },
+          {
+            text: "Action"
+          } if enableLicenceMonitoringStationsView
         ],
         rows: tableRows
       }) }}
@@ -160,11 +175,25 @@
 
   {% if permissionToManageLinks %}
     <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Tag a licence",
-        href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
-        classes: "govuk-button--secondary"
-      }) }}
+      {% if enableLicenceMonitoringStationsSetup %}
+        <form method="post" action="/system/licence-monitoring-station/setup">
+          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+          {{
+            govukButton({
+              text: 'Tag a licence',
+              name: "monitoringStationId",
+              value: monitoringStationId,
+              preventDoubleClick: true,
+              classes: "govuk-button--secondary"
+            })
+          }}
+      {% else %}
+        {{ govukButton({
+          text: "Tag a licence",
+          href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
 
       {% if restrictions.length > 0 %}
         {{ govukButton({
@@ -173,6 +202,7 @@
           classes: "govuk-button--secondary"
         }) }}
       {% endif %}
+      </form>
     </div>
   {% endif %}
 {% endblock %}

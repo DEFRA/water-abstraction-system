@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
@@ -20,9 +21,11 @@ const InitiateSessionService = require('../../app/services/notices/setup/initiat
 const LicenceService = require('../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
+const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
+const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
-const SubmitLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
@@ -234,6 +237,70 @@ describe('Notices Setup controller', () => {
   })
 
   describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
+    describe('/alert-thresholds', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-thresholds`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(AlertThresholdsService, 'go').resolves({
+            pageTitle: 'Threshold page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Threshold page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-thresholds`, {})
+
+            Sinon.stub(SubmitAlertThresholdsService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/abstraction-alerts/check`)
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Threshold page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Threshold page')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+
     describe('/alert-type', () => {
       describe('GET', () => {
         beforeEach(async () => {
@@ -257,6 +324,44 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Alert page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`
+            )
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Alert page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Alert page')
+            expect(response.payload).to.contain('There is a problem')
           })
         })
       })
@@ -295,7 +400,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '01/115' })
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({})
+          Sinon.stub(SubmitAdHocLicenceService, 'go').resolves({})
         })
 
         it('returns the same page', async () => {
@@ -310,7 +415,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc-licence`, { licenceRef: '' })
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({
+          Sinon.stub(SubmitAdHocLicenceService, 'go').resolves({
             licenceRef: '01/115',
             error: { text: 'Enter a Licence number' }
           })

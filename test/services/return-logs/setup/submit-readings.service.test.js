@@ -146,14 +146,14 @@ describe('Return Logs Setup - Submit Readings service', () => {
           error: [
             {
               href: '#2023-04-30T00:00:00.000Z',
-              text: 'Meter readings must be a number or blank'
+              text: 'Reading must be a number or blank'
             }
           ],
           backLink: `/system/return-logs/setup/${session.id}/check`,
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
-              error: 'Meter readings must be a number or blank',
+              error: 'Reading must be a number or blank',
               label: 'April 2023',
               reading: 'INVALID'
             }
@@ -170,7 +170,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           expect(result.error).to.equal([
             {
               href: '#2023-04-30T00:00:00.000Z',
-              text: 'Meter readings must be a number or blank'
+              text: 'Reading must be a number or blank'
             }
           ])
         })

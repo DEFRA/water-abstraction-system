@@ -2,6 +2,9 @@ name: CI
 
 on: push
 
+permissions:
+  contents: read
+
 jobs:
   build:
     # You must use a Linux environment when using service containers or container jobs

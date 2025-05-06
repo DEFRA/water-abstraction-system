@@ -36,6 +36,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
         activeNavBar: 'manage',
         alertTypeOptions: [
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
             },
@@ -43,6 +44,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
             value: 'warning'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they can take water at a reduced amount.'
             },
@@ -50,6 +52,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
             value: 'reduce'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they must stop taking water.'
             },
@@ -57,6 +60,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
             value: 'stop'
           },
           {
+            checked: false,
             hint: {
               text: 'Tell licence holders they can take water at the normal amount.'
             },

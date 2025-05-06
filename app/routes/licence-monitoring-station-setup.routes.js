@@ -1,0 +1,44 @@
+'use strict'
+
+const LicenceMonitoringStationSetupController = require('../controllers/licence-monitoring-station-setup.controller.js')
+
+const routes = [
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitSetup,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
+    options: {
+      handler: LicenceMonitoringStationSetupController.thresholdAndUnit,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitThresholdAndUnit,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  }
+]
+
+module.exports = routes
