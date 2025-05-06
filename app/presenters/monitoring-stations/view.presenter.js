@@ -34,6 +34,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(monitoringStation, auth) {
   const {
     id: monitoringStationId,
+    catchmentName,
     gridReference,
     label: monitoringStationName,
     licenceMonitoringStations,
@@ -43,9 +44,11 @@ function go(monitoringStation, auth) {
   } = monitoringStation
 
   return {
+    catchmentName,
     enableLicenceMonitoringStationsSetup: FeatureFlagsConfig.enableLicenceMonitoringStationsSetup,
-    links: _links(monitoringStationId),
+    enableLicenceMonitoringStationsView: FeatureFlagsConfig.enableLicenceMonitoringStationsView,
     gridReference: gridReference ?? '',
+    links: _links(monitoringStationId),
     monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
@@ -153,7 +156,7 @@ function _restrictionHeading(licenceMonitoringStations) {
 
 function _restrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
+    const { id, licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
       licenceMonitoringStation
 
     return {
@@ -164,7 +167,8 @@ function _restrictions(licenceMonitoringStations) {
       licenceRef: licence.licenceRef,
       restriction: _restriction(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
-      threshold: `${thresholdValue} ${thresholdUnit}`
+      threshold: `${thresholdValue} ${thresholdUnit}`,
+      viewLink: `/system/licence-monitoring-station/${id}`
     }
   })
 }
