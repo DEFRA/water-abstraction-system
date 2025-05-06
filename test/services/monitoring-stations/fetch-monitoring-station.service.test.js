@@ -44,6 +44,7 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
 
         expect(result).to.equal({
           id: monitoringStation.id,
+          catchmentName: null,
           gridReference: monitoringStation.gridReference,
           label: 'LONELY POINT',
           riverName: null,
@@ -100,6 +101,7 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
 
         expect(result).to.equal({
           id: monitoringStation.id,
+          catchmentName: null,
           gridReference: monitoringStation.gridReference,
           label: 'BUSY POINT',
           riverName: null,

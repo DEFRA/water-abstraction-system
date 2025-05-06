@@ -22,7 +22,7 @@ async function go(monitoringStationId) {
 async function _fetch(monitoringStationId) {
   return MonitoringStationModel.query()
     .findById(monitoringStationId)
-    .select(['id', 'gridReference', 'label', 'riverName', 'stationReference', 'wiskiId'])
+    .select(['id', 'catchmentName', 'gridReference', 'label', 'riverName', 'stationReference', 'wiskiId'])
     .withGraphFetched('licenceMonitoringStations')
     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
       licenceMonitoringStationsBuilder
