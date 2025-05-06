@@ -13,7 +13,9 @@ const __MODULE_NAME__ = require('__REQUIRE_PATH__')
 describe('__DESCRIBE_LABEL__', () => {
   let session
 
-  beforeEach(() => {})
+  beforeEach(() => {
+    session = {}
+  })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
