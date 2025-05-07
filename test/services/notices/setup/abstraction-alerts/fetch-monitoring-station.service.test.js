@@ -16,9 +16,9 @@ const MonitoringStationHelper = require('../../../../support/helpers/monitoring-
 const { generateRandomInteger } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-licence-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-monitoring-station.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Fetch Licence Monitoring Stations service', () => {
+describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service', () => {
   let licence
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
@@ -57,7 +57,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Licence Monitoring Stations
   })
 
   it('correctly returns the data', async () => {
-    const result = await FetchLicenceMonitoringStationsService.go(monitoringStation.id)
+    const result = await FetchMonitoringStationService.go(monitoringStation.id)
 
     expect(result).to.equal({
       id: monitoringStation.id,
@@ -109,7 +109,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Licence Monitoring Stations
 
   describe('when the licence has a licence version purpose', () => {
     it('correctly returns the data', async () => {
-      const result = await FetchLicenceMonitoringStationsService.go(monitoringStation.id)
+      const result = await FetchMonitoringStationService.go(monitoringStation.id)
 
       expect(result.licenceMonitoringStations[1]).to.equal({
         abstractionPeriodEndDay: null,
@@ -140,7 +140,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Licence Monitoring Stations
 
   describe('when the licence does not have a licence version purpose', () => {
     it('correctly returns the data', async () => {
-      const result = await FetchLicenceMonitoringStationsService.go(monitoringStation.id)
+      const result = await FetchMonitoringStationService.go(monitoringStation.id)
 
       expect(result.licenceMonitoringStations[0]).to.equal({
         abstractionPeriodEndDay: 1,
