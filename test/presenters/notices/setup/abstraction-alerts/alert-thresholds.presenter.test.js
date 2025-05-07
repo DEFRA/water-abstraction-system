@@ -126,7 +126,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           }
         })
 
-        it('returns page data for the view, with only the thresholds with stop restrictions', () => {
+        it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
           const result = AlertThresholdsPresenter.go(session)
 
           expect(result.thresholdOptions).to.equal([
@@ -142,51 +142,10 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
         })
       })
 
-      describe('and the "alertType" is "warning" ', () => {
+      describe('"and the alert type is not "stop" or "reduce"', () => {
         beforeEach(() => {
           session = {
-            ...AbstractionAlertSessionData.monitoringStation(),
-            alertType: 'warning'
-          }
-        })
-
-        it('returns page data for the view, with all the thresholds', () => {
-          const result = AlertThresholdsPresenter.go(session)
-
-          expect(result.thresholdOptions).to.equal([
-            {
-              checked: false,
-              hint: {
-                text: 'Flow thresholds for this station (m)'
-              },
-              text: '1000 m',
-              value: '0'
-            },
-            {
-              checked: false,
-              hint: {
-                text: 'Flow thresholds for this station (m3/s)'
-              },
-              text: '100 m3/s',
-              value: '1'
-            },
-            {
-              checked: false,
-              hint: {
-                text: 'Level thresholds for this station (m)'
-              },
-              text: '100 m',
-              value: '2'
-            }
-          ])
-        })
-      })
-
-      describe('and the "alertType" is "resume" ', () => {
-        beforeEach(() => {
-          session = {
-            ...AbstractionAlertSessionData.monitoringStation(),
-            alertType: 'resume'
+            ...AbstractionAlertSessionData.monitoringStation()
           }
         })
 

@@ -30,13 +30,12 @@ function go(session) {
  *
  * @private
  */
-function _relevantLicenceMonitoringStations(stations, alertType) {
-  return stations.filter((station) => {
-    if (alertType === 'stop' || alertType === 'reduce') {
-      return station.restriction_type === alertType
-    }
-
-    return Boolean(station.restriction_type)
+function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType) {
+  if (alertType !== 'stop' && alertType !== 'reduce') {
+    return licenceMonitoringStations
+  }
+  return licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return licenceMonitoringStation.restriction_type === alertType
   })
 }
 
