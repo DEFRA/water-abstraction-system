@@ -42,7 +42,7 @@ function _licenceMonitoringStations(licenceMonitoringStations) {
 
 function _licenceVersionPurpose(licenceVersionPurposeCondition) {
   if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
-    return licenceVersionPurposeCondition?.licenceVersionPurpose
+    return licenceVersionPurposeCondition.licenceVersionPurpose
   } else {
     return {}
   }
