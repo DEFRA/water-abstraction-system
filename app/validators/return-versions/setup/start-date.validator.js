@@ -52,7 +52,22 @@ function _fullDate(payload) {
   return `${year}-${paddedMonth}-${paddedDay}`
 }
 
-function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
+/**
+ * When creating a return version you will create return logs which use the existing return cycles. We found an issue
+ * with missing returns cycles and have now fixed that but it only goes back to the oldest licence we have in the system.
+ *
+ * We are 99.999% certain no one will add a new licence with a start date before 1959-04-01. But just in case, for that
+ * 0.001% chance, we will extend the start date validation in the return version setup journey.
+ *
+ * This logice ensures that the start date entered equals or exceeds the licence’s start date. But should we
+ * encounter a licence with a start date before 1959-04-01 we need to stop it from being created as no return logs
+ * will be added.
+ *
+ * @param {Date} licenceStartDate - The licenec start date
+ *
+ * @returns {object} The date and messsage to use for earliest allowable date
+ */
+function _minimumDateDetails(licenceStartDate) {
   let minDate = licenceStartDate
   let minMessage = 'Start date must be on or after the original licence start date'
 
@@ -60,6 +75,12 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
     minDate = '1959-04-01'
     minMessage = 'Start date must be on or after 1 April 1959'
   }
+
+  return { minDate, minMessage }
+}
+
+function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
+  const { minDate, minMessage } = _minimumDateDetails(licenceStartDate)
 
   const schema = Joi.object({
     fullDate: Joi.date()
