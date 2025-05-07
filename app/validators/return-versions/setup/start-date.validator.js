@@ -68,15 +68,11 @@ function _fullDate(payload) {
  * @returns {object} The date and messsage to use for earliest allowable date
  */
 function _minimumDateDetails(licenceStartDate) {
-  let minDate = licenceStartDate
-  let minMessage = 'Start date must be on or after the original licence start date'
-
   if (new Date(licenceStartDate) < new Date('1959-04-01')) {
-    minDate = '1959-04-01'
-    minMessage = 'Start date must be on or after 1 April 1959'
+    return { minDate: '1959-04-01', minMessage: 'Start date must be on or after 1 April 1959' }
   }
 
-  return { minDate, minMessage }
+  return { minDate: licenceStartDate, minMessage: 'Start date must be on or after the original licence start date' }
 }
 
 function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
