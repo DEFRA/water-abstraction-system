@@ -5,7 +5,7 @@
  * @module DetermineLicenceMonitoringStationsService
  */
 
-const FetchLicenceMonitoringStationsService = require('./fetch-licence-monitoring-stations.service.js')
+const FetchLicenceMonitoringStationsService = require('./fetch-monitoring-station.service.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey

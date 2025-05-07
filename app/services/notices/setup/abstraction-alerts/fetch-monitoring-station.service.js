@@ -2,7 +2,7 @@
 
 /**
  * Fetches the data needed for the monitoring station abstraction alert journey
- * @module FetchLicenceMonitoringStationsService
+ * @module FetchMonitoringStationService
  */
 
 const MonitoringStationModel = require('../../../../models/monitoring-station.model.js')

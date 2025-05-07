@@ -12,7 +12,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-licence-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-monitoring-station.service.js')
 
 // Thing under test
 const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
@@ -21,7 +21,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   const monitoringStation = generateUUID()
 
   beforeEach(async () => {
-    Sinon.stub(FetchLicenceMonitoringStationsService, 'go').resolves({
+    Sinon.stub(FetchMonitoringStationService, 'go').resolves({
       id: monitoringStation.id,
       label: 'MONITOR PLACE',
       licenceMonitoringStations: [
