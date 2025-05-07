@@ -31,7 +31,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + `/{sessionId}/abstraction-alerts/alert-type`,
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.viewAlertType,
       auth: {
@@ -43,7 +43,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + `/{sessionId}/abstraction-alerts/alert-type`,
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.submitAlertType,
       auth: {
@@ -55,7 +55,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + `/{sessionId}/abstraction-alerts/alert-thresholds`,
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.viewAlertThresholds,
       auth: {
@@ -67,7 +67,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + `/{sessionId}/abstraction-alerts/alert-thresholds`,
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.submitAlertThresholds,
       auth: {
