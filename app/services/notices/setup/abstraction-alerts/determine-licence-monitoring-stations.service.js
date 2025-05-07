@@ -14,24 +14,28 @@ const FetchLicenceMonitoringStationsService = require('./fetch-licence-monitorin
  * @returns {Promise<{object}>}
  */
 async function go(id) {
-  const licenceMonitoringStations = await FetchLicenceMonitoringStationsService.go(id)
-
-  const monitoringStationName = licenceMonitoringStations[0].label
+  const monitoringStation = await FetchLicenceMonitoringStationsService.go(id)
 
   return {
-    licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),
+    licenceMonitoringStations: _licenceMonitoringStations(monitoringStation.licenceMonitoringStations),
     monitoringStationId: id,
-    monitoringStationName
+    monitoringStationName: monitoringStation.label
   }
 }
 
 function _licenceMonitoringStations(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation, index) => {
-    delete licenceMonitoringStation.label
+    const {
+      licence: { licenceRef },
+      licenceVersionPurposeCondition,
+      ...rest
+    } = licenceMonitoringStation
 
     return {
       id: `${index}`,
-      ...licenceMonitoringStation
+      licenceRef,
+      ...rest,
+      ...(licenceVersionPurposeCondition?.licenceVersionPurpose ?? {})
     }
   })
 }
