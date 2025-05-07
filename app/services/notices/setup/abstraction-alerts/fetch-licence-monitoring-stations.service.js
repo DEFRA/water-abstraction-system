@@ -5,104 +5,64 @@
  * @module FetchLicenceMonitoringStationsService
  */
 
-const { db } = require('../../../../../db/db.js')
+const MonitoringStationModel = require('../../../../models/monitoring-station.model.js')
 
 /**
  * Fetches the data needed for the monitoring station abstraction alert journey
  *
- * @param {string} id
- * @returns {Promise<object[]>}
+ * @param {string} monitoringStationId - The UUID for the monitoring station to fetch
+ *
+ * @returns {Promise<module:MonitoringStationModel>} the matching instance of `MonitoringStationModel` populated with
+ * the data needed for the abstraction alert journey
  */
-async function go(id) {
-  const { rows } = await _fetch(id)
-
-  return rows
+async function go(monitoringStationId) {
+  return _fetch(monitoringStationId)
 }
 
-async function _fetch(id) {
-  const query = _query()
-  const params = [id, id]
-
-  return db.raw(query, params)
-}
-
-/**
- * Fetches monitoring station data by ID, joining multiple related tables for full context.
- *
- * This function uses two `SELECT` queries combined with `UNION ALL` to fetch monitoring station data
- * for two distinct cases:
- *
- * 1. Records where `licence_version_purpose_condition_id` is `NULL`:
- *    - These pull abstraction period data directly from `licence_monitoring_stations`.
- *
- * 2. Records where `licence_version_purpose_condition_id` is *not* `NULL`:
- *    - These retrieve abstraction period data via a join to `licence_version_purpose_conditions`
- *      and then `licence_version_purposes`.
- *
- * A single query with a `LEFT JOIN` would not be appropriate because:
- * - The source of the abstraction period data differs depending on the presence of the condition ID.
- * - Using `UNION ALL` avoids mixing fields and makes the logic clearer and easier to maintain.
- *
- * @private
- */
-function _query() {
-  return `SELECT
-    ms.label,
-    lms.abstraction_period_start_day,
-    lms.abstraction_period_start_month,
-    lms.abstraction_period_end_day,
-    lms.abstraction_period_end_month,
-    lms.measure_type,
-    lms.restriction_type,
-    lms.threshold_value,
-    lms.threshold_unit,
-    lms.status,
-    lms.status_updated_at,
-    lms.licence_version_purpose_condition_id,
-    l.licence_id,
-    l.licence_ref,
-    l.start_date
-FROM
-    public.monitoring_stations ms
-        JOIN public.licence_monitoring_stations lms ON
-        (lms.monitoring_station_id = ms.id)
-        JOIN water.licences l ON
-        (l.licence_id = lms.licence_id)
-WHERE
-    lms.licence_version_purpose_condition_id IS NULL
-  AND lms.deleted_at IS NULL
-  AND  ms.id=?
-UNION ALL
-SELECT
-    ms.label,
-    lvp.abstraction_period_start_day,
-    lvp.abstraction_period_start_month,
-    lvp.abstraction_period_end_day,
-    lvp.abstraction_period_end_month,
-    lms.measure_type,
-    lms.restriction_type,
-    lms.threshold_value,
-    lms.threshold_unit,
-    lms.status,
-    lms.status_updated_at,
-    lms.licence_version_purpose_condition_id,
-    l.licence_id,
-    l.licence_ref,
-    l.start_date
-FROM
-    public.monitoring_stations ms
-        JOIN public.licence_monitoring_stations lms ON
-        (lms.monitoring_station_id = ms.id)
-        JOIN water.licences l ON
-        (l.licence_id = lms.licence_id)
-        JOIN public.licence_version_purpose_conditions lvpc ON
-        lvpc.id = lms.licence_version_purpose_condition_id
-        JOIN public.licence_version_purposes lvp ON
-        lvp.id = lvpc.licence_version_purpose_id
-WHERE
-    lms.licence_version_purpose_condition_id IS NOT NULL
-  AND lms.deleted_at IS NULL
-  AND  ms.id=?;`
+async function _fetch(monitoringStationId) {
+  return MonitoringStationModel.query()
+    .findById(monitoringStationId)
+    .select(['id', 'label'])
+    .withGraphFetched('licenceMonitoringStations')
+    .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
+      licenceMonitoringStationsBuilder
+        .select([
+          'licenceMonitoringStations.abstractionPeriodEndDay',
+          'licenceMonitoringStations.abstractionPeriodEndMonth',
+          'licenceMonitoringStations.abstractionPeriodStartDay',
+          'licenceMonitoringStations.abstractionPeriodStartMonth',
+          'licenceMonitoringStations.measureType',
+          'licenceMonitoringStations.restrictionType',
+          'licenceMonitoringStations.status',
+          'licenceMonitoringStations.statusUpdatedAt',
+          'licenceMonitoringStations.thresholdUnit',
+          'licenceMonitoringStations.thresholdValue'
+        ])
+        .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
+        .whereNull('licenceMonitoringStations.deletedAt')
+        .orderBy([
+          { column: 'licences.licenceRef', order: 'asc' },
+          { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
+        ])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder.select(['licenceRef'])
+        })
+        .withGraphFetched('licenceVersionPurposeCondition')
+        .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
+          licenceVersionPurposeConditionBuilder
+            .select(['id'])
+            .withGraphFetched('licenceVersionPurpose')
+            .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
+              licenceVersionPurposeBuilder.select([
+                'abstractionPeriodEndDay',
+                'abstractionPeriodEndMonth',
+                'abstractionPeriodStartMonth',
+                'abstractionPeriodStartDay'
+              ])
+            })
+        })
+    })
 }
 
 module.exports = {
