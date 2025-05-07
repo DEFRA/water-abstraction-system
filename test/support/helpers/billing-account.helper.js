@@ -4,9 +4,8 @@
  * @module BillingAccountHelper
  */
 
-const { randomInteger } = require('../general.js')
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new billing account
@@ -58,7 +57,7 @@ function defaults(data = {}) {
  * @returns {string} - The generated account number
  */
 function generateAccountNumber() {
-  const numbering = randomInteger(10000000, 99999999)
+  const numbering = generateRandomInteger(10000000, 99999999)
 
   return `T${numbering}A`
 }
