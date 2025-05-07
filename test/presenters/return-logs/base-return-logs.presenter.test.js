@@ -439,6 +439,34 @@ describe('Base Return Logs presenter', () => {
             expect(result[1].monthlyTotal).to.be.null()
           })
         })
+
+        describe('and the lines being processed contain zero "quantity"', () => {
+          beforeEach(() => {
+            sampleLines[1].quantity = 0
+          })
+
+          it('returns the monthlyTotal as 0 for the line with a zero "quantity"', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.equal('400')
+            expect(result[1].monthlyTotal).to.equal('0')
+          })
+        })
+
+        describe('and all the lines being processed contain a zero "quantity"', () => {
+          beforeEach(() => {
+            sampleLines.forEach((sampleLine) => {
+              sampleLine.quantity = 0
+            })
+          })
+
+          it('returns the monthlyTotal as 0 for all lines', () => {
+            const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
+
+            expect(result[0].monthlyTotal).to.equal('0')
+            expect(result[1].monthlyTotal).to.equal('0')
+          })
+        })
       })
 
       describe('and the abstraction method is not "abstractionVolumes"', () => {
