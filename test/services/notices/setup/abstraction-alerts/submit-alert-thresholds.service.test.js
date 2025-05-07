@@ -21,7 +21,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
   describe('when called', () => {
     beforeEach(async () => {
-
       sessionData = {
         ...AbstractionAlertSessionData.monitoringStation(),
         alertType: 'stop'
@@ -72,7 +71,13 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
   describe('when validation fails', () => {
     describe('and there are no previous "alertThresholds"', () => {
       beforeEach(async () => {
-        sessionData = AbstractionAlertSessionData.monitoringStation()
+        const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+
+        sessionData = {
+          ...abstractionAlertSessionData,
+          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id],
+          alertType: 'stop'
+        }
 
         payload = {}
 
@@ -90,19 +95,19 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
           thresholdOptions: [
             {
               checked: false,
-              value: '0',
-              text: '1000 m',
               hint: {
-                text: 'Flow thresholds for this station (m)'
-              }
+                text: 'Flow thresholds for this station (m3/s)'
+              },
+              text: '100 m3/s',
+              value: '1'
             },
             {
               checked: false,
-              value: '1',
-              text: '100 m3/s',
               hint: {
-                text: 'Level thresholds for this station (m3/s)'
-              }
+                text: 'Level thresholds for this station (m)'
+              },
+              text: '100 m',
+              value: '2'
             }
           ]
         })
@@ -115,7 +120,8 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
         sessionData = {
           ...abstractionAlertSessionData,
-          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id]
+          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id],
+          alertType: 'stop'
         }
 
         payload = {}
@@ -134,19 +140,19 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
           thresholdOptions: [
             {
               checked: false,
-              value: '0',
-              text: '1000 m',
               hint: {
-                text: 'Flow thresholds for this station (m)'
-              }
+                text: 'Flow thresholds for this station (m3/s)'
+              },
+              text: '100 m3/s',
+              value: '1'
             },
             {
               checked: false,
-              value: '1',
-              text: '100 m3/s',
               hint: {
-                text: 'Level thresholds for this station (m3/s)'
-              }
+                text: 'Level thresholds for this station (m)'
+              },
+              text: '100 m',
+              value: '2'
             }
           ]
         })
