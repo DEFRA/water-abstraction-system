@@ -4,9 +4,8 @@
  * @module LicenceVersionHelper
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { randomInteger } = require('../general.js')
 
 /**
  * Add a new licence version
@@ -70,7 +69,7 @@ function defaults(data = {}) {
  * @returns {string} - A randomly generated externalId
  */
 function generateLicenceVersionExternalId() {
-  return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}:${randomInteger(1, 100)}:0`
+  return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}:${generateRandomInteger(1, 100)}:0`
 }
 
 module.exports = {

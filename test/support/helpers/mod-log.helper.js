@@ -4,9 +4,10 @@
  * @module ModLogHelper
  */
 
-const ModLogModel = require('../../../app/models/mod-log.model.js')
-const { randomInteger, randomRegionCode } = require('../general.js')
+const { randomRegionCode } = require('../general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
+const ModLogModel = require('../../../app/models/mod-log.model.js')
 
 /**
  * Add a new mod log
@@ -73,9 +74,9 @@ function defaults(data = {}) {
  * @returns {string} The generated external ID
  */
 function generateRegionNaldPatternExternalId(regionCode = null) {
-  const regionCodeToUse = regionCode ?? randomInteger(1, 9)
+  const regionCodeToUse = regionCode ?? generateRandomInteger(1, 9)
 
-  return `${regionCodeToUse}:${randomInteger(100, 99999)}`
+  return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
 }
 
 module.exports = {
