@@ -223,7 +223,7 @@ function _groupLinesByMonth(lines) {
       }
     }
 
-    if (quantity) {
+    if (quantity || quantity === 0) {
       acc[key].quantity += quantity
     }
 
