@@ -8,23 +8,24 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('__SESSION_HELPER_PATH__')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+const CheckLicenceMatchesService = require('../../../../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 
-describe('__DESCRIBE_LABEL__', () => {
+describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', () => {
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {}
+
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await __MODULE_NAME__.go(session.id)
+      const result = await CheckLicenceMatchesService.go(session.id)
 
       expect(result).to.equal({})
     })

@@ -14,7 +14,7 @@ describe('__DESCRIBE_LABEL__', () => {
   let payload
 
   beforeEach(() => {
-    payload = {}
+    payload = { placeholder: '' }
   })
 
   describe('when called with valid data', () => {
@@ -27,12 +27,16 @@ describe('__DESCRIBE_LABEL__', () => {
   })
 
   describe('when called with invalid data', () => {
+    beforeEach(() => {
+      payload = {}
+    })
+
     it('returns with errors', () => {
       const result = __MODULE_NAME__.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('')
+      expect(result.error.details[0].message).to.equal('"placeholder" is required')
     })
   })
 })

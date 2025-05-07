@@ -6,8 +6,10 @@
  */
 
 const AdHocLicenceService = require('../services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
+const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
+const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
@@ -15,6 +17,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
@@ -38,6 +41,14 @@ async function downloadRecipients(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
+async function viewAlertThresholds(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AlertThresholdsService.go(sessionId)
+
+  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+}
+
 async function viewAlertType(request, h) {
   const {
     params: { sessionId }
@@ -54,6 +65,14 @@ async function viewCancel(request, h) {
   const pageData = await CancelService.go(sessionId)
 
   return h.view(`${basePath}/cancel.njk`, pageData)
+}
+
+async function viewCheckLicenceMatches(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await CheckLicenceMatchesService.go(sessionId)
+
+  return h.view(`notices/setup/abstraction-alerts/check-licence-matches.njk`, pageData)
 }
 
 async function viewConfirmation(request, h) {
@@ -109,6 +128,21 @@ async function setup(request, h) {
   const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
+}
+
+async function submitAlertThresholds(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+  }
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 async function submitAlertType(request, h) {
@@ -189,14 +223,17 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewAlertThresholds,
   viewAlertType,
   viewCancel,
+  viewCheck,
+  viewCheckLicenceMatches,
   viewConfirmation,
   viewLicence,
-  viewCheck,
   viewRemoveLicences,
   viewReturnsPeriod,
   setup,
+  submitAlertThresholds,
   submitAlertType,
   submitCancel,
   submitCheck,

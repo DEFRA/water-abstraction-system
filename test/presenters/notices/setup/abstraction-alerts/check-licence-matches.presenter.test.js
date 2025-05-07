@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+const CheckLicenceMatchesPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
 
-describe('__DESCRIBE_LABEL__', () => {
+describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter', () => {
   let session
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = __MODULE_NAME__.go(session)
+      const result = CheckLicenceMatchesPresenter.go(session)
 
       expect(result).to.equal({})
     })

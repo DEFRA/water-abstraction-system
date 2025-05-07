@@ -55,6 +55,42 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    options: {
+      handler: NoticesSetupController.viewAlertThresholds,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    options: {
+      handler: NoticesSetupController.submitAlertThresholds,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    options: {
+      handler: NoticesSetupController.viewCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {
       handler: NoticesSetupController.viewLicence,
