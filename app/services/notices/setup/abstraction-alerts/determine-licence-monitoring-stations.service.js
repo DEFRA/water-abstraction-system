@@ -35,9 +35,17 @@ function _licenceMonitoringStations(licenceMonitoringStations) {
       id: `${index}`,
       licenceRef,
       ...rest,
-      ...(licenceVersionPurposeCondition?.licenceVersionPurpose ?? {})
+      ..._licenceVersionPurpose(licenceVersionPurposeCondition)
     }
   })
+}
+
+function _licenceVersionPurpose(licenceVersionPurposeCondition) {
+  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
+    return licenceVersionPurposeCondition?.licenceVersionPurpose
+  } else {
+    return {}
+  }
 }
 
 module.exports = {
