@@ -10,6 +10,7 @@ const StopOrReduceService = require('../services//licence-monitoring-station/set
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+
 async function submitSetup(request, h) {
   const { monitoringStationId } = request.payload
 
@@ -23,7 +24,7 @@ async function stopOrReduce(request, h) {
 
   const pageData = await StopOrReduceService.go(sessionId)
 
-  return h.view(`/licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
+  return h.view(`licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
 }
 
 async function submitStopOrReduce(request, h) {
@@ -35,7 +36,7 @@ async function submitStopOrReduce(request, h) {
   const pageData = await SubmitStopOrReduceService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`/licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
+    return h.view(`licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
   }
 
   if (pageData.checkPageVisited) {
