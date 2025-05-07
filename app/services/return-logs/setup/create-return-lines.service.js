@@ -20,7 +20,7 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {string} meterProvided - Indicates if a meter was provided ('yes' or 'no')
  * @param {objection.transaction} [trx] - Optional transaction object
  *
- * @returns {module:ReturnSubmissionLineModel[]} - The created return lines (empty if no lines were provided)
+ * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if no lines were provided)
  */
 async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvided, trx = null) {
   if (!lines?.length) {
