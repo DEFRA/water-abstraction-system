@@ -48,6 +48,16 @@ function _licenceVersionPurpose(licenceVersionPurposeCondition) {
   }
 }
 
+/**
+ * Each threshold group key is a string formatted as: `${measureType}-${thresholdValue}-${thresholdUnit}`.
+ * For example: `'flow-100-m'`.
+ *
+ * These are not unique and can/ will occur multiple times. When a threshold/s is selected by the user we use this key
+ * to find all the relevant licence monitoring stations data.
+ *
+ * @returns {string}
+ * @private
+ */
 function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
   return `${measureType}-${thresholdValue}-${thresholdUnit}`
 }
