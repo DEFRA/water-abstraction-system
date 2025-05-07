@@ -59,7 +59,7 @@ function _meters(session) {
       multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       manufacturer: session.meterMake,
       serialNumber: session.meterSerialNumber,
-      startReading: session.meterStartReading,
+      startReading: session.startReading,
       readings: _formatReadings(session.lines)
     }
   ]

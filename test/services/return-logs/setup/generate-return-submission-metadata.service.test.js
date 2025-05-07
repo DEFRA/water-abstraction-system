@@ -185,7 +185,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         sessionData.meterProvided = 'yes'
         sessionData.meterMake = 'Make'
         sessionData.meterSerialNumber = '123456789'
-        sessionData.meterStartReading = 1000
+        sessionData.startReading = 1000
         sessionData.meter10TimesDisplay = 'no'
         sessionData.lines = [
           {
