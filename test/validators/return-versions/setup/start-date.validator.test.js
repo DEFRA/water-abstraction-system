@@ -160,6 +160,21 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
       })
 
+      describe('but entered a date before the first return cycle start date', () => {
+        beforeEach(() => {
+          payload['start-date-day'] = '31'
+          payload['start-date-month'] = '12'
+          payload['start-date-year'] = '1958'
+        })
+
+        it('fails validation with the message "Start date must be on or after 1 April 1959"', () => {
+          const result = StartDateValidator.go(payload, '1958-01-01T00:00:00.000Z', licenceEndDate)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Start date must be on or after 1 April 1959')
+        })
+      })
+
       describe("but entered a date after the licence's end date", () => {
         beforeEach(() => {
           payload['start-date-day'] = '1'
