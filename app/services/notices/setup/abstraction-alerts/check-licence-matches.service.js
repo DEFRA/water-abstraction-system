@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/check-licence-matches` page
+ * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @module CheckLicenceMatchesService
  */
@@ -10,9 +10,9 @@ const CheckLicenceMatchesPresenter = require('../../../../presenters/notices/set
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/check-licence-matches` page
+ * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
