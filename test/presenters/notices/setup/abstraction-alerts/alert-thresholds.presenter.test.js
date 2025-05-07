@@ -17,7 +17,10 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
   let session
 
   beforeEach(() => {
-    session = AbstractionAlertSessionData.monitoringStation()
+    session = {
+      ...AbstractionAlertSessionData.monitoringStation(),
+      alertType: 'stop'
+    }
   })
 
   describe('when called', () => {
@@ -32,18 +35,18 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           {
             checked: false,
             hint: {
-              text: 'Flow thresholds for this station (m)'
+              text: 'Flow thresholds for this station (m3/s)'
             },
-            text: '1000 m',
-            value: '0'
+            text: '100 m3/s',
+            value: '1'
           },
           {
             checked: false,
             hint: {
-              text: 'Level thresholds for this station (m3/s)'
+              text: 'Level thresholds for this station (m)'
             },
-            text: '100 m3/s',
-            value: '1'
+            text: '100 m',
+            value: '2'
           }
         ]
       })
@@ -54,7 +57,8 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
         beforeEach(() => {
           session = {
             ...AbstractionAlertSessionData.monitoringStation(),
-            alertThresholds: ['0']
+            alertThresholds: ['1'],
+            alertType: 'stop'
           }
         })
 
@@ -65,6 +69,93 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
             {
               checked: true,
               hint: {
+                text: 'Flow thresholds for this station (m3/s)'
+              },
+              text: '100 m3/s',
+              value: '1'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Level thresholds for this station (m)'
+              },
+              text: '100 m',
+              value: '2'
+            }
+          ])
+        })
+      })
+
+      describe('and the "alertType" is "stop" ', () => {
+        beforeEach(() => {
+          session = {
+            ...AbstractionAlertSessionData.monitoringStation(),
+            alertType: 'stop'
+          }
+        })
+
+        it('returns page data for the view, with only the thresholds with stop restrictions', () => {
+          const result = AlertThresholdsPresenter.go(session)
+
+          expect(result.thresholdOptions).to.equal([
+            {
+              checked: false,
+              hint: {
+                text: 'Flow thresholds for this station (m3/s)'
+              },
+              text: '100 m3/s',
+              value: '1'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Level thresholds for this station (m)'
+              },
+              text: '100 m',
+              value: '2'
+            }
+          ])
+        })
+      })
+
+      describe('and the "alertType" is "reduce" ', () => {
+        beforeEach(() => {
+          session = {
+            ...AbstractionAlertSessionData.monitoringStation(),
+            alertType: 'reduce'
+          }
+        })
+
+        it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
+          const result = AlertThresholdsPresenter.go(session)
+
+          expect(result.thresholdOptions).to.equal([
+            {
+              checked: false,
+              hint: {
+                text: 'Flow thresholds for this station (m)'
+              },
+              text: '1000 m',
+              value: '0'
+            }
+          ])
+        })
+      })
+
+      describe('"and the alert type is not "stop" or "reduce"', () => {
+        beforeEach(() => {
+          session = {
+            ...AbstractionAlertSessionData.monitoringStation()
+          }
+        })
+
+        it('returns page data for the view, with all the thresholds', () => {
+          const result = AlertThresholdsPresenter.go(session)
+
+          expect(result.thresholdOptions).to.equal([
+            {
+              checked: false,
+              hint: {
                 text: 'Flow thresholds for this station (m)'
               },
               text: '1000 m',
@@ -73,10 +164,18 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
             {
               checked: false,
               hint: {
-                text: 'Level thresholds for this station (m3/s)'
+                text: 'Flow thresholds for this station (m3/s)'
               },
               text: '100 m3/s',
               value: '1'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Level thresholds for this station (m)'
+              },
+              text: '100 m',
+              value: '2'
             }
           ])
         })

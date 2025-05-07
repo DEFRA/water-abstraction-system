@@ -64,5 +64,83 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
         pageTitle: 'Select the type of alert you need to send'
       })
     })
+
+    describe('and there is a previous selection', () => {
+      describe('and the selection was "warning', () => {
+        beforeEach(() => {
+          sessionData.alertType = 'warning'
+        })
+
+        it('returns page data for the view, with the option selected', () => {
+          const result = AlertTypePresenter.go(sessionData)
+
+          expect(result.alertTypeOptions[0]).to.equal({
+            checked: true,
+            hint: {
+              text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
+            },
+            text: 'Warning',
+            value: 'warning'
+          })
+        })
+      })
+
+      describe('and the selection was "reduce', () => {
+        beforeEach(() => {
+          sessionData.alertType = 'reduce'
+        })
+
+        it('returns page data for the view, with the option selected', () => {
+          const result = AlertTypePresenter.go(sessionData)
+
+          expect(result.alertTypeOptions[1]).to.equal({
+            checked: true,
+            hint: {
+              text: 'Tell licence holders they can take water at a reduced amount.'
+            },
+            text: 'Reduce',
+            value: 'reduce'
+          })
+        })
+      })
+
+      describe('and the selection was "stop', () => {
+        beforeEach(() => {
+          sessionData.alertType = 'stop'
+        })
+
+        it('returns page data for the view, with the option selected', () => {
+          const result = AlertTypePresenter.go(sessionData)
+
+          expect(result.alertTypeOptions[2]).to.equal({
+            checked: true,
+            hint: {
+              text: 'Tell licence holders they must stop taking water.'
+            },
+            text: 'Stop',
+            value: 'stop'
+          })
+        })
+      })
+
+      describe('and the selection was "resume', () => {
+        beforeEach(() => {
+          sessionData.alertType = 'resume'
+        })
+
+        it('returns page data for the view, with the option selected', () => {
+          const result = AlertTypePresenter.go(sessionData)
+
+          expect(result.alertTypeOptions[3]).to.equal({
+            checked: true,
+            hint: {
+              text: 'Tell licence holders they can take water at the normal amount.'
+            },
+            text: 'Resume',
+            value: 'resume'
+          })
+        })
+      })
+    })
   })
 })
