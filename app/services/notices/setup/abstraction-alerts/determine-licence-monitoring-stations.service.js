@@ -24,7 +24,7 @@ async function go(id) {
 }
 
 function _licenceMonitoringStations(licenceMonitoringStations) {
-  return licenceMonitoringStations.map((licenceMonitoringStation, index) => {
+  return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const {
       licence: { licenceRef },
       licenceVersionPurposeCondition,
@@ -32,10 +32,10 @@ function _licenceMonitoringStations(licenceMonitoringStations) {
     } = licenceMonitoringStation
 
     return {
-      id: `${index}`,
       licenceRef,
       ...rest,
-      ..._licenceVersionPurpose(licenceVersionPurposeCondition)
+      ..._licenceVersionPurpose(licenceVersionPurposeCondition),
+      thresholdGroup: _thresholdGroup(rest.measureType, rest.thresholdValue, rest.thresholdUnit)
     }
   })
 }
@@ -46,6 +46,10 @@ function _licenceVersionPurpose(licenceVersionPurposeCondition) {
   } else {
     return {}
   }
+}
+
+function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
+  return `${measureType}-${thresholdValue}-${thresholdUnit}`
 }
 
 module.exports = {

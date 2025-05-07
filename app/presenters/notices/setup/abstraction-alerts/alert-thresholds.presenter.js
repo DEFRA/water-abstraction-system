@@ -40,16 +40,28 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType
   })
 }
 
+function _relevantThresholds(relevantLicenceMonitoringStations) {
+  const thresholdGroups = relevantLicenceMonitoringStations.map((relevantLicenceMonitoringStation) => {
+    return relevantLicenceMonitoringStation.thresholdGroup
+  })
+
+  return [...new Set(thresholdGroups)]
+}
+
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
 
-  return relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
+  const relevantThresholds = _relevantThresholds(relevantLicenceMonitoringStations)
+
+  return relevantThresholds.map((relevantThreshold) => {
+    const [measureType, thresholdValue, thresholdUnit] = relevantThreshold.split('-')
+
     return {
-      checked: alertThresholds.includes(licenceMonitoringStation.id),
-      value: licenceMonitoringStation.id,
-      text: `${licenceMonitoringStation.thresholdValue} ${licenceMonitoringStation.thresholdUnit}`,
+      checked: alertThresholds.includes(relevantThreshold),
+      value: relevantThreshold,
+      text: `${thresholdValue} ${thresholdUnit}`,
       hint: {
-        text: `${titleCase(licenceMonitoringStation.measureType)} thresholds for this station (${licenceMonitoringStation.thresholdUnit})`
+        text: `${titleCase(measureType)} threshold`
       }
     }
   })
