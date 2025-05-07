@@ -18,7 +18,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
 // Things we need to stub
-const CreateNewReturnLinesService = require('../../../../app/services/return-logs/setup/create-new-return-lines.service.js')
+const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
 const GenerateReturnSubmissionMetadata = require('../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js')
 
@@ -35,7 +35,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
   let generateReturnSubmissionMetadataStub
   let createReturnSubmissionServiceStub
-  let createNewReturnLinesServiceStub
+  let createReturnLinesServiceStub
 
   const mockGeneratedMetadata = {
     generated: 'metadata',
@@ -97,7 +97,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       .stub(CreateReturnSubmissionService, 'go')
       .resolves({ id: mockNewReturnSubmissionId })
 
-    createNewReturnLinesServiceStub = sandbox.stub(CreateNewReturnLinesService, 'go').resolves()
+    createReturnLinesServiceStub = sandbox.stub(CreateReturnLinesService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -139,11 +139,11 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(callArgs[4]).to.equal(sessionData.data.journey === 'nil-return')
     })
 
-    it('calls CreateNewReturnLinesService with correct parameters including transaction and new submission ID', async () => {
+    it('calls CreateReturnLinesService with correct parameters including transaction and new submission ID', async () => {
       await SubmitCheckService.go(session.id, user)
 
-      expect(createNewReturnLinesServiceStub.calledOnce).to.be.true()
-      const callArgs = createNewReturnLinesServiceStub.firstCall.args
+      expect(createReturnLinesServiceStub.calledOnce).to.be.true()
+      const callArgs = createReturnLinesServiceStub.firstCall.args
       expect(callArgs[0]).to.equal(sessionData.data.lines)
       expect(callArgs[1]).to.equal(mockNewReturnSubmissionId)
       expect(callArgs[2]).to.equal(sessionData.data.returnsFrequency)

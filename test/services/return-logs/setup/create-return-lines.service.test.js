@@ -12,7 +12,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 
 // Thing under test
-const CreateNewReturnLinesService = require('../../../../app/services/return-logs/setup/create-new-return-lines.service.js')
+const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 
 describe('Return Logs Setup - Create New Return Lines service', () => {
   let lines
@@ -33,7 +33,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
     })
 
     it('inserts the lines', async () => {
-      await CreateNewReturnLinesService.go(lines, returnSubmissionId, 'week', 'cubic-metres', 'no')
+      await CreateReturnLinesService.go(lines, returnSubmissionId, 'week', 'cubic-metres', 'no')
 
       const [result] = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
@@ -47,14 +47,14 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
     })
 
     it('correctly converts quantity', async () => {
-      const [result] = await CreateNewReturnLinesService.go(lines, returnSubmissionId, 'week', 'megalitres', 'no')
+      const [result] = await CreateReturnLinesService.go(lines, returnSubmissionId, 'week', 'megalitres', 'no')
 
       expect(result.quantity).to.equal(16000)
       expect(result.userUnit).to.equal('Ml')
     })
 
     it('sets readingType to "estimated" when meterProvided is "yes"', async () => {
-      const [result] = await CreateNewReturnLinesService.go(lines, returnSubmissionId, 'week', 'megalitres', 'yes')
+      const [result] = await CreateReturnLinesService.go(lines, returnSubmissionId, 'week', 'megalitres', 'yes')
 
       expect(result.readingType).to.equal('measured')
     })
@@ -62,7 +62,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
 
   describe('when called with no lines', () => {
     it('returns an empty array', async () => {
-      const result = await CreateNewReturnLinesService.go([], returnSubmissionId, 'week', 'cubic-metres', 'no')
+      const result = await CreateReturnLinesService.go([], returnSubmissionId, 'week', 'cubic-metres', 'no')
 
       expect(result).to.equal([])
     })

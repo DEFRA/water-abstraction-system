@@ -2,7 +2,7 @@
 
 /**
  * Creates new return lines by formatting the provided lines and inserting them into the database.
- * @module CreateNewReturnLinesService
+ * @module CreateReturnLinesService
  */
 
 const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -11,7 +11,7 @@ const ReturnSubmissionLineModel = require('../../../models/return-submission-lin
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Creates new return lines by formatting the provided lines and inserting them into the database.
+ * Creates return lines by formatting the provided lines and inserting them into the database.
  *
  * @param {object[]} lines - An array of line objects to be processed.
  * @param {string} returnSubmissionId - The ID of the return submission.

@@ -5,7 +5,7 @@
  * @module SubmitCheckService
  */
 
-const CreateNewReturnLinesService = require('./create-new-return-lines.service.js')
+const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
 const GenerateReturnSubmissionMetadata = require('./generate-return-submission-metadata.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
@@ -40,7 +40,7 @@ async function go(sessionId, user) {
       trx
     )
 
-    await CreateNewReturnLinesService.go(
+    await CreateReturnLinesService.go(
       session.lines,
       returnSubmission.id,
       session.returnsFrequency,
