@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates new return lines by formatting the provided lines and inserting them into the database.
+ * Creates new return lines by formatting the provided lines and inserting them into the database
  * @module CreateReturnLinesService
  */
 
@@ -11,16 +11,16 @@ const ReturnSubmissionLineModel = require('../../../models/return-submission-lin
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Creates return lines by formatting the provided lines and inserting them into the database.
+ * Creates return lines by formatting the provided lines and inserting them into the database
  *
- * @param {object[]} lines - An array of line objects to be processed.
- * @param {string} returnSubmissionId - The ID of the return submission.
- * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.).
- * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.).
- * @param {string} meterProvided - Indicates if a meter was provided ('yes' or 'no').
- * @param {objection.transaction} [trx] - Optional transaction object.
+ * @param {object[]} lines - An array of line objects to be processed
+ * @param {string} returnSubmissionId - The ID of the return submission
+ * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
+ * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
+ * @param {string} meterProvided - Indicates if a meter was provided ('yes' or 'no')
+ * @param {objection.transaction} [trx] - Optional transaction object
  *
- * @returns {module:ReturnSubmissionLineModel[]} - The created return lines (empty if no lines were provided).
+ * @returns {module:ReturnSubmissionLineModel[]} - The created return lines (empty if no lines were provided)
  */
 async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvided, trx = null) {
   if (!lines?.length) {
@@ -30,7 +30,7 @@ async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvi
   const returnLines = lines.map((line) => {
     return {
       ...line,
-      reading: undefined, // This needs to be removed by setting it as undefined as it isn't a valid column in the db
+      reading: undefined, // This isn't a valid column in the db so we set it to `undefined` to remove it
       id: generateUUID(),
       createdAt: timestampForPostgres(),
       quantity: line.quantity ? _convertToCubicMetres(line.quantity, units) : undefined,
@@ -44,6 +44,14 @@ async function go(lines, returnSubmissionId, returnsFrequency, units, meterProvi
   return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
 
+/**
+ * Converts a quantity to cubic metres based on the provided unit, as we store quantities in the db in cubic metres
+ *
+ * @param {number} quantity - The quantity to convert
+ * @param {string} units - The unit of measurement for the quantity
+ *
+ * @returns {number} The converted quantity in cubic metres
+ */
 function _convertToCubicMetres(quantity, units) {
   const { multiplier } = Object.values(returnUnits).find((unit) => {
     return unit.name === units
