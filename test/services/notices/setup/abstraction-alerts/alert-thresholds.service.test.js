@@ -14,7 +14,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Thing under test
 const AlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 
-describe.only('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => {
+describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => {
   let alertThresholdGroupOne
   let alertThresholdGroupTwo
   let session

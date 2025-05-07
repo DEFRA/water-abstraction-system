@@ -40,6 +40,16 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType
   })
 }
 
+/**
+ * Returns a list of unique threshold group keys from the relevant licence monitoring stations.
+ *
+ * Each threshold group key is a string formatted as: `${measureType}-${thresholdValue}-${thresholdUnit}`.
+ * For example: `'flow-100-m'`.
+ *
+ * @returns {string[]} Unique threshold group identifiers
+ *
+ * @private
+ */
 function _relevantThresholds(relevantLicenceMonitoringStations) {
   const thresholdGroups = relevantLicenceMonitoringStations.map((relevantLicenceMonitoringStation) => {
     return relevantLicenceMonitoringStation.thresholdGroup
@@ -48,6 +58,14 @@ function _relevantThresholds(relevantLicenceMonitoringStations) {
   return [...new Set(thresholdGroups)]
 }
 
+/**
+ * Builds threshold options based on grouped threshold identifiers.
+ *
+ * Each threshold group key has the format: `${measureType}-${thresholdValue}-${thresholdUnit}`
+ * (e.g. `'flow-100-m'`). These are used to construct UI options with labels, hints, and checked states.
+ *
+ * @private
+ */
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
 
