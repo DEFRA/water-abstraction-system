@@ -113,10 +113,10 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   })
 
   describe('the "licenceMonitoringStations" property', () => {
-    it('should add an id to the licence station', async () => {
+    it('should add a "thresholdGroup" to the licence station', async () => {
       const result = await DetermineLicenceMonitoringStationsService.go(monitoringStation.id)
 
-      expect(result.licenceMonitoringStations[0].id).to.equal('0')
+      expect(result.licenceMonitoringStations[0].thresholdGroup).to.equal('flow-100-m3/s0')
     })
   })
 
