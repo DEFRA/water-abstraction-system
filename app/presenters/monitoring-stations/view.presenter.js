@@ -156,7 +156,7 @@ function _restrictionHeading(licenceMonitoringStations) {
 
 function _restrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { id, licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
+    const { licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
       licenceMonitoringStation
 
     return {
@@ -168,7 +168,7 @@ function _restrictions(licenceMonitoringStations) {
       restriction: _restriction(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
       threshold: `${thresholdValue} ${thresholdUnit}`,
-      viewLink: `/system/licence-monitoring-station/${id}`
+      viewLink: `licence/${licence.id}`
     }
   })
 }
