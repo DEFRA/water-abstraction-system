@@ -6,13 +6,7 @@
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-
-const UNIT_NAMES = {
-  'cubic-metres': 'm³',
-  litres: 'l',
-  megalitres: 'Ml',
-  gallons: 'gal'
-}
+const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Generates return submission metatadata
@@ -30,7 +24,7 @@ function go(session) {
   return {
     type: session.meterProvided === 'no' ? 'estimated' : 'measured',
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    units: UNIT_NAMES[session.units],
+    units: getUnitSymbolByName(session.units),
     meters: _meters(session),
     ..._total(session)
   }
@@ -54,7 +48,7 @@ function _meters(session) {
 
   return [
     {
-      units: session.lines.length > 0 ? UNIT_NAMES[session.units] : undefined, // Only required if there are readings
+      units: session.lines.length > 0 ? getUnitSymbolByName(session.units) : undefined, // Only required if there are readings
       meterDetailsProvided: true, // We hardcode this to true as we only return meter details if meterProvided is `yes`
       multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       manufacturer: session.meterMake,
@@ -87,6 +81,12 @@ function _total(session) {
     ...total,
     ...totalCustomDates
   }
+}
+
+function getUnitSymbolByName(name) {
+  return Object.keys(returnUnits).find((key) => {
+    return returnUnits[key].name === name
+  })
 }
 
 module.exports = {
