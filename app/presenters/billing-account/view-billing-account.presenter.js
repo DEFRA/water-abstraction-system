@@ -41,6 +41,17 @@ function go(billingAccountData) {
   }
 }
 
+/**
+ * Formats a company's address for display on the view billing account page.
+ *
+ * Some companies may have fewer populated address lines than others, resulting in `null` values. This function filters
+ * out any empty address lines, applies title casing to each one, and appends the postcode in uppercase.
+ *
+ * @param {module:AddressModel} address - The address associated with the billing account.
+ * @param {module:CompanyModel} company - The company associated with the billing account.
+ *
+ * @returns {string[]} An array of formatted address lines for display.
+ */
 function _address(address, company) {
   const addressLines = [
     company.name,
@@ -49,22 +60,22 @@ function _address(address, company) {
     address['address3'],
     address['address4'],
     address['address5'],
-    address['address6'],
-    address['postcode']
+    address['address6']
   ]
+    .filter(Boolean)
+    .map(titleCase)
 
-  const validAddressLines = addressLines.filter((addressLine) => {
-    return addressLine
-  })
+  if (address['postcode']) {
+    addressLines.push(address['postcode'].toUpperCase())
+  }
 
-  return validAddressLines.map((validAddressLine) => {
-    return titleCase(validAddressLine)
-  })
+  return addressLines
 }
 
 function _bills(bills) {
   return bills.map((bill) => {
     const { billRun } = bill
+
     return {
       billId: bill.id,
       billNumber: bill.invoiceNumber || 'Zero value bill',
