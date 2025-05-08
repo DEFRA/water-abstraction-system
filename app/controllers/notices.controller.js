@@ -6,8 +6,8 @@
  */
 
 const NoticesIndexService = require('../services/notices/index.service.js')
-const SubmitNoticesIndexService = require('../services/notices/submit-index.service.js')
 const NoticesViewService = require('../services/notices/view.service.js')
+const SubmitNoticesIndexService = require('../services/notices/submit-index.service.js')
 
 const basePath = 'notices'
 
