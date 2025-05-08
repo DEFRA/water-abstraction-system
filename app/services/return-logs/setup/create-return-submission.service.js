@@ -18,7 +18,7 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @param {string} userType - Type of user (eg. 'internal' or 'external')
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
- * @param {objection.transaction} [trx] - Optional transaction object
+ * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {module:ReturnSubmissionModel} - The created return submission
  */

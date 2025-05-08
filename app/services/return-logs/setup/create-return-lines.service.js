@@ -18,7 +18,7 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.).
  * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.).
  * @param {string} meterProvided - Indicates if a meter was provided ('yes' or 'no').
- * @param {objection.transaction} [trx] - Optional transaction object.
+ * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {module:ReturnSubmissionLineModel[]} - The created return lines (empty if no lines were provided).
  */
