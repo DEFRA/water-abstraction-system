@@ -38,6 +38,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             nilReturn,
             returnLogId,
             userId,
+            userType: 'internal',
             version: 1
           },
           { skip: ['id', 'createdAt'] }
@@ -63,6 +64,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             nilReturn,
             returnLogId,
             userId,
+            userType: 'internal',
             version: 2
           },
           { skip: ['id', 'createdAt'] }
