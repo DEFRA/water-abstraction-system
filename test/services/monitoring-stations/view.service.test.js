@@ -96,7 +96,7 @@ describe('Monitoring Stations - View service', () => {
             restriction: 'Reduce',
             restrictionCount: 1,
             threshold: '100 m3/s',
-            viewLink: '/system/licence-monitoring-station/3ee344db-784c-4d21-8d53-e50833f7e848'
+            viewLink: 'licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5'
           }
         ],
         stationReference: '',
