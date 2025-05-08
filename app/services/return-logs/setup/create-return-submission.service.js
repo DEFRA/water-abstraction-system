@@ -45,7 +45,7 @@ async function go(returnLogId, userId, userType, metadata, nilReturn, trx = null
   return ReturnSubmissionModel.query(trx).insert(returnSubmission)
 }
 
-async function _getVersionNumber(returnLogId, trx) {
+async function _determineVersionNumbers(returnLogId, trx) {
   const { previousVersion } = await ReturnSubmissionModel.query(trx)
     .max('version as previousVersion')
     .whereLike('returnLogId', `${returnLogId}%`)
