@@ -26,13 +26,14 @@ async function go(id) {
 function _licenceMonitoringStations(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation, index) => {
     const {
-      licence: { licenceRef },
+      licence: { licenceRef, id: licenceId },
       licenceVersionPurposeCondition,
       ...rest
     } = licenceMonitoringStation
 
     return {
       id: `${index}`,
+      licenceId,
       licenceRef,
       ...rest,
       ..._licenceVersionPurpose(licenceVersionPurposeCondition)
