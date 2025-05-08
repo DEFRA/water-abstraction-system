@@ -10,25 +10,22 @@ function _alert(status, statusUpdatedAt) {
   return sentenceCase(status)
 }
 
-function _restrictionCount(licenceId, licenceMonitoringStations) {
-  const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.licenceId === licenceId
-  })
-
-  return count.length
-}
-
 /**
+ * Transforms a list of licence monitoring station records into abstraction restrictions.
  *
- * An action should be provided on the object as below:
+ * Each input object may include an `action` property with the following structure:
  * ```
- *   action = {
- *         link: `/system/licence-monitoring-station/${licenceMonitoringStation.id}`,
- *         text: 'View'
- *       }
+ * action = {
+ *   link: `/system/licence-monitoring-station/${licenceMonitoringStation.id}`,
+ *   text: 'View'
+ * }
  * ```
  *
- * @param licenceMonitoringStations
+ * This action is passed through to the resulting restriction object unchanged.
+ *
+ * @param {object[]} licenceMonitoringStations
+ *
+ * @returns {object[]}
  */
 function restrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
@@ -73,6 +70,14 @@ function _restriction(restrictionType) {
   return sentenceCase(restrictionType)
 }
 
+function _restrictionCount(licenceId, licenceMonitoringStations) {
+  const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return licenceMonitoringStation.licenceId === licenceId
+  })
+
+  return count.length
+}
+
 /**
  * Returns the heading for the "restrictions" column of the monitoring station page
  *
@@ -94,7 +99,9 @@ function _restriction(restrictionType) {
  * instead of a fixed "Flow and level restriction type and threshold", we determine it based on the licence monitoring
  * station records. Go the new folks!
  *
- * @param licenceMonitoringStations
+ * @param {object[]} licenceMonitoringStations
+ *
+ * @returns {string} - the restriction header
  */
 function restrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
