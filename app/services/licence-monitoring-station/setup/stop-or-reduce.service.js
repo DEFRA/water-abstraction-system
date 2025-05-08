@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
+ * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module StopOrReduceService
  */
 
