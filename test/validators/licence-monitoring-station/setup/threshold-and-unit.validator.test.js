@@ -41,7 +41,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
         const result = ThresholdAndUnitValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a threshold')
+        expect(result.error.details[0].message).to.equal('Enter a threshold of 0 or greater')
       })
     })
 
