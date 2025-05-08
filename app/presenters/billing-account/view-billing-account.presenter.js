@@ -17,18 +17,11 @@ const { formatBillRunType } = require('../billing.presenter.js')
  */
 function go(billingAccountData) {
   const { billingAccount, bills, licenceId, pagination } = billingAccountData
-  const {
-    accountNumber,
-    billingAccountAddresses,
-    company,
-    createdAt,
-    id,
-    lastTransactionFile,
-    lastTransactionFileCreatedAt
-  } = billingAccount
+  const { billingAccountAddresses, company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } =
+    billingAccount
 
   return {
-    accountNumber,
+    accountNumber: billingAccount.accountNumber,
     address: _address(billingAccountAddresses[0].address, company),
     billingAccountId: id,
     bills: _bills(bills),
