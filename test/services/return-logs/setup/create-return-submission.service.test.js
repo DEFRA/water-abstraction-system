@@ -8,56 +8,72 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../../../app/models/return-submission.model.js')
 
 // Thing under test
 const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
 
-describe('Return Logs Setup - Create Return Submission service', () => {
+describe('Return Logs - Setup - Create Return Submission service', () => {
+  const userId = 'admin-internal@wrls.gov.uk'
+  const userType = 'internal'
+  const metadata = {}
+  const nilReturn = false
+
+  let returnLogId
+
   describe('when called with valid data', () => {
-    it('creates a new return submission', async () => {
-      const { returnLogId, userId, userType, metadata, nilReturn } = ReturnSubmissionHelper.defaults()
-
-      const result = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
-
-      expect(result).to.include({
-        returnLogId,
-        userId,
-        userType,
-        metadata,
-        nilReturn,
-        current: true
-      })
-    })
-
     describe('and no previous submission exists for this return log', () => {
-      it('sets the version to 1', async () => {
-        const { returnLogId, userId, userType, metadata, nilReturn } = ReturnSubmissionHelper.defaults()
+      beforeEach(() => {
+        returnLogId = ReturnLogHelper.generateReturnLogId()
+      })
 
-        const { version } = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
+      it('creates a new return submission and sets the version to 1', async () => {
+        const result = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
 
-        expect(version).to.equal(1)
+        expect(result).to.equal(
+          {
+            returnLogId,
+            userId,
+            userType,
+            version: 1,
+            metadata,
+            nilReturn,
+            current: true
+          },
+          { skip: ['id', 'createdAt'] }
+        )
+        expect(result).to.be.instanceOf(ReturnSubmissionModel)
       })
     })
 
     describe('and a previous submission exists for this return log', () => {
-      let returnLogId
-
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
+
         returnLogId = returnSubmission.returnLogId
       })
 
-      it('sets the version to 2', async () => {
-        const { userId, userType, metadata, nilReturn } = ReturnSubmissionHelper.defaults()
+      it('creates a new return submission and sets the version to 2', async () => {
         const result = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
 
-        expect(result.version).to.equal(2)
+        expect(result).to.equal(
+          {
+            returnLogId,
+            userId,
+            userType,
+            version: 2,
+            metadata,
+            nilReturn,
+            current: true
+          },
+          { skip: ['id', 'createdAt'] }
+        )
+        expect(result).to.be.instanceOf(ReturnSubmissionModel)
       })
 
       it('marks the previous version as superseded', async () => {
-        const { userId, userType, metadata, nilReturn } = ReturnSubmissionHelper.defaults()
         await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
 
         const previousVersion = await ReturnSubmissionModel.query()
