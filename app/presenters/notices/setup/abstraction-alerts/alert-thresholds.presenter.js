@@ -40,16 +40,46 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType
   })
 }
 
+/**
+ * Returns a list of unique threshold group keys from the relevant licence monitoring stations.
+ *
+ * Each threshold group key is a string formatted as: `${measureType}-${thresholdValue}-${thresholdUnit}`.
+ * For example: `'flow-100-m'`.
+ *
+ * @returns {string[]} Unique threshold group identifiers
+ *
+ * @private
+ */
+function _relevantThresholds(relevantLicenceMonitoringStations) {
+  const thresholdGroups = relevantLicenceMonitoringStations.map((relevantLicenceMonitoringStation) => {
+    return relevantLicenceMonitoringStation.thresholdGroup
+  })
+
+  return [...new Set(thresholdGroups)]
+}
+
+/**
+ * Builds threshold options based on grouped threshold identifiers.
+ *
+ * Each threshold group key has the format: `${measureType}-${thresholdValue}-${thresholdUnit}`
+ * (e.g. `'flow-100-m'`). These are used to construct UI options with labels, hints, and checked states.
+ *
+ * @private
+ */
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
 
-  return relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
+  const relevantThresholds = _relevantThresholds(relevantLicenceMonitoringStations)
+
+  return relevantThresholds.map((relevantThreshold) => {
+    const [measureType, thresholdValue, thresholdUnit] = relevantThreshold.split('-')
+
     return {
-      checked: alertThresholds.includes(licenceMonitoringStation.id),
-      value: licenceMonitoringStation.id,
-      text: `${licenceMonitoringStation.thresholdValue} ${licenceMonitoringStation.thresholdUnit}`,
+      checked: alertThresholds.includes(relevantThreshold),
+      value: relevantThreshold,
+      text: `${thresholdValue} ${thresholdUnit}`,
       hint: {
-        text: `${titleCase(licenceMonitoringStation.measureType)} thresholds for this station (${licenceMonitoringStation.thresholdUnit})`
+        text: `${titleCase(measureType)} threshold`
       }
     }
   })
