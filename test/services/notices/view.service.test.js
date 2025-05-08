@@ -4,28 +4,18 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
 const ViewService = require('../../../app/services/notices/view.service.js')
 
 describe('View Service', () => {
-  let session
-  let sessionData
-
-  beforeEach(async () => {
-    sessionData = {}
-
-    session = await SessionHelper.add({ data: sessionData })
-  })
-
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(session.id)
+      const result = await ViewService.go()
 
       expect(result).to.equal({})
     })
