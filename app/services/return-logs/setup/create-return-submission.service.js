@@ -60,7 +60,7 @@ async function _determineVersionNumbers(returnLogId, trx) {
 async function _markPreviousVersionAsSuperseded(returnLogId, version, trx) {
   await ReturnSubmissionModel.query(trx)
     .patch({ current: false })
-    .whereLike('returnLogId', `${returnLogId}%`)
+    .where('returnLogId', returnLogId)
     .where('version', version)
 }
 
