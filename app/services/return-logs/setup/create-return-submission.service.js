@@ -24,7 +24,7 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
 async function go(returnLogId, userId, userType, metadata, nilReturn, trx = null) {
-  const { version, previousVersion } = await _getVersionNumber(returnLogId, trx)
+  const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
