@@ -5,7 +5,7 @@
  * @module GeneralLib
  */
 
-const { randomUUID } = require('crypto')
+const { randomInt, randomUUID } = require('node:crypto')
 
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
@@ -113,6 +113,18 @@ function flashNotification(yar, title = 'Updated', text = 'Changes made') {
     title,
     text
   })
+}
+
+/**
+ * Generate a random integer within a range (inclusive)
+ *
+ * @param {number} min - lowest number (integer) in the range (inclusive)
+ * @param {number} max - largest number (integer) in the range (inclusive)
+ *
+ * @returns a number between min and max (inclusive)
+ */
+function generateRandomInteger(min, max) {
+  return randomInt(min, max)
 }
 
 /**
@@ -302,6 +314,7 @@ module.exports = {
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
   flashNotification,
+  generateRandomInteger,
   generateUUID,
   periodsOverlap,
   timestampForPostgres,

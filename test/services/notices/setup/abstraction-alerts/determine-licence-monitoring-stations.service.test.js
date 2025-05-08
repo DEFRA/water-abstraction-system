@@ -12,7 +12,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-licence-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-monitoring-station.service.js')
 
 // Thing under test
 const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
@@ -21,25 +21,52 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   const monitoringStation = generateUUID()
 
   beforeEach(async () => {
-    Sinon.stub(FetchLicenceMonitoringStationsService, 'go').resolves([
-      {
-        abstraction_period_end_day: 1,
-        abstraction_period_end_month: 1,
-        abstraction_period_start_day: 1,
-        abstraction_period_start_month: 2,
-        label: 'MONITOR PLACE',
-        licence_id: '123',
-        licence_ref: '123/456',
-        licence_version_purpose_condition_id: null,
-        measure_type: 'flow',
-        restriction_type: 'reduce',
-        start_date: new Date('2022-01-01'),
-        status: 'resume',
-        status_updated_at: null,
-        threshold_unit: 'm3/s',
-        threshold_value: 100
-      }
-    ])
+    Sinon.stub(FetchMonitoringStationService, 'go').resolves({
+      id: monitoringStation.id,
+      label: 'MONITOR PLACE',
+      licenceMonitoringStations: [
+        {
+          abstractionPeriodEndDay: 1,
+          abstractionPeriodEndMonth: 1,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 2,
+          measureType: 'flow',
+          restrictionType: 'reduce',
+          status: 'resume',
+          statusUpdatedAt: null,
+          thresholdUnit: 'm3/s',
+          thresholdValue: 100,
+          licence: {
+            licenceRef: '01/01/01/6880'
+          },
+          licenceVersionPurposeCondition: null
+        },
+        {
+          abstractionPeriodEndDay: null,
+          abstractionPeriodEndMonth: null,
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null,
+          measureType: 'level',
+          restrictionType: 'reduce',
+          status: 'resume',
+          statusUpdatedAt: null,
+          thresholdUnit: 'm3/s',
+          thresholdValue: 100,
+          licence: {
+            licenceRef: '02/02/02/3116'
+          },
+          licenceVersionPurposeCondition: {
+            id: '3f01d2d9-d23b-4697-b215-2ee3836feabb',
+            licenceVersionPurpose: {
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartMonth: 1,
+              abstractionPeriodStartDay: 1
+            }
+          }
+        }
+      ]
+    })
   })
 
   afterEach(() => {
@@ -52,21 +79,32 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
     expect(result).to.equal({
       licenceMonitoringStations: [
         {
-          abstraction_period_end_day: 1,
-          abstraction_period_end_month: 1,
-          abstraction_period_start_day: 1,
-          abstraction_period_start_month: 2,
-          id: '0',
-          licence_id: '123',
-          licence_ref: '123/456',
-          licence_version_purpose_condition_id: null,
-          measure_type: 'flow',
-          restriction_type: 'reduce',
-          start_date: new Date('2022-01-01'),
+          abstractionPeriodEndDay: 1,
+          abstractionPeriodEndMonth: 1,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 2,
+          licenceRef: '01/01/01/6880',
+          measureType: 'flow',
+          restrictionType: 'reduce',
           status: 'resume',
-          status_updated_at: null,
-          threshold_unit: 'm3/s',
-          threshold_value: 100
+          statusUpdatedAt: null,
+          thresholdGroup: 'flow-100-m3/s',
+          thresholdUnit: 'm3/s',
+          thresholdValue: 100
+        },
+        {
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 1,
+          licenceRef: '02/02/02/3116',
+          measureType: 'level',
+          restrictionType: 'reduce',
+          status: 'resume',
+          statusUpdatedAt: null,
+          thresholdGroup: 'level-100-m3/s',
+          thresholdUnit: 'm3/s',
+          thresholdValue: 100
         }
       ],
       monitoringStationId: monitoringStation.id,
@@ -75,10 +113,10 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   })
 
   describe('the "licenceMonitoringStations" property', () => {
-    it('should add an id to the licence station', async () => {
+    it('should add a "thresholdGroup" to the licence station', async () => {
       const result = await DetermineLicenceMonitoringStationsService.go(monitoringStation.id)
 
-      expect(result.licenceMonitoringStations[0].id).to.equal('0')
+      expect(result.licenceMonitoringStations[0].thresholdGroup).to.equal('flow-100-m3/s')
     })
   })
 
