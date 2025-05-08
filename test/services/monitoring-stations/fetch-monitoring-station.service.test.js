@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { randomInteger } = require('../../support/general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -63,7 +63,7 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
         })
 
         // NOTE: We control the licence references used to assert the licence sorting is working as expected
-        licenceWithCondition = await LicenceHelper.add({ licenceRef: `02/02/02/${randomInteger(1, 9999)}` })
+        licenceWithCondition = await LicenceHelper.add({ licenceRef: `02/02/02/${generateRandomInteger(1, 9999)}` })
         const licenceVersion = await LicenceVersionHelper.add({ licenceId: licenceWithCondition.id })
 
         licenceWithConditionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId: licenceVersion.id })
@@ -76,7 +76,7 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
           monitoringStationId: monitoringStation.id
         })
 
-        licenceWithoutConditions = await LicenceHelper.add({ licenceRef: `01/01/01/${randomInteger(1, 9999)}` })
+        licenceWithoutConditions = await LicenceHelper.add({ licenceRef: `01/01/01/${generateRandomInteger(1, 9999)}` })
         licenceMonitoringStationTwo = await LicenceMonitoringStationHelper.add({
           licenceId: licenceWithoutConditions.id,
           monitoringStationId: monitoringStation.id

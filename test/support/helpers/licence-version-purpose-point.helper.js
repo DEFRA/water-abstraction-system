@@ -4,8 +4,7 @@
  * @module LicenceVersionPurposePointHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
 const PointHelper = require('./point.helper.js')
 
@@ -65,7 +64,7 @@ function defaults(data = {}) {
 function generateLicenceVersionPurposePointExternalId() {
   const naldPointId = PointHelper.generateNaldPointId()
 
-  return `9:${randomInteger(100, 99999)}:${naldPointId}`
+  return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
 }
 
 module.exports = {

@@ -5,7 +5,7 @@
  */
 
 const LicenceModel = require('../../../app/models/licence.model.js')
-const { randomInteger } = require('../general.js')
+const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const RegionHelper = require('./region.helper.js')
 
 /**
@@ -64,9 +64,9 @@ function defaults(data = {}) {
  * @returns {string} - A randomly generated licence reference
  */
 function generateLicenceRef() {
-  const secondPart = randomInteger(10, 99)
-  const thirdPart = randomInteger(10, 99)
-  const fourthPart = randomInteger(1000, 9999)
+  const secondPart = generateRandomInteger(10, 99)
+  const thirdPart = generateRandomInteger(10, 99)
+  const fourthPart = generateRandomInteger(1000, 9999)
 
   return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }

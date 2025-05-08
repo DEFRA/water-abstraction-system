@@ -5,6 +5,8 @@
  * @module GeneralHelper
  */
 
+const { generateRandomInteger } = require('../../app/lib/general.lib.js')
+
 /**
  * Generate the POST request options needed for `server.inject()`
  *
@@ -72,20 +74,6 @@ function postRequestOptions(
 }
 
 /**
- * Generate a random integer within a range (inclusive)
- *
- * @param {number} min - lowest number (integer) in the range (inclusive)
- * @param {number} max - largest number (integer) in the range (inclusive)
- *
- * Credit https://stackoverflow.com/a/7228322
- *
- * @returns a number between min and max (inclusive)
- */
-function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-/**
  * Select a random entry from an array of entries
  *
  * Was built when we started using real reference data within the unit tests, for example, regions and purposes.
@@ -98,7 +86,7 @@ function randomInteger(min, max) {
  * @returns a random entry from the data provided
  */
 function selectRandomEntry(data) {
-  const randomIndex = randomInteger(0, data.length - 1)
+  const randomIndex = generateRandomInteger(0, data.length - 1)
 
   return data[randomIndex]
 }
@@ -115,12 +103,11 @@ function selectRandomEntry(data) {
  * @returns a random number
  */
 function randomRegionCode() {
-  return randomInteger(1, 999999)
+  return generateRandomInteger(1, 999999)
 }
 
 module.exports = {
   postRequestOptions,
-  randomInteger,
   randomRegionCode,
   selectRandomEntry
 }
