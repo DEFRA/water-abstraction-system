@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = CheckLicenceMatchesPresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     ...pageData
   }
 }

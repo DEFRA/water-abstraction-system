@@ -37,6 +37,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
           licence: {
+            id: '123',
             licenceRef: '01/01/01/6880'
           },
           licenceVersionPurposeCondition: null
@@ -53,6 +54,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
           licence: {
+            id: '456',
             licenceRef: '02/02/02/3116'
           },
           licenceVersionPurposeCondition: {
@@ -84,6 +86,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
           id: '0',
+          licenceId: '123',
           licenceRef: '01/01/01/6880',
           measureType: 'flow',
           restrictionType: 'reduce',
@@ -98,6 +101,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
           id: '1',
+          licenceId: '456',
           licenceRef: '02/02/02/3116',
           measureType: 'flow',
           restrictionType: 'reduce',

@@ -4,6 +4,10 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 function licenceMonitoringStations() {
+  const sharedLicence = {
+    id: generateUUID(),
+    licenceRef: generateLicenceRef()
+  }
   return [
     {
       abstractionPeriodEndDay: 1,
@@ -11,6 +15,7 @@ function licenceMonitoringStations() {
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 2,
       id: '0',
+      licenceId: generateUUID(),
       licenceRef: generateLicenceRef(),
       measureType: 'flow',
       restrictionType: 'reduce',
@@ -25,7 +30,8 @@ function licenceMonitoringStations() {
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
       id: '1',
-      licenceRef: generateLicenceRef(),
+      licenceId: sharedLicence.id,
+      licenceRef: sharedLicence.licenceRef,
       measureType: 'flow',
       restrictionType: 'stop',
       status: 'resume',
@@ -39,7 +45,8 @@ function licenceMonitoringStations() {
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
       id: '2',
-      licenceRef: generateLicenceRef(),
+      licenceId: sharedLicence.id,
+      licenceRef: sharedLicence.licenceRef,
       measureType: 'level',
       restrictionType: 'stop',
       status: 'resume',

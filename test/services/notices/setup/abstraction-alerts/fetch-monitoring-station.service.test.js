@@ -69,6 +69,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
           licence: {
+            id: licence.id,
             licenceRef: licence.licenceRef
           },
           licenceVersionPurposeCondition: null,
@@ -85,6 +86,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           abstractionPeriodStartDay: null,
           abstractionPeriodStartMonth: null,
           licence: {
+            id: licenceWithVersionPurpose.id,
             licenceRef: licenceWithVersionPurpose.licenceRef
           },
           licenceVersionPurposeCondition: {
@@ -117,6 +119,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
         abstractionPeriodStartDay: null,
         abstractionPeriodStartMonth: null,
         licence: {
+          id: licenceWithVersionPurpose.id,
           licenceRef: licenceWithVersionPurpose.licenceRef
         },
         licenceVersionPurposeCondition: {
@@ -148,6 +151,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 2,
         licence: {
+          id: licence.id,
           licenceRef: licence.licenceRef
         },
         licenceVersionPurposeCondition: null,
