@@ -36,7 +36,7 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType
   }
 
   return licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.restriction_type === alertType
+    return licenceMonitoringStation.restrictionType === alertType
   })
 }
 
@@ -47,9 +47,9 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
     return {
       checked: alertThresholds.includes(licenceMonitoringStation.id),
       value: licenceMonitoringStation.id,
-      text: `${licenceMonitoringStation.threshold_value} ${licenceMonitoringStation.threshold_unit}`,
+      text: `${licenceMonitoringStation.thresholdValue} ${licenceMonitoringStation.thresholdUnit}`,
       hint: {
-        text: `${titleCase(licenceMonitoringStation.measure_type)} thresholds for this station (${licenceMonitoringStation.threshold_unit})`
+        text: `${titleCase(licenceMonitoringStation.measureType)} thresholds for this station (${licenceMonitoringStation.thresholdUnit})`
       }
     }
   })
