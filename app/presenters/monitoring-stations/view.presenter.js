@@ -54,7 +54,7 @@ function go(monitoringStation, auth) {
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     restrictionHeading: _restrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations),
+    restrictions: _restrictions(licenceMonitoringStations, monitoringStationId),
     stationReference: stationReference ?? '',
     wiskiId: wiskiId ?? ''
   }
@@ -154,7 +154,7 @@ function _restrictionHeading(licenceMonitoringStations) {
   return 'Level restriction type and threshold'
 }
 
-function _restrictions(licenceMonitoringStations) {
+function _restrictions(licenceMonitoringStations, monitoringStationId) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const { licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
       licenceMonitoringStation
@@ -168,7 +168,7 @@ function _restrictions(licenceMonitoringStations) {
       restriction: _restriction(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
       threshold: `${thresholdValue} ${thresholdUnit}`,
-      viewLink: `licence/${licence.id}`
+      viewLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licence.id}`
     }
   })
 }

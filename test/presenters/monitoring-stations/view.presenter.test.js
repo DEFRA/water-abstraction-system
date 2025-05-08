@@ -88,7 +88,8 @@ describe('Monitoring Stations - View presenter', () => {
             restriction: 'Reduce',
             restrictionCount: 1,
             threshold: '100 m3/s',
-            viewLink: 'licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5'
+            viewLink:
+              '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5'
           }
         ],
         stationReference: '',
