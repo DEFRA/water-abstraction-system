@@ -28,6 +28,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: basePath + '/{noticeId}/view',
+    options: {
+      handler: NoticesController.view,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 
