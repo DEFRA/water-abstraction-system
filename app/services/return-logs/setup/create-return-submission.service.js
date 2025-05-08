@@ -16,26 +16,25 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  *
  * @param {string} returnLogId - ID of the return log (typically something like v1:6:01/23:987654:2024-11-01:2025-10-31)
  * @param {string} userId - ID of the user creating the return submission (typically an email address)
- * @param {string} userType - Type of user (eg. 'internal' or 'external')
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(returnLogId, userId, userType, metadata, nilReturn, trx = null) {
+async function go(returnLogId, userId, metadata, nilReturn, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
+    createdAt: timestampForPostgres(),
+    current: true,
+    nilReturn,
+    metadata,
     returnLogId,
     userId,
-    userType,
-    version,
-    metadata,
-    nilReturn,
-    current: true,
-    createdAt: timestampForPostgres()
+    userType: 'internal',
+    version
   }
 
   if (previousVersion) {

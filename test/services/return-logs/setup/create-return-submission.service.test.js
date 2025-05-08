@@ -17,7 +17,6 @@ const CreateReturnSubmissionService = require('../../../../app/services/return-l
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
   const userId = 'admin-internal@wrls.gov.uk'
-  const userType = 'internal'
   const metadata = {}
   const nilReturn = false
 
@@ -30,17 +29,16 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('creates a new return submission and sets the version to 1', async () => {
-        const result = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
+        const result = await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn)
 
         expect(result).to.equal(
           {
-            returnLogId,
-            userId,
-            userType,
-            version: 1,
+            current: true,
             metadata,
             nilReturn,
-            current: true
+            returnLogId,
+            userId,
+            version: 1
           },
           { skip: ['id', 'createdAt'] }
         )
@@ -56,17 +54,16 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('creates a new return submission and sets the version to 2', async () => {
-        const result = await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
+        const result = await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn)
 
         expect(result).to.equal(
           {
-            returnLogId,
-            userId,
-            userType,
-            version: 2,
+            current: true,
             metadata,
             nilReturn,
-            current: true
+            returnLogId,
+            userId,
+            version: 2
           },
           { skip: ['id', 'createdAt'] }
         )
@@ -74,7 +71,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('marks the previous version as superseded', async () => {
-        await CreateReturnSubmissionService.go(returnLogId, userId, userType, metadata, nilReturn)
+        await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn)
 
         const previousVersion = await ReturnSubmissionModel.query()
           .where('returnLogId', returnLogId)
