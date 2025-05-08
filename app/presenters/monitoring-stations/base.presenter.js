@@ -11,7 +11,7 @@ function _alert(status, statusUpdatedAt) {
 }
 
 /**
- * Transforms a list of licence monitoring station records into abstraction restrictions.
+ * Formats a list of licence monitoring station records into abstraction restrictions.
  *
  * Each input object may include an `action` property with the following structure:
  * ```
