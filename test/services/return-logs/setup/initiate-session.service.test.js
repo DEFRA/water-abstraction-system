@@ -104,7 +104,6 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         meterMake: null,
         meterProvided: 'no',
         meterSerialNumber: null,
-        nilReturn: false,
         periodStartDay: returnLog.metadata.nald.periodStartDay,
         periodStartMonth: returnLog.metadata.nald.periodStartMonth,
         periodEndDay: returnLog.metadata.nald.periodEndDay,
