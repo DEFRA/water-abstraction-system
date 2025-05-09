@@ -102,7 +102,7 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
  *
  * @param {object[]} licenceMonitoringStations - the licence monitoring stations to determine the heading from
  *
- * @returns {string} - the restriction header
+ * @returns {string} - the restriction heading
  */
 function determineRestrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
