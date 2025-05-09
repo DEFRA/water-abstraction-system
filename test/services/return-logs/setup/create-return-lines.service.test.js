@@ -15,20 +15,19 @@ const ReturnSubmissionLineModel = require('../../../../app/models/return-submiss
 const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 
 describe('Return Logs Setup - Create New Return Lines service', () => {
-  let lines
+  const lines = [
+    {
+      startDate: '2024-10-26T00:00:00.000Z',
+      endDate: '2024-11-01T00:00:00.000Z',
+      reading: 1234,
+      quantity: 16
+    }
+  ]
+
   let returnSubmissionId
 
   describe('when called with valid data', () => {
     beforeEach(() => {
-      lines = [
-        {
-          startDate: '2024-10-26T00:00:00.000Z',
-          endDate: '2024-11-01T00:00:00.000Z',
-          reading: 1234,
-          quantity: 16
-        }
-      ]
-
       returnSubmissionId = generateUUID()
     })
 
