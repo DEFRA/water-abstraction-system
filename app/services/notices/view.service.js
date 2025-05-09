@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the 'notices/{id}/view' page
+ * Orchestrates fetching and presenting the data for the 'notices/{id}' page
  *
  * @module ViewService
  */
@@ -9,7 +9,7 @@
 const ViewPresenter = require('../../presenters/notices/view.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the 'notices/{id}/view' page
+ * Orchestrates fetching and presenting the data for the 'notices/{id}' page
  *
  * @param {string} noticeId - The uuid of the notice we are viewing
  * @param {number|string} page - The current page for the pagination service

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the notices for the 'notices/{id}/view' page
+ * Fetches the notices for the 'notices/{id}' page
  * @module FetchNoticesService
  */
 
@@ -10,7 +10,7 @@ const ScheduledNotification = require('../../models/scheduled-notification.model
 const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
- * Fetches the notice for the 'notices/{id}/view' page
+ * Fetches the notice for the 'notices/{id}' page
  *
  * @param {string} id - the id of the scheduled notification to look up
  * @param {number|string} page - The current page for the pagination service
