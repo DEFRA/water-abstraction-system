@@ -29,11 +29,11 @@ async function submitIndex(request, h) {
 
 async function view(request, h) {
   const {
-    params: { noticeId },
+    params: { id },
     query: { page = 1 }
   } = request
 
-  const pageData = await NoticesViewService.go(noticeId, page)
+  const pageData = await NoticesViewService.go(id, page)
 
   return h.view(`${basePath}/view.njk`, pageData)
 }

@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the 'notices/{noticeId}/view' page
+ * Formats data for the 'notices/{id}/view' page
  * @module ViewPresenter
  */
 
 /**
- * Formats data for the 'notices/{noticeId}/view' page
+ * Formats data for the 'notices/{id}/view' page
  *
  * @returns {object} - The data formatted for the view template
  */
