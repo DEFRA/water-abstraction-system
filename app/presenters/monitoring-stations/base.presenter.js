@@ -14,7 +14,8 @@ function _alert(status, statusUpdatedAt) {
  * Formats a list of licence monitoring station records into abstraction restrictions.
  *
  * Each input object may include an `action` property with the following structure:
- * ```
+ *
+ * ```javascript
  * action = {
  *   link: `/system/licence-monitoring-station/${licenceMonitoringStation.id}`,
  *   text: 'View'
