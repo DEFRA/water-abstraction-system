@@ -100,7 +100,7 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
  * instead of a fixed "Flow and level restriction type and threshold", we determine it based on the licence monitoring
  * station records. Go the new folks!
  *
- * @param {object[]} licenceMonitoringStations
+ * @param {object[]} licenceMonitoringStations - the licence monitoring stations to determine the heading from
  *
  * @returns {string} - the restriction header
  */
