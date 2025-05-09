@@ -66,4 +66,25 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
       expect(result).to.equal([])
     })
   })
+
+  describe('when called with a transaction', () => {
+    beforeEach(() => {
+      returnSubmissionId = generateUUID()
+    })
+
+    it('does not persist anything if an error occurs', async () => {
+      try {
+        await ReturnSubmissionLineModel.transaction(async (trx) => {
+          await CreateReturnLinesService.go(lines, returnSubmissionId, 'week', 'cubic-metres', 'no', trx)
+          throw new Error()
+        })
+      } catch (_error) {
+        // Ignore the error, we just want to test that nothing was persisted
+      }
+
+      const [result] = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
+
+      expect(result).to.not.exist()
+    })
+  })
 })
