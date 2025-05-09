@@ -31,7 +31,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{id}/view',
+    path: basePath + '/{id}',
     options: {
       handler: NoticesController.view,
       auth: {
