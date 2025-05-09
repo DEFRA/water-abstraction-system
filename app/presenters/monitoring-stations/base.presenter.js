@@ -104,7 +104,7 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
  *
  * @returns {string} - the restriction header
  */
-function restrictionHeading(licenceMonitoringStations) {
+function determineRestrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
     return licenceMonitoringStation.measureType === 'flow'
   })
