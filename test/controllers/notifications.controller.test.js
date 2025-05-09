@@ -15,7 +15,9 @@ const ViewNotificationService = require('../../app/services/notifications/view-n
 const { init } = require('../../app/server.js')
 
 describe('Notifications controller', () => {
-  let options
+  const basePath = '/notifications'
+
+  let getOptions
   let server
 
   // Create server before running the tests
@@ -36,30 +38,45 @@ describe('Notifications controller', () => {
     Sinon.restore()
   })
 
-  describe('/notifications/{notificationId}', () => {
+  describe('Notifications controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = {
+        getOptions = {
           method: 'GET',
-          url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
+          url: basePath,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: ['returns'] }
           }
         }
       })
 
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewNotificationService, 'go').resolves(_viewNotification())
-        })
+      describe('/notifications/{notificationId}', () => {
+        describe('GET', () => {
+          beforeEach(async () => {
+            getOptions = {
+              method: 'GET',
+              url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
+              auth: {
+                strategy: 'session',
+                credentials: { scope: ['returns'] }
+              }
+            }
+          })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+          describe('when a request is valid', () => {
+            beforeEach(async () => {
+              Sinon.stub(ViewNotificationService, 'go').resolves(_viewNotification())
+            })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Licence 01/117')
-          expect(response.payload).to.contain('Hands off flow: levels warning')
+            it('returns the page successfully', async () => {
+              const response = await server.inject(getOptions)
+
+              expect(response.statusCode).to.equal(200)
+              expect(response.payload).to.contain('Licence 01/117')
+              expect(response.payload).to.contain('Hands off flow: levels warning')
+            })
+          })
         })
       })
     })
