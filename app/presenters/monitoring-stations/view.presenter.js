@@ -5,8 +5,9 @@
  * @module ViewPresenter
  */
 
+const { determineRestrictionHeading, formatRestrictions } = require('./base.presenter.js')
+
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const { restrictionHeading, restrictions } = require('./base.presenter.js')
 
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
@@ -51,19 +52,19 @@ function go(monitoringStation, auth) {
     pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
-    restrictionHeading: restrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations, FeatureFlagsConfig.enableLicenceMonitoringStationsView),
+    restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
+    restrictions: _restrictions(licenceMonitoringStations, FeatureFlagsConfig),
     stationReference: stationReference ?? '',
     tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
   }
 }
 
-function _restrictions(licenceMonitoringStations, enableLicenceMonitoringStationsView) {
+function _restrictions(licenceMonitoringStations, FeatureFlagsConfig) {
   const preparedLicenceMonitoringStations = licenceMonitoringStations.map((licenceMonitoringStation) => {
     let action
 
-    if (enableLicenceMonitoringStationsView) {
+    if (FeatureFlagsConfig.enableLicenceMonitoringStationsView) {
       action = {
         link: `/system/licence-monitoring-station/${licenceMonitoringStation.id}`,
         text: 'View'
@@ -77,7 +78,7 @@ function _restrictions(licenceMonitoringStations, enableLicenceMonitoringStation
     }
   })
 
-  return restrictions(preparedLicenceMonitoringStations)
+  return formatRestrictions(preparedLicenceMonitoringStations)
 }
 
 function _licenceVersionPurpose(licenceVersionPurposeCondition) {

@@ -40,7 +40,7 @@ describe('Monitoring Stations - Base presenter', () => {
   describe('#restrictionHeading', () => {
     describe('when the monitoring station has only "flow" based licence monitoring station records', () => {
       it('returns "Flow restriction type and threshold"', () => {
-        const result = BasePresenter.restrictionHeading(licenceMonitoringStations)
+        const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
         expect(result).to.equal('Flow restriction type and threshold')
       })
@@ -52,7 +52,7 @@ describe('Monitoring Stations - Base presenter', () => {
       })
 
       it('returns "Flow restriction type and threshold"', () => {
-        const result = BasePresenter.restrictionHeading(licenceMonitoringStations)
+        const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
         expect(result).to.equal('Level restriction type and threshold')
       })
@@ -69,17 +69,17 @@ describe('Monitoring Stations - Base presenter', () => {
       })
 
       it('returns "Flow and level restriction type and threshold"', () => {
-        const result = BasePresenter.restrictionHeading(licenceMonitoringStations)
+        const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
         expect(result).to.equal('Flow and level restriction type and threshold')
       })
     })
   })
 
-  describe('the "restrictions" property', () => {
+  describe('#formatRestrictions', () => {
     describe('the "abstraction" property', () => {
       it('returns the abstraction period', () => {
-        const result = BasePresenter.restrictions(licenceMonitoringStations)
+        const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
         expect(result[0].abstractionPeriod).to.equal('1 April to 31 August')
       })
@@ -95,7 +95,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns the action object', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].action).to.equal({
             link: `/system/licence-monitoring-station/${licenceMonitoringStations[0].id}`,
@@ -106,7 +106,7 @@ describe('Monitoring Stations - Base presenter', () => {
 
       describe('when the licence monitoring station has no action', () => {
         it('returns the action object', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].action).to.be.undefined()
         })
@@ -116,7 +116,7 @@ describe('Monitoring Stations - Base presenter', () => {
     describe('the "alert" property', () => {
       describe('when the licence monitoring station record has never had an alert sent', () => {
         it('returns null', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].alert).to.be.null()
         })
@@ -128,7 +128,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns the current "status" formatted for display', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].alert).to.equal('Resume')
         })
@@ -138,7 +138,7 @@ describe('Monitoring Stations - Base presenter', () => {
     describe('the "alertDate" property', () => {
       describe('when the licence monitoring station record has never had an alert sent', () => {
         it('returns null', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].alertDate).to.be.null()
         })
@@ -150,7 +150,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns the "statusUpdatedAt" formatted for display', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].alertDate).to.equal('17 June 2024')
         })
@@ -164,7 +164,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns "Stop or reduce"', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].restriction).to.equal('Stop or reduce')
         })
@@ -176,7 +176,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns "Reduce"', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].restriction).to.equal('Reduce')
         })
@@ -188,7 +188,7 @@ describe('Monitoring Stations - Base presenter', () => {
         })
 
         it('returns "Stop"', () => {
-          const result = BasePresenter.restrictions(licenceMonitoringStations)
+          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
           expect(result[0].restriction).to.equal('Stop')
         })
@@ -204,7 +204,7 @@ describe('Monitoring Stations - Base presenter', () => {
       })
 
       it('returns returns the count of licence monitoring stations for the licence linked to this monitoring station', () => {
-        const result = BasePresenter.restrictions(licenceMonitoringStations)
+        const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
         expect(result[0].restrictionCount).to.equal(2)
       })
