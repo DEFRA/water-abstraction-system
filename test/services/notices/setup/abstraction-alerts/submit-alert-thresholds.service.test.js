@@ -15,6 +15,9 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const SubmitAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 
 describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service', () => {
+  let alertThresholdGroupOne
+  let alertThresholdGroupThree
+  let alertThresholdGroupTwo
   let payload
   let session
   let sessionData
@@ -26,8 +29,12 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
         alertType: 'stop'
       }
 
+      alertThresholdGroupOne = sessionData.licenceMonitoringStations[0].thresholdGroup
+      alertThresholdGroupTwo = sessionData.licenceMonitoringStations[1].thresholdGroup
+      alertThresholdGroupThree = sessionData.licenceMonitoringStations[2].thresholdGroup
+
       payload = {
-        'alert-thresholds': [sessionData.licenceMonitoringStations[0].id, sessionData.licenceMonitoringStations[1].id]
+        'alert-thresholds': [alertThresholdGroupOne, alertThresholdGroupTwo]
       }
 
       session = await SessionHelper.add({ data: sessionData })
@@ -43,7 +50,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
       describe('and one threshold has been selected ', () => {
         beforeEach(() => {
           payload = {
-            'alert-thresholds': sessionData.licenceMonitoringStations[0].id
+            'alert-thresholds': alertThresholdGroupOne
           }
         })
 
@@ -52,7 +59,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.alertThresholds).to.equal(['0'])
+          expect(refreshedSession.alertThresholds).to.equal([alertThresholdGroupOne])
         })
       })
 
@@ -62,7 +69,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.alertThresholds).to.equal(['0', '1'])
+          expect(refreshedSession.alertThresholds).to.equal([alertThresholdGroupOne, alertThresholdGroupTwo])
         })
       })
     })
@@ -75,7 +82,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
         sessionData = {
           ...abstractionAlertSessionData,
-          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id],
+          alertThresholds: [alertThresholdGroupOne],
           alertType: 'stop'
         }
 
@@ -96,18 +103,18 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
             {
               checked: false,
               hint: {
-                text: 'Flow thresholds for this station (m3/s)'
+                text: 'Flow threshold'
               },
               text: '100 m3/s',
-              value: '1'
+              value: alertThresholdGroupTwo
             },
             {
               checked: false,
               hint: {
-                text: 'Level thresholds for this station (m)'
+                text: 'Level threshold'
               },
               text: '100 m',
-              value: '2'
+              value: alertThresholdGroupThree
             }
           ]
         })
@@ -120,7 +127,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
         sessionData = {
           ...abstractionAlertSessionData,
-          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id],
+          alertThresholds: [alertThresholdGroupOne],
           alertType: 'stop'
         }
 
@@ -141,18 +148,18 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
             {
               checked: false,
               hint: {
-                text: 'Flow thresholds for this station (m3/s)'
+                text: 'Flow threshold'
               },
               text: '100 m3/s',
-              value: '1'
+              value: alertThresholdGroupTwo
             },
             {
               checked: false,
               hint: {
-                text: 'Level thresholds for this station (m)'
+                text: 'Level threshold'
               },
               text: '100 m',
-              value: '2'
+              value: alertThresholdGroupThree
             }
           ]
         })

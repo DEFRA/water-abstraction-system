@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the `` page
  *
  * @module __MODULE_NAME__
  */
@@ -10,7 +10,7 @@ const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
 const SessionModel = require('__SESSION_MODEL_PATH__')
 
 /**
- * Orchestrates presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the `` page
  *
  * @param {string} sessionId
  *
