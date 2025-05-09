@@ -13,7 +13,9 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
+const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
 const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 
 // For running our service
@@ -23,7 +25,6 @@ const sessionId = 'b0ebf12a-c238-4c48-9526-64513a8df935'
 
 describe('Licence Monitoring Station - Setup - Controller', () => {
   let options
-  let path
   let server
 
   // Create server before running the tests
@@ -71,7 +72,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
   })
 
   describe('licence-monitoring-station/setup/{sessionId}/threshold-and-unit', () => {
-    path = 'threshold-and-unit'
+    const path = 'threshold-and-unit'
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
@@ -140,6 +141,89 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Enter a threshold')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/stop-or-reduce', () => {
+    const path = 'stop-or-reduce'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(StopOrReduceService, 'go').resolves({
+            sessionId,
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
+            reduceAtThreshold: null,
+            stopOrReduce: null
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Does the licence holder need to stop or reduce at this threshold?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({})
+          })
+
+          it('redirects to the "licence-number" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/licence-monitoring-station/setup/${sessionId}/licence-number`
+            )
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({
+              error: {
+                message: 'Select if the licence holder needs to stop or reduce',
+                reduceAtThresholdRadioElement: null,
+                stopOrReduceRadioElement: { text: 'Select if the licence holder needs to stop or reduce' }
+              },
+              monitoringStationLabel: 'Station Label',
+              pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
+              sessionId,
+              reduceAtThreshold: null,
+              stopOrReduce: null
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select if the licence holder needs to stop or reduce')
             expect(response.payload).to.contain('There is a problem')
           })
         })

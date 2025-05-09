@@ -38,6 +38,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
+    options: {
+      handler: LicenceMonitoringStationSetupController.stopOrReduce,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitStopOrReduce,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
   }
 ]
 

@@ -1,6 +1,6 @@
 # Water Abstraction System
 
-![Build Status](https://github.com/DEFRA/water-abstraction-system/workflows/CI/badge.svg?branch=main)
+![Build Status](https://github.com/DEFRA/water-abstraction-system/actions/workflows/ci.yml/badge.svg?branch=main)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_water-abstraction-system&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DEFRA_water-abstraction-system)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_water-abstraction-system&metric=coverage)](https://sonarcloud.io/dashboard?id=DEFRA_water-abstraction-system)
 [![Known Vulnerabilities](https://snyk.io/test/github/DEFRA/water-abstraction-system/badge.svg)](https://snyk.io/test/github/DEFRA/water-abstraction-system)
