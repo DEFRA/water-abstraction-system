@@ -1,0 +1,125 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, tableCaption) %}
+
+  {% set showActionHeader = false %}
+
+  {% if restrictions.length > 0 %}
+    {# Create rows for licences linked to the monitoring station #}
+    {% set tableRows = [] %}
+
+    {% for restriction in restrictions %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+
+      {% if rowIndex > 0 %}
+        {% set lastLicenceId = restrictions[rowIndex - 1].licenceId %}
+      {% else %}
+        {% set lastLicenceId = null %}
+      {% endif %}
+
+      {% set tableRow = [] %}
+
+      {% if lastLicenceId !== restriction.licenceId %}
+        {% set licenceCell =
+          {
+            html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + restriction.licenceId + '/summary">' + restriction.licenceRef + '</a>',
+            attributes: { 'data-test': 'licence-ref-' + rowIndex },
+            rowspan: restriction.restrictionCount
+          } %}
+
+        {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
+      {% endif %}
+
+      {% set abstractionPeriodCell =
+        {
+          text: restriction.abstractionPeriod,
+          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+        } %}
+      {% set tableRow = (tableRow.push(abstractionPeriodCell), tableRow) %}
+
+      {% set restrictionCell =
+        {
+          text: restriction.restriction,
+          attributes: { 'data-test': 'restriction-' + rowIndex }
+        } %}
+
+      {% set tableRow = (tableRow.push(restrictionCell), tableRow) %}
+
+      {% set thresholdCell =
+        {
+          text: restriction.threshold,
+          attributes: { 'data-test': 'threshold-' + rowIndex }
+        } %}
+      {% set tableRow = (tableRow.push(thresholdCell), tableRow) %}
+
+      {% set alertCell =
+        {
+          text: restriction.alert,
+          attributes: { 'data-test': 'alert-' + rowIndex }
+        } %}
+      {% set tableRow = (tableRow.push(alertCell), tableRow) %}
+
+      {% set alertDateCell =
+        {
+          text: restriction.alertDate,
+          attributes: { 'data-test': 'alert-date-' + rowIndex }
+        } %}
+      {% set tableRow = (tableRow.push(alertDateCell), tableRow) %}
+
+
+      {% if restriction.action %}
+        {% set showActionHeader = true %}
+
+        {% set actionCell =
+          {
+            html: '<a href="'+ restriction.action.link +'" class="govuk-link">' + restriction.action.text + '</a>',
+            attributes: { 'data-test': 'action-' + rowIndex }
+          } %}
+        {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+      {% endif %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    <div>
+      {{ govukTable({
+        caption: tableCaption,
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: false,
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          }
+        },
+        head: [
+          {
+            text: "Licence"
+          },
+          {
+            text: "Abstraction period",
+            classes: 'govuk-!-width-one-quarter'
+          },
+          {
+            text: restrictionHeading,
+            colspan: 2
+          },
+          {
+            text: "Last type of alert sent and date issued",
+            classes: 'govuk-!-width-one-quarter',
+            colspan: 2
+          },
+          {
+            text: "Action"
+          } if showActionHeader
+        ],
+        rows: tableRows
+      }) }}
+    </div>
+  {% else %}
+    <p class="govuk-body">There are no licences tagged with restrictions for this monitoring station</p>
+  {% endif %}
+
+{% endmacro %}

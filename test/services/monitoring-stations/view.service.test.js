@@ -76,7 +76,6 @@ describe('Monitoring Stations - View service', () => {
         activeNavBar: 'search',
         catchmentName: null,
         enableLicenceMonitoringStationsSetup: true,
-        enableLicenceMonitoringStationsView: true,
         gridReference: 'TL2664640047',
         links: {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
@@ -88,6 +87,10 @@ describe('Monitoring Stations - View service', () => {
         restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
+            action: {
+              link: '/system/licence-monitoring-station/3ee344db-784c-4d21-8d53-e50833f7e848',
+              text: 'View'
+            },
             abstractionPeriod: '1 April to 31 August',
             alert: null,
             alertDate: null,
@@ -95,11 +98,11 @@ describe('Monitoring Stations - View service', () => {
             licenceRef: 'AT/TEST',
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '100 m3/s',
-            viewLink: '/system/licence-monitoring-station/3ee344db-784c-4d21-8d53-e50833f7e848'
+            threshold: '100 m3/s'
           }
         ],
         stationReference: '',
+        tableCaption: 'Licences linked to this monitoring station',
         wiskiId: ''
       })
     })
