@@ -14,6 +14,7 @@ const ReturnSubmissionModel = require('../../../../app/models/return-submission.
 
 // Thing under test
 const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
   const userId = 'admin-internal@wrls.gov.uk'
@@ -82,6 +83,38 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
 
         expect(previousVersion.current).to.be.false()
       })
+    })
+  })
+
+  describe('when called with a transaction', () => {
+    beforeEach(async () => {
+      const returnSubmission = await ReturnSubmissionHelper.add()
+
+      returnLogId = returnSubmission.returnLogId
+    })
+
+    it('does not persist anything if an error occurs', async () => {
+      try {
+        await ReturnLogModel.transaction(async (trx) => {
+          await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn, trx)
+          throw new Error()
+        })
+      } catch (_error) {
+        // Ignore the error, we just want to test that nothing was persisted
+      }
+
+      const currentVersion = await ReturnSubmissionModel.query()
+        .where('returnLogId', returnLogId)
+        .where('version', 2)
+        .first()
+
+      const previousVersion = await ReturnSubmissionModel.query()
+        .where('returnLogId', returnLogId)
+        .where('version', 1)
+        .first()
+
+      expect(currentVersion).to.not.exist()
+      expect(previousVersion.current).to.be.true()
     })
   })
 })
