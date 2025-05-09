@@ -28,7 +28,7 @@ function _alert(status, statusUpdatedAt) {
  *
  * @returns {object[]}
  */
-function restrictions(licenceMonitoringStations) {
+function formatRestrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const {
       abstractionPeriodEndDay,
