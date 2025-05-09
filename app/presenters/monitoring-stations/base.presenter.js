@@ -24,7 +24,7 @@ function _alert(status, statusUpdatedAt) {
  *
  * This action is passed through to the resulting restriction object unchanged.
  *
- * @param {object[]} licenceMonitoringStations
+ * @param {object[]} licenceMonitoringStations - the licence monitoring stations to format restrictions from
  *
  * @returns {object[]}
  */
