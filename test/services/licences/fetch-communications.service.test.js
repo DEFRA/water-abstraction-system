@@ -57,8 +57,8 @@ describe('Fetch Communications service', () => {
             type: 'notification'
           },
           id: scheduledNotification.id,
-          messageRef: null,
-          messageType: null
+          messageRef: 'returns_invitation_licence_holder_letter',
+          messageType: 'letter'
         }
       ])
     })
