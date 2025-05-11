@@ -9,7 +9,7 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Generates return submission metatadata
+ * Generates return submission metatadata based on the provided session data
  *
  * @param {object} session - Session object containing the return submission data
  *
@@ -26,7 +26,7 @@ function go(session) {
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
     type: session.meterProvided === 'no' ? 'estimated' : 'measured',
     units: getUnitSymbolByName(session.units),
-    ..._total(session)
+    ..._totalProperties(session)
   }
 }
 
@@ -54,12 +54,13 @@ function _meters(session) {
       serialNumber: session.meterSerialNumber,
       startReading: session.startReading,
       readings: _formatReadings(session.lines),
-      units: session.lines.length > 0 ? getUnitSymbolByName(session.units) : undefined
+      // We use the spread operator to add the units property only if there are lines present
+      ...(session.lines.length > 0 && { units: getUnitSymbolByName(session.units) })
     }
   ]
 }
 
-function _total(session) {
+function _totalProperties(session) {
   if (!session.singleVolume) {
     return {
       totalFlag: false
@@ -72,14 +73,13 @@ function _total(session) {
     totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
   }
 
-  const totalCustomDates = {
-    totalCustomDateStart: total.totalCustomDates ? session.fromFullDate : undefined,
-    totalCustomDateEnd: total.totalCustomDates ? session.toFullDate : undefined
-  }
-
   return {
     ...total,
-    ...totalCustomDates
+    // Custom date fields are only required if the custom date option has been selected
+    ...(total.totalCustomDates && {
+      totalCustomDateStart: session.fromFullDate,
+      totalCustomDateEnd: session.toFullDate
+    })
   }
 }
 
