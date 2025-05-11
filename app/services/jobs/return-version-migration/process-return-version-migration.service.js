@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Determines which licences need new return versions created for quarterly returns
- * @module ReturnVersionMigrationService
+ * Determines which licences need new return versions created for quarterly returns and processes them
+ * @module ProcessReturnVersionMigrationService
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -14,7 +14,7 @@ const PersistReturnVersionService = require('../../return-versions/setup/check/p
 const UserModel = require('../../../models/user.model.js')
 
 /**
- * Determines which licences need new return versions created for quarterly returns
+ * Determines which licences need new return versions created for quarterly returns and processes them
  *
  * This service will generate new return versions for each current licence that is a water undertaker (a water company).
  * The new return version will start on 1/04/2025.
