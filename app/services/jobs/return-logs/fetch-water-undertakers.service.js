@@ -66,7 +66,6 @@ async function go() {
         .where('startDate', '<', quarterlyStartDate)
         .whereColumn('returnVersions.licenceId', 'licences.id')
     )
-    .whereIn('id', ['5599e2b2-4047-48e6-84aa-f6fc23741e05', '95de4f0f-f13f-4ea6-9460-b7f5d6ce8381'])
 }
 
 module.exports = {
