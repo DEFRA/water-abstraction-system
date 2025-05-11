@@ -22,10 +22,10 @@ function go(session) {
   }
 
   return {
-    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
-    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    units: getUnitSymbolByName(session.units),
     meters: _meters(session),
+    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
+    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
+    units: getUnitSymbolByName(session.units),
     ..._total(session)
   }
 }
@@ -48,13 +48,13 @@ function _meters(session) {
 
   return [
     {
-      units: session.lines.length > 0 ? getUnitSymbolByName(session.units) : undefined, // Only required if there are readings
-      meterDetailsProvided: true, // We hardcode this to true as we only return meter details if meterProvided is `yes`
-      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       manufacturer: session.meterMake,
+      meterDetailsProvided: true, // We can hardcode this true as we only return meter details if meterProvided is `yes`
+      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       serialNumber: session.meterSerialNumber,
       startReading: session.startReading,
-      readings: _formatReadings(session.lines)
+      readings: _formatReadings(session.lines),
+      units: session.lines.length > 0 ? getUnitSymbolByName(session.units) : undefined
     }
   ]
 }
