@@ -29,20 +29,6 @@ async function go() {
       'waterUndertaker',
       db.raw("regions->>'regionalChargeArea' as regionalChargeArea")
     ])
-    .withGraphFetched('returnVersions')
-    .modifyGraph('returnVersions', (builder) => {
-      builder
-        .select(['id', 'startDate', 'reason'])
-        .where('startDate', '<', quarterlyStartDate)
-        .where('status', 'current')
-        // A return version must include return requirements in order for us to be able to copy from it
-        .whereExists(
-          ReturnRequirementModel.query()
-            .select(1)
-            .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
-        )
-        .orderBy('startDate', 'desc')
-    })
     .where('waterUndertaker', true)
     .where((builder) => {
       builder.whereNull('expiredDate').orWhere('expiredDate', '>=', quarterlyStartDate)
@@ -66,6 +52,20 @@ async function go() {
         .where('startDate', '<', quarterlyStartDate)
         .whereColumn('returnVersions.licenceId', 'licences.id')
     )
+    .withGraphFetched('returnVersions')
+    .modifyGraph('returnVersions', (builder) => {
+      builder
+        .select(['id', 'startDate', 'reason'])
+        .where('startDate', '<', quarterlyStartDate)
+        .where('status', 'current')
+        // A return version must include return requirements in order for us to be able to copy from it
+        .whereExists(
+          ReturnRequirementModel.query()
+            .select(1)
+            .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
+        )
+        .orderBy('startDate', 'desc')
+    })
 }
 
 module.exports = {
