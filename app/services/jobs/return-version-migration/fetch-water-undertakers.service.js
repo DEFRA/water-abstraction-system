@@ -65,6 +65,7 @@ async function go() {
             .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
         )
         .orderBy('startDate', 'desc')
+        .limit(1)
     })
 }
 
