@@ -26,10 +26,14 @@ async function go() {
     const usernames = ['admin-internal@wrls.gov.uk']
 
     if (LicencesConfig.returnVersionBatchUser) {
-      usernames.unshift(LicencesConfig.returnVersionBatchUser)
+      usernames.push(LicencesConfig.returnVersionBatchUser)
     }
 
-    const user = await UserModel.query().select(['id']).whereIn('username', usernames).first()
+    const user = await UserModel.query()
+      .select(['id'])
+      .whereIn('username', usernames)
+      .orderBy('username', 'DESC')
+      .first()
 
     const licences = await FetchWaterUndertakersService.go()
 
