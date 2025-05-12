@@ -19,32 +19,71 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = { 'alert-type': 'stop' }
     sessionData = AbstractionAlertSessionData.monitoringStation()
-
-    session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('saves the submitted value', async () => {
-      await SubmitAlertTypeService.go(session.id, payload)
+    describe('when the "alertType" has not been previously set', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      const refreshedSession = await session.$query()
+      it('saves the submitted value', async () => {
+        await SubmitAlertTypeService.go(session.id, payload)
 
-      expect(refreshedSession.alertType).to.equal('stop')
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertType).to.equal('stop')
+      })
+
+      it('returns an empty object (no page data is needed for a redirect)', async () => {
+        const result = await SubmitAlertTypeService.go(session.id, payload)
+
+        expect(result).to.equal({})
+      })
     })
 
-    it('returns an empty object (no page data is needed for a redirect)', async () => {
-      const result = await SubmitAlertTypeService.go(session.id, payload)
+    describe('when the user selects a different "alertType" to a previous selection', () => {
+      beforeEach(async () => {
+        sessionData.alertType = 'resume'
 
-      expect(result).to.equal({})
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('sets the "alertThresholds" to an empty array', async () => {
+        await SubmitAlertTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertThresholds).to.equal([])
+      })
+    })
+
+    describe('when the user selects the same "alertType" they previously selected', () => {
+      beforeEach(async () => {
+        sessionData.alertType = 'stop'
+        sessionData.alertThresholds = ['100-flow']
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('does not change the existing "alertThresholds"', async () => {
+        await SubmitAlertTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertThresholds).to.equal(['100-flow'])
+      })
     })
   })
 
   describe('when validation fails', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       payload = {}
+
+      session = await SessionHelper.add({ data: sessionData })
     })
 
     it('returns page data for the view, with errors', async () => {
