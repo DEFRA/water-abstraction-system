@@ -7,11 +7,14 @@
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const FetchWaterUndertakersService = require('./fetch-water-undertakers.service.js')
-const GenerateFromExisintRequirementsService = require('../../return-versions/setup/existing/generate-from-existing-requirements.service.js')
-const GenerateReturnVersionService = require('../../return-versions/setup/check/generate-return-version.service.js')
-const LicencesConfig = require('../../../../config/licences.config.js')
-const PersistReturnVersionService = require('../../return-versions/setup/check/persist-return-version.service.js')
+const GenerateReturnVersionService = require('./generate-return-version.service.js')
+const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
+const ReturnRequirementPurposeModel = require('../../../models/return-requirement-purpose.model.js')
+const ReturnVersionModel = require('../../../models/return-version.model.js')
 const UserModel = require('../../../models/user.model.js')
+
+const LicencesConfig = require('../../../../config/licences.config.js')
 
 /**
  * Determines which licences need new return versions created for quarterly returns and processes them
@@ -23,45 +26,58 @@ async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const usernames = ['admin-internal@wrls.gov.uk']
-
-    if (LicencesConfig.returnVersionBatchUser) {
-      usernames.push(LicencesConfig.returnVersionBatchUser)
-    }
-
-    const user = await UserModel.query()
-      .select(['id'])
-      .whereIn('username', usernames)
-      .orderBy('username', 'DESC')
-      .first()
-
     const licences = await FetchWaterUndertakersService.go()
+    // console.log('🚀🚀🚀 ~ licences:')
+    // console.dir(licences, { depth: null, colors: true })
+    const user = await _user()
 
     for (const licence of licences) {
-      const returnRequirements = await GenerateFromExisintRequirementsService.go(licence.returnVersions[0].id)
+      const existingReturnVersion = licence.returnVersions[0]
 
-      const data = {
-        licence: {
-          id: licence.id
-        },
-        multipleUpload: returnRequirements.multipleUpload,
-        note: {
-          content: 'Changed due to water company licences moving to quarterly returns'
-        },
-        reason: 'change-to-return-requirements',
-        returnVersionStartDate: new Date('2025-04-01'),
-        requirements: returnRequirements.requirements,
-        quarterlyReturns: true
-      }
+      const naldRegionId = licence.region.naldRegionId
 
-      const returnVersionData = await GenerateReturnVersionService.go(data, user.id)
-      await PersistReturnVersionService.go(returnVersionData)
+      const quarterlyReturnVersion = await GenerateReturnVersionService.go(existingReturnVersion, user, naldRegionId)
+
+      await _save(existingReturnVersion, quarterlyReturnVersion)
     }
 
-    calculateAndLogTimeTaken(startTime, 'Return version migration job complete')
+    calculateAndLogTimeTaken(startTime, 'Return version migration job complete', { count: licences.length })
   } catch (error) {
     global.GlobalNotifier.omfg('Return version migration job failed', null, error)
   }
+}
+
+async function _save(existingReturnVersion, quarterlyReturnVersion) {
+  try {
+    const { returnRequirements, returnRequirementPoints, returnRequirementPurposes, ...returnVersion } =
+      quarterlyReturnVersion
+
+    await ReturnVersionModel.transaction(async (trx) => {
+      await ReturnVersionModel.query(trx).insert(returnVersion)
+      await ReturnRequirementModel.query(trx).insert(returnRequirements)
+      await ReturnRequirementPointModel.query(trx).insert(returnRequirementPoints)
+      await ReturnRequirementPurposeModel.query(trx).insert(returnRequirementPurposes)
+      await ReturnVersionModel.query(trx)
+        .patch({ endDate: new Date('2025-03-31') })
+        .findById(existingReturnVersion.id)
+    })
+  } catch (error) {
+    global.GlobalNotifier.omg('Return version migration licence failed', {
+      errorMsg: error.message,
+      stacktrace: error.stack,
+      returnVersion: existingReturnVersion
+    })
+  }
+}
+
+async function _user() {
+  const usernames = ['admin-internal@wrls.gov.uk']
+
+  if (LicencesConfig.returnVersionBatchUser) {
+    usernames.push(LicencesConfig.returnVersionBatchUser)
+  }
+
+  return UserModel.query().select(['id']).whereIn('username', usernames).orderBy('username', 'DESC').first()
 }
 
 module.exports = {
