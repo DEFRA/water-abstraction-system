@@ -26,10 +26,10 @@ async function changeAddress(request, h) {
 }
 
 async function view(request, h) {
-  const { billingAccountId } = request.params
+  const { id } = request.params
   const { page = 1 } = request.query
 
-  const pageData = await ViewBillingAccountService.go(billingAccountId, page)
+  const pageData = await ViewBillingAccountService.go(id, page)
 
   return h.view('billing-accounts/view.njk', pageData)
 }
