@@ -5,7 +5,6 @@
  * @module FetchWaterUndertakersService
  */
 
-const { db } = require('../../../../db/db.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
 const ReturnVersionModel = require('../../../models/return-version.model.js')
@@ -18,17 +17,8 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
 async function go() {
   const quarterlyStartDate = new Date('2025-04-01')
 
-  return await LicenceModel.query()
-    .select([
-      'id',
-      'expiredDate',
-      'lapsedDate',
-      'licenceRef',
-      'revokedDate',
-      'startDate',
-      'waterUndertaker',
-      db.raw("regions->>'regionalChargeArea' as regionalChargeArea")
-    ])
+  return LicenceModel.query()
+    .select(['id'])
     .where('waterUndertaker', true)
     .where((builder) => {
       builder.whereNull('expiredDate').orWhere('expiredDate', '>=', quarterlyStartDate)
@@ -52,10 +42,18 @@ async function go() {
         .where('startDate', '<', quarterlyStartDate)
         .whereColumn('returnVersions.licenceId', 'licences.id')
     )
+    .orderBy([
+      { column: 'regionId', order: 'desc' },
+      { column: 'licenceRef', order: 'desc' }
+    ])
+    .withGraphFetched('region')
+    .modifyGraph('region', (regionBuilder) => {
+      regionBuilder.select(['id', 'naldRegionId'])
+    })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
       builder
-        .select(['id', 'startDate', 'reason'])
+        .select(['id', 'licenceId', 'multipleUpload', 'notes', 'startDate'])
         .where('startDate', '<', quarterlyStartDate)
         .where('status', 'current')
         // A return version must include return requirements in order for us to be able to copy from it
@@ -65,7 +63,34 @@ async function go() {
             .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
         )
         .orderBy('startDate', 'desc')
-        .limit(1)
+        .withGraphFetched('returnRequirements')
+        .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
+          returnRequirementsBuilder
+            .select([
+              'abstractionPeriodEndDay',
+              'abstractionPeriodEndMonth',
+              'abstractionPeriodStartDay',
+              'abstractionPeriodStartMonth',
+              'collectionFrequency',
+              'fiftySixException',
+              'gravityFill',
+              'reabstraction',
+              'reportingFrequency',
+              'returnsFrequency',
+              'siteDescription',
+              'summer',
+              'upload',
+              'twoPartTariff'
+            ])
+            .withGraphFetched('returnRequirementPurposes')
+            .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+              returnRequirementPurposesBuilder.select(['alias', 'primaryPurposeId', 'purposeId', 'secondaryPurposeId'])
+            })
+            .withGraphFetched('points')
+            .modifyGraph('points', (pointsBuilder) => {
+              pointsBuilder.select(['pointId'])
+            })
+        })
     })
 }
 
