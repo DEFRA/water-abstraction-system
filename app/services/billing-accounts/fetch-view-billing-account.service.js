@@ -51,6 +51,10 @@ async function _fetchBillingAccount(id) {
     .modifyGraph('billingAccountAddresses.address', (builder) => {
       builder.select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     })
+    .withGraphFetched('bills.billLicences.licence')
+    .modifyGraph('bills.billLicences.licence', (builder) => {
+      builder.select('id')
+    })
 }
 
 async function _fetchBills(billingAccountId, page) {
@@ -73,19 +77,6 @@ async function _fetchBills(billingAccountId, page) {
     ])
     .where('billingAccountId', billingAccountId)
     .page(page - 1, DatabaseConfig.defaultPageSize)
-}
-
-async function _fetchLicence(billingAccountId) {
-  const result = await db
-    .withSchema('public')
-    .select('l.id AS licenceId')
-    .distinct()
-    .from('licences AS l')
-    .innerJoin('billLicences AS bl', 'l.id', '=', 'bl.licenceId')
-    .innerJoin('bills AS b', 'bl.billId', '=', 'b.id')
-    .where('b.billingAccountId', '=', billingAccountId)
-
-  return result[0].licenceId
 }
 
 module.exports = {
