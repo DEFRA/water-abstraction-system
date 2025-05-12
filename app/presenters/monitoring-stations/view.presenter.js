@@ -60,7 +60,7 @@ function go(monitoringStation, auth) {
   }
 }
 
-function _restrictions(licenceMonitoringStations, FeatureFlagsConfig) {
+function _restrictions(licenceMonitoringStations) {
   const preparedLicenceMonitoringStations = licenceMonitoringStations.map((licenceMonitoringStation) => {
     let action
 
