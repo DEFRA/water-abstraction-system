@@ -68,7 +68,6 @@ describe('Monitoring Stations - View presenter', () => {
       expect(result).to.equal({
         catchmentName: null,
         enableLicenceMonitoringStationsSetup: true,
-        enableLicenceMonitoringStationsView: true,
         links: {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
         },
@@ -80,6 +79,10 @@ describe('Monitoring Stations - View presenter', () => {
         restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
+            action: {
+              link: '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+              text: 'View'
+            },
             abstractionPeriod: '1 April to 31 August',
             alert: null,
             alertDate: null,
@@ -87,12 +90,11 @@ describe('Monitoring Stations - View presenter', () => {
             licenceRef: 'AT/TEST',
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '100 m3/s',
-            viewLink:
-              '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5'
+            threshold: '100 m3/s'
           }
         ],
         stationReference: '',
+        tableCaption: 'Licences linked to this monitoring station',
         wiskiId: ''
       })
     })
@@ -214,46 +216,8 @@ describe('Monitoring Stations - View presenter', () => {
     })
   })
 
-  describe('the "restrictionHeading" property', () => {
-    describe('when the monitoring station has only "flow" based licence monitoring station records', () => {
-      it('returns "Flow restriction type and threshold"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
-
-        expect(result.restrictionHeading).to.equal('Flow restriction type and threshold')
-      })
-    })
-
-    describe('when the monitoring station has only "level" based licence monitoring station records', () => {
-      beforeEach(() => {
-        monitoringStation.licenceMonitoringStations[0].measureType = 'level'
-      })
-
-      it('returns "Flow restriction type and threshold"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
-
-        expect(result.restrictionHeading).to.equal('Level restriction type and threshold')
-      })
-    })
-
-    describe('when the monitoring station has both "flow" and "level" based licence monitoring station records', () => {
-      beforeEach(() => {
-        const secondLicenceMonitoringStation = { ...monitoringStation.licenceMonitoringStations[0] }
-
-        secondLicenceMonitoringStation.id = '6f498459-8b7e-48f9-bc88-293dce414e8d'
-        secondLicenceMonitoringStation.measureType = 'level'
-        monitoringStation.licenceMonitoringStations.push(secondLicenceMonitoringStation)
-      })
-
-      it('returns "Flow and level restriction type and threshold"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
-
-        expect(result.restrictionHeading).to.equal('Flow and level restriction type and threshold')
-      })
-    })
-  })
-
   describe('the "restrictions" property', () => {
-    describe('the "abstraction" property', () => {
+    describe('the "abstractionPeriod" property', () => {
       describe('when the licence monitoring station record is not linked to a licence condition', () => {
         it('returns the abstraction period set when the licence was tagged formatted for display', () => {
           const result = ViewPresenter.go(monitoringStation, auth)
@@ -281,103 +245,6 @@ describe('Monitoring Stations - View presenter', () => {
 
           expect(result.restrictions[0].abstractionPeriod).to.equal('1 September to 31 December')
         })
-      })
-    })
-
-    describe('the "alert" property', () => {
-      describe('when the licence monitoring station record has never had an alert sent', () => {
-        it('returns null', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].alert).to.be.null()
-        })
-      })
-
-      describe('when the licence monitoring station record has had an alert sent', () => {
-        beforeEach(() => {
-          monitoringStation.licenceMonitoringStations[0].statusUpdatedAt = new Date('2024-06-17')
-        })
-
-        it('returns the current "status" formatted for display', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].alert).to.equal('Resume')
-        })
-      })
-    })
-
-    describe('the "alertDate" property', () => {
-      describe('when the licence monitoring station record has never had an alert sent', () => {
-        it('returns null', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].alertDate).to.be.null()
-        })
-      })
-
-      describe('when the licence monitoring station record has had an alert sent', () => {
-        beforeEach(() => {
-          monitoringStation.licenceMonitoringStations[0].statusUpdatedAt = new Date('2024-06-17')
-        })
-
-        it('returns the "statusUpdatedAt" formatted for display', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].alertDate).to.equal('17 June 2024')
-        })
-      })
-    })
-
-    describe('the "restriction" property', () => {
-      describe("when the licence monitoring station record's restriction type is 'stop_or_reduce'", () => {
-        beforeEach(() => {
-          monitoringStation.licenceMonitoringStations[0].restrictionType = 'stop_or_reduce'
-        })
-
-        it('returns "Stop or reduce"', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].restriction).to.equal('Stop or reduce')
-        })
-      })
-
-      describe("when the licence monitoring station record's restriction type is 'reduce'", () => {
-        beforeEach(() => {
-          monitoringStation.licenceMonitoringStations[0].restrictionType = 'reduce'
-        })
-
-        it('returns "Reduce"', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].restriction).to.equal('Reduce')
-        })
-      })
-
-      describe("when the licence monitoring station record's restriction type is 'stop'", () => {
-        beforeEach(() => {
-          monitoringStation.licenceMonitoringStations[0].restrictionType = 'stop'
-        })
-
-        it('returns "Stop"', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
-
-          expect(result.restrictions[0].restriction).to.equal('Stop')
-        })
-      })
-    })
-
-    describe('the "restrictionCount" property', () => {
-      beforeEach(() => {
-        const secondLicenceMonitoringStation = { ...monitoringStation.licenceMonitoringStations[0] }
-
-        secondLicenceMonitoringStation.id = '6f498459-8b7e-48f9-bc88-293dce414e8d'
-        monitoringStation.licenceMonitoringStations.push(secondLicenceMonitoringStation)
-      })
-
-      it('returns returns the count of licence monitoring stations for the licence linked to this monitoring station', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
-
-        expect(result.restrictions[0].restrictionCount).to.equal(2)
       })
     })
   })
