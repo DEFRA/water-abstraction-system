@@ -16,9 +16,11 @@ const { formatBillRunType } = require('../billing.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(billingAccountData) {
-  const { billingAccount, bills, licenceId, pagination } = billingAccountData
+  const { billingAccount, bills, pagination } = billingAccountData
   const { billingAccountAddresses, company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } =
     billingAccount
+
+  const { id: licenceId } = billingAccount.bills[0].billLicences[0].licence
 
   return {
     accountNumber: billingAccount.accountNumber,
