@@ -27,8 +27,6 @@ async function go() {
     const startTime = currentTimeInNanoseconds()
 
     const licences = await FetchWaterUndertakersService.go()
-    // console.log('🚀🚀🚀 ~ licences:')
-    // console.dir(licences, { depth: null, colors: true })
     const user = await _user()
 
     for (const licence of licences) {
