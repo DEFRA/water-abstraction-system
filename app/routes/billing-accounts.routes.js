@@ -5,7 +5,7 @@ const BillingAccountsController = require('../controllers/billing-accounts.contr
 const routes = [
   {
     method: 'GET',
-    path: '/billing-accounts/{billingAccountId}',
+    path: '/billing-accounts/{id}',
     options: {
       handler: BillingAccountsController.view,
       auth: {
