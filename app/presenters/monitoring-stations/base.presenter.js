@@ -118,7 +118,7 @@ function _restriction(restrictionType) {
 
 function _restrictionCount(licenceId, licenceMonitoringStations) {
   const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.licenceId === licenceId
+    return licenceMonitoringStation.licence.id === licenceId
   })
 
   return count.length

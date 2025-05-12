@@ -25,14 +25,9 @@ async function go(id) {
 
 function _licenceMonitoringStations(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const {
-      licence: { licenceRef },
-      licenceVersionPurposeCondition,
-      ...rest
-    } = licenceMonitoringStation
+    const { licenceVersionPurposeCondition, ...rest } = licenceMonitoringStation
 
     return {
-      licenceRef,
       ...rest,
       ..._licenceVersionPurpose(licenceVersionPurposeCondition),
       thresholdGroup: _thresholdGroup(rest.measureType, rest.thresholdValue, rest.thresholdUnit)
