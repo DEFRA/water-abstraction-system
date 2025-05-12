@@ -42,7 +42,7 @@ describe('View Billing Account presenter', () => {
         createdDate: '14 December 2023',
         customerFile: null,
         lastUpdated: null,
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+        licenceId: '1c26e4f8-bce8-427f-8a88-72e704a4ca04',
         pageTitle: 'Billing account for Ferns Surfacing Limited',
         pagination: { total: 1 }
       })
