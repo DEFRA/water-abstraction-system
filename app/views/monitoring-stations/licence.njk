@@ -1,0 +1,208 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to search',
+      href: "/licences"
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    {% if catchmentName %}
+      <span class="govuk-caption-l">{{ catchmentName }}</span>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-!-margin-bottom-7">
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'meta-data'
+      },
+      rows: [
+        {
+          key: { text: "Grid reference", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-grid-reference">' + gridReference + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "WISKI ID", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-wiski-id">' + wiskiId + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Station reference", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-station-reference">' + stationReference + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    }) }}
+  </div>
+
+  {% if restrictions.length > 0 and permissionToSendAlerts %}
+    <div class="govuk-!-margin-bottom-7">
+      {{ govukButton({
+        text: "Create a water abstraction alert",
+        href: links.createAlert
+      }) }}
+
+    </div>
+  {% endif %}
+
+  <div class="divider govuk-!-margin-bottom-7"></div>
+
+  {% if restrictions.length > 0 %}
+    {# Create rows for licences linked to the monitoring station #}
+    {% set tableRows = []%}
+
+    {% for restriction in restrictions %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+
+      {% if rowIndex > 0 %}
+        {% set lastLicenceId = restrictions[rowIndex - 1].licenceId %}
+      {% else %}
+        {% set lastLicenceId = null %}
+      {% endif %}
+
+      {% set tableRow = []%}
+
+      {% if lastLicenceId !== restriction.licenceId %}
+        {% set licenceCell =
+          {
+            html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + restriction.licenceId + '/summary">' + restriction.licenceRef + '</a>',
+            attributes: { 'data-test': 'licence-ref-' + rowIndex },
+            rowspan: restriction.restrictionCount
+          }
+        %}
+
+        {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
+      {% endif %}
+
+      {% set abstractionPeriodCell =
+        {
+          text: restriction.abstractionPeriod,
+          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+        }
+      %}
+      {% set tableRow = (tableRow.push(abstractionPeriodCell), tableRow) %}
+
+      {% set restrictionCell =
+        {
+          text: restriction.restriction,
+          attributes: { 'data-test': 'restriction-' + rowIndex }
+        }
+      %}
+      {% set tableRow = (tableRow.push(restrictionCell), tableRow) %}
+
+      {% set thresholdCell =
+        {
+          text: restriction.threshold,
+          attributes: { 'data-test': 'threshold-' + rowIndex }
+        }
+      %}
+      {% set tableRow = (tableRow.push(thresholdCell), tableRow) %}
+
+      {% set alertCell =
+        {
+          text: restriction.alert,
+          attributes: { 'data-test': 'alert-' + rowIndex }
+        }
+      %}
+      {% set tableRow = (tableRow.push(alertCell), tableRow) %}
+
+      {% set alertDateCell =
+        {
+          text: restriction.alertDate,
+          attributes: { 'data-test': 'alert-date-' + rowIndex }
+        }
+      %}
+      {% set tableRow = (tableRow.push(alertDateCell), tableRow) %}
+
+      {% if enableLicenceMonitoringStationsView %}
+        {% set actionCell =
+          {
+            html: '<a href="'+ restriction.viewLink +'" class="govuk-link">View</a>',
+            attributes: { 'data-test': 'action-' + rowIndex }
+          }
+        %}
+        {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+      {% endif %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    <div>
+      {{ govukTable({
+        caption: "Licences linked to this monitoring station",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Licence"
+          },
+          {
+            text: "Abstraction period",
+            classes: 'govuk-!-width-one-quarter'
+          },
+          {
+            text: restrictionHeading,
+            colspan: 2
+          },
+          {
+            text: "Last type of alert sent and date issued",
+            classes: 'govuk-!-width-one-quarter',
+            colspan: 2
+          },
+          {
+            text: "Action"
+          } if enableLicenceMonitoringStationsView
+        ],
+        rows: tableRows
+      }) }}
+    </div>
+  {% else %}
+    <p class="govuk-body">There are no licences tagged with restrictions for this monitoring station</p>
+  {% endif %}
+
+  {% if permissionToManageLinks %}
+    <div class="govuk-button-group">
+      {% if enableLicenceMonitoringStationsSetup %}
+        <form method="post" action="/system/licence-monitoring-station/setup">
+          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+          {{
+            govukButton({
+              text: 'Tag a licence',
+              name: "monitoringStationId",
+              value: monitoringStationId,
+              preventDoubleClick: true,
+              classes: "govuk-button--secondary"
+            })
+          }}
+      {% else %}
+        {{ govukButton({
+          text: "Tag a licence",
+          href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
+
+      {% if restrictions.length > 0 %}
+        {{ govukButton({
+          text: "Remove a tag",
+          href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}
