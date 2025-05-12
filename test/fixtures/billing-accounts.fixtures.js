@@ -28,6 +28,23 @@ function billingAccount() {
           }
         }
       ],
+      bills: [
+        {
+          id: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
+          createdAt: new Date('2023-12-14T18:42:59.659Z'),
+          credit: false,
+          invoiceNumber: false,
+          netAmount: 10384,
+          financialYear: 2021,
+          billLicences: [
+            {
+              licence: {
+                id: '1c26e4f8-bce8-427f-8a88-72e704a4ca04'
+              }
+            }
+          ]
+        }
+      ],
       company: {
         id: '55a71eb5-e0e1-443e-9a25-c529cccfd6df',
         name: 'Ferns Surfacing Limited'
