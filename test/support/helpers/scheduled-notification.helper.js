@@ -4,7 +4,7 @@
  * @module ScheduledNotificationHelper
  */
 
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ScheduledNotificationModel = require('../../../app/models/scheduled-notification.model.js')
 
 /**
@@ -38,6 +38,20 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
+    messageType: 'letter',
+    messageRef: 'returns_invitation_licence_holder_letter',
+    personalisation: JSON.stringify({
+      name: 'Mr B Lobby',
+      postcode: 'SW1A 1AA',
+      address_line_1: 'Mr B Lobby',
+      address_line_2: 'BBC Farm',
+      address_line_3: 'Fake town',
+      address_line_4: 'London',
+      address_line_5: 'England'
+    }),
+    status: 'sent',
+    licences: JSON.stringify(['44/67/20/12']),
+    eventId: generateUUID(),
     // INFO: The table does not have a default for the createdAt column.
     createdAt: timestampForPostgres()
   }
