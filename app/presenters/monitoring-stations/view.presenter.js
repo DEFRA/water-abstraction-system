@@ -53,7 +53,7 @@ function go(monitoringStation, auth) {
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations, FeatureFlagsConfig),
+    restrictions: _restrictions(licenceMonitoringStations),
     stationReference: stationReference ?? '',
     tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
