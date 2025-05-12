@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
+
 // Things we need to stub
 const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
 
@@ -16,7 +19,7 @@ const ViewBillingAccountService = require('../../../app/services/billing-account
 
 describe('View Billing Account service', () => {
   beforeEach(() => {
-    Sinon.stub(FetchViewBillingAccountService, 'go').returns(_testFetchBillingAccount())
+    Sinon.stub(FetchViewBillingAccountService, 'go').returns(BillingAccountsFixture.billingAccount())
   })
 
   describe('when a billing account with a matching ID exists', () => {
@@ -25,78 +28,27 @@ describe('View Billing Account service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        accountNumber: 'T53153094A',
-        address: ['Example Trading Ltd', 'Environment Agency', 'Horizon House', 'Deanery Road', 'Bristol', 'BS1 5AH'],
-        billingAccountId: '64d7fc10-f046-4444-ba32-bb917dd8cde6',
+        accountNumber: 'S88897992A',
+        address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
         bills: [
           {
-            billId: '94bfb1dd-20df-4415-99c3-7dce17520c2e',
+            billId: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
             billNumber: 'Zero value bill',
-            billRunNumber: null,
-            billRunType: 'Supplementary',
-            billTotal: '£0.00',
-            dateCreated: '7 May 2025',
-            financialYear: null
+            billRunNumber: 607,
+            billRunType: 'Annual',
+            billTotal: '£103.84',
+            dateCreated: '14 December 2023',
+            financialYear: 2021
           }
         ],
-        createdDate: '7 May 2025',
+        createdDate: '14 December 2023',
         customerFile: null,
         lastUpdated: null,
-        licenceId: 'd1cec4c1-3c81-4f5e-8268-d354c8a324ee',
-        pageTitle: 'Billing account for Example Trading Ltd',
+        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+        pageTitle: 'Billing account for Ferns Surfacing Limited',
         pagination: { numberOfPages: 1 }
       })
     })
   })
 })
-
-function _testFetchBillingAccount() {
-  return {
-    billingAccount: {
-      id: '64d7fc10-f046-4444-ba32-bb917dd8cde6',
-      accountNumber: 'T53153094A',
-      createdAt: new Date('2025-05-07T12:15:21.950Z'),
-      lastTransactionFile: null,
-      lastTransactionFileCreatedAt: null,
-      billingAccountAddresses: [
-        {
-          id: 'bfea53ba-f7f4-46c4-953f-048696f4bf4f',
-          address: {
-            id: '574aa765-916b-475b-ba63-fe08faf1aa16',
-            address1: 'ENVIRONMENT AGENCY',
-            address2: 'HORIZON HOUSE',
-            address3: 'DEANERY ROAD',
-            address4: 'BRISTOL',
-            address5: null,
-            address6: null,
-            postcode: 'BS1 5AH'
-          }
-        }
-      ],
-      company: {
-        id: '0fcaaeb0-851e-4ac3-9530-9930563b7660',
-        name: 'Example Trading Ltd'
-      }
-    },
-    bills: [
-      {
-        id: '94bfb1dd-20df-4415-99c3-7dce17520c2e',
-        createdAt: new Date('2025-05-07T12:15:21.950Z'),
-        credit: null,
-        invoiceNumber: null,
-        netAmount: null,
-        financialYear: null,
-        billRun: {
-          id: '1577fe1a-7f5f-4bb1-a39e-d18c4bb8ac60',
-          batchType: 'supplementary',
-          billRunNumber: null,
-          scheme: 'sroc',
-          source: 'wrls',
-          summer: false
-        }
-      }
-    ],
-    licenceId: 'd1cec4c1-3c81-4f5e-8268-d354c8a324ee',
-    pagination: { total: 1 }
-  }
-}
