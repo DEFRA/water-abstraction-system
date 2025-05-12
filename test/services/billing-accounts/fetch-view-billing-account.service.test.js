@@ -26,6 +26,7 @@ describe('Fetch Billing Account service', () => {
   let billingAccount
   let billingAccountAddress
   let billingAccountId
+  let billLicence
   let billRun
   let company
   let licence
@@ -54,7 +55,7 @@ describe('Fetch Billing Account service', () => {
       licence = await LicenceHelper.add()
       licenceId = licence.id
 
-      await BillLicenceHelper.add({
+      billLicence = await BillLicenceHelper.add({
         billId: bill.id,
         licenceId
       })
@@ -88,7 +89,42 @@ describe('Fetch Billing Account service', () => {
           company: {
             id: company.id,
             name: 'Example Trading Ltd'
-          }
+          },
+          bills: [
+            {
+              id: bill.id,
+              billingAccountId: bill.billingAccountId,
+              address: bill.address,
+              accountNumber: bill.accountNumber,
+              netAmount: bill.netAmount,
+              credit: bill.credit,
+              billRunId: billRun.id,
+              financialYearEnding: bill.financialYearEnding,
+              invoiceNumber: bill.invoiceNumber,
+              legacyId: bill.legacyId,
+              metadata: bill.metadata,
+              creditNoteValue: bill.creditNoteValue,
+              invoiceValue: bill.invoiceValue,
+              deminimis: bill.deminimis,
+              externalId: bill.externalId,
+              flaggedForRebilling: bill.flaggedForRebilling,
+              originalBillId: bill.originalBillId,
+              rebillingState: bill.rebillingState,
+              createdAt: bill.createdAt,
+              updatedAt: bill.updatedAt,
+              billLicences: [
+                {
+                  id: billLicence.id,
+                  billId: billLicence.billId,
+                  licenceRef: billLicence.licenceRef,
+                  licenceId: billLicence.licenceId,
+                  createdAt: billLicence.createdAt,
+                  updatedAt: billLicence.updatedAt,
+                  licence: { id: licenceId }
+                }
+              ]
+            }
+          ]
         },
         bills: [
           {
@@ -108,7 +144,6 @@ describe('Fetch Billing Account service', () => {
             }
           }
         ],
-        licenceId,
         pagination: { total: 1 }
       })
     })
