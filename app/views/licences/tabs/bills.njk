@@ -27,10 +27,6 @@
         attributes: { 'data-test': 'bill-created-' + rowIndex }
       },
       {
-        html: '<a href="/billing-accounts/' + bill.billingAccountId + '">' + bill.accountNumber + '</a>',
-        attributes: { 'data-test': 'bill-account-' + rowIndex }
-      },
-      {
         html: '<a href="/system/billing-accounts/' + bill.billingAccountId + '">' + bill.accountNumber + '</a>',
         attributes: { 'data-test': 'bill-account-' + rowIndex }
       },
@@ -60,7 +56,6 @@
       { text: 'Bill number' },
       { text: 'Date created' },
       { text: 'Billing account' },
-      { text: 'New Billing account' },
       { text: 'Bill run type' },
       { text: 'Financial year', format: 'numeric' },
       { text: 'Bill total', format: 'numeric' }
