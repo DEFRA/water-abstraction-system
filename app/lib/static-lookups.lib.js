@@ -131,10 +131,10 @@ const unitNames = {
 }
 
 const returnUnits = {
-  [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres' },
-  [unitNames.LITRES]: { multiplier: 1000, label: 'litres' },
-  [unitNames.MEGALITRES]: { multiplier: 0.001, label: 'megalitres' },
-  [unitNames.GALLONS]: { multiplier: 219.969248299, label: 'gallons' }
+  [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres', name: 'cubic-metres' },
+  [unitNames.LITRES]: { multiplier: 1000, label: 'litres', name: 'litres' },
+  [unitNames.MEGALITRES]: { multiplier: 0.001, label: 'megalitres', name: 'megalitres' },
+  [unitNames.GALLONS]: { multiplier: 219.969248299, label: 'gallons', name: 'gallons' }
 }
 
 const sources = ['nald', 'wrls']
