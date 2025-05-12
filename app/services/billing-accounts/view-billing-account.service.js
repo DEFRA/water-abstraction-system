@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the view billing accounts page
+ * Orchestrates fetching and presenting the data needed for the view billing account page
  * @module ViewBillingAccountService
  */
 
@@ -10,12 +10,12 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewBillingAccountPresenter = require('../../presenters/billing-account/view-billing-account.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the view billing accounts page
+ * Orchestrates fetching and presenting the data needed for the view billing account page
  *
  * @param {string} billingAccountId - The UUID of the billing account to view
  * @param {number|string} page - The current page for the pagination service
  *
- * @returns {Promise<object>} an object representing the `pageData` needed by the view billing accounts template.
+ * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
 async function go(billingAccountId, page) {
   const billingAccountData = await FetchViewBillingAccountService.go(billingAccountId, page)
