@@ -5,7 +5,6 @@
  * @module FetchViewBillingAccountService
  */
 
-const { db } = require('../../../db/db.js')
 const { ref } = require('objection')
 
 const BillingAccountModel = require('../../models/billing-account.model.js')
@@ -16,30 +15,29 @@ const DatabaseConfig = require('../../../config/database.config.js')
 /**
  * Fetches the matching billing account and additional records needed for the view billing account page
  *
- * @param {string} billingAccountId - The UUID for the billing account to fetch
+ * @param {string} id - The UUID for the billing account to fetch
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-async function go(billingAccountId, page) {
-  const billingAccount = await _fetchBillingAccount(billingAccountId)
-  const { results, total } = await _fetchBills(billingAccountId, page)
-  const licenceId = await _fetchLicence(billingAccountId)
+async function go(id, page) {
+  const billingAccount = await _fetchBillingAccount(id)
+  const { results, total } = await _fetchBills(id, page)
 
   return {
     billingAccount,
     bills: results,
-    licenceId,
+
     pagination: {
       total
     }
   }
 }
 
-async function _fetchBillingAccount(billingAccountId) {
+async function _fetchBillingAccount(id) {
   return BillingAccountModel.query()
-    .findById(billingAccountId)
+    .findById(id)
     .select(['id', 'accountNumber', 'createdAt', 'lastTransactionFile', 'lastTransactionFileCreatedAt'])
     .withGraphFetched('billingAccountAddresses')
     .modifyGraph('billingAccountAddresses', (builder) => {
