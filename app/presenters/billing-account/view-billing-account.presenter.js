@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats billing account data ready for presenting in the view billing accounts page
+ * Formats billing account data ready for presenting in the view billing account page
  * @module ViewBillingAccountPresenter
  */
 
@@ -9,9 +9,9 @@ const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js
 const { formatBillRunType } = require('../billing.presenter.js')
 
 /**
- * Formats billing account data ready for presenting in the view billing accounts page
+ * Formats billing account data ready for presenting in the view billing account page
  *
- * @param {module:BillingAccountModel} billingAccountData - The billing account and related licence data
+ * @param {object} billingAccountData -The results from `FetchViewBillingAccountService`
  *
  * @returns {object} The data formatted for the view template
  */
