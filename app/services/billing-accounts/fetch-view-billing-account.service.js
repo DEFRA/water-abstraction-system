@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the matching billing account and additional records needed for the view billing accounts page
+ * Fetches the matching billing account and additional records needed for the view billing account page
  * @module FetchViewBillingAccountService
  */
 
@@ -14,13 +14,13 @@ const BillModel = require('../../models/bill.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
- * Fetches the matching billing account and additional records needed for the view billing accounts page
+ * Fetches the matching billing account and additional records needed for the view billing account page
  *
  * @param {string} billingAccountId - The UUID for the billing account to fetch
  * @param {number|string} page - The current page for the pagination service
  *
- * @returns {Promise<module:BillingAccountModel>} the matching instance of `BillingAccountModel` populated with
- * the data needed for the view billing account page
+ * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
+ * billing account page
  */
 async function go(billingAccountId, page) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
