@@ -24,6 +24,7 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
   let createReturnLogsStub
   let notifierStub
+  let testReturnRequirement
 
   beforeEach(() => {
     createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
@@ -46,7 +47,29 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
     describe('and there are return requirements that need return logs created', () => {
       beforeEach(() => {
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement()])
+        testReturnRequirement = returnRequirement()
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
+      })
+
+      it('logs the time taken in milliseconds and seconds', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const logDataArg = notifierStub.omg.firstCall.args[1]
+
+        expect(createReturnLogsStub.called).to.be.true()
+        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.count).to.equal(1)
+        expect(logDataArg.cycle).to.equal(cycle)
+      })
+    })
+
+    describe('and it has a return version with an end date with return requirements that need return logs created', () => {
+      beforeEach(() => {
+        testReturnRequirement = returnRequirement()
+        testReturnRequirement.returnVersion.endDate = '2023-05-28'
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
