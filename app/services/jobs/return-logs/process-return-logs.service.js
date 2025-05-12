@@ -5,6 +5,7 @@
  * @module ProcessReturnLogsService
  */
 
+const { determineEarliestDate } = require('../../../lib/dates.lib.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
 const CheckReturnCycleService = require('./check-return-cycle.service.js')
@@ -39,13 +40,21 @@ async function go(cycle) {
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
-      await CreateReturnLogsService.go(returnRequirement, returnCycle)
+      const licenceEndDate = _endDate(returnRequirement.returnVersion)
+
+      await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
     }
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
   }
+}
+
+function _endDate(returnVersion) {
+  const { licence } = returnVersion
+
+  return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
 module.exports = {
