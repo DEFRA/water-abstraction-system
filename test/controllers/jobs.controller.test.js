@@ -13,9 +13,9 @@ const ExportService = require('../../app/services/jobs/export/export.service.js'
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessNotificationsStatusUpdatesServiceService = require('../../app/services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
+const ProcessReturnVersionMigrationService = require('../../app/services/jobs/return-version-migration/process-return-version-migration.service.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
-const ReturnVersionMigrationService = require('../../app/services/jobs/return-logs/return-version-migration.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -206,7 +206,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(ReturnVersionMigrationService, 'go').resolves()
+          Sinon.stub(ProcessReturnVersionMigrationService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {
