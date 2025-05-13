@@ -34,6 +34,8 @@ describe('Fetch Communications service', () => {
     scheduledNotification = await ScheduledNotificationModel.add({
       eventId: event.id,
       licences: JSON.stringify([licenceRef]),
+      messageRef: 'returns_invitation_licence_holder_letter',
+      messageType: 'letter',
       notifyStatus: 'delivered'
     })
   })

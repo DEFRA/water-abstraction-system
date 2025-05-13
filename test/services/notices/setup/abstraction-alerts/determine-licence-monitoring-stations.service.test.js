@@ -37,6 +37,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
           licence: {
+            id: '123',
             licenceRef: '01/01/01/6880'
           },
           licenceVersionPurposeCondition: null
@@ -53,6 +54,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
           licence: {
+            id: '456',
             licenceRef: '02/02/02/3116'
           },
           licenceVersionPurposeCondition: {
@@ -83,28 +85,34 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstractionPeriodEndMonth: 1,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
-          licenceRef: '01/01/01/6880',
           measureType: 'flow',
           restrictionType: 'reduce',
           status: 'resume',
           statusUpdatedAt: null,
-          thresholdGroup: 'flow-100-m3/s',
           thresholdUnit: 'm3/s',
-          thresholdValue: 100
+          thresholdValue: 100,
+          licence: {
+            id: '123',
+            licenceRef: '01/01/01/6880'
+          },
+          thresholdGroup: 'flow-100-m3/s'
         },
         {
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
-          licenceRef: '02/02/02/3116',
           measureType: 'level',
           restrictionType: 'reduce',
           status: 'resume',
           statusUpdatedAt: null,
-          thresholdGroup: 'level-100-m3/s',
           thresholdUnit: 'm3/s',
-          thresholdValue: 100
+          thresholdValue: 100,
+          licence: {
+            id: '456',
+            licenceRef: '02/02/02/3116'
+          },
+          thresholdGroup: 'level-100-m3/s'
         }
       ],
       monitoringStationId: monitoringStation.id,

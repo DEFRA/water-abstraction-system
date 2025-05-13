@@ -39,6 +39,10 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  if (session.alertType !== payload['alert-type']) {
+    session.alertThresholds = []
+  }
+
   session.alertType = payload['alert-type']
 
   return session.$update()
