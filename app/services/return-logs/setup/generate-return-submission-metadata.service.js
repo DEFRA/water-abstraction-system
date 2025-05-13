@@ -6,16 +6,10 @@
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-
-const UNIT_NAMES = {
-  'cubic-metres': 'm³',
-  litres: 'l',
-  megalitres: 'Ml',
-  gallons: 'gal'
-}
+const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Generates return submission metatadata
+ * Generates return submission metatadata based on the provided session data
  *
  * @param {object} session - Session object containing the return submission data
  *
@@ -28,11 +22,11 @@ function go(session) {
   }
 
   return {
-    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
-    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    units: UNIT_NAMES[session.units],
     meters: _meters(session),
-    ..._total(session)
+    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
+    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
+    units: getUnitSymbolByName(session.units),
+    ..._totalProperties(session)
   }
 }
 
@@ -54,18 +48,19 @@ function _meters(session) {
 
   return [
     {
-      units: session.lines.length > 0 ? UNIT_NAMES[session.units] : undefined, // Only required if there are readings
-      meterDetailsProvided: true, // We hardcode this to true as we only return meter details if meterProvided is `yes`
-      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       manufacturer: session.meterMake,
+      meterDetailsProvided: true, // We can hardcode this true as we only return meter details if meterProvided is `yes`
+      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
       serialNumber: session.meterSerialNumber,
       startReading: session.startReading,
-      readings: _formatReadings(session.lines)
+      readings: _formatReadings(session.lines),
+      // We use the spread operator to add the units property only if there are lines present
+      ...(session.lines.length > 0 && { units: getUnitSymbolByName(session.units) })
     }
   ]
 }
 
-function _total(session) {
+function _totalProperties(session) {
   if (!session.singleVolume) {
     return {
       totalFlag: false
@@ -78,15 +73,20 @@ function _total(session) {
     totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
   }
 
-  const totalCustomDates = {
-    totalCustomDateStart: total.totalCustomDates ? session.fromFullDate : undefined,
-    totalCustomDateEnd: total.totalCustomDates ? session.toFullDate : undefined
-  }
-
   return {
     ...total,
-    ...totalCustomDates
+    // Custom date fields are only required if the custom date option has been selected
+    ...(total.totalCustomDates && {
+      totalCustomDateStart: session.fromFullDate,
+      totalCustomDateEnd: session.toFullDate
+    })
   }
+}
+
+function getUnitSymbolByName(name) {
+  return Object.keys(returnUnits).find((key) => {
+    return returnUnits[key].name === name
+  })
 }
 
 module.exports = {
