@@ -36,6 +36,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           statusUpdatedAt: null,
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
+          id: 'c4f6d976-3b18-44bc-b2b4-a649421faf2e',
           licence: {
             id: '123',
             licenceRef: '01/01/01/6880'
@@ -53,6 +54,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           statusUpdatedAt: null,
           thresholdUnit: 'm3/s',
           thresholdValue: 100,
+          id: '0cfcfcb0-989e-481f-9cc1-10a69d82ff3f',
           licence: {
             id: '456',
             licenceRef: '02/02/02/3116'
@@ -85,6 +87,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstractionPeriodEndMonth: 1,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
+          id: 'c4f6d976-3b18-44bc-b2b4-a649421faf2e',
           measureType: 'flow',
           restrictionType: 'reduce',
           status: 'resume',
@@ -102,6 +105,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
           abstractionPeriodEndMonth: 3,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
+          id: '0cfcfcb0-989e-481f-9cc1-10a69d82ff3f',
           measureType: 'level',
           restrictionType: 'reduce',
           status: 'resume',
