@@ -14,6 +14,8 @@ const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
+const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
+const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
@@ -141,6 +143,37 @@ describe('User model', () => {
 
         expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
         expect(result.licenceEntity).to.equal(testLicenceEntity)
+      })
+    })
+
+    describe('when linking to licence monitoring stations', () => {
+      let testLicenceMonitoringStations
+
+      beforeEach(async () => {
+        testLicenceMonitoringStations = []
+        for (let i = 0; i < 2; i++) {
+          const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ createdBy: testRecord.id })
+
+          testLicenceMonitoringStations.push(licenceMonitoringStation)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('licenceMonitoringStations')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence monitoring stations', async () => {
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('licenceMonitoringStations')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceMonitoringStations).to.be.an.array()
+        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
       })
     })
 
