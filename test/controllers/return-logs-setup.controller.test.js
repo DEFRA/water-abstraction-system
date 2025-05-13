@@ -29,6 +29,7 @@ const SingleVolumeService = require('../../app/services/return-logs/setup/single
 const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../../app/services/return-logs/setup/submit-check.service.js')
 const SubmitConfirmedService = require('../../app/services/return-logs/setup/submit-confirmed.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
@@ -88,6 +89,23 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
         })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/check', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        Sinon.stub(SubmitCheckService, 'go').resolves('TEST_RETURN_LOG_ID')
+      })
+
+      it('redirects to the confirmed page on success', async () => {
+        options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
       })
     })
   })
@@ -884,25 +902,6 @@ describe('Return Logs - Setup - Controller', () => {
           })
         })
 
-        describe('and the reporting type is "abstraction-volumes" but the page has been visited', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-              checkPageVisited: true,
-              reported: 'abstraction-volumes',
-              meterMake: 'Meter',
-              meterSerialNumber: '1234',
-              meter10TimesDisplay: 'no'
-            })
-          })
-
-          it('redirects to the "check" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
-          })
-        })
-
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
@@ -1545,22 +1544,6 @@ describe('Return Logs - Setup - Controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
-          })
-        })
-
-        describe('and the user selected "Record receipt" on the submission page', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({
-              redirect: 'confirm-received',
-              returnLogId: '123'
-            })
-          })
-
-          it('redirects to the "reported" page', async () => {
-            const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/confirmed?id=123`)
           })
         })
 
