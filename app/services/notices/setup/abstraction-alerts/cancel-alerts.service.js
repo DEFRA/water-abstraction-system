@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/cancel` page
  *
  * @module CancelAlertsService
  */
@@ -10,7 +10,7 @@ const CancelAlertsPresenter = require('../../../../presenters/notices/setup/abst
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/cancel` page
  *
  * @param {string} sessionId
  *
