@@ -5,7 +5,10 @@
  * @module FetchLicenceTagDetailsService
  */
 
+const { ref } = require('objection')
+
 const MonitoringStationModel = require('../../models/monitoring-station.model.js')
+const NotificationModel = require('../../models/notification.model.js')
 
 /**
  * Fetches the matching licence monitoring station and additional records needed for the licence tag details page
@@ -13,40 +16,54 @@ const MonitoringStationModel = require('../../models/monitoring-station.model.js
  * @param {string} licenceId - The UUID of the licence record
  * @param {string} monitoringStationId - The UUID of the monitoring station record
  *
- * @returns {Promise<module:MonitoringStationModel>} the matching instance of `MonitoringStationModel` populated with
- * the data needed for the licence tag details page
+ * @returns {Promise<object>} the matching instance of the `MonitoringStationModel` and `NotificationModel` populated
+ * with the data needed for the licence tag details page
  */
 async function go(licenceId, monitoringStationId) {
-  return _fetch(licenceId, monitoringStationId)
+  const licenceTags = await _fetchLicenceTags(licenceId, monitoringStationId)
+  const lastAlert = await _fetchLastAlert(licenceId)
+
+  return { lastAlert, licenceTags }
 }
 
-async function _fetch(licenceId, monitoringStationId) {
+async function _fetchLastAlert(licenceId) {
+  return NotificationModel.query()
+    .select([
+      'id',
+      ref('personalisation:alertType').castText().as('alertType'),
+      ref('personalisation:address_line_1').castText().as('contact'),
+      'createdAt',
+      'messageRef',
+      'messageType',
+      'recipient',
+      'status'
+    ])
+    .where(ref('personalisation:licenceId').castText(), licenceId)
+    .where('status', 'sent')
+    .whereLike('messageRef', 'water_abstraction_alert%')
+    .orderBy('createdAt', 'desc') // Order by most recent first
+    .first() // Return only the first result
+}
+
+async function _fetchLicenceTags(licenceId, monitoringStationId) {
   return MonitoringStationModel.query()
     .findById(monitoringStationId)
-    .select(['id', 'catchmentName', 'gridReference', 'label', 'riverName', 'stationReference', 'wiskiId'])
+    .select(['id', 'label', 'riverName'])
     .withGraphFetched('licenceMonitoringStations')
     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
       licenceMonitoringStationsBuilder
         .select([
           'licenceMonitoringStations.id',
-          'licenceMonitoringStations.abstractionPeriodEndDay',
-          'licenceMonitoringStations.abstractionPeriodEndMonth',
-          'licenceMonitoringStations.abstractionPeriodStartDay',
-          'licenceMonitoringStations.abstractionPeriodStartMonth',
+          'licenceMonitoringStations.createdAt',
+          'licenceMonitoringStations.createdBy',
           'licenceMonitoringStations.licenceId',
-          'licenceMonitoringStations.measureType',
           'licenceMonitoringStations.restrictionType',
-          'licenceMonitoringStations.status',
-          'licenceMonitoringStations.statusUpdatedAt',
           'licenceMonitoringStations.thresholdUnit',
           'licenceMonitoringStations.thresholdValue'
         ])
-        .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
         .whereNull('licenceMonitoringStations.deletedAt')
-        .orderBy([
-          { column: 'licences.licenceRef', order: 'asc' },
-          { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
-        ])
+        .where('licenceMonitoringStations.licenceId', licenceId)
+        .orderBy([{ column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }])
         .withGraphFetched('licence')
         .modifyGraph('licence', (licenceBuilder) => {
           licenceBuilder.select(['id', 'licenceRef'])
@@ -54,16 +71,19 @@ async function _fetch(licenceId, monitoringStationId) {
         .withGraphFetched('licenceVersionPurposeCondition')
         .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
           licenceVersionPurposeConditionBuilder
-            .select(['id'])
+            .select(['id', 'externalId', 'notes'])
             .withGraphFetched('licenceVersionPurpose')
             .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
-              licenceVersionPurposeBuilder.select([
-                'id',
-                'abstractionPeriodEndDay',
-                'abstractionPeriodEndMonth',
-                'abstractionPeriodStartMonth',
-                'abstractionPeriodStartDay'
-              ])
+              licenceVersionPurposeBuilder
+                .select(['id'])
+                .withGraphFetched('licenceVersion')
+                .modifyGraph('licenceVersion', (licenceVersionBuilder) => {
+                  licenceVersionBuilder.select(['id', 'status'])
+                })
+            })
+            .withGraphFetched('licenceVersionPurposeConditionType')
+            .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
+              licenceVersionPurposeConditionTypeBuilder.select(['id', 'displayTitle'])
             })
         })
     })
