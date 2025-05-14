@@ -15,13 +15,13 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { licenceMonitoringStations, alertThresholds, monitoringStationName, id } = session
+  const { licenceMonitoringStations, alertThresholds, monitoringStationName, id: sessionId } = session
 
   return {
-    backLink: `/system/notices/setup/${id}/abstraction-alerts/alert-thresholds`,
+    backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds),
+    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, sessionId),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
@@ -32,7 +32,7 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThre
   })
 }
 
-function _restrictions(licenceMonitoringStations, alertThresholds) {
+function _restrictions(licenceMonitoringStations, alertThresholds, sessionId) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(
     licenceMonitoringStations,
     alertThresholds
@@ -42,7 +42,7 @@ function _restrictions(licenceMonitoringStations, alertThresholds) {
     return {
       ...licenceMonitoringStation,
       action: {
-        link: `/system/licence-monitoring-station`,
+        link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove/${licenceMonitoringStation.id}`,
         text: 'Remove'
       },
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt

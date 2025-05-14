@@ -10,6 +10,7 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 1,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 2,
+      id: generateUUID(),
       licence: {
         licenceRef: generateLicenceRef(),
         id: generateUUID()
@@ -27,6 +28,7 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 3,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
+      id: generateUUID(),
       licence: {
         licenceRef: generateLicenceRef(),
         id: generateUUID()
@@ -44,6 +46,7 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 3,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
+      id: generateUUID(),
       licence: {
         licenceRef: generateLicenceRef(),
         id: generateUUID()
