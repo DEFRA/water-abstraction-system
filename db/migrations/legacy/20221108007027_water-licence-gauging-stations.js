@@ -23,6 +23,7 @@ exports.up = function (knex) {
     table.timestamp('date_status_updated', { useTz: false })
     table.timestamp('date_deleted', { useTz: false })
     table.string('alert_type').notNullable().default('reduce')
+    table.integer('created_by')
     table.boolean('is_test').defaultTo(false)
 
     // Legacy timestamps

@@ -10,7 +10,11 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 1,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 2,
-      licenceRef: generateLicenceRef(),
+      id: generateUUID(),
+      licence: {
+        licenceRef: generateLicenceRef(),
+        id: generateUUID()
+      },
       measureType: 'level',
       restrictionType: 'reduce',
       status: 'resume',
@@ -24,7 +28,11 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 3,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
-      licenceRef: generateLicenceRef(),
+      id: generateUUID(),
+      licence: {
+        licenceRef: generateLicenceRef(),
+        id: generateUUID()
+      },
       measureType: 'flow',
       restrictionType: 'stop',
       status: 'resume',
@@ -38,7 +46,11 @@ function licenceMonitoringStations() {
       abstractionPeriodEndMonth: 3,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 1,
-      licenceRef: generateLicenceRef(),
+      id: generateUUID(),
+      licence: {
+        licenceRef: generateLicenceRef(),
+        id: generateUUID()
+      },
       measureType: 'level',
       restrictionType: 'stop',
       status: 'resume',

@@ -20,6 +20,8 @@ const FetchMonitoringStationService = require('../../../../../app/services/notic
 
 describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service', () => {
   let licence
+  let licenceMonitoringStation
+  let licenceMonitoringStationWithVersionPurpose
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceWithVersionPurpose
@@ -31,7 +33,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
     // A licence with the abstraction data from the Licence monitoring station
     licence = await LicenceHelper.add({ licenceRef: `01/01/01/${generateRandomInteger(1, 9999)}` })
 
-    await LicenceMonitoringStationHelper.add({
+    licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
       licenceId: licence.id,
       monitoringStationId: monitoringStation.id,
       abstractionPeriodEndDay: '01',
@@ -49,7 +51,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
       licenceVersionPurposeId: licenceVersionPurpose.id
     })
 
-    await LicenceMonitoringStationHelper.add({
+    licenceMonitoringStationWithVersionPurpose = await LicenceMonitoringStationHelper.add({
       licenceId: licenceWithVersionPurpose.id,
       licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
       monitoringStationId: monitoringStation.id
@@ -68,7 +70,9 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           abstractionPeriodEndMonth: 1,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
+          id: licenceMonitoringStation.id,
           licence: {
+            id: licence.id,
             licenceRef: licence.licenceRef
           },
           licenceVersionPurposeCondition: null,
@@ -84,7 +88,9 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           abstractionPeriodEndMonth: null,
           abstractionPeriodStartDay: null,
           abstractionPeriodStartMonth: null,
+          id: licenceMonitoringStationWithVersionPurpose.id,
           licence: {
+            id: licenceWithVersionPurpose.id,
             licenceRef: licenceWithVersionPurpose.licenceRef
           },
           licenceVersionPurposeCondition: {
@@ -116,7 +122,9 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
         abstractionPeriodEndMonth: null,
         abstractionPeriodStartDay: null,
         abstractionPeriodStartMonth: null,
+        id: licenceMonitoringStationWithVersionPurpose.id,
         licence: {
+          id: licenceWithVersionPurpose.id,
           licenceRef: licenceWithVersionPurpose.licenceRef
         },
         licenceVersionPurposeCondition: {
@@ -147,7 +155,9 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
         abstractionPeriodEndMonth: 1,
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 2,
+        id: licenceMonitoringStation.id,
         licence: {
+          id: licence.id,
           licenceRef: licence.licenceRef
         },
         licenceVersionPurposeCondition: null,

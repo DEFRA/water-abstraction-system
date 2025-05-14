@@ -21,7 +21,7 @@ const SessionModel = require('../../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session.licenceMonitoringStations)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -39,13 +39,17 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  if (session.alertType !== payload['alert-type']) {
+    session.alertThresholds = []
+  }
+
   session.alertType = payload['alert-type']
 
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = AlertTypeValidator.go(payload)
+function _validate(payload, licenceMonitoringStations) {
+  const validation = AlertTypeValidator.go(payload, licenceMonitoringStations)
 
   if (!validation.error) {
     return null

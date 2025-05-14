@@ -27,6 +27,7 @@ async function _fetch(monitoringStationId) {
     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
       licenceMonitoringStationsBuilder
         .select([
+          'licenceMonitoringStations.id',
           'licenceMonitoringStations.abstractionPeriodEndDay',
           'licenceMonitoringStations.abstractionPeriodEndMonth',
           'licenceMonitoringStations.abstractionPeriodStartDay',
@@ -46,7 +47,7 @@ async function _fetch(monitoringStationId) {
         ])
         .withGraphFetched('licence')
         .modifyGraph('licence', (licenceBuilder) => {
-          licenceBuilder.select(['licenceRef'])
+          licenceBuilder.select(['licenceRef', 'id'])
         })
         .withGraphFetched('licenceVersionPurposeCondition')
         .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {

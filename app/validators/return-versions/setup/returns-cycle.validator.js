@@ -46,9 +46,8 @@ function _noSummerCycleWithQuarterlyReturns(value, helpers, session) {
 
   const isSummer = returnsCycle === 'summer'
   const hasQuarterlyReturns = session.data.quarterlyReturns === true
-  const checkPageVisited = session.data.checkPageVisited === true
 
-  if (checkPageVisited && hasQuarterlyReturns && isSummer) {
+  if (hasQuarterlyReturns && isSummer) {
     return helpers.error('any.invalid')
   }
 
