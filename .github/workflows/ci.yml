@@ -78,19 +78,11 @@ jobs:
         run: |
           ! grep -R 'describe.only(\|it.only(' test
 
-      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
+      # Alongside this, check we haven't accidentally left any `console.log` or `console.dir` while checking results in app and tests
       - name: Temporary log check
         run: |
-          if grep -R 'console.log(' ./app/ ./test/; then
-            echo "console.log statement found. Please remove it."
-            exit 1
-          fi
-
-      # Also check we haven't accidentally left any `console.dir()` while checking results in app and tests
-      - name: Temporary log check
-        run: |
-          if grep -R 'console.dir(' ./app/ ./test/; then
-            echo "console.dir statement found. Please remove it."
+          if grep -R 'console.log(\|console.dir(' ./app/ ./test/; then
+            echo "console statement found. Please remove it."
             exit 1
           fi
 
