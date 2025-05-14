@@ -49,7 +49,7 @@ describe('Billing Accounts controller', () => {
 
   describe('/billing-accounts/{billingAccountId}', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = {
           method: 'GET',
           url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018',
@@ -61,7 +61,7 @@ describe('Billing Accounts controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
         })
 
