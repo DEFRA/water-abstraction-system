@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alert/alert-type` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module AlertTypeService
  */
@@ -10,7 +10,7 @@ const AlertTypePresenter = require('../../../../presenters/notices/setup/abstrac
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alert/alert-type` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @param {string} sessionId
  *
