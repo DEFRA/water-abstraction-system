@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/remove-threshold/{licenceMonitoringStationId}` page
  *
  * @module SubmitRemoveThresholdService
  */
@@ -9,7 +9,7 @@
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/remove-threshold/{licenceMonitoringStationId}` page
  *
  * @param {string} sessionId
  * @param {string} licenceMonitoringStationId
