@@ -53,7 +53,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 February to 1 January',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -67,7 +67,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationTwo.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -81,7 +81,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationThree.id}`,
               text: 'Remove'
             },
             alert: null,
