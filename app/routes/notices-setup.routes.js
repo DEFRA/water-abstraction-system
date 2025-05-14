@@ -90,6 +90,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
+    options: {
+      handler: NoticesSetupController.submitRemoveThreshold,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {

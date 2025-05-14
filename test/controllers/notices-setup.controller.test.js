@@ -28,6 +28,7 @@ const SubmitAlertTypeService = require('../../app/services/notices/setup/abstrac
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
+const SubmitRemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/submit-remove-threshold.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
 // For running our service
@@ -393,6 +394,51 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Check licence page')
+          })
+        })
+      })
+    })
+
+    describe('/remove-threshold/{licenceMonitoringStationId}', () => {
+      describe('POST', () => {
+        const licenceMonitoringStationId = 123
+
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(
+              basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
+              {}
+            )
+
+            Sinon.stub(SubmitRemoveThresholdService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
+            )
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+
+            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Alert page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Alert page')
+            expect(response.payload).to.contain('There is a problem')
           })
         })
       })

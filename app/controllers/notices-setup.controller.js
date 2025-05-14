@@ -22,6 +22,7 @@ const SubmitAlertTypeService = require('../services/notices/setup/abstraction-al
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
+const SubmitRemoveThresholdService = require('../services/notices/setup/abstraction-alerts/submit-remove-threshold.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 
 const basePath = 'notices/setup'
@@ -206,6 +207,16 @@ async function submitRemoveLicences(request, h) {
   return h.redirect(`/system/${basePath}/${pageData.redirect}`)
 }
 
+async function submitRemoveThreshold(request, h) {
+  const {
+    params: { sessionId, licenceMonitoringStationId }
+  } = request
+
+  await SubmitRemoveThresholdService.go(sessionId, licenceMonitoringStationId)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
+}
+
 async function submitReturnsPeriod(request, h) {
   const {
     payload,
@@ -239,5 +250,6 @@ module.exports = {
   submitCheck,
   submitLicence,
   submitRemoveLicences,
+  submitRemoveThreshold,
   submitReturnsPeriod
 }
