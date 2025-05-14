@@ -93,7 +93,7 @@ const routes = [
     method: 'GET',
     path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
     options: {
-      handler: NoticesSetupController.viewCheckLicenceMatches,
+      handler: NoticesSetupController.viewRemoveThreshold,
       auth: {
         access: {
           scope: ['returns']

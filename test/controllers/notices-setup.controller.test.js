@@ -413,10 +413,6 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(CheckLicenceMatchesService, 'go').resolves({
-            pageTitle: 'Check licence page'
-          })
-
           Sinon.stub(RemoveThresholdService, 'go').resolves({})
         })
 
@@ -424,10 +420,10 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
-            // expect(response.headers.location).to.equal(
-            //   `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
-            // )
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
+            )
           })
         })
       })

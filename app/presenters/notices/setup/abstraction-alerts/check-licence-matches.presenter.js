@@ -15,27 +15,42 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { licenceMonitoringStations, alertThresholds, monitoringStationName, id: sessionId } = session
+  const {
+    alertThresholds,
+    id: sessionId,
+    licenceMonitoringStations,
+    monitoringStationName,
+    removedThresholds
+  } = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, sessionId),
+    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
 
-function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds) {
-  return licenceMonitoringStations.filter((licenceMonitoringStation) => {
+function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds, removedThresholds) {
+  const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
   })
+
+  if (removedThresholds) {
+    return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
+      return !removedThresholds.includes(licenceMonitoringStation.id)
+    })
+  }
+
+  return relevantLicenceMonitoringStations
 }
 
-function _restrictions(licenceMonitoringStations, alertThresholds, sessionId) {
+function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(
     licenceMonitoringStations,
-    alertThresholds
+    alertThresholds,
+    removedThresholds
   )
 
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
