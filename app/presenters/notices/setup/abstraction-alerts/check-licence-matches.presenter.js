@@ -42,7 +42,7 @@ function _restrictions(licenceMonitoringStations, alertThresholds, sessionId) {
     return {
       ...licenceMonitoringStation,
       action: {
-        link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove/${licenceMonitoringStation.id}`,
+        link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
         text: 'Remove'
       },
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt

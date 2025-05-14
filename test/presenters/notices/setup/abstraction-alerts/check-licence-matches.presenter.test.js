@@ -48,7 +48,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 February to 1 January',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -62,7 +62,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationTwo.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationTwo.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -76,7 +76,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationThree.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationThree.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -104,7 +104,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             {
               abstractionPeriod: '1 February to 1 January',
               action: {
-                link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
+                link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
                 text: 'Remove'
               },
               alert: null,
@@ -123,7 +123,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             const result = CheckLicenceMatchesPresenter.go(session)
 
             expect(result.restrictions[0].action).to.equal({
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             })
           })
