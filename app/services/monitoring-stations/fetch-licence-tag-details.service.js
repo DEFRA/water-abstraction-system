@@ -20,8 +20,8 @@ const NotificationModel = require('../../models/notification.model.js')
  * with the data needed for the licence tag details page
  */
 async function go(licenceId, monitoringStationId) {
-  const licenceTags = await _fetchLicenceTags(licenceId, monitoringStationId)
   const lastAlert = await _fetchLastAlert(licenceId)
+  const licenceTags = await _fetchLicenceTags(licenceId, monitoringStationId)
 
   return { lastAlert, licenceTags }
 }
