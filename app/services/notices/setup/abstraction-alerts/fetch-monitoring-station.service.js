@@ -27,6 +27,7 @@ async function _fetch(monitoringStationId) {
     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
       licenceMonitoringStationsBuilder
         .select([
+          'licenceMonitoringStations.id',
           'licenceMonitoringStations.abstractionPeriodEndDay',
           'licenceMonitoringStations.abstractionPeriodEndMonth',
           'licenceMonitoringStations.abstractionPeriodStartDay',
