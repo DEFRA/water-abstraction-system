@@ -35,6 +35,8 @@ async function go(sessionId, user) {
       user.username,
       metadata,
       session.journey === 'nil-return',
+      session.note?.content,
+      user.id,
       trx
     )
 

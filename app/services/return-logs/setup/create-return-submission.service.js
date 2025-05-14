@@ -18,7 +18,7 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @param {string} userId - ID of the user creating the return submission (typically an email address)
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
- * @param {string} notes - Text of the note
+ * @param {string} notes - Text of any note added to the return submission
  * @param {number} createdBy - Numeric user ID of the user who created the note
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
