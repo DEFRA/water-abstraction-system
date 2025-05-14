@@ -86,6 +86,14 @@ jobs:
             exit 1
           fi
 
+      # Also check we haven't accidentally left any `console.dir()` while checking results in app and tests
+      - name: Temporary log check
+        run: |
+          if grep -R 'console.dir(' ./app/ ./test/; then
+            echo "console.dir statement found. Please remove it."
+            exit 1
+          fi
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
