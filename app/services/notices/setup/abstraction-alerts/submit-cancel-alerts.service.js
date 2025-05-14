@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/cancel` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
  * @module SubmitCancelAlertsService
  */
@@ -9,7 +9,7 @@
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/cancel` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
  * @param {string} sessionId
  *
