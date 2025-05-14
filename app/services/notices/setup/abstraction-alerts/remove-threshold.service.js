@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/remove-threshold/{licenceMonitoringStationId}` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
  *
  * @module RemoveThresholdService
  */
@@ -9,7 +9,7 @@
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/remove-threshold/{licenceMonitoringStationId}` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
  *
  * @param {string} sessionId
  * @param {string} licenceMonitoringStationId
