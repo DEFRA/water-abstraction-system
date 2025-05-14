@@ -80,7 +80,7 @@
     <div class="govuk-body govuk-!-padding-top-3">
       <p>No sent bills for this billing account</p>
     </div>
-  {% elif bills.length > 0 %}
+  {% else %}
     {% set tableRows = [] %}
 
     {% for bill in bills %}
