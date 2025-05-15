@@ -13,7 +13,32 @@
  *
  * @returns {Promise<object>} The error details if any
  */
-async function go(payload, yar) {}
+async function go(payload, yar) {
+  const clearFilters = payload?.clearFilters
+  const sentFromDay = payload['sent-from-day'] ? payload['sent-from-day'] : null
+  const sentFromMonth = payload['sent-from-month'] ? payload['sent-from-month'] : null
+  const sentFromYear = payload['sent-from-year'] ? payload['sent-from-year'] : null
+  const sentToDay = payload['sent-to-day'] ? payload['sent-to-day'] : null
+  const sentToMonth = payload['sent-to-month'] ? payload['sent-to-month'] : null
+  const sentToYear = payload['sent-to-year'] ? payload['sent-to-year'] : null
+  const filterNotificationTypes = payload?.filterNotificationTypes
+  const sentBy = payload?.sentBy
+
+  if (clearFilters) {
+    yar.clear('notices-filter')
+  } else {
+    yar.set('notices-filter', {
+      filterNotificationTypes,
+      sentBy,
+      sentFromDay,
+      sentFromMonth,
+      sentFromYear,
+      sentToDay,
+      sentToMonth,
+      sentToYear
+    })
+  }
+}
 
 module.exports = {
   go

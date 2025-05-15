@@ -4,650 +4,220 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
+const NoticesSeeder = require('../../support/seeders/notices.seeder.js')
 const EventModel = require('../../../app/models/event.model.js')
 
 // Thing under test
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 describe('Notices - Fetch Notices service', () => {
-  let testEvent
-  let secondTestEvent
+  const pageNumber = 1
 
-  describe('when a notice exists and there are no filters applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
-      })
-    })
+  let filters
+  let seedData
 
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({
-        filterNotificationTypes: undefined,
-        sentBy: undefined,
-        sentFromDay: undefined,
-        sentFromMonth: undefined,
-        sentFromYear: undefined,
-        sentToDay: undefined,
-        sentToMonth: undefined,
-        sentToYear: undefined,
-        openFilter: undefined
-      })
+  before(async () => {
+    seedData = await NoticesSeeder.seed()
+  })
 
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
+  beforeEach(() => {
+    // NOTE: _filters() generates an empty filters object as used by the services that call FetchNotices when no filter
+    // has been applied by the user
+    filters = _filters()
+  })
+
+  describe('when no filter is applied', () => {
+    it('returns all notices ordered by the date they were created (newest to oldest)', async () => {
+      const result = await FetchNoticesService.go(filters, pageNumber)
+
+      expect(result.results).contains(_transformEventToResult(seedData.fromDateEvent))
+      expect(result.results).contains(_transformEventToResult(seedData.legacyEvent))
+      expect(result.results).contains(_transformEventToResult(seedData.resumeAlertEvent))
+      expect(result.results).contains(_transformEventToResult(seedData.sentByEvent))
+      expect(result.results).contains(_transformEventToResult(seedData.stopAlertEvent))
     })
   })
 
-  describe('when a notice exists and there is a "sent by" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
+  describe('when a filter is applied', () => {
+    describe('and "Sent By" has been set', () => {
+      beforeEach(() => {
+        filters.sentBy = 'area.team@wrls.gov.uk'
       })
-      await EventHelper.add({
-        type: 'notification',
-        issuer: 'test@test.com',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformEventToResult(seedData.sentByEvent))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformEventToResult(seedData.fromDateEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
       })
     })
 
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go({ sentBy: 'test.user@defra.gov.uk' }, 1)
+    describe('and "From Date" has been set', () => {
+      beforeEach(() => {
+        filters.fromDate = new Date('2025-04-01')
+      })
 
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformEventToResult(seedData.fromDateEvent))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.sentByEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
+      })
+    })
+
+    describe('and "To Date" has been set', () => {
+      beforeEach(() => {
+        filters.toDate = new Date('2025-04-01')
+      })
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformEventToResult(seedData.legacyEvent))
+        expect(result.results).contains(_transformEventToResult(seedData.resumeAlertEvent))
+        expect(result.results).contains(_transformEventToResult(seedData.sentByEvent))
+        expect(result.results).contains(_transformEventToResult(seedData.stopAlertEvent))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformEventToResult(seedData.fromDateEvent))
+      })
+    })
+
+    describe('and "Notice Types" has been set', () => {
+      describe('and its a "standard" notice type (not an alert)', () => {
+        describe('and its "returnsInvitation"', () => {
+          beforeEach(() => {
+            filters.noticeTypes.push('returnInvitation')
+          })
+
+          it('returns the matching notices', async () => {
+            const result = await FetchNoticesService.go(filters, pageNumber)
+
+            expect(result.results).contains(_transformEventToResult(seedData.fromDateEvent))
+            expect(result.results).contains(_transformEventToResult(seedData.sentByEvent))
+          })
+
+          it('excludes those that do not match', async () => {
+            const result = await FetchNoticesService.go(filters, pageNumber)
+
+            expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+            expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+            expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
+          })
         })
-      )
-    })
-  })
 
-  describe('when a notice exists and there is a "sentFromDay" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
-      })
-      secondTestEvent = await EventHelper.add({
-        type: 'notification',
-        issuer: 'test@test.com',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
-      })
-    })
+        describe('and its "legacyNotifications"', () => {
+          beforeEach(() => {
+            filters.noticeTypes.push('legacyNotifications')
+          })
 
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          sentFromDay: 1,
-          sentFromMonth: 1,
-          sentFromYear: new Date().getFullYear()
-        },
-        1
-      )
+          it('returns the matching notices', async () => {
+            const result = await FetchNoticesService.go(filters, pageNumber)
 
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
+            expect(result.results).contains(_transformEventToResult(seedData.legacyEvent))
+          })
+
+          it('excludes those that do not match', async () => {
+            const result = await FetchNoticesService.go(filters, pageNumber)
+
+            expect(result.results).not.contains(_transformEventToResult(seedData.fromDateEvent))
+            expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+            expect(result.results).not.contains(_transformEventToResult(seedData.sentByEvent))
+            expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
+          })
         })
-      )
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: secondTestEvent.id,
-          createdAt: secondTestEvent.createdAt,
-          issuer: secondTestEvent.issuer,
-          name: secondTestEvent.metadata.name,
-          alertType: secondTestEvent.metadata.options.sendingAlertType,
-          recipientCount: secondTestEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "sentToDay" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
       })
-      secondTestEvent = await EventHelper.add({
-        type: 'notification',
-        issuer: 'test@test.com',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'stop'
-          },
-          recipients: 1
-        }
+
+      describe('and its an "alert" notice type', () => {
+        beforeEach(() => {
+          filters.noticeTypes.push('resume')
+        })
+
+        it('returns the matching notices', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformEventToResult(seedData.resumeAlertEvent))
+        })
+
+        it('excludes those that do not match', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).not.contains(_transformEventToResult(seedData.fromDateEvent))
+          expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+          expect(result.results).not.contains(_transformEventToResult(seedData.sentByEvent))
+          expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
+        })
       })
-    })
 
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          sentToDay: 1,
-          sentToMonth: 11,
-          sentToYear: new Date().getFullYear()
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
+      describe('and its a combination of notice types (standard and alert)', () => {
+        beforeEach(() => {
+          filters.noticeTypes.push('returnInvitation')
+          filters.noticeTypes.push('stop')
         })
-      )
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: secondTestEvent.id,
-          createdAt: secondTestEvent.createdAt,
-          issuer: secondTestEvent.issuer,
-          name: secondTestEvent.metadata.name,
-          alertType: secondTestEvent.metadata.options.sendingAlertType,
-          recipientCount: secondTestEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
 
-  describe('when a notice exists and there is a "waterAbstractionAlerts" with a "resume" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'waterAbstractionAlerts',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'warning',
-            linkages: [[{ alertType: 'resume' }]]
-          },
-          recipients: 1
-        }
+        it('returns the matching notices', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformEventToResult(seedData.fromDateEvent))
+          expect(result.results).contains(_transformEventToResult(seedData.sentByEvent))
+          expect(result.results).contains(_transformEventToResult(seedData.stopAlertEvent))
+        })
+
+        it('excludes those that do not match', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+          expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+        })
       })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            waterAbstractionAlertResume: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "waterAbstractionAlerts" with a stop "filter" applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'waterAbstractionAlerts',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'warning',
-            linkages: [[{ alertType: 'stop' }]]
-          },
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            waterAbstractionAlertStop: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "waterAbstractionAlertReduce" with a "reduce" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'waterAbstractionAlerts',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'warning',
-            linkages: [[{ alertType: 'reduce' }]]
-          },
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            waterAbstractionAlertReduce: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "waterAbstractionAlertWarning" with a "warning" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'waterAbstractionAlerts',
-        status: 'sent',
-        metadata: {
-          name: 'Water abstraction alert',
-          options: {
-            sendingAlertType: 'warning',
-            linkages: [[{ alertType: 'warning' }]]
-          },
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            waterAbstractionAlertWarning: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: testEvent.metadata.options.sendingAlertType,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "returnsPaperForm" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'paperReturnForms',
-        status: 'sent',
-        metadata: {
-          name: 'Paper returns',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            returnsPaperForm: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "returnReminders" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'returnReminder',
-        status: 'sent',
-        metadata: {
-          name: 'Returns: reminder',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            returnReminders: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "returnInvitation" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'returnInvitation',
-        status: 'sent',
-        metadata: {
-          name: 'Paper returns',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            returnInvitation: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists and there is a "adHocReminders" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'adHocReminder',
-        status: 'sent',
-        metadata: {
-          name: 'Returns: ad-hoc',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            adHocReminders: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists with a subtype of "hof-stop" and there is a "legacyNotifications" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'hof-stop',
-        status: 'sent',
-        metadata: {
-          name: 'Hands off flow: stop abstraction',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            legacyNotifications: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists with a subtype of "hof-resume" and there is a "legacyNotifications" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'hof-resume',
-        status: 'sent',
-        metadata: {
-          name: 'Hands off flow: resume abstraction',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            legacyNotifications: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
-    })
-  })
-
-  describe('when a notice exists with a subtype of "hof-warning" and there is a "legacyNotifications" filter applied', () => {
-    beforeEach(async () => {
-      testEvent = await EventHelper.add({
-        type: 'notification',
-        subtype: 'hof-warning',
-        status: 'sent',
-        metadata: {
-          name: 'Hands off flow: levels warning',
-          recipients: 1
-        }
-      })
-    })
-
-    it('fetches the matching notices', async () => {
-      const result = await FetchNoticesService.go(
-        {
-          notifications: {
-            legacyNotifications: true
-          }
-        },
-        1
-      )
-
-      expect(result.results).to.contain(
-        EventModel.fromJson({
-          id: testEvent.id,
-          createdAt: testEvent.createdAt,
-          issuer: testEvent.issuer,
-          name: testEvent.metadata.name,
-          alertType: null,
-          recipientCount: testEvent.metadata.recipients,
-          errorCount: null
-        })
-      )
     })
   })
 })
+
+function _filters() {
+  return {
+    fromDate: null,
+    noticeTypes: [],
+    populated: false,
+    sentBy: null,
+    toDate: null
+  }
+}
+
+function _transformEventToResult(eventInstance, overrides = {}) {
+  const data = {
+    id: eventInstance.id,
+    createdAt: eventInstance.createdAt,
+    issuer: eventInstance.issuer,
+    name: eventInstance.metadata.name,
+    alertType: eventInstance.metadata.options?.sendingAlertType || null,
+    recipientCount: eventInstance.metadata.recipients,
+    errorCount: eventInstance.metadata.error,
+    ...overrides
+  }
+
+  return EventModel.fromJson(data)
+}
