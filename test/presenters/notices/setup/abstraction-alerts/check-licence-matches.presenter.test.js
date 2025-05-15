@@ -41,6 +41,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
 
       expect(result).to.equal({
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+        cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
         caption: 'Death star',
         pageTitle: 'Check the licence matches for the selected thresholds',
         restrictionHeading: 'Flow and level restriction type and threshold',
@@ -188,6 +189,30 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                 threshold: '100 m'
               }
             ])
+          })
+
+          describe('when there is only one threshold left to display', () => {
+            beforeEach(() => {
+              session.removedThresholds = [licenceMonitoringStationOne.id, licenceMonitoringStationTwo.id]
+            })
+
+            it('should not show any remove links for the remaining restriction', () => {
+              const result = CheckLicenceMatchesPresenter.go(session)
+
+              expect(result.restrictions).to.equal([
+                {
+                  abstractionPeriod: '1 January to 31 March',
+                  action: null,
+                  alert: null,
+                  alertDate: null,
+                  licenceId: licenceMonitoringStationThree.licence.id,
+                  licenceRef: licenceMonitoringStationThree.licence.licenceRef,
+                  restriction: 'Stop',
+                  restrictionCount: 1,
+                  threshold: '100 m'
+                }
+              ])
+            })
           })
         })
       })

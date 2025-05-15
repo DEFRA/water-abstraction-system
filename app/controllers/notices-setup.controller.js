@@ -217,9 +217,9 @@ async function submitCancelAlerts(request, h) {
     params: { sessionId }
   } = request
 
-  await SubmitCancelAlertsService.go(sessionId)
+  const { monitoringStationId } = await SubmitCancelAlertsService.go(sessionId)
 
-  return h.redirect('')
+  return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
 async function submitCheck(request, h) {
@@ -287,6 +287,7 @@ module.exports = {
   viewConfirmation,
   viewLicence,
   viewRemoveLicences,
+  viewRemoveThreshold,
   viewReturnsPeriod,
   setup,
   submitAlertEmailAddress,
@@ -297,6 +298,5 @@ module.exports = {
   submitCheck,
   submitLicence,
   submitRemoveLicences,
-  viewRemoveThreshold,
   submitReturnsPeriod
 }
