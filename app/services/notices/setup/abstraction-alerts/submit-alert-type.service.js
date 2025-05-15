@@ -10,6 +10,8 @@ const AlertTypePresenter = require('../../../../presenters/notices/setup/abstrac
 const AlertTypeValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-type.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
 
+const ALERT_TYPE_KEY = 'alert-type'
+
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
@@ -29,6 +31,8 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.alertType = payload[ALERT_TYPE_KEY]
+
   const pageData = AlertTypePresenter.go(session)
 
   return {
@@ -39,11 +43,11 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  if (session.alertType !== payload['alert-type']) {
+  if (session.alertType !== payload[ALERT_TYPE_KEY]) {
     session.alertThresholds = []
   }
 
-  session.alertType = payload['alert-type']
+  session.alertType = payload[ALERT_TYPE_KEY]
 
   return session.$update()
 }
