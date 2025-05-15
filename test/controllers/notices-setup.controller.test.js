@@ -401,17 +401,19 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
+          const monitoringStationId = '123'
+
           beforeEach(async () => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {})
 
-            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({})
+            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({ monitoringStationId })
           })
 
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(``)
+            expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
           })
         })
       })

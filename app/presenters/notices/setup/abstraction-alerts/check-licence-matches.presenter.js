@@ -19,6 +19,7 @@ function go(session) {
 
   return {
     backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
+    cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
     restrictions: _restrictions(licenceMonitoringStations, alertThresholds, sessionId),
