@@ -2,6 +2,7 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block breadcrumbs %}
   {{
@@ -14,10 +15,30 @@
 
 {% block content %}
   <div>
+
+    <span class="govuk-caption-l"> {{ caption }} </span>
+
+    <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+
+    {{ govukSummaryList({
+
+      rows: [
+        {},
+        {
+          key: {
+          text: summaryList.text
+        },
+          value: {
+          text: summaryList.value
+        }
+        }
+      ]
+    }) }}
+
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}
