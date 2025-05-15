@@ -17,7 +17,15 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const schema = Joi.object({})
+  const errorMessage = 'Email address for the alert is required'
+
+  const schema = Joi.object({
+    alertEmailAddress: Joi.string().required().valid('saved-email-address', 'other-email-address').messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage,
+      'string.empty': errorMessage
+    })
+  })
 
   return schema.validate(payload, { abortEarly: false })
 }

@@ -14,7 +14,7 @@ describe('Alert Email Address Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { placeholder: '' }
+    payload = { alertEmailAddress: 'saved-email-address' }
   })
 
   describe('when called with valid data', () => {
@@ -36,7 +36,7 @@ describe('Alert Email Address Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"placeholder" is required')
+      expect(result.error.details[0].message).to.equal('Email address for the alert is required')
     })
   })
 })
