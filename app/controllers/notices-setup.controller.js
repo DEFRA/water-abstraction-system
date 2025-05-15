@@ -9,6 +9,7 @@ const AdHocLicenceService = require('../services/notices/setup/ad-hoc/ad-hoc-lic
 const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
+const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -16,11 +17,13 @@ const ConfirmationService = require('../services/notices/setup/confirmation.serv
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
+const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
+const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
@@ -77,6 +80,14 @@ async function viewCancel(request, h) {
   return h.view(`${basePath}/cancel.njk`, pageData)
 }
 
+async function viewCancelAlerts(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await CancelAlertsService.go(sessionId)
+
+  return h.view(`notices/setup/abstraction-alerts/cancel-alerts.njk`, pageData)
+}
+
 async function viewCheckLicenceMatches(request, h) {
   const { sessionId } = request.params
 
@@ -130,6 +141,14 @@ async function viewCheck(request, h) {
   const pageData = await CheckService.go(sessionId, page)
 
   return h.view(`${basePath}/check.njk`, pageData)
+}
+
+async function viewRemoveThreshold(request, h) {
+  const { sessionId, licenceMonitoringStationId } = request.params
+
+  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 async function setup(request, h) {
@@ -193,6 +212,16 @@ async function submitCancel(request, h) {
   return h.redirect(`/manage`)
 }
 
+async function submitCancelAlerts(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  await SubmitCancelAlertsService.go(sessionId)
+
+  return h.redirect('')
+}
+
 async function submitCheck(request, h) {
   const {
     auth,
@@ -252,6 +281,7 @@ module.exports = {
   viewAlertThresholds,
   viewAlertType,
   viewCancel,
+  viewCancelAlerts,
   viewCheck,
   viewCheckLicenceMatches,
   viewConfirmation,
@@ -263,8 +293,10 @@ module.exports = {
   submitAlertThresholds,
   submitAlertType,
   submitCancel,
+  submitCancelAlerts,
   submitCheck,
   submitLicence,
   submitRemoveLicences,
+  viewRemoveThreshold,
   submitReturnsPeriod
 }

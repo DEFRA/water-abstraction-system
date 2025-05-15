@@ -48,6 +48,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
     describe('when the user selects a different "alertType" to a previous selection', () => {
       beforeEach(async () => {
         sessionData.alertType = 'resume'
+        sessionData.removedThresholds = ['123']
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -58,6 +59,14 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.alertThresholds).to.equal([])
+      })
+
+      it('sets the "removedThresholds" to an empty array', async () => {
+        await SubmitAlertTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.removedThresholds).to.equal([])
       })
     })
 
@@ -150,7 +159,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
         session = await SessionHelper.add({ data: sessionData })
       })
 
-      it('returns page data for the view, with errors', async () => {
+      it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
         const result = await SubmitAlertTypeService.go(session.id, payload)
 
         expect(result).to.equal({
@@ -173,7 +182,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
               value: 'reduce'
             },
             {
-              checked: false,
+              checked: true,
               hint: {
                 text: 'Tell licence holders they must stop taking water.'
               },
