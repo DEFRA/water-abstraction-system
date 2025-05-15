@@ -88,6 +88,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/check',
+    options: {
+      handler: ReturnLogsSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/delete-note',
     options: {

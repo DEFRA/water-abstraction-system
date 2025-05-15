@@ -23,6 +23,7 @@ const StartReadingService = require('../services/return-logs/setup/start-reading
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
 const SubmitConfirmedService = require('../services/return-logs/setup/submit-confirmed.service.js')
 const SubmitCancelService = require('../services/return-logs/setup/submit-cancel.service.js')
+const SubmitCheckService = require('../services/return-logs/setup/submit-check.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitMultipleEntriesService = require('../services/return-logs/setup/submit-multiple-entries.service.js')
@@ -166,6 +167,15 @@ async function submitCancel(request, h) {
   await SubmitCancelService.go(sessionId)
 
   return h.redirect(`/system/return-logs?id=${returnLogId}`)
+}
+
+async function submitCheck(request, h) {
+  const { sessionId } = request.params
+  const { user } = request.auth.credentials
+
+  const returnLogId = await SubmitCheckService.go(sessionId, user)
+
+  return h.redirect(`/system/return-logs/setup/confirmed?id=${returnLogId}`)
 }
 
 async function submitMeterDetails(request, h) {
@@ -448,6 +458,7 @@ module.exports = {
   submission,
   submitConfirmed,
   submitCancel,
+  submitCheck,
   submitMeterDetails,
   submitMeterProvided,
   submitMultipleEntries,
