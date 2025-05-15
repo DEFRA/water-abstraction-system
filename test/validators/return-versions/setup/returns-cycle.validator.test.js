@@ -62,6 +62,22 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     })
   })
 
+  describe('when a user selects summer but quarterly returns is marked false', () => {
+    before(() => {
+      payload = {
+        returnsCycle: 'summer'
+      }
+
+      session.data.quarterlyReturns = false
+    })
+
+    it('confirms the data is valid', () => {
+      const result = ReturnsCycleValidator.go(payload, session)
+
+      expect(result.value.returnsCycle).to.exist()
+    })
+  })
+
   describe('when no data is provided', () => {
     before(() => {
       payload = {}
@@ -108,7 +124,7 @@ function _testSession() {
       startDateYear: '2025',
       multipleUpload: false,
       startDateMonth: '12',
-      checkPageVisited: true,
+      checkPageVisited: false,
       quarterlyReturns: false,
       startDateOptions: 'anotherStartDate',
       returnVersionStartDate: '2025-12-28T00:00:00.000Z'
