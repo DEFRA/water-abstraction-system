@@ -5,55 +5,88 @@
  * @module LicencePresenter
  */
 
-const { thresholdUnits } = require('../../lib/static-lookups.lib.js')
+const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
  *
- * @param {module:LicenceMonitoringStationModel} licenceMonitoringStation - The licence monitoring station and
- * associated data
+ * @param {module:NotificationModel} lastAlert - The last water abstraction alert sent
+ * @param {module:MonitoringStationModel} monitoringStationLicenceTags - The licence monitoring station and associated
+ * licence tag data
  *
  * @returns {object} page data needed by the view template
  */
-function go(licenceMonitoringStation) {
-  const { id: sessionId, label, unit: sessionUnit, threshold } = licenceMonitoringStation
+function go(lastAlert, monitoringStationLicenceTags) {
+  const { id: monitoringStationId, label, licenceMonitoringStations, riverName } = monitoringStationLicenceTags
+  const { licence } = licenceMonitoringStations[0]
 
   return {
-    backLink: _backLink(licenceMonitoringStation),
-    displayUnits: _units(sessionUnit),
-    monitoringStationLabel: label,
-    pageTitle: 'What is the licence hands-off flow or level threshold?',
-    sessionId,
-    threshold: threshold ?? null
+    backLink: `/system/monitoring-stations/${monitoringStationId}`,
+    lastAlertSent: _lastAlertSent(lastAlert),
+    licenceTags: _licenceTags(licenceMonitoringStations),
+    monitoringStationName: _monitoringStationName(label, riverName),
+    pageTitle: `Details for ${licence.licenceRef}`
   }
 }
 
-function _backLink(session) {
-  const { checkPageVisited, id, monitoringStationId } = session
+function _lastAlertSent(lastAlert) {
+  if (lastAlert) {
+    const { contact, createdAt, messageType, recipient, sendingAlertType } = lastAlert
+    const receiver = messageType === 'email' ? recipient : contact
 
-  if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
+    return `${sentenceCase(sendingAlertType)} ${messageType} on ${formatLongDate(createdAt)} sent to ${receiver}`
   }
 
-  return `/system/monitoring-stations/${monitoringStationId}`
+  return 'N/A'
 }
 
-function _units(sessionUnit) {
-  const mappedUnits = Object.entries(thresholdUnits).map(([_key, value]) => {
+function _licenceTags(licenceMonitoringStations) {
+  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+    const { createdAt, licenceVersionPurposeCondition, restrictionType, thresholdUnit, thresholdValue, user } =
+      licenceMonitoringStation
+
+    const { effectOfRestriction, licenceVersionStatus, linkedCondition } =
+      _linkedConditionDetails(licenceVersionPurposeCondition)
+
     return {
-      value,
-      text: value,
-      selected: sessionUnit === value
+      created: `Created on ${formatLongDate(createdAt)} by ${user.username}`,
+      effectOfRestriction,
+      licenceVersionStatus,
+      linkedCondition,
+      tag: `${sentenceCase(restrictionType)} tag`,
+      threshold: `${thresholdValue}${thresholdUnit}`,
+      type: sentenceCase(restrictionType)
     }
   })
+}
 
-  mappedUnits.push({
-    value: 'select',
-    text: 'Select an option',
-    selected: sessionUnit === 'select' || sessionUnit === undefined
-  })
+function _linkedConditionDetails(licenceVersionPurposeCondition) {
+  if (licenceVersionPurposeCondition) {
+    const { externalId, licenceVersionPurpose, licenceVersionPurposeConditionType, notes } =
+      licenceVersionPurposeCondition
 
-  return mappedUnits
+    const lastDigits = externalId.split(':').pop() // Get the last set digits from the externalId
+
+    return {
+      effectOfRestriction: notes ?? '',
+      licenceVersionStatus: licenceVersionPurpose.licenceVersion.status,
+      linkedCondition: `${licenceVersionPurposeConditionType.displayTitle}, ID${lastDigits}`
+    }
+  }
+
+  return {
+    effectOfRestriction: null,
+    licenceVersionStatus: null,
+    linkedCondition: 'Not linked to a condition'
+  }
+}
+
+function _monitoringStationName(label, riverName) {
+  if (riverName) {
+    return `${riverName} at ${label}`
+  }
+
+  return label
 }
 
 module.exports = {
