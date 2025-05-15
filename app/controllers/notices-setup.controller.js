@@ -16,6 +16,7 @@ const ConfirmationService = require('../services/notices/setup/confirmation.serv
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
+const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -130,6 +131,14 @@ async function viewCheck(request, h) {
   const pageData = await CheckService.go(sessionId, page)
 
   return h.view(`${basePath}/check.njk`, pageData)
+}
+
+async function viewRemoveThreshold(request, h) {
+  const { sessionId, licenceMonitoringStationId } = request.params
+
+  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 async function setup(request, h) {
@@ -261,5 +270,6 @@ module.exports = {
   submitCheck,
   submitLicence,
   submitRemoveLicences,
+  viewRemoveThreshold,
   submitReturnsPeriod
 }
