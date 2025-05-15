@@ -10,7 +10,8 @@ const { sentenceCase } = require('../../../base.presenter.js')
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
- * @param session
+ * @param {module:SessionModel} session - The session instance
+ *
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
