@@ -190,6 +190,30 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
               }
             ])
           })
+
+          describe('when there is only one threshold left to display', () => {
+            beforeEach(() => {
+              session.removedThresholds = [licenceMonitoringStationOne.id, licenceMonitoringStationTwo.id]
+            })
+
+            it('should not show any remove links for the remaining restriction', () => {
+              const result = CheckLicenceMatchesPresenter.go(session)
+
+              expect(result.restrictions).to.equal([
+                {
+                  abstractionPeriod: '1 January to 31 March',
+                  action: null,
+                  alert: null,
+                  alertDate: null,
+                  licenceId: licenceMonitoringStationThree.licence.id,
+                  licenceRef: licenceMonitoringStationThree.licence.licenceRef,
+                  restriction: 'Stop',
+                  restrictionCount: 1,
+                  threshold: '100 m'
+                }
+              ])
+            })
+          })
         })
       })
     })

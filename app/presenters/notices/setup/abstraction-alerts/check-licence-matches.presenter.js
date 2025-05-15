@@ -33,6 +33,13 @@ function go(session) {
   }
 }
 
+function _action(sessionId, licenceMonitoringStation) {
+  return {
+    link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
+    text: 'Remove'
+  }
+}
+
 function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds, removedThresholds) {
   const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
@@ -54,13 +61,12 @@ function _restrictions(licenceMonitoringStations, alertThresholds, removedThresh
     removedThresholds
   )
 
+  const multipleRestrictions = relevantLicenceMonitoringStations.length > 1
+
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
       ...licenceMonitoringStation,
-      action: {
-        link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
-        text: 'Remove'
-      },
+      action: multipleRestrictions ? _action(sessionId, licenceMonitoringStation) : null,
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
         ? new Date(licenceMonitoringStation.statusUpdatedAt)
         : null
