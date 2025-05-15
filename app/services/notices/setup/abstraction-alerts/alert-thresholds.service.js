@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module AlertThresholdsService
  */
@@ -10,7 +10,7 @@ const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/a
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @param {string} sessionId
  *
