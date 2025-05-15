@@ -36,6 +36,7 @@ async function _fetchLastAlert(licenceId) {
       'messageRef',
       'messageType',
       'recipient',
+      ref('personalisation:sending_alert_type').castText().as('sendingAlertType'),
       'status'
     ])
     .where(ref('personalisation:licenceId').castText(), licenceId)
