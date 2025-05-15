@@ -23,9 +23,7 @@ async function go(returnRequirement, returnCycle, licenceEndDate) {
   try {
     const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
-    const createdIds = await _persistReturnLogs(returnLogs)
-
-    return createdIds
+    return await _persistReturnLogs(returnLogs)
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
   }

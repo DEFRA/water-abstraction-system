@@ -69,7 +69,7 @@ async function _fetchReturnCycles(changeDate, returnVersionEndDate) {
     .where('endDate', '>', changeDate)
 
   if (returnVersionEndDate) {
-    query.where('endDate', '<=', returnVersionEndDate)
+    query.where('startDate', '<=', returnVersionEndDate)
   }
 
   return query.orderBy('endDate', 'desc')
