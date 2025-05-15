@@ -22,7 +22,6 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
-const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -402,17 +401,19 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
+          const monitoringStationId = '123'
+
           beforeEach(async () => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {})
 
-            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({})
+            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({ monitoringStationId })
           })
 
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(``)
+            expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
           })
         })
       })
@@ -441,36 +442,6 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Check licence page')
-          })
-        })
-      })
-    })
-
-    describe('/remove-threshold/{licenceMonitoringStationId}', () => {
-      describe('GET', () => {
-        const licenceMonitoringStationId = '123'
-
-        beforeEach(async () => {
-          getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
-            auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
-          }
-
-          Sinon.stub(RemoveThresholdService, 'go').resolves({})
-        })
-
-        describe('when a request is valid', () => {
-          it('redirects the to the next page', async () => {
-            const response = await server.inject(getOptions)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(
-              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
-            )
           })
         })
       })

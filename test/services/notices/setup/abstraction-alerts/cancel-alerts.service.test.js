@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -18,7 +19,10 @@ describe('Cancel Alerts Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    sessionData = {
+      ...AbstractionAlertSessionData.monitoringStation(),
+      alertType: 'resume'
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -27,7 +31,16 @@ describe('Cancel Alerts Service', () => {
     it('returns page data for the view', async () => {
       const result = await CancelAlertsService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        activeNavBar: 'manage',
+        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+        caption: 'Death star',
+        pageTitle: 'You are about to cancel this alert',
+        summaryList: {
+          text: 'Alert type',
+          value: 'Resume'
+        }
+      })
     })
   })
 })

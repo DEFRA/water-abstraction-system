@@ -192,9 +192,9 @@ async function submitCancelAlerts(request, h) {
     params: { sessionId }
   } = request
 
-  await SubmitCancelAlertsService.go(sessionId)
+  const { monitoringStationId } = await SubmitCancelAlertsService.go(sessionId)
 
-  return h.redirect('')
+  return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
 async function submitCheck(request, h) {
