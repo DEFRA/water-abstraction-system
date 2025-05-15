@@ -29,6 +29,8 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.alertType = payload['alert-type']
+
   const pageData = AlertTypePresenter.go(session)
 
   return {
