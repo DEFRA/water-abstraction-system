@@ -89,9 +89,12 @@ async function viewCancelAlerts(request, h) {
 }
 
 async function viewCheckLicenceMatches(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    yar
+  } = request
 
-  const pageData = await CheckLicenceMatchesService.go(sessionId)
+  const pageData = await CheckLicenceMatchesService.go(sessionId, yar)
 
   return h.view(`notices/setup/abstraction-alerts/check-licence-matches.njk`, pageData)
 }
@@ -144,9 +147,12 @@ async function viewCheck(request, h) {
 }
 
 async function viewRemoveThreshold(request, h) {
-  const { sessionId, licenceMonitoringStationId } = request.params
+  const {
+    params: { sessionId, licenceMonitoringStationId },
+    yar
+  } = request
 
-  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId)
+  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }

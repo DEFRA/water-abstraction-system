@@ -92,12 +92,33 @@ function formatRestrictions(licenceMonitoringStations) {
       alertDate: statusUpdatedAt ? formatLongDate(statusUpdatedAt) : null,
       licenceId: licence.id,
       licenceRef: licence.licenceRef,
-      restriction: _restriction(restrictionType),
+      restriction: formatRestrictionType(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
       threshold: `${thresholdValue} ${thresholdUnit}`,
       action
     }
   })
+}
+
+/**
+ * Formats the restriction type
+ *
+ * This can be 'stop', 'reduce' or 'stop_and_reduce'.
+ *
+ * When the restriction type is 'stop_and_reduce', we want to show the user 'Stop and reduce'.
+ *
+ * When it is something else it just needs to be in sentence case
+ *
+ * @param {string} restrictionType
+ *
+ * @returns {string}
+ */
+function formatRestrictionType(restrictionType) {
+  if (restrictionType === 'stop_or_reduce') {
+    return 'Stop or reduce'
+  }
+
+  return sentenceCase(restrictionType)
 }
 
 function _alert(status, statusUpdatedAt) {
@@ -106,14 +127,6 @@ function _alert(status, statusUpdatedAt) {
   }
 
   return sentenceCase(status)
-}
-
-function _restriction(restrictionType) {
-  if (restrictionType === 'stop_or_reduce') {
-    return 'Stop or reduce'
-  }
-
-  return sentenceCase(restrictionType)
 }
 
 function _restrictionCount(licenceId, licenceMonitoringStations) {
@@ -125,6 +138,7 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
 }
 
 module.exports = {
-  formatRestrictions,
-  determineRestrictionHeading
+  determineRestrictionHeading,
+  formatRestrictionType,
+  formatRestrictions
 }
