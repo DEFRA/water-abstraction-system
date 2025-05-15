@@ -55,6 +55,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+        cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
         caption: 'Death star',
         notification: undefined,
         pageTitle: 'Check the licence matches for the selected thresholds',

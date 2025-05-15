@@ -25,10 +25,18 @@ function go(session) {
 
   return {
     backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
+    cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
     restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
+  }
+}
+
+function _action(sessionId, licenceMonitoringStation) {
+  return {
+    link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
+    text: 'Remove'
   }
 }
 
@@ -53,13 +61,12 @@ function _restrictions(licenceMonitoringStations, alertThresholds, removedThresh
     removedThresholds
   )
 
+  const multipleRestrictions = relevantLicenceMonitoringStations.length > 1
+
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
       ...licenceMonitoringStation,
-      action: {
-        link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
-        text: 'Remove'
-      },
+      action: multipleRestrictions ? _action(sessionId, licenceMonitoringStation) : null,
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
         ? new Date(licenceMonitoringStation.statusUpdatedAt)
         : null
