@@ -193,7 +193,7 @@ describe('Return Logs - Create Return Logs service', () => {
     })
   })
 
-  describe('when called with an existing return log already exists and a return cycle before 01-04-2025', () => {
+  describe('when called when an existing return log already exists and a return cycle before 01-04-2025', () => {
     beforeEach(async () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
@@ -210,7 +210,7 @@ describe('Return Logs - Create Return Logs service', () => {
       })
     })
 
-    it('returns only one return log', async () => {
+    it('returns an empty array', async () => {
       const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
 
       expect(results).to.equal([])
