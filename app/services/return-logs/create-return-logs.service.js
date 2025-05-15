@@ -9,7 +9,6 @@ const { db } = require('../../../db/db.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
 const GenerateReturnLogService = require('./generate-return-log.service.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
 
 /**
  * Generates and persists return logs for the given return requirement and cycle
