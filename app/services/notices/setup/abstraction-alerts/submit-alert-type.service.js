@@ -45,6 +45,7 @@ async function go(sessionId, payload) {
 async function _save(session, payload) {
   if (session.alertType !== payload[ALERT_TYPE_KEY]) {
     session.alertThresholds = []
+    session.removedThresholds = []
   }
 
   session.alertType = payload[ALERT_TYPE_KEY]
