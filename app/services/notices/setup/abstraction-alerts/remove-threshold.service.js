@@ -27,8 +27,8 @@ async function go(sessionId, licenceMonitoringStationId, yar) {
 }
 
 function _notificationMessage(session, licenceMonitoringStationId) {
-  const licenceMonitoringStation = session.licenceMonitoringStations.find((licenceMonitoringStation) => {
-    return licenceMonitoringStation.id === licenceMonitoringStationId
+  const licenceMonitoringStation = session.licenceMonitoringStations.find((station) => {
+    return station.id === licenceMonitoringStationId
   })
 
   return `Removed ${licenceMonitoringStation.licence.licenceRef} ${formatRestrictionType(licenceMonitoringStation.restrictionType)} ${licenceMonitoringStation.thresholdValue}${licenceMonitoringStation.thresholdUnit}`
