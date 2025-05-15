@@ -27,7 +27,16 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: cancelLink,
+          preventDoubleClick: true
+        }) }}
+      </div>
     </form>
   </div>
 {% endblock %}
