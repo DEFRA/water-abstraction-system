@@ -21,11 +21,12 @@ const LicencePresenter = require('../../presenters/monitoring-stations/licence.p
  * @returns {Promise<object>} The view data for the licence tag details page
  */
 async function go(licenceId, monitoringStationId) {
-  const licenceMonitoringStation = await FetchLicenceTagDetailsService.go(licenceId, monitoringStationId)
-  console.log('🚀🚀🚀 ~ licenceMonitoringStation:')
-  console.dir(licenceMonitoringStation, { depth: null, colors: true })
+  const { lastAlert, monitoringStationLicenceTags } = await FetchLicenceTagDetailsService.go(
+    licenceId,
+    monitoringStationId
+  )
 
-  const formattedData = LicencePresenter.go(licenceMonitoringStation)
+  const formattedData = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
 
   return {
     activeNavBar: 'search',

@@ -21,9 +21,9 @@ const NotificationModel = require('../../models/notification.model.js')
  */
 async function go(licenceId, monitoringStationId) {
   const lastAlert = await _fetchLastAlert(licenceId)
-  const licenceTags = await _fetchLicenceTags(licenceId, monitoringStationId)
+  const monitoringStationLicenceTags = await _fetchMonitoringStationLicenceTags(licenceId, monitoringStationId)
 
-  return { lastAlert, licenceTags }
+  return { lastAlert, monitoringStationLicenceTags }
 }
 
 async function _fetchLastAlert(licenceId) {
@@ -45,7 +45,7 @@ async function _fetchLastAlert(licenceId) {
     .first() // Return only the first result
 }
 
-async function _fetchLicenceTags(licenceId, monitoringStationId) {
+async function _fetchMonitoringStationLicenceTags(licenceId, monitoringStationId) {
   return MonitoringStationModel.query()
     .findById(monitoringStationId)
     .select(['id', 'label', 'riverName'])
@@ -85,6 +85,10 @@ async function _fetchLicenceTags(licenceId, monitoringStationId) {
             .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
               licenceVersionPurposeConditionTypeBuilder.select(['id', 'displayTitle'])
             })
+        })
+        .withGraphFetched('user')
+        .modifyGraph('user', (userBuilder) => {
+          userBuilder.select(['id', 'username'])
         })
     })
 }
