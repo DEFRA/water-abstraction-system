@@ -19,7 +19,7 @@ describe('Alert Email Address Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
+    payload = { alertEmailAddress: 'saved-email-address' }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
@@ -42,10 +42,17 @@ describe('Alert Email Address Service', () => {
   })
 
   describe('when validation fails', () => {
+    beforeEach(() => {
+      payload = {}
+    })
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitAlertEmailAddressService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        error: {
+          text: 'Email address for the alert is required'
+        }
+      })
     })
   })
 })

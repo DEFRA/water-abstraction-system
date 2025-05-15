@@ -20,10 +20,8 @@ function go(payload) {
   const errorMessage = 'Email address for the alert is required'
 
   const schema = Joi.object({
-    alertEmailAddress: Joi.string().required().valid('saved-email-address', 'other-email-address').messages({
-      'any.required': errorMessage,
-      'any.only': errorMessage,
-      'string.empty': errorMessage
+    alertEmailAddress: Joi.string().required().messages({
+      'any.required': errorMessage
     })
   })
 
