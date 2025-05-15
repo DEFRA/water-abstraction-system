@@ -115,6 +115,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
+    options: {
+      handler: NoticesSetupController.viewRemoveThreshold,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/ad-hoc-licence',
     options: {
       handler: NoticesSetupController.viewLicence,

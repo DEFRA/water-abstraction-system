@@ -49,7 +49,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 February to 1 January',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -63,7 +63,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationTwo.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationTwo.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -77,7 +77,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationThree.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationThree.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -94,29 +94,23 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
 
     describe('the "restrictions" property', () => {
       describe('when there are selected "alertThresholds"', () => {
-        beforeEach(() => {
-          session.alertThresholds = [licenceMonitoringStationOne.thresholdGroup]
-        })
-
         it('returns only the thresholds previously selected', () => {
           const result = CheckLicenceMatchesPresenter.go(session)
 
-          expect(result.restrictions).to.equal([
-            {
-              abstractionPeriod: '1 February to 1 January',
-              action: {
-                link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
-                text: 'Remove'
-              },
-              alert: null,
-              alertDate: null,
-              licenceId: licenceMonitoringStationOne.licence.id,
-              licenceRef: licenceMonitoringStationOne.licence.licenceRef,
-              restriction: 'Reduce',
-              restrictionCount: 1,
-              threshold: '1000 m'
-            }
-          ])
+          expect(result.restrictions[0]).to.equal({
+            abstractionPeriod: '1 February to 1 January',
+            action: {
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
+              text: 'Remove'
+            },
+            alert: null,
+            alertDate: null,
+            licenceId: licenceMonitoringStationOne.licence.id,
+            licenceRef: licenceMonitoringStationOne.licence.licenceRef,
+            restriction: 'Reduce',
+            restrictionCount: 1,
+            threshold: '1000 m'
+          })
         })
 
         describe('the "action" property', () => {
@@ -124,7 +118,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             const result = CheckLicenceMatchesPresenter.go(session)
 
             expect(result.restrictions[0].action).to.equal({
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove/${licenceMonitoringStationOne.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             })
           })
@@ -152,6 +146,49 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
 
               expect(result.restrictions[0].alertDate).to.equal('12 May 2025')
             })
+          })
+        })
+
+        describe('when there are thresholds removed from the list', () => {
+          beforeEach(() => {
+            session.removedThresholds = [licenceMonitoringStationOne.id]
+          })
+
+          it('returns only the thresholds previously selected and not removed', () => {
+            const result = CheckLicenceMatchesPresenter.go(session)
+
+            expect(result.restrictions.length).to.equal(2)
+
+            expect(result.restrictions).to.equal([
+              {
+                abstractionPeriod: '1 January to 31 March',
+                action: {
+                  link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationTwo.id}`,
+                  text: 'Remove'
+                },
+                alert: null,
+                alertDate: null,
+                licenceId: licenceMonitoringStationTwo.licence.id,
+                licenceRef: licenceMonitoringStationTwo.licence.licenceRef,
+                restriction: 'Stop',
+                restrictionCount: 1,
+                threshold: '100 m3/s'
+              },
+              {
+                abstractionPeriod: '1 January to 31 March',
+                action: {
+                  link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationThree.id}`,
+                  text: 'Remove'
+                },
+                alert: null,
+                alertDate: null,
+                licenceId: licenceMonitoringStationThree.licence.id,
+                licenceRef: licenceMonitoringStationThree.licence.licenceRef,
+                restriction: 'Stop',
+                restrictionCount: 1,
+                threshold: '100 m'
+              }
+            ])
           })
         })
       })
