@@ -289,7 +289,7 @@ describe('Notices Setup controller', () => {
 
             Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({
               error: { text: 'Select an option' },
-              pageTitle: 'Threshold page'
+              pageTitle: 'Email Address page'
             })
           })
 
@@ -297,7 +297,7 @@ describe('Notices Setup controller', () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Email address page')
+            expect(response.payload).to.contain('Email Address page')
             expect(response.payload).to.contain('There is a problem')
           })
         })
