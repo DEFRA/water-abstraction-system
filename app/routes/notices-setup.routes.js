@@ -66,6 +66,30 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.viewCancelAlerts,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.submitCancelAlerts,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
     path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
@@ -82,6 +106,18 @@ const routes = [
     path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
     options: {
       handler: NoticesSetupController.viewCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
+    options: {
+      handler: NoticesSetupController.viewRemoveThreshold,
       auth: {
         access: {
           scope: ['returns']

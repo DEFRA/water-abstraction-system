@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  * @module AlertThresholdsPresenter
  */
 
 const { titleCase } = require('../../../base.presenter.js')
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @param {module:SessionModel} session - The session instance
  *

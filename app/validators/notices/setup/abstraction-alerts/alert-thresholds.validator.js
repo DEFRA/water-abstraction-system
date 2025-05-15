@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module AlertThresholdsValidator
  */
@@ -11,7 +11,7 @@ const Joi = require('joi')
 const ERROR_MESSAGE = 'Select applicable threshold(s)'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alert/alert-thresholds` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
