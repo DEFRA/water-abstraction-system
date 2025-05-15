@@ -195,7 +195,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
               session.removedThresholds = [licenceMonitoringStationOne.id, licenceMonitoringStationTwo.id]
             })
 
-            it('should not show any remove links fro the remaining restriction', () => {
+            it('should not show any remove links for the remaining restriction', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
               expect(result.restrictions).to.equal([
