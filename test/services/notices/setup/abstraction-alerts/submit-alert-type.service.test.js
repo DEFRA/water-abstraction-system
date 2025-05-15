@@ -159,7 +159,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
         session = await SessionHelper.add({ data: sessionData })
       })
 
-      it('returns page data for the view, with errors', async () => {
+      it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
         const result = await SubmitAlertTypeService.go(session.id, payload)
 
         expect(result).to.equal({
@@ -182,7 +182,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
               value: 'reduce'
             },
             {
-              checked: false,
+              checked: true,
               hint: {
                 text: 'Tell licence holders they must stop taking water.'
               },
