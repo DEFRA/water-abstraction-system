@@ -36,7 +36,7 @@ describe('Alert Email Address Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Email address for the alert is required')
+      expect(result.error.details[0].message).to.equal('Select an email address to include in the alerts')
     })
   })
 })

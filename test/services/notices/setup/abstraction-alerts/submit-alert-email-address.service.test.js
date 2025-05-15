@@ -50,7 +50,7 @@ describe('Alert Email Address Service', () => {
 
       expect(result).to.equal({
         error: {
-          text: 'Email address for the alert is required'
+          text: 'Select an email address to include in the alerts'
         }
       })
     })
