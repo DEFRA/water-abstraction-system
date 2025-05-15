@@ -5,6 +5,7 @@
  * @module CreateReturnLogsService
  */
 
+const { db } = require('../../../db/db.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
 const GenerateReturnLogService = require('./generate-return-log.service.js')
@@ -23,11 +24,9 @@ async function go(returnRequirement, returnCycle, licenceEndDate) {
   try {
     const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
-    await _persistReturnLogs(returnLogs)
+    const createdIds = await _persistReturnLogs(returnLogs)
 
-    return returnLogs.map((returnLog) => {
-      return returnLog.id
-    })
+    return createdIds
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
   }
@@ -71,14 +70,23 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
 }
 
 async function _persistReturnLogs(returnLogs) {
+  const createdIds = []
   for (const returnLog of returnLogs) {
     const timestamp = timestampForPostgres()
 
-    await ReturnLogModel.query()
+    const insertedRow = await db('returnLogs')
+      .withSchema('public')
       .insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
-      .onConflict(['id'])
+      .onConflict('id')
       .ignore()
+      .returning('id')
+
+    if (insertedRow.length > 0) {
+      createdIds.push(insertedRow[0].id)
+    }
   }
+
+  return createdIds
 }
 
 module.exports = {

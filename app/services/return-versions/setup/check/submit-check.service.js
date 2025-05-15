@@ -52,7 +52,11 @@ async function _processReturnVersion(session, userId) {
     )
   }
 
-  await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
+  await ProcessLicenceReturnLogsService.go(
+    returnVersionData.returnVersion.licenceId,
+    changeDate,
+    returnVersionData.returnVersion.endDate
+  )
 }
 
 module.exports = {

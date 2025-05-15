@@ -39,8 +39,9 @@ const VoidLicenceReturnLogsService = require('./void-licence-return-logs.service
  *
  * @param {string} licenceId - The UUID of the licence to create return logs for
  * @param {Date} [changeDate] - An optional change date to use when determining which return logs to void and reissue
+ * @param {Date} [returnVersionEndDate] - An optional end date to use when determining which return logs to void and reissue
  */
-async function go(licenceId, changeDate = new Date()) {
+async function go(licenceId, changeDate = new Date(), returnVersionEndDate = null) {
   const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
 
   if (returnRequirements.length === 0) {
@@ -49,7 +50,7 @@ async function go(licenceId, changeDate = new Date()) {
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
-  const returnCycles = await _fetchReturnCycles(changeDate)
+  const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate)
 
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate)
@@ -62,10 +63,14 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
-async function _fetchReturnCycles(changeDate) {
+async function _fetchReturnCycles(changeDate, returnVersionEndDate) {
   const query = ReturnCycleModel.query()
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
-    .where('endDate', '>=', changeDate)
+    .where('endDate', '>', changeDate)
+
+  if (returnVersionEndDate) {
+    query.where('endDate', '<=', returnVersionEndDate)
+  }
 
   return query.orderBy('endDate', 'desc')
 }
