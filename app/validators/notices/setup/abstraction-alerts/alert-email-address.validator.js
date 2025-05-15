@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module AlertEmailAddressValidator
  */
@@ -9,7 +9,7 @@
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @param {object} payload - The payload from the request to be validated
  *

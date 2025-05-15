@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module AlertEmailAddressService
  */
@@ -10,7 +10,7 @@ const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @param {string} sessionId
  *

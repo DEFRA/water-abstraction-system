@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module SubmitAlertEmailAddressService
  */
@@ -11,7 +11,7 @@ const AlertEmailAddressValidator = require('../../../../validators/notices/setup
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alert/alert-email-address` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
