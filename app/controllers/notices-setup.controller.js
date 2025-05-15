@@ -6,6 +6,7 @@
  */
 
 const AdHocLicenceService = require('../services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
+const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
@@ -19,6 +20,7 @@ const RemoveLicencesService = require('../services/notices/setup/remove-licences
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
@@ -42,6 +44,14 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewAlertEmailAddress(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AlertEmailAddressService.go(sessionId)
+
+  return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
 }
 
 async function viewAlertThresholds(request, h) {
@@ -149,6 +159,21 @@ async function setup(request, h) {
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
 
+async function submitAlertEmailAddress(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
+  }
+
+  return h.redirect('')
+}
+
 async function submitAlertThresholds(request, h) {
   const {
     payload,
@@ -252,6 +277,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,
   viewCancel,
@@ -264,6 +290,7 @@ module.exports = {
   viewRemoveThreshold,
   viewReturnsPeriod,
   setup,
+  submitAlertEmailAddress,
   submitAlertThresholds,
   submitAlertType,
   submitCancel,
