@@ -3,15 +3,27 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
 describe('View Licence Bills presenter', () => {
   let bill
+
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when provided with a bills data', () => {
     beforeEach(() => {
@@ -26,6 +38,7 @@ describe('View Licence Bills presenter', () => {
           {
             accountNumber: 'BA1234443S',
             billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',
+            billingAccountLink: '/system/billing-accounts/2563bda0-73d8-4055-b3e7-421cf188d4dc',
             billId: 'dfed8cdd-05c0-4f03-9a95-a7bae74fe7be',
             billNumber: 'WAC0003872T',
             billRunType: 'Annual',
