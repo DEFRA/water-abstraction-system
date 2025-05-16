@@ -14,7 +14,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
-describe.only('View Licence Bills presenter', () => {
+describe('View Licence Bills presenter', () => {
   let bill
 
   beforeEach(() => {
