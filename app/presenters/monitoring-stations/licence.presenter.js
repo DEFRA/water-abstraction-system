@@ -70,7 +70,7 @@ function _linkedConditionDetails(licenceVersionPurposeCondition) {
     return {
       effectOfRestriction: notes ?? '',
       licenceVersionStatus: licenceVersionPurpose.licenceVersion.status,
-      linkedCondition: `${licenceVersionPurposeConditionType.displayTitle}, NALD ID${lastDigits}`
+      linkedCondition: `${licenceVersionPurposeConditionType.displayTitle}, NALD ID ${lastDigits}`
     }
   }
 
