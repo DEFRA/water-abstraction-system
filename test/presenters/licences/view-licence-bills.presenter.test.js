@@ -14,7 +14,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
-describe('View Licence Bills presenter', () => {
+describe.only('View Licence Bills presenter', () => {
   let bill
 
   beforeEach(() => {
@@ -58,6 +58,28 @@ describe('View Licence Bills presenter', () => {
             const result = ViewLicenceBillsPresenter.go([bill])
 
             expect(result.bills[0].billNumber).to.equal('WAC0003872T')
+          })
+        })
+
+        describe('the "billingAccountLink" property', () => {
+          describe('when the "enableBillingAccountView" flag is true', () => {
+            it('returns the system link', () => {
+              const result = ViewLicenceBillsPresenter.go([bill])
+
+              expect(result.bills[0].billingAccountLink).to.equal(`/system/billing-accounts/${bill.billingAccountId}`)
+            })
+          })
+
+          describe('when the "enableBillingAccountView" flag is false', () => {
+            beforeEach(() => {
+              Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(false)
+            })
+
+            it('returns the legacy link', () => {
+              const result = ViewLicenceBillsPresenter.go([bill])
+
+              expect(result.bills[0].billingAccountLink).to.equal(`/billing-accounts/${bill.billingAccountId}`)
+            })
           })
         })
 
