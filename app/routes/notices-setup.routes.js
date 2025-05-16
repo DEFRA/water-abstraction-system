@@ -31,6 +31,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    options: {
+      handler: NoticesSetupController.viewAlertEmailAddress,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    options: {
+      handler: NoticesSetupController.submitAlertEmailAddress,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.viewAlertType,

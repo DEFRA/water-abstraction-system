@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
@@ -25,6 +26,7 @@ const RemoveLicencesService = require('../../app/services/notices/setup/remove-l
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
@@ -241,6 +243,70 @@ describe('Notices Setup controller', () => {
   })
 
   describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
+    describe('/alert-email-address', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(AlertEmailAddressService, 'go').resolves({
+            pageTitle: 'Email Address page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Email Address page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+
+            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(``)
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+
+            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Email Address page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Email Address page')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+
     describe('/alert-thresholds', () => {
       describe('GET', () => {
         beforeEach(async () => {
