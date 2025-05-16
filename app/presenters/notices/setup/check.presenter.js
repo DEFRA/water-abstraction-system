@@ -25,11 +25,11 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { id: sessionId, journey, referenceCode } = session
+  const { journey, referenceCode } = session
 
   return {
     defaultPageSize,
-    links: _links(sessionId, journey),
+    links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
     recipients: _recipients(recipients, page),
@@ -66,7 +66,9 @@ function _formatRecipients(recipients) {
     }
   })
 }
-function _links(sessionId, journey) {
+function _links(session) {
+  const { sessionId, journey } = session
+
   const links = {
     back: `/system/notices/setup/${sessionId}/returns-period`,
     cancel: `/system/notices/setup/${sessionId}/cancel`,
@@ -76,6 +78,9 @@ function _links(sessionId, journey) {
 
   if (journey === 'ad-hoc') {
     links.back = `/system/notices/setup/${sessionId}/ad-hoc-licence`
+    links.removeLicences = ''
+  } else if (journey === 'abstraction-alert') {
+    links.back = `/system/monitoring-stations/${session.monitoringStationId}`
     links.removeLicences = ''
   }
 
