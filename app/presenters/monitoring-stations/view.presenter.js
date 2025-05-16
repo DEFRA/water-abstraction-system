@@ -53,20 +53,22 @@ function go(monitoringStation, auth) {
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations),
+    restrictions: _restrictions(licenceMonitoringStations, monitoringStationId),
     stationReference: stationReference ?? '',
     tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
   }
 }
 
-function _restrictions(licenceMonitoringStations) {
+function _restrictions(licenceMonitoringStations, monitoringStationId) {
   const preparedLicenceMonitoringStations = licenceMonitoringStations.map((licenceMonitoringStation) => {
+    const { licence } = licenceMonitoringStation
+
     let action
 
     if (FeatureFlagsConfig.enableLicenceMonitoringStationsView) {
       action = {
-        link: `/system/licence-monitoring-station/${licenceMonitoringStation.id}`,
+        link: `/system/monitoring-stations/${monitoringStationId}/licence/${licence.id}`,
         text: 'View'
       }
     }
