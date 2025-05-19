@@ -3,6 +3,19 @@
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 
 /**
+ * Create abstraction alerts recipients test data
+ *
+ * @returns {object} - Returns recipients for primaryUser, licenceHolder and an additional contact
+ */
+function alertsRecipients() {
+  return {
+    additionalContact: _addAdditionalContact(),
+    licenceHolder: _addLicenceHolder(),
+    primaryUser: _addPrimaryUser()
+  }
+}
+
+/**
  * Create recipients test data
  *
  * @returns {object} - Returns recipients for primaryUser, returnsAgent, licenceHolder, returnsTo and
@@ -15,6 +28,16 @@ function recipients() {
     licenceHolder: _addLicenceHolder(),
     returnsTo: _addReturnTo(),
     licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences()
+  }
+}
+
+function _addAdditionalContact() {
+  return {
+    licence_refs: generateLicenceRef(),
+    contact: null,
+    contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
+    contact_type: 'Additional contact',
+    email: 'additional.contact@important.com'
   }
 }
 
@@ -150,6 +173,7 @@ function _contact(line1, name, role) {
 }
 
 module.exports = {
+  alertsRecipients,
   recipients,
   duplicateRecipients
 }

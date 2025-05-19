@@ -5,10 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const FetchAbstractionAlertContactsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const RecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
@@ -21,7 +22,7 @@ describe('Notices - Setup - Check service', () => {
   let session
   let testRecipients
 
-  before(async () => {
+  beforeEach(async () => {
     removeLicences = ''
 
     session = await SessionHelper.add({
@@ -64,6 +65,48 @@ describe('Notices - Setup - Check service', () => {
       ],
       recipientsAmount: 1,
       referenceCode: 'RINV-123'
+    })
+  })
+
+  describe('when the journey is "abstraction-alert"', () => {
+    beforeEach(async () => {
+      session = await SessionHelper.add({
+        data: { journey: 'abstraction-alert', referenceCode: 'WAA-123', monitoringStationId: '456' }
+      })
+
+      testRecipients = RecipientsFixture.alertsRecipients()
+
+      Sinon.stub(FetchAbstractionAlertContactsService, 'go').resolves([testRecipients.additionalContact])
+    })
+
+    it('correctly presents the data', async () => {
+      const result = await CheckService.go(session.id)
+
+      expect(result).to.equal({
+        activeNavBar: 'manage',
+        defaultPageSize: 25,
+        links: {
+          back: `/system/monitoring-stations/${session.data.monitoringStationId}`,
+          cancel: `/system/notices/setup/${session.id}/cancel`,
+          download: `/system/notices/setup/${session.id}/download`,
+          removeLicences: ``
+        },
+        page: 1,
+        pagination: {
+          numberOfPages: 1
+        },
+        pageTitle: 'Check the recipients',
+        readyToSend: 'Abstraction alerts are ready to send.',
+        recipients: [
+          {
+            contact: ['additional.contact@important.com'],
+            licences: [`${testRecipients.additionalContact.licence_refs}`],
+            method: 'Email - Additional contact'
+          }
+        ],
+        recipientsAmount: 1,
+        referenceCode: 'WAA-123'
+      })
     })
   })
 })

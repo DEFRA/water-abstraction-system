@@ -9,6 +9,7 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
+  'abstraction-alert': 'Abstraction alerts',
   'ad-hoc': 'Ad-hoc notifications',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
@@ -67,17 +68,17 @@ function _formatRecipients(recipients) {
   })
 }
 function _links(session) {
-  const { sessionId, journey } = session
+  const { id, journey } = session
 
   const links = {
-    back: `/system/notices/setup/${sessionId}/returns-period`,
-    cancel: `/system/notices/setup/${sessionId}/cancel`,
-    download: `/system/notices/setup/${sessionId}/download`,
-    removeLicences: `/system/notices/setup/${sessionId}/remove-licences`
+    back: `/system/notices/setup/${id}/returns-period`,
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`,
+    removeLicences: `/system/notices/setup/${id}/remove-licences`
   }
 
   if (journey === 'ad-hoc') {
-    links.back = `/system/notices/setup/${sessionId}/ad-hoc-licence`
+    links.back = `/system/notices/setup/${id}/ad-hoc-licence`
     links.removeLicences = ''
   } else if (journey === 'abstraction-alert') {
     links.back = `/system/monitoring-stations/${session.monitoringStationId}`
