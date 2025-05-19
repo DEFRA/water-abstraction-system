@@ -247,7 +247,7 @@ async function submitCheckLicenceMatches(request, h) {
 
   await SubmitCheckLicenceMatchesService.go(sessionId)
 
-  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
 async function submitLicence(request, h) {
