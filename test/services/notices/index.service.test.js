@@ -5,958 +5,201 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
-const NoticesIndexPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
 // Thing under test
-const NoticesIndexService = require('../../../app/services/notices/index.service.js')
+const IndexService = require('../../../app/services/notices/index.service.js')
 
-describe('Notices - view', () => {
+describe('Notices - Index service', () => {
+  let fetchResults
+  let page
   let yarStub
-
-  beforeEach(async () => {})
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when called with no filters and no notices', () => {
-    before(() => {
-      yarStub = { get: Sinon.stub().returns({}) }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 0 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [],
-        pageTitle: 'View sent notices'
+  describe('when there are multiple pages of results', () => {
+    beforeEach(() => {
+      // For the purposes of these tests the filter doesn't matter
+      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
+
+      // NOTE: The presenter tests cover ensuring the page data is as expected. We don't need to replicate them here.
+      // So, we pretend there are lots of results, even though we just return one. It helps reduce the noise in these
+      // tests.
+      fetchResults = { results: [NoticesFixture.alertReduce()], total: 70 }
+      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+    })
+
+    describe('and no "page" was selected', () => {
+      beforeEach(() => {
+        page = undefined
+      })
+
+      it('returns the first page of notices, the title with page info and a pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.notices).to.have.length(1)
+        expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
+        expect(result.pagination.component).to.exist()
       })
     })
 
-    it('returns the data to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          notifications: undefined,
-          openFilter: false
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
+    describe('and a "page" other than 1 was selected', () => {
+      beforeEach(() => {
+        page = 2
       })
-    })
-  })
 
-  describe('when called with no filters and some notices', () => {
-    before(() => {
-      yarStub = { get: Sinon.stub().returns() }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 1 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
+      it('returns the selected page of notices, the title with page info and a pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
 
-    it('returns the data to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          notifications: undefined,
-          openFilter: false
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 1
-        },
-        pageTitle: 'View sent notices'
+        expect(result.notices).to.have.length(1)
+        expect(result.pageTitle).to.equal('Notices (page 2 of 3)')
+        expect(result.pagination.component).to.exist()
       })
     })
   })
 
-  describe('when called with filters and some notices', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          filterNotificationTypes: [
-            'ad-hoc-reminders',
-            'legacy-notifications',
-            'returns-paper-form',
-            'returns-reminders',
-            'returns-invitation',
-            'water-abstraction-alert-resume',
-            'water-abstraction-alert-stop',
-            'water-abstraction-alert-reduce',
-            'water-abstraction-alert-warning'
-          ]
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 1 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+  describe('when there is only one page of results', () => {
+    beforeEach(() => {
+      // For the purposes of these tests the filter doesn't matter
+      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
+
+      fetchResults = { results: [NoticesFixture.alertReduce()], total: 1 }
+      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+    })
+
+    describe('and no "page" was selected', () => {
+      beforeEach(() => {
+        page = undefined
+      })
+
+      it('returns all notices, the title without page info and no pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.notices).to.have.length(1)
+        expect(result.pageTitle).to.equal('Notices')
+        expect(result.pagination.component).not.to.exist()
       })
     })
 
-    it('returns the data to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
+    describe('and a "page" other than 1 was selected', () => {
+      beforeEach(() => {
+        page = 2
+      })
 
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          filterNotificationTypes: [
-            'ad-hoc-reminders',
-            'legacy-notifications',
-            'returns-paper-form',
-            'returns-reminders',
-            'returns-invitation',
-            'water-abstraction-alert-resume',
-            'water-abstraction-alert-stop',
-            'water-abstraction-alert-reduce',
-            'water-abstraction-alert-warning'
-          ],
-          notifications: {
-            adHocReminders: true,
-            legacyNotifications: true,
-            returnInvitation: true,
-            returnReminders: true,
-            returnsPaperForm: true,
-            waterAbstractionAlertReduce: true,
-            waterAbstractionAlertResume: true,
-            waterAbstractionAlertStop: true,
-            waterAbstractionAlertWarning: true
-          },
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 1
-        },
-        pageTitle: 'View sent notices'
+      it('returns all notices, the title without page info and no pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.notices).to.have.length(1)
+        expect(result.pageTitle).to.equal('Notices')
+        expect(result.pagination.component).not.to.exist()
       })
     })
   })
 
-  describe('when called with filters and there is an error with the email', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentBy: 'test@test'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 0 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+  describe('when are no results', () => {
+    beforeEach(() => {
+      // For the purposes of these tests the filter doesn't matter
+      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
+
+      fetchResults = { results: [], total: 0 }
+      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+    })
+
+    describe('and no "page" was selected', () => {
+      beforeEach(() => {
+        page = undefined
+      })
+
+      it('returns no notices, the title without page info and no pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.notices).to.be.empty()
+        expect(result.pageTitle).to.equal('Notices')
+        expect(result.pagination.component).not.to.exist()
       })
     })
 
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
+    describe('and a "page" other than 1 was selected', () => {
+      beforeEach(() => {
+        page = 2
+      })
 
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          sentByError: {
-            message: 'Enter a valid email'
-          },
-          summary: [
-            {
-              href: '#sent-by',
-              text: 'Enter a valid email'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentBy: 'test@test',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
+      it('returns no notices, the title without page info and no pagination component for the view', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.notices).to.be.empty()
+        expect(result.pageTitle).to.equal('Notices')
+        expect(result.pagination.component).not.to.exist()
       })
     })
   })
 
-  describe('when called with filters and there is no error with the email', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentBy: 'test@test.com'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 0 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+  describe('when the filters are assessed', () => {
+    beforeEach(() => {
+      // For the purposes of these tests the results don't matter
+      fetchResults = { results: [], total: 0 }
+      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+    })
+
+    describe('and none were ever set or they were cleared', () => {
+      beforeEach(() => {
+        yarStub = { get: Sinon.stub().returns(null) }
+      })
+
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.filters.openFilter).to.be.false()
       })
     })
 
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          notifications: undefined,
-          sentBy: 'test@test.com',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
+    describe('and the filters were submitted empty', () => {
+      beforeEach(() => {
+        yarStub = { get: Sinon.stub().returns(_noticeFilters()) }
       })
-    })
-  })
 
-  describe('when called with date filters', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentFromDay: '1',
-          sentFromMonth: '1',
-          sentFromYear: '2024',
-          sentToDay: '31',
-          sentToMonth: '12',
-          sentToYear: '2024'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 1 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await IndexService.go(yarStub, page)
+
+        expect(result.filters.openFilter).to.be.false()
       })
     })
 
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
+    describe('when a filter was applied', () => {
+      beforeEach(() => {
+        const filters = _noticeFilters()
 
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          notifications: undefined,
-          sentFromDay: '1',
-          sentFromMonth: '1',
-          sentFromYear: '2024',
-          sentToDay: '31',
-          sentToMonth: '12',
-          sentToYear: '2024',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 1
-        },
-        pageTitle: 'View sent notices'
+        filters.sentBy = 'carol.shaw@wrls.gov.uk'
+        yarStub = { get: Sinon.stub().returns(filters) }
       })
-    })
-  })
 
-  describe('when called with date filters but missing sentFromDay', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentFromMonth: '1',
-          sentFromYear: '2025'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
+      it('returns the saved filters and that the controls should be open', async () => {
+        const result = await IndexService.go(yarStub, page)
 
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          fromFullDate: {
-            message: 'Enter a valid from date'
-          },
-          summary: [
-            {
-              href: '#sent-from',
-              text: 'Enter a valid from date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentFromMonth: '1',
-          sentFromYear: '2025',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentFromMonth', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentFromDay: '1',
-          sentFromYear: '2025'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          fromFullDate: {
-            message: 'Enter a valid from date'
-          },
-          summary: [
-            {
-              href: '#sent-from',
-              text: 'Enter a valid from date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentFromDay: '1',
-          sentFromYear: '2025',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentFromYear', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentFromDay: '1',
-          sentFromMonth: '1'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          fromFullDate: {
-            message: 'Enter a valid from date'
-          },
-          summary: [
-            {
-              href: '#sent-from',
-              text: 'Enter a valid from date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentFromDay: '1',
-          sentFromMonth: '1',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentFromDay, sentFromMonth', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentFromYear: '2025'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          fromFullDate: {
-            message: 'Enter a valid from date'
-          },
-          summary: [
-            {
-              href: '#sent-from',
-              text: 'Enter a valid from date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentFromYear: '2025',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentToDay', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentToMonth: '12',
-          sentToYear: '2025'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          toFullDate: {
-            message: 'Enter a valid to date'
-          },
-          summary: [
-            {
-              href: '#sent-to',
-              text: 'Enter a valid to date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentToMonth: '12',
-          sentToYear: '2025',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentToMonth', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentToDay: '31',
-          sentToYear: '2025'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          toFullDate: {
-            message: 'Enter a valid to date'
-          },
-          summary: [
-            {
-              href: '#sent-to',
-              text: 'Enter a valid to date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentToDay: '31',
-          sentToYear: '2025',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with date filters but missing sentToYear', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          sentToDay: '31',
-          sentToMonth: '12'
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves([])
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: {
-          toFullDate: {
-            message: 'Enter a valid to date'
-          },
-          summary: [
-            {
-              href: '#sent-to',
-              text: 'Enter a valid to date'
-            }
-          ]
-        },
-        filter: {
-          notifications: undefined,
-          sentToDay: '31',
-          sentToMonth: '12',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 0
-        },
-        pageTitle: 'View sent notices'
-      })
-    })
-  })
-
-  describe('when called with all the filters with no errors', () => {
-    before(() => {
-      yarStub = {
-        get: Sinon.stub().returns({
-          filterNotificationTypes: [
-            'ad-hoc-reminders',
-            'legacy-notifications',
-            'returns-paper-form',
-            'returns-reminders',
-            'returns-invitation',
-            'water-abstraction-alert-resume',
-            'water-abstraction-alert-stop',
-            'water-abstraction-alert-reduce',
-            'water-abstraction-alert-warning'
-          ],
-          notifications: {
-            adHocReminders: true,
-            legacyNotifications: true,
-            returnInvitation: true,
-            returnReminders: true,
-            returnsPaperForm: true,
-            waterAbstractionAlertReduce: true,
-            waterAbstractionAlertResume: true,
-            waterAbstractionAlertStop: true,
-            waterAbstractionAlertWarning: true
-          },
-          sentFromDay: '31',
-          sentFromMonth: '12',
-          sentFromYear: '2023',
-          sentToDay: '31',
-          sentToMonth: '12',
-          sentToYear: '2024',
-          openFilter: true
-        })
-      }
-      Sinon.stub(FetchNoticesService, 'go').resolves({ results: [], total: 1 })
-      Sinon.stub(NoticesIndexPresenter, 'go').resolves({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pageTitle: 'View sent notices'
-      })
-    })
-
-    it('returns the data and the error to be displayed on the page', async () => {
-      const result = await NoticesIndexService.go(yarStub, 1)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        error: null,
-        filter: {
-          filterNotificationTypes: [
-            'ad-hoc-reminders',
-            'legacy-notifications',
-            'returns-paper-form',
-            'returns-reminders',
-            'returns-invitation',
-            'water-abstraction-alert-resume',
-            'water-abstraction-alert-stop',
-            'water-abstraction-alert-reduce',
-            'water-abstraction-alert-warning'
-          ],
-          notifications: {
-            adHocReminders: true,
-            legacyNotifications: true,
-            returnInvitation: true,
-            returnReminders: true,
-            returnsPaperForm: true,
-            waterAbstractionAlertReduce: true,
-            waterAbstractionAlertResume: true,
-            waterAbstractionAlertStop: true,
-            waterAbstractionAlertWarning: true
-          },
-          sentFromDay: '31',
-          sentFromMonth: '12',
-          sentFromYear: '2023',
-          sentToDay: '31',
-          sentToMonth: '12',
-          sentToYear: '2024',
-          openFilter: true
-        },
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            { text: '21 February 2025' },
-            { html: `<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>` },
-            { text: 'test@test.com' },
-            { text: 1, format: 'numeric' },
-            { text: 1, format: 'numeric' }
-          ]
-        ],
-        pagination: {
-          numberOfPages: 1
-        },
-        pageTitle: 'View sent notices'
+        expect(result.filters.openFilter).to.be.true()
       })
     })
   })
 })
 
-function _tableHeaders() {
-  return [
-    {
-      text: 'Date'
-    },
-    {
-      text: 'Notification type'
-    },
-    {
-      text: 'Sent by'
-    },
-    {
-      text: 'Recipients'
-    },
-    {
-      text: 'Problems'
-    }
-  ]
+function _noticeFilters() {
+  return {
+    noticeTypes: [],
+    sentBy: null,
+    sentFromDay: null,
+    sentFromMonth: null,
+    sentFromYear: null,
+    sentToDay: null,
+    sentToMonth: null,
+    sentToYear: null
+  }
 }

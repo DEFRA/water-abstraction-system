@@ -15,7 +15,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the notices for the `/notices` page
  *
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {number|string} page - The current page for the pagination service
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
