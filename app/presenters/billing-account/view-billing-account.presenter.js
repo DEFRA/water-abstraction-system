@@ -78,7 +78,7 @@ function _bills(bills) {
       billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
       billTotal: bill.credit ? formatMoney(bill.netAmount) + ' Credit' : formatMoney(bill.netAmount),
       dateCreated: formatLongDate(bill.createdAt),
-      financialYear: bill.financialYear
+      financialYear: bill.financialYearEnding
     }
   })
 }
