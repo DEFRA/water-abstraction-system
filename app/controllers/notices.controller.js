@@ -5,23 +5,26 @@
  * @module NoticesController
  */
 
-const NoticesIndexService = require('../services/notices/index.service.js')
-const SubmitNoticesIndexService = require('../services/notices/submit-index.service.js')
-
-const basePath = 'notices'
+const IndexNoticesService = require('../services/notices/index-notices.service.js')
+const SubmitIndexNoticesService = require('../services/notices/submit-index.service.js')
 
 async function index(request, h) {
-  const {
-    query: { page = 1 }
-  } = request
+  const { page } = request.query
 
-  const pageData = await NoticesIndexService.go(request.yar, page)
+  const pageData = await IndexNoticesService.go(request.yar, page)
 
-  return h.view(`${basePath}/index.njk`, pageData)
+  return h.view('notices/index.njk', pageData)
 }
 
 async function submitIndex(request, h) {
-  await SubmitNoticesIndexService.go(request.payload, request.yar)
+  const { payload, yar } = request
+  const { page } = request.query
+
+  const pageData = await SubmitIndexNoticesService.go(payload, yar, page)
+
+  if (pageData.error) {
+    return h.view('notices/index.njk', pageData)
+  }
 
   return h.redirect('/system/notices')
 }

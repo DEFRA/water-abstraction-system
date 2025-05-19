@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates presenting the data for `/notifications` page
- * @module ViewNoticesService
+ * @module IndexNoticesService
  */
 
 const FetchNoticesService = require('./fetch-notices.service.js')

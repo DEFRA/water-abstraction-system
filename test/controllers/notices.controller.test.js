@@ -11,7 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const IndexNoticesService = require('../../app/services/notices/index.service.js')
+const IndexNoticesService = require('../../app/services/notices/index-notices.service.js')
 const SubmitIndexNoticesService = require('../../app/services/notices/submit-index.service.js')
 
 // For running our service

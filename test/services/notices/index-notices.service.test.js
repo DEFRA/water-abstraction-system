@@ -15,9 +15,9 @@ const NoticesFixture = require('../../fixtures/notices.fixture.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
-const IndexService = require('../../../app/services/notices/index.service.js')
+const IndexNoticesService = require('../../../app/services/notices/index-notices.service.js')
 
-describe('Notices - Index service', () => {
+describe('Notices - Index Notices service', () => {
   let fetchResults
   let page
   let yarStub
@@ -44,7 +44,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns the first page of notices, the title with page info and a pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.have.length(1)
         expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
@@ -58,7 +58,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns the selected page of notices, the title with page info and a pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.have.length(1)
         expect(result.pageTitle).to.equal('Notices (page 2 of 3)')
@@ -82,7 +82,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns all notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.have.length(1)
         expect(result.pageTitle).to.equal('Notices')
@@ -96,7 +96,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns all notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.have.length(1)
         expect(result.pageTitle).to.equal('Notices')
@@ -120,7 +120,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns no notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.be.empty()
         expect(result.pageTitle).to.equal('Notices')
@@ -134,7 +134,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns no notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.notices).to.be.empty()
         expect(result.pageTitle).to.equal('Notices')
@@ -156,7 +156,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -168,7 +168,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -183,7 +183,7 @@ describe('Notices - Index service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, page)
 
         expect(result.filters.openFilter).to.be.true()
       })
