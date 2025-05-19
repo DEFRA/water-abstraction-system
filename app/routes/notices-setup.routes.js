@@ -138,6 +138,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    options: {
+      handler: NoticesSetupController.submitCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
     options: {
