@@ -15,36 +15,58 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { licenceMonitoringStations, alertThresholds, monitoringStationName, id } = session
+  const {
+    alertThresholds,
+    id: sessionId,
+    licenceMonitoringStations,
+    monitoringStationName,
+    removedThresholds
+  } = session
 
   return {
-    backLink: `/system/notices/setup/${id}/abstraction-alerts/alert-thresholds`,
+    backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
+    cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds),
+    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
 
-function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds) {
-  return licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
-  })
+function _action(sessionId, licenceMonitoringStation) {
+  return {
+    link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
+    text: 'Remove'
+  }
 }
 
-function _restrictions(licenceMonitoringStations, alertThresholds) {
+function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds, removedThresholds) {
+  const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
+  })
+
+  if (removedThresholds) {
+    return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
+      return !removedThresholds.includes(licenceMonitoringStation.id)
+    })
+  }
+
+  return relevantLicenceMonitoringStations
+}
+
+function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(
     licenceMonitoringStations,
-    alertThresholds
+    alertThresholds,
+    removedThresholds
   )
+
+  const multipleRestrictions = relevantLicenceMonitoringStations.length > 1
 
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
       ...licenceMonitoringStation,
-      action: {
-        link: `/system/licence-monitoring-station`,
-        text: 'Remove'
-      },
+      action: multipleRestrictions ? _action(sessionId, licenceMonitoringStation) : null,
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
         ? new Date(licenceMonitoringStation.statusUpdatedAt)
         : null

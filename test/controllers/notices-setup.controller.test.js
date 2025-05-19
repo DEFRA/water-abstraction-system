@@ -11,8 +11,10 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
+const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
@@ -21,11 +23,15 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/ad-hoc/ad-hoc-licence.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
+const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAdHocLicenceService = require('../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
+const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
+const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
@@ -238,6 +244,70 @@ describe('Notices Setup controller', () => {
   })
 
   describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
+    describe('/alert-email-address', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(AlertEmailAddressService, 'go').resolves({
+            pageTitle: 'Email Address page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Email Address page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+
+            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({})
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(``)
+          })
+        })
+
+        describe('when a request is invalid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+
+            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({
+              error: { text: 'Select an option' },
+              pageTitle: 'Email Address page'
+            })
+          })
+
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Email Address page')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+
     describe('/alert-thresholds', () => {
       describe('GET', () => {
         beforeEach(async () => {
@@ -370,6 +440,53 @@ describe('Notices Setup controller', () => {
       })
     })
 
+    describe('/cancel', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/cancel`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(CancelAlertsService, 'go').resolves({
+            pageTitle: 'Cancel page'
+          })
+        })
+
+        describe('when a request is valid', () => {
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Cancel page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          const monitoringStationId = '123'
+
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {})
+
+            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({ monitoringStationId })
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
+          })
+        })
+      })
+    })
+
     describe('/check-licence-matches', () => {
       describe('GET', () => {
         beforeEach(async () => {
@@ -393,6 +510,55 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Check licence page')
+          })
+        })
+      })
+
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/check-licence-matches`, {})
+
+            Sinon.stub(SubmitCheckLicenceMatchesService, 'go').resolves()
+          })
+
+          it('redirects to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`
+            )
+          })
+        })
+      })
+    })
+
+    describe('/remove-threshold/{licenceMonitoringStationId}', () => {
+      describe('GET', () => {
+        const licenceMonitoringStationId = '123'
+
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          Sinon.stub(RemoveThresholdService, 'go').resolves({})
+        })
+
+        describe('when a request is valid', () => {
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
+            )
           })
         })
       })

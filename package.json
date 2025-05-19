@@ -1,6 +1,6 @@
 {
   "name": "water-abstraction-system",
-  "version": "0.30.0",
+  "version": "0.32.0",
   "description": "System for managing water abstraction licences, including alerts, returns and billing",
   "homepage": "https://github.com/DEFRA/water-abstraction-team",
   "main": "index.js",

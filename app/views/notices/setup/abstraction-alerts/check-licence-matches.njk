@@ -2,6 +2,7 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/licence-monitoring-station-restrictions-table.njk" import licenceMonitoringStationRestrictionsTable %}
@@ -18,6 +19,13 @@
 {% block content %}
   <div>
 
+    {% if notification %}
+      {{ govukNotificationBanner({
+        titleText: notification.title,
+        text: notification.text
+      }) }}
+    {% endif %}
+
     <span class="govuk-caption-l">{{caption}}</span>
 
     <h2 class="govuk-heading-l">{{ pageTitle }}</h2>
@@ -27,7 +35,16 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: cancelLink,
+          preventDoubleClick: true
+        }) }}
+      </div>
     </form>
   </div>
 {% endblock %}

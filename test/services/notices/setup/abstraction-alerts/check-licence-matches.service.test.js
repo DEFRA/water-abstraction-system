@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,6 +21,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
   let licenceMonitoringStationTwo
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
@@ -38,22 +40,31 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
     }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub().resolves() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckLicenceMatchesService.go(session.id)
+      const result = await CheckLicenceMatchesService.go(session.id, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+        cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
         caption: 'Death star',
+        notification: undefined,
         pageTitle: 'Check the licence matches for the selected thresholds',
         restrictionHeading: 'Flow and level restriction type and threshold',
         restrictions: [
           {
             abstractionPeriod: '1 February to 1 January',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -67,7 +78,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationTwo.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -81,7 +92,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: '/system/licence-monitoring-station',
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationThree.id}`,
               text: 'Remove'
             },
             alert: null,
@@ -93,6 +104,18 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
             threshold: '100 m'
           }
         ]
+      })
+    })
+
+    describe('when there is a notification', () => {
+      beforeEach(() => {
+        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+      })
+
+      it('should set the notification', async () => {
+        const result = await CheckLicenceMatchesService.go(session.id, yarStub)
+
+        expect(result.notification).to.equal('Test notification')
       })
     })
   })

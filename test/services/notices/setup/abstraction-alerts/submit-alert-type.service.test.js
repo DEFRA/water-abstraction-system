@@ -48,6 +48,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
     describe('when the user selects a different "alertType" to a previous selection', () => {
       beforeEach(async () => {
         sessionData.alertType = 'resume'
+        sessionData.removedThresholds = ['123']
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -58,6 +59,14 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.alertThresholds).to.equal([])
+      })
+
+      it('sets the "removedThresholds" to an empty array', async () => {
+        await SubmitAlertTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.removedThresholds).to.equal([])
       })
     })
 
@@ -80,57 +89,122 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = {}
+    describe('and no option has been selected', () => {
+      beforeEach(async () => {
+        payload = {}
 
-      session = await SessionHelper.add({ data: sessionData })
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitAlertTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertTypeOptions: [
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
+              },
+              text: 'Warning',
+              value: 'warning'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they can take water at a reduced amount.'
+              },
+              text: 'Reduce',
+              value: 'reduce'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they must stop taking water.'
+              },
+              text: 'Stop',
+              value: 'stop'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they can take water at the normal amount.'
+              },
+              text: 'Resume',
+              value: 'resume'
+            }
+          ],
+          backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
+          caption: 'Death star',
+          error: {
+            text: 'Select the type of alert you need to send'
+          },
+          pageTitle: 'Select the type of alert you need to send'
+        })
+      })
     })
 
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAlertTypeService.go(session.id, payload)
+    describe('and "stop" or "reduce" have been selected but no thresholds have that alert type', () => {
+      beforeEach(async () => {
+        payload = { 'alert-type': 'stop' }
 
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        alertTypeOptions: [
+        sessionData.licenceMonitoringStations = [
           {
-            checked: false,
-            hint: {
-              text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
-            },
-            text: 'Warning',
-            value: 'warning'
-          },
-          {
-            checked: false,
-            hint: {
-              text: 'Tell licence holders they can take water at a reduced amount.'
-            },
-            text: 'Reduce',
-            value: 'reduce'
-          },
-          {
-            checked: false,
-            hint: {
-              text: 'Tell licence holders they must stop taking water.'
-            },
-            text: 'Stop',
-            value: 'stop'
-          },
-          {
-            checked: false,
-            hint: {
-              text: 'Tell licence holders they can take water at the normal amount.'
-            },
-            text: 'Resume',
-            value: 'resume'
+            ...sessionData.licenceMonitoringStations[0],
+            restrictionType: 'warning'
           }
-        ],
-        backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
-        caption: 'Death star',
-        error: {
-          text: 'Select the type of alert you need to send'
-        },
-        pageTitle: 'Select the type of alert you need to send'
+        ]
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
+        const result = await SubmitAlertTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertTypeOptions: [
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
+              },
+              text: 'Warning',
+              value: 'warning'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they can take water at a reduced amount.'
+              },
+              text: 'Reduce',
+              value: 'reduce'
+            },
+            {
+              checked: true,
+              hint: {
+                text: 'Tell licence holders they must stop taking water.'
+              },
+              text: 'Stop',
+              value: 'stop'
+            },
+            {
+              checked: false,
+              hint: {
+                text: 'Tell licence holders they can take water at the normal amount.'
+              },
+              text: 'Resume',
+              value: 'resume'
+            }
+          ],
+          backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
+          caption: 'Death star',
+          error: {
+            text: 'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+          },
+          pageTitle: 'Select the type of alert you need to send'
+        })
       })
     })
   })

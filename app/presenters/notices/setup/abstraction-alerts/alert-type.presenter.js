@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/abstraction-alert/alert-type` page
+ * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module AlertTypePresenter
  */
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/abstraction-alert/alert-type` page
+ * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @param {module:SessionModel} session - The session instance
  *
