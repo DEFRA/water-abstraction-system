@@ -45,7 +45,10 @@ async function go(sessionId, user) {
       returnSubmission.id,
       session.returnsFrequency,
       session.units,
-      session.meterProvided,
+      session.reported === 'abstraction-volumes',
+      session.meterProvided === 'yes',
+      session.startReading,
+      session.meter10TimesDisplay === 'yes',
       trx
     )
 
