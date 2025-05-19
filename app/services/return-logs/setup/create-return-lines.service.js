@@ -20,10 +20,9 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {boolean} volumes - Indicates if lines contain volumes
  * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether it's volumes or
  * meter readings)
- * @param {number} startReading - TODO: Document
- * @param {boolean} meter10TimesDisplay - TODO: Document
- * @param {object} [trx=null] - Optional
- * {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
+ * @param {number} startReading - The starting meter reading
+ * @param {boolean} meter10TimesDisplay - Whether the meter is a 10x display
+ * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if no lines were provided)
  */
