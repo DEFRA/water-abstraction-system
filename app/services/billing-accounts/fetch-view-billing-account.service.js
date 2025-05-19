@@ -5,8 +5,6 @@
  * @module FetchViewBillingAccountService
  */
 
-const { ref } = require('objection')
-
 const BillingAccountModel = require('../../models/billing-account.model.js')
 const BillModel = require('../../models/bill.model.js')
 
@@ -59,14 +57,7 @@ async function _fetchBillingAccount(id) {
 
 async function _fetchBills(billingAccountId, page) {
   return BillModel.query()
-    .select([
-      'id',
-      'createdAt',
-      'credit',
-      'invoiceNumber',
-      'netAmount',
-      ref('bills.metadata:FIN_YEAR').castInt().as('financialYear')
-    ])
+    .select(['id', 'createdAt', 'credit', 'financialYearEnding', 'invoiceNumber', 'netAmount'])
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
       builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer'])

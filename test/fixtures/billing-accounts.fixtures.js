@@ -57,7 +57,7 @@ function billingAccount() {
         credit: false,
         invoiceNumber: false,
         netAmount: 10384,
-        financialYear: 2021,
+        financialYearEnding: 2021,
         billRun: {
           id: 'eee30072-ad12-426a-9d69-c712f38e581d',
           batchType: 'annual',
