@@ -18,8 +18,8 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
  * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
  * @param {boolean} volumes - Indicates if lines contain volumes
- * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether it's volumes or
- * meter readings)
+ * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether lines contain
+ * volumes or meter readings)
  * @param {number} startReading - The starting meter reading
  * @param {boolean} meter10TimesDisplay - Whether the meter is a 10x display
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
@@ -48,9 +48,11 @@ async function go(
 
     previousReading = currentReading
 
+    // We use destructuring to remove the reading property as this is not a valid column in the db
+    const { reading, ...restOfLine } = line
+
     return {
-      ...line,
-      reading: undefined, // Remove the original 'reading' property as it's not a DB column
+      ...restOfLine,
       id: generateUUID(),
       createdAt: timestampForPostgres(),
       quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, units) : undefined,
@@ -76,23 +78,20 @@ async function go(
  * @returns {object} - An object containing the calculated quantity and the new previous reading
  */
 function calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay) {
-  let rawQuantity
-  let currentReading = previousReading
+  const currentReading = line.reading ?? previousReading
 
   if (volumes) {
-    rawQuantity = line.quantity ?? null
-  } else {
-    if (line.reading) {
-      const multiplier = meter10TimesDisplay ? 10 : 1
-      rawQuantity = (line.reading - previousReading) * multiplier
-      currentReading = line.reading
-    } else {
-      rawQuantity = null
-    }
+    return { rawQuantity: line.quantity, currentReading }
   }
 
+  if (!line.reading) {
+    return { rawQuantity: null, currentReading }
+  }
+
+  const multiplier = meter10TimesDisplay ? 10 : 1
+
   return {
-    rawQuantity,
+    rawQuantity: (line.reading - previousReading) * multiplier,
     currentReading
   }
 }
