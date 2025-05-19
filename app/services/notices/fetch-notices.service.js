@@ -45,7 +45,7 @@ function _applyFilters(query, filters) {
   const { fromDate, noticeTypes, sentBy, toDate } = filters
 
   if (sentBy) {
-    query.whereLike('issuer', `%${sentBy}%`)
+    query.whereILike('issuer', `%${sentBy}%`)
   }
 
   if (fromDate) {

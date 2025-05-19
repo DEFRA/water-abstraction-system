@@ -45,7 +45,8 @@ describe('Notices - Fetch Notices service', () => {
   describe('when a filter is applied', () => {
     describe('and "Sent By" has been set', () => {
       beforeEach(() => {
-        filters.sentBy = 'area.team@wrls.gov.uk'
+        // NOTE: We use an uppercase "TEAM" here to test that the service is using case insensitive LIKE where clause
+        filters.sentBy = 'TEAM'
       })
 
       it('returns the matching notices', async () => {
