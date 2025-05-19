@@ -3,24 +3,6 @@
 const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
- * Returns all the notices as an array
- *
- * @returns {object[]} all the notices as an array
- */
-function notices() {
-  return [
-    alertReduce(),
-    alertResume(),
-    alertStop(),
-    alertWarning(),
-    legacyNotification(),
-    returnsInvitation(),
-    returnsPaperForm(),
-    returnsReminder()
-  ]
-}
-
-/**
  * Represents a notice of type 'alert reduce'
  *
  * @returns {object}
@@ -87,6 +69,24 @@ function legacyNotification() {
   data.name = 'Hands off flow: levels warning'
 
   return data
+}
+
+/**
+ * Returns all the notices as an array
+ *
+ * @returns {object[]} all the notices as an array
+ */
+function notices() {
+  return [
+    alertReduce(),
+    alertResume(),
+    alertStop(),
+    alertWarning(),
+    legacyNotification(),
+    returnsInvitation(),
+    returnsPaperForm(),
+    returnsReminder()
+  ]
 }
 
 /**
