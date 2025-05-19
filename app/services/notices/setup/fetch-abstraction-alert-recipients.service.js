@@ -74,12 +74,12 @@ function _query() {
                  (NULL)                AS contact,
                  md5(LOWER(con.email)) AS contact_hash_id
           FROM public.licence_document_headers ldh
-                 INNER JOIN wabs.public.licence_documents ld
+                 INNER JOIN public.licence_documents ld
                             ON ld.licence_ref = ldh.licence_ref
-                 INNER JOIN wabs.public.licence_document_roles AS ldr ON ldr.licence_document_id = ld.id
-                 INNER JOIN wabs.public.company_contacts AS cct ON cct.company_id = ldr.company_id
-                 INNER JOIN wabs.public.contacts AS con ON con.id = cct.contact_id
-                 INNER JOIN wabs.public.licence_roles AS lr ON lr.id = cct.licence_role_id
+                 INNER JOIN public.licence_document_roles AS ldr ON ldr.licence_document_id = ld.id
+                 INNER JOIN public.company_contacts AS cct ON cct.company_id = ldr.company_id
+                 INNER JOIN public.contacts AS con ON con.id = cct.contact_id
+                 INNER JOIN public.licence_roles AS lr ON lr.id = cct.licence_role_id
           WHERE ldh.licence_ref = ANY (?)) contacts
     GROUP BY contact_type,
              email,
