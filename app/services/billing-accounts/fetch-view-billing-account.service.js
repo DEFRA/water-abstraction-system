@@ -22,6 +22,8 @@ const DatabaseConfig = require('../../../config/database.config.js')
 async function go(id, page) {
   const billingAccount = await _fetchBillingAccount(id)
   const { results, total } = await _fetchBills(id, page)
+  console.log('🚀🚀🚀 ~ results:')
+  console.dir(results, { depth: null, colors: true })
 
   return {
     billingAccount,
@@ -58,15 +60,18 @@ async function _fetchBillingAccount(id) {
 async function _fetchBills(billingAccountId, page) {
   return BillModel.query()
     .select(['id', 'createdAt', 'credit', 'financialYearEnding', 'invoiceNumber', 'netAmount'])
-    .withGraphFetched('billRun')
-    .modifyGraph('billRun', (builder) => {
-      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer'])
+    .where('billingAccountId', billingAccountId)
+    .whereExists(function () {
+      this.select(1).from('billRuns').whereRaw('billRuns.id = bills.billRunId').andWhere('billRuns.status', 'sent')
     })
     .orderBy([
       { column: 'createdAt', order: 'desc' },
       { column: 'invoiceNumber', order: 'asc' }
     ])
-    .where('billingAccountId', billingAccountId)
+    .withGraphFetched('billRun')
+    .modifyGraph('billRun', (builder) => {
+      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
+    })
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
