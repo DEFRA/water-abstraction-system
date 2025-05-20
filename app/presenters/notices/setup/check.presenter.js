@@ -67,25 +67,28 @@ function _formatRecipients(recipients) {
     }
   })
 }
-function _links(session) {
-  const { id, journey } = session
 
-  const links = {
-    back: `/system/notices/setup/${id}/returns-period`,
-    cancel: `/system/notices/setup/${id}/cancel`,
-    download: `/system/notices/setup/${id}/download`,
-    removeLicences: `/system/notices/setup/${id}/remove-licences`
-  }
+function _links(session) {
+  const { id, journey, monitoringStationId } = session
+
+  let back
+  let removeLicences = ''
 
   if (journey === 'ad-hoc') {
-    links.back = `/system/notices/setup/${id}/ad-hoc-licence`
-    links.removeLicences = ''
+    back = `/system/notices/setup/${id}/ad-hoc-licence`
   } else if (journey === 'abstraction-alert') {
-    links.back = `/system/monitoring-stations/${session.monitoringStationId}`
-    links.removeLicences = ''
+    back = `/system/monitoring-stations/${monitoringStationId}`
+  } else {
+    back = `/system/notices/setup/${id}/returns-period`
+    removeLicences = `/system/notices/setup/${id}/remove-licences`
   }
 
-  return links
+  return {
+    back,
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`,
+    removeLicences
+  }
 }
 
 function _pageTitle(page, pagination) {
