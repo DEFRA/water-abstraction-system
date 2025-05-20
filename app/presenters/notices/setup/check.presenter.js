@@ -9,6 +9,7 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
+  'abstraction-alert': 'Abstraction alerts',
   'ad-hoc': 'Ad-hoc notifications',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
@@ -25,11 +26,11 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { id: sessionId, journey, referenceCode } = session
+  const { journey, referenceCode } = session
 
   return {
     defaultPageSize,
-    links: _links(sessionId, journey),
+    links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
     recipients: _recipients(recipients, page),
@@ -66,20 +67,28 @@ function _formatRecipients(recipients) {
     }
   })
 }
-function _links(sessionId, journey) {
-  const links = {
-    back: `/system/notices/setup/${sessionId}/returns-period`,
-    cancel: `/system/notices/setup/${sessionId}/cancel`,
-    download: `/system/notices/setup/${sessionId}/download`,
-    removeLicences: `/system/notices/setup/${sessionId}/remove-licences`
-  }
+
+function _links(session) {
+  const { id, journey, monitoringStationId } = session
+
+  let back
+  let removeLicences = ''
 
   if (journey === 'ad-hoc') {
-    links.back = `/system/notices/setup/${sessionId}/ad-hoc-licence`
-    links.removeLicences = ''
+    back = `/system/notices/setup/${id}/ad-hoc-licence`
+  } else if (journey === 'abstraction-alert') {
+    back = `/system/monitoring-stations/${monitoringStationId}`
+  } else {
+    back = `/system/notices/setup/${id}/returns-period`
+    removeLicences = `/system/notices/setup/${id}/remove-licences`
   }
 
-  return links
+  return {
+    back,
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`,
+    removeLicences
+  }
 }
 
 function _pageTitle(page, pagination) {
