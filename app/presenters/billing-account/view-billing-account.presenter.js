@@ -31,7 +31,6 @@ function go(billingAccountData, licenceId) {
     createdDate: formatLongDate(createdAt),
     customerFile: lastTransactionFile,
     lastUpdated: lastTransactionFileCreatedAt ? formatLongDate(lastTransactionFileCreatedAt) : null,
-    licenceId,
     pageTitle: 'Billing account for ' + titleCase(company.name),
     pagination
   }
