@@ -1,8 +1,11 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "macros/notice-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
   {{
@@ -14,18 +17,93 @@
 {% endblock %}
 
 {% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">Notice {{reference}} </span>
+    <h1 class="govuk-heading-l">Water abstraction alert</h1>
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    {{ statusTag(status, false) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
+    {{
+      govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        attributes: {
+          'data-test': 'meta-data'
+        },
+        rows: [
+          {
+            key: { text: 'Date created', classes: 'meta-data__label' },
+            value: { text: dateCreated, classes: 'govuk-!-padding-bottom-0' }
+          },
+          {
+            key: { text: 'Created by', classes: 'meta-data__label' },
+            value: { text: createdBy }
+          }
+        ]
+      })
+    }}
+
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Showing {{numberShowing}} of {{numberOfRecipients}} notifications.</p>
+
+    {% set tableRows = [] %}
+    {% for notice in notices %}
+      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+      {% set rowIndex = loop.index0 %}
+
+      {% set addressLineSpan %}
+        {% for addressLine in notice.recipient %}
+            <span class="govuk-!-display-block">{{ addressLine }}</span>
+        {% endfor %}
+      {% endset %}
+
+      {% set licenceSpan %}
+        {% for licence in notice.licenceRefs %}
+            <span class="govuk-!-display-block">{{ licence }}</span>
+        {% endfor %}
+      {% endset %}
+
+      {% set noticeStatusTag %}
+        {{ statusTag(notice.status, true) }}
+      {% endset %}
+
+      {% set row = [
+        {
+          html: addressLineSpan,
+          attributes: { 'data-test': 'notice-recipient' + rowIndex }
+        },
+        {
+          html: licenceSpan,
+          attributes: { 'data-test': 'notice-licences-' + rowIndex }
+        },
+        {
+          text: notice.messageType,
+          attributes: { 'data-test': 'notice-messageType-' + rowIndex }
+        },
+        {
+          html: noticeStatusTag,
+          attributes: { 'data-test': 'notice-status-' + rowIndex }
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{
+      govukTable({
+        firstCellIsHeader: false,
+        attributes: { 'data-test': 'notices' },
+        head: [
+          { text: 'Receipient' },
+          { text: 'Licence number' },
+          { text: 'Method' },
+          { text: 'Status' }
+        ],
+        rows: tableRows
+      })
+    }}
+
+    {% if pagination.numberOfPages > 1  %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+
   </div>
 {% endblock %}
