@@ -49,27 +49,55 @@ describe('Billing Accounts controller', () => {
 
   describe('/billing-accounts/{billingAccountId}', () => {
     describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
-        }
-      })
-
-      describe('when the request succeeds', () => {
+      describe('when a licenceId is passed as a query parameter', () => {
         beforeEach(() => {
-          Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          options = {
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?izd=9a437fad-86b7-4495-8b26-061662cf8037',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
         })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+        describe('when the request succeeds', () => {
+          beforeEach(() => {
+            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          })
+        })
+      })
+
+      describe('when no licenceId is passed as a query parameter', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(() => {
+            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          })
         })
       })
     })
@@ -171,7 +199,10 @@ function _viewBillingAccount() {
     createdDate: '14 December 2023',
     customerFile: 'naltc0001',
     lastUpdated: '6 May 2025',
-    licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+    backLink: {
+      title: 'Go back to bills',
+      link: `/system/licences/9a437fad-86b7-4495-8b26-061662cf8037/bills`
+    },
     pageTitle: 'Billing account for Ferns Surfacing Limited',
     pagination: { numberOfPages: 1 }
   }
