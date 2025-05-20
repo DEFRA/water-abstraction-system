@@ -26,17 +26,14 @@ describe('Monitoring Stations - Licence service', () => {
       {
         id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
         createdAt: new Date('2025-04-23'),
-        createdBy: 100329,
         licenceId,
         restrictionType: 'reduce',
         thresholdUnit: 'Ml/d',
         thresholdValue: 175,
         licence: {
-          id: licenceId,
           licenceRef: '99/999'
         },
         user: {
-          id: 100329,
           username: 'environment.officer@wrls.gov.uk'
         },
         licenceVersionPurposeCondition: undefined

@@ -79,19 +79,20 @@ describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
     let licence
     let licenceMonitoringStation
     let licenceVersionPurposeCondition
-    let licenceVersionPurpose
+    let licenceVersionPurposeId
 
     beforeEach(async () => {
       licence = await LicenceHelper.add()
 
       const { id: licenceVersionId } = await LicenceVersionHelper.add({ licenceId: licence.id })
 
-      licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId })
+      const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId })
+      licenceVersionPurposeId = licenceVersionPurpose.id
 
       const { id: licenceVersionPurposeConditionTypeId } = LicenceVersionPurposeConditionTypeHelper.select(22)
 
       licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-        licenceVersionPurposeId: licenceVersionPurpose.id,
+        licenceVersionPurposeId,
         licenceVersionPurposeConditionTypeId,
         notes: 'This is the effect of restriction'
       })
@@ -128,7 +129,7 @@ describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
               externalId: licenceVersionPurposeCondition.externalId,
               notes: 'This is the effect of restriction',
               licenceVersionPurpose: {
-                id: licenceVersionPurpose.id,
+                id: licenceVersionPurposeId,
                 licenceVersion: { status: 'current' }
               },
               licenceVersionPurposeConditionType: {

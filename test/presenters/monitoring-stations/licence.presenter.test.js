@@ -108,26 +108,7 @@ describe('Monitoring Stations - Licence presenter', () => {
   describe('the "licenceTags" property', () => {
     describe('when the licence monitoring station record is NOT linked to a condition', () => {
       beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations = [
-          {
-            id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-            createdAt: new Date('2025-04-23'),
-            createdBy: 100329,
-            licenceId: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-            restrictionType: 'reduce',
-            thresholdUnit: 'Ml/d',
-            thresholdValue: 175,
-            licence: {
-              id: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-              licenceRef: '99/999'
-            },
-            user: {
-              id: 100329,
-              username: 'environment.officer@wrls.gov.uk'
-            },
-            licenceVersionPurposeCondition: undefined
-          }
-        ]
+        monitoringStationLicenceTags.licenceMonitoringStations[0].licenceVersionPurposeCondition = undefined
       })
 
       it('correctly formats the licence monitoring station record', () => {
@@ -149,37 +130,18 @@ describe('Monitoring Stations - Licence presenter', () => {
 
     describe('when the licence monitoring station record is linked to a condition', () => {
       beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations = [
-          {
-            id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-            createdAt: new Date('2025-04-23'),
-            createdBy: 100329,
-            licenceId: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-            restrictionType: 'reduce',
-            thresholdUnit: 'Ml/d',
-            thresholdValue: 175,
-            licence: {
-              id: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-              licenceRef: '99/999'
-            },
-            user: {
-              id: 100329,
-              username: 'environment.officer@wrls.gov.uk'
-            },
-            licenceVersionPurposeCondition: {
-              externalId: '12345:1:98765',
-              notes: 'licenceVersionPurposeCondition notes',
-              licenceVersionPurposeConditionType: {
-                displayTitle: 'Flow cessation condition'
-              },
-              licenceVersionPurpose: {
-                licenceVersion: {
-                  status: 'current'
-                }
-              }
+        monitoringStationLicenceTags.licenceMonitoringStations[0].licenceVersionPurposeCondition = {
+          externalId: '12345:1:98765',
+          notes: 'licenceVersionPurposeCondition notes',
+          licenceVersionPurposeConditionType: {
+            displayTitle: 'Flow cessation condition'
+          },
+          licenceVersionPurpose: {
+            licenceVersion: {
+              status: 'current'
             }
           }
-        ]
+        }
       })
 
       it('correctly formats the licence monitoring station record', () => {
@@ -238,17 +200,14 @@ function _monitoringStationLicenceTags() {
       {
         id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
         createdAt: new Date('2025-04-23'),
-        createdBy: 100329,
         licenceId: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
         restrictionType: 'reduce',
         thresholdUnit: 'Ml/d',
         thresholdValue: 175,
         licence: {
-          id: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
           licenceRef: '99/999'
         },
         user: {
-          id: 100329,
           username: 'environment.officer@wrls.gov.uk'
         },
         licenceVersionPurposeCondition: undefined
