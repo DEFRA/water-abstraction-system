@@ -130,17 +130,17 @@ describe('Fetch Billing Account service', () => {
           {
             id: bill.id,
             createdAt: bill.createdAt,
-            credit: null,
-            invoiceNumber: null,
-            netAmount: null,
-            financialYear: null,
+            credit: bill.credit,
+            invoiceNumber: bill.invoiceNumber,
+            netAmount: bill.netAmount,
+            financialYearEnding: bill.financialYearEnding,
             billRun: {
               id: billRun.id,
-              batchType: 'supplementary',
-              billRunNumber: null,
-              scheme: 'sroc',
-              source: 'wrls',
-              summer: false
+              batchType: billRun.batchType,
+              billRunNumber: billRun.billRunNumber,
+              scheme: billRun.scheme,
+              source: billRun.source,
+              summer: billRun.summer
             }
           }
         ],
