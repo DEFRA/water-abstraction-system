@@ -22,11 +22,11 @@ function go(session) {
   }
 
   return {
-    meters: _meters(session),
+    meters: _determineMeters(session),
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    // Legacy code sets reported to `estimated` ONLY if this is volumes with no meter; otherwise it's `measured`
-    type: session.reported === 'abstraction-volumes' && session.meterProvided === 'no' ? 'estimated' : 'measured',
     units: getUnitSymbolByName(session.units),
+    // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
+    type: session.reported === 'abstraction-volumes' && session.meterProvided === 'no' ? 'estimated' : 'measured',
     ..._totalProperties(session)
   }
 }
@@ -42,40 +42,31 @@ function _formatReadings(lines) {
   }, {})
 }
 
-function _meters(session) {
-  // Legacy code sets meters array as empty ONLY if we have volumes with no meter; otherwise we populate the array
+function _determineMeters(session) {
+  // We set meters array as empty ONLY if we have volumes with no meter; in all other scenarios we populate the array
   if (session.reported === 'abstraction-volumes' && session.meterProvided === 'no') {
     return []
   }
 
-  if (session.reported === 'abstraction-volumes' && session.meterProvided === 'yes') {
-    return [
-      {
-        multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+  // Otherwise, we return an array containing a single meter object
+  return [
+    {
+      meterDetailsProvided: session.meterProvided === 'yes',
+      // Legacy code always sets multiplier, regardless of whether we have meter details. We follow suit for consistency
+      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+      // Manufacturer and serial number are only set if meter details are provided
+      ...(session.meterProvided === 'yes' && {
         manufacturer: session.meterMake,
-        serialNumber: session.meterSerialNumber,
-        meterDetailsProvided: true
-      }
-    ]
-  }
-
-  // At this point, we know that session.reported is 'meter-readings'
-
-  // These details are always included in the meter object
-  const meter = {
-    units: getUnitSymbolByName(session.units),
-    readings: _formatReadings(session.lines),
-    multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
-    startReading: session.startReading,
-    meterDetailsProvided: session.meterProvided === 'yes'
-  }
-
-  if (meter.meterDetailsProvided) {
-    meter.manufacturer = session.meterMake
-    meter.serialNumber = session.meterSerialNumber
-  }
-
-  return [meter]
+        serialNumber: session.meterSerialNumber
+      }),
+      // Units, readings and start reading are only set if this is a meter reading return
+      ...(session.reported === 'meter-readings' && {
+        units: getUnitSymbolByName(session.units),
+        readings: _formatReadings(session.lines),
+        startReading: session.startReading
+      })
+    }
+  ]
 }
 
 function _totalProperties(session) {

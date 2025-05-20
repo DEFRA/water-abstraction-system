@@ -274,7 +274,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
           sessionData.meterProvided = 'no'
         })
 
-        // This is consistent with the legacy code; only submissions with volumes and no meter have type set to estimated
+        // This is consistent with the legacy code; only returns with volumes and no meter have type set to estimated
         it('sets type as measured', () => {
           const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
