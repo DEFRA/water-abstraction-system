@@ -18,13 +18,24 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       reported: 'abstraction-volumes',
       units: 'cubic-metres',
       singleVolume: false,
-      meterProvided: 'no'
+      meterProvided: 'no',
+      lines: []
     }
   })
 
   describe('when this is a nil return', () => {
     beforeEach(() => {
       sessionData.journey = 'nil-return'
+      sessionData.lines.push(
+        {
+          startDate: '2025-03-01T00:00:00.000Z',
+          endDate: '2025-03-31T00:00:00.000Z'
+        },
+        {
+          startDate: '2025-04-01T00:00:00.000Z',
+          endDate: '2025-04-30T00:00:00.000Z'
+        }
+      )
     })
 
     it('returns an empty object', () => {
@@ -37,6 +48,20 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
   describe('when this is not a nil return', () => {
     beforeEach(() => {
       sessionData.journey = 'enter-return'
+      sessionData.lines.push(
+        {
+          startDate: '2025-03-01T00:00:00.000Z',
+          endDate: '2025-03-31T00:00:00.000Z',
+          reading: null,
+          quantity: 1000
+        },
+        {
+          startDate: '2025-04-01T00:00:00.000Z',
+          endDate: '2025-04-30T00:00:00.000Z',
+          reading: null,
+          quantity: 4000
+        }
+      )
     })
 
     it('correctly sets units', () => {
@@ -64,11 +89,144 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
         expect(result.method).to.equal('abstractionVolumes')
       })
+
+      describe('and meter details are provided', () => {
+        beforeEach(() => {
+          sessionData.meterProvided = 'yes'
+          sessionData.meterMake = 'MAKE'
+          sessionData.meterSerialNumber = 'SERIAL'
+          sessionData.meter10TimesDisplay = 'no'
+        })
+
+        it('correctly populates meters array with details', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.meters).to.equal([
+            {
+              multiplier: 1,
+              manufacturer: 'MAKE',
+              serialNumber: 'SERIAL',
+              meterDetailsProvided: true
+            }
+          ])
+        })
+
+        it('sets type as measured', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.type).to.equal('measured')
+        })
+      })
+
+      describe('and meter details are not provided', () => {
+        beforeEach(() => {
+          sessionData.meterProvided = 'no'
+        })
+
+        it('correctly sets meters array as empty', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.meters).to.equal([])
+        })
+
+        it('sets type as estimated', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.type).to.equal('estimated')
+        })
+      })
+
+      describe('and session.singleVolume is true', () => {
+        beforeEach(() => {
+          sessionData.singleVolume = true
+          sessionData.singleVolumeQuantity = 12345
+        })
+
+        it('sets totalFlag to true', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.totalFlag).to.equal(true)
+        })
+
+        it('sets total as session.singleVolumeQuantity', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.total).to.equal(12345)
+        })
+
+        describe('and session.periodDateUsedOptions is custom-dates', () => {
+          beforeEach(() => {
+            sessionData.periodDateUsedOptions = 'custom-dates'
+            sessionData.fromFullDate = '2025-01-01'
+            sessionData.toFullDate = '2025-12-31'
+          })
+
+          it('sets totalCustomDates as true', () => {
+            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+            expect(result.totalCustomDates).to.equal(true)
+          })
+
+          it('sets totalCustomDateStart to fromFullDate', () => {
+            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+            expect(result.totalCustomDateStart).to.equal('2025-01-01')
+          })
+
+          it('sets totalCustomDateEnd to toFullDate', () => {
+            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+            expect(result.totalCustomDateEnd).to.equal('2025-12-31')
+          })
+        })
+
+        describe('and session.periodDateUsedOptions is not custom-dates', () => {
+          beforeEach(() => {
+            sessionData.periodDateUsedOptions = 'default'
+          })
+
+          it('sets totalCustomDates as false', () => {
+            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+            expect(result.totalCustomDates).to.equal(false)
+          })
+
+          it('does not include totalCustomDateStart or totalCustomEndDate', () => {
+            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+            expect(result.totalCustomDateStart).to.be.undefined()
+            expect(result.totalCustomDateEnd).to.be.undefined()
+          })
+        })
+      })
+
+      describe('and session.singleVolume is false', () => {
+        beforeEach(() => {
+          sessionData.singleVolume = false
+        })
+
+        it('sets totalFlag to false', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.totalFlag).to.equal(false)
+        })
+
+        it('does not include total, totalCustomDateStart or totalCustomEndDate', () => {
+          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+
+          expect(result.total).to.be.undefined()
+          expect(result.totalCustomDateStart).to.be.undefined()
+          expect(result.totalCustomDateEnd).to.be.undefined()
+        })
+      })
     })
 
-    describe('and session.reported is not abstraction-volumes', () => {
+    describe('and session.reported is meter-readings', () => {
       beforeEach(() => {
         sessionData.reported = 'meter-readings'
+        sessionData.startReading = 250
+        sessionData.lines[0].reading = 750
+        sessionData.lines[1].reading = 3000
       })
 
       it('sets method as oneMeter', () => {
@@ -76,173 +234,68 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
         expect(result.method).to.equal('oneMeter')
       })
-    })
 
-    describe('and session.singleVolume is true', () => {
-      beforeEach(() => {
-        sessionData.singleVolume = true
-        sessionData.singleVolumeQuantity = 12345
-      })
-
-      it('sets totalFlag to true', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.totalFlag).to.equal(true)
-      })
-
-      it('sets total as session.singleVolumeQuantity', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.total).to.equal(12345)
-      })
-
-      describe('and session.periodDateUsedOptions is custom-dates', () => {
+      describe('and meter details are provided', () => {
         beforeEach(() => {
-          sessionData.periodDateUsedOptions = 'custom-dates'
-          sessionData.fromFullDate = '2023-01-01'
-          sessionData.toFullDate = '2023-12-31'
+          sessionData.meterProvided = 'yes'
+          sessionData.meterMake = 'MAKE'
+          sessionData.meterSerialNumber = 'SERIAL'
+          sessionData.meter10TimesDisplay = 'no'
         })
 
-        it('sets totalCustomDates as true', () => {
+        it('sets type as measured', () => {
           const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
-          expect(result.totalCustomDates).to.equal(true)
+          expect(result.type).to.equal('measured')
         })
 
-        it('sets totalCustomDateStart to fromFullDate', () => {
+        it('returns the expected meter array', () => {
           const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
-          expect(result.totalCustomDateStart).to.equal('2023-01-01')
-        })
-
-        it('sets totalCustomDateEnd to toFullDate', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-          expect(result.totalCustomDateEnd).to.equal('2023-12-31')
-        })
-      })
-
-      describe('and session.periodDateUsedOptions is not custom-dates', () => {
-        beforeEach(() => {
-          sessionData.periodDateUsedOptions = 'default'
-        })
-
-        it('sets totalCustomDates as false', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-          expect(result.totalCustomDates).to.equal(false)
-        })
-
-        it('does not include totalCustomDateStart or totalCustomEndDate', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-          expect(result.totalCustomDateStart).to.be.undefined()
-          expect(result.totalCustomDateEnd).to.be.undefined()
-        })
-      })
-    })
-
-    describe('and session.singleVolume is false', () => {
-      beforeEach(() => {
-        sessionData.singleVolume = false
-      })
-
-      it('sets totalFlag to false', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.totalFlag).to.equal(false)
-      })
-
-      it('does not include total, totalCustomDateStart or totalCustomEndDate', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.total).to.be.undefined()
-        expect(result.totalCustomDateStart).to.be.undefined()
-        expect(result.totalCustomDateEnd).to.be.undefined()
-      })
-    })
-
-    describe('and session.meterProvided is no', () => {
-      beforeEach(() => {
-        sessionData.meterProvided = 'no'
-      })
-
-      it('sets type as estimated', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.type).to.equal('estimated')
-      })
-
-      it('returns an empty array for meters', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.meters).to.equal([])
-      })
-    })
-
-    describe('and session.meterProvided is yes', () => {
-      beforeEach(() => {
-        sessionData.meterProvided = 'yes'
-        sessionData.meterMake = 'Make'
-        sessionData.meterSerialNumber = '123456789'
-        sessionData.startReading = 1000
-        sessionData.meter10TimesDisplay = 'no'
-        sessionData.lines = [
-          {
-            startDate: '2023-01-01',
-            endDate: '2023-01-31',
-            quantity: 100,
-            reading: 1100
-          },
-          {
-            startDate: '2023-02-01',
-            endDate: '2023-02-28',
-            quantity: 200,
-            reading: 1300
-          }
-        ]
-      })
-
-      it('sets type as measured', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.type).to.equal('measured')
-      })
-
-      it('returns an array with meter details', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
-
-        expect(result.meters).to.equal([
-          {
-            units: 'm³',
-            meterDetailsProvided: true,
-            multiplier: 1,
-            manufacturer: 'Make',
-            serialNumber: '123456789',
-            startReading: 1000,
-            readings: {
-              '2023-01-01_2023-01-31': 1100,
-              '2023-02-01_2023-02-28': 1300
+          expect(result.meters).to.equal([
+            {
+              units: 'm³',
+              meterDetailsProvided: true,
+              multiplier: 1,
+              manufacturer: 'MAKE',
+              serialNumber: 'SERIAL',
+              startReading: 250,
+              readings: {
+                '2025-03-01_2025-03-31': 750,
+                '2025-04-01_2025-04-30': 3000
+              }
             }
-          }
-        ])
+          ])
+        })
       })
 
-      describe('and there are no readings', () => {
+      describe('and meter details are not provided', () => {
         beforeEach(() => {
-          sessionData.lines = []
+          sessionData.meterProvided = 'no'
         })
 
-        it('returns an empty array for readings', () => {
+        // This is consistent with the legacy code; only submissions with volumes and no meter have type set to estimated
+        it('sets type as measured', () => {
           const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
-          expect(result.meters[0].readings).to.equal({})
+          expect(result.type).to.equal('measured')
         })
 
-        it('does not include the units', () => {
+        it('returns the expected meter array', () => {
           const result = GenerateReturnSubmissionMetadataService.go(sessionData)
 
-          expect(result.meters[0].units).to.be.undefined()
+          expect(result.meters).to.equal([
+            {
+              units: 'm³',
+              meterDetailsProvided: false,
+              multiplier: 1,
+              startReading: 250,
+              readings: {
+                '2025-03-01_2025-03-31': 750,
+                '2025-04-01_2025-04-30': 3000
+              }
+            }
+          ])
         })
       })
     })
