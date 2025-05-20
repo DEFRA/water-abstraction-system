@@ -16,7 +16,7 @@ const LicenceDocumentRoleHelper = require('../../../support/helpers/licence-docu
 const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 
 // Thing under test
-const FetchAbstractionAlertContactsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 
 describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
@@ -34,7 +34,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
     })
 
     it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
-      const result = await FetchAbstractionAlertContactsService.go(session)
+      const result = await FetchAbstractionAlertRecipientsService.go(session)
 
       expect(result).to.equal([
         {
@@ -65,7 +65,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       })
 
       it('correctly returns the "additional contact" and the "primary user"', async () => {
-        const result = await FetchAbstractionAlertContactsService.go(session)
+        const result = await FetchAbstractionAlertRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -110,7 +110,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       })
 
       it('correctly returns all the "additional contact" and the "primary user"', async () => {
-        const result = await FetchAbstractionAlertContactsService.go(session)
+        const result = await FetchAbstractionAlertRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -147,7 +147,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
     })
 
     it('correctly returns the licence holder', async () => {
-      const result = await FetchAbstractionAlertContactsService.go(session)
+      const result = await FetchAbstractionAlertRecipientsService.go(session)
 
       expect(result).to.equal([
         {
@@ -193,7 +193,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       })
 
       it('correctly returns the "additional contact" and the "licence holder"', async () => {
-        const result = await FetchAbstractionAlertContactsService.go(session)
+        const result = await FetchAbstractionAlertRecipientsService.go(session)
 
         expect(result).to.equal([
           {

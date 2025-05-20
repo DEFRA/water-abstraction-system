@@ -9,9 +9,9 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const FetchAbstractionAlertContactsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const RecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -31,7 +31,7 @@ describe('Notices - Setup - Check service', () => {
 
     testRecipients = RecipientsFixture.recipients()
 
-    Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
+    Sinon.stub(FetchRecipientsService, 'go').resolves([testRecipients.primaryUser])
   })
 
   afterEach(() => {
@@ -76,7 +76,7 @@ describe('Notices - Setup - Check service', () => {
 
       testRecipients = RecipientsFixture.alertsRecipients()
 
-      Sinon.stub(FetchAbstractionAlertContactsService, 'go').resolves([testRecipients.additionalContact])
+      Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves([testRecipients.additionalContact])
     })
 
     it('correctly presents the data', async () => {
