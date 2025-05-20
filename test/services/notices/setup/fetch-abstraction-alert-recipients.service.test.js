@@ -18,7 +18,7 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 // Thing under test
 const FetchAbstractionAlertContactsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 
-describe.only('Notices - Setup - Fetch abstraction alert recipients service', () => {
+describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
   let session
 
