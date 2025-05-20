@@ -8,6 +8,11 @@
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
+const REPORTED = {
+  VOLUMES: 'abstraction-volumes',
+  READINGS: 'meter-readings'
+}
+
 /**
  * Generates return submission metatadata based on the provided session data
  *
@@ -23,10 +28,10 @@ function go(session) {
 
   return {
     meters: _determineMeters(session),
-    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
+    method: session.reported === REPORTED.VOLUMES ? 'abstractionVolumes' : 'oneMeter',
     units: getUnitSymbolByName(session.units),
     // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
-    type: session.reported === 'abstraction-volumes' && session.meterProvided === 'no' ? 'estimated' : 'measured',
+    type: session.reported === REPORTED.VOLUMES && session.meterProvided === 'no' ? 'estimated' : 'measured',
     ..._totalProperties(session)
   }
 }
@@ -44,7 +49,7 @@ function _formatReadings(lines) {
 
 function _determineMeters(session) {
   // We set meters array as empty ONLY if we have volumes with no meter; in all other scenarios we populate the array
-  if (session.reported === 'abstraction-volumes' && session.meterProvided === 'no') {
+  if (session.reported === REPORTED.VOLUMES && session.meterProvided === 'no') {
     return []
   }
 
@@ -60,7 +65,7 @@ function _determineMeters(session) {
         serialNumber: session.meterSerialNumber
       }),
       // Units, readings and start reading are only set if this is a meter reading return
-      ...(session.reported === 'meter-readings' && {
+      ...(session.reported === REPORTED.READINGS && {
         units: getUnitSymbolByName(session.units),
         readings: _formatReadings(session.lines),
         startReading: session.startReading
