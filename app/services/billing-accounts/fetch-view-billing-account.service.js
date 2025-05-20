@@ -7,6 +7,7 @@
 
 const BillingAccountModel = require('../../models/billing-account.model.js')
 const BillModel = require('../../models/bill.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -61,9 +62,12 @@ async function _fetchBills(billingAccountId, page) {
   return BillModel.query()
     .select(['id', 'createdAt', 'credit', 'financialYearEnding', 'invoiceNumber', 'netAmount'])
     .where('billingAccountId', billingAccountId)
-    .whereExists(function () {
-      this.select(1).from('billRuns').whereRaw('billRuns.id = bills.billRunId').andWhere('billRuns.status', 'sent')
-    })
+    .whereExists(
+      BillRunModel.query()
+        .select(1)
+        .whereColumn('bills.billRunId', 'billRuns.id')
+        .andWhere('billRuns.status', '=', 'sent')
+    )
     .orderBy([
       { column: 'createdAt', order: 'desc' },
       { column: 'invoiceNumber', order: 'asc' }
