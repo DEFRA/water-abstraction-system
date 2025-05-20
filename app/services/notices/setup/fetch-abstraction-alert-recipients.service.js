@@ -44,9 +44,6 @@ const { db } = require('../../../../db/db.js')
  * simply hash the email address. For letter contacts, we extract key fields out of the JSON in `metadata`, convert them
  * to lowercase, concatenate them, and then generate an `md5()` result from it.
  *
- * This means we can identify 'duplicate' contacts. For example, we can determine these contact records will result in
- * the same 'recipient'.
- *
  * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} The contact data for all licence refs
