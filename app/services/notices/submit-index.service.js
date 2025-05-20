@@ -54,6 +54,7 @@ async function go(payload, yar, page = 1) {
     activeNavBar: 'manage',
     error: validationResult,
     filters: { ...savedFilters, ...payload },
+    numberOfNotices,
     ...pageData,
     pagination,
     pageTitle

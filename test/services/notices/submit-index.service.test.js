@@ -246,6 +246,7 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop - Water abstraction alert'
                 }
               ],
+              numberOfNotices: 70,
               numberOfNoticesDisplayed: 1,
               totalNumberOfNotices: '70',
               pageTitle: 'Notices (page 2 of 3)'
@@ -296,6 +297,7 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop - Water abstraction alert'
                 }
               ],
+              numberOfNotices: 1,
               numberOfNoticesDisplayed: 1,
               totalNumberOfNotices: '1',
               pageTitle: 'Notices'
