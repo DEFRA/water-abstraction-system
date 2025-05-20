@@ -69,10 +69,7 @@ async function _fetch(session) {
 function _query() {
   return `
     SELECT string_agg(
-             licence_ref,
-             ','
-             ORDER BY
-               licence_ref
+             licence_ref, ',' ORDER BY licence_ref
            ) AS licence_refs,
            contact_type,
            email,
@@ -136,9 +133,7 @@ function _query() {
     GROUP BY contact_type,
              email,
              contact,
-             contact_hash_id;
-
-  `
+             contact_hash_id;`
 }
 
 module.exports = {
