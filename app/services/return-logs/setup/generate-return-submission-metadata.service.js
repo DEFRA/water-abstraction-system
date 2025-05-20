@@ -2,7 +2,7 @@
 
 /**
  * Generates return submission metatadata
- * @module GenerateReturnSubmissionMetadata
+ * @module GenerateReturnSubmissionMetadataService
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
