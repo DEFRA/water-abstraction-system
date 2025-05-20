@@ -24,7 +24,8 @@ function go(session) {
   return {
     meters: _meters(session),
     method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
+    // Legacy code sets reported to `estimated` ONLY if this is volumes with no meter; otherwise it's `measured`
+    type: session.reported === 'abstraction-volumes' && session.meterProvided === 'no' ? 'estimated' : 'measured',
     units: getUnitSymbolByName(session.units),
     ..._totalProperties(session)
   }
@@ -42,22 +43,39 @@ function _formatReadings(lines) {
 }
 
 function _meters(session) {
-  if (session.meterProvided === 'no') {
+  // Legacy code sets meters array as empty ONLY if we have volumes with no meter; otherwise we populate the array
+  if (session.reported === 'abstraction-volumes' && session.meterProvided === 'no') {
     return []
   }
 
-  return [
-    {
-      manufacturer: session.meterMake,
-      meterDetailsProvided: true, // We can hardcode this true as we only return meter details if meterProvided is `yes`
-      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
-      serialNumber: session.meterSerialNumber,
-      startReading: session.startReading,
-      readings: _formatReadings(session.lines),
-      // We use the spread operator to add the units property only if there are lines present
-      ...(session.lines.length > 0 && { units: getUnitSymbolByName(session.units) })
-    }
-  ]
+  if (session.reported === 'abstraction-volumes' && session.meterProvided === 'yes') {
+    return [
+      {
+        multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+        manufacturer: session.meterMake,
+        serialNumber: session.meterSerialNumber,
+        meterDetailsProvided: true
+      }
+    ]
+  }
+
+  // At this point, we know that session.reported is 'meter-readings'
+
+  // These details are always included in the meter object
+  const meter = {
+    units: getUnitSymbolByName(session.units),
+    readings: _formatReadings(session.lines),
+    multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+    startReading: session.startReading,
+    meterDetailsProvided: session.meterProvided === 'yes'
+  }
+
+  if (meter.meterDetailsProvided) {
+    meter.manufacturer = session.meterMake
+    meter.serialNumber = session.meterSerialNumber
+  }
+
+  return [meter]
 }
 
 function _totalProperties(session) {
