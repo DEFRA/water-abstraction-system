@@ -64,7 +64,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         })
       })
 
-      it('correctly returns the "additional contact"', async () => {
+      it('correctly returns the "additional contact" and the "primary user"', async () => {
         const result = await FetchAbstractionAlertContactsService.go(session)
 
         expect(result).to.equal([
@@ -109,7 +109,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         })
       })
 
-      it('correctly returns all the "additional contact"', async () => {
+      it('correctly returns all the "additional contact" and the "primary user"', async () => {
         const result = await FetchAbstractionAlertContactsService.go(session)
 
         expect(result).to.equal([
@@ -173,6 +173,60 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
           email: null
         }
       ])
+    })
+
+    describe('and there is an "additional contact"', () => {
+      beforeEach(async () => {
+        session = {
+          licenceRefs: [recipients.licenceHolder.licenceRef]
+        }
+
+        const licenceDocument = await LicenceDocumentHelper.add({
+          licenceRef: recipients.licenceHolder.licenceRef
+        })
+
+        await _additionalContact(licenceDocument, {
+          firstName: 'Brian',
+          lastName: 'Fantana',
+          email: 'Brian.Fantana@news.com'
+        })
+      })
+
+      it('correctly returns the "additional contact" and the "licence holder"', async () => {
+        const result = await FetchAbstractionAlertContactsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: null,
+            contact_hash_id: '0c21cf650a32c0144f7da3f9c6441cad',
+            contact_type: 'Additional contact',
+            email: 'Brian.Fantana@news.com',
+            licence_refs: recipients.licenceHolder.licenceRef
+          },
+          {
+            licence_refs: recipients.licenceHolder.licenceRef,
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Licence holder only',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+            contact_type: 'Licence holder',
+            email: null
+          }
+        ])
+      })
     })
   })
 })
