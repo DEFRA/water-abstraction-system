@@ -18,7 +18,7 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 // Thing under test
 const FetchAbstractionAlertContactsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 
-describe('Notices - Setup - Recipients service', () => {
+describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
   let session
 
@@ -109,7 +109,7 @@ describe('Notices - Setup - Recipients service', () => {
         })
       })
 
-      it('correctly returns the "additional contact"', async () => {
+      it('correctly returns all the "additional contact"', async () => {
         const result = await FetchAbstractionAlertContactsService.go(session)
 
         expect(result).to.equal([

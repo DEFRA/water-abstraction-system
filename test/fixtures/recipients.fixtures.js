@@ -5,7 +5,7 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 /**
  * Create abstraction alerts recipients test data
  *
- * @returns {object} - Returns recipients for primaryUser, licenceHolder and an additional contact
+ * @returns {object} - Returns recipients for primaryUser, licenceHolder and additional contact
  */
 function alertsRecipients() {
   return {
