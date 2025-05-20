@@ -8,6 +8,44 @@
 const { db } = require('../../../../db/db.js')
 
 /**
+ * Fetches the abstraction alert recipients data for the `/notices/setup/check` page
+ *
+ * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
+ * > the tables in `crm_v2`. However, the 'Additional contact' information is stored in `crm_v2`.
+ *
+ * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
+ * linked to, or what roles they have.
+ *
+ * We will receive an array of licence refs in the session for our query. Theses are used to get the recipients.
+ *
+ * For each licence, we extract the contact information, if a licence is _registered_ (more details below), we only care
+ * about the email addresses registered against it, all licences should have a 'licence holder' contact to fall back on.
+ *
+ * WRLS has the concept of a registered and unregistered licences:
+ *
+ * - **Unregistered licences** have not been linked to an external email, so do not have a 'primary user'. All licences
+ * have a contact with the role 'Licence holder', so this will be extracted as a 'contact'.
+ *
+ * - **Registered licences** have been linked to an external email. That initial email will be linked as the 'primary
+ * user'.
+ *
+ * If a licence is registered, we only extract the email contacts. Unregistered licences it's the 'Licence holder'
+ * contact from `licence_document_headers.metadata->contacts`.
+ *
+ * When the licence is registered we can expect an 'additional contact'. This can be created a user and is stored in
+ * `crm_v2`. As the 'primary user' is in `crm.document_headers` and the 'additional contact' stored in `crm_v2.document`
+ * we need to accommodate this by linking the two 'copies' of the licence together, we do this by the licence ref.
+ *
+ * Because we are working with `licence_document_header` we get one row per licence. So, the next step is to group the
+ * contacts by their contact information.
+ *
+ * We do this by generating a hash ID using PostgreSQL's
+ * {@link https://www.postgresql.org/docs/current/functions-binarystring.html | md5() function}. For email contacts, we
+ * simply hash the email address. For letter contacts, we extract key fields out of the JSON in `metadata`, convert them
+ * to lowercase, concatenate them, and then generate an `md5()` result from it.
+ *
+ * This means we can identify 'duplicate' contacts. For example, we can determine these contact records will result in
+ * the same 'recipient'.
  *
  * @param {module:SessionModel} session - The session instance
  *
