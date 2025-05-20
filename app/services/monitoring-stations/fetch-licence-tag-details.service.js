@@ -56,7 +56,6 @@ async function _fetchMonitoringStationLicenceTags(licenceId, monitoringStationId
         .select([
           'licenceMonitoringStations.id',
           'licenceMonitoringStations.createdAt',
-          'licenceMonitoringStations.createdBy',
           'licenceMonitoringStations.licenceId',
           'licenceMonitoringStations.restrictionType',
           'licenceMonitoringStations.thresholdUnit',
@@ -67,29 +66,29 @@ async function _fetchMonitoringStationLicenceTags(licenceId, monitoringStationId
         .orderBy([{ column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }])
         .withGraphFetched('licence')
         .modifyGraph('licence', (licenceBuilder) => {
-          licenceBuilder.select(['id', 'licenceRef'])
+          licenceBuilder.select(['licenceRef'])
         })
         .withGraphFetched('licenceVersionPurposeCondition')
         .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
           licenceVersionPurposeConditionBuilder
-            .select(['id', 'externalId', 'notes'])
+            .select(['externalId', 'notes'])
             .withGraphFetched('licenceVersionPurpose')
             .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
               licenceVersionPurposeBuilder
                 .select(['id'])
                 .withGraphFetched('licenceVersion')
                 .modifyGraph('licenceVersion', (licenceVersionBuilder) => {
-                  licenceVersionBuilder.select(['id', 'status'])
+                  licenceVersionBuilder.select(['status'])
                 })
             })
             .withGraphFetched('licenceVersionPurposeConditionType')
             .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
-              licenceVersionPurposeConditionTypeBuilder.select(['id', 'displayTitle'])
+              licenceVersionPurposeConditionTypeBuilder.select(['displayTitle'])
             })
         })
         .withGraphFetched('user')
         .modifyGraph('user', (userBuilder) => {
-          userBuilder.select(['id', 'username'])
+          userBuilder.select(['username'])
         })
     })
 }
