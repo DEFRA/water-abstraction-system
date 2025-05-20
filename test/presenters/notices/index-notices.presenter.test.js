@@ -27,7 +27,6 @@ describe('Notices - Index Notices presenter', () => {
     const result = IndexNoticesPresenter.go(notices, numberOfNotices)
 
     expect(result).to.equal({
-      backLink: '/manage',
       notices: [
         {
           createdDate: '25 March 2025',

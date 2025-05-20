@@ -17,7 +17,6 @@ const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.j
  */
 function go(notices, numberOfNotices) {
   return {
-    backLink: '/manage',
     notices: _noticeRowData(notices),
     numberOfNoticesDisplayed: notices.length,
     totalNumberOfNotices: formatNumber(numberOfNotices)
