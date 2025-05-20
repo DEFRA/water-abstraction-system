@@ -34,11 +34,24 @@ describe('Notices - Fetch Notice service', () => {
           recipients: 1
         }
       })
-      testScheduledNotification = await ScheduledNotificationHelper.add({ eventId: testEvent.id })
+      testScheduledNotification = await ScheduledNotificationHelper.add({
+        messageType: 'letter',
+        messageRef: 'returns_invitation_licence_holder_letter',
+        personalisation: {
+          postcode: 'SW1 2AN',
+          address_line_1: 'Water company',
+          address_line_2: 'Company street',
+          address_line_3: 'Company town',
+          address_line_4: 'Company region'
+        },
+        status: 'completed',
+        // licences: ['03/TST/23'],
+        eventId: testEvent.id
+      })
     })
 
     it('fetches the matching notice', async () => {
-      const result = await FetchNoticeService.go(testScheduledNotification.id)
+      const result = await FetchNoticeService.go(testEvent.id)
 
       expect(result.results).to.contain(
         ScheduledNotificationModel.fromJson({
@@ -46,20 +59,25 @@ describe('Notices - Fetch Notice service', () => {
           messageRef: testScheduledNotification.messageRef,
           personalisation: testScheduledNotification.personalisation,
           status: testScheduledNotification.status,
-          licences: testScheduledNotification.licences,
+          licences: null,
+          recipient: null,
           event: EventModel.fromJson({
-            referenceCode: 'RREM-RD2KF4'
+            id: testEvent.id,
+            referenceCode: testEvent.referenceCode,
+            issuer: testEvent.issuer,
+            createdAt: testEvent.createdAt,
+            status: 'sent'
           })
         })
       )
     })
   })
 
-  describe('when a notice does not exists', () => {
+  describe('when a notice does not exist', () => {
     it('returns an empty array', async () => {
       const result = await FetchNoticeService.go('03bded61-9e68-4c57-a2fc-811c580efb44')
 
-      expect(result.results).to.equal(undefined)
+      expect(result.results).to.equal([])
     })
   })
 })
