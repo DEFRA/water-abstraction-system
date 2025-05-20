@@ -10,12 +10,10 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
@@ -26,11 +24,8 @@ describe('Fetch Billing Account service', () => {
   let billingAccount
   let billingAccountAddress
   let billingAccountId
-  let billLicence
   let billRun
   let company
-  let licence
-  let licenceId
 
   describe('when a matching billing account exists', () => {
     beforeEach(async () => {
@@ -50,14 +45,6 @@ describe('Fetch Billing Account service', () => {
       bill = await BillHelper.add({
         billingAccountId,
         billRunId: billRun.id
-      })
-
-      licence = await LicenceHelper.add()
-      licenceId = licence.id
-
-      billLicence = await BillLicenceHelper.add({
-        billId: bill.id,
-        licenceId
       })
     })
 
@@ -89,42 +76,7 @@ describe('Fetch Billing Account service', () => {
           company: {
             id: company.id,
             name: 'Example Trading Ltd'
-          },
-          bills: [
-            {
-              id: bill.id,
-              billingAccountId: bill.billingAccountId,
-              address: bill.address,
-              accountNumber: bill.accountNumber,
-              netAmount: bill.netAmount,
-              credit: bill.credit,
-              billRunId: billRun.id,
-              financialYearEnding: bill.financialYearEnding,
-              invoiceNumber: bill.invoiceNumber,
-              legacyId: bill.legacyId,
-              metadata: bill.metadata,
-              creditNoteValue: bill.creditNoteValue,
-              invoiceValue: bill.invoiceValue,
-              deminimis: bill.deminimis,
-              externalId: bill.externalId,
-              flaggedForRebilling: bill.flaggedForRebilling,
-              originalBillId: bill.originalBillId,
-              rebillingState: bill.rebillingState,
-              createdAt: bill.createdAt,
-              updatedAt: bill.updatedAt,
-              billLicences: [
-                {
-                  id: billLicence.id,
-                  billId: billLicence.billId,
-                  licenceRef: billLicence.licenceRef,
-                  licenceId: billLicence.licenceId,
-                  createdAt: billLicence.createdAt,
-                  updatedAt: billLicence.updatedAt,
-                  licence: { id: licenceId }
-                }
-              ]
-            }
-          ]
+          }
         },
         bills: [
           {
