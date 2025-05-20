@@ -18,9 +18,7 @@ const SubmitIndexNoticesService = require('../../app/services/notices/submit-ind
 const { init } = require('../../app/server.js')
 
 describe('Notices controller', () => {
-  const basePath = '/notices'
-
-  let getOptions
+  let options
   let postOptions
   let server
 
@@ -42,71 +40,155 @@ describe('Notices controller', () => {
     Sinon.restore()
   })
 
-  describe('Notices controller', () => {
+  describe('/notices', () => {
     describe('GET', () => {
-      beforeEach(async () => {
-        getOptions = {
-          method: 'GET',
-          url: basePath,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
+      describe('with no pagination', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/notices',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
           }
-        }
-      })
 
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(IndexNoticesService, 'go').returns({
-            backLink: '/manage',
-            error: null,
-            filter: undefined,
-            headers: [
-              {
-                text: 'Date'
-              },
-              {
-                text: 'Notification type'
-              },
-              {
-                text: 'Sent by'
-              },
-              {
-                text: 'Recipients'
-              },
-              {
-                text: 'Problems'
-              }
-            ],
-            rows: [],
-            pageTitle: 'View sent notices'
-          })
+          const pageData = _noticePageData()
+          Sinon.stub(IndexNoticesService, 'go').returns(pageData)
         })
 
         it('returns the page successfully', async () => {
-          const response = await server.inject(getOptions)
+          const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('manage')
-          expect(response.payload).to.contain('View sent notices')
+          expect(response.payload).to.contain('Notices')
+          expect(response.payload).to.contain('Showing all 1 notices')
+        })
+      })
+
+      describe('with pagination', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/notices?page=2',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          const pageData = _noticePageData()
+
+          pageData.numberOfNoticesDisplayed = 25
+          pageData.numberOfNotices = 70
+          pageData.totalNumberOfNotices = '70'
+          pageData.pageTitle = 'Notices (page 2 of 3)'
+          Sinon.stub(IndexNoticesService, 'go').returns(pageData)
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Notices (page 2 of 3)')
+          expect(response.payload).to.contain('Showing 25 of 70 notices')
         })
       })
     })
 
     describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions('/notices', {})
+      })
+
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          Sinon.stub(SubmitIndexNoticesService, 'go').returns()
-          postOptions = postRequestOptions(basePath, {})
+        beforeEach(() => {
+          Sinon.stub(SubmitIndexNoticesService, 'go').returns({})
         })
 
-        it('redirects the to the next page', async () => {
+        it('redirects back to the index page', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/notices`)
         })
       })
+
+      describe('when the request fails', () => {
+        describe('with no pagination', () => {
+          beforeEach(() => {
+            const pageData = _noticePageData(true)
+
+            Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
+          })
+
+          it('re-renders the index page with no pagination and an error', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Notices')
+            expect(response.payload).to.contain('Showing all 1 notices')
+          })
+        })
+
+        describe('with pagination', () => {
+          beforeEach(async () => {
+            const pageData = _noticePageData(true)
+
+            pageData.numberOfNoticesDisplayed = 25
+            pageData.numberOfNotices = 70
+            pageData.totalNumberOfNotices = '70'
+            pageData.pageTitle = 'Notices (page 2 of 3)'
+            Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
+          })
+
+          it('re-renders the index page with pagination and an error', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Notices (page 2 of 3)')
+            expect(response.payload).to.contain('Showing 25 of 70 notices')
+          })
+        })
+      })
     })
   })
 })
+
+function _noticePageData(error = false) {
+  const pageData = {
+    activeNavBar: 'manage',
+    filters: {
+      noticeTypes: [],
+      openFilter: false,
+      toDate: undefined
+    },
+    notices: [
+      {
+        createdDate: '25 March 2025',
+        link: '/notifications/report/5a5ea1cc-580c-4921-a5a5-297bd7885bae',
+        recipients: 123,
+        sentBy: 'billing.data@wrls.gov.uk',
+        status: 'sent',
+        type: 'Stop - Water abstraction alert'
+      }
+    ],
+    numberOfNotices: 1,
+    numberOfNoticesDisplayed: 1,
+    totalNumberOfNotices: '1',
+    pageTitle: 'Notices'
+  }
+
+  if (error) {
+    pageData.error = {
+      errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
+      fromDate: { message: 'Enter a valid from date' }
+    }
+  }
+
+  return pageData
+}
