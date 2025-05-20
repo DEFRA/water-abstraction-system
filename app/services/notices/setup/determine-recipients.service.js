@@ -85,9 +85,9 @@ function _mergeRecipients(matches) {
 }
 
 function _mergeRecipientsForEmail(matches) {
+  const additionalContact = _includesContactType(matches, 'Additional contact')
   const primaryUser = _includesContactType(matches, 'Primary user')
   const returnsAgent = _includesContactType(matches, 'Returns agent')
-  const additionalContact = _includesContactType(matches, 'Additional contact')
 
   let contactType
 
