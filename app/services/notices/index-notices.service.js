@@ -61,6 +61,7 @@ function _filters(yar) {
     fromDate: null,
     noticeTypes: [],
     openFilter,
+    reference: null,
     sentBy: null,
     toDate: null,
     ...savedFilters

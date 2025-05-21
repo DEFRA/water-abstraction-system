@@ -194,6 +194,7 @@ describe('Notices - Index Notices service', () => {
 function _noticeFilters() {
   return {
     noticeTypes: [],
+    reference: null,
     sentBy: null,
     sentFromDay: null,
     sentFromMonth: null,
