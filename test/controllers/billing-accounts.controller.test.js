@@ -53,7 +53,7 @@ describe('Billing Accounts controller', () => {
         beforeEach(() => {
           options = {
             method: 'GET',
-            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?izd=9a437fad-86b7-4495-8b26-061662cf8037',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037',
             auth: {
               strategy: 'session',
               credentials: { scope: ['billing'] }
