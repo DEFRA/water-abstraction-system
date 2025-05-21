@@ -24,7 +24,14 @@ async function go(id, licenceId, page) {
 
   const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
-  const pagination = PaginatorPresenter.go(pageData.pagination.total, Number(page), `/system/billing-accounts/${id}`)
+  const queryArgs = licenceId ? { 'licence-id': licenceId } : {}
+
+  const pagination = PaginatorPresenter.go(
+    pageData.pagination.total,
+    Number(page),
+    `/system/billing-accounts/${id}`,
+    queryArgs
+  )
 
   return {
     activeNavBar: 'search',
