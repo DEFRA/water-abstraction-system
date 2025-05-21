@@ -27,7 +27,7 @@ async function changeAddress(request, h) {
 
 async function view(request, h) {
   const { id } = request.params
-  const { id: licenceId, page = 1 } = request.query
+  const { 'licence-id': licenceId, page = 1 } = request.query
 
   const pageData = await ViewBillingAccountService.go(id, licenceId, page)
 
