@@ -75,6 +75,7 @@ describe('Notices - Submit Index service', () => {
         expect(setArgs[1]).to.equal({
           noticeTypes: [],
           fromDate: undefined,
+          reference: null,
           sentBy: null,
           sentFromDay: null,
           sentFromMonth: null,
@@ -90,6 +91,7 @@ describe('Notices - Submit Index service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
+          reference: 'WAA-BZZDWX',
           sentBy: 'carol.shaw@wrls.gov.uk',
           sentFromDay: '1',
           sentFromMonth: '4',
@@ -116,6 +118,7 @@ describe('Notices - Submit Index service', () => {
           expect(setArgs[1]).to.equal({
             noticeTypes: [],
             fromDate: '2023-04-01',
+            reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
             sentFromMonth: payload.sentFromMonth,
@@ -148,6 +151,7 @@ describe('Notices - Submit Index service', () => {
           expect(setArgs[1]).to.equal({
             noticeTypes: ['stop'],
             fromDate: '2023-04-01',
+            reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
             sentFromMonth: payload.sentFromMonth,
@@ -180,6 +184,7 @@ describe('Notices - Submit Index service', () => {
           expect(setArgs[1]).to.equal({
             noticeTypes: payload.noticeTypes,
             fromDate: '2023-04-01',
+            reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
             sentFromMonth: payload.sentFromMonth,
@@ -231,6 +236,7 @@ describe('Notices - Submit Index service', () => {
                 noticeTypes: [],
                 fromDate: '-04-01',
                 openFilter: true,
+                reference: null,
                 sentBy: 'billing.data@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,
@@ -283,6 +289,7 @@ describe('Notices - Submit Index service', () => {
                 noticeTypes: [],
                 fromDate: '-04-01',
                 openFilter: true,
+                reference: null,
                 sentBy: 'billing.data@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,

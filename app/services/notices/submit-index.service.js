@@ -105,6 +105,7 @@ function _save(payload, yar) {
   yar.set('noticesFilter', {
     noticeTypes: payload.noticeTypes,
     fromDate: payload.fromDate,
+    reference: payload.reference ?? null,
     sentBy: payload.sentBy ?? null,
     sentFromDay: payload.sentFromDay ?? null,
     sentFromMonth: payload.sentFromMonth ?? null,
@@ -123,6 +124,7 @@ function _savedFilters(yar) {
     fromDate: null,
     noticeTypes: [],
     openFilter: true,
+    reference: null,
     sentBy: null,
     toDate: null,
     ...savedFilters
