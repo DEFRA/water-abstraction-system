@@ -49,49 +49,49 @@
               items: [
                 {
                   value: "legacyNotifications",
-                  text: "Legacy notifications (Hands off flows and expiry notifications)",
+                  text: "Legacy (Hands off flows and expiry notifications)",
                   checked: filters.noticeTypes.includes('legacyNotifications'),
                   attributes: { 'data-test': 'legacy-notifications' }
                 },
                 {
                   value: "paperReturnForms",
-                  text: "Returns: Paper form",
+                  text: "Paper return",
                   checked: filters.noticeTypes.includes('paperReturnForms'),
                   attributes: { 'data-test': 'returns-paper-form' }
                 },
                 {
                   value: "returnReminder",
-                  text: "Returns: Reminders",
+                  text: "Returns reminder",
                   checked: filters.noticeTypes.includes('returnReminder'),
                   attributes: { 'data-test': 'returns-reminders' }
                 },
                 {
                   value: "returnInvitation",
-                  text: "Returns: Invitation",
+                  text: "Returns invitation",
                   checked: filters.noticeTypes.includes('returnInvitation'),
                   attributes: { 'data-test': 'returns-invitation' }
                 },
                 {
                   value: "resume",
-                  text: "Water abstraction alert: Resume",
+                  text: "Resume alert",
                   checked: filters.noticeTypes.includes('resume'),
                   attributes: { 'data-test': 'water-abstraction-alert-resume' }
                 },
                 {
                   value: "stop",
-                  text: "Water abstraction alert: Stop",
+                  text: "Stop alert",
                   checked: filters.noticeTypes.includes('stop'),
                   attributes: { 'data-test': 'water-abstraction-alert-stop' }
                 },
                 {
                   value: "reduce",
-                  text: "Water abstraction alert: Reduce",
+                  text: "Reduce alert",
                   checked: filters.noticeTypes.includes('reduce'),
                   attributes: { 'data-test': 'water-abstraction-alert-reduce' }
                 },
                 {
                   value: "warning",
-                  text: "Water abstraction alert: Warning",
+                  text: "Warning alert",
                   checked: filters.noticeTypes.includes('warning'),
                   attributes: { 'data-test': 'water-abstraction-alert-warning' }
                 }
@@ -238,6 +238,10 @@
               attributes: { 'data-test': 'notice-date-created-' + rowIndex }
             },
             {
+              text: notice.reference,
+              attributes: { 'data-test': 'notice-reference-' + rowIndex }
+            },
+            {
               text: notice.type,
               attributes: { 'data-test': 'notice-type-' + rowIndex }
             },
@@ -275,6 +279,7 @@
           attributes: { 'data-test': 'notifications' },
           head: [
             { text: 'Date' },
+            { text: 'Reference' },
             { text: 'Notice type' },
             { text: 'Sent by' },
             { text: 'Recipients', format: 'numeric' },
