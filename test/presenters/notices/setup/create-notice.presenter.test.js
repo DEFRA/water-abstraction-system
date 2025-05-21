@@ -19,8 +19,18 @@ describe('Notices - Setup - Create Notice presenter', () => {
   let session
   let testRecipients
 
+  beforeEach(() => {
+    auth = {
+      credentials: {
+        user: {
+          username: 'hello@world.com'
+        }
+      }
+    }
+  })
+
   describe('when the journey is a return journey', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       recipients = RecipientsFixture.recipients()
       testRecipients = [...Object.values(recipients)]
 
@@ -37,14 +47,6 @@ describe('Notices - Setup - Create Notice presenter', () => {
         },
         subType: 'returnInvitation',
         name: 'Returns: invitation'
-      }
-
-      auth = {
-        credentials: {
-          user: {
-            username: 'hello@world.com'
-          }
-        }
       }
     })
 
@@ -180,7 +182,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
   })
 
   describe('when the journey is "abstraction-alert', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       recipients = RecipientsFixture.alertsRecipients()
       testRecipients = [...Object.values(recipients)]
 
@@ -192,14 +194,6 @@ describe('Notices - Setup - Create Notice presenter', () => {
         subType: 'waterAbstractionAlerts',
         name: 'Water abstraction alert',
         alertType: 'stop'
-      }
-
-      auth = {
-        credentials: {
-          user: {
-            username: 'hello@world.com'
-          }
-        }
       }
     })
 
