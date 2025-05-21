@@ -10,7 +10,7 @@ exports.up = function (knex) {
     // Data
     table.string('version_id').notNullable()
     table.string('substance').notNullable().defaultTo('water')
-    table.decimal('quantity').notNullable()
+    table.decimal('quantity')
     table.string('unit').notNullable().defaultTo('m³')
     table.date('start_date').notNullable()
     table.date('end_date').notNullable()
