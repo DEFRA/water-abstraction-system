@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const ChangeAddressService = require('../../app/services/billing-accounts/change-address.service.js')
+const ViewBillingAccountService = require('../../app/services/billing-accounts/view-billing-account.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -44,6 +45,62 @@ describe('Billing Accounts controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/billing-accounts/{billingAccountId}', () => {
+    describe('GET', () => {
+      describe('when a licenceId is passed as a query parameter', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(() => {
+            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          })
+        })
+      })
+
+      describe('when no licenceId is passed as a query parameter', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(() => {
+            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          })
+        })
+      })
+    })
   })
 
   describe('POST /billing-accounts/{billingAccountId}/change-address', () => {
@@ -121,3 +178,32 @@ describe('Billing Accounts controller', () => {
     })
   })
 })
+
+function _viewBillingAccount() {
+  return {
+    activeNavBar: 'search',
+    accountNumber: 'S88897992A',
+    address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'Me15 0ne'],
+    billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
+    bills: [
+      {
+        billId: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
+        billNumber: 'SAI0297399',
+        billRunNumber: 607,
+        billRunType: 'Annual',
+        billTotal: '£103.84',
+        dateCreated: '6 April 2020',
+        financialYear: 2021
+      }
+    ],
+    createdDate: '14 December 2023',
+    customerFile: 'naltc0001',
+    lastUpdated: '6 May 2025',
+    backLink: {
+      title: 'Go back to bills',
+      link: `/system/licences/9a437fad-86b7-4495-8b26-061662cf8037/bills`
+    },
+    pageTitle: 'Billing account for Ferns Surfacing Limited',
+    pagination: { numberOfPages: 1 }
+  }
+}

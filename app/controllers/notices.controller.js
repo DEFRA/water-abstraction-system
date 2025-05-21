@@ -6,6 +6,7 @@
  */
 
 const IndexNoticesService = require('../services/notices/index-notices.service.js')
+const NoticesViewService = require('../services/notices/view.service.js')
 const SubmitIndexNoticesService = require('../services/notices/submit-index.service.js')
 
 async function index(request, h) {
@@ -29,7 +30,19 @@ async function submitIndex(request, h) {
   return h.redirect('/system/notices')
 }
 
+async function view(request, h) {
+  const {
+    params: { id },
+    query: { page = 1 }
+  } = request
+
+  const pageData = await NoticesViewService.go(id, page)
+
+  return h.view('notices/view.njk', pageData)
+}
+
 module.exports = {
   index,
-  submitIndex
+  submitIndex,
+  view
 }

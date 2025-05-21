@@ -5,7 +5,7 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../base.presenter.js')
+const { determineRestrictionHeading, formatRestrictions } = require('./base.presenter.js')
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -46,49 +46,49 @@ function go(monitoringStation, auth) {
   return {
     catchmentName,
     enableLicenceMonitoringStationsSetup: FeatureFlagsConfig.enableLicenceMonitoringStationsSetup,
-    enableLicenceMonitoringStationsView: FeatureFlagsConfig.enableLicenceMonitoringStationsView,
     gridReference: gridReference ?? '',
     links: _links(monitoringStationId),
     monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
-    restrictionHeading: _restrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations),
+    restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
+    restrictions: _restrictions(licenceMonitoringStations, monitoringStationId),
     stationReference: stationReference ?? '',
+    tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
   }
 }
 
-function _abstractionPeriod(licenceMonitoringStation) {
-  const {
-    abstractionPeriodEndDay: stationEndDay,
-    abstractionPeriodEndMonth: stationEndMonth,
-    abstractionPeriodStartDay: stationStartDay,
-    abstractionPeriodStartMonth: stationStartMonth,
-    licenceVersionPurposeCondition
-  } = licenceMonitoringStation
+function _restrictions(licenceMonitoringStations, monitoringStationId) {
+  const preparedLicenceMonitoringStations = licenceMonitoringStations.map((licenceMonitoringStation) => {
+    const { licence } = licenceMonitoringStation
 
-  if (licenceVersionPurposeCondition) {
-    const {
-      abstractionPeriodEndDay: purposeEndDay,
-      abstractionPeriodEndMonth: purposeEndMonth,
-      abstractionPeriodStartDay: purposeStartDay,
-      abstractionPeriodStartMonth: purposeStartMonth
-    } = licenceVersionPurposeCondition.licenceVersionPurpose
+    let action
 
-    return formatAbstractionPeriod(purposeStartDay, purposeStartMonth, purposeEndDay, purposeEndMonth)
-  }
+    if (FeatureFlagsConfig.enableLicenceMonitoringStationsView) {
+      action = {
+        link: `/system/monitoring-stations/${monitoringStationId}/licence/${licence.id}`,
+        text: 'View'
+      }
+    }
 
-  return formatAbstractionPeriod(stationStartDay, stationStartMonth, stationEndDay, stationEndMonth)
+    return {
+      ...licenceMonitoringStation,
+      ..._licenceVersionPurpose(licenceMonitoringStation.licenceVersionPurposeCondition),
+      action
+    }
+  })
+
+  return formatRestrictions(preparedLicenceMonitoringStations)
 }
 
-function _alert(status, statusUpdatedAt) {
-  if (!statusUpdatedAt) {
-    return null
+function _licenceVersionPurpose(licenceVersionPurposeCondition) {
+  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
+    return licenceVersionPurposeCondition.licenceVersionPurpose
+  } else {
+    return {}
   }
-
-  return sentenceCase(status)
 }
 
 function _links(monitoringStationId) {
@@ -101,84 +101,6 @@ function _links(monitoringStationId) {
   return {
     createAlert
   }
-}
-
-function _restriction(restrictionType) {
-  if (restrictionType === 'stop_or_reduce') {
-    return 'Stop or reduce'
-  }
-
-  return sentenceCase(restrictionType)
-}
-
-/**
- * Returns the heading for the "restrictions" column of the monitoring station page
- *
- * When we came to replace the legacy page we found that when a licence is tagged, the existing logic records the
- * measure type of the licence monitoring station record as 'flow' or 'level' based on the threshold unit selected.
- *
- * - flowUnits = Ml/d, m3/s, m3/d, l/s
- * - levelUnits = mAOD, mBOD, mASD, m, SLD
- *
- * But we don't show this on the page. The only clue was the heading "Flow and level restriction type and threshold". In
- * our initial implementation of the page we added this as a new column. But we quickly saw that whatever monitoring you
- * have selected, the linked records are always of one type.
- *
- * We suspect it's the monitoring station itself that determines how the available water is measured, and that when a
- * user tags a licence they should only be able to select the appropriate threshold unit. But instead users are managing
- * to select the appropriate threshold unit when tagging each licence. Go legacy!
- *
- * So, instead we removed the measure type column and opted to be a little bit cleverer with the column heading. Now,
- * instead of a fixed "Flow and level restriction type and threshold", we determine it based on the licence monitoring
- * station records. Go the new folks!
- *
- * @private
- */
-function _restrictionHeading(licenceMonitoringStations) {
-  const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
-    return licenceMonitoringStation.measureType === 'flow'
-  })
-
-  const containsLevel = licenceMonitoringStations.some((licenceMonitoringStation) => {
-    return licenceMonitoringStation.measureType === 'level'
-  })
-
-  if (containsFlow && containsLevel) {
-    return 'Flow and level restriction type and threshold'
-  }
-
-  if (containsFlow) {
-    return 'Flow restriction type and threshold'
-  }
-
-  return 'Level restriction type and threshold'
-}
-
-function _restrictions(licenceMonitoringStations) {
-  return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { id, licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
-      licenceMonitoringStation
-
-    return {
-      abstractionPeriod: _abstractionPeriod(licenceMonitoringStation),
-      alert: _alert(status, statusUpdatedAt),
-      alertDate: statusUpdatedAt ? formatLongDate(statusUpdatedAt) : null,
-      licenceId: licence.id,
-      licenceRef: licence.licenceRef,
-      restriction: _restriction(restrictionType),
-      restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
-      threshold: `${thresholdValue} ${thresholdUnit}`,
-      viewLink: `/system/licence-monitoring-station/${id}`
-    }
-  })
-}
-
-function _restrictionCount(licenceId, licenceMonitoringStations) {
-  const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.licenceId === licenceId
-  })
-
-  return count.length
 }
 
 function _pageTitle(riverName, stationName) {

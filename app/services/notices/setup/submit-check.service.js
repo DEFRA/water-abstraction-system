@@ -9,7 +9,8 @@ const BatchNotificationsService = require('./batch-notifications.service.js')
 const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
 const CreateNoticeService = require('./create-notice.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const RecipientsService = require('./fetch-recipients.service.js')
+const FetchAbstractionAlertContactsService = require('./fetch-abstraction-alert-recipients.service.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
@@ -30,11 +31,11 @@ async function go(sessionId, auth) {
 
   const notice = await _notice(session, recipients, auth)
 
-  const { determinedReturnsPeriod, referenceCode, journey } = session
+  const sessionCopy = session
 
   await session.$query().delete()
 
-  _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, notice)
+  _processNotifications(sessionCopy, recipients, notice)
 
   return notice.id
 }
@@ -45,11 +46,11 @@ async function _notice(session, recipients, auth) {
   return CreateNoticeService.go(event)
 }
 
-async function _processNotifications(determinedReturnsPeriod, referenceCode, journey, recipients, notice) {
+async function _processNotifications(session, recipients, notice) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await BatchNotificationsService.go(recipients, determinedReturnsPeriod, referenceCode, journey, notice.id)
+    await BatchNotificationsService.go(recipients, session, notice.id)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {
@@ -58,7 +59,13 @@ async function _processNotifications(determinedReturnsPeriod, referenceCode, jou
 }
 
 async function _recipients(session) {
-  const recipientsData = await RecipientsService.go(session)
+  let recipientsData
+
+  if (session.journey === 'abstraction-alert') {
+    recipientsData = await FetchAbstractionAlertContactsService.go(session)
+  } else {
+    recipientsData = await FetchRecipientsService.go(session)
+  }
 
   return DetermineRecipientsService.go(recipientsData)
 }

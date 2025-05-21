@@ -27,7 +27,7 @@
         attributes: { 'data-test': 'bill-created-' + rowIndex }
       },
       {
-        html: '<a href="/billing-accounts/' + bill.billingAccountId + '">' + bill.accountNumber + '</a>',
+        html: '<a href="'+ bill.billingAccountLink + '?licence-id=' + licenceId + '">' + bill.accountNumber + '</a>',
         attributes: { 'data-test': 'bill-account-' + rowIndex }
       },
       {

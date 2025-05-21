@@ -15,16 +15,26 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const SubmitAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 
 describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service', () => {
+  let alertThresholdGroupOne
+  let alertThresholdGroupThree
+  let alertThresholdGroupTwo
   let payload
   let session
   let sessionData
 
   describe('when called', () => {
     beforeEach(async () => {
-      sessionData = AbstractionAlertSessionData.monitoringStation()
+      sessionData = {
+        ...AbstractionAlertSessionData.monitoringStation(),
+        alertType: 'stop'
+      }
+
+      alertThresholdGroupOne = sessionData.licenceMonitoringStations[0].thresholdGroup
+      alertThresholdGroupTwo = sessionData.licenceMonitoringStations[1].thresholdGroup
+      alertThresholdGroupThree = sessionData.licenceMonitoringStations[2].thresholdGroup
 
       payload = {
-        'alert-thresholds': [sessionData.licenceMonitoringStations[0].id, sessionData.licenceMonitoringStations[1].id]
+        'alert-thresholds': [alertThresholdGroupOne, alertThresholdGroupTwo]
       }
 
       session = await SessionHelper.add({ data: sessionData })
@@ -40,7 +50,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
       describe('and one threshold has been selected ', () => {
         beforeEach(() => {
           payload = {
-            'alert-thresholds': sessionData.licenceMonitoringStations[0].id
+            'alert-thresholds': alertThresholdGroupOne
           }
         })
 
@@ -49,7 +59,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.alertThresholds).to.equal(['0'])
+          expect(refreshedSession.alertThresholds).to.equal([alertThresholdGroupOne])
         })
       })
 
@@ -59,7 +69,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.alertThresholds).to.equal(['0', '1'])
+          expect(refreshedSession.alertThresholds).to.equal([alertThresholdGroupOne, alertThresholdGroupTwo])
         })
       })
     })
@@ -68,7 +78,13 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
   describe('when validation fails', () => {
     describe('and there are no previous "alertThresholds"', () => {
       beforeEach(async () => {
-        sessionData = AbstractionAlertSessionData.monitoringStation()
+        const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+
+        sessionData = {
+          ...abstractionAlertSessionData,
+          alertThresholds: [alertThresholdGroupOne],
+          alertType: 'stop'
+        }
 
         payload = {}
 
@@ -86,19 +102,19 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
           thresholdOptions: [
             {
               checked: false,
-              value: '0',
-              text: '1000 m',
               hint: {
-                text: 'Flow thresholds for this station (m)'
-              }
+                text: 'Flow threshold'
+              },
+              text: '100 m3/s',
+              value: alertThresholdGroupTwo
             },
             {
               checked: false,
-              value: '1',
-              text: '100 m3/s',
               hint: {
-                text: 'Level thresholds for this station (m3/s)'
-              }
+                text: 'Level threshold'
+              },
+              text: '100 m',
+              value: alertThresholdGroupThree
             }
           ]
         })
@@ -111,7 +127,8 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
 
         sessionData = {
           ...abstractionAlertSessionData,
-          alertThresholds: [abstractionAlertSessionData.licenceMonitoringStations[0].id]
+          alertThresholds: [alertThresholdGroupOne],
+          alertType: 'stop'
         }
 
         payload = {}
@@ -130,19 +147,19 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
           thresholdOptions: [
             {
               checked: false,
-              value: '0',
-              text: '1000 m',
               hint: {
-                text: 'Flow thresholds for this station (m)'
-              }
+                text: 'Flow threshold'
+              },
+              text: '100 m3/s',
+              value: alertThresholdGroupTwo
             },
             {
               checked: false,
-              value: '1',
-              text: '100 m3/s',
               hint: {
-                text: 'Level thresholds for this station (m3/s)'
-              }
+                text: 'Level threshold'
+              },
+              text: '100 m',
+              value: alertThresholdGroupThree
             }
           ]
         })

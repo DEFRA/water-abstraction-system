@@ -31,6 +31,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    options: {
+      handler: NoticesSetupController.viewAlertEmailAddress,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    options: {
+      handler: NoticesSetupController.submitAlertEmailAddress,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.viewAlertType,
@@ -66,10 +90,70 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.viewCancelAlerts,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.submitCancelAlerts,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
     path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.submitAlertThresholds,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    options: {
+      handler: NoticesSetupController.viewCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    options: {
+      handler: NoticesSetupController.submitCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
+    options: {
+      handler: NoticesSetupController.viewRemoveThreshold,
       auth: {
         access: {
           scope: ['returns']

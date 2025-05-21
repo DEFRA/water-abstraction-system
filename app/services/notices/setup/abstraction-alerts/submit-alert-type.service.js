@@ -10,6 +10,8 @@ const AlertTypePresenter = require('../../../../presenters/notices/setup/abstrac
 const AlertTypeValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-type.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
 
+const ALERT_TYPE_KEY = 'alert-type'
+
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
@@ -21,13 +23,15 @@ const SessionModel = require('../../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session.licenceMonitoringStations)
 
   if (!validationResult) {
     await _save(session, payload)
 
     return {}
   }
+
+  session.alertType = payload[ALERT_TYPE_KEY]
 
   const pageData = AlertTypePresenter.go(session)
 
@@ -39,13 +43,18 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.alertType = payload['alert-type']
+  if (session.alertType !== payload[ALERT_TYPE_KEY]) {
+    session.alertThresholds = []
+    session.removedThresholds = []
+  }
+
+  session.alertType = payload[ALERT_TYPE_KEY]
 
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = AlertTypeValidator.go(payload)
+function _validate(payload, licenceMonitoringStations) {
+  const validation = AlertTypeValidator.go(payload, licenceMonitoringStations)
 
   if (!validation.error) {
     return null

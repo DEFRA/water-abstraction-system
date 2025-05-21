@@ -82,7 +82,7 @@ async function go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate) {
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('returnCycleId', returnCycleId)
     .where('licenceRef', licenceRef)
-    .where('endDate', '>=', changeDate)
+    .where('endDate', '>', changeDate)
     .whereNotIn('id', reissuedReturnLogIds)
 }
 
