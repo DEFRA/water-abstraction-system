@@ -30,13 +30,11 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * rate limit).
  *
  * @param {object[]} recipients
- * @param {object} determinedReturnsPeriod
- * @param {string} referenceCode
- * @param {string} journey
+ * @param {SessionModel} session - The session instance
  * @param {string} eventId - the event id to link all the notifications to an event
  *
  */
-async function go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
+async function go(recipients, session, eventId) {
   const { batchSize, delay } = NotifyConfig
 
   let error = 0
@@ -44,7 +42,7 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
   for (let i = 0; i < recipients.length; i += batchSize) {
     const batchRecipients = recipients.slice(i, i + batchSize)
 
-    const batch = await _batch(batchRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+    const batch = await _batch(batchRecipients, session, eventId)
 
     await _delay(delay)
 
@@ -54,7 +52,9 @@ async function go(recipients, determinedReturnsPeriod, referenceCode, journey, e
   await UpdateEventService.go(eventId, error)
 }
 
-async function _batch(recipients, determinedReturnsPeriod, referenceCode, journey, eventId) {
+async function _batch(recipients, session, eventId) {
+  const { determinedReturnsPeriod, referenceCode, journey } = session
+
   const notifications = NotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
 
   const toSendNotifications = _toSendNotifications(notifications)
