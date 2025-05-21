@@ -17,6 +17,7 @@ function go(event) {
 
   const type = _type(subtype)
 
+  // TODO: update page title to allow for alerts
   return {
     forwardLink: `/notifications/report/${eventId}`,
     pageTitle: `Returns ${type} sent`,

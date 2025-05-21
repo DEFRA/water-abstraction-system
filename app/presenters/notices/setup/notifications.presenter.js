@@ -177,9 +177,10 @@ function _letterTemplate(contactType, journey) {
 
 function _returnsPeriod(returnsPeriod) {
   return {
-    periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
-    periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
-    returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
+    // periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
+    // periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
+    // returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
+    // flow_or_level, monitoring_station_name, licence_ref, issuer_email_address, source, threshold_value, threshold_unit, condition_text
   }
 }
 
@@ -242,6 +243,15 @@ function _messageRef(journey, messageType, contactType) {
         'Licence holder': 'ad-hoc_licence_holder_letter',
         both: 'ad-hoc_licence_holder_letter',
         'Returns to': 'ad-hoc_returns_to_letter'
+      }
+    },
+    'abstraction-alert': {
+      email: {
+        'Primary user': 'alert_primary_user_email',
+        'Additional contact': 'alert_additional_contact_email'
+      },
+      letter: {
+        'Licence holder': 'alert_licence_holder_letter'
       }
     }
   }

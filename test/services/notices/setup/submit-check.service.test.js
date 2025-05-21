@@ -16,7 +16,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Things we need to stub
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const RecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')
@@ -64,7 +64,7 @@ describe('Notices - Setup - Submit Check service', () => {
 
     Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
     Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-    Sinon.stub(FetchRecipientsService, 'go').resolves(testRecipients)
+    Sinon.stub(RecipientsService, 'go').resolves(testRecipients)
   })
 
   afterEach(() => {
