@@ -7,6 +7,16 @@
 
 const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.js')
 
+const NOTICE_MAPPINGS = {
+  'hof-resume': 'HOF resume',
+  'hof-stop': 'HOF stop',
+  'hof-warning': 'HOF warning',
+  paperReturnForms: 'Paper return',
+  returnInvitation: 'Returns invitation',
+  returnReminder: 'Returns reminder',
+  waterAbstractionAlerts: 'alert'
+}
+
 /**
  * Formats data for the `/notices` page
  *
@@ -25,12 +35,13 @@ function go(notices, numberOfNotices) {
 
 function _noticeRowData(notices) {
   return notices.map((notice) => {
-    const { createdAt, errorCount, id, issuer, recipientCount } = notice
+    const { createdAt, errorCount, id, issuer, referenceCode, recipientCount } = notice
 
     return {
       createdDate: formatLongDate(createdAt),
       link: `/notifications/report/${id}`,
       recipients: recipientCount,
+      reference: referenceCode,
       sentBy: issuer,
       status: errorCount > 0 ? 'error' : 'sent',
       type: _type(notice)
@@ -39,11 +50,13 @@ function _noticeRowData(notices) {
 }
 
 function _type(notice) {
-  const { alertType, name } = notice
+  const { alertType, subtype } = notice
 
-  const prefix = alertType ? `${titleCase(alertType)} - ` : ''
+  if (alertType) {
+    return `${titleCase(alertType)} alert`
+  }
 
-  return `${prefix}${name}`
+  return NOTICE_MAPPINGS[subtype]
 }
 
 module.exports = {

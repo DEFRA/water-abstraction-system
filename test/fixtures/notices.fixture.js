@@ -12,6 +12,8 @@ function alertReduce() {
 
   data.alertType = 'reduce'
   data.name = 'Water abstraction alert'
+  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'waterAbstractionAlerts'
 
   return data
 }
@@ -26,6 +28,8 @@ function alertResume() {
 
   data.alertType = 'resume'
   data.name = 'Water abstraction alert'
+  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'waterAbstractionAlerts'
 
   return data
 }
@@ -40,6 +44,8 @@ function alertStop() {
 
   data.alertType = 'stop'
   data.name = 'Water abstraction alert'
+  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'waterAbstractionAlerts'
 
   return data
 }
@@ -54,6 +60,8 @@ function alertWarning() {
 
   data.alertType = 'warning'
   data.name = 'Water abstraction alert'
+  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'waterAbstractionAlerts'
 
   return data
 }
@@ -67,6 +75,8 @@ function legacyNotification() {
   const data = _defaults()
 
   data.name = 'Hands off flow: levels warning'
+  data.referenceCode = `HOF-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'hof-warning'
 
   return data
 }
@@ -95,7 +105,11 @@ function notices() {
  * @returns {object}
  */
 function returnsInvitation() {
-  return _defaults()
+  const data = _defaults()
+
+  data.referenceCode = `RINV-${generateRandomInteger(100000, 999999)}`
+
+  return data
 }
 
 /**
@@ -107,6 +121,8 @@ function returnsPaperForm() {
   const data = _defaults()
 
   data.name = 'Paper returns'
+  data.referenceCode = `PRTF-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'paperReturnForms'
 
   return data
 }
@@ -120,6 +136,8 @@ function returnsReminder() {
   const data = _defaults()
 
   data.name = 'Returns: reminder'
+  data.referenceCode = `RREM-${generateRandomInteger(100000, 999999)}`
+  data.subtype = 'returnReminder'
 
   return data
 }
@@ -132,7 +150,8 @@ function _defaults() {
     errorCount: 0,
     issuer: 'billing.data@wrls.gov.uk',
     name: 'Returns: invitation',
-    recipientCount: generateRandomInteger(1, 5000)
+    recipientCount: generateRandomInteger(1, 5000),
+    subtype: 'returnInvitation'
   }
 }
 
