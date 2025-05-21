@@ -25,14 +25,14 @@ function go(session, recipients, auth) {
 
   return {
     issuer: auth.credentials.user.username,
-    licences: _licences(recipients),
+    licences: session.journey !== 'abstraction-alert' ? _licences(recipients) : null,
     metadata: {
       name,
       options: {
         excludeLicences: removeLicences
       },
       recipients: recipients.length,
-      returnCycle: _returnCycle(determinedReturnsPeriod)
+      returnCycle: session.journey !== 'abstraction-alert' ? _returnCycle(determinedReturnsPeriod) : ''
     },
     referenceCode,
     status: 'completed',
