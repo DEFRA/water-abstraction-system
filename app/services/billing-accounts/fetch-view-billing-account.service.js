@@ -23,8 +23,6 @@ const DatabaseConfig = require('../../../config/database.config.js')
 async function go(id, page) {
   const billingAccount = await _fetchBillingAccount(id)
   const { results, total } = await _fetchBills(id, page)
-  console.log('🚀🚀🚀 ~ results:')
-  console.dir(results, { depth: null, colors: true })
 
   return {
     billingAccount,
