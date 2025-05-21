@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
+const LicenceService = require('../../app/services/monitoring-stations/licence.service.js')
 const ViewService = require('../../app/services/monitoring-stations/view.service.js')
 
 // For running our service
@@ -86,6 +87,48 @@ describe('Monitoring stations controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Bodney Bridge')
+        })
+      })
+    })
+  })
+
+  describe('/monitoring-station/{monitoringStationId}/licence/{licenceId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3/licence/bf1befed-2ece-4805-89fd-3056a5cf5020',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+
+        Sinon.stub(LicenceService, 'go').resolves({
+          backLink: '/system/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
+          lastAlertSent: 'Warning letter on 13 August 2024 sent to Big Farm Co Ltd',
+          licenceTags: [
+            {
+              created: 'Created on 23 April 2025 by environment.officer@wrls.gov.uk',
+              effectOfRestriction: 'There are some effects of restriction on the licence',
+              licenceVersionStatus: 'superseded',
+              linkedCondition: 'Flow cessation condition',
+              tag: 'Reduce tag',
+              threshold: '175Ml/d',
+              type: 'Reduce'
+            }
+          ],
+          monitoringStationName: 'The Station',
+          pageTitle: 'Details for 99/9999'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Details for 99/9999')
         })
       })
     })
