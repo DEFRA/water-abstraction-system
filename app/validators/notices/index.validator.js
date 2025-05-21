@@ -20,6 +20,9 @@ const NOTICE_TYPES = [
   'warning'
 ]
 
+const MAX_REFERENCE_LENGTH = 11
+const MAX_SENT_BY_LENGTH = 255
+
 /**
  * Validates data submitted for the `/notices` page
  *
@@ -92,12 +95,18 @@ function _validate(payload) {
       .messages({
         'any.only': 'Select a valid notice type'
       }),
-    reference: Joi.string().max(11).optional().messages({
-      'string.max': 'Reference must be 11 characters or less'
-    }),
-    sentBy: Joi.string().max(255).optional().messages({
-      'string.max': 'Sent by must be 255 characters or less'
-    }),
+    reference: Joi.string()
+      .max(MAX_REFERENCE_LENGTH)
+      .optional()
+      .messages({
+        'string.max': `Reference must be ${MAX_REFERENCE_LENGTH} characters or less`
+      }),
+    sentBy: Joi.string()
+      .max(MAX_SENT_BY_LENGTH)
+      .optional()
+      .messages({
+        'string.max': `Sent by must be ${MAX_SENT_BY_LENGTH} characters or less`
+      }),
     toDate: Joi.date().format(['YYYY-MM-DD']).max('now').optional().messages({
       'date.base': 'Enter a valid to date',
       'date.format': 'Enter a valid to date',

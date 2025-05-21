@@ -24,7 +24,7 @@ async function go(yar, page) {
 
   const { results, total: numberOfNotices } = await FetchNoticesService.go(filters, selectedPageNumber)
 
-  const pageData = await NoticesIndexPresenter.go(results, numberOfNotices)
+  const pageData = NoticesIndexPresenter.go(results, numberOfNotices)
   const pagination = PaginatorPresenter.go(numberOfNotices, selectedPageNumber, `/system/notices`)
   const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
 

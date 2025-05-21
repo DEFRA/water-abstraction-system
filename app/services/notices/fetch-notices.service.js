@@ -20,7 +20,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
 async function go(filters, page) {
-  const query = _fetchQuery(page)
+  const query = _fetchQuery()
 
   _applyFilters(query, filters)
 
