@@ -84,11 +84,22 @@ describe('Notices - Setup - Submit Check service', () => {
     const result = await SubmitCheckService.go(session.id, auth)
 
     expect(
-      BatchNotificationsService.go.calledWith(
+      BatchNotificationsService.go.calledWithMatch(
         testRecipients,
-        session.data.determinedReturnsPeriod,
-        referenceCode,
-        session.data.journey,
+        Sinon.match({
+          id: session.id,
+          data: session.data,
+          journey: 'invitations',
+          referenceCode,
+          returnsPeriod: 'quarterFour',
+          determinedReturnsPeriod: {
+            name: 'allYear',
+            dueDate: '2025-04-28',
+            endDate: '2023-03-31',
+            summer: 'false',
+            startDate: '2022-04-01'
+          }
+        }),
         result
       )
     ).to.be.true()
