@@ -241,9 +241,10 @@ describe('Notices - Submit Index service', () => {
                   createdDate: '25 March 2025',
                   link: `/notifications/report/${notice.id}`,
                   recipients: notice.recipientCount,
+                  reference: notice.referenceCode,
                   sentBy: 'billing.data@wrls.gov.uk',
                   status: 'sent',
-                  type: 'Stop - Water abstraction alert'
+                  type: 'Stop alert'
                 }
               ],
               numberOfNotices: 70,
@@ -292,9 +293,10 @@ describe('Notices - Submit Index service', () => {
                   createdDate: '25 March 2025',
                   link: `/notifications/report/${notice.id}`,
                   recipients: notice.recipientCount,
+                  reference: notice.referenceCode,
                   sentBy: 'billing.data@wrls.gov.uk',
                   status: 'sent',
-                  type: 'Stop - Water abstraction alert'
+                  type: 'Stop alert'
                 }
               ],
               numberOfNotices: 1,
