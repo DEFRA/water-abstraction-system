@@ -21,23 +21,28 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {object} The data formatted persisting as a `notice` record
  */
 function go(session, recipients, auth) {
-  const { referenceCode, determinedReturnsPeriod, removeLicences = [], subType, name } = session
+  const { referenceCode, subType, name } = session
 
-  return {
+  const notice = {
     issuer: auth.credentials.user.username,
-    licences: _licences(recipients),
     metadata: {
       name,
-      options: {
-        excludeLicences: removeLicences
-      },
-      recipients: recipients.length,
-      returnCycle: _returnCycle(determinedReturnsPeriod)
+      recipients: recipients.length
     },
     referenceCode,
     status: 'completed',
     subtype: subType
   }
+
+  if (session.journey === 'abstraction-alert') {
+    notice.metadata.options = { sendingAlertType: session.alertType }
+  } else {
+    notice.licences = _licences(recipients)
+    notice.metadata.options = { excludeLicences: session.removeLicences ? session.removeLicences : [] }
+    notice.metadata.returnCycle = _returnCycle(session.determinedReturnsPeriod)
+  }
+
+  return notice
 }
 
 /**
