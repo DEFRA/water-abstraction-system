@@ -13,16 +13,25 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-account/vi
  * Orchestrates fetching and presenting the data needed for the view billing account page
  *
  * @param {string} id - The UUID of the billing account to view
+ * @param {string|undefined} licenceId - The UUID of the licence related to the billing account, if available, used to
+ * determine the backlink
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
-async function go(id, page) {
+async function go(id, licenceId, page) {
   const billingAccountData = await FetchViewBillingAccountService.go(id, page)
 
-  const pageData = ViewBillingAccountPresenter.go(billingAccountData)
+  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
-  const pagination = PaginatorPresenter.go(pageData.pagination.total, Number(page), `/system/billing-accounts/${id}`)
+  const queryArgs = licenceId ? { 'licence-id': licenceId } : {}
+
+  const pagination = PaginatorPresenter.go(
+    pageData.pagination.total,
+    Number(page),
+    `/system/billing-accounts/${id}`,
+    queryArgs
+  )
 
   return {
     activeNavBar: 'search',
