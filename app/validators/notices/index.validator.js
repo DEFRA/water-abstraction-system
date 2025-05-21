@@ -92,6 +92,9 @@ function _validate(payload) {
       .messages({
         'any.only': 'Select a valid notice type'
       }),
+    reference: Joi.string().max(11).optional().messages({
+      'string.max': 'Reference must be 11 characters or less'
+    }),
     sentBy: Joi.string().max(255).optional().messages({
       'string.max': 'Sent by must be 255 characters or less'
     }),

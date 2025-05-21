@@ -84,6 +84,20 @@ describe('Notices - Index validator', () => {
       payload = _payload()
     })
 
+    describe('because "Reference" is too long', () => {
+      beforeEach(() => {
+        payload.reference = 'a'.repeat(12)
+      })
+
+      it('fails validation', () => {
+        const result = IndexValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error.details[0].message).to.equal('Reference must be 11 characters or less')
+        expect(result.error.details[0].path[0]).to.equal('reference')
+      })
+    })
+
     describe('because "Sent by" is too long', () => {
       beforeEach(() => {
         payload.sentBy = 'a'.repeat(256)
