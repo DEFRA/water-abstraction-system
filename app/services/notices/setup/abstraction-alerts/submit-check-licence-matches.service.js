@@ -6,9 +6,8 @@
  * @module SubmitCheckLicenceMatchesService
  */
 
-const CheckLicenceMatchesPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
 const DetermineRelevantLicenceMonitoringStationsService = require('./determine-relevant-licence-monitoring-stations.service.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -19,9 +18,7 @@ const DetermineRelevantLicenceMonitoringStationsService = require('./determine-r
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter.go(session)
-
-  await _save(session, pageData)
+  await _save(session)
 }
 
 async function _save(session) {
