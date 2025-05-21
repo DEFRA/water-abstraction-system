@@ -11,6 +11,20 @@ const SubmitStopOrReduceService = require('../services//licence-monitoring-stati
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 
+async function licenceNumber(_request, h) {
+  const pageData = {}
+
+  return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
+}
+
+async function submitLicenceNumber(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/full-condition`)
+}
+
 async function submitSetup(request, h) {
   const { monitoringStationId } = request.payload
 
@@ -75,8 +89,10 @@ async function thresholdAndUnit(request, h) {
 }
 
 module.exports = {
+  licenceNumber,
   submitSetup,
   stopOrReduce,
+  submitLicenceNumber,
   submitStopOrReduce,
   submitThresholdAndUnit,
   thresholdAndUnit
