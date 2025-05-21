@@ -44,7 +44,7 @@ async function go(
   let previousReading = startReading ?? 0
 
   const returnLines = lines.map((line) => {
-    const { rawQuantity, currentReading } = calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay)
+    const { rawQuantity, currentReading } = _calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay)
 
     previousReading = currentReading
 
