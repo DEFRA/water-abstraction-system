@@ -114,6 +114,19 @@
               value: filters.sentBy
             }) }}
 
+            {# Filter by reference #}
+            {{ govukInput({
+              label: {
+                text: "Reference",
+                classes: "govuk-label--s",
+                isPageHeading: false
+              },
+              classes: "govuk-input--width-10",
+              id: "reference",
+              name: "reference",
+              value: filters.reference
+            }) }}
+
           <p class="govuk-!-font-weight-bold">Sent Dates</p>
 
           {# Filter by from date #}
