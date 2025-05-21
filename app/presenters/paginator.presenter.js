@@ -105,18 +105,21 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
  * @param {number} selectedPageNumber - the page of results selected for viewing
  * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
+ * @param {object} queryArgs - the current query arguments to be added to the pagination links
  *
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, selectedPageNumber, path) {
+function go(numberOfRecords, selectedPageNumber, path, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
 
   if (numberOfPages < 2) {
     return { numberOfPages }
   }
 
-  const component = _component(selectedPageNumber, numberOfPages, path)
+  const queryString = _queryString(queryArgs)
+
+  const component = _component(selectedPageNumber, numberOfPages, path, queryString)
 
   return {
     component,
@@ -124,90 +127,90 @@ function go(numberOfRecords, selectedPageNumber, path) {
   }
 }
 
-function _component(selectedPageNumber, numberOfPages, path) {
-  const items = _items(selectedPageNumber, numberOfPages, path)
+function _component(selectedPageNumber, numberOfPages, path, queryString) {
+  const items = _items(selectedPageNumber, numberOfPages, path, queryString)
 
   const component = { items }
 
   if (selectedPageNumber !== 1) {
-    component.previous = { href: `${path}?page=${selectedPageNumber - 1}` }
+    component.previous = { href: `${path}?page=${selectedPageNumber - 1}${queryString}` }
   }
 
   if (selectedPageNumber !== numberOfPages) {
-    component.next = { href: `${path}?page=${selectedPageNumber + 1}` }
+    component.next = { href: `${path}?page=${selectedPageNumber + 1}${queryString}` }
   }
 
   return component
 }
 
-function _complexPaginatorEnd(selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorEnd(selectedPageNumber, numberOfPages, path, queryString) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber, path))
+  items.push(_item(1, selectedPageNumber, path, queryString))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages - 4, selectedPageNumber, path))
-  items.push(_item(numberOfPages - 3, selectedPageNumber, path))
-  items.push(_item(numberOfPages - 2, selectedPageNumber, path))
-  items.push(_item(numberOfPages - 1, selectedPageNumber, path))
-  items.push(_item(numberOfPages, selectedPageNumber, path))
+  items.push(_item(numberOfPages - 4, selectedPageNumber, path, queryString))
+  items.push(_item(numberOfPages - 3, selectedPageNumber, path, queryString))
+  items.push(_item(numberOfPages - 2, selectedPageNumber, path, queryString))
+  items.push(_item(numberOfPages - 1, selectedPageNumber, path, queryString))
+  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
 
   return items
 }
 
-function _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path, queryString) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber, path))
+  items.push(_item(1, selectedPageNumber, path, queryString))
   items.push({ ellipsis: true })
-  items.push(_item(selectedPageNumber - 1, selectedPageNumber, path))
-  items.push(_item(selectedPageNumber, selectedPageNumber, path))
-  items.push(_item(selectedPageNumber + 1, selectedPageNumber, path))
+  items.push(_item(selectedPageNumber - 1, selectedPageNumber, path, queryString))
+  items.push(_item(selectedPageNumber, selectedPageNumber, path, queryString))
+  items.push(_item(selectedPageNumber + 1, selectedPageNumber, path, queryString))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber, path))
+  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
 
   return items
 }
 
-function _complexPaginatorStart(selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorStart(selectedPageNumber, numberOfPages, path, queryString) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber, path))
-  items.push(_item(2, selectedPageNumber, path))
-  items.push(_item(3, selectedPageNumber, path))
-  items.push(_item(4, selectedPageNumber, path))
-  items.push(_item(5, selectedPageNumber, path))
+  items.push(_item(1, selectedPageNumber, path, queryString))
+  items.push(_item(2, selectedPageNumber, path, queryString))
+  items.push(_item(3, selectedPageNumber, path, queryString))
+  items.push(_item(4, selectedPageNumber, path, queryString))
+  items.push(_item(5, selectedPageNumber, path, queryString))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber, path))
+  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
 
   return items
 }
 
-function _item(pageNumber, selectedPageNumber, path) {
+function _item(pageNumber, selectedPageNumber, path, queryString) {
   return {
     number: pageNumber,
     visuallyHiddenText: `Page ${pageNumber}`,
-    href: pageNumber === 1 ? path : `${path}?page=${pageNumber}`,
+    href: pageNumber === 1 ? path : `${path}?page=${pageNumber}${queryString}`,
     current: pageNumber === selectedPageNumber
   }
 }
 
-function _items(selectedPageNumber, numberOfPages, path) {
+function _items(selectedPageNumber, numberOfPages, path, queryString) {
   const paginatorType = _paginatorType(selectedPageNumber, numberOfPages)
 
   let items
 
   switch (paginatorType) {
     case COMPLEX_START_PAGINATOR:
-      items = _complexPaginatorStart(selectedPageNumber, numberOfPages, path)
+      items = _complexPaginatorStart(selectedPageNumber, numberOfPages, path, queryString)
       break
     case COMPLEX_MIDDLE_PAGINATOR:
-      items = _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path)
+      items = _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path, queryString)
       break
     case COMPLEX_END_PAGINATOR:
-      items = _complexPaginatorEnd(selectedPageNumber, numberOfPages, path)
+      items = _complexPaginatorEnd(selectedPageNumber, numberOfPages, path, queryString)
       break
     default:
-      items = _simplePaginator(selectedPageNumber, numberOfPages, path)
+      items = _simplePaginator(selectedPageNumber, numberOfPages, path, queryString)
   }
 
   return items
@@ -229,11 +232,21 @@ function _paginatorType(selectedPageNumber, numberOfPages) {
   return COMPLEX_MIDDLE_PAGINATOR
 }
 
-function _simplePaginator(selectedPageNumber, numberOfPages, path) {
+function _queryString(queryArgs) {
+  const args = []
+
+  for (const [key, value] of Object.entries(queryArgs)) {
+    args.push(`&${key}=${value}`)
+  }
+
+  return args.join('')
+}
+
+function _simplePaginator(selectedPageNumber, numberOfPages, path, queryString) {
   const items = []
 
   for (let i = 1; i <= numberOfPages; i++) {
-    items.push(_item(i, selectedPageNumber, path))
+    items.push(_item(i, selectedPageNumber, path, queryString))
   }
 
   return items

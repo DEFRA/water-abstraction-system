@@ -9,7 +9,7 @@ const BatchNotificationsService = require('./batch-notifications.service.js')
 const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
 const CreateNoticeService = require('./create-notice.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const RecipientsService = require('./fetch-recipients.service.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
@@ -58,7 +58,7 @@ async function _processNotifications(determinedReturnsPeriod, referenceCode, jou
 }
 
 async function _recipients(session) {
-  const recipientsData = await RecipientsService.go(session)
+  const recipientsData = await FetchRecipientsService.go(session)
 
   return DetermineRecipientsService.go(recipientsData)
 }
