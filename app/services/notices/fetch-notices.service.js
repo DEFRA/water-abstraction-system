@@ -93,6 +93,8 @@ function _fetchQuery() {
       'id',
       'createdAt',
       'issuer',
+      'referenceCode',
+      'subtype',
       ref('metadata:name').castText().as('name'),
       ref('metadata:options.sendingAlertType').castText().as('alertType'),
       ref('metadata:recipients').castInt().as('recipientCount'),

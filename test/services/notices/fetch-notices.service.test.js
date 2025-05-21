@@ -213,6 +213,8 @@ function _transformEventToResult(eventInstance, overrides = {}) {
     id: eventInstance.id,
     createdAt: eventInstance.createdAt,
     issuer: eventInstance.issuer,
+    referenceCode: eventInstance.referenceCode,
+    subtype: eventInstance.subtype,
     name: eventInstance.metadata.name,
     alertType: eventInstance.metadata.options?.sendingAlertType || null,
     recipientCount: eventInstance.metadata.recipients,
