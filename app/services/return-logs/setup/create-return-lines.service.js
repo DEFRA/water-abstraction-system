@@ -77,7 +77,7 @@ async function go(
  * @param {boolean} meter10TimesDisplay - Indicates if the meter is a 10x display
  * @returns {object} - An object containing the calculated quantity and the new previous reading
  */
-function calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay) {
+function _calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay) {
   const currentReading = line.reading ?? previousReading
 
   if (volumes) {
