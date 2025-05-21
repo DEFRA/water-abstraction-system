@@ -109,9 +109,12 @@
               hint: {
                 text: 'You can use partial matches, for example, "rachel" or "defra.gov.uk"'
               },
-              id: "sent-by",
+              id: "sentBy",
               name: "sentBy",
-              value: filters.sentBy
+              value: filters.sentBy,
+              errorMessage: {
+                text: error.sentBy.message
+              } if error.sentBy
             }) }}
 
             {# Filter by reference #}
@@ -124,7 +127,10 @@
               classes: "govuk-input--width-10",
               id: "reference",
               name: "reference",
-              value: filters.reference
+              value: filters.reference,
+              errorMessage: {
+                text: error.reference.message
+              } if error.reference
             }) }}
 
           <p class="govuk-!-font-weight-bold">Sent Dates</p>
