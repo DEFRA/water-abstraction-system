@@ -42,7 +42,11 @@ function _alertNoticeTypes(noticeTypes) {
 }
 
 function _applyFilters(query, filters) {
-  const { fromDate, noticeTypes, sentBy, toDate } = filters
+  const { fromDate, noticeTypes, reference, sentBy, toDate } = filters
+
+  if (reference) {
+    query.whereILike('referenceCode', `%${reference}%`)
+  }
 
   if (sentBy) {
     query.whereILike('issuer', `%${sentBy}%`)

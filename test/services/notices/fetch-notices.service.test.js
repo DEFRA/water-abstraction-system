@@ -43,6 +43,28 @@ describe('Notices - Fetch Notices service', () => {
   })
 
   describe('when a filter is applied', () => {
+    describe('and "Reference" has been set', () => {
+      beforeEach(() => {
+        // NOTE: We use an lowercase "TEAM" here to test that the service is using case insensitive LIKE where clause
+        filters.reference = seedData.fromDateEvent.referenceCode.toLowerCase()
+      })
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformEventToResult(seedData.fromDateEvent))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformEventToResult(seedData.sentByEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.legacyEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.resumeAlertEvent))
+        expect(result.results).not.contains(_transformEventToResult(seedData.stopAlertEvent))
+      })
+    })
+
     describe('and "Sent By" has been set', () => {
       beforeEach(() => {
         // NOTE: We use an uppercase "TEAM" here to test that the service is using case insensitive LIKE where clause
