@@ -225,6 +225,7 @@ function _filters() {
     fromDate: null,
     noticeTypes: [],
     populated: false,
+    reference: null,
     sentBy: null,
     toDate: null
   }
