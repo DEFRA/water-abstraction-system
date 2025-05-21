@@ -12,6 +12,7 @@ const NOTICE_MAPPINGS = {
   'hof-stop': 'HOF stop',
   'hof-warning': 'HOF warning',
   paperReturnForms: 'Paper return',
+  renewal: 'Renewal',
   returnInvitation: 'Returns invitation',
   returnReminder: 'Returns reminder',
   waterAbstractionAlerts: 'alert'

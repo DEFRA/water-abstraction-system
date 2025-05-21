@@ -109,7 +109,7 @@ function _standardNoticeTypes(noticeTypes) {
 
   for (const noticeType of noticeTypes) {
     if (noticeType === 'legacyNotifications') {
-      standardTypes.push('hof-stop', 'hof-resume', 'hof-warning')
+      standardTypes.push('hof-stop', 'hof-resume', 'hof-warning', 'renewal')
 
       continue
     }
