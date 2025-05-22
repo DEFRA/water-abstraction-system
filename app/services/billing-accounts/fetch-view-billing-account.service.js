@@ -7,6 +7,7 @@
 
 const BillingAccountModel = require('../../models/billing-account.model.js')
 const BillModel = require('../../models/bill.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -54,15 +55,21 @@ async function _fetchBillingAccount(id) {
 async function _fetchBills(billingAccountId, page) {
   return BillModel.query()
     .select(['id', 'createdAt', 'credit', 'financialYearEnding', 'invoiceNumber', 'netAmount'])
-    .withGraphFetched('billRun')
-    .modifyGraph('billRun', (builder) => {
-      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer'])
-    })
+    .where('billingAccountId', billingAccountId)
+    .whereExists(
+      BillRunModel.query()
+        .select(1)
+        .whereColumn('bills.billRunId', 'billRuns.id')
+        .andWhere('billRuns.status', '=', 'sent')
+    )
     .orderBy([
       { column: 'createdAt', order: 'desc' },
       { column: 'invoiceNumber', order: 'asc' }
     ])
-    .where('billingAccountId', billingAccountId)
+    .withGraphFetched('billRun')
+    .modifyGraph('billRun', (builder) => {
+      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
+    })
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
