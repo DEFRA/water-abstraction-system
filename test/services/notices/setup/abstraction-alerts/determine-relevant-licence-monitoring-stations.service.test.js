@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 // Thing under test
 const DetermineRelevantLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
 
-describe.only('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations service', () => {
+describe('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations service', () => {
   let alertType
   let licenceMonitoringStationOne
   let licenceMonitoringStationThree
