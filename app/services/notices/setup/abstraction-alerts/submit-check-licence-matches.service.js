@@ -22,12 +22,13 @@ async function go(sessionId) {
 }
 
 async function _save(session) {
-  const { alertThresholds, licenceMonitoringStations, removedThresholds } = session
+  const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
 
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
-    removedThresholds
+    removedThresholds,
+    alertType
   )
 
   const relevantLicenceRefs = relevantLicenceMonitoringStations.map((station) => {
