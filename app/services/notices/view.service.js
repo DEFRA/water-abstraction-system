@@ -25,22 +25,32 @@ async function go(id, page) {
   const { results, total: numberOfRecipients } = notices
   const selectedPageNumber = page ? Number(page) : 1
   const defaultPageSize = DatabaseConfig.defaultPageSize
-  const numberShowing = results.length < defaultPageSize ? results.length : defaultPageSize * selectedPageNumber
+  const numberShowing = results.length < defaultPageSize ? results.length : defaultPageSize
 
   const pagination = PaginatorPresenter.go(
     numberOfRecipients,
     selectedPageNumber,
     `/system/notices/${results[0].event.id}`
   )
+  const pageNumbers = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+
   const pageData = ViewPresenter.go(results, page)
 
   return {
     ...pageData,
     numberOfRecipients,
     numberShowing,
-    pageTitle: 'Water abstraction alert',
-    pagination
+    pagination,
+    pageNumbers
   }
+}
+
+function _pageTitle(numberOfPages, selectedPageNumber) {
+  if (numberOfPages < 2) {
+    return null
+  }
+
+  return `Showing page ${selectedPageNumber} of ${numberOfPages} notifications`
 }
 
 module.exports = {

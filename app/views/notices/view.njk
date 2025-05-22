@@ -42,7 +42,9 @@
       })
     }}
 
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Showing {{numberShowing}} of {{numberOfRecipients}} notifications.</p>
+    {% if pageNumbers %}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{pageNumbers}}</p>
+    {% endif %}
 
     {% set tableRows = [] %}
     {% for notice in notices %}
@@ -75,7 +77,7 @@
           attributes: { 'data-test': 'notice-licences-' + rowIndex }
         },
         {
-          text: notice.messageType,
+          text: notice.messageType | capitalize,
           attributes: { 'data-test': 'notice-messageType-' + rowIndex }
         },
         {
