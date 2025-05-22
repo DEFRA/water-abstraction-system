@@ -5,56 +5,59 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
+const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.js')
+
+const NOTICE_MAPPINGS = {
+  'hof-resume': 'HOF resume',
+  'hof-stop': 'HOF stop',
+  'hof-warning': 'HOF warning',
+  paperReturnForms: 'Paper return',
+  renewal: 'Renewal',
+  returnInvitation: 'Returns invitation',
+  returnReminder: 'Returns reminder',
+  waterAbstractionAlerts: 'alert'
+}
 
 /**
  * Formats data for the `/notices` page
  *
- * @param {object} data - The object containing the notices to display
+ * @param {module:NoticeModel[]} notices - An array of notices to display
+ * @param {number} numberOfNotices - The total number of notices
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(data) {
+function go(notices, numberOfNotices) {
   return {
-    backLink: '/manage',
-    headers: _tableHeaders(),
-    rows: _tableRows(data),
-    pageTitle: 'View sent notices'
+    notices: _noticeRowData(notices),
+    numberOfNoticesDisplayed: notices.length,
+    totalNumberOfNotices: formatNumber(numberOfNotices)
   }
 }
 
-function _tableHeaders() {
-  return [
-    {
-      text: 'Date'
-    },
-    {
-      text: 'Notice type'
-    },
-    {
-      text: 'Sent by'
-    },
-    {
-      text: 'Recipients'
-    },
-    {
-      text: 'Problems'
+function _noticeRowData(notices) {
+  return notices.map((notice) => {
+    const { createdAt, errorCount, id, issuer, referenceCode, recipientCount } = notice
+
+    return {
+      createdDate: formatLongDate(createdAt),
+      link: `/notifications/report/${id}`,
+      recipients: recipientCount,
+      reference: referenceCode,
+      sentBy: issuer,
+      status: errorCount > 0 ? 'error' : 'sent',
+      type: _type(notice)
     }
-  ]
+  })
 }
 
-function _tableRows(data) {
-  return data.map((notice) => {
-    const name = notice.alertType === 'warning' ? `Warning - ${notice.name}` : notice.name
+function _type(notice) {
+  const { alertType, subtype } = notice
 
-    return [
-      { text: formatLongDate(notice.createdAt) },
-      { html: `<a href="/notifications/report/${notice.id}">${name}</a>` },
-      { text: notice.issuer },
-      { text: notice.recipientCount, format: 'numeric' },
-      { html: notice.errorCount ? `<strong class="govuk-tag govuk-tag--orange">ERROR</strong>` : '' }
-    ]
-  })
+  if (alertType) {
+    return `${titleCase(alertType)} alert`
+  }
+
+  return NOTICE_MAPPINGS[subtype]
 }
 
 module.exports = {
