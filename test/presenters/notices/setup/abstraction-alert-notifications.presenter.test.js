@@ -15,7 +15,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const AbstractionAlertsNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
 
-describe.only('Notices - Setup - Abstraction alert notifications presenter', () => {
+describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
