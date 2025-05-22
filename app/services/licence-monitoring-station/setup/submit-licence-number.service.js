@@ -6,6 +6,7 @@
  * @module SubmitLicenceNumberService
  */
 
+const LicenceModel = require('../../../models/licence.model.js')
 const LicenceNumberPresenter = require('../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js')
 const LicenceNumberValidator = require('../../../validators/licence-monitoring-station/setup/licence-number.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -13,7 +14,7 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/licence-number` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} - The data formatted for the view template
@@ -21,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = await _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -32,17 +33,31 @@ async function go(sessionId, payload) {
   const pageData = LicenceNumberPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }
 }
 
+async function _licenceExists(licenceRef) {
+  const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').first()
+
+  return !!licence
+}
+
 async function _save(session, payload) {
+  session.licenceRef = payload.licenceRef
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = LicenceNumberValidator.go(payload)
+async function _validate(payload) {
+  let licenceExists = false
+
+  if (payload.licenceRef) {
+    licenceExists = await _licenceExists(payload.licenceRef)
+  }
+
+  const validation = LicenceNumberValidator.go(payload, licenceExists)
 
   if (!validation.error) {
     return null

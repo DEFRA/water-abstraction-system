@@ -6,21 +6,34 @@
  */
 
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
-const StopOrReduceService = require('../services//licence-monitoring-station/setup/stop-or-reduce.service.js')
+const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
+const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 
-async function licenceNumber(_request, h) {
-  const pageData = {}
+async function licenceNumber(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await LicenceNumberService.go(sessionId)
 
   return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
 }
 
 async function submitLicenceNumber(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    payload
   } = request
+
+  const pageData = await SubmitLicenceNumberService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
+  }
 
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/full-condition`)
 }

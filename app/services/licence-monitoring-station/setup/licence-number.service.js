@@ -23,7 +23,8 @@ async function go(sessionId) {
   const pageData = LicenceNumberPresenter.go(session)
 
   return {
-    ...pageData
+    ...pageData,
+    activeNavBar: 'search'
   }
 }
 

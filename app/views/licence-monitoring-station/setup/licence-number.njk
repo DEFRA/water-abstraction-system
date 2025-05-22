@@ -3,29 +3,51 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
   {{
   govukBackLink({
     text: 'Back',
     href: backLink
-  })
-  }}
+  }) }}
 {% endblock %}
 
 {% block content %}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: "#licence-ref-error"
+        }
+      ]
     }) }}
   {%endif%}
+
+  {# Main heading #}
+  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </span>
 
   <div>
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      {{ govukInput({
+        classes: "govuk-input--width-20",
+        hint: {
+          text: "You need to tag and add other licences with this threshold individually"
+        },
+        id: "licence-ref",
+        name: "licenceRef"
+      }) }}
+
+      {{ govukButton({
+        text: "Continue",
+        preventDoubleClick: true
+      }) }}
     </form>
   </div>
 {% endblock %}
