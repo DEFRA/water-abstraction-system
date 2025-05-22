@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates presenting the data for `/notifications` page
+ * Orchestrates presenting the data for `/notices` page
  * @module IndexNoticesService
  */
 
