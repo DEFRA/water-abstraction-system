@@ -20,11 +20,13 @@ const FetchViewBillingAccountService = require('../../../app/services/billing-ac
 
 describe('Fetch Billing Account service', () => {
   let address
-  let bill
+  let bill1
   let billingAccount
   let billingAccountAddress
   let billingAccountId
-  let billRun
+  let billRun1
+  let billRun2
+  let billRun3
   let company
 
   describe('when a matching billing account exists', () => {
@@ -40,15 +42,35 @@ describe('Fetch Billing Account service', () => {
         billingAccountId
       })
 
-      billRun = await BillRunHelper.add()
+      billRun1 = await BillRunHelper.add({
+        status: 'sent'
+      })
 
-      bill = await BillHelper.add({
+      billRun2 = await BillRunHelper.add({
+        status: 'ready'
+      })
+
+      billRun3 = await BillRunHelper.add({
+        status: 'error'
+      })
+
+      bill1 = await BillHelper.add({
         billingAccountId,
-        billRunId: billRun.id
+        billRunId: billRun1.id
+      })
+
+      await BillHelper.add({
+        billingAccountId,
+        billRunId: billRun2.id
+      })
+
+      await BillHelper.add({
+        billingAccountId,
+        billRunId: billRun3.id
       })
     })
 
-    it('returns the matching billingAccount with related address, bills, bill runs, company, licence', async () => {
+    it('returns the matching billingAccount with related address, company, and bills with a bill run status of "sent"', async () => {
       const result = await FetchViewBillingAccountService.go(billingAccountId, 1)
 
       expect(result).to.equal({
@@ -80,19 +102,20 @@ describe('Fetch Billing Account service', () => {
         },
         bills: [
           {
-            id: bill.id,
-            createdAt: bill.createdAt,
-            credit: bill.credit,
-            invoiceNumber: bill.invoiceNumber,
-            netAmount: bill.netAmount,
-            financialYearEnding: bill.financialYearEnding,
+            id: bill1.id,
+            createdAt: bill1.createdAt,
+            credit: bill1.credit,
+            invoiceNumber: bill1.invoiceNumber,
+            netAmount: bill1.netAmount,
+            financialYearEnding: bill1.financialYearEnding,
             billRun: {
-              id: billRun.id,
-              batchType: billRun.batchType,
-              billRunNumber: billRun.billRunNumber,
-              scheme: billRun.scheme,
-              source: billRun.source,
-              summer: billRun.summer
+              id: billRun1.id,
+              batchType: billRun1.batchType,
+              billRunNumber: billRun1.billRunNumber,
+              scheme: billRun1.scheme,
+              source: billRun1.source,
+              status: billRun1.status,
+              summer: billRun1.summer
             }
           }
         ],
