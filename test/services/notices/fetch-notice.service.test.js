@@ -45,7 +45,7 @@ describe('Notices - Fetch Notice service', () => {
           address_line_4: 'Company region'
         },
         status: 'completed',
-        // licences: ['03/TST/23'],
+        licences: JSON.stringify("['03/TST/23']"),
         eventId: testEvent.id
       })
     })
@@ -59,7 +59,7 @@ describe('Notices - Fetch Notice service', () => {
           messageRef: testScheduledNotification.messageRef,
           personalisation: testScheduledNotification.personalisation,
           status: testScheduledNotification.status,
-          licences: null,
+          licences: "['03/TST/23']",
           recipient: null,
           event: EventModel.fromJson({
             id: testEvent.id,
