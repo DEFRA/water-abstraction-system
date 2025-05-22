@@ -40,7 +40,7 @@ async function _fetchBillingAccount(id) {
     .select(['id', 'accountNumber', 'createdAt', 'lastTransactionFile', 'lastTransactionFileCreatedAt'])
     .withGraphFetched('billingAccountAddresses')
     .modifyGraph('billingAccountAddresses', (builder) => {
-      builder.select('id')
+      builder.select('id').orderBy('createdAt', 'desc').limit(1)
     })
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
