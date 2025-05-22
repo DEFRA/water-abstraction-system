@@ -8,10 +8,12 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
  * @returns {object} - Returns recipients for primaryUser, licenceHolder and additional contact
  */
 function alertsRecipients() {
+  const licenceRef = generateLicenceRef()
+
   return {
-    additionalContact: _addAdditionalContact(),
+    additionalContact: _addAdditionalContact(licenceRef),
     licenceHolder: _addLicenceHolder(),
-    primaryUser: _addPrimaryUser()
+    primaryUser: _addPrimaryUser(licenceRef)
   }
 }
 
@@ -31,9 +33,10 @@ function recipients() {
   }
 }
 
-function _addAdditionalContact() {
+// an additional contact will always be associated with a primary user or licence holder by the licence ref
+function _addAdditionalContact(licenceRef) {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: licenceRef,
     contact: null,
     contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
     contact_type: 'Additional contact',
@@ -85,9 +88,9 @@ function _addLicenceHolder() {
   }
 }
 
-function _addPrimaryUser() {
+function _addPrimaryUser(licenceRef) {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: licenceRef || generateLicenceRef(),
     contact: null,
     contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
     contact_type: 'Primary user',

@@ -18,12 +18,19 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 function go(recipients, session, eventId) {
   const notifications = []
 
-  for (const recipient of recipients) {
-    // loop each threshold we need to use ?
-    if (recipient.email) {
-      notifications.push(_email(recipient, session, eventId))
-    } else {
-      notifications.push(_letter(recipient, session, eventId))
+  const { referenceCode, relevantLicenceMonitoringStations } = session
+
+  for (const lms of relevantLicenceMonitoringStations) {
+    const rec = recipients.filter((r) => {
+      return r.licence_refs === lms.licence.licenceRef
+    })
+
+    for (const recipient of rec) {
+      if (recipient.email) {
+        notifications.push(_email(recipient, referenceCode, eventId))
+      } else {
+        notifications.push(_letter(recipient, referenceCode, eventId))
+      }
     }
   }
 
@@ -42,13 +49,13 @@ function _addressLines(contact) {
   return addressLines
 }
 
-function _email(recipient, session, eventId) {
+function _email(recipient, referenceCode, eventId) {
   const templateId = _emailTemplate()
 
   const messageType = 'email'
 
   return {
-    ..._common(session.referenceCode, templateId, eventId),
+    ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
     messageRef: 'water_abstraction_alert_reduce_warning_email',
@@ -78,14 +85,14 @@ function _licences(licenceRefs) {
   return JSON.stringify(formattedRecipients)
 }
 
-function _letter(recipient, session, eventId) {
+function _letter(recipient, referenceCode, eventId) {
   const name = contactName(recipient.contact)
   const templateId = _letterTemplate()
 
   const messageType = 'letter'
 
   return {
-    ..._common(session.referenceCode, templateId, eventId),
+    ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
     messageRef: 'water_abstraction_alert_reduce_warning',
