@@ -15,7 +15,7 @@ const SessionModel = require('../../../models/session.model.js')
  * Service to handle the submission of the check page in the return logs setup flow.
  *
  * This function orchestrates the submission process. It generates metadata, creates a return submission, creates new
- * return lines, marks the return log as submitted, and cleans up the session.
+ * return lines, marks the return log as submitted by updating its status and received date, and cleans up the session.
  *
  * All of this is wrapped in a transaction so that if any part of it fails, the entire process is rolled back.
  *
@@ -45,19 +45,22 @@ async function go(sessionId, user) {
       returnSubmission.id,
       session.returnsFrequency,
       session.units,
-      session.meterProvided,
+      session.reported === 'abstraction-volumes',
+      session.meterProvided === 'yes',
+      session.startReading,
+      session.meter10TimesDisplay === 'yes',
       trx
     )
 
-    await _markReturnLogAsSubmitted(session.returnLogId, trx)
+    await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, trx)
     await _cleanupSession(sessionId, trx)
   })
 
   return session.returnLogId
 }
 
-async function _markReturnLogAsSubmitted(returnLogId, trx) {
-  await ReturnLogModel.query(trx).patch({ status: 'completed' }).where({ id: returnLogId })
+async function _markReturnLogAsSubmitted(returnLogId, receivedDate, trx) {
+  await ReturnLogModel.query(trx).patch({ status: 'completed', receivedDate }).where({ id: returnLogId })
 }
 
 async function _cleanupSession(sessionId, trx) {

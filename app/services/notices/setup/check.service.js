@@ -7,8 +7,9 @@
 
 const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const RecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -22,7 +23,13 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipientsData = await RecipientsService.go(session)
+  let recipientsData
+
+  if (session.journey === 'abstraction-alert') {
+    recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
+  } else {
+    recipientsData = await FetchRecipientsService.go(session)
+  }
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 

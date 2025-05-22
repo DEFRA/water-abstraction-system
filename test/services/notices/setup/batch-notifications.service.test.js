@@ -26,12 +26,11 @@ describe('Notices - Setup - Batch notifications service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
   const referenceCode = 'RINV-123'
 
-  let determinedReturnsPeriod
   let event
   let eventId
-  let journey
   let notifierStub
   let recipients
+  let session
   let testRecipients
 
   beforeEach(async () => {
@@ -41,16 +40,6 @@ describe('Notices - Setup - Batch notifications service', () => {
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
-
-    determinedReturnsPeriod = {
-      name: 'allYear',
-      dueDate: '2025-04-28',
-      endDate: '2023-03-31',
-      summer: 'false',
-      startDate: '2022-04-01'
-    }
-
-    journey = 'invitations'
 
     recipients = RecipientsFixture.recipients()
 
@@ -64,6 +53,18 @@ describe('Notices - Setup - Batch notifications service', () => {
     })
 
     eventId = event.id
+
+    session = {
+      determinedReturnsPeriod: {
+        name: 'allYear',
+        dueDate: '2025-04-28',
+        endDate: '2023-03-31',
+        summer: 'false',
+        startDate: '2022-04-01'
+      },
+      journey: 'invitations',
+      referenceCode
+    }
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -89,7 +90,7 @@ describe('Notices - Setup - Batch notifications service', () => {
     })
 
     it('should persist the notifications', async () => {
-      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+      await BatchNotificationsService.go(testRecipients, session, eventId)
 
       const result = await _getNotifications(eventId)
 
@@ -214,7 +215,7 @@ describe('Notices - Setup - Batch notifications service', () => {
 
     if (stubNotify) {
       it('correctly sends the "email" data to Notify', async () => {
-        await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+        await BatchNotificationsService.go(testRecipients, session, eventId)
 
         expect(
           NotifyClient.prototype.sendEmail.calledWith(
@@ -234,7 +235,7 @@ describe('Notices - Setup - Batch notifications service', () => {
     }
     if (stubNotify) {
       it('correctly sends the "letter" data to Notify', async () => {
-        await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+        await BatchNotificationsService.go(testRecipients, session, eventId)
 
         expect(
           NotifyClient.prototype.sendLetter.calledWith('4fe80aed-c5dd-44c3-9044-d0289d635019', {
@@ -272,7 +273,7 @@ describe('Notices - Setup - Batch notifications service', () => {
     })
 
     it('should persist the notifications with the errors', async () => {
-      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+      await BatchNotificationsService.go(testRecipients, session, eventId)
 
       const result = await _getNotifications(eventId)
 
@@ -322,7 +323,7 @@ describe('Notices - Setup - Batch notifications service', () => {
     })
 
     it('should update the "event.metadata.error"', async () => {
-      await BatchNotificationsService.go(testRecipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+      await BatchNotificationsService.go(testRecipients, session, eventId)
 
       const updatedResult = await EventModel.query().findById(eventId)
 

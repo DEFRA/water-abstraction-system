@@ -2,11 +2,16 @@
 
 /**
  * Generates return submission metatadata
- * @module GenerateReturnSubmissionMetadata
+ * @module GenerateReturnSubmissionMetadataService
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
+
+const REPORTED = {
+  VOLUMES: 'abstraction-volumes',
+  READINGS: 'meter-readings'
+}
 
 /**
  * Generates return submission metatadata based on the provided session data
@@ -22,10 +27,11 @@ function go(session) {
   }
 
   return {
-    meters: _meters(session),
-    method: session.reported === 'abstraction-volumes' ? 'abstractionVolumes' : 'oneMeter',
-    type: session.meterProvided === 'no' ? 'estimated' : 'measured',
+    meters: _determineMeters(session),
+    method: session.reported === REPORTED.VOLUMES ? 'abstractionVolumes' : 'oneMeter',
     units: getUnitSymbolByName(session.units),
+    // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
+    type: session.reported === REPORTED.VOLUMES && session.meterProvided === 'no' ? 'estimated' : 'measured',
     ..._totalProperties(session)
   }
 }
@@ -41,21 +47,29 @@ function _formatReadings(lines) {
   }, {})
 }
 
-function _meters(session) {
-  if (session.meterProvided === 'no') {
+function _determineMeters(session) {
+  // We set meters array as empty ONLY if we have volumes with no meter; in all other scenarios we populate the array
+  if (session.reported === REPORTED.VOLUMES && session.meterProvided === 'no') {
     return []
   }
 
+  // Otherwise, we return an array containing a single meter object
   return [
     {
-      manufacturer: session.meterMake,
-      meterDetailsProvided: true, // We can hardcode this true as we only return meter details if meterProvided is `yes`
+      meterDetailsProvided: session.meterProvided === 'yes',
+      // Legacy code always sets multiplier, regardless of whether we have meter details. We follow suit for consistency
       multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
-      serialNumber: session.meterSerialNumber,
-      startReading: session.startReading,
-      readings: _formatReadings(session.lines),
-      // We use the spread operator to add the units property only if there are lines present
-      ...(session.lines.length > 0 && { units: getUnitSymbolByName(session.units) })
+      // Manufacturer and serial number are only set if meter details are provided
+      ...(session.meterProvided === 'yes' && {
+        manufacturer: session.meterMake,
+        serialNumber: session.meterSerialNumber
+      }),
+      // Units, readings and start reading are only set if this is a meter reading return
+      ...(session.reported === REPORTED.READINGS && {
+        units: getUnitSymbolByName(session.units),
+        readings: _formatReadings(session.lines),
+        startReading: session.startReading
+      })
     }
   ]
 }

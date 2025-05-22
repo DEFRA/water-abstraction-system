@@ -202,5 +202,26 @@ describe('Notices - Setup - Determine Recipients service', () => {
         ])
       })
     })
+
+    describe('when an "Additional contact" is present', () => {
+      beforeEach(() => {
+        testRecipients = RecipientsFixture.alertsRecipients()
+      })
+
+      it('returns the additional contact', () => {
+        const result = DetermineRecipientsService.go([testRecipients.additionalContact])
+
+        expect(result).to.equal([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
+            contact_type: 'Additional contact',
+            email: 'additional.contact@important.com',
+            licence_refs: testRecipients.additionalContact.licence_refs,
+            message_type: 'Email'
+          }
+        ])
+      })
+    })
   })
 })

@@ -2,7 +2,7 @@
 
 /**
  * Fetches the recipients data for the `/notices/setup/check` page
- * @module FetchContactsService
+ * @module FetchRecipientsService
  */
 
 const { db } = require('../../../../db/db.js')

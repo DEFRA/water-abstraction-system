@@ -5,10 +5,9 @@
  * @module FetchViewBillingAccountService
  */
 
-const { ref } = require('objection')
-
 const BillingAccountModel = require('../../models/billing-account.model.js')
 const BillModel = require('../../models/bill.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -51,31 +50,26 @@ async function _fetchBillingAccount(id) {
     .modifyGraph('billingAccountAddresses.address', (builder) => {
       builder.select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     })
-    .withGraphFetched('bills.billLicences.licence')
-    .modifyGraph('bills.billLicences.licence', (builder) => {
-      builder.select('id')
-    })
 }
 
 async function _fetchBills(billingAccountId, page) {
   return BillModel.query()
-    .select([
-      'id',
-      'createdAt',
-      'credit',
-      'invoiceNumber',
-      'netAmount',
-      ref('bills.metadata:FIN_YEAR').castInt().as('financialYear')
-    ])
-    .withGraphFetched('billRun')
-    .modifyGraph('billRun', (builder) => {
-      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer'])
-    })
+    .select(['id', 'createdAt', 'credit', 'financialYearEnding', 'invoiceNumber', 'netAmount'])
+    .where('billingAccountId', billingAccountId)
+    .whereExists(
+      BillRunModel.query()
+        .select(1)
+        .whereColumn('bills.billRunId', 'billRuns.id')
+        .andWhere('billRuns.status', '=', 'sent')
+    )
     .orderBy([
       { column: 'createdAt', order: 'desc' },
       { column: 'invoiceNumber', order: 'asc' }
     ])
-    .where('billingAccountId', billingAccountId)
+    .withGraphFetched('billRun')
+    .modifyGraph('billRun', (builder) => {
+      builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
+    })
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

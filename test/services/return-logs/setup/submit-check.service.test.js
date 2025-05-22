@@ -64,6 +64,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         returnSubmissionId: initialReturnSubmission.id,
         startDate: '2023-01-01',
         endDate: '2023-12-31',
+        receivedDate: '2024-01-01',
         journey: 'enter-return',
         lines: [
           {
@@ -109,45 +110,54 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(updatedReturnLog.status).to.equal('completed')
     })
 
-    it('deletes the session', async () => {
+    it('updates the return log received date', async () => {
       await SubmitCheckService.go(session.id, user)
 
-      const deletedSession = await SessionModel.query().findById(session.id)
-      expect(deletedSession).to.not.exist()
-    })
-
-    it('generates metadata for the return submission', async () => {
-      await SubmitCheckService.go(session.id, user)
-
-      const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
-      expect(callArgs[0]).to.be.an.instanceOf(SessionModel)
+      const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
+      expect(updatedReturnLog.receivedDate).to.equal(new Date('2024-01-01'))
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      it('deletes the session', async () => {
+        await SubmitCheckService.go(session.id, user)
 
-      const callArgs = createReturnSubmissionServiceStub.firstCall.args
-      expect(callArgs[0]).to.equal(returnLog.id)
-      expect(callArgs[1]).to.equal(user.username)
-      expect(callArgs[2]).to.equal(mockGeneratedMetadata)
-      expect(callArgs[3]).to.equal(sessionData.data.journey === 'nil-return')
-    })
+        const deletedSession = await SessionModel.query().findById(session.id)
+        expect(deletedSession).to.not.exist()
+      })
 
-    it('calls CreateReturnLinesService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      it('generates metadata for the return submission', async () => {
+        await SubmitCheckService.go(session.id, user)
 
-      const callArgs = createReturnLinesServiceStub.firstCall.args
-      expect(callArgs[0]).to.equal(sessionData.data.lines)
-      expect(callArgs[1]).to.equal(mockNewReturnSubmissionId)
-      expect(callArgs[2]).to.equal(sessionData.data.returnsFrequency)
-      expect(callArgs[3]).to.equal(sessionData.data.units)
-      expect(callArgs[4]).to.equal(sessionData.data.meterProvided)
-    })
+        const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
+        expect(callArgs[0]).to.be.an.instanceOf(SessionModel)
+      })
 
-    it('returns the original returnLogId', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      it('calls CreateReturnSubmissionService with correct parameters', async () => {
+        await SubmitCheckService.go(session.id, user)
 
-      expect(result).to.equal(returnLog.id)
+        const callArgs = createReturnSubmissionServiceStub.firstCall.args
+        expect(callArgs[0]).to.equal(returnLog.id)
+        expect(callArgs[1]).to.equal(user.username)
+        expect(callArgs[2]).to.equal(mockGeneratedMetadata)
+        expect(callArgs[3]).to.equal(sessionData.data.journey === 'nil-return')
+      })
+
+      it('calls CreateReturnLinesService with correct parameters', async () => {
+        await SubmitCheckService.go(session.id, user)
+
+        const callArgs = createReturnLinesServiceStub.firstCall.args
+        expect(callArgs[0]).to.equal(sessionData.data.lines)
+        expect(callArgs[1]).to.equal(mockNewReturnSubmissionId)
+        expect(callArgs[2]).to.equal(sessionData.data.returnsFrequency)
+        expect(callArgs[3]).to.equal(sessionData.data.units)
+        expect(callArgs[4]).to.equal(sessionData.data.meterProvided)
+      })
+
+      it('returns the original returnLogId', async () => {
+        const result = await SubmitCheckService.go(session.id, user)
+
+        expect(result).to.equal(returnLog.id)
+      })
     })
   })
 })

@@ -120,208 +120,201 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "invitations"', () => {
-      beforeEach(() => {
-        session.journey = 'invitations'
-        session.referenceCode = 'RINV-123'
-      })
-
-      describe('the "links" property', () => {
-        it('should return the links for "invitations"', () => {
+    describe('the "recipients" property', () => {
+      describe('format all recipient types', () => {
+        it('should return the formatted recipients', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/returns-period`,
-            cancel: `/system/notices/setup/${session.id}/cancel`,
-            download: `/system/notices/setup/${session.id}/download`,
-            removeLicences: `/system/notices/setup/${session.id}/remove-licences`
+
+          expect(result.recipients).to.equal([
+            {
+              contact: [
+                'Mr H J Duplicate Licence holder',
+                '4',
+                'Privet Drive',
+                'Little Whinging',
+                'Surrey',
+                'WD25 7LR'
+              ],
+              licences: [testDuplicateRecipients.duplicateLicenceHolder.licence_refs],
+              method: 'Letter or email - Licence holder'
+            },
+            {
+              contact: ['Mr H J Duplicate Returns to', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+              licences: [testDuplicateRecipients.duplicateReturnsTo.licence_refs],
+              method: 'Letter or email - Returns to'
+            },
+            {
+              contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+              licences: [testRecipients.licenceHolder.licence_refs],
+              method: 'Letter or email - Licence holder'
+            },
+            {
+              contact: [
+                'Mr H J Licence holder with multiple licences',
+                '3',
+                'Privet Drive',
+                'Little Whinging',
+                'Surrey',
+                'WD25 7LR'
+              ],
+              licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
+              method: 'Letter or email - Licence holder'
+            },
+            {
+              contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+              licences: [testRecipients.returnsTo.licence_refs],
+              method: 'Letter or email - Returns to'
+            },
+            {
+              contact: ['primary.user@important.com'],
+              licences: [testRecipients.primaryUser.licence_refs],
+              method: 'Letter or email - Primary user'
+            },
+            {
+              contact: ['primary.user@important.com'],
+              licences: [testDuplicateRecipients.duplicatePrimaryUser.licence_refs],
+              method: 'Letter or email - Primary user'
+            },
+            {
+              contact: ['returns.agent@important.com'],
+              licences: [testRecipients.returnsAgent.licence_refs],
+              method: 'Letter or email - Returns agent'
+            },
+            {
+              contact: ['returns.agent@important.com'],
+              licences: [testDuplicateRecipients.duplicateReturnsAgent.licence_refs],
+              method: 'Letter or email - Returns agent'
+            }
+          ])
+        })
+
+        describe('the "contact" property', () => {
+          describe('when the contact is an email', () => {
+            it('should return the email address', () => {
+              const result = CheckPresenter.go(testInput, page, pagination, session)
+
+              const testRecipient = result.recipients.find((recipient) => {
+                return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
+              })
+
+              expect(testRecipient).to.equal({
+                contact: ['primary.user@important.com'],
+                licences: [`${testRecipients.primaryUser.licence_refs}`],
+                method: 'Letter or email - Primary user'
+              })
+            })
+          })
+
+          describe('when the contact is an address', () => {
+            it('should convert the contact into an array', () => {
+              const result = CheckPresenter.go(testInput, page, pagination, session)
+
+              const testRecipient = result.recipients.find((recipient) => {
+                return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
+              })
+
+              expect(testRecipient).to.equal({
+                contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+                licences: [`${testRecipients.licenceHolder.licence_refs}`],
+                method: 'Letter or email - Licence holder'
+              })
+            })
           })
         })
-      })
 
-      describe('the "recipients" property', () => {
-        describe('format all recipient types', () => {
-          it('should return the formatted recipients', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
+        describe('the "licences" property', () => {
+          describe('when the recipient has a single licence number', () => {
+            it('should return licence numbers as an array', () => {
+              const result = CheckPresenter.go(testInput, page, pagination, session)
 
-            expect(result.recipients).to.equal([
-              {
-                contact: [
-                  'Mr H J Duplicate Licence holder',
-                  '4',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: [testDuplicateRecipients.duplicateLicenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Duplicate Returns to', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testDuplicateRecipients.duplicateReturnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.licenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: [
-                  'Mr H J Licence holder with multiple licences',
-                  '3',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.returnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testRecipients.primaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testDuplicateRecipients.duplicatePrimaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testRecipients.returnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testDuplicateRecipients.duplicateReturnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              }
-            ])
-          })
-
-          describe('the "contact" property', () => {
-            describe('when the contact is an email', () => {
-              it('should return the email address', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['primary.user@important.com'],
-                  licences: [`${testRecipients.primaryUser.licence_refs}`],
-                  method: 'Letter or email - Primary user'
-                })
+              const testRecipient = result.recipients.find((recipient) => {
+                return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
               })
-            })
 
-            describe('when the contact is an address', () => {
-              it('should convert the contact into an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                  licences: [`${testRecipients.licenceHolder.licence_refs}`],
-                  method: 'Letter or email - Licence holder'
-                })
-              })
+              expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
             })
           })
 
-          describe('the "licences" property', () => {
-            describe('when the recipient has a single licence number', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
+          describe('when the recipient has multiple licence numbers', () => {
+            it('should return licence numbers as an array', () => {
+              const result = CheckPresenter.go(testInput, page, pagination, session)
 
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
-              })
-            })
-
-            describe('when the recipient has multiple licence numbers', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  const licences = JSON.stringify(recipient.licences)
-                  const licenceRefs = JSON.stringify(
-                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-                  )
-
-                  return licences === licenceRefs
-                })
-
-                expect(testRecipient.licences).to.equal(
+              const testRecipient = result.recipients.find((recipient) => {
+                const licences = JSON.stringify(recipient.licences)
+                const licenceRefs = JSON.stringify(
                   testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
                 )
+
+                return licences === licenceRefs
               })
+
+              expect(testRecipient.licences).to.equal(
+                testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
+              )
             })
           })
         })
+      })
 
-        describe('and there are <= 25 recipients ', () => {
-          it('returns all the recipients', () => {
+      describe('and there are <= 25 recipients ', () => {
+        it('returns all the recipients', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.recipients.length).to.equal(testInput.length)
+        })
+      })
+
+      describe('and there are >= 25 recipients', () => {
+        beforeEach(() => {
+          testInput = [...testInput, ...testInput, ...testInput]
+
+          pagination = {
+            numberOfPages: 2
+          }
+        })
+
+        describe('and the page is 1', () => {
+          it('returns the first 25 recipients', () => {
             const result = CheckPresenter.go(testInput, page, pagination, session)
 
-            expect(result.recipients.length).to.equal(testInput.length)
+            expect(result.recipients.length).to.equal(25)
+          })
+
+          it('returns the updated "pageTitle"', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+
+            expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
           })
         })
 
-        describe('and there are >= 25 recipients', () => {
+        describe('and there is more than one page', () => {
           beforeEach(() => {
-            testInput = [...testInput, ...testInput, ...testInput]
-
-            pagination = {
-              numberOfPages: 2
-            }
+            page = '2'
           })
 
-          describe('and the page is 1', () => {
-            it('returns the first 25 recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
+          it('returns the remaining recipients', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.recipients.length).to.equal(25)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
-            })
+            expect(result.recipients.length).to.equal(2)
           })
 
-          describe('and there is more than one page', () => {
-            beforeEach(() => {
-              page = '2'
-            })
+          it('returns the updated "pageTitle"', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
 
-            it('returns the remaining recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients.length).to.equal(2)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
-            })
+            expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
           })
+        })
+      })
+    })
+
+    describe('the "links" property', () => {
+      it('should return the links for "invitations"', () => {
+        const result = CheckPresenter.go(testInput, page, pagination, session)
+        expect(result.links).to.equal({
+          back: `/system/notices/setup/${session.id}/returns-period`,
+          cancel: `/system/notices/setup/${session.id}/cancel`,
+          download: `/system/notices/setup/${session.id}/download`,
+          removeLicences: `/system/notices/setup/${session.id}/remove-licences`
         })
       })
     })
@@ -344,190 +337,51 @@ describe('Notices - Setup - Check presenter', () => {
         })
       })
 
-      describe('the "recipients" property', () => {
-        describe('format all recipient types', () => {
-          it('should return the formatted recipients', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.readyToSend).to.equal('Ad-hoc notifications are ready to send.')
+        })
+      })
+    })
 
-            expect(result.recipients).to.equal([
-              {
-                contact: [
-                  'Mr H J Duplicate Licence holder',
-                  '4',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: [testDuplicateRecipients.duplicateLicenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Duplicate Returns to', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testDuplicateRecipients.duplicateReturnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.licenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: [
-                  'Mr H J Licence holder with multiple licences',
-                  '3',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.returnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testRecipients.primaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testDuplicateRecipients.duplicatePrimaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testRecipients.returnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testDuplicateRecipients.duplicateReturnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              }
-            ])
-          })
+    describe('when the journey is for "abstraction-alert"', () => {
+      beforeEach(() => {
+        session.journey = 'abstraction-alert'
+        session.referenceCode = 'WAA-123'
+        session.monitoringStationId = '345'
+      })
 
-          describe('the "contact" property', () => {
-            describe('when the contact is an email', () => {
-              it('should return the email address', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['primary.user@important.com'],
-                  licences: [`${testRecipients.primaryUser.licence_refs}`],
-                  method: 'Letter or email - Primary user'
-                })
-              })
-            })
-
-            describe('when the contact is an address', () => {
-              it('should convert the contact into an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                  licences: [`${testRecipients.licenceHolder.licence_refs}`],
-                  method: 'Letter or email - Licence holder'
-                })
-              })
-            })
-          })
-
-          describe('the "licences" property', () => {
-            describe('when the recipient has a single licence number', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
-              })
-            })
-
-            describe('when the recipient has multiple licence numbers', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  const licences = JSON.stringify(recipient.licences)
-                  const licenceRefs = JSON.stringify(
-                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-                  )
-
-                  return licences === licenceRefs
-                })
-
-                expect(testRecipient.licences).to.equal(
-                  testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-                )
-              })
-            })
+      describe('the "links" property', () => {
+        it('should return the links for "abstraction-alert"', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.links).to.equal({
+            back: `/system/monitoring-stations/${session.monitoringStationId}`,
+            cancel: `/system/notices/setup/${session.id}/cancel`,
+            download: `/system/notices/setup/${session.id}/download`,
+            removeLicences: ``
           })
         })
+      })
 
-        describe('and there are <= 25 recipients ', () => {
-          it('returns all the recipients', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.recipients.length).to.equal(testInput.length)
-          })
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.readyToSend).to.equal('Abstraction alerts are ready to send.')
         })
+      })
+    })
 
-        describe('and there are >= 25 recipients', () => {
-          beforeEach(() => {
-            testInput = [...testInput, ...testInput, ...testInput]
+    describe('when the journey is for "invitations"', () => {
+      beforeEach(() => {
+        session.journey = 'invitations'
+        session.referenceCode = 'RINV-123'
+      })
 
-            pagination = {
-              numberOfPages: 2
-            }
-          })
-
-          describe('and the page is 1', () => {
-            it('returns the first 25 recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients.length).to.equal(25)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
-            })
-          })
-
-          describe('and there is more than one page', () => {
-            beforeEach(() => {
-              page = '2'
-            })
-
-            it('returns the remaining recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients.length).to.equal(2)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
-            })
-          })
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
         })
       })
     })
@@ -537,202 +391,10 @@ describe('Notices - Setup - Check presenter', () => {
         session.journey = 'reminders'
       })
 
-      describe('the "links" property', () => {
-        it('should return the links for "invitations"', () => {
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/returns-period`,
-            cancel: `/system/notices/setup/${session.id}/cancel`,
-            download: `/system/notices/setup/${session.id}/download`,
-            removeLicences: `/system/notices/setup/${session.id}/remove-licences`
-          })
-        })
-      })
-
-      describe('the "recipients" property', () => {
-        describe('format all recipient types', () => {
-          it('should return the formatted recipients', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.recipients).to.equal([
-              {
-                contact: [
-                  'Mr H J Duplicate Licence holder',
-                  '4',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: [testDuplicateRecipients.duplicateLicenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Duplicate Returns to', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testDuplicateRecipients.duplicateReturnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.licenceHolder.licence_refs],
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: [
-                  'Mr H J Licence holder with multiple licences',
-                  '3',
-                  'Privet Drive',
-                  'Little Whinging',
-                  'Surrey',
-                  'WD25 7LR'
-                ],
-                licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
-                method: 'Letter or email - Licence holder'
-              },
-              {
-                contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                licences: [testRecipients.returnsTo.licence_refs],
-                method: 'Letter or email - Returns to'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testRecipients.primaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['primary.user@important.com'],
-                licences: [testDuplicateRecipients.duplicatePrimaryUser.licence_refs],
-                method: 'Letter or email - Primary user'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testRecipients.returnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              },
-              {
-                contact: ['returns.agent@important.com'],
-                licences: [testDuplicateRecipients.duplicateReturnsAgent.licence_refs],
-                method: 'Letter or email - Returns agent'
-              }
-            ])
-          })
-
-          describe('the "contact" property', () => {
-            describe('when the contact is an email', () => {
-              it('should return the email address', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.primaryUser.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['primary.user@important.com'],
-                  licences: [`${testRecipients.primaryUser.licence_refs}`],
-                  method: 'Letter or email - Primary user'
-                })
-              })
-            })
-
-            describe('when the contact is an address', () => {
-              it('should convert the contact into an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient).to.equal({
-                  contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-                  licences: [`${testRecipients.licenceHolder.licence_refs}`],
-                  method: 'Letter or email - Licence holder'
-                })
-              })
-            })
-          })
-
-          describe('the "licences" property', () => {
-            describe('when the recipient has a single licence number', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  return recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
-                })
-
-                expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
-              })
-            })
-
-            describe('when the recipient has multiple licence numbers', () => {
-              it('should return licence numbers as an array', () => {
-                const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                const testRecipient = result.recipients.find((recipient) => {
-                  const licences = JSON.stringify(recipient.licences)
-                  const licenceRefs = JSON.stringify(
-                    testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-                  )
-
-                  return licences === licenceRefs
-                })
-
-                expect(testRecipient.licences).to.equal(
-                  testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-                )
-              })
-            })
-          })
-        })
-
-        describe('and there are <= 25 recipients ', () => {
-          it('returns all the recipients', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.recipients.length).to.equal(testInput.length)
-          })
-        })
-
-        describe('and there are >= 25 recipients', () => {
-          beforeEach(() => {
-            testInput = [...testInput, ...testInput, ...testInput]
-
-            pagination = {
-              numberOfPages: 2
-            }
-          })
-
-          describe('and the page is 1', () => {
-            it('returns the first 25 recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients.length).to.equal(25)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
-            })
-          })
-
-          describe('and there is more than one page', () => {
-            beforeEach(() => {
-              page = '2'
-            })
-
-            it('returns the remaining recipients', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients.length).to.equal(2)
-            })
-
-            it('returns the updated "pageTitle"', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
-            })
-          })
+          expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
         })
       })
     })

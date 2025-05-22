@@ -10,8 +10,8 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: 'Go back to bills',
-      href:  '/system/licences/' + licenceId + '/bills'
+      text: backLink.title,
+      href: backLink.link
     })
   }}
 {% endblock %}
@@ -66,7 +66,7 @@
         },
         {
           value: {
-            html: '<a class="govuk-button govuk-button--secondary" href="/billing-account-entry/change-address-' + billingAccountId + '/select-account">Change address</a>'
+            html: '<a class="govuk-button govuk-button--secondary" href="/billing-accounts/' + billingAccountId + '/change-address">Change address</a>'
           }
         }
       ]
@@ -78,7 +78,7 @@
   {# Bill details #}
   {% if bills.length === 0 %}
     <div class="govuk-body govuk-!-padding-top-3">
-      <p>No sent bills for this billing account</p>
+      <p>No sent bills for this billing account.</p>
     </div>
   {% else %}
     {% set tableRows = [] %}

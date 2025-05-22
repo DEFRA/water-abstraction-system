@@ -4,127 +4,136 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Thing under test
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
 describe('Notices - Index Notices presenter', () => {
-  describe('when the "data" is empty and there are no filters or validation results', () => {
-    it('returns the correct information', () => {
-      const result = IndexNoticesPresenter.go([])
+  let notice
+  let notices
+  let numberOfNotices
 
-      expect(result).to.equal({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [],
-        pageTitle: 'View sent notices'
-      })
+  beforeEach(() => {
+    notices = NoticesFixture.notices()
+    numberOfNotices = notices.length
+  })
+
+  it('correctly presents the data', () => {
+    const result = IndexNoticesPresenter.go(notices, numberOfNotices)
+
+    expect(result).to.equal({
+      notices: [
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[0].id}`,
+          recipients: notices[0].recipientCount,
+          reference: notices[0].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Reduce alert'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[1].id}`,
+          recipients: notices[1].recipientCount,
+          reference: notices[1].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Resume alert'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[2].id}`,
+          recipients: notices[2].recipientCount,
+          reference: notices[2].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Stop alert'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[3].id}`,
+          recipients: notices[3].recipientCount,
+          reference: notices[3].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Warning alert'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[4].id}`,
+          recipients: notices[4].recipientCount,
+          reference: notices[4].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'HOF warning'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[5].id}`,
+          recipients: notices[5].recipientCount,
+          reference: notices[5].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Returns invitation'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[6].id}`,
+          recipients: notices[6].recipientCount,
+          reference: notices[6].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Paper return'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/notifications/report/${notices[7].id}`,
+          recipients: notices[7].recipientCount,
+          reference: notices[7].referenceCode,
+          sentBy: 'billing.data@wrls.gov.uk',
+          status: 'sent',
+          type: 'Returns reminder'
+        }
+      ],
+      numberOfNoticesDisplayed: numberOfNotices,
+      totalNumberOfNotices: numberOfNotices.toString()
     })
   })
 
-  describe('when there is some "data"', () => {
-    it('returns it formatted for display on the page', () => {
-      const result = IndexNoticesPresenter.go([
-        {
-          id: '809aa951-e5eb-4300-8492-9e0f2bcb5b98',
-          createdAt: new Date('2025-02-21T14:52:18.000Z'),
-          issuer: 'billing.data@wrls.gov.uk',
-          name: 'Paper returns',
-          alertType: null,
-          recipientCount: 1,
-          errorCount: 0
-        }
-      ])
+  describe('the "notices" property', () => {
+    describe('the "status" property', () => {
+      describe('when the notice has no errors', () => {
+        beforeEach(() => {
+          notice = notices[0]
+          numberOfNotices = 1
+        })
 
-      expect(result).to.equal({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            {
-              text: '21 February 2025'
-            },
-            {
-              html: '<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>'
-            },
-            {
-              text: 'billing.data@wrls.gov.uk'
-            },
-            {
-              format: 'numeric',
-              text: 1
-            },
-            {
-              html: ''
-            }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+        it('returns "sent"', () => {
+          const result = IndexNoticesPresenter.go([notice], numberOfNotices)
+
+          expect(result.notices[0].status).to.equal('sent')
+        })
       })
-    })
-  })
 
-  describe('when there is some "data" with an error', () => {
-    it('returns it formatted for display on the page', () => {
-      const result = IndexNoticesPresenter.go([
-        {
-          id: '809aa951-e5eb-4300-8492-9e0f2bcb5b98',
-          createdAt: new Date('2025-02-21T14:52:18.000Z'),
-          issuer: 'billing.data@wrls.gov.uk',
-          name: 'Paper returns',
-          alertType: null,
-          recipientCount: 1,
-          errorCount: 1
-        }
-      ])
+      describe('when the notice has errors', () => {
+        beforeEach(() => {
+          notice = notices[0]
+          notice.errorCount = 1
+          numberOfNotices = 1
+        })
 
-      expect(result).to.equal({
-        backLink: '/manage',
-        headers: _tableHeaders(),
-        rows: [
-          [
-            {
-              text: '21 February 2025'
-            },
-            {
-              html: '<a href="/notifications/report/809aa951-e5eb-4300-8492-9e0f2bcb5b98">Paper returns</a>'
-            },
-            {
-              text: 'billing.data@wrls.gov.uk'
-            },
-            {
-              format: 'numeric',
-              text: 1
-            },
-            {
-              html: `<strong class="govuk-tag govuk-tag--orange">ERROR</strong>`
-            }
-          ]
-        ],
-        pageTitle: 'View sent notices'
+        it('returns "error"', () => {
+          const result = IndexNoticesPresenter.go([notice], numberOfNotices)
+
+          expect(result.notices[0].status).to.equal('error')
+        })
       })
     })
   })
 })
-
-function _tableHeaders() {
-  return [
-    {
-      text: 'Date'
-    },
-    {
-      text: 'Notice type'
-    },
-    {
-      text: 'Sent by'
-    },
-    {
-      text: 'Recipients'
-    },
-    {
-      text: 'Problems'
-    }
-  ]
-}

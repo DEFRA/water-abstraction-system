@@ -15,18 +15,24 @@ const ViewBillingAccountPresenter = require('../../../app/presenters/billing-acc
 
 describe('View Billing Account presenter', () => {
   let billingAccountData
+  let licenceId
 
   beforeEach(() => {
     billingAccountData = BillingAccountsFixture.billingAccount()
+    licenceId = '634aecc9-1086-41b1-a1cd-37247f8d321b'
   })
 
   describe('when provided with a populated billing account', () => {
     it('returns the correctly presents the data', () => {
-      const result = ViewBillingAccountPresenter.go(billingAccountData)
+      const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
       expect(result).to.equal({
         accountNumber: 'S88897992A',
         address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        backLink: {
+          title: 'Go back to bills',
+          link: `/system/licences/${licenceId}/bills`
+        },
         billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
         bills: [
           {
@@ -42,7 +48,6 @@ describe('View Billing Account presenter', () => {
         createdDate: '14 December 2023',
         customerFile: null,
         lastUpdated: null,
-        licenceId: '1c26e4f8-bce8-427f-8a88-72e704a4ca04',
         pageTitle: 'Billing account for Ferns Surfacing Limited',
         pagination: { total: 1 }
       })
@@ -57,7 +62,7 @@ describe('View Billing Account presenter', () => {
       })
 
       it('returns an array of address lines title cased with the postcode capitalised', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData)
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
         expect(result.address).to.equal([
           'Ferns Surfacing Limited',
@@ -74,7 +79,7 @@ describe('View Billing Account presenter', () => {
 
     describe('when some address lines are null', () => {
       it('returns an array of populated address lines title cased with the postcode capitalised', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData)
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
         expect(result.address).to.equal([
           'Ferns Surfacing Limited',
@@ -88,6 +93,34 @@ describe('View Billing Account presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the licenceId is undefined', () => {
+      beforeEach(() => {
+        licenceId = undefined
+      })
+
+      it('returns the title "Go back to search" and the link to search page', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+
+        expect(result.backLink).to.equal({
+          title: 'Go back to search',
+          link: '/licences'
+        })
+      })
+    })
+
+    describe('when the licenceId is not undefined', () => {
+      it('returns the title "Go back to bills" and the link to licence bills page', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+
+        expect(result.backLink).to.equal({
+          title: 'Go back to bills',
+          link: `/system/licences/${licenceId}/bills`
+        })
+      })
+    })
+  })
+
   describe('the "bills" property', () => {
     describe('the "bills.billNumber" property', () => {
       describe('when the "invoiceNumber" is populated', () => {
@@ -96,7 +129,7 @@ describe('View Billing Account presenter', () => {
         })
 
         it('returns the "invoiceNumber" value', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData)
+          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
           expect(result.bills[0].billNumber).to.equal('Test123')
         })
@@ -104,7 +137,7 @@ describe('View Billing Account presenter', () => {
 
       describe('when the "invoiceNumber" is null', () => {
         it('returns the string "Zero value bill"', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData)
+          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
           expect(result.bills[0].billNumber).to.equal('Zero value bill')
         })
@@ -118,7 +151,7 @@ describe('View Billing Account presenter', () => {
         })
 
         it('returns the formatted "bill.netAmount" value followed by the string "Credit"', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData)
+          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
           expect(result.bills[0].billTotal).to.equal('£103.84 Credit')
         })
@@ -126,7 +159,7 @@ describe('View Billing Account presenter', () => {
 
       describe('when the "bill.credit" property is false', () => {
         it('returns the formatted "bill.netAmount" value', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData)
+          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
           expect(result.bills[0].billTotal).to.equal('£103.84')
         })
@@ -141,7 +174,7 @@ describe('View Billing Account presenter', () => {
       })
 
       it('returns the formatted "lastTransactionFileCreatedAt" date value', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData)
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
         expect(result.lastUpdated).to.equal('14 December 2023')
       })
@@ -149,7 +182,7 @@ describe('View Billing Account presenter', () => {
 
     describe('when the "lastTransactionFileCreatedAt" is null', () => {
       it('returns null', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData)
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
 
         expect(result.lastUpdated).to.be.null()
       })

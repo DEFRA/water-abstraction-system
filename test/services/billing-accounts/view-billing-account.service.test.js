@@ -24,12 +24,20 @@ describe('View Billing Account service', () => {
 
   describe('when a billing account with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewBillingAccountService.go('64d7fc10-f046-4444-ba32-bb917dd8cde6', 1)
+      const result = await ViewBillingAccountService.go(
+        '64d7fc10-f046-4444-ba32-bb917dd8cde6',
+        '53325713-1364-4f6b-a244-8771a36a1248',
+        1
+      )
 
       expect(result).to.equal({
         activeNavBar: 'search',
         accountNumber: 'S88897992A',
         address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        backLink: {
+          title: 'Go back to bills',
+          link: `/system/licences/53325713-1364-4f6b-a244-8771a36a1248/bills`
+        },
         billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
         bills: [
           {
@@ -45,7 +53,6 @@ describe('View Billing Account service', () => {
         createdDate: '14 December 2023',
         customerFile: null,
         lastUpdated: null,
-        licenceId: '1c26e4f8-bce8-427f-8a88-72e704a4ca04',
         pageTitle: 'Billing account for Ferns Surfacing Limited',
         pagination: { numberOfPages: 1 }
       })

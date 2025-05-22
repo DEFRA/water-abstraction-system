@@ -88,7 +88,7 @@ describe('Monitoring Stations - View service', () => {
         restrictions: [
           {
             action: {
-              link: '/system/licence-monitoring-station/3ee344db-784c-4d21-8d53-e50833f7e848',
+              link: '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5',
               text: 'View'
             },
             abstractionPeriod: '1 April to 31 August',

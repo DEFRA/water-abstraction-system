@@ -5,7 +5,16 @@
  * @module MonitoringStationsController
  */
 
+const LicenceService = require('../services/monitoring-stations/licence.service.js')
 const ViewService = require('../services/monitoring-stations/view.service.js')
+
+async function licence(request, h) {
+  const { licenceId, monitoringStationId } = request.params
+
+  const pageData = await LicenceService.go(licenceId, monitoringStationId)
+
+  return h.view('monitoring-stations/licence.njk', pageData)
+}
 
 async function view(request, h) {
   const {
@@ -19,5 +28,6 @@ async function view(request, h) {
 }
 
 module.exports = {
+  licence,
   view
 }

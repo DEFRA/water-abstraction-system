@@ -9,6 +9,13 @@ const routes = [
     options: {
       handler: MonitoringStationsController.view
     }
+  },
+  {
+    method: 'GET',
+    path: '/monitoring-stations/{monitoringStationId}/licence/{licenceId}',
+    options: {
+      handler: MonitoringStationsController.licence
+    }
   }
 ]
 
