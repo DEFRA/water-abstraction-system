@@ -50,6 +50,10 @@ async function _fetchBillingAccount(id) {
     .modifyGraph('billingAccountAddresses.address', (builder) => {
       builder.select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     })
+    .withGraphFetched('billingAccountAddresses.contact')
+    .modifyGraph('billingAccountAddresses.contact', (builder) => {
+      builder.select(['id', 'contactType', 'department', 'firstName', 'lastName'])
+    })
 }
 
 async function _fetchBills(billingAccountId, page) {
