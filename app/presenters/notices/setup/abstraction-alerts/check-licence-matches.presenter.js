@@ -5,6 +5,7 @@
  * @module CheckLicenceMatchesPresenter
  */
 
+const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
 const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
 
 /**
@@ -40,22 +41,8 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds, removedThresholds) {
-  const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
-  })
-
-  if (removedThresholds) {
-    return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
-      return !removedThresholds.includes(licenceMonitoringStation.id)
-    })
-  }
-
-  return relevantLicenceMonitoringStations
-}
-
 function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId) {
-  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds
