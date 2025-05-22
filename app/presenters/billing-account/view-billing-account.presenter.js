@@ -24,7 +24,7 @@ function go(billingAccountData, licenceId) {
 
   return {
     accountNumber: billingAccount.accountNumber,
-    address: _address(billingAccountAddresses[0].address, company),
+    address: _address(billingAccountAddresses[0].address, billingAccountAddresses[0].contact, company),
     backLink: _backLink(licenceId),
     billingAccountId: id,
     bills: _bills(bills),
@@ -43,13 +43,16 @@ function go(billingAccountData, licenceId) {
  * out any empty address lines, applies title casing to each one, and appends the postcode in uppercase.
  *
  * @param {module:AddressModel} address - The address associated with the billing account.
+ * @param {module:AddressModel} contact - The contact associated with the billing account.
  * @param {module:CompanyModel} company - The company associated with the billing account.
  *
  * @returns {string[]} An array of formatted address lines for display.
  */
-function _address(address, company) {
+function _address(address, contact, company) {
+  const companyContact = _contact(contact)
+  const companyName = titleCase(company.name)
+
   const addressLines = [
-    company.name,
     address['address1'],
     address['address2'],
     address['address3'],
@@ -64,7 +67,7 @@ function _address(address, company) {
     addressLines.push(address['postcode'].toUpperCase())
   }
 
-  return addressLines
+  return [companyName, companyContact, ...addressLines].filter(Boolean)
 }
 
 function _backLink(licenceId) {
@@ -95,6 +98,20 @@ function _bills(bills) {
       financialYear: bill.financialYearEnding
     }
   })
+}
+
+function _contact(contact) {
+  if (!contact) return null
+
+  if (contact.contactType === 'person') {
+    return `FAO ${titleCase(contact.firstName)} ${titleCase(contact.lastName)}`
+  }
+
+  if (contact.contactType === 'department') {
+    return `FAO ${titleCase(contact.department)}`
+  }
+
+  return null
 }
 
 module.exports = {
