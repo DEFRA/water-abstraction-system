@@ -21,13 +21,18 @@
  * @param {Array<object>} licenceMonitoringStations
  * @param {Array<string>} selectedLicenceMonitoringStations
  * @param {Array<string>} removedLicenceMonitoringStations
+ * @param {string} alertType
  *
  * @returns {Array<object>}
  */
-function go(licenceMonitoringStations, selectedLicenceMonitoringStations, removedLicenceMonitoringStations) {
-  const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return selectedLicenceMonitoringStations.includes(licenceMonitoringStation.thresholdGroup)
-  })
+function go(licenceMonitoringStations, selectedLicenceMonitoringStations, removedLicenceMonitoringStations, alertType) {
+  const relevantLicenceMonitoringStations = licenceMonitoringStations
+    .filter((licenceMonitoringStation) => {
+      return _relevantByAlertType(licenceMonitoringStation, alertType)
+    })
+    .filter((licenceMonitoringStation) => {
+      return selectedLicenceMonitoringStations.includes(licenceMonitoringStation.thresholdGroup)
+    })
 
   if (removedLicenceMonitoringStations) {
     return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
@@ -36,6 +41,21 @@ function go(licenceMonitoringStations, selectedLicenceMonitoringStations, remove
   }
 
   return relevantLicenceMonitoringStations
+}
+
+function _relevantByAlertType(licenceMonitoringStation, alertType) {
+  if (alertType !== 'stop' && alertType !== 'reduce') {
+    return licenceMonitoringStation
+  }
+
+  if (
+    licenceMonitoringStation.restrictionType === alertType ||
+    licenceMonitoringStation.restrictionType === 'stop_or_reduce'
+  ) {
+    return licenceMonitoringStation
+  }
+
+  return false
 }
 
 module.exports = {
