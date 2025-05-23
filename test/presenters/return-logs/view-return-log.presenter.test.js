@@ -680,6 +680,81 @@ describe('View Return Log presenter', () => {
       })
     })
   })
+
+  describe('the "versions" property', () => {
+    beforeEach(() => {
+      testReturnLog.returnSubmissions = [
+        createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, {
+          id: 'b57bc755-5f94-4760-bc5c-aba690827467',
+          returnLogId: testReturnLog.id
+        })
+      ]
+
+      testReturnLog.versions = [
+        createInstance(ReturnVersionModel, ReturnVersionHelper, {
+          id: testReturnLog.returnSubmissions[0].id,
+          licenceId: testReturnLog.licence.id,
+          notes: 'NOTES_V3',
+          userId: '4f6ab2c7-1361-4360-b83c-dec8cfc02585',
+          version: 3
+        }),
+        createInstance(ReturnVersionModel, ReturnVersionHelper, {
+          licenceId: testReturnLog.licence.id,
+          notes: 'NOTES_V2',
+          userId: '0c807806-500a-448d-83ff-bf12d3138988',
+          version: 2
+        }),
+        createInstance(ReturnVersionModel, ReturnVersionHelper, {
+          licenceId: testReturnLog.licence.id,
+          notes: 'NOTES_V1',
+          userId: '7b08a1a0-10c8-4981-82f5-5157d09205bb',
+          version: 1
+        })
+      ]
+
+      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+        createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id
+        }),
+        createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+          startDate: new Date(`2022-01-02`),
+          endDate: new Date(`2022-02-08`)
+        })
+      ]
+    })
+
+    it('returns the versions', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.versions).to.equal(
+        [
+          {
+            link: `/system/return-logs?id=${testReturnLog.id}&version=3`,
+            notes: 'NOTES_V3',
+            selected: true,
+            version: 3,
+            user: '4f6ab2c7-1361-4360-b83c-dec8cfc02585'
+          },
+          {
+            link: `/system/return-logs?id=${testReturnLog.id}&version=2`,
+            notes: 'NOTES_V2',
+            selected: false,
+            version: 2,
+            user: '0c807806-500a-448d-83ff-bf12d3138988'
+          },
+          {
+            link: `/system/return-logs?id=${testReturnLog.id}&version=1`,
+            notes: 'NOTES_V1',
+            selected: false,
+            version: 1,
+            user: '7b08a1a0-10c8-4981-82f5-5157d09205bb'
+          }
+        ],
+        { skip: ['createdAt'] }
+      )
+    })
+  })
 })
 
 function setupSubmission(testReturnLog, nilReturn = false) {
