@@ -183,7 +183,15 @@ function _viewBillingAccount() {
   return {
     activeNavBar: 'search',
     accountNumber: 'S88897992A',
-    address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'Me15 0ne'],
+    address: [
+      'Ferns Surfacing Limited',
+      'FAO Test Testingson',
+      'Tutsham Farm',
+      'West Farleigh',
+      'Maidstone',
+      'Kent',
+      'Me15 0ne'
+    ],
     billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
     bills: [
       {

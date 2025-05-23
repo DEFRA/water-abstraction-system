@@ -33,7 +33,15 @@ describe('View Billing Account service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         accountNumber: 'S88897992A',
-        address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        address: [
+          'Ferns Surfacing Limited',
+          'FAO Test Testingson',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ],
         backLink: {
           title: 'Go back to bills',
           link: `/system/licences/53325713-1364-4f6b-a244-8771a36a1248/bills`

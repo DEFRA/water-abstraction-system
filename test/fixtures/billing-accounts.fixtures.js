@@ -25,6 +25,13 @@ function billingAccount() {
             address5: 'Maidstone',
             address6: 'Kent',
             postcode: 'ME15 0NE'
+          },
+          contact: {
+            id: '93403c8c-ff7d-4ec7-a6be-7a4451e3ac72',
+            contactType: 'person',
+            department: 'Testing department',
+            firstName: 'Test',
+            lastName: 'Testingson'
           }
         }
       ],
