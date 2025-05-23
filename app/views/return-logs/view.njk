@@ -328,6 +328,12 @@
               <p class="govuk-!-margin-0">Viewing version {{ version.version }}</p>
               <p class="govuk-!-margin-0">{{ version.user }}</p>
               <p class="govuk-!-margin-0">{{ version.createdAt }}</p>
+              {% if version.notes %}
+                {{ govukDetails({
+                  summaryText: "Notes",
+                  text: version.notes
+                }) }}
+              {% endif %}
             {% endset %}
           {% else %}
             {% set selectedClass = '' %}
@@ -335,6 +341,12 @@
               <p class="govuk-!-margin-0">Version {{ version.version }}</p>
               <p class="govuk-!-margin-0">{{ version.user }}</p>
               <p class="govuk-!-margin-0"><a href="{{ version.link }}">{{ version.createdAt }}</a></p>
+              {% if version.notes %}
+                {{ govukDetails({
+                  summaryText: "Notes",
+                  text: version.notes
+                }) }}
+              {% endif %}
             {% endset %}
           {% endif %}
 
