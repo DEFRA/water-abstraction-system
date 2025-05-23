@@ -38,7 +38,9 @@ function go(payload, licenceMonitoringStations) {
  * Returns a list of available alert types based on the restriction types
  * found in the provided licence monitoring stations.
  *
- * Includes the default alert types: 'warning' and 'resume',
+ * If at least one restriction type is 'stop_or_reduce' then all the alert types are valid.
+ *
+ * Includes the default alert types: 'warning' and 'resume'
  * followed by any additional restriction types extracted from the input.
  *
  * @private
@@ -47,6 +49,10 @@ function _availableRestrictionType(licenceMonitoringStations) {
   const restrictionTypes = licenceMonitoringStations.map((licenceMonitoringStation) => {
     return licenceMonitoringStation.restrictionType
   })
+
+  if (restrictionTypes.includes('stop_or_reduce')) {
+    return ['warning', 'resume', 'stop', 'reduce']
+  }
 
   return ['warning', 'resume', ...restrictionTypes]
 }
