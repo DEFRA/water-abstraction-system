@@ -16,7 +16,7 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
  * @param {SessionModel} session - The session instance
  * @param {string} eventId
  *
- * @returns {Array<object>} notifications
+ * @returns {object[]} notifications
  */
 function go(recipients, session, eventId) {
   const notifications = []
