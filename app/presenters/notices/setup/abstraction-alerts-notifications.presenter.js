@@ -23,16 +23,16 @@ function go(recipients, session, eventId) {
 
   const { referenceCode, relevantLicenceMonitoringStations } = session
 
-  for (const lms of relevantLicenceMonitoringStations) {
-    const rec = recipients.filter((r) => {
-      return r.licence_refs === lms.licence.licenceRef
+  for (const licenceMonitoringStation of relevantLicenceMonitoringStations) {
+    const matchingRecipients = recipients.filter((recipient) => {
+      return recipient.licence_refs === licenceMonitoringStation.licence.licenceRef
     })
 
-    for (const recipient of rec) {
-      if (recipient.email) {
-        notifications.push(_email(recipient, referenceCode, eventId))
+    for (const matchingRecipient of matchingRecipients) {
+      if (matchingRecipient.email) {
+        notifications.push(_email(matchingRecipient, referenceCode, eventId))
       } else {
-        notifications.push(_letter(recipient, referenceCode, eventId))
+        notifications.push(_letter(matchingRecipient, referenceCode, eventId))
       }
     }
   }
