@@ -53,26 +53,20 @@ function _addressLines(contact) {
 }
 
 function _email(recipient, referenceCode, eventId) {
+  const createdAt = timestampForPostgres()
+
   const templateId = _emailTemplate()
 
   const messageType = 'email'
 
   return {
-    ..._common(referenceCode, templateId, eventId),
-    licences: _licences(recipient.licence_refs),
-    messageType,
-    messageRef: 'water_abstraction_alert_reduce_warning_email',
-    personalisation: {},
-    recipient: recipient.email
-  }
-}
-
-function _common(referenceCode, templateId, eventId) {
-  const createdAt = timestampForPostgres()
-
-  return {
     createdAt,
     eventId,
+    licences: _licences(recipient.licence_refs),
+    messageRef: 'water_abstraction_alert_reduce_warning_email',
+    messageType,
+    personalisation: {},
+    recipient: recipient.email,
     reference: referenceCode,
     templateId
   }
@@ -89,20 +83,26 @@ function _licences(licenceRefs) {
 }
 
 function _letter(recipient, referenceCode, eventId) {
+  const createdAt = timestampForPostgres()
+
   const name = contactName(recipient.contact)
+
   const templateId = _letterTemplate()
 
   const messageType = 'letter'
 
   return {
-    ..._common(referenceCode, templateId, eventId),
+    createdAt,
+    eventId,
     licences: _licences(recipient.licence_refs),
-    messageType,
     messageRef: 'water_abstraction_alert_reduce_warning',
+    messageType,
     personalisation: {
       name,
       ..._addressLines(recipient.contact)
-    }
+    },
+    reference: referenceCode,
+    templateId
   }
 }
 
