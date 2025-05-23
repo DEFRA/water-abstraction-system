@@ -12,7 +12,7 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 /**
  * Formats recipients into notifications for an abstraction alert
  *
- * @param {Array<object>} recipients
+ * @param {object[]} recipients
  * @param {SessionModel} session - The session instance
  * @param {string} eventId
  *
