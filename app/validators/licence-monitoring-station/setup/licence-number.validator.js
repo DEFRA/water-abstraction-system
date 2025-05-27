@@ -8,7 +8,7 @@
 
 const Joi = require('joi')
 
-const errorMessage = 'Enter a licence number'
+const ENTER_A_LICENCE_NUMBER_ERROR = 'Enter a licence number'
 
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/licence-number` page
@@ -28,10 +28,9 @@ function go(payload, licenceExists) {
       }, 'Custom Licence Validation')
       .messages({
         invalidLicence: 'Enter a valid licence number',
-        dueReturns: 'There are no returns due for licence {{#licenceRef}}',
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage
+        'any.required': ENTER_A_LICENCE_NUMBER_ERROR,
+        'any.only': ENTER_A_LICENCE_NUMBER_ERROR,
+        'string.empty': ENTER_A_LICENCE_NUMBER_ERROR
       })
   })
 
