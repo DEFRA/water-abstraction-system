@@ -104,7 +104,7 @@ describe('View Billing Account presenter', () => {
 
     describe('when there is no contact', () => {
       beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].contact = {}
+        billingAccountData.billingAccount.billingAccountAddresses[0].contact = null
       })
 
       it('returns an array of populated address lines title cased, the postcode capitalised, and no contact included', () => {
