@@ -48,9 +48,12 @@ async function downloadRecipients(request, h) {
 }
 
 async function viewAlertEmailAddress(request, h) {
-  const { sessionId } = request.params
+  const {
+    auth,
+    params: { sessionId }
+  } = request
 
-  const pageData = await AlertEmailAddressService.go(sessionId)
+  const pageData = await AlertEmailAddressService.go(sessionId, auth)
 
   return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
 }
