@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AlertEmailAddressValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-email-address.validator.js')
 
-describe.only('Alert Email Address Validator', () => {
+describe('Alert Email Address Validator', () => {
   let payload
 
   beforeEach(() => {
