@@ -15,10 +15,11 @@ const SessionModel = require('../../../../models/session.model.js')
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -29,7 +30,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = AlertEmailAddressPresenter.go(session)
+  const pageData = AlertEmailAddressPresenter.go(session, auth)
 
   return {
     error: validationResult,

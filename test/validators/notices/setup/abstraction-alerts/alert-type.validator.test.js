@@ -34,6 +34,19 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
     })
+
+    describe('when the a restriction type is "stop_or_reduce" and there are no other licence monitoring stations', () => {
+      beforeEach(() => {
+        licenceMonitoringStations = [{ ...licenceMonitoringStations[0], restrictionType: 'stop_or_reduce' }]
+      })
+
+      it('returns with no errors', () => {
+        const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
+    })
   })
 
   describe('when called with invalid data', () => {
