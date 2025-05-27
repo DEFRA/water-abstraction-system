@@ -171,11 +171,12 @@ async function setup(request, h) {
 
 async function submitAlertEmailAddress(request, h) {
   const {
+    auth,
     payload,
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload)
+  const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload, auth)
 
   if (pageData.error) {
     return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)

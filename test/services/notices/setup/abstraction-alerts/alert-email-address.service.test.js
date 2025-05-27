@@ -15,9 +15,9 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const AlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 
 describe('Alert Email Address Service', () => {
+  let auth
   let session
   let sessionData
-  let auth
 
   beforeEach(async () => {
     auth = {
@@ -39,7 +39,7 @@ describe('Alert Email Address Service', () => {
       expect(result).to.equal({
         caption: 'Death star',
         pageTitle: 'Select an email address to include in the alerts',
-        user: 'admin@defra.gov.uk'
+        username: 'admin@defra.gov.uk'
       })
     })
   })

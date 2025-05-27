@@ -14,7 +14,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 
-describe.only('Submit Alert Email Address Service', () => {
+describe('Submit Alert Email Address Service', () => {
   let auth
   let payload
   let session
@@ -63,7 +63,7 @@ describe.only('Submit Alert Email Address Service', () => {
         error: {
           text: 'Select an email address to include in the alerts'
         },
-        user: 'admin@defra.gov.uk'
+        username: 'admin@defra.gov.uk'
       })
     })
   })
