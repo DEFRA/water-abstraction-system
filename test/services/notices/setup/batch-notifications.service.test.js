@@ -23,7 +23,7 @@ const { NotifyClient } = require('notifications-node-client')
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
 
-describe.only('Notices - Setup - Batch notifications service', () => {
+describe('Notices - Setup - Batch notifications service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
   const referenceCode = 'RINV-123'
 
@@ -427,7 +427,7 @@ describe.only('Notices - Setup - Batch notifications service', () => {
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
             source: '',
-            licence_ref: '01/19/76/7327',
+            licence_ref: recipients.additionalContact.licence_refs,
             flow_or_level: 'level',
             condition_text: '',
             threshold_unit: 'm',
@@ -452,7 +452,7 @@ describe.only('Notices - Setup - Batch notifications service', () => {
           personalisation: {
             name: 'Mr H J Licence holder',
             source: '',
-            licence_ref: recipients.additionalContact.licence_refs,
+            licence_ref: recipients.licenceHolder.licence_refs,
             flow_or_level: 'flow',
             address_line_1: '1',
             address_line_2: 'Privet Drive',
