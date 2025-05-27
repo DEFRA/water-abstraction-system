@@ -1,11 +1,21 @@
 'use strict'
 
+const ContactModel = require('../../app/models/contact.model.js')
+
 /**
  * Represents a complete response from `FetchBillingAccountService`
  *
  * @returns {object} an object representing the billing account, bills and its related licence
  */
 function billingAccount() {
+  const contact = ContactModel.fromJson({
+    id: '93403c8c-ff7d-4ec7-a6be-7a4451e3ac72',
+    contactType: 'person',
+    department: 'Testing department',
+    firstName: 'Test',
+    lastName: 'Testingson'
+  })
+
   return {
     billingAccount: {
       id: '9b03843e-848b-497e-878e-4a6628d4f683',
@@ -26,13 +36,7 @@ function billingAccount() {
             address6: 'Kent',
             postcode: 'ME15 0NE'
           },
-          contact: {
-            id: '93403c8c-ff7d-4ec7-a6be-7a4451e3ac72',
-            contactType: 'person',
-            department: 'Testing department',
-            firstName: 'Test',
-            lastName: 'Testingson'
-          }
+          contact
         }
       ],
       company: {
