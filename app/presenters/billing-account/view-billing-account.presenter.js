@@ -43,7 +43,7 @@ function go(billingAccountData, licenceId) {
  * out any empty address lines, applies title casing to each one, and appends the postcode in uppercase.
  *
  * @param {module:AddressModel} address - The address associated with the billing account.
- * @param {module:AddressModel} contact - The contact associated with the billing account.
+ * @param {module:ContactModel} contact - The contact associated with the billing account.
  * @param {module:CompanyModel} company - The company associated with the billing account.
  *
  * @returns {string[]} An array of formatted address lines for display.
