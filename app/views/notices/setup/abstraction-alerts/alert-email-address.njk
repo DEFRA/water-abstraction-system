@@ -3,6 +3,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
@@ -28,6 +29,20 @@
 
       <span class="govuk-caption-l">{{caption}}</span>
 
+      {% set textHtml %}
+      {{ govukInput({
+        id: "other-user",
+        name: "otherUser",
+        classes: "govuk-!-width-one-third",
+        label: {
+          text: "Email address"
+        },
+        hint: {
+          text: "This is usually your area’s team email address"
+        }
+      }) }}
+      {% endset %}
+
       {{ govukRadios({
         name: 'alert-type',
         errorMessage: error,
@@ -38,7 +53,22 @@
             classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
           }
         },
-        items: radioItems
+        items: [
+          {
+            value: 'username',
+            text: user
+          },
+          {
+            divider: 'or'
+          },
+          {
+            value: 'other',
+            text: 'Use another email address',
+            conditional: {
+              html: textHtml
+            }
+          }
+        ]
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

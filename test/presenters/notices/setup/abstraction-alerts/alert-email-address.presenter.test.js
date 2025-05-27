@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 // Thing under test
 const AlertEmailAddressPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
 
-describe.only('Alert Email Address Presenter', () => {
+describe('Alert Email Address Presenter', () => {
   let session
   let auth
 
@@ -36,19 +36,7 @@ describe.only('Alert Email Address Presenter', () => {
       expect(result).to.equal({
         caption: 'Death star',
         pageTitle: 'Select an email address to include in the alerts',
-        radioItems: [
-          {
-            value: 'username',
-            text: 'admin@defra.gov.uk'
-          },
-          {
-            divider: 'or'
-          },
-          {
-            value: 'other',
-            text: 'Use another email address'
-          }
-        ]
+        user: 'admin@defra.gov.uk'
       })
     })
   })

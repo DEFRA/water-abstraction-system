@@ -17,19 +17,7 @@ function go(session, auth) {
   return {
     caption: session.monitoringStationName,
     pageTitle: 'Select an email address to include in the alerts',
-    radioItems: [
-      {
-        value: 'username',
-        text: auth.credentials.user.username
-      },
-      {
-        divider: 'or'
-      },
-      {
-        value: 'other',
-        text: 'Use another email address'
-      }
-    ]
+    user: auth.credentials.user.username
   }
 }
 
