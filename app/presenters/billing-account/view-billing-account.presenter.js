@@ -49,7 +49,7 @@ function go(billingAccountData, licenceId) {
  * @returns {string[]} An array of formatted address lines for display.
  */
 function _address(address, contact, company) {
-  const companyContact = _contact(contact)
+  const contactName = `FAO ${contact.$name()}`
   const companyName = titleCase(company.name)
 
   const addressLines = [
@@ -67,7 +67,7 @@ function _address(address, contact, company) {
     addressLines.push(address['postcode'].toUpperCase())
   }
 
-  return [companyName, companyContact, ...addressLines].filter(Boolean)
+  return [companyName, contactName, ...addressLines].filter(Boolean)
 }
 
 function _backLink(licenceId) {
@@ -98,22 +98,6 @@ function _bills(bills) {
       financialYear: bill.financialYearEnding
     }
   })
-}
-
-function _contact(contact) {
-  if (!contact) {
-    return null
-  }
-
-  if (contact.contactType === 'person') {
-    return `FAO ${titleCase(contact.firstName)} ${titleCase(contact.lastName)}`
-  }
-
-  if (contact.contactType === 'department') {
-    return `FAO ${titleCase(contact.department)}`
-  }
-
-  return null
 }
 
 module.exports = {
