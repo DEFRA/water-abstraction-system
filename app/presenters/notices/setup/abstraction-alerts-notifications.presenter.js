@@ -29,10 +29,12 @@ function go(recipients, session, eventId) {
     })
 
     for (const matchingRecipient of matchingRecipients) {
+      const commonPersonalisation = _commonPersonalisation(licenceMonitoringStation, session.monitoringStationName)
+
       if (matchingRecipient.email) {
-        notifications.push(_email(matchingRecipient, referenceCode, eventId))
+        notifications.push(_email(matchingRecipient, referenceCode, eventId, commonPersonalisation))
       } else {
-        notifications.push(_letter(matchingRecipient, referenceCode, eventId))
+        notifications.push(_letter(matchingRecipient, referenceCode, eventId, commonPersonalisation))
       }
     }
   }
@@ -52,7 +54,20 @@ function _addressLines(contact) {
   return addressLines
 }
 
-function _email(recipient, referenceCode, eventId) {
+function _commonPersonalisation(licenceMonitoringStation, monitoringStationName) {
+  return {
+    condition_text: '',
+    flow_or_level: licenceMonitoringStation.measureType,
+    issuer_email_address: '',
+    licence_ref: licenceMonitoringStation.licence.licenceRef,
+    monitoring_station_name: monitoringStationName,
+    source: '',
+    threshold_unit: licenceMonitoringStation.thresholdUnit,
+    threshold_value: licenceMonitoringStation.thresholdValue
+  }
+}
+
+function _email(recipient, referenceCode, eventId, commonPersonalisation) {
   const createdAt = timestampForPostgres()
 
   const templateId = _emailTemplate()
@@ -65,7 +80,7 @@ function _email(recipient, referenceCode, eventId) {
     licences: _licences(recipient.licence_refs),
     messageRef: 'water_abstraction_alert_reduce_warning_email',
     messageType,
-    personalisation: {},
+    personalisation: commonPersonalisation,
     recipient: recipient.email,
     reference: referenceCode,
     templateId
@@ -82,7 +97,7 @@ function _licences(licenceRefs) {
   return JSON.stringify(formattedRecipients)
 }
 
-function _letter(recipient, referenceCode, eventId) {
+function _letter(recipient, referenceCode, eventId, commonPersonalisation) {
   const createdAt = timestampForPostgres()
 
   const name = contactName(recipient.contact)
@@ -98,8 +113,9 @@ function _letter(recipient, referenceCode, eventId) {
     messageRef: 'water_abstraction_alert_reduce_warning',
     messageType,
     personalisation: {
-      name,
-      ..._addressLines(recipient.contact)
+      ..._addressLines(recipient.contact),
+      ...commonPersonalisation,
+      name
     },
     reference: referenceCode,
     templateId
