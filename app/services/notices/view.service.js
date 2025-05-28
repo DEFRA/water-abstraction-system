@@ -22,32 +22,48 @@ const ViewPresenter = require('../../presenters/notices/view.presenter.js')
 async function go(id, page) {
   const notices = await FetchNoticeService.go(id, page)
 
-  const { results, total: numberOfRecipients } = notices
+  const { results } = notices
   const selectedPageNumber = page ? Number(page) : 1
   const defaultPageSize = DatabaseConfig.defaultPageSize
   const numberShowing = results.length < defaultPageSize ? results.length : defaultPageSize
 
-  const pagination = PaginatorPresenter.go(
-    numberOfRecipients,
-    selectedPageNumber,
-    `/system/notices/${results[0].event.id}`
-  )
-  const pageNumbers = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+  const pagination = PaginatorPresenter.go(results.length, selectedPageNumber, `/system/notices/${notices.event.id}`)
 
-  const pageData = ViewPresenter.go(results, page)
+  const pageData = ViewPresenter.go(notices, page)
 
   return {
     ...pageData,
-    numberOfRecipients,
+    numberOfRecipients: results.length,
     numberShowing,
     pagination,
-    pageNumbers
+    pageNumbers: _numberOfNotifications(pagination.numberOfPages, selectedPageNumber),
+    pageTitle: _pageTitle(notices.event.subtype)
   }
 }
 
-function _pageTitle(numberOfPages, selectedPageNumber) {
+function _pageTitle(subtype) {
+  if (subtype === 'returnInvitation') {
+    return 'Returns invitations'
+  }
+
+  if (subtype === 'returnReminder') {
+    return 'Returns reminders'
+  }
+
+  if (subtype === 'adHocReminder') {
+    return 'Ad-hoc notice'
+  }
+
+  if (subtype === 'waterAbstractionAlerts') {
+    return 'Water abstraction alert'
+  }
+
+  return 'Notifications'
+}
+
+function _numberOfNotifications(numberOfPages, selectedPageNumber) {
   if (numberOfPages < 2) {
-    return null
+    return 'Showing all notifications'
   }
 
   return `Showing page ${selectedPageNumber} of ${numberOfPages} notifications`

@@ -26,6 +26,7 @@ describe('Notices - Fetch Notice service', () => {
         referenceCode: 'RREM-RD2KF4',
         type: 'notification',
         status: 'sent',
+        subtype: 'returnReminder',
         metadata: {
           name: 'Water abstraction alert',
           options: {
@@ -66,7 +67,8 @@ describe('Notices - Fetch Notice service', () => {
             referenceCode: testEvent.referenceCode,
             issuer: testEvent.issuer,
             createdAt: testEvent.createdAt,
-            status: 'sent'
+            status: 'sent',
+            subtype: 'returnReminder'
           })
         })
       )
