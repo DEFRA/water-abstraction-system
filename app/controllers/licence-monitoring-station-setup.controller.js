@@ -35,6 +35,10 @@ async function submitLicenceNumber(request, h) {
     return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
   }
 
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+  }
+
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/full-condition`)
 }
 
