@@ -10,20 +10,19 @@ const { formatLongDate } = require('../base.presenter.js')
 /**
  * Formats data for the 'notices/{id}' page
  *
- * @param {object[]} data - The data to be formatted for display
- * @param {number|string} page - The currently selected page
+ * @param {object[]} notices - The data to be formatted for display
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(data, page) {
-  const tableRows = _formatTableData(data)
+function go(notices) {
+  const tableRows = _formatTableData(notices.results)
 
   return {
-    createdBy: data[0].event.issuer,
-    dateCreated: formatLongDate(data[0].event.createdAt),
-    reference: data[0].event.referenceCode,
+    createdBy: notices.event.issuer,
+    dateCreated: formatLongDate(notices.event.createdAt),
+    reference: notices.event.referenceCode,
     notices: tableRows,
-    status: data[0].event.status
+    status: notices.event.status
   }
 }
 
