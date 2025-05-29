@@ -14,14 +14,51 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = {
+      label: 'LABEL',
+      id: 'd9afac37-9754-4bfa-95f7-87ab26824423'
+    }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = LicenceNumberPresenter.go(session)
 
-      expect(result).to.equal({})
+      expect(result).to.equal(
+        {
+          monitoringStationLabel: 'LABEL',
+          pageTitle: 'Enter the licence number this threshold applies to'
+        },
+        { skip: ['backLink'] }
+      )
+    })
+
+    describe('when checkPageVisited is true', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns the back link to the check page', () => {
+        const result = LicenceNumberPresenter.go(session)
+
+        expect(result.backLink).to.equal(
+          `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/check`
+        )
+      })
+    })
+
+    describe('when checkPageVisited is false', () => {
+      beforeEach(() => {
+        session.checkPageVisited = false
+      })
+
+      it('returns the back link to the stop or reduce page', () => {
+        const result = LicenceNumberPresenter.go(session)
+
+        expect(result.backLink).to.equal(
+          `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/stop-or-reduce`
+        )
+      })
     })
   })
 })
