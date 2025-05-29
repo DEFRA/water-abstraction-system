@@ -160,6 +160,30 @@ describe('Monitoring Stations - Licence presenter', () => {
         ])
       })
     })
+
+    describe('when the licence monitoring station record is NOT linked to a user', () => {
+      beforeEach(() => {
+        monitoringStationLicenceTags.licenceMonitoringStations[0].user = null
+      })
+
+      it('correctly formats the licence monitoring station created string', () => {
+        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+
+        expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025')
+      })
+    })
+
+    describe('when the licence monitoring station record is linked to a user', () => {
+      beforeEach(() => {
+        monitoringStationLicenceTags.licenceMonitoringStations[0].user = { username: 'a.user@wrls.gov.uk' }
+      })
+
+      it('correctly formats the licence monitoring station created string', () => {
+        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+
+        expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025 by a.user@wrls.gov.uk')
+      })
+    })
   })
 
   describe('the "monitoringStationName" property', () => {
