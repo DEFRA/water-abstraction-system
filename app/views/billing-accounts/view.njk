@@ -10,8 +10,8 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: 'Go back to bills',
-      href:  '/system/licences/' + licenceId + '/bills'
+      text: backLink.title,
+      href: backLink.link
     })
   }}
 {% endblock %}
@@ -78,7 +78,7 @@
   {# Bill details #}
   {% if bills.length === 0 %}
     <div class="govuk-body govuk-!-padding-top-3">
-      <p>No sent bills for this billing account</p>
+      <p>No sent bills for this billing account.</p>
     </div>
   {% else %}
     {% set tableRows = [] %}

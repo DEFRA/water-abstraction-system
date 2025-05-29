@@ -5,6 +5,7 @@
  * @module CheckLicenceMatchesPresenter
  */
 
+const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
 const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
 
 /**
@@ -20,7 +21,8 @@ function go(session) {
     id: sessionId,
     licenceMonitoringStations,
     monitoringStationName,
-    removedThresholds
+    removedThresholds,
+    alertType
   } = session
 
   return {
@@ -28,7 +30,7 @@ function go(session) {
     cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId),
+    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
@@ -40,25 +42,12 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertThresholds, removedThresholds) {
-  const relevantLicenceMonitoringStations = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return alertThresholds.includes(licenceMonitoringStation.thresholdGroup)
-  })
-
-  if (removedThresholds) {
-    return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
-      return !removedThresholds.includes(licenceMonitoringStation.id)
-    })
-  }
-
-  return relevantLicenceMonitoringStations
-}
-
-function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId) {
-  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(
+function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType) {
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
-    removedThresholds
+    removedThresholds,
+    alertType
   )
 
   const multipleRestrictions = relevantLicenceMonitoringStations.length > 1

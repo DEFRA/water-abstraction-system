@@ -41,9 +41,9 @@ describe('Fetch Return Log service', () => {
   describe('when a return log with submissions exists', () => {
     beforeEach(async () => {
       testSubmissions = await Promise.all([
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 3 })
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1, notes: 'NOTES_V1' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2, notes: 'NOTES_V2' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 3, notes: 'NOTES_V3' })
       ])
 
       await Promise.all([
@@ -118,6 +118,16 @@ describe('Fetch Return Log service', () => {
       })
 
       expect(versions).to.equal([3, 2, 1])
+    })
+
+    it('includes notes for the versions', async () => {
+      const result = await FetchReturnLogService.go(testReturnLog.id)
+
+      const notes = result.versions.map((v) => {
+        return v.notes
+      })
+
+      expect(notes).to.equal(['NOTES_V3', 'NOTES_V2', 'NOTES_V1'])
     })
 
     it('applies readings to selected submission', async () => {

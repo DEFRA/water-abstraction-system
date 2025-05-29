@@ -6,7 +6,7 @@
  * @module SubmitCheckLicenceMatchesService
  */
 
-const CheckLicenceMatchesPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
+const DetermineRelevantLicenceMonitoringStationsService = require('./determine-relevant-licence-monitoring-stations.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
@@ -18,17 +18,25 @@ const SessionModel = require('../../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter.go(session)
-
-  await _save(session, pageData)
+  await _save(session)
 }
 
-async function _save(session, pageData) {
-  const relevantLicenceRefs = pageData.restrictions.map((restriction) => {
-    return restriction.licenceRef
+async function _save(session) {
+  const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
+
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+    licenceMonitoringStations,
+    alertThresholds,
+    removedThresholds,
+    alertType
+  )
+
+  const relevantLicenceRefs = relevantLicenceMonitoringStations.map((station) => {
+    return station.licence.licenceRef
   })
 
   session.licenceRefs = Array.from(new Set(relevantLicenceRefs))
+  session.relevantLicenceMonitoringStations = relevantLicenceMonitoringStations
 
   return session.$update()
 }

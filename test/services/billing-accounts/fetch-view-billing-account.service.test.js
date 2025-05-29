@@ -10,27 +10,24 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
 
 describe('Fetch Billing Account service', () => {
   let address
-  let bill
+  let bill1
   let billingAccount
   let billingAccountAddress
   let billingAccountId
-  let billLicence
-  let billRun
+  let billRun1
+  let billRun2
+  let billRun3
   let company
-  let licence
-  let licenceId
 
   describe('when a matching billing account exists', () => {
     beforeEach(async () => {
@@ -45,23 +42,35 @@ describe('Fetch Billing Account service', () => {
         billingAccountId
       })
 
-      billRun = await BillRunHelper.add()
-
-      bill = await BillHelper.add({
-        billingAccountId,
-        billRunId: billRun.id
+      billRun1 = await BillRunHelper.add({
+        status: 'sent'
       })
 
-      licence = await LicenceHelper.add()
-      licenceId = licence.id
+      billRun2 = await BillRunHelper.add({
+        status: 'ready'
+      })
 
-      billLicence = await BillLicenceHelper.add({
-        billId: bill.id,
-        licenceId
+      billRun3 = await BillRunHelper.add({
+        status: 'error'
+      })
+
+      bill1 = await BillHelper.add({
+        billingAccountId,
+        billRunId: billRun1.id
+      })
+
+      await BillHelper.add({
+        billingAccountId,
+        billRunId: billRun2.id
+      })
+
+      await BillHelper.add({
+        billingAccountId,
+        billRunId: billRun3.id
       })
     })
 
-    it('returns the matching billingAccount with related address, bills, bill runs, company, licence', async () => {
+    it('returns the matching billingAccount with related address, company, and bills with a bill run status of "sent"', async () => {
       const result = await FetchViewBillingAccountService.go(billingAccountId, 1)
 
       expect(result).to.equal({
@@ -89,58 +98,24 @@ describe('Fetch Billing Account service', () => {
           company: {
             id: company.id,
             name: 'Example Trading Ltd'
-          },
-          bills: [
-            {
-              id: bill.id,
-              billingAccountId: bill.billingAccountId,
-              address: bill.address,
-              accountNumber: bill.accountNumber,
-              netAmount: bill.netAmount,
-              credit: bill.credit,
-              billRunId: billRun.id,
-              financialYearEnding: bill.financialYearEnding,
-              invoiceNumber: bill.invoiceNumber,
-              legacyId: bill.legacyId,
-              metadata: bill.metadata,
-              creditNoteValue: bill.creditNoteValue,
-              invoiceValue: bill.invoiceValue,
-              deminimis: bill.deminimis,
-              externalId: bill.externalId,
-              flaggedForRebilling: bill.flaggedForRebilling,
-              originalBillId: bill.originalBillId,
-              rebillingState: bill.rebillingState,
-              createdAt: bill.createdAt,
-              updatedAt: bill.updatedAt,
-              billLicences: [
-                {
-                  id: billLicence.id,
-                  billId: billLicence.billId,
-                  licenceRef: billLicence.licenceRef,
-                  licenceId: billLicence.licenceId,
-                  createdAt: billLicence.createdAt,
-                  updatedAt: billLicence.updatedAt,
-                  licence: { id: licenceId }
-                }
-              ]
-            }
-          ]
+          }
         },
         bills: [
           {
-            id: bill.id,
-            createdAt: bill.createdAt,
-            credit: bill.credit,
-            invoiceNumber: bill.invoiceNumber,
-            netAmount: bill.netAmount,
-            financialYearEnding: bill.financialYearEnding,
+            id: bill1.id,
+            createdAt: bill1.createdAt,
+            credit: bill1.credit,
+            invoiceNumber: bill1.invoiceNumber,
+            netAmount: bill1.netAmount,
+            financialYearEnding: bill1.financialYearEnding,
             billRun: {
-              id: billRun.id,
-              batchType: billRun.batchType,
-              billRunNumber: billRun.billRunNumber,
-              scheme: billRun.scheme,
-              source: billRun.source,
-              summer: billRun.summer
+              id: billRun1.id,
+              batchType: billRun1.batchType,
+              billRunNumber: billRun1.billRunNumber,
+              scheme: billRun1.scheme,
+              source: billRun1.source,
+              status: billRun1.status,
+              summer: billRun1.summer
             }
           }
         ],
