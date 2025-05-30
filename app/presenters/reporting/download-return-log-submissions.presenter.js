@@ -140,9 +140,9 @@ function _transformToCsv(returnLogSubmissions) {
       return transformArrayToCSVRow(row)
     })
 
-    csvRows.push(rows)
+    csvRows.push(...rows)
   })
-  return csvRows.flat()
+  return csvRows
 }
 
 module.exports = {

@@ -13,17 +13,19 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  * Fetches the matching return log submission records needed for the reporting page
  *
  * @param {string} licenceRef - The licence reference for which to fetch return submissions
+ * @param {Date} startDate - The return log startDate for which to fetch return submissions
+ * @param {Date} endDate - The return log endDate for which to fetch return submissions
  *
  * @returns {Promise<object>} the matching instance of the `ReturnLogModel` populated with the data needed for the
  * reporting page
  */
-async function go(licenceRef) {
-  const returnLogSubmissions = await _fetchReturnLogSubmissions(licenceRef)
+async function go(licenceRef, startDate, endDate) {
+  const returnLogSubmissions = await _fetchReturnLogSubmissions(licenceRef, startDate, endDate)
 
   return returnLogSubmissions
 }
 
-async function _fetchReturnLogSubmissions(licenceRef) {
+async function _fetchReturnLogSubmissions(licenceRef, startDate, endDate) {
   return ReturnLogModel.query()
     .select([
       'id',
@@ -49,6 +51,8 @@ async function _fetchReturnLogSubmissions(licenceRef) {
         })
     })
     .where('licenceRef', licenceRef)
+    .where('startDate', '<=', endDate)
+    .where('endDate', '>=', startDate)
 }
 
 module.exports = {

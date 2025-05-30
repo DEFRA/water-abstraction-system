@@ -17,7 +17,10 @@ const FetchReturnLogSubmissionsService = require('./fetch-return-log-submissions
  */
 async function go() {
   const licenceRef = '03/28/80/0029'
-  const returnLogSubmissions = await FetchReturnLogSubmissionsService.go(licenceRef)
+  const startDate = new Date('2023-01-01')
+  const endDate = new Date('2025-03-31')
+
+  const returnLogSubmissions = await FetchReturnLogSubmissionsService.go(licenceRef, startDate, endDate)
 
   const formattedData = DownloadReturnLogSubmissionsPresenter.go(returnLogSubmissions)
 
