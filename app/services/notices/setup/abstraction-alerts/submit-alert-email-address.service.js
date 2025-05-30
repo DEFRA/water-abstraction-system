@@ -25,7 +25,7 @@ async function go(sessionId, payload, auth) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, payload, auth)
 
     return {}
   }
@@ -38,21 +38,36 @@ async function go(sessionId, payload, auth) {
   }
 }
 
-async function _save(session, _payload) {
+async function _save(session, payload, auth) {
+  if (payload.alertEmailAddress === 'username') {
+    session.alertEmailAddress = auth.credentials.user.username
+  }
+
+  if (payload.alertEmailAddress === 'other') {
+    session.alertEmailAddress = payload.otherUser
+  }
+
   return session.$update()
 }
 
 function _validate(payload) {
+  console.log('🚀🚀🚀 ~ payload:')
+  console.dir(payload, { depth: null, colors: true })
+
   const validation = AlertEmailAddressValidator.go(payload)
 
   if (!validation.error) {
     return null
   }
 
-  const { message } = validation.error.details[0]
+  const { message, path } = validation.error.details[0]
+  console.log('🚀🚀🚀 ~ validation.error.details[0]:')
+  console.dir(validation.error.details[0], { depth: null, colors: true })
 
   return {
-    text: message
+    text: message,
+    radioFormElement: path[0] === 'alertEmailAddress' ? { text: message } : null,
+    emailAddressInputFormElement: path[0] === 'otherUser' ? { text: message } : null
   }
 }
 
