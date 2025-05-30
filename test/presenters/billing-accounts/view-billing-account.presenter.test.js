@@ -28,7 +28,15 @@ describe('View Billing Account presenter', () => {
 
       expect(result).to.equal({
         accountNumber: 'S88897992A',
-        address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        address: [
+          'Ferns Surfacing Limited',
+          'FAO Test Testingson',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ],
         backLink: {
           title: 'Go back to bills',
           link: `/system/licences/${licenceId}/bills`
@@ -66,6 +74,7 @@ describe('View Billing Account presenter', () => {
 
         expect(result.address).to.equal([
           'Ferns Surfacing Limited',
+          'FAO Test Testingson',
           'Tutsham Farm',
           'West Farleigh',
           'Test Road',
@@ -83,6 +92,66 @@ describe('View Billing Account presenter', () => {
 
         expect(result.address).to.equal([
           'Ferns Surfacing Limited',
+          'FAO Test Testingson',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ])
+      })
+    })
+
+    describe('when there is no contact', () => {
+      beforeEach(() => {
+        billingAccountData.billingAccount.billingAccountAddresses[0].contact = null
+      })
+
+      it('returns an array of populated address lines title cased, the postcode capitalised, and no contact included', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+
+        expect(result.address).to.equal([
+          'Ferns Surfacing Limited',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ])
+      })
+    })
+
+    describe('when the contact is a department', () => {
+      beforeEach(() => {
+        billingAccountData.billingAccount.billingAccountAddresses[0].contact.contactType = 'department'
+      })
+
+      it('returns an array of populated address lines title cased, the postcode capitalised, and the department name included', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+
+        expect(result.address).to.equal([
+          'Ferns Surfacing Limited',
+          'FAO Testing department',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ])
+      })
+    })
+
+    describe('when the contact is a person', () => {
+      beforeEach(() => {
+        billingAccountData.billingAccount.billingAccountAddresses[0].contact.contactType = 'person'
+      })
+
+      it('returns an array of populated address lines title cased, the postcode capitalised, and the persons first and last names included', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+
+        expect(result.address).to.equal([
+          'Ferns Surfacing Limited',
+          'FAO Test Testingson',
           'Tutsham Farm',
           'West Farleigh',
           'Maidstone',
