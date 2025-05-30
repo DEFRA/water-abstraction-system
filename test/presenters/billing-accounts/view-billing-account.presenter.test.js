@@ -131,7 +131,7 @@ describe('View Billing Account presenter', () => {
 
         expect(result.address).to.equal([
           'Ferns Surfacing Limited',
-          'FAO Testing Department',
+          'FAO Testing department',
           'Tutsham Farm',
           'West Farleigh',
           'Maidstone',
