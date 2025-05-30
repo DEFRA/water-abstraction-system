@@ -18,7 +18,7 @@ describe('Cancel Alerts Presenter', () => {
 
   beforeEach(() => {
     session = {
-      ...AbstractionAlertSessionData.monitoringStation(),
+      ...AbstractionAlertSessionData.get(),
       alertType: 'resume'
     }
   })

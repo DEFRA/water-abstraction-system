@@ -147,7 +147,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       let monitoringStationData
 
       beforeEach(() => {
-        monitoringStationData = AbstractionAlertSessionData.monitoringStation()
+        monitoringStationData = AbstractionAlertSessionData.get()
 
         Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
       })

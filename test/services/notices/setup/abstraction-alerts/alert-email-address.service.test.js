@@ -28,7 +28,7 @@ describe('Alert Email Address Service', () => {
       }
     }
 
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+    sessionData = AbstractionAlertSessionData.get()
     session = await SessionHelper.add({ data: sessionData })
   })
 
