@@ -49,7 +49,7 @@ function go(billingAccountData, licenceId) {
  * @returns {string[]} An array of formatted address lines for display.
  */
 function _address(address, contact, company) {
-  const contactName = contact ? `FAO ${titleCase(contact.$name())}` : null
+  const contactName = contact ? `FAO ${contact.$name()}` : null
   const companyName = titleCase(company.name)
 
   const addressLines = [
