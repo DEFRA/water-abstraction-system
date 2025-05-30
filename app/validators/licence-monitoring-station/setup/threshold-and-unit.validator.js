@@ -20,7 +20,10 @@ const MAX_VALUE = 10000000
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const VALID_VALUES = Object.values(thresholdUnits)
+  const VALID_VALUES = Object.values(thresholdUnits).map((unit) => {
+    return unit.value
+  })
+
   const thresholdErrorMessage = 'Enter a threshold'
 
   const schema = Joi.object({

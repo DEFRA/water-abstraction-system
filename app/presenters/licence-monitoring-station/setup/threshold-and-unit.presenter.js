@@ -38,7 +38,7 @@ function _backLink(session) {
 }
 
 function _units(sessionUnit) {
-  const mappedUnits = Object.entries(thresholdUnits).map(([_key, value]) => {
+  const mappedUnits = Object.entries(thresholdUnits).map(([_key, { value }]) => {
     return {
       value,
       text: value,
