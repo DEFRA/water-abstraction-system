@@ -30,6 +30,7 @@ const LicenceRoutes = require('../routes/licence.routes.js')
 const LicenceEndDatesRoutes = require('../routes/licences-end-dates.routes.js')
 const LicenceMonitoringStationSetupRoutes = require('../routes/licence-monitoring-station-setup.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
+const ReportingRoutes = require('../routes/reporting.routes.js')
 const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
 const ReturnLogRoutes = require('../routes/return-logs.routes.js')
 const ReturnSubmissionsRoutes = require('../routes/return-submissions.routes.js')
@@ -56,6 +57,7 @@ const routes = [
   ...LicenceMonitoringStationSetupRoutes,
   ...JobRoutes,
   ...MonitoringStationRoutes,
+  ...ReportingRoutes,
   ...ReturnLogSetupRoutes,
   ...ReturnLogRoutes,
   ...ReturnSubmissionsRoutes,
