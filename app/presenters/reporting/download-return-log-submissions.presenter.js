@@ -34,8 +34,6 @@ const HEADERS = [
  */
 function go(returnLogSubmissions) {
   const rows = _transformToCsv(returnLogSubmissions)
-  console.log('🚀🚀🚀 ~ rows:')
-  console.dir(rows, { depth: null, colors: true })
 
   return [HEADERS + '\n', ...rows].join('')
 }
@@ -99,7 +97,9 @@ function _inPeriod(abstractionPeriods, line) {
  * @private
  */
 function _transformToCsv(returnLogSubmissions) {
-  return returnLogSubmissions.map((returnLogSubmission) => {
+  const csvRows = []
+
+  returnLogSubmissions.forEach((returnLogSubmission) => {
     const {
       endDate,
       licenceRef,
@@ -140,8 +140,9 @@ function _transformToCsv(returnLogSubmissions) {
       return transformArrayToCSVRow(row)
     })
 
-    return rows
+    csvRows.push(rows)
   })
+  return csvRows.flat()
 }
 
 module.exports = {
