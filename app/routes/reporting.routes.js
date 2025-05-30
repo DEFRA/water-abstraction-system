@@ -16,6 +16,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: basePath + '/download',
+    options: {
+      handler: ReportingController.downloadReturnLogSubmissions,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 
