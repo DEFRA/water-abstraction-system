@@ -7,11 +7,12 @@
 
 const { setTimeout } = require('node:timers/promises')
 
+const AbstractionAlertsNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
+const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
 const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -55,7 +56,13 @@ async function go(recipients, session, eventId) {
 async function _batch(recipients, session, eventId) {
   const { determinedReturnsPeriod, referenceCode, journey } = session
 
-  const notifications = NotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+  let notifications
+
+  if (session.journey === 'abstraction-alert') {
+    notifications = AbstractionAlertsNotificationsPresenter.go(recipients, session, eventId)
+  } else {
+    notifications = NotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+  }
 
   const toSendNotifications = _toSendNotifications(notifications)
 
