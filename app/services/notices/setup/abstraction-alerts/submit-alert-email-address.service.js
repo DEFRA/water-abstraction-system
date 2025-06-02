@@ -51,9 +51,6 @@ async function _save(session, payload, auth) {
 }
 
 function _validate(payload) {
-  console.log('🚀🚀🚀 ~ payload:')
-  console.dir(payload, { depth: null, colors: true })
-
   const validation = AlertEmailAddressValidator.go(payload)
 
   if (!validation.error) {
@@ -61,8 +58,6 @@ function _validate(payload) {
   }
 
   const { message, path } = validation.error.details[0]
-  console.log('🚀🚀🚀 ~ validation.error.details[0]:')
-  console.dir(validation.error.details[0], { depth: null, colors: true })
 
   return {
     text: message,
