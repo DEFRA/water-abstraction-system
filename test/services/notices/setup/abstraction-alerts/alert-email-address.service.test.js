@@ -8,26 +8,39 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
 const AlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 
 describe('Alert Email Address Service', () => {
+  let auth
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    auth = {
+      credentials: {
+        user: {
+          username: 'admin@defra.gov.uk'
+        }
+      }
+    }
 
+    sessionData = AbstractionAlertSessionData.monitoringStation()
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await AlertEmailAddressService.go(session.id)
+      const result = await AlertEmailAddressService.go(session.id, auth)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        caption: 'Death star',
+        pageTitle: 'Select an email address to include in the alerts',
+        username: 'admin@defra.gov.uk'
+      })
     })
   })
 })

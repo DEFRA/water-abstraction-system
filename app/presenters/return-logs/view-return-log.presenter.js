@@ -221,11 +221,12 @@ function _versions(selectedReturnSubmission, versions, returnLogId) {
   }
 
   return versions.map((version) => {
-    const { createdAt, id, userId: user, version: number } = version
+    const { createdAt, id, notes, userId: user, version: number } = version
 
     return {
       createdAt: `${formatLongDate(createdAt)}`,
       link: `/system/return-logs?id=${returnLogId}&version=${number}`,
+      notes,
       selected: id === selectedReturnSubmission.id,
       version: number,
       user

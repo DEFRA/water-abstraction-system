@@ -72,7 +72,7 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
   // that match either the alert types or the standard notice types
   if (alertTypes.length > 0 && standardNoticeTypes.length > 0) {
     query.whereRaw(
-      `(metadata->'options'->>'sendingAlertType' = ANY (?) AND subtype = 'waterAbstractionAlerts') OR subtype = ANY (?)`,
+      `((metadata->'options'->>'sendingAlertType' = ANY (?) AND subtype = 'waterAbstractionAlerts') OR subtype = ANY (?))`,
       [alertTypes, standardNoticeTypes]
     )
 

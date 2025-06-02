@@ -13,6 +13,7 @@ const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const ContactHelper = require('../../support/helpers/contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 
 // Thing under test
@@ -28,10 +29,12 @@ describe('Fetch Billing Account service', () => {
   let billRun2
   let billRun3
   let company
+  let contact
 
   describe('when a matching billing account exists', () => {
     beforeEach(async () => {
       address = await AddressHelper.add()
+      contact = await ContactHelper.add()
       company = await CompanyHelper.add()
 
       billingAccount = await BillingAccountHelper.add({ companyId: company.id })
@@ -39,7 +42,8 @@ describe('Fetch Billing Account service', () => {
 
       billingAccountAddress = await BillingAccountAddressHelper.add({
         addressId: address.id,
-        billingAccountId
+        billingAccountId,
+        contactId: contact.id
       })
 
       billRun1 = await BillRunHelper.add({
@@ -92,6 +96,13 @@ describe('Fetch Billing Account service', () => {
                 address5: null,
                 address6: null,
                 postcode: 'BS1 5AH'
+              },
+              contact: {
+                id: contact.id,
+                contactType: contact.contactType,
+                department: contact.department,
+                firstName: contact.firstName,
+                lastName: contact.lastName
               }
             }
           ],

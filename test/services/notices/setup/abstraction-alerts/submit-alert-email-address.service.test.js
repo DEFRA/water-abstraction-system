@@ -8,34 +8,43 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitAlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 
-describe('Alert Email Address Service', () => {
+describe('Submit Alert Email Address Service', () => {
+  let auth
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
+    auth = {
+      credentials: {
+        user: {
+          username: 'admin@defra.gov.uk'
+        }
+      }
+    }
     payload = { alertEmailAddress: 'saved-email-address' }
-    sessionData = {}
+    sessionData = AbstractionAlertSessionData.monitoringStation()
 
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitAlertEmailAddressService.go(session.id, payload)
+      await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession.id).to.equal(session.id)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAlertEmailAddressService.go(session.id, payload)
+      const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
       expect(result).to.equal({})
     })
@@ -46,12 +55,15 @@ describe('Alert Email Address Service', () => {
       payload = {}
     })
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAlertEmailAddressService.go(session.id, payload)
+      const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
       expect(result).to.equal({
+        caption: 'Death star',
+        pageTitle: 'Select an email address to include in the alerts',
         error: {
           text: 'Select an email address to include in the alerts'
-        }
+        },
+        username: 'admin@defra.gov.uk'
       })
     })
   })

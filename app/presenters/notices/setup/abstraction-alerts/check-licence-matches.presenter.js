@@ -21,7 +21,8 @@ function go(session) {
     id: sessionId,
     licenceMonitoringStations,
     monitoringStationName,
-    removedThresholds
+    removedThresholds,
+    alertType
   } = session
 
   return {
@@ -29,7 +30,7 @@ function go(session) {
     cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
     caption: monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId),
+    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
@@ -41,11 +42,12 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId) {
+function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType) {
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
-    removedThresholds
+    removedThresholds,
+    alertType
   )
 
   const multipleRestrictions = relevantLicenceMonitoringStations.length > 1

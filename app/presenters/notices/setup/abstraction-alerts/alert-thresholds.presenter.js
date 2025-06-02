@@ -36,7 +36,10 @@ function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType
   }
 
   return licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.restrictionType === alertType
+    return (
+      licenceMonitoringStation.restrictionType === alertType ||
+      licenceMonitoringStation.restrictionType === 'stop_or_reduce'
+    )
   })
 }
 

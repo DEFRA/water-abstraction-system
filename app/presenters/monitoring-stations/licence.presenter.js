@@ -29,6 +29,16 @@ function go(lastAlert, monitoringStationLicenceTags) {
   }
 }
 
+function _created(createdAt, user) {
+  const created = `Created on ${formatLongDate(createdAt)}`
+
+  if (user) {
+    return `${created} by ${user.username}`
+  }
+
+  return created
+}
+
 function _lastAlertSent(lastAlert) {
   if (lastAlert) {
     const { contact, createdAt, messageType, recipient, sendingAlertType } = lastAlert
@@ -49,7 +59,7 @@ function _licenceTags(licenceMonitoringStations) {
       _linkedConditionDetails(licenceVersionPurposeCondition)
 
     return {
-      created: `Created on ${formatLongDate(createdAt)} by ${user.username}`,
+      created: _created(createdAt, user),
       effectOfRestriction,
       licenceVersionStatus,
       linkedCondition,
