@@ -5,6 +5,7 @@
  * @module AlertThresholdsPresenter
  */
 
+const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 const { titleCase } = require('../../../base.presenter.js')
 
 /**
@@ -21,26 +22,6 @@ function go(session) {
     pageTitle: 'Which thresholds do you need to send an alert for?',
     thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertType, session.alertThresholds)
   }
-}
-
-/**
- * Filters licence monitoring stations based on alert type.
- *
- * When the alert type is not 'stop' or 'reduce', all stations with any restriction are included.
- *
- * @private
- */
-function _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType) {
-  if (alertType !== 'stop' && alertType !== 'reduce') {
-    return licenceMonitoringStations
-  }
-
-  return licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return (
-      licenceMonitoringStation.restrictionType === alertType ||
-      licenceMonitoringStation.restrictionType === 'stop_or_reduce'
-    )
-  })
 }
 
 /**
@@ -70,7 +51,10 @@ function _relevantThresholds(relevantLicenceMonitoringStations) {
  * @private
  */
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
-  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(licenceMonitoringStations, alertType)
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+    licenceMonitoringStations,
+    alertType
+  )
 
   const relevantThresholds = _relevantThresholds(relevantLicenceMonitoringStations)
 
