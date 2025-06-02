@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -45,7 +45,7 @@
         name: "threshold"
       }) }}
 
-      {{ govukSelect({
+      {{ govukRadios({
         id: "unit",
         name: "unit",
         label: {
