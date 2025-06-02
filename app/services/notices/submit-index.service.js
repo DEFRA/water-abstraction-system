@@ -117,17 +117,21 @@ function _save(payload, yar) {
   })
 }
 
-function _savedFilters(yar) {
-  const savedFilters = yar.get('noticesFilter')
+function _savedFilters(payload) {
+  const { clear, get, set, ...noticesFilter } = payload
 
   return {
-    fromDate: null,
+    sentFromDay: null,
+    sentFromMonth: null,
+    sentFromYear: null,
+    sentToDay: null,
+    sentToMonth: null,
+    sentToYear: null,
     noticeTypes: [],
     openFilter: true,
     reference: null,
     sentBy: null,
-    toDate: null,
-    ...savedFilters
+    ...noticesFilter
   }
 }
 

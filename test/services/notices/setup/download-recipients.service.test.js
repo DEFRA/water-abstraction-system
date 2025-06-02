@@ -9,41 +9,97 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const DownloadRecipientsService = require('../../../../app/services/notices/setup/download-recipients.service.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 describe('Notices - Setup - Download recipients service', () => {
-  const referenceCode = 'RREM-00R1MQ'
-
-  let removeLicences
+  let referenceCode
   let session
   let testRecipients
 
-  before(async () => {
-    removeLicences = ''
+  describe('when the journey is for returns ', () => {
+    let removeLicences
 
-    session = await SessionHelper.add({
-      data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns reminder', removeLicences }
+    before(async () => {
+      removeLicences = ''
+      referenceCode = 'RREM-00R1MQ'
+
+      session = await SessionHelper.add({
+        data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns reminder', removeLicences }
+      })
+
+      testRecipients = _recipients()
+      Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
     })
 
-    testRecipients = _recipients()
-    Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
+    it('correctly returns the csv string, filename and type', async () => {
+      const result = await DownloadRecipientsService.go(session.id)
+
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+          // Row - licence holder
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n',
+        filename: `Returns reminder - ${referenceCode}.csv`,
+        type: 'text/csv'
+      })
+    })
   })
 
-  it('correctly returns the csv string, filename and type', async () => {
-    const result = await DownloadRecipientsService.go(session.id)
+  describe('when the journey is "abstraction-alerts"', () => {
+    let recipients
 
-    expect(result).to.equal({
-      data:
-        // Headers
-        'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
-        // Row - licence holder
-        '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n',
-      filename: `Returns reminder - ${referenceCode}.csv`,
-      type: 'text/csv'
+    before(async () => {
+      recipients = RecipientsFixture.alertsRecipients()
+
+      testRecipients = [...Object.values(recipients)]
+
+      const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+
+      const licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
+
+      const relevantLicenceMonitoringStations = [
+        {
+          ...licenceMonitoringStationTwo,
+          licence: {
+            licenceRef: recipients.licenceHolder.licence_refs
+          }
+        }
+      ]
+
+      referenceCode = 'WAA-123'
+
+      session = await SessionHelper.add({
+        data: {
+          notificationType: 'Abstraction alert',
+          journey: 'abstraction-alert',
+          referenceCode,
+          relevantLicenceMonitoringStations
+        }
+      })
+
+      Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+    })
+
+    it('correctly returns the csv string, filename and type', async () => {
+      const result = await DownloadRecipientsService.go(session.id)
+
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+          // Row - licence holder
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100 m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive",,,"Little Whinging",,"WD25 7LR"\n`,
+        filename: `Abstraction alert - ${referenceCode}.csv`,
+        type: 'text/csv'
+      })
     })
   })
 })
