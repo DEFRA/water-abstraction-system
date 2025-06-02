@@ -202,10 +202,9 @@ describe('Notices - Submit Index service', () => {
       beforeEach(() => {
         payload = {
           sentFromDay: '1',
-          sentFromMonth: '4'
+          sentFromMonth: '4',
+          sentBy: 'billing.data@wrls.gov.uk'
         }
-
-        yarStub.get.returns({ sentBy: 'billing.data@wrls.gov.uk' })
 
         notice = NoticesFixture.alertStop()
       })
@@ -213,13 +212,6 @@ describe('Notices - Submit Index service', () => {
       describe('and the results are paginated', () => {
         beforeEach(() => {
           Sinon.stub(FetchNoticesService, 'go').resolves({ results: [notice], total: 70 })
-        })
-
-        it('extracts the previously saved filters', async () => {
-          await SubmitIndexService.go(payload, yarStub)
-
-          expect(yarStub.get.called).to.be.true()
-          expect(yarStub.set.called).to.be.false()
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -240,6 +232,10 @@ describe('Notices - Submit Index service', () => {
                 sentBy: 'billing.data@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,
+                sentFromYear: null,
+                sentToDay: null,
+                sentToMonth: null,
+                sentToYear: null,
                 toDate: undefined
               },
               notices: [
@@ -268,13 +264,6 @@ describe('Notices - Submit Index service', () => {
           Sinon.stub(FetchNoticesService, 'go').resolves({ results: [notice], total: 1 })
         })
 
-        it('extracts the previously saved filters', async () => {
-          await SubmitIndexService.go(payload, yarStub)
-
-          expect(yarStub.get.called).to.be.true()
-          expect(yarStub.set.called).to.be.false()
-        })
-
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexService.go(payload, yarStub)
 
@@ -293,6 +282,10 @@ describe('Notices - Submit Index service', () => {
                 sentBy: 'billing.data@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,
+                sentFromYear: null,
+                sentToDay: null,
+                sentToMonth: null,
+                sentToYear: null,
                 toDate: undefined
               },
               notices: [
