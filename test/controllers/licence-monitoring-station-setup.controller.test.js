@@ -13,6 +13,8 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
+const LicenceNumberService = require('../../app/services/licence-monitoring-station/setup/licence-number.service.js')
+const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
 const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
@@ -224,6 +226,82 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Select if the licence holder needs to stop or reduce')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/licence-number', () => {
+    const path = 'licence-number'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(LicenceNumberService, 'go').resolves({
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Enter the licence number this threshold applies to',
+            activeNavBar: 'search'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter the licence number this threshold applies to')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({})
+          })
+
+          it('redirects to the "licence-number" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/licence-monitoring-station/setup/${sessionId}/full-condition`
+            )
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({
+              error: { text: 'Enter a valid licence number' },
+              backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+              monitoringStationLabel: 'Station Label',
+              pageTitle: 'Enter the licence number this threshold applies to',
+              activeNavBar: 'search'
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Enter a valid licence number')
             expect(response.payload).to.contain('There is a problem')
           })
         })
