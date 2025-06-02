@@ -28,42 +28,117 @@ describe('Submit Alert Email Address Service', () => {
         }
       }
     }
-    payload = { alertEmailAddress: 'saved-email-address' }
+    payload = { alertEmailAddress: 'username' }
     sessionData = AbstractionAlertSessionData.monitoringStation()
 
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('saves the submitted value', async () => {
-      await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+    describe('and the user selects the username as the email address', () => {
+      it('saves the submitted value', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-      const refreshedSession = await session.$query()
+        const refreshedSession = await session.$query()
 
-      expect(refreshedSession.id).to.equal(session.id)
+        expect(refreshedSession.alertEmailAddress).to.equal('admin@defra.gov.uk')
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        expect(result).to.equal({})
+      })
     })
 
-    it('continues the journey', async () => {
-      const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+    describe('and the user selects other value as the email address', () => {
+      beforeEach(() => {
+        payload = { alertEmailAddress: 'other', otherUser: 'test@defra.gov.uk' }
+      })
 
-      expect(result).to.equal({})
+      it('saves the submitted value', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertEmailAddress).to.equal('test@defra.gov.uk')
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        expect(result).to.equal({})
+      })
     })
   })
 
   describe('when validation fails', () => {
-    beforeEach(() => {
-      payload = {}
-    })
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+    describe('because no option has been selected', () => {
+      beforeEach(() => {
+        payload = {}
+      })
 
-      expect(result).to.equal({
-        caption: 'Death star',
-        pageTitle: 'Select an email address to include in the alerts',
-        error: {
-          text: 'Select an email address to include in the alerts'
-        },
-        username: 'admin@defra.gov.uk'
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        expect(result).to.equal({
+          caption: 'Death star',
+          pageTitle: 'Select an email address to include in the alerts',
+          error: {
+            emailAddressInputFormElement: null,
+            radioFormElement: {
+              text: 'Enter an email address'
+            },
+            text: 'Enter an email address'
+          },
+          username: 'admin@defra.gov.uk'
+        })
+      })
+    })
+
+    describe('because other email has been selected but no email was provided', () => {
+      beforeEach(() => {
+        payload = { alertEmailAddress: 'other', otherUser: '' }
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        expect(result).to.equal({
+          caption: 'Death star',
+          pageTitle: 'Select an email address to include in the alerts',
+          error: {
+            emailAddressInputFormElement: {
+              text: 'Enter an email address'
+            },
+            radioFormElement: null,
+            text: 'Enter an email address'
+          },
+          username: 'admin@defra.gov.uk'
+        })
+      })
+    })
+
+    describe('because other email has been selected but an invalid email was provided', () => {
+      beforeEach(() => {
+        payload = { alertEmailAddress: 'other', otherUser: '123123123' }
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        expect(result).to.equal({
+          caption: 'Death star',
+          pageTitle: 'Select an email address to include in the alerts',
+          error: {
+            emailAddressInputFormElement: {
+              text: 'Enter an email address in the correct format, like name@example.com'
+            },
+            radioFormElement: null,
+            text: 'Enter an email address in the correct format, like name@example.com'
+          },
+          username: 'admin@defra.gov.uk'
+        })
       })
     })
   })
