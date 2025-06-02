@@ -1,6 +1,6 @@
 'use strict'
 
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const EventHelper = require('../helpers/event.helper.js')
 
 /**
@@ -56,7 +56,7 @@ function _defaults() {
 async function _fromDateEvent() {
   const data = _defaults()
 
-  data.referenceCode = `RINV-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = `RINV-${generateUUID()}`
   data.createdAt = new Date('2025-04-12')
 
   return EventHelper.add(data)
@@ -65,7 +65,7 @@ async function _fromDateEvent() {
 async function _legacyEvent() {
   const data = _defaults()
 
-  data.referenceCode = `HOF-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = `HOF-${generateUUID()}`
   data.subtype = 'hof-stop'
 
   return EventHelper.add(data)
@@ -74,7 +74,7 @@ async function _legacyEvent() {
 async function _sentByEvent() {
   const data = _defaults()
 
-  data.referenceCode = `RINV-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = `RINV-${generateUUID()}`
   data.issuer = 'area.team@wrls.gov.uk'
 
   return EventHelper.add(data)
@@ -83,7 +83,7 @@ async function _sentByEvent() {
 async function _stopAlertEvent() {
   const data = _defaults()
 
-  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = `WAA-${generateUUID()}`
   data.subtype = 'waterAbstractionAlerts'
   data.metadata.name = 'Water abstraction alert'
   data.metadata.options.sendingAlertType = 'stop'
