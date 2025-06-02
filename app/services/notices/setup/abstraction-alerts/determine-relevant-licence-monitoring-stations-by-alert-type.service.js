@@ -20,7 +20,7 @@
  * - "Stop" – includes stations with `restrictionType` "stop".
  * - "Resume" – includes all stations (similar to "Warning").
  *
- * This function ensures the correct set of stations is selected based on the user’s chosen alert type.
+ * This function ensures the correct set of stations is selected based on alert type.
  *
  * @param {object[]} licenceMonitoringStations - An array of licence monitoring stations
  * @param {string} alertType - The type of alert selected by the user. Possible types are:

@@ -124,6 +124,22 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
           )
         })
       })
+
+      describe('and there are no licence monitoring stations', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = []
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
     })
   })
 
@@ -164,6 +180,22 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
           )
         })
       })
+
+      describe('and there are no licence monitoring stations', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = []
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'There are no thresholds with the reduce restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
     })
   })
 
@@ -182,6 +214,24 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
         expect(result.error).not.to.exist()
       })
     })
+
+    describe('when called with invalid data', () => {
+      describe('and there are no licence monitoring stations', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = []
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'There are no thresholds with the warning restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
+    })
   })
 
   describe('when the alert type is "resume"', () => {
@@ -197,6 +247,24 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
+      })
+    })
+
+    describe('when called with invalid data', () => {
+      describe('and there are no licence monitoring stations', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = []
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'There are no thresholds with the resume restriction type, Select the type of alert you need to send'
+          )
+        })
       })
     })
   })
