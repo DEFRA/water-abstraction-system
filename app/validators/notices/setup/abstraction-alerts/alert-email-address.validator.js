@@ -8,6 +8,12 @@
 
 const Joi = require('joi')
 
+const ERROR_MESSAGES = {
+  invalidEmail: 'Enter an email address in the correct format, like name@example.com',
+  selectOrEmpty: 'Enter an email address'
+}
+const VALID_VALUES = ['username', 'other']
+
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
@@ -17,21 +23,19 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const VALID_VALUES = ['username', 'other']
-
   const schema = Joi.object({
     alertEmailAddress: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Enter an email address'
+        'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
     otherUser: Joi.alternatives().conditional('alertEmailAddress', {
       is: 'other',
       then: Joi.string().email().empty('').required().messages({
-        'string.email': 'Enter an email address in the correct format, like name@example.com',
-        'string.empty': 'Enter an email address',
-        'any.required': 'Enter an email address'
+        'string.email': ERROR_MESSAGES.invalidEmail,
+        'string.empty': ERROR_MESSAGES.selectOrEmpty,
+        'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
       otherwise: Joi.forbidden()
     })
