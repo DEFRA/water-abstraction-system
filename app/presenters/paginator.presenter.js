@@ -235,6 +235,7 @@ function _paginatorType(selectedPageNumber, numberOfPages) {
 function _queryString(queryArgs) {
   const params = new URLSearchParams(queryArgs)
   const queryString = params.toString()
+
   return queryString ? `&${queryString}` : ''
 }
 
