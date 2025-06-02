@@ -28,8 +28,9 @@ function go(payload) {
       }),
     otherUser: Joi.alternatives().conditional('alertEmailAddress', {
       is: 'other',
-      then: Joi.string().email().required().messages({
+      then: Joi.string().email().empty('').required().messages({
         'string.email': 'Enter an email address in the correct format, like name@example.com',
+        'string.empty': 'Enter an email address',
         'any.required': 'Enter an email address'
       }),
       otherwise: Joi.forbidden()
