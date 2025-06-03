@@ -31,11 +31,11 @@
               text: "Threshold"
             },
             classes: "govuk-input--width-10",
-            value: threshold,
+            value: threshold if unit_item.checked else "",
             errorMessage: {
               text: error.threshold.message
             } if error.threshold,
-            id: "threshold",
+            id: "threshold-" + unit_item.value,
             name: "threshold-" + unit_item.value
           }) }}
         {% endset %}
