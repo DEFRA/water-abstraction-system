@@ -49,6 +49,15 @@
           card: {
             title: {
               html: licenceTag.tag + '<div class="govuk-body-s govuk-!-margin-bottom-0">' + licenceTag.created + '</div>'
+            },
+            actions: {
+              items: [
+                {
+                  href: "/system/licence-monitoring-station/" + licenceTag.licenceMonitoringStationId + "/remove",
+                  text: "Remove tag",
+                  visuallyHiddenText: "remove" + licenceTag.tag + licenceTag.created
+                }
+              ]
             }
           },
           attributes: { 'data-test': 'tag-details-' + rowIndex },

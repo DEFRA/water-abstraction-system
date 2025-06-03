@@ -52,8 +52,15 @@ function _lastAlertSent(lastAlert) {
 
 function _licenceTags(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { createdAt, licenceVersionPurposeCondition, restrictionType, thresholdUnit, thresholdValue, user } =
-      licenceMonitoringStation
+    const {
+      id: licenceMonitoringStationId,
+      createdAt,
+      licenceVersionPurposeCondition,
+      restrictionType,
+      thresholdUnit,
+      thresholdValue,
+      user
+    } = licenceMonitoringStation
 
     const { effectOfRestriction, licenceVersionStatus, linkedCondition } =
       _linkedConditionDetails(licenceVersionPurposeCondition)
@@ -61,6 +68,7 @@ function _licenceTags(licenceMonitoringStations) {
     return {
       created: _created(createdAt, user),
       effectOfRestriction,
+      licenceMonitoringStationId,
       licenceVersionStatus,
       linkedCondition,
       tag: `${sentenceCase(restrictionType)} tag`,
