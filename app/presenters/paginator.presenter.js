@@ -233,13 +233,10 @@ function _paginatorType(selectedPageNumber, numberOfPages) {
 }
 
 function _queryString(queryArgs) {
-  const args = []
+  const params = new URLSearchParams(queryArgs)
+  const queryString = params.toString()
 
-  for (const [key, value] of Object.entries(queryArgs)) {
-    args.push(`&${key}=${value}`)
-  }
-
-  return args.join('')
+  return queryString ? `&${queryString}` : ''
 }
 
 function _simplePaginator(selectedPageNumber, numberOfPages, path, queryString) {
