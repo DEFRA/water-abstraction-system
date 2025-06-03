@@ -27,7 +27,7 @@
 
   <div>
     {% set textHtml %}
-      {% if error.emailAddressInputFormElement %}
+      {% if error.emailAddressInputFormError %}
         {% set errorClass = 'govuk-input--error' %}
       {% else %}
         {% set errorClass = '' %}
@@ -37,7 +37,7 @@
         id: "other-user",
         name: "otherUser",
         classes: "govuk-!-width-one-third " + errorClass,
-        errorMessage: error.emailAddressInputFormElement,
+        errorMessage: error.emailAddressInputFormError,
         label: {
           text: "Email address"
         },
@@ -53,7 +53,7 @@
 
       {{ govukRadios({
         name: 'alertEmailAddress',
-        errorMessage: error.radioFormElement,
+        errorMessage: error.radioFormError,
         fieldset: {
           legend: {
             text: pageTitle,
