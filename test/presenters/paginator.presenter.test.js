@@ -892,6 +892,20 @@ describe('Paginator Presenter', () => {
         }
       })
 
+      describe('URL encodes the query string', () => {
+        beforeEach(() => {
+          queryArgs = {
+            name: 'Mr T'
+          }
+        })
+
+        it('encodes special characters correctly', () => {
+          const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, queryArgs)
+
+          expect(result.component.previous.href).equal('/system/bill-runs?page=99&name=Mr+T')
+        })
+      })
+
       describe('for 2 pages', () => {
         beforeEach(() => {
           numberOfRecords = 75
