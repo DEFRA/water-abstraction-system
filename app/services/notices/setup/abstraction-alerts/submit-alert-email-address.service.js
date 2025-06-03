@@ -30,7 +30,7 @@ async function go(sessionId, payload, auth) {
     return {}
   }
 
-  const pageData = AlertEmailAddressPresenter.go(session, auth)
+  const pageData = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
   return {
     error: validationResult,
@@ -50,6 +50,21 @@ async function _save(session, payload, auth) {
   return session.$update()
 }
 
+/**
+ * Validates the submitted form data using `AlertEmailAddressValidator`.
+ *
+ * If the validation passes with no errors, it returns `null`. If validation fails, it returns an object containing
+ * error messages for the appropriate form fields.
+ *
+ * The `radioFormError` and `emailAddressInputFormError` fields indicate where the error should be displayed.
+ * The validator provides a `path` indicating which field caused the error, allowing us to differentiate between
+ * cases where the user selected "Use another email address" without entering an email address, or selected no option at all.
+ *
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {null|object} returns null if validation passes or returns an object with the error messages and where they
+ * need to be displayed
+ */
 function _validate(payload) {
   const validation = AlertEmailAddressValidator.go(payload)
 
@@ -61,8 +76,8 @@ function _validate(payload) {
 
   return {
     text: message,
-    radioFormElement: path[0] === 'alertEmailAddress' ? { text: message } : null,
-    emailAddressInputFormElement: path[0] === 'otherUser' ? { text: message } : null
+    radioFormError: path[0] === 'alertEmailAddress' ? { text: message } : null,
+    emailAddressInputFormError: path[0] === 'otherUser' ? { text: message } : null
   }
 }
 
