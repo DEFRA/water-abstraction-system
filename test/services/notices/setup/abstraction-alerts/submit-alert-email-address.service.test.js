@@ -82,11 +82,13 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          anchor: '#alertEmailAddress',
+          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
           pageTitle: 'Select an email address to include in the alerts',
           error: {
-            emailAddressInputFormElement: null,
-            radioFormElement: {
+            emailAddressInputFormError: null,
+            radioFormError: {
               text: 'Enter an email address'
             },
             text: 'Enter an email address'
@@ -105,13 +107,15 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          anchor: '#otherUser',
+          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
           pageTitle: 'Select an email address to include in the alerts',
           error: {
-            emailAddressInputFormElement: {
+            emailAddressInputFormError: {
               text: 'Enter an email address'
             },
-            radioFormElement: null,
+            radioFormError: null,
             text: 'Enter an email address'
           },
           username: 'admin@defra.gov.uk'
@@ -128,13 +132,15 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          anchor: '#otherUser',
+          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
           pageTitle: 'Select an email address to include in the alerts',
           error: {
-            emailAddressInputFormElement: {
+            emailAddressInputFormError: {
               text: 'Enter an email address in the correct format, like name@example.com'
             },
-            radioFormElement: null,
+            radioFormError: null,
             text: 'Enter an email address in the correct format, like name@example.com'
           },
           username: 'admin@defra.gov.uk'
