@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
@@ -21,6 +25,11 @@ describe('View Bill presenter', () => {
     beforeEach(() => {
       bill = _testBill()
       billingAccount = _testBillingAccount()
+      Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(true)
+    })
+
+    afterEach(() => {
+      Sinon.restore()
     })
 
     it('correctly presents the data', () => {
@@ -32,6 +41,7 @@ describe('View Bill presenter', () => {
         addressLines: ['86 Oxford Road', 'WOOTTON', 'COURTENAY', 'TA24 8NX'],
         billId: '64924759-8142-4a08-9d1e-1e902cd9d316',
         billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+        billingAccountLink: '/system/billing-accounts/ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
         billNumber: 'EAI0000007T',
         billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
         billRunNumber: 10003,
@@ -51,6 +61,28 @@ describe('View Bill presenter', () => {
         pageTitle: 'Bill for Wessex Water Services Ltd',
         region: 'South West',
         transactionFile: 'nalei50002t'
+      })
+    })
+
+    describe('the "billingAccountLink" property', () => {
+      describe('when enableBillingAccountView is false', () => {
+        beforeEach(() => {
+          Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(false)
+        })
+
+        it('returns the link to the legacy billing account page', () => {
+          const result = ViewBillPresenter.go(bill, billingAccount)
+
+          expect(result.billingAccountLink).to.equal('/billing-accounts/ee3f5562-26ad-4d58-9b59-5c388a13d7d0')
+        })
+      })
+
+      describe('when enableBillingAccountView is true', () => {
+        it('returns the link to the legacy billing account page', () => {
+          const result = ViewBillPresenter.go(bill, billingAccount)
+
+          expect(result.billingAccountLink).to.equal('/system/billing-accounts/ee3f5562-26ad-4d58-9b59-5c388a13d7d0')
+        })
       })
     })
 
