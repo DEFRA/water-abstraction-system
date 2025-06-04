@@ -20,7 +20,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+    sessionData = AbstractionAlertSessionData.get()
     session = await SessionHelper.add({ data: sessionData })
   })
 

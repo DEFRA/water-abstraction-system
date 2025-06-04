@@ -20,36 +20,19 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let clock
-  let session
   let recipients
+  let session
   let testRecipients
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationTwo
 
   beforeEach(() => {
     recipients = RecipientsFixture.alertsRecipients()
 
     testRecipients = [...Object.values(recipients)]
 
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
-
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-    const relevantLicenceMonitoringStations = [
-      {
-        ...licenceMonitoringStationOne,
-        licence: {
-          licenceRef: recipients.primaryUser.licence_refs
-        }
-      },
-      {
-        ...licenceMonitoringStationTwo,
-        licence: {
-          licenceRef: recipients.licenceHolder.licence_refs
-        }
-      }
-    ]
+    const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      recipients.primaryUser.licence_refs,
+      recipients.licenceHolder.licence_refs
+    ])
 
     session = {
       journey: 'abstraction-alerts',
@@ -112,25 +95,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a licence has more than one licence monitoring stations to send alerts to', () => {
     beforeEach(() => {
-      const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
-
-      licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-      licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-      const relevantLicenceMonitoringStations = [
-        {
-          ...licenceMonitoringStationOne,
-          licence: {
-            licenceRef: recipients.primaryUser.licence_refs
-          }
-        },
-        {
-          ...licenceMonitoringStationTwo,
-          licence: {
-            licenceRef: recipients.primaryUser.licence_refs
-          }
-        }
-      ]
+      const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+        recipients.primaryUser.licence_refs,
+        recipients.primaryUser.licence_refs
+      ])
 
       session = {
         journey: 'abstraction-alerts',
@@ -193,14 +161,9 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a "primaryUser" has abstraction alerts', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = [
-        {
-          ...licenceMonitoringStationOne,
-          licence: {
-            licenceRef: recipients.primaryUser.licence_refs
-          }
-        }
-      ]
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+        recipients.primaryUser.licence_refs
+      ])
 
       testRecipients[0].licence_refs = recipients.licenceHolder.licence_refs
     })
@@ -261,14 +224,9 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a "licenceHolder" has abstraction alerts', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = [
-        {
-          ...licenceMonitoringStationTwo,
-          licence: {
-            licenceRef: recipients.licenceHolder.licence_refs
-          }
-        }
-      ]
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+        recipients.licenceHolder.licence_refs
+      ])
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
