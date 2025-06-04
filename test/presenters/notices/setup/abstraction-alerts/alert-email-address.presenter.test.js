@@ -26,7 +26,7 @@ describe('Alert Email Address Presenter', () => {
       }
     }
 
-    session = AbstractionAlertSessionData.monitoringStation()
+    session = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {
