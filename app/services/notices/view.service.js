@@ -50,7 +50,6 @@ async function go(id, page) {
 }
 
 function _pageTitle(subtype) {
-  console.log('subtype', subtype)
   if (subtype === 'returnInvitation') {
     return 'Returns invitations'
   }
