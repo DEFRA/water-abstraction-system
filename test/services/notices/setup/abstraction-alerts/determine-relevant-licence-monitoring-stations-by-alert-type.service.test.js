@@ -15,59 +15,62 @@ const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('..
 
 describe('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations by alert type service', () => {
   let alertType
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationThree
-  let licenceMonitoringStationTwo
   let licenceMonitoringStations
+  let licenceMonitoringStationsData
 
   beforeEach(async () => {
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    licenceMonitoringStations = abstractionAlertSessionData.licenceMonitoringStations
-
-    licenceMonitoringStationOne = licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = licenceMonitoringStations[1]
-    licenceMonitoringStationThree = licenceMonitoringStations[2]
+    licenceMonitoringStationsData = [...Object.values(licenceMonitoringStations)]
 
     alertType = 'warning'
   })
 
   it('returns the licence monitoring stations', () => {
-    const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(licenceMonitoringStations, alertType)
+    const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+      licenceMonitoringStationsData,
+      alertType
+    )
 
-    expect(result).to.equal([licenceMonitoringStationOne, licenceMonitoringStationTwo, licenceMonitoringStationThree])
+    expect(result).to.equal([
+      licenceMonitoringStations.one,
+      licenceMonitoringStations.two,
+      licenceMonitoringStations.three
+    ])
   })
 
   describe('when the "alertType" is "stop"', () => {
     beforeEach(() => {
       alertType = 'stop'
 
-      licenceMonitoringStations[1].restrictionType = 'stop'
-      licenceMonitoringStations[0].restrictionType = 'reduce'
-      licenceMonitoringStations[2].restrictionType = 'stop_or_reduce'
+      licenceMonitoringStations.one.restrictionType = 'reduce'
+      licenceMonitoringStations.two.restrictionType = 'stop'
+      licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+      licenceMonitoringStationsData = [...Object.values(licenceMonitoringStations)]
     })
 
     it('returns the licence monitoring stations (with the reduce type removed)', () => {
       const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
-        licenceMonitoringStations,
+        licenceMonitoringStationsData,
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStationTwo])
+      expect(result).to.equal([licenceMonitoringStations.two])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
       beforeEach(() => {
-        licenceMonitoringStations[2].restrictionType = 'stop_or_reduce'
+        licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
       })
 
       it('returns the licence monitoring stations, without the "stop_or_reduce" licence monitoring station', () => {
         const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
-          licenceMonitoringStations,
+          licenceMonitoringStationsData,
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStationTwo])
+        expect(result).to.equal([licenceMonitoringStations.two])
       })
     })
   })
@@ -79,25 +82,25 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
 
     it('returns the licence monitoring stations (with the reduce type removed)', () => {
       const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
-        licenceMonitoringStations,
+        licenceMonitoringStationsData,
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStationOne])
+      expect(result).to.equal([licenceMonitoringStations.one])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
       beforeEach(() => {
-        licenceMonitoringStations[1].restrictionType = 'stop_or_reduce'
+        licenceMonitoringStations.two.restrictionType = 'stop_or_reduce'
       })
 
       it('returns the licence monitoring stations, with "stop_or_reduce" but without the stop type)', () => {
         const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
-          licenceMonitoringStations,
+          licenceMonitoringStationsData,
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStationOne, licenceMonitoringStationTwo])
+        expect(result).to.equal([licenceMonitoringStations.one, licenceMonitoringStations.two])
       })
     })
   })

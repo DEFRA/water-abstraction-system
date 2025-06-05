@@ -14,9 +14,9 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 const AlertTypeValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-type.validator.js')
 
 describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
-  let payload
   let licenceMonitoringStations
   let licenceMonitoringStationsData
+  let payload
 
   beforeEach(() => {
     payload = {
@@ -59,7 +59,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
       describe('and the alert type is not "stop"', () => {
         beforeEach(() => {
-          licenceMonitoringStations = [{ ...licenceMonitoringStations[0], restrictionType: 'stop_or_reduce' }]
+          licenceMonitoringStationsData = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
         })
 
         it('returns with no errors', () => {
@@ -97,7 +97,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -128,11 +128,11 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStations = []
+          licenceMonitoringStationsData = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -153,7 +153,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -163,16 +163,16 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     describe('when called with invalid data', () => {
       describe('and the "alert-type" is not available', () => {
         beforeEach(() => {
-          licenceMonitoringStations = [
+          licenceMonitoringStationsData = [
             {
-              ...licenceMonitoringStations[0],
+              ...licenceMonitoringStations.one,
               restrictionType: 'warning'
             }
           ]
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -184,11 +184,11 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStations = []
+          licenceMonitoringStationsData = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -209,7 +209,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -219,11 +219,11 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     describe('when called with invalid data', () => {
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStations = []
+          licenceMonitoringStationsData = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -244,7 +244,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -254,11 +254,11 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     describe('when called with invalid data', () => {
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStations = []
+          licenceMonitoringStationsData = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStations)
+          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()

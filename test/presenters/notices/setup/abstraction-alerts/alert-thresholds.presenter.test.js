@@ -107,9 +107,14 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
         describe('and a licence monitoring station is "stop_or_reduce" ', () => {
           beforeEach(() => {
-            licenceMonitoringStations.one.responseType = 'reduce'
-            licenceMonitoringStations.two.responseType = 'stop'
-            licenceMonitoringStations.three.responseType = 'stop_or_reduce'
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'stop'
+            }
           })
 
           it('returns page data for the view, with only the thresholds with stop restrictions', () => {
@@ -120,7 +125,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
                 checked: false,
                 hint: { text: 'Flow threshold' },
                 text: '100 m3/s',
-                value: licenceMonitoringStations.two.thresholdGroup,
+                value: licenceMonitoringStations.two.thresholdGroup
               }
             ])
           })
@@ -147,9 +152,14 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
         describe('and a licence monitoring station is "stop_or_reduce" ', () => {
           beforeEach(() => {
-            licenceMonitoringStations.one.responseType = 'reduce'
-            licenceMonitoringStations.two.responseType = 'stop'
-            licenceMonitoringStations.three.responseType = 'stop_or_reduce'
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'reduce'
+            }
           })
 
           it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
@@ -168,7 +178,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
                 checked: false,
                 hint: { text: 'Level threshold' },
                 text: '100 m',
-                value: 'level-100-m'
+                value: licenceMonitoringStations.three.thresholdGroup
               }
             ])
           })
