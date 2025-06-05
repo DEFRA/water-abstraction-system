@@ -27,12 +27,13 @@ function go(payload) {
     alertEmailAddress: Joi.string()
       .required()
       .valid(...VALID_VALUES)
+      .label('alertEmailAddress')
       .messages({
         'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
     otherUser: Joi.alternatives().conditional('alertEmailAddress', {
       is: 'other',
-      then: Joi.string().email().empty('').required().messages({
+      then: Joi.string().email().empty('').required().label('otherUser').messages({
         'string.email': ERROR_MESSAGES.invalidEmail,
         'string.empty': ERROR_MESSAGES.selectOrEmpty,
         'any.required': ERROR_MESSAGES.selectOrEmpty
