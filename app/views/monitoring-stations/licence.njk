@@ -44,6 +44,27 @@
           }) }}
         {% endif %}
 
+        {% if permissionToManageLinks %}
+          {% set actionsItems = [
+                {
+                  href: "/system/licence-monitoring-station/" + licenceTag.licenceMonitoringStationId + "/remove",
+                  text: "Remove tag",
+                  visuallyHiddenText: "remove " + licenceTag.tag + " " + licenceTag.created
+                }
+              ] %}
+        {% else %}
+          {% set actionsItems = [] %}
+        {% endif %}
+
+        {# Warning for licence condition #}
+        {% if licenceTag.licenceConditionTitle %}
+          {{ govukWarningText({
+            text: "You will not be able to send a water abstraction alert for the licence at this restriction type and threshold.",
+            iconFallbackText: "Warning",
+            attributes: { 'data-test': 'warning-' + rowIndex }
+          }) }}
+        {% endif %}
+
         {# Tag details summary list #}
         {{ govukSummaryList({
           card: {
@@ -51,13 +72,7 @@
               html: licenceTag.tag + '<div class="govuk-body-s govuk-!-margin-bottom-0">' + licenceTag.created + '</div>'
             },
             actions: {
-              items: [
-                {
-                  href: "/system/licence-monitoring-station/" + licenceTag.licenceMonitoringStationId + "/remove",
-                  text: "Remove tag",
-                  visuallyHiddenText: "remove " + licenceTag.tag + " " + licenceTag.created
-                }
-              ]
+              items: actionsItems
             }
           },
           attributes: { 'data-test': 'tag-details-' + rowIndex },
