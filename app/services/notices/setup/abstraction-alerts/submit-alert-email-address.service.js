@@ -57,8 +57,9 @@ async function _save(session, payload, auth) {
  * error messages for the appropriate form fields.
  *
  * The `radioFormError` and `emailAddressInputFormError` fields indicate where the error should be displayed.
- * The validator provides a `path` indicating which field caused the error, allowing us to differentiate between
- * cases where the user selected "Use another email address" without entering an email address, or selected no option at all.
+ * The validator provides a `context` property indicating which field caused the error, allowing us to differentiate
+ * between cases where the user selected "Use another email address" without entering an email address, or selected no
+ * option at all.
  *
  * @param {object} payload - The submitted form data
  *
