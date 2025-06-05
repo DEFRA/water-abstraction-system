@@ -6,16 +6,18 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Formats data for the 'notices/{id}' page
  *
  * @param {object[]} notices - The data to be formatted for display
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notices) {
-  const tableRows = _formatTableData(notices.results)
+function go(notices, page = 1) {
+  const tableRows = _formatTableData(notices.results, page)
 
   return {
     createdBy: notices.event.issuer,
@@ -26,12 +28,16 @@ function go(notices) {
   }
 }
 
-function _formatTableData(data) {
-  return data.map((notice) => {
+function _formatTableData(data, page) {
+  const to = page === 1 ? DatabaseConfig.defaultPageSize : page * DatabaseConfig.defaultPageSize
+  const from = page === 1 ? 0 : to - DatabaseConfig.defaultPageSize
+  const rows = data.slice(from, to)
+
+  return rows.map((notice) => {
     return {
       recipient: _recipient(notice),
       licenceRefs: notice.licences,
-      messageType: notice.messageType,
+      messageType: notice.message_type,
       status: notice.status
     }
   })
