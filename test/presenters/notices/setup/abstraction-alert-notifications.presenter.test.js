@@ -20,6 +20,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let clock
+  let monitoringStationName
   let recipients
   let session
   let testRecipients
@@ -29,6 +30,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
     testRecipients = [...Object.values(recipients)]
 
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+
+    monitoringStationName = abstractionAlertSessionData.monitoringStationName
+
     const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
       recipients.primaryUser.licence_refs,
       recipients.licenceHolder.licence_refs
@@ -37,7 +42,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     session = {
       journey: 'abstraction-alerts',
       referenceCode,
-      monitoringStationName: abstractionAlertSessionData.monitoringStationName,
+      monitoringStationName,
       relevantLicenceMonitoringStations
     }
 
@@ -132,7 +137,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       session = {
         journey: 'abstraction-alerts',
         referenceCode,
-        monitoringStationName: abstractionAlertSessionData.monitoringStationName,
+        monitoringStationName,
         relevantLicenceMonitoringStations
       }
     })
@@ -345,13 +350,13 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             address_line_5: 'WD25 7LR',
             // common personalisation
             condition_text: '',
-            flow_or_level: 'flow',
+            flow_or_level: 'level',
             issuer_email_address: '',
             licence_ref: recipients.licenceHolder.licence_refs,
             monitoring_station_name: 'Death star',
             source: '',
-            threshold_unit: 'm3/s',
-            threshold_value: 100
+            threshold_unit: 'm',
+            threshold_value: 1000
           }
         }
       ])
@@ -376,13 +381,13 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             messageRef: 'water_abstraction_alert_reduce_warning_email',
             personalisation: {
               condition_text: '',
-              flow_or_level: 'flow',
+              flow_or_level: 'level',
               issuer_email_address: '',
               licence_ref: recipients.additionalContact.licence_refs,
               monitoring_station_name: 'Death star',
               source: '',
-              threshold_unit: 'm3/s',
-              threshold_value: 100
+              threshold_unit: 'm',
+              threshold_value: 1000
             },
             recipient: 'additional.contact@important.com'
           },
@@ -403,13 +408,13 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               address_line_5: 'WD25 7LR',
               // common personalisation
               condition_text: '',
-              flow_or_level: 'flow',
+              flow_or_level: 'level',
               issuer_email_address: '',
               licence_ref: recipients.licenceHolder.licence_refs,
               monitoring_station_name: 'Death star',
               source: '',
-              threshold_unit: 'm3/s',
-              threshold_value: 100
+              threshold_unit: 'm',
+              threshold_value: 1000
             }
           }
         ])

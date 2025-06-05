@@ -353,9 +353,6 @@ describe('Notices - Setup - Batch notifications service', () => {
   })
 
   describe('when the journey is "abstraction-alert"', () => {
-    let licenceMonitoringStationOne
-    let licenceMonitoringStationTwo
-
     beforeEach(async () => {
       recipients = RecipientsFixture.alertsRecipients()
 
@@ -370,25 +367,12 @@ describe('Notices - Setup - Batch notifications service', () => {
 
       eventId = event.id
 
-      const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+      const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
-      licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-      licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-      const relevantLicenceMonitoringStations = [
-        {
-          ...licenceMonitoringStationOne,
-          licence: {
-            licenceRef: recipients.primaryUser.licence_refs
-          }
-        },
-        {
-          ...licenceMonitoringStationTwo,
-          licence: {
-            licenceRef: recipients.licenceHolder.licence_refs
-          }
-        }
-      ]
+      const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+        recipients.primaryUser.licence_refs,
+        recipients.licenceHolder.licence_refs
+      ])
 
       session = {
         ...abstractionAlertSessionData,
