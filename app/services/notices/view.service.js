@@ -20,7 +20,7 @@ const ViewPresenter = require('../../presenters/notices/view.presenter.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(id, page) {
-  const notices = await FetchNoticeService.go(id, page)
+  const notices = await FetchNoticeService.go(id)
 
   if (!notices) {
     return {
