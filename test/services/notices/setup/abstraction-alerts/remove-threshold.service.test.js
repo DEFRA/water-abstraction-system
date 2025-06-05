@@ -15,19 +15,16 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Thing under test
 const RemoveThresholdService = require('../../../../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 
-describe('Remove Threshold Service', () => {
-  let abstractionAlertSessionData
-  let licenceMonitoringStationId
-  let licenceMonitoringStationOne
+describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => {
+  let licenceMonitoringStations
   let session
+  let sessionData
   let yarStub
 
   beforeEach(() => {
-    abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-
-    licenceMonitoringStationId = licenceMonitoringStationOne.id
+    sessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -40,16 +37,16 @@ describe('Remove Threshold Service', () => {
     describe('and there are no thresholds currently removed', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
-          data: abstractionAlertSessionData
+          data: sessionData
         })
       })
 
       it('saves the "licenceMonitoringStationId" to the session to be excluded from the list', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStationId, yarStub)
+        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.removedThresholds).to.equal([licenceMonitoringStationId])
+        expect(refreshedSession.removedThresholds).to.equal([licenceMonitoringStations.one.id])
       })
     })
 
@@ -57,18 +54,21 @@ describe('Remove Threshold Service', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
           data: {
-            ...abstractionAlertSessionData,
-            removedThresholds: [licenceMonitoringStationId]
+            ...sessionData,
+            removedThresholds: [licenceMonitoringStations.one.id]
           }
         })
       })
 
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStationId, yarStub)
+        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.removedThresholds).to.equal([licenceMonitoringStationId, licenceMonitoringStationId])
+        expect(refreshedSession.removedThresholds).to.equal([
+          licenceMonitoringStations.one.id,
+          licenceMonitoringStations.one.id
+        ])
       })
     })
 
@@ -76,20 +76,20 @@ describe('Remove Threshold Service', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
           data: {
-            ...abstractionAlertSessionData,
-            removedThresholds: [licenceMonitoringStationId]
+            ...sessionData,
+            removedThresholds: [licenceMonitoringStations.one.id]
           }
         })
       })
       it('sets a flash message', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStationId, yarStub)
+        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
         expect(bannerMessage).to.equal({
-          text: `Removed ${licenceMonitoringStationOne.licence.licenceRef} Reduce 1000m`,
+          text: `Removed ${licenceMonitoringStations.one.licence.licenceRef} Reduce 1000m`,
           title: 'Updated'
         })
       })
