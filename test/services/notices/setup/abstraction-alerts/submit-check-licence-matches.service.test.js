@@ -16,29 +16,25 @@ const SubmitCheckLicenceMatchesService = require('../../../../../app/services/no
 
 describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Service', () => {
   let licenceMonitoringStationDuplicate
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationThree
-  let licenceMonitoringStationTwo
+  let licenceMonitoringStations
   let session
   let sessionData
 
   beforeEach(async () => {
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-    licenceMonitoringStationThree = abstractionAlertSessionData.licenceMonitoringStations[2]
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
 
     // A licence monitoring station can have the same licence as another. When this is the case we need to check we
     // handle duplicate licence refs and that we do no strip / remove them unexpectedly
-    licenceMonitoringStationDuplicate = licenceMonitoringStationOne
+    licenceMonitoringStationDuplicate = licenceMonitoringStations.one
 
     sessionData = {
       ...abstractionAlertSessionData,
       alertThresholds: [
-        licenceMonitoringStationOne.thresholdGroup,
-        licenceMonitoringStationTwo.thresholdGroup,
-        licenceMonitoringStationThree.thresholdGroup
+        licenceMonitoringStations.one.thresholdGroup,
+        licenceMonitoringStations.two.thresholdGroup,
+        licenceMonitoringStations.three.thresholdGroup
       ]
     }
   })
@@ -55,9 +51,9 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.licenceRefs).to.equal([
-          licenceMonitoringStationOne.licence.licenceRef,
-          licenceMonitoringStationTwo.licence.licenceRef,
-          licenceMonitoringStationThree.licence.licenceRef
+          licenceMonitoringStations.one.licence.licenceRef,
+          licenceMonitoringStations.two.licence.licenceRef,
+          licenceMonitoringStations.three.licence.licenceRef
         ])
       })
 
@@ -67,16 +63,16 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.relevantLicenceMonitoringStations).to.equal([
-          licenceMonitoringStationOne,
-          licenceMonitoringStationTwo,
-          licenceMonitoringStationThree
+          licenceMonitoringStations.one,
+          licenceMonitoringStations.two,
+          licenceMonitoringStations.three
         ])
       })
     })
 
     describe('and there are duplicate licence refs', () => {
       beforeEach(async () => {
-        sessionData.licenceMonitoringStations = [licenceMonitoringStationOne, licenceMonitoringStationDuplicate]
+        sessionData.licenceMonitoringStations = [licenceMonitoringStations.one, licenceMonitoringStationDuplicate]
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -86,7 +82,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.licenceRefs).to.equal([licenceMonitoringStationOne.licence.licenceRef])
+        expect(refreshedSession.licenceRefs).to.equal([licenceMonitoringStations.one.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
@@ -95,7 +91,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.relevantLicenceMonitoringStations).to.equal([
-          licenceMonitoringStationOne,
+          licenceMonitoringStations.one,
           licenceMonitoringStationDuplicate
         ])
       })
@@ -103,7 +99,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
 
     describe('and there are no licence monitoring stations removed', () => {
       beforeEach(async () => {
-        sessionData.removedThresholds = [licenceMonitoringStationOne.id, licenceMonitoringStationTwo.id]
+        sessionData.removedThresholds = [licenceMonitoringStations.one.id, licenceMonitoringStations.two.id]
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -113,7 +109,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.licenceRefs).to.equal([licenceMonitoringStationThree.licence.licenceRef])
+        expect(refreshedSession.licenceRefs).to.equal([licenceMonitoringStations.three.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
@@ -121,7 +117,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.relevantLicenceMonitoringStations).to.equal([licenceMonitoringStationThree])
+        expect(refreshedSession.relevantLicenceMonitoringStations).to.equal([licenceMonitoringStations.three])
       })
     })
   })

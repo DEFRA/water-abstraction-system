@@ -40,6 +40,9 @@ async function go() {
         .where('returnVersions.status', 'current')
         .where('quarterlyReturns', false)
         .where('startDate', '<', quarterlyStartDate)
+        .where((returnVersionEndDateBuilder) => {
+          returnVersionEndDateBuilder.whereNull('endDate').orWhere('endDate', '>=', quarterlyStartDate)
+        })
         .whereColumn('returnVersions.licenceId', 'licences.id')
     )
     .orderBy([

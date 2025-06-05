@@ -16,26 +16,22 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const CheckLicenceMatchesService = require('../../../../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 
 describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', () => {
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationThree
-  let licenceMonitoringStationTwo
+  let licenceMonitoringStations
   let session
   let sessionData
   let yarStub
 
   beforeEach(async () => {
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-    licenceMonitoringStationThree = abstractionAlertSessionData.licenceMonitoringStations[2]
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
 
     sessionData = {
       ...abstractionAlertSessionData,
       alertThresholds: [
-        licenceMonitoringStationOne.thresholdGroup,
-        licenceMonitoringStationTwo.thresholdGroup,
-        licenceMonitoringStationThree.thresholdGroup
+        licenceMonitoringStations.one.thresholdGroup,
+        licenceMonitoringStations.two.thresholdGroup,
+        licenceMonitoringStations.three.thresholdGroup
       ]
     }
 
@@ -64,13 +60,13 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 February to 1 January',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationOne.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
               text: 'Remove'
             },
             alert: null,
             alertDate: null,
-            licenceId: licenceMonitoringStationOne.licence.id,
-            licenceRef: licenceMonitoringStationOne.licence.licenceRef,
+            licenceId: licenceMonitoringStations.one.licence.id,
+            licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
             restrictionCount: 1,
             threshold: '1000 m'
@@ -78,13 +74,13 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationTwo.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.two.id}`,
               text: 'Remove'
             },
             alert: null,
             alertDate: null,
-            licenceId: licenceMonitoringStationTwo.licence.id,
-            licenceRef: licenceMonitoringStationTwo.licence.licenceRef,
+            licenceId: licenceMonitoringStations.two.licence.id,
+            licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
             threshold: '100 m3/s'
@@ -92,13 +88,13 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
           {
             abstractionPeriod: '1 January to 31 March',
             action: {
-              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationThree.id}`,
+              link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.three.id}`,
               text: 'Remove'
             },
             alert: null,
             alertDate: null,
-            licenceId: licenceMonitoringStationThree.licence.id,
-            licenceRef: licenceMonitoringStationThree.licence.licenceRef,
+            licenceId: licenceMonitoringStations.three.licence.id,
+            licenceRef: licenceMonitoringStations.three.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
             threshold: '100 m'
