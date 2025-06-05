@@ -23,7 +23,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
   let selectedLicenceMonitoringStations
 
   beforeEach(async () => {
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
     licenceMonitoringStations = abstractionAlertSessionData.licenceMonitoringStations
 
