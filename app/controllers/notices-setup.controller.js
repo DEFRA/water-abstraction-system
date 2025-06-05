@@ -182,7 +182,7 @@ async function submitAlertEmailAddress(request, h) {
     return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
   }
 
-  return h.redirect('')
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
 async function submitAlertThresholds(request, h) {

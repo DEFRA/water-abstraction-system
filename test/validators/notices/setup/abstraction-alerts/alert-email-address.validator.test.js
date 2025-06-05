@@ -14,7 +14,7 @@ describe('Alert Email Address Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { alertEmailAddress: 'saved-email-address' }
+    payload = { alertEmailAddress: 'username' }
   })
 
   describe('when called with valid data', () => {
@@ -23,6 +23,51 @@ describe('Alert Email Address Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
+    })
+
+    describe('and the "otherUser"', () => {
+      describe('is an invalid email address', () => {
+        beforeEach(() => {
+          payload = { alertEmailAddress: 'other', otherUser: '123123123' }
+        })
+
+        it('returns with errors', () => {
+          const result = AlertEmailAddressValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'Enter an email address in the correct format, like name@example.com'
+          )
+        })
+      })
+
+      describe('is an empty string', () => {
+        beforeEach(() => {
+          payload = { alertEmailAddress: 'other', otherUser: '' }
+        })
+
+        it('returns with errors', () => {
+          const result = AlertEmailAddressValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Enter an email address')
+        })
+      })
+
+      describe('is a valid email address', () => {
+        beforeEach(() => {
+          payload = { alertEmailAddress: 'other', otherUser: 'test@defra.gov.uk' }
+        })
+
+        it('returns with no errors', () => {
+          const result = AlertEmailAddressValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).not.to.exist()
+        })
+      })
     })
   })
 
@@ -36,7 +81,7 @@ describe('Alert Email Address Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select an email address to include in the alerts')
+      expect(result.error.details[0].message).to.equal('Enter an email address')
     })
   })
 })
