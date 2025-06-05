@@ -17,10 +17,11 @@ const LicencePresenter = require('../../presenters/monitoring-stations/licence.p
  *
  * @param {string} licenceId - The UUID of the licence record
  * @param {string} monitoringStationId - The UUID of the monitoring station record
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} The view data for the licence tag details page
  */
-async function go(licenceId, monitoringStationId) {
+async function go(licenceId, monitoringStationId, yar) {
   const { lastAlert, monitoringStationLicenceTags } = await FetchLicenceTagDetailsService.go(
     licenceId,
     monitoringStationId
@@ -28,9 +29,12 @@ async function go(licenceId, monitoringStationId) {
 
   const formattedData = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
 
+  const notification = yar.flash('notification')[0]
+
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...formattedData,
+    notification
   }
 }
 

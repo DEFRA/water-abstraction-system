@@ -11,7 +11,7 @@ const ViewService = require('../services/monitoring-stations/view.service.js')
 async function licence(request, h) {
   const { licenceId, monitoringStationId } = request.params
 
-  const pageData = await LicenceService.go(licenceId, monitoringStationId)
+  const pageData = await LicenceService.go(licenceId, monitoringStationId, request.yar)
 
   return h.view('monitoring-stations/licence.njk', pageData)
 }
