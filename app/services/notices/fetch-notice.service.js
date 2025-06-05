@@ -12,11 +12,10 @@ const EventModel = require('../../models/event.model.js')
  * Fetches the notice for the 'notices/{id}' page
  *
  * @param {string} id - the id of the scheduled notification to look up
- * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object[]>} an array of matching notices
  */
-async function go(id, page = 1) {
+async function go(id) {
   const event = await EventModel.query()
     .findById(id)
     .select(['id', 'referenceCode', 'issuer', 'createdAt', 'status', 'subtype'])
@@ -25,7 +24,7 @@ async function go(id, page = 1) {
     return undefined
   }
 
-  const scheduledNotifications = await _query(id, page)
+  const scheduledNotifications = await _query(id)
 
   return {
     event,
@@ -33,7 +32,7 @@ async function go(id, page = 1) {
   }
 }
 
-function _query(id, page) {
+function _query(id) {
   const query = `
   SELECT * FROM (
     SELECT
