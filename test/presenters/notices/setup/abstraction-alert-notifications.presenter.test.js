@@ -20,6 +20,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let clock
+  let monitoringStationName
   let recipients
   let session
   let testRecipients
@@ -29,6 +30,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
     testRecipients = [...Object.values(recipients)]
 
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+
+    monitoringStationName = abstractionAlertSessionData.monitoringStationName
+
     const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
       recipients.primaryUser.licence_refs,
       recipients.licenceHolder.licence_refs
@@ -37,6 +42,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     session = {
       journey: 'abstraction-alerts',
       referenceCode,
+      monitoringStationName,
       relevantLicenceMonitoringStations
     }
 
@@ -59,7 +65,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         licences: `["${recipients.additionalContact.licence_refs}"]`,
         messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
-        personalisation: {},
+        personalisation: {
+          condition_text: '',
+          flow_or_level: 'level',
+          issuer_email_address: '',
+          licence_ref: recipients.additionalContact.licence_refs,
+          monitoring_station_name: 'Death star',
+          source: '',
+          threshold_unit: 'm',
+          threshold_value: 1000
+        },
         recipient: 'additional.contact@important.com'
       },
       {
@@ -70,7 +85,17 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         licences: `["${recipients.primaryUser.licence_refs}"]`,
         messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
-        personalisation: {},
+        personalisation: {
+          condition_text: '',
+          flow_or_level: 'level',
+          issuer_email_address: '',
+          licence_ref: recipients.primaryUser.licence_refs,
+          monitoring_station_name: 'Death star',
+          source: '',
+          threshold_unit: 'm',
+          threshold_value: 1000
+        },
+
         recipient: 'primary.user@important.com'
       },
       {
@@ -87,7 +112,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           address_line_2: 'Privet Drive',
           address_line_3: 'Little Whinging',
           address_line_4: 'Surrey',
-          address_line_5: 'WD25 7LR'
+          address_line_5: 'WD25 7LR',
+          // common personalisation
+          condition_text: '',
+          flow_or_level: 'flow',
+          issuer_email_address: '',
+          licence_ref: recipients.licenceHolder.licence_refs,
+          monitoring_station_name: 'Death star',
+          source: '',
+          threshold_unit: 'm3/s',
+          threshold_value: 100
         }
       }
     ])
@@ -103,6 +137,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       session = {
         journey: 'abstraction-alerts',
         referenceCode,
+        monitoringStationName,
         relevantLicenceMonitoringStations
       }
     })
@@ -119,7 +154,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           licences: `["${recipients.additionalContact.licence_refs}"]`,
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
-          personalisation: {},
+          personalisation: {
+            condition_text: '',
+            flow_or_level: 'level',
+            issuer_email_address: '',
+            licence_ref: recipients.additionalContact.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm',
+            threshold_value: 1000
+          },
           recipient: 'additional.contact@important.com'
         },
         {
@@ -128,7 +172,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           licences: `["${recipients.primaryUser.licence_refs}"]`,
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
-          personalisation: {},
+          personalisation: {
+            condition_text: '',
+            flow_or_level: 'level',
+            issuer_email_address: '',
+            licence_ref: recipients.primaryUser.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm',
+            threshold_value: 1000
+          },
           recipient: 'primary.user@important.com',
           reference: 'TEST-123',
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
@@ -141,7 +194,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           licences: `["${recipients.additionalContact.licence_refs}"]`,
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
-          personalisation: {},
+          personalisation: {
+            condition_text: '',
+            flow_or_level: 'flow',
+            issuer_email_address: '',
+            licence_ref: recipients.additionalContact.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm3/s',
+            threshold_value: 100
+          },
           recipient: 'additional.contact@important.com'
         },
         {
@@ -150,7 +212,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           licences: `["${recipients.primaryUser.licence_refs}"]`,
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
-          personalisation: {},
+          personalisation: {
+            condition_text: '',
+            flow_or_level: 'flow',
+            issuer_email_address: '',
+            licence_ref: recipients.primaryUser.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm3/s',
+            threshold_value: 100
+          },
           recipient: 'primary.user@important.com',
           reference: 'TEST-123',
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
@@ -180,7 +251,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           licences: `["${recipients.primaryUser.licence_refs}"]`,
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
-          personalisation: {},
+          personalisation: {
+            condition_text: '',
+            flow_or_level: 'level',
+            issuer_email_address: '',
+            licence_ref: recipients.primaryUser.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm',
+            threshold_value: 1000
+          },
           recipient: 'primary.user@important.com'
         }
       ])
@@ -203,7 +283,17 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             licences: `["${recipients.additionalContact.licence_refs}"]`,
             messageType: 'email',
             messageRef: 'water_abstraction_alert_reduce_warning_email',
-            personalisation: {},
+            personalisation: {
+              condition_text: '',
+              flow_or_level: 'level',
+              issuer_email_address: '',
+              licence_ref: recipients.additionalContact.licence_refs,
+              monitoring_station_name: 'Death star',
+              source: '',
+              threshold_unit: 'm',
+              threshold_value: 1000
+            },
+
             recipient: 'additional.contact@important.com'
           },
           {
@@ -214,7 +304,17 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             licences: `["${recipients.primaryUser.licence_refs}"]`,
             messageType: 'email',
             messageRef: 'water_abstraction_alert_reduce_warning_email',
-            personalisation: {},
+            personalisation: {
+              condition_text: '',
+              flow_or_level: 'level',
+              issuer_email_address: '',
+              licence_ref: recipients.primaryUser.licence_refs,
+              monitoring_station_name: 'Death star',
+              source: '',
+              threshold_unit: 'm',
+              threshold_value: 1000
+            },
+
             recipient: 'primary.user@important.com'
           }
         ])
@@ -247,7 +347,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             address_line_2: 'Privet Drive',
             address_line_3: 'Little Whinging',
             address_line_4: 'Surrey',
-            address_line_5: 'WD25 7LR'
+            address_line_5: 'WD25 7LR',
+            // common personalisation
+            condition_text: '',
+            flow_or_level: 'level',
+            issuer_email_address: '',
+            licence_ref: recipients.licenceHolder.licence_refs,
+            monitoring_station_name: 'Death star',
+            source: '',
+            threshold_unit: 'm',
+            threshold_value: 1000
           }
         }
       ])
@@ -270,7 +379,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             licences: `["${recipients.additionalContact.licence_refs}"]`,
             messageType: 'email',
             messageRef: 'water_abstraction_alert_reduce_warning_email',
-            personalisation: {},
+            personalisation: {
+              condition_text: '',
+              flow_or_level: 'level',
+              issuer_email_address: '',
+              licence_ref: recipients.additionalContact.licence_refs,
+              monitoring_station_name: 'Death star',
+              source: '',
+              threshold_unit: 'm',
+              threshold_value: 1000
+            },
             recipient: 'additional.contact@important.com'
           },
           {
@@ -287,7 +405,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               address_line_2: 'Privet Drive',
               address_line_3: 'Little Whinging',
               address_line_4: 'Surrey',
-              address_line_5: 'WD25 7LR'
+              address_line_5: 'WD25 7LR',
+              // common personalisation
+              condition_text: '',
+              flow_or_level: 'level',
+              issuer_email_address: '',
+              licence_ref: recipients.licenceHolder.licence_refs,
+              monitoring_station_name: 'Death star',
+              source: '',
+              threshold_unit: 'm',
+              threshold_value: 1000
             }
           }
         ])
