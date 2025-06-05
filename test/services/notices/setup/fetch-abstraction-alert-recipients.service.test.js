@@ -233,7 +233,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   describe('and there are recipients related to multiple licence refs', () => {
     beforeEach(async () => {
       session = {
-        licenceRefs: [recipients.primaryUser.licenceRef]
+        licenceRefs: [recipients.primaryUser.licenceRef, recipients.licenceHolder.licenceRef]
       }
 
       const licenceDocument = await LicenceDocumentHelper.add({
@@ -245,27 +245,28 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         lastName: 'Burgundy',
         email: 'Ron.Burgundy@news.com'
       })
+
+      const licenceDocument2 = await LicenceDocumentHelper.add({
+        licenceRef: recipients.licenceHolder.licenceRef
+      })
+
+      await _additionalContact(licenceDocument2, {
+        firstName: 'Ron',
+        lastName: 'Burgundy',
+        email: 'Ron.Burgundy@news.com'
+      })
     })
 
-    it('correctly returns the "additional contact" and the "primary user"', async () => {
+    it('correctly returns the "additional contact" with multiple licence refs', async () => {
       const result = await FetchAbstractionAlertRecipientsService.go(session)
 
-      expect(result).to.equal([
-        {
-          contact: null,
-          contact_hash_id: 'c661b771974504933d79ca64249570d0',
-          contact_type: 'Additional contact',
-          email: 'Ron.Burgundy@news.com',
-          licence_refs: recipients.primaryUser.licenceRef
-        },
-        {
-          licence_refs: recipients.primaryUser.licenceRef,
-          contact: null,
-          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-          contact_type: 'Primary user',
-          email: 'primary.user@important.com'
-        }
-      ])
+      expect(result[0]).to.equal({
+        contact: null,
+        contact_hash_id: 'c661b771974504933d79ca64249570d0',
+        contact_type: 'Additional contact',
+        email: 'Ron.Burgundy@news.com',
+        licence_refs: `${recipients.primaryUser.licenceRef},${recipients.licenceHolder.licenceRef}`
+      })
     })
   })
 })
