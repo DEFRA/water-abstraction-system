@@ -21,7 +21,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
 
   beforeEach(() => {
     payload = { 'alert-type': 'stop' }
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+    sessionData = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {

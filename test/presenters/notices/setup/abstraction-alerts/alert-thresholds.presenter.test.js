@@ -14,20 +14,16 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 const AlertThresholdsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
 
 describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () => {
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationThree
-  let licenceMonitoringStationTwo
+  let licenceMonitoringStations
   let session
 
   beforeEach(() => {
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
+
     session = {
-      ...AbstractionAlertSessionData.monitoringStation(),
+      ...AbstractionAlertSessionData.get(licenceMonitoringStations),
       alertType: 'stop'
     }
-
-    licenceMonitoringStationOne = session.licenceMonitoringStations[0].thresholdGroup
-    licenceMonitoringStationTwo = session.licenceMonitoringStations[1].thresholdGroup
-    licenceMonitoringStationThree = session.licenceMonitoringStations[2].thresholdGroup
   })
 
   describe('when called', () => {
@@ -45,7 +41,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               text: 'Flow threshold'
             },
             text: '100 m3/s',
-            value: licenceMonitoringStationTwo
+            value: licenceMonitoringStations.two.thresholdGroup
           },
           {
             checked: false,
@@ -53,7 +49,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               text: 'Level threshold'
             },
             text: '100 m',
-            value: licenceMonitoringStationThree
+            value: licenceMonitoringStations.three.thresholdGroup
           }
         ]
       })
@@ -62,11 +58,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
     describe('the "thresholdOptions" property', () => {
       describe('when there are already selected thresholds', () => {
         beforeEach(() => {
-          session = {
-            ...AbstractionAlertSessionData.monitoringStation(),
-            alertThresholds: [licenceMonitoringStationTwo],
-            alertType: 'stop'
-          }
+          session.alertThresholds = [licenceMonitoringStations.two.thresholdGroup]
         })
 
         it('returns page data for the view, with the thresholds checked', () => {
@@ -75,13 +67,13 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           expect(result.thresholdOptions).to.equal([
             {
               checked: true,
-              value: licenceMonitoringStationTwo,
+              value: licenceMonitoringStations.two.thresholdGroup,
               text: '100 m3/s',
               hint: { text: 'Flow threshold' }
             },
             {
               checked: false,
-              value: licenceMonitoringStationThree,
+              value: licenceMonitoringStations.three.thresholdGroup,
               text: '100 m',
               hint: { text: 'Level threshold' }
             }
@@ -91,10 +83,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
       describe('and the "alertType" is "stop" ', () => {
         beforeEach(() => {
-          session = {
-            ...AbstractionAlertSessionData.monitoringStation(),
-            alertType: 'stop'
-          }
+          session.alertType = 'stop'
         })
 
         it('returns page data for the view, with only the thresholds with stop restrictions', () => {
@@ -103,13 +92,13 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           expect(result.thresholdOptions).to.equal([
             {
               checked: false,
-              value: licenceMonitoringStationTwo,
+              value: licenceMonitoringStations.two.thresholdGroup,
               text: '100 m3/s',
               hint: { text: 'Flow threshold' }
             },
             {
               checked: false,
-              value: licenceMonitoringStationThree,
+              value: licenceMonitoringStations.three.thresholdGroup,
               text: '100 m',
               hint: { text: 'Level threshold' }
             }
@@ -118,25 +107,25 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
         describe('and a licence monitoring station is "stop_or_reduce" ', () => {
           beforeEach(() => {
-            session.licenceMonitoringStations[1].responseType = 'stop_or_reduce'
-            session.licenceMonitoringStations[2].responseType = 'stop'
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'stop'
+            }
           })
 
-          it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
+          it('returns page data for the view, with only the thresholds with stop restrictions', () => {
             const result = AlertThresholdsPresenter.go(session)
 
             expect(result.thresholdOptions).to.equal([
               {
                 checked: false,
-                value: licenceMonitoringStationTwo,
+                hint: { text: 'Flow threshold' },
                 text: '100 m3/s',
-                hint: { text: 'Flow threshold' }
-              },
-              {
-                checked: false,
-                value: licenceMonitoringStationThree,
-                text: '100 m',
-                hint: { text: 'Level threshold' }
+                value: licenceMonitoringStations.two.thresholdGroup
               }
             ])
           })
@@ -145,10 +134,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
       describe('and the "alertType" is "reduce" ', () => {
         beforeEach(() => {
-          session = {
-            ...AbstractionAlertSessionData.monitoringStation(),
-            alertType: 'reduce'
-          }
+          session.alertType = 'reduce'
         })
 
         it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
@@ -157,19 +143,52 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           expect(result.thresholdOptions).to.equal([
             {
               checked: false,
-              value: licenceMonitoringStationOne,
+              value: licenceMonitoringStations.one.thresholdGroup,
               text: '1000 m',
               hint: { text: 'Level threshold' }
             }
           ])
         })
+
+        describe('and a licence monitoring station is "stop_or_reduce" ', () => {
+          beforeEach(() => {
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'reduce'
+            }
+          })
+
+          it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
+            const result = AlertThresholdsPresenter.go(session)
+
+            expect(result.thresholdOptions).to.equal([
+              // reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '1000 m',
+                value: licenceMonitoringStations.one.thresholdGroup
+              },
+              // stop_or_reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '100 m',
+                value: licenceMonitoringStations.three.thresholdGroup
+              }
+            ])
+          })
+        })
       })
 
       describe('"and the alert type is not "stop" or "reduce"', () => {
         beforeEach(() => {
-          session = {
-            ...AbstractionAlertSessionData.monitoringStation()
-          }
+          // This could be 'resume' or 'warning'
+          delete session.alertType
         })
 
         it('returns page data for the view, with all the thresholds', () => {
@@ -178,19 +197,19 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           expect(result.thresholdOptions).to.equal([
             {
               checked: false,
-              value: licenceMonitoringStationOne,
+              value: licenceMonitoringStations.one.thresholdGroup,
               text: '1000 m',
               hint: { text: 'Level threshold' }
             },
             {
               checked: false,
-              value: licenceMonitoringStationTwo,
+              value: licenceMonitoringStations.two.thresholdGroup,
               text: '100 m3/s',
               hint: { text: 'Flow threshold' }
             },
             {
               checked: false,
-              value: licenceMonitoringStationThree,
+              value: licenceMonitoringStations.three.thresholdGroup,
               text: '100 m',
               hint: { text: 'Level threshold' }
             }
