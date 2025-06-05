@@ -66,18 +66,9 @@ describe('Notices - Setup - Download recipients service', () => {
 
         testRecipients = [...Object.values(recipients)]
 
-        const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
-
-        const licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-        const relevantLicenceMonitoringStations = [
-          {
-            ...licenceMonitoringStationTwo,
-            licence: {
-              licenceRef: recipients.licenceHolder.licence_refs
-            }
-          }
-        ]
+        const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+          recipients.licenceHolder.licence_refs
+        ])
 
         referenceCode = 'WAA-123'
 
