@@ -29,7 +29,7 @@ describe('Submit Alert Email Address Service', () => {
       }
     }
     payload = { alertEmailAddress: 'saved-email-address' }
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+    sessionData = AbstractionAlertSessionData.get()
 
     session = await SessionHelper.add({ data: sessionData })
   })
