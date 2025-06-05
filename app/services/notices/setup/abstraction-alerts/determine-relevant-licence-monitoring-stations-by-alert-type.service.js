@@ -31,11 +31,13 @@
 function go(licenceMonitoringStations, alertType) {
   if (alertType === 'stop') {
     return _stop(licenceMonitoringStations, alertType)
-  } else if (alertType === 'reduce') {
-    return _reduce(licenceMonitoringStations, alertType)
-  } else {
-    return licenceMonitoringStations
   }
+
+  if (alertType === 'reduce') {
+    return _reduce(licenceMonitoringStations, alertType)
+  }
+
+  return licenceMonitoringStations
 }
 
 function _reduce(licenceMonitoringStations, alertType) {
