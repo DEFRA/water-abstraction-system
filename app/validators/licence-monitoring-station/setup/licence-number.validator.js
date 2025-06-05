@@ -27,7 +27,7 @@ function go(payload, licenceExists) {
         return _licenceExists(value, helpers, licenceExists)
       }, 'Custom Licence Validation')
       .messages({
-        invalidLicence: 'Enter a valid licence number',
+        invalidLicence: 'Licence could not be found',
         'any.required': ENTER_A_LICENCE_NUMBER_ERROR,
         'any.only': ENTER_A_LICENCE_NUMBER_ERROR,
         'string.empty': ENTER_A_LICENCE_NUMBER_ERROR
