@@ -63,7 +63,7 @@ describe('Monitoring Stations - View presenter', () => {
 
   describe('when provided with the result of the fetch monitoring service', () => {
     it('correctly presents the data', () => {
-      const result = ViewPresenter.go(monitoringStation, auth)
+      const result = ViewPresenter.go(auth, monitoringStation)
 
       expect(result).to.equal({
         catchmentName: null,
@@ -103,7 +103,7 @@ describe('Monitoring Stations - View presenter', () => {
   describe('the "gridReference" property', () => {
     describe('when a monitoring station has a grid reference', () => {
       it('returns the grid reference', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.gridReference).to.equal('TL2664640047')
       })
@@ -115,7 +115,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns an empty string', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.gridReference).to.equal('')
       })
@@ -126,7 +126,7 @@ describe('Monitoring Stations - View presenter', () => {
     describe('when the link is "createAlert" ', () => {
       describe('and the "enableMonitoringStationsAlertNotifications" flag  is true', () => {
         it('returns the link', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
+          const result = ViewPresenter.go(auth, monitoringStation)
 
           expect(result.links.createAlert).to.equal(
             `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
@@ -140,7 +140,7 @@ describe('Monitoring Stations - View presenter', () => {
         })
 
         it('returns the legacy link', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
+          const result = ViewPresenter.go(auth, monitoringStation)
 
           expect(result.links.createAlert).to.equal(
             `/monitoring-stations/${monitoringStation.id}/send-alert/alert-type`
@@ -157,7 +157,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns the river name followed by the monitoring station name', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.pageTitle).to.equal('Test river at BUSY POINT')
       })
@@ -165,7 +165,7 @@ describe('Monitoring Stations - View presenter', () => {
 
     describe('when a monitoring station does not have an associated river', () => {
       it('returns just the monitoring station name', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.pageTitle).to.equal('BUSY POINT')
       })
@@ -175,7 +175,7 @@ describe('Monitoring Stations - View presenter', () => {
   describe('the "permissionToManageLinks" property', () => {
     describe('when a user has the "manage_gauging_station_licence_links" role', () => {
       it('returns true for "permissionToManageLinks"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.permissionToManageLinks).to.equal(true)
       })
@@ -187,7 +187,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns false for "permissionToManageLinks"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.permissionToManageLinks).to.equal(false)
       })
@@ -197,7 +197,7 @@ describe('Monitoring Stations - View presenter', () => {
   describe('the "permissionToSendAlerts" property', () => {
     describe('when a user has the "hof_notifications" role', () => {
       it('returns true for "permissionToSendAlerts"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.permissionToSendAlerts).to.equal(true)
       })
@@ -209,7 +209,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns false for "permissionToSendAlerts"', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.permissionToSendAlerts).to.equal(false)
       })
@@ -220,7 +220,7 @@ describe('Monitoring Stations - View presenter', () => {
     describe('the "abstractionPeriod" property', () => {
       describe('when the licence monitoring station record is not linked to a licence condition', () => {
         it('returns the abstraction period set when the licence was tagged formatted for display', () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
+          const result = ViewPresenter.go(auth, monitoringStation)
 
           expect(result.restrictions[0].abstractionPeriod).to.equal('1 April to 31 August')
         })
@@ -241,7 +241,7 @@ describe('Monitoring Stations - View presenter', () => {
         })
 
         it("returns the abstraction period from the condition's licence purpose formatted for display", () => {
-          const result = ViewPresenter.go(monitoringStation, auth)
+          const result = ViewPresenter.go(auth, monitoringStation)
 
           expect(result.restrictions[0].abstractionPeriod).to.equal('1 September to 31 December')
         })
@@ -256,7 +256,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns the station reference', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.stationReference).to.equal('STN12345')
       })
@@ -264,7 +264,7 @@ describe('Monitoring Stations - View presenter', () => {
 
     describe('when a monitoring station does not have a station reference', () => {
       it('returns an empty string', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.stationReference).to.equal('')
       })
@@ -278,7 +278,7 @@ describe('Monitoring Stations - View presenter', () => {
       })
 
       it('returns the WSKI Id', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.wiskiId).to.equal('WSK12345')
       })
@@ -286,7 +286,7 @@ describe('Monitoring Stations - View presenter', () => {
 
     describe('when a monitoring station does not have a WSKI Id', () => {
       it('returns an empty string', () => {
-        const result = ViewPresenter.go(monitoringStation, auth)
+        const result = ViewPresenter.go(auth, monitoringStation)
 
         expect(result.wiskiId).to.equal('')
       })

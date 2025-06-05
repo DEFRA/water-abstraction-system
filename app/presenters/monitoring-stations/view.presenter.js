@@ -25,13 +25,13 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  * licence condition need to display the abstraction period on the associated licence purpose. Else the user will have
  * add an abstraction period against the licence monitoring station record when they tagged it.
  *
+ * @param {object} auth - The auth object taken from `request.auth`
  * @param {module:MonitoringStationModel} monitoringStation - The monitoring station and associated licence monitoring
  * station data
- * @param {object} auth - The auth object taken from `request.auth`
  *
  * @returns {object} page data needed by the view template
  */
-function go(monitoringStation, auth) {
+function go(auth, monitoringStation) {
   const {
     id: monitoringStationId,
     catchmentName,

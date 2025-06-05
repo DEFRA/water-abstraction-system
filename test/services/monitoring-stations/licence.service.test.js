@@ -61,6 +61,7 @@ describe('Monitoring Stations - Licence service', () => {
           {
             created: 'Created on 23 April 2025 by environment.officer@wrls.gov.uk',
             effectOfRestriction: null,
+            licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
             licenceVersionStatus: null,
             linkedCondition: 'Not linked to a condition',
             tag: 'Reduce tag',
