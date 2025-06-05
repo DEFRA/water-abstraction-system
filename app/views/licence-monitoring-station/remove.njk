@@ -63,6 +63,8 @@
 
   {# "Remove tag" button #}
   <form method="post">
+    <input type="hidden" name="licenceRef" value="{{licenceRef}}"/>
+    <input type="hidden" name="monitoringStationId" value="{{monitoringStationId}}"/>
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
       {{ govukButton({
         text: "Remove tag",

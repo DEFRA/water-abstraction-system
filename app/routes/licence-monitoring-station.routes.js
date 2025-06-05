@@ -14,6 +14,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/{licenceMonitoringStationId}/remove',
+    options: {
+      handler: LicenceMonitoringStationController.submitRemove,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
   }
 ]
 

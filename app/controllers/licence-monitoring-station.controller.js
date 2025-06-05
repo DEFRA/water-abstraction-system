@@ -6,6 +6,7 @@
  */
 
 const RemoveService = require('../services/licence-monitoring-station/remove.service.js')
+const SubmitRemoveService = require('../services/licence-monitoring-station/submit-remove.service.js')
 
 async function remove(request, h) {
   const { licenceMonitoringStationId } = request.params
@@ -15,6 +16,16 @@ async function remove(request, h) {
   return h.view('licence-monitoring-station/remove.njk', pageData)
 }
 
+async function submitRemove(request, h) {
+  const { licenceMonitoringStationId } = request.params
+  const { licenceRef, monitoringStationId } = request.payload
+
+  await SubmitRemoveService.go(licenceMonitoringStationId, licenceRef, request.yar)
+
+  return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
+}
+
 module.exports = {
-  remove
+  remove,
+  submitRemove
 }

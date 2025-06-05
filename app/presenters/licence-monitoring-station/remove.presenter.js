@@ -31,6 +31,7 @@ function go(licenceMonitoringStation) {
     licenceConditionTitle: `Hands off ${measureType} threshold`,
     licenceRef: licence.licenceRef,
     linkedCondition: _linkedConditionDetails(licenceVersionPurposeCondition),
+    monitoringStationId: monitoringStation.id,
     pageTitle: 'You’re about to remove the tag for this licence',
     station: _monitoringStationName(monitoringStation),
     threshold: `${thresholdValue}${thresholdUnit}`,
