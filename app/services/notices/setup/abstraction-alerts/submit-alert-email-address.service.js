@@ -72,12 +72,12 @@ function _validate(payload) {
     return null
   }
 
-  const { message, path } = validation.error.details[0]
+  const { message, context } = validation.error.details[0]
 
   return {
     text: message,
-    radioFormError: path[0] === 'alertEmailAddress' ? { text: message } : null,
-    emailAddressInputFormError: path[0] === 'otherUser' ? { text: message } : null
+    radioFormError: context.label === 'alertEmailAddress' ? { text: message } : null,
+    emailAddressInputFormError: context.label === 'otherUser' ? { text: message } : null
   }
 }
 
