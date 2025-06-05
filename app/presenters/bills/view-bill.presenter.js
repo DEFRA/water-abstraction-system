@@ -8,6 +8,8 @@
 const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = require('../billing.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
  *
@@ -25,6 +27,7 @@ function go(bill, billingAccount) {
     accountNumber: billingAccount.accountNumber,
     addressLines: billingAccount.$addressLines(),
     billId: bill.id,
+    billingAccountLink: _billingAccountLink(billingAccount.id),
     billingAccountId: billingAccount.id,
     billNumber: bill.invoiceNumber,
     billRunId: billRun.id,
@@ -48,6 +51,14 @@ function go(bill, billingAccount) {
   }
 
   return formattedBill
+}
+
+function _billingAccountLink(billingAccountId) {
+  if (FeatureFlagsConfig.enableBillingAccountView) {
+    return `/system/billing-accounts/${billingAccountId}`
+  }
+
+  return `/billing-accounts/${billingAccountId}`
 }
 
 function _creditsTotal(bill, billRun) {

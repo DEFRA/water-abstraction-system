@@ -17,7 +17,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Presenter', () => {
   let sessionData
 
   beforeEach(async () => {
-    sessionData = AbstractionAlertSessionData.monitoringStation()
+    sessionData = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {

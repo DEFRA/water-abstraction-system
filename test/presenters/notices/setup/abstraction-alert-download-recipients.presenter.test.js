@@ -18,33 +18,16 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
   let session
   let recipients
   let testRecipients
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationTwo
 
   beforeEach(() => {
     recipients = RecipientsFixture.alertsRecipients()
 
     testRecipients = [...Object.values(recipients)]
 
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
-
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-    const relevantLicenceMonitoringStations = [
-      {
-        ...licenceMonitoringStationOne,
-        licence: {
-          licenceRef: recipients.primaryUser.licence_refs
-        }
-      },
-      {
-        ...licenceMonitoringStationTwo,
-        licence: {
-          licenceRef: recipients.licenceHolder.licence_refs
-        }
-      }
-    ]
+    const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      recipients.primaryUser.licence_refs,
+      recipients.licenceHolder.licence_refs
+    ])
 
     session = {
       relevantLicenceMonitoringStations,

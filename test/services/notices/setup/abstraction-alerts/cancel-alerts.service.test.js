@@ -20,7 +20,7 @@ describe('Cancel Alerts Service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      ...AbstractionAlertSessionData.monitoringStation(),
+      ...AbstractionAlertSessionData.get(),
       alertType: 'resume'
     }
 

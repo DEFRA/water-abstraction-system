@@ -62,6 +62,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
+    options: {
+      handler: LicenceMonitoringStationSetupController.licenceNumber,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitLicenceNumber,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
   }
 ]
 
