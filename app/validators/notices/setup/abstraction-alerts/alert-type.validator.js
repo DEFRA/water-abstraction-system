@@ -7,6 +7,7 @@
  */
 
 const Joi = require('joi')
+const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 
 const errorMessage = 'Select the type of alert you need to send'
 
@@ -20,14 +21,14 @@ const errorMessage = 'Select the type of alert you need to send'
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, licenceMonitoringStations) {
-  const restrictionTypes = _availableRestrictionType(licenceMonitoringStations)
-
   const schema = Joi.object({
-    'alert-type': Joi.valid(...restrictionTypes)
-      .required()
+    'alert-type': Joi.required()
+      .custom((value, helpers) => {
+        return _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations)
+      }, 'Custom Alert Type Validation')
       .messages({
         'any.required': errorMessage,
-        'any.only': `There are no thresholds with the {#value} restriction type, ${errorMessage}`
+        customAlertType: `There are no thresholds with the {{#value}} restriction type, ${errorMessage}`
       })
   })
 
@@ -35,26 +36,64 @@ function go(payload, licenceMonitoringStations) {
 }
 
 /**
- * Returns a list of available alert types based on the restriction types
- * found in the provided licence monitoring stations.
+ * We need to check if the chosen alert type has any matching licence monitoring station with the matching restriction
+ * type.
  *
- * If at least one restriction type is 'stop_or_reduce' then all the alert types are valid.
- *
- * Includes the default alert types: 'warning' and 'resume'
- * followed by any additional restriction types extracted from the input.
+ * This is not straight forwards, and we have created a shared place to handle the logic in
+ * DetermineRelevantLicenceMonitoringStationsByAlertTypeService
  *
  * @private
  */
-function _availableRestrictionType(licenceMonitoringStations) {
-  const restrictionTypes = licenceMonitoringStations.map((licenceMonitoringStation) => {
+function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations) {
+  const availableTypes = _availableRestrictionType(licenceMonitoringStations, value)
+
+  const errorMsg = `There are no thresholds with the ${value} restriction type, ${errorMessage}`
+
+  if (availableTypes.length === 0 || !availableTypes.includes(value)) {
+    return helpers.error('customAlertType', {
+      message: errorMsg
+    })
+  }
+
+  return value
+}
+
+/**
+ * Returns a list of available alert types based on the restriction types
+ * found in the provided licence monitoring stations.
+ *
+ * When there are no licence monitoring stations with where the alert type matches the restriction type then there are
+ * no valid options to available. This is unlikely, as to get to this state there must be some sort of restriction type.
+ *
+ * When there is a restriction type of 'stop_or_reduce' then that is considered a 'reduce' alert type for validation.
+ *
+ * We do not have a 1:1 map with the alert types. In fact only 'stop' and 'reduce' match. This means the 'warning' and
+ * 'resume' alert type have no corresponding restriction type. When this is the case all licence monitoring stations are
+ * valid and show for theses alert types.k
+ *
+ * @private
+ */
+function _availableRestrictionType(licenceMonitoringStations, alertType) {
+  const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+    licenceMonitoringStations,
+    alertType
+  )
+
+  const restrictionTypes = relevantLicenceMonitoringStation.map((licenceMonitoringStation) => {
     return licenceMonitoringStation.restrictionType
   })
 
-  if (restrictionTypes.includes('stop_or_reduce')) {
-    return ['warning', 'resume', 'stop', 'reduce']
+  if (restrictionTypes.length === 0) {
+    return []
   }
 
-  return ['warning', 'resume', ...restrictionTypes]
+  const types = new Set(['warning', 'resume', ...restrictionTypes])
+
+  if (restrictionTypes.includes('stop_or_reduce')) {
+    types.add('reduce')
+  }
+
+  return Array.from(types)
 }
 
 module.exports = {

@@ -107,25 +107,25 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
         describe('and a licence monitoring station is "stop_or_reduce" ', () => {
           beforeEach(() => {
-            licenceMonitoringStations.two.responseType = 'stop_or_reduce'
-            licenceMonitoringStations.three.responseType = 'stop'
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'stop'
+            }
           })
 
-          it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
+          it('returns page data for the view, with only the thresholds with stop restrictions', () => {
             const result = AlertThresholdsPresenter.go(session)
 
             expect(result.thresholdOptions).to.equal([
               {
                 checked: false,
-                value: licenceMonitoringStations.two.thresholdGroup,
+                hint: { text: 'Flow threshold' },
                 text: '100 m3/s',
-                hint: { text: 'Flow threshold' }
-              },
-              {
-                checked: false,
-                value: licenceMonitoringStations.three.thresholdGroup,
-                text: '100 m',
-                hint: { text: 'Level threshold' }
+                value: licenceMonitoringStations.two.thresholdGroup
               }
             ])
           })
@@ -148,6 +148,40 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               hint: { text: 'Level threshold' }
             }
           ])
+        })
+
+        describe('and a licence monitoring station is "stop_or_reduce" ', () => {
+          beforeEach(() => {
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'reduce'
+            }
+          })
+
+          it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
+            const result = AlertThresholdsPresenter.go(session)
+
+            expect(result.thresholdOptions).to.equal([
+              // reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '1000 m',
+                value: licenceMonitoringStations.one.thresholdGroup
+              },
+              // stop_or_reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '100 m',
+                value: licenceMonitoringStations.three.thresholdGroup
+              }
+            ])
+          })
         })
       })
 
