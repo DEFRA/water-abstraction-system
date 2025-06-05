@@ -37,6 +37,8 @@ describe('Alert Email Address Service', () => {
       const result = await AlertEmailAddressService.go(session.id, auth)
 
       expect(result).to.equal({
+        anchor: null,
+        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
         caption: 'Death star',
         pageTitle: 'Select an email address to include in the alerts',
         username: 'admin@defra.gov.uk'
