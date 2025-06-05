@@ -22,6 +22,13 @@ const ViewPresenter = require('../../presenters/notices/view.presenter.js')
 async function go(id, page) {
   const notices = await FetchNoticeService.go(id, page)
 
+  if (!notices) {
+    return {
+      activeNavBar: 'manage',
+      pageTitle: _pageTitle()
+    }
+  }
+
   const { results } = notices
   const selectedPageNumber = page ? Number(page) : 1
   const defaultPageSize = DatabaseConfig.defaultPageSize
@@ -32,6 +39,7 @@ async function go(id, page) {
   const pageData = ViewPresenter.go(notices, page)
 
   return {
+    activeNavBar: 'manage',
     ...pageData,
     numberOfRecipients: results.length,
     numberShowing,
@@ -42,6 +50,7 @@ async function go(id, page) {
 }
 
 function _pageTitle(subtype) {
+  console.log('subtype', subtype)
   if (subtype === 'returnInvitation') {
     return 'Returns invitations'
   }

@@ -11,7 +11,6 @@ const { expect } = Code
 const EventHelper = require('../../support/helpers/event.helper.js')
 const EventModel = require('../../../app/models/event.model.js')
 const ScheduledNotificationHelper = require('../../support/helpers/scheduled-notification.helper.js')
-const ScheduledNotificationModel = require('../../../app/models/scheduled-notification.model.js')
 
 // Thing under test
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
@@ -37,7 +36,6 @@ describe('Notices - Fetch Notice service', () => {
       })
       testScheduledNotification = await ScheduledNotificationHelper.add({
         messageType: 'letter',
-        messageRef: 'returns_invitation_licence_holder_letter',
         personalisation: {
           postcode: 'SW1 2AN',
           address_line_1: 'Water company',
@@ -54,24 +52,26 @@ describe('Notices - Fetch Notice service', () => {
     it('fetches the matching notice', async () => {
       const result = await FetchNoticeService.go(testEvent.id)
 
-      expect(result.results).to.contain(
-        ScheduledNotificationModel.fromJson({
-          messageType: testScheduledNotification.messageType,
-          messageRef: testScheduledNotification.messageRef,
-          personalisation: testScheduledNotification.personalisation,
-          status: testScheduledNotification.status,
-          licences: "['03/TST/23']",
-          recipient: null,
-          event: EventModel.fromJson({
-            id: testEvent.id,
-            referenceCode: testEvent.referenceCode,
-            issuer: testEvent.issuer,
-            createdAt: testEvent.createdAt,
-            status: 'sent',
-            subtype: 'returnReminder'
-          })
-        })
-      )
+      expect(result).to.contain({
+        event: EventModel.fromJson({
+          id: testEvent.id,
+          referenceCode: testEvent.referenceCode,
+          issuer: testEvent.issuer,
+          createdAt: testEvent.createdAt,
+          status: 'sent',
+          subtype: 'returnReminder'
+        }),
+        results: [
+          {
+            recipient_name: 'Water company',
+            message_type: testScheduledNotification.messageType,
+            personalisation: testScheduledNotification.personalisation,
+            status: testScheduledNotification.status,
+            licences: "['03/TST/23']",
+            recipient: null
+          }
+        ]
+      })
     })
   })
 
@@ -79,7 +79,7 @@ describe('Notices - Fetch Notice service', () => {
     it('returns an empty array', async () => {
       const result = await FetchNoticeService.go('03bded61-9e68-4c57-a2fc-811c580efb44')
 
-      expect(result.results).to.equal([])
+      expect(result).to.equal(undefined)
     })
   })
 })

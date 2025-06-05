@@ -7,9 +7,6 @@
 
 const { db } = require('../../../db/db.js')
 const EventModel = require('../../models/event.model.js')
-const ScheduledNotification = require('../../models/scheduled-notification.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches the notice for the 'notices/{id}' page
@@ -20,24 +17,20 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object[]>} an array of matching notices
  */
 async function go(id, page = 1) {
-  const event = await EventModel.query().findById(id)
+  const event = await EventModel.query()
+    .findById(id)
     .select(['id', 'referenceCode', 'issuer', 'createdAt', 'status', 'subtype'])
+
+  if (!event) {
+    return undefined
+  }
+
   const scheduledNotifications = await _query(id, page)
 
-  // ScheduledNotification.query()
-  //   .where('eventId', id)
-  //   .select(['messageType', 'messageRef', 'personalisation', 'recipient', 'status', 'licences'])
-  //   .withGraphFetched('event')
-  //   .modifyGraph('event', (builder) => {
-  //     builder.select(['id', 'referenceCode', 'issuer', 'createdAt', 'status', 'subtype'])
-  //   })
-  //   .orderBy('id', 'desc')
-  //   .debug()
-
-    return {
-      event,
-      results: scheduledNotifications.rows
-    }
+  return {
+    event,
+    results: scheduledNotifications.rows
+  }
 }
 
 function _query(id, page) {
@@ -50,7 +43,6 @@ function _query(id, page) {
       END) AS recipient_name,
       sn.licences,
       sn.message_type,
-      sn.message_ref,
       sn.personalisation,
       sn.recipient,
       sn.status
