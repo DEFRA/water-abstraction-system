@@ -70,7 +70,7 @@ describe('Monitoring Stations - View service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewService.go(monitoringStation.id, auth)
+      const result = await ViewService.go(auth, monitoringStation.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -114,7 +114,7 @@ describe('Monitoring Stations - View service', () => {
     })
 
     it('returns the link for the legacy water abstraction alert page', async () => {
-      const result = await ViewService.go(monitoringStation.id, auth)
+      const result = await ViewService.go(auth, monitoringStation.id)
 
       expect(result.links).to.equal({
         createAlert: `/monitoring-stations/${monitoringStation.id}/send-alert/alert-type`

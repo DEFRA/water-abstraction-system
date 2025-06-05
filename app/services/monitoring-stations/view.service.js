@@ -11,16 +11,16 @@ const ViewPresenter = require('../../presenters/monitoring-stations/view.present
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  *
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} monitoringStationId - The UUID for the monitoring station
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(monitoringStationId, yar, auth) {
+async function go(auth, monitoringStationId, yar) {
   const monitoringStation = await FetchMonitoringStationService.go(monitoringStationId)
 
-  const pageData = ViewPresenter.go(monitoringStation, auth)
+  const pageData = ViewPresenter.go(auth, monitoringStation)
 
   const notification = yar.flash('notification')[0]
 
