@@ -29,7 +29,6 @@ describe('Alert Email Address Presenter', () => {
 
     validationResult = null
     session = AbstractionAlertSessionData.get()
-
   })
 
   describe('when called', () => {

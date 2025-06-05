@@ -28,7 +28,7 @@ describe('Submit Alert Email Address Service', () => {
         }
       }
     }
-    
+
     payload = { alertEmailAddress: 'username' }
     sessionData = AbstractionAlertSessionData.get()
 
