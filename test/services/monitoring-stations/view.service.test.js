@@ -15,9 +15,10 @@ const FetchMonitoringStationService = require('../../../app/services/monitoring-
 // Thing under test
 const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
 
-describe('Monitoring Stations - View service', () => {
+describe.only('Monitoring Stations - View service', () => {
   let auth
   let monitoringStation
+  let yarStub
 
   beforeEach(() => {
     Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
@@ -59,6 +60,7 @@ describe('Monitoring Stations - View service', () => {
         }
       ]
     }
+    yarStub = { flash: Sinon.stub().returns(['Tag removed for 99/999/9999']) }
 
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(true)
     Sinon.stub(FetchMonitoringStationService, 'go').resolves(monitoringStation)
@@ -70,7 +72,7 @@ describe('Monitoring Stations - View service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewService.go(auth, monitoringStation.id)
+      const result = await ViewService.go(auth, monitoringStation.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -81,6 +83,7 @@ describe('Monitoring Stations - View service', () => {
           createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
         },
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
+        notification: 'Tag removed for 99/999/9999',
         pageTitle: 'BUSY POINT',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
@@ -114,7 +117,7 @@ describe('Monitoring Stations - View service', () => {
     })
 
     it('returns the link for the legacy water abstraction alert page', async () => {
-      const result = await ViewService.go(auth, monitoringStation.id)
+      const result = await ViewService.go(auth, monitoringStation.id, yarStub)
 
       expect(result.links).to.equal({
         createAlert: `/monitoring-stations/${monitoringStation.id}/send-alert/alert-type`
