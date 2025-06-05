@@ -229,6 +229,45 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       })
     })
   })
+
+  describe('and there are recipients related to multiple licence refs', () => {
+    beforeEach(async () => {
+      session = {
+        licenceRefs: [recipients.primaryUser.licenceRef]
+      }
+
+      const licenceDocument = await LicenceDocumentHelper.add({
+        licenceRef: recipients.primaryUser.licenceRef
+      })
+
+      await _additionalContact(licenceDocument, {
+        firstName: 'Ron',
+        lastName: 'Burgundy',
+        email: 'Ron.Burgundy@news.com'
+      })
+    })
+
+    it('correctly returns the "additional contact" and the "primary user"', async () => {
+      const result = await FetchAbstractionAlertRecipientsService.go(session)
+
+      expect(result).to.equal([
+        {
+          contact: null,
+          contact_hash_id: 'c661b771974504933d79ca64249570d0',
+          contact_type: 'Additional contact',
+          email: 'Ron.Burgundy@news.com',
+          licence_refs: recipients.primaryUser.licenceRef
+        },
+        {
+          licence_refs: recipients.primaryUser.licenceRef,
+          contact: null,
+          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+          contact_type: 'Primary user',
+          email: 'primary.user@important.com'
+        }
+      ])
+    })
+  })
 })
 
 async function _additionalContact(licenceDocument, contact) {

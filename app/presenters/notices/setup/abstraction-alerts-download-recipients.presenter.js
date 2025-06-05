@@ -69,11 +69,27 @@ function _address(contact) {
   ]
 }
 
-function _row(matchingRecipient, licenceMonitoringStation, notificationType) {
+/**
+ * Matches a recipient to a licence nomonitoring station by the licence ref.
+ *
+ * 'recipient.licence_refs' will be a comma seperated sting: 'licenceOne,licenceTwo'.
+ *
+ * To match a recipient to a licence monitoring station we use the 'licenceMonitoringStationLicenceRef' and check if the
+ * licence ref is present in the 'recipient.licence_refs' string.
+ *
+ * @private
+ */
+function _matchingRecipient(recipients, licenceMonitoringStationLicenceRef) {
+  return recipients.filter((recipient) => {
+    return recipient.licence_refs.split(',').includes(licenceMonitoringStationLicenceRef)
+  })
+}
+
+function _row(matchingRecipient, licenceMonitoringStation, notificationType, licenceRef) {
   const { contact } = matchingRecipient
 
   return [
-    matchingRecipient.licence_refs,
+    licenceRef,
     formatAbstractionPeriod(
       licenceMonitoringStation.abstractionPeriodStartDay,
       licenceMonitoringStation.abstractionPeriodStartMonth,
@@ -96,6 +112,13 @@ function _row(matchingRecipient, licenceMonitoringStation, notificationType) {
  *
  * The order of the properties must match the CSV header order.
  *
+ * A recipient could belong to multiple licences. When this happens we receive the 'licence_refs' in a comma seperated
+ * sting: 'licenceOne,licenceTwo'. The '_matchingRecipient' explains how we match the recipients.
+ *
+ * When we transform the recipient to a download row we only want to show a single licence ref, this means we use the
+ * licence monitoring stations licence ref which has been matched to the string above. This simplifies the code, but
+ * is a subtle change worth documenting.
+ *
  * @private
  */
 function _transformToCsv(recipients, session) {
@@ -104,12 +127,17 @@ function _transformToCsv(recipients, session) {
   const rows = []
 
   for (const licenceMonitoringStation of relevantLicenceMonitoringStations) {
-    const matchingRecipients = recipients.filter((recipient) => {
-      return recipient.licence_refs === licenceMonitoringStation.licence.licenceRef
-    })
+    const licenceMonitoringStationLicenceRef = licenceMonitoringStation.licence.licenceRef
+
+    const matchingRecipients = _matchingRecipient(recipients, licenceMonitoringStationLicenceRef)
 
     for (const matchingRecipient of matchingRecipients) {
-      const row = _row(matchingRecipient, licenceMonitoringStation, notificationType)
+      const row = _row(
+        matchingRecipient,
+        licenceMonitoringStation,
+        notificationType,
+        licenceMonitoringStationLicenceRef
+      )
 
       rows.push(transformArrayToCSVRow(row))
     }
