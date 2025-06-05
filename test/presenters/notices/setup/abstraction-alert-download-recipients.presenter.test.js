@@ -196,9 +196,9 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
         }
       ]
 
-      const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
+      const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
-      licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
+      const licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
 
       const relevantLicenceMonitoringStations = [
         {
