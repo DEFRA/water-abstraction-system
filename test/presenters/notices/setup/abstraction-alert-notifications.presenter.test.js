@@ -428,7 +428,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       expect(result.personalisation).to.equal({
         condition_text: '',
         flow_or_level: 'level',
-        issuer_email_address: '',
+        issuer_email_address: 'luke.skywalker@rebelmail.test',
         licence_ref: recipients.primaryUser.licence_refs,
         monitoring_station_name: 'Death star',
         source: '* Source of supply: Meridian Trench',
