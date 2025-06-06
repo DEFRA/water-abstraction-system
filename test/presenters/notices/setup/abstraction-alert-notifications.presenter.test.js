@@ -16,8 +16,8 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const AbstractionAlertsNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
 
 describe('Notices - Setup - Abstraction alert notifications presenter', () => {
-  const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+  const referenceCode = 'TEST-123'
 
   let clock
   let recipients
@@ -40,7 +40,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       ...abstractionAlertSessionData,
       journey: 'abstraction-alerts',
       referenceCode,
-      relevantLicenceMonitoringStations
+      relevantLicenceMonitoringStations,
+      alertEmailAddress: 'luke.skywalker@rebelmail.test'
     }
 
     clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
@@ -65,7 +66,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         personalisation: {
           condition_text: '',
           flow_or_level: 'level',
-          issuer_email_address: '',
+          issuer_email_address: 'luke.skywalker@rebelmail.test',
           licence_ref: recipients.additionalContact.licence_refs,
           monitoring_station_name: 'Death star',
           source: '* Source of supply: Meridian Trench',
@@ -85,7 +86,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         personalisation: {
           condition_text: '',
           flow_or_level: 'level',
-          issuer_email_address: '',
+          issuer_email_address: 'luke.skywalker@rebelmail.test',
           licence_ref: recipients.primaryUser.licence_refs,
           monitoring_station_name: 'Death star',
           source: '* Source of supply: Meridian Trench',
@@ -113,7 +114,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           // common personalisation
           condition_text: '',
           flow_or_level: 'flow',
-          issuer_email_address: '',
+          issuer_email_address: 'luke.skywalker@rebelmail.test',
           licence_ref: recipients.licenceHolder.licence_refs,
           monitoring_station_name: 'Death star',
           source: '* Source of supply: Meridian Trench',
@@ -147,7 +148,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           personalisation: {
             condition_text: '',
             flow_or_level: 'level',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -165,7 +166,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           personalisation: {
             condition_text: '',
             flow_or_level: 'level',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -187,7 +188,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           personalisation: {
             condition_text: '',
             flow_or_level: 'flow',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -205,7 +206,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           personalisation: {
             condition_text: '',
             flow_or_level: 'flow',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -244,7 +245,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           personalisation: {
             condition_text: '',
             flow_or_level: 'level',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -276,7 +277,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             personalisation: {
               condition_text: '',
               flow_or_level: 'level',
-              issuer_email_address: '',
+              issuer_email_address: 'luke.skywalker@rebelmail.test',
               licence_ref: recipients.additionalContact.licence_refs,
               monitoring_station_name: 'Death star',
               source: '* Source of supply: Meridian Trench',
@@ -297,7 +298,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             personalisation: {
               condition_text: '',
               flow_or_level: 'level',
-              issuer_email_address: '',
+              issuer_email_address: 'luke.skywalker@rebelmail.test',
               licence_ref: recipients.primaryUser.licence_refs,
               monitoring_station_name: 'Death star',
               source: '* Source of supply: Meridian Trench',
@@ -341,7 +342,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             // common personalisation
             condition_text: '',
             flow_or_level: 'level',
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.licenceHolder.licence_refs,
             monitoring_station_name: 'Death star',
             source: '* Source of supply: Meridian Trench',
@@ -372,7 +373,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             personalisation: {
               condition_text: '',
               flow_or_level: 'level',
-              issuer_email_address: '',
+              issuer_email_address: 'luke.skywalker@rebelmail.test',
               licence_ref: recipients.additionalContact.licence_refs,
               monitoring_station_name: 'Death star',
               source: '* Source of supply: Meridian Trench',
@@ -399,7 +400,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               // common personalisation
               condition_text: '',
               flow_or_level: 'level',
-              issuer_email_address: '',
+              issuer_email_address: 'luke.skywalker@rebelmail.test',
               licence_ref: recipients.licenceHolder.licence_refs,
               monitoring_station_name: 'Death star',
               source: '* Source of supply: Meridian Trench',

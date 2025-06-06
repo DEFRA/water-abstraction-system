@@ -36,11 +36,10 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 function go(recipients, session, eventId) {
   const notifications = []
 
-  const { referenceCode, relevantLicenceMonitoringStations, monitoringStationName, monitoringStationRiverName } =
-    session
+  const { alertEmailAddress, monitoringStationName, referenceCode, relevantLicenceMonitoringStations, monitoringStationRiverName } = session
 
   for (const station of relevantLicenceMonitoringStations) {
-    const commonPersonalisation = _commonPersonalisation(station, monitoringStationName, monitoringStationRiverName)
+    const commonPersonalisation = _commonPersonalisation(station, monitoringStationName, alertEmailAddress, monitoringStationRiverName)
 
     const matchingRecipients = _matchingRecipients(recipients, station)
 
@@ -96,11 +95,11 @@ function _addressLines(contact) {
  * @private
  */
 
-function _commonPersonalisation(licenceMonitoringStation, monitoringStationName, monitoringStationRiverName) {
+function _commonPersonalisation(licenceMonitoringStation, monitoringStationName, alertEmailAddress, monitoringStationRiverName) {
   return {
     condition_text: '',
     flow_or_level: licenceMonitoringStation.measureType,
-    issuer_email_address: '',
+    issuer_email_address: alertEmailAddress,
     licence_ref: licenceMonitoringStation.licence.licenceRef,
     monitoring_station_name: monitoringStationName,
     source: _source(monitoringStationRiverName),

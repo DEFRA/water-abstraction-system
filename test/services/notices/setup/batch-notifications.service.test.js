@@ -376,6 +376,7 @@ describe('Notices - Setup - Batch notifications service', () => {
 
       session = {
         ...abstractionAlertSessionData,
+        alertEmailAddress: 'luke.skywalker@rebelmail.test',
         alertType: 'stop',
         journey: 'abstraction-alert',
         name: 'Water abstraction alert',
@@ -416,7 +417,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             condition_text: '',
             threshold_unit: 'm',
             threshold_value: 1000,
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             monitoring_station_name: 'Death star'
           },
           status: 'pending',
@@ -446,7 +447,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             condition_text: '',
             threshold_unit: 'm3/s',
             threshold_value: 100,
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             monitoring_station_name: 'Death star'
           },
           status: 'pending',
@@ -470,7 +471,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             condition_text: '',
             threshold_unit: 'm',
             threshold_value: 1000,
-            issuer_email_address: '',
+            issuer_email_address: 'luke.skywalker@rebelmail.test',
             monitoring_station_name: 'Death star'
           },
           status: 'pending',
