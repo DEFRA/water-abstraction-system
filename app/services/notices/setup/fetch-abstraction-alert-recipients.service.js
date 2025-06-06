@@ -120,11 +120,11 @@ function _query() {
     WHERE
       ldh.licence_ref = ANY (?)
     UNION ALL
-    SELECT
+    SELECT DISTINCT
       ldh.licence_ref,
       ('Additional contact') AS contact_type,
       con.email AS email,
-      (NULL) AS contact,
+      (NULL::jsonb) AS contact,
       md5(LOWER(con.email)) AS contact_hash_id
     FROM
       public.licence_document_headers ldh
