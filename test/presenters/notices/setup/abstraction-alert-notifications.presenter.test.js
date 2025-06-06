@@ -450,7 +450,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           session.monitoringStationRiverName = ''
         })
 
-        it('correctly sets defaults the "source"', () => {
+        it('correctly defaults the "source"', () => {
           const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.source).to.equal('')
@@ -462,7 +462,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           session.monitoringStationRiverName = null
         })
 
-        it('correctly sets defaults the "source"', () => {
+        it('correctly defaults the "source"', () => {
           const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.source).to.equal('')
