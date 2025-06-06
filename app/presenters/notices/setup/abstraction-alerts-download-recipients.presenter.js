@@ -70,9 +70,9 @@ function _address(contact) {
 }
 
 /**
- * Matches a recipient to a licence nomonitoring station by the licence ref.
+ * Matches a recipient to a licence monitoring station by the licence ref.
  *
- * 'recipient.licence_refs' will be a comma seperated sting: 'licenceOne,licenceTwo'.
+ * 'recipient.licence_refs' will be a comma seperated string: 'licenceOne,licenceTwo'.
  *
  * To match a recipient to a licence monitoring station we use the 'licenceMonitoringStationLicenceRef' and check if the
  * licence ref is present in the 'recipient.licence_refs' string.
@@ -113,7 +113,7 @@ function _row(matchingRecipient, licenceMonitoringStation, notificationType, lic
  * The order of the properties must match the CSV header order.
  *
  * A recipient could belong to multiple licences. When this happens we receive the 'licence_refs' in a comma seperated
- * sting: 'licenceOne,licenceTwo'. The '_matchingRecipient' explains how we match the recipients.
+ * string: 'licenceOne,licenceTwo'. The '_matchingRecipient' explains how we match the recipients.
  *
  * When we transform the recipient to a download row we only want to show a single licence ref, this means we use the
  * licence monitoring stations licence ref which has been matched to the string above. This simplifies the code, but
