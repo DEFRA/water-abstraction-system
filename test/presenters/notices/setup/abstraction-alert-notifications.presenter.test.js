@@ -19,7 +19,6 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
-  let abstractionAlertSessionData
   let clock
   let recipients
   let session
@@ -30,7 +29,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
     testRecipients = [...Object.values(recipients)]
 
-    abstractionAlertSessionData = AbstractionAlertSessionData.get()
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
     const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
       recipients.primaryUser.licence_refs,
