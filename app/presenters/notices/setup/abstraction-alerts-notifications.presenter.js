@@ -36,10 +36,11 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 function go(recipients, session, eventId) {
   const notifications = []
 
-  const { referenceCode, relevantLicenceMonitoringStations, monitoringStationName } = session
+  const { referenceCode, relevantLicenceMonitoringStations, monitoringStationName, monitoringStationRiverName } =
+    session
 
   for (const station of relevantLicenceMonitoringStations) {
-    const commonPersonalisation = _commonPersonalisation(station, monitoringStationName)
+    const commonPersonalisation = _commonPersonalisation(station, monitoringStationName, monitoringStationRiverName)
 
     const matchingRecipients = _matchingRecipients(recipients, station)
 
@@ -95,14 +96,14 @@ function _addressLines(contact) {
  * @private
  */
 
-function _commonPersonalisation(licenceMonitoringStation, monitoringStationName) {
+function _commonPersonalisation(licenceMonitoringStation, monitoringStationName, monitoringStationRiverName) {
   return {
     condition_text: '',
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: '',
     licence_ref: licenceMonitoringStation.licence.licenceRef,
     monitoring_station_name: monitoringStationName,
-    source: '',
+    source: _source(monitoringStationRiverName),
     threshold_unit: licenceMonitoringStation.thresholdUnit,
     threshold_value: licenceMonitoringStation.thresholdValue
   }
@@ -237,6 +238,24 @@ function _matchingRecipients(recipients, station) {
     return recipient.licence_refs === station.licence.licenceRef
   })
 }
+
+/**
+ * The source is derived from the monitoring stations river name.
+ *
+ * This can be in three states (from the db):
+ * - string - normally the name of the river
+ * - '' an empty string
+ * - null
+ *
+ * When the river name is null or '' we do no want to show this in the notify template. So we set it to an empty string
+ * which tells notify to ignore the field.
+ *
+ * @private
+ */
+function _source(monitoringStationRiverName) {
+  return monitoringStationRiverName ? `* Source of supply: ${monitoringStationRiverName}` : ''
+}
+
 module.exports = {
   go
 }

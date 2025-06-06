@@ -19,8 +19,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const referenceCode = 'TEST-123'
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
+  let abstractionAlertSessionData
   let clock
-  let monitoringStationName
   let recipients
   let session
   let testRecipients
@@ -30,9 +30,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
     testRecipients = [...Object.values(recipients)]
 
-    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
-
-    monitoringStationName = abstractionAlertSessionData.monitoringStationName
+    abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
     const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
       recipients.primaryUser.licence_refs,
@@ -40,9 +38,9 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     ])
 
     session = {
+      ...abstractionAlertSessionData,
       journey: 'abstraction-alerts',
       referenceCode,
-      monitoringStationName,
       relevantLicenceMonitoringStations
     }
 
@@ -71,7 +69,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           issuer_email_address: '',
           licence_ref: recipients.additionalContact.licence_refs,
           monitoring_station_name: 'Death star',
-          source: '',
+          source: '* Source of supply: Meridian Trench',
           threshold_unit: 'm',
           threshold_value: 1000
         },
@@ -91,7 +89,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           issuer_email_address: '',
           licence_ref: recipients.primaryUser.licence_refs,
           monitoring_station_name: 'Death star',
-          source: '',
+          source: '* Source of supply: Meridian Trench',
           threshold_unit: 'm',
           threshold_value: 1000
         },
@@ -119,7 +117,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           issuer_email_address: '',
           licence_ref: recipients.licenceHolder.licence_refs,
           monitoring_station_name: 'Death star',
-          source: '',
+          source: '* Source of supply: Meridian Trench',
           threshold_unit: 'm3/s',
           threshold_value: 100
         }
@@ -129,17 +127,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a licence has more than one licence monitoring stations to send alerts to', () => {
     beforeEach(() => {
-      const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
         recipients.primaryUser.licence_refs,
         recipients.primaryUser.licence_refs
       ])
-
-      session = {
-        journey: 'abstraction-alerts',
-        referenceCode,
-        monitoringStationName,
-        relevantLicenceMonitoringStations
-      }
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
@@ -160,7 +151,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm',
             threshold_value: 1000
           },
@@ -178,7 +169,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm',
             threshold_value: 1000
           },
@@ -200,7 +191,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm3/s',
             threshold_value: 100
           },
@@ -218,7 +209,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm3/s',
             threshold_value: 100
           },
@@ -257,7 +248,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm',
             threshold_value: 1000
           },
@@ -289,7 +280,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               issuer_email_address: '',
               licence_ref: recipients.additionalContact.licence_refs,
               monitoring_station_name: 'Death star',
-              source: '',
+              source: '* Source of supply: Meridian Trench',
               threshold_unit: 'm',
               threshold_value: 1000
             },
@@ -310,7 +301,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               issuer_email_address: '',
               licence_ref: recipients.primaryUser.licence_refs,
               monitoring_station_name: 'Death star',
-              source: '',
+              source: '* Source of supply: Meridian Trench',
               threshold_unit: 'm',
               threshold_value: 1000
             },
@@ -354,7 +345,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             issuer_email_address: '',
             licence_ref: recipients.licenceHolder.licence_refs,
             monitoring_station_name: 'Death star',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             threshold_unit: 'm',
             threshold_value: 1000
           }
@@ -385,7 +376,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               issuer_email_address: '',
               licence_ref: recipients.additionalContact.licence_refs,
               monitoring_station_name: 'Death star',
-              source: '',
+              source: '* Source of supply: Meridian Trench',
               threshold_unit: 'm',
               threshold_value: 1000
             },
@@ -412,12 +403,71 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               issuer_email_address: '',
               licence_ref: recipients.licenceHolder.licence_refs,
               monitoring_station_name: 'Death star',
-              source: '',
+              source: '* Source of supply: Meridian Trench',
               threshold_unit: 'm',
               threshold_value: 1000
             }
           }
         ])
+      })
+    })
+  })
+
+  describe('the "personalisation" object', () => {
+    beforeEach(() => {
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+        recipients.primaryUser.licence_refs
+      ])
+
+      testRecipients[0].licence_refs = recipients.licenceHolder.licence_refs
+    })
+
+    it('correctly sets the "personalisation" object', () => {
+      const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+      expect(result.personalisation).to.equal({
+        condition_text: '',
+        flow_or_level: 'level',
+        issuer_email_address: '',
+        licence_ref: recipients.primaryUser.licence_refs,
+        monitoring_station_name: 'Death star',
+        source: '* Source of supply: Meridian Trench',
+        threshold_unit: 'm',
+        threshold_value: 1000
+      })
+    })
+
+    describe('when the "source"', () => {
+      describe('has a value', () => {
+        it('correctly sets "source"', () => {
+          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+          expect(result.personalisation.source).to.equal('* Source of supply: Meridian Trench')
+        })
+      })
+
+      describe('is an empty string ""', () => {
+        beforeEach(() => {
+          session.monitoringStationRiverName = ''
+        })
+
+        it('correctly sets defaults the "source"', () => {
+          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+          expect(result.personalisation.source).to.equal('')
+        })
+      })
+
+      describe('is null', () => {
+        beforeEach(() => {
+          session.monitoringStationRiverName = null
+        })
+
+        it('correctly sets defaults the "source"', () => {
+          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+          expect(result.personalisation.source).to.equal('')
+        })
       })
     })
   })
