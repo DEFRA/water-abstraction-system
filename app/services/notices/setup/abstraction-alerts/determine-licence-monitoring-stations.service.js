@@ -19,6 +19,7 @@ async function go(id) {
   return {
     licenceMonitoringStations: _licenceMonitoringStations(monitoringStation.licenceMonitoringStations),
     monitoringStationId: id,
+    monitoringStationRiverName: monitoringStation.riverName,
     monitoringStationName: monitoringStation.label
   }
 }

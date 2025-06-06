@@ -28,7 +28,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
   let monitoringStation
 
   beforeEach(async () => {
-    monitoringStation = await MonitoringStationHelper.add()
+    monitoringStation = await MonitoringStationHelper.add({ riverName: 'A river' })
 
     // A licence with the abstraction data from the Licence monitoring station
     licence = await LicenceHelper.add({ licenceRef: `01/01/01/${generateRandomInteger(1, 9999)}` })
@@ -109,7 +109,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           thresholdUnit: 'm3/s',
           thresholdValue: 100
         }
-      ]
+      ],
+      riverName: 'A river'
     })
   })
 
