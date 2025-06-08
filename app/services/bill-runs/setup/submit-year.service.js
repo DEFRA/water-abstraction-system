@@ -38,7 +38,7 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return { setupComplete: ['2024', '2023'].includes(session.year) }
+    return { setupComplete: ['2025'].includes(session.year) }
   }
 
   const regionId = session.region
