@@ -147,7 +147,10 @@ describe('Return Logs - Create Return Logs service', () => {
       testReturnCycle = returnCycles()[1]
       testReturnRequirement = returnRequirementsAcrossReturnVersions()[4]
       testReturnRequirement.returnVersion.endDate = new Date('2025-05-01')
+
+      // These should always be in sync
       testReturnRequirement.legacyId = 16999611
+      testReturnRequirement.reference = 16999611
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
