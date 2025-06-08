@@ -32,7 +32,7 @@ async function _fetch(returnCycle) {
       'abstractionPeriodStartMonth',
       'externalId',
       'id',
-      'legacyId',
+      'reference',
       'reportingFrequency',
       'returnVersionId',
       'siteDescription',
@@ -46,10 +46,7 @@ async function _fetch(returnCycle) {
         .select(1)
         .whereNot('status', 'void')
         .where('returnCycleId', returnCycleId)
-        .whereColumn(
-          db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference)"),
-          'returnRequirements.externalId'
-        )
+        .whereColumn('returnReference', db.raw('return_requirements.reference::text'))
     )
     .whereExists(
       ReturnVersionModel.query()
