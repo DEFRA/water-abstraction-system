@@ -54,7 +54,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
     }
   })
 
-  describe.only('when the matching licence exists', () => {
+  describe('when the matching licence exists', () => {
     it('returns the licence version purpose points for the licence', async () => {
       const results = await FetchPointsService.go(licence.id)
 
