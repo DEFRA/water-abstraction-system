@@ -30,8 +30,10 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
   describe('when called', () => {
     describe('and the licence exists', () => {
+      let licence
+
       beforeEach(async () => {
-        const licence = await LicenceHelper.add()
+        licence = await LicenceHelper.add()
         payload = { licenceRef: licence.licenceRef }
       })
 
@@ -41,6 +43,14 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.licenceRef).to.equal(payload.licenceRef)
+      })
+
+      it('saves the licence id', async () => {
+        await SubmitLicenceNumberService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.licenceId).to.equal(licence.id)
       })
 
       describe('and the page has been not been visited', () => {
