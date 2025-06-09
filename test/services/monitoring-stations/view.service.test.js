@@ -15,7 +15,7 @@ const FetchMonitoringStationService = require('../../../app/services/monitoring-
 // Thing under test
 const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
 
-describe.only('Monitoring Stations - View service', () => {
+describe('Monitoring Stations - View service', () => {
   let auth
   let monitoringStation
   let yarStub
