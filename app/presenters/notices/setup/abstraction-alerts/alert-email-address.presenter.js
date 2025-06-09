@@ -11,15 +11,16 @@
  * @param {module:SessionModel} session - The session instance
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {object} validationResult - The validation results from the payload
+ * @param {object} payload - The submitted form data
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, auth, validationResult) {
+function go(session, auth, validationResult, payload = {}) {
   const { username } = auth.credentials.user
   const { alertEmailAddress, monitoringStationName, id: sessionId } = session
 
   return {
-    alertEmailAddressOptions: _alertEmailAddressOptions(username, alertEmailAddress),
+    alertEmailAddressOptions: _alertEmailAddressOptions(username, alertEmailAddress, payload),
     anchor: _anchor(validationResult),
     backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`,
     caption: monitoringStationName,
@@ -28,9 +29,10 @@ function go(session, auth, validationResult) {
   }
 }
 
-function _alertEmailAddressOptions(username, alertEmailAddress) {
-  const usernameChecked = alertEmailAddress && username === alertEmailAddress
-  const otherUserChecked = alertEmailAddress && username !== alertEmailAddress
+function _alertEmailAddressOptions(username, alertEmailAddress, payload) {
+  const usernameChecked = username === alertEmailAddress || payload.alertEmailAddress === 'username'
+  const otherUserChecked =
+    payload.alertEmailAddress === 'other' || (alertEmailAddress && username !== alertEmailAddress)
   const otherUserEmailAddressInput = otherUserChecked ? alertEmailAddress : ''
 
   return {
