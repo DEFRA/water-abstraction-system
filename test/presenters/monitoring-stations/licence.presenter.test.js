@@ -224,7 +224,7 @@ describe('Monitoring Stations - Licence presenter', () => {
     })
   })
 
-  describe.only('the "permissionToManageLinks" property', () => {
+  describe('the "permissionToManageLinks" property', () => {
     describe('when the user has permission to manage links to monitoring stations', () => {
       beforeEach(() => {
         auth = {
