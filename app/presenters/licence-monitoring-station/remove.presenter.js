@@ -41,9 +41,9 @@ function go(licenceMonitoringStation) {
 }
 
 function _linkedConditionDetails(licenceVersionPurposeCondition) {
-  const { externalId, licenceVersionPurposeConditionType } = licenceVersionPurposeCondition
-
   if (licenceVersionPurposeCondition) {
+    const { externalId, licenceVersionPurposeConditionType } = licenceVersionPurposeCondition
+
     // Get the last set digits from the externalId
     const lastDigits = externalId.split(':').pop()
 
