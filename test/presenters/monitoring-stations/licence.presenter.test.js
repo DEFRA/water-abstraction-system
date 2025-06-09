@@ -11,17 +11,23 @@ const { expect } = Code
 const LicencePresenter = require('../../../app/presenters/monitoring-stations/licence.presenter.js')
 
 describe('Monitoring Stations - Licence presenter', () => {
+  let auth
   let lastAlert
   let monitoringStationLicenceTags
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
+      }
+    }
     lastAlert = undefined
     monitoringStationLicenceTags = _monitoringStationLicenceTags()
   })
 
   describe('when provided with the result of the fetch licence tag details service', () => {
     it('correctly presents the data', () => {
-      const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+      const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
       expect(result).to.equal({
         backLink: '/system/monitoring-stations/863c375f-4f8d-4633-af0e-a2298f6f174e',
@@ -39,7 +45,8 @@ describe('Monitoring Stations - Licence presenter', () => {
           }
         ],
         monitoringStationName: 'The Station',
-        pageTitle: 'Details for 99/999'
+        pageTitle: 'Details for 99/999',
+        permissionToManageLinks: true
       })
     })
   })
@@ -51,7 +58,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('returns the string "N/A"', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.lastAlertSent).to.equal('N/A')
       })
@@ -74,7 +81,7 @@ describe('Monitoring Stations - Licence presenter', () => {
         })
 
         it('returns details of the alert sent to the "contact"', () => {
-          const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+          const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
           expect(result.lastAlertSent).to.equal('Warning letter on 13 August 2024 sent to Big Farm Co Ltd')
         })
@@ -96,7 +103,7 @@ describe('Monitoring Stations - Licence presenter', () => {
         })
 
         it('returns details of the alert sent to the "recipient"', () => {
-          const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+          const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
           expect(result.lastAlertSent).to.equal(
             'Warning email on 13 August 2024 sent to environment.officer@wrls.gov.uk'
@@ -113,7 +120,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('correctly formats the licence monitoring station record', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.licenceTags).to.equal([
           {
@@ -147,7 +154,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('correctly formats the licence monitoring station record', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.licenceTags).to.equal([
           {
@@ -170,7 +177,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('correctly formats the licence monitoring station created string', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025')
       })
@@ -182,7 +189,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('correctly formats the licence monitoring station created string', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025 by a.user@wrls.gov.uk')
       })
@@ -197,7 +204,7 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('returns the correct "monitoringStationName"', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.monitoringStationName).to.equal('The Station')
       })
@@ -210,9 +217,43 @@ describe('Monitoring Stations - Licence presenter', () => {
       })
 
       it('returns the correct "monitoringStationName"', () => {
-        const result = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
         expect(result.monitoringStationName).to.equal('River Piddle at The Station')
+      })
+    })
+  })
+
+  describe.only('the "permissionToManageLinks" property', () => {
+    describe('when the user has permission to manage links to monitoring stations', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
+          }
+        }
+      })
+
+      it('returns "permissionToManageLinks" as true', () => {
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+
+        expect(result.permissionToManageLinks).to.be.true()
+      })
+    })
+
+    describe('when the user does not have permission to manage links to monitoring stations', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            scope: ['billing', 'hof_notifications']
+          }
+        }
+      })
+
+      it('returns "permissionToManageLinks" as false', () => {
+        const result = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+
+        expect(result.permissionToManageLinks).to.be.false()
       })
     })
   })
