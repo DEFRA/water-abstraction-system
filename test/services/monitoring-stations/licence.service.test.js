@@ -15,6 +15,11 @@ const FetchLicenceTagDetailsService = require('../../../app/services/monitoring-
 const LicenceService = require('../../../app/services/monitoring-stations/licence.service.js')
 
 describe('Monitoring Stations - Licence service', () => {
+  const auth = {
+    credentials: {
+      scope: ['manage_gauging_station_licence_links']
+    }
+  }
   const lastAlert = undefined
   const licenceId = '33615d39-cc4e-4747-9c27-2dfa49fe73bf'
   const monitoringStationId = '863c375f-4f8d-4633-af0e-a2298f6f174e'
@@ -51,7 +56,7 @@ describe('Monitoring Stations - Licence service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await LicenceService.go(licenceId, monitoringStationId)
+      const result = await LicenceService.go(auth, licenceId, monitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -70,7 +75,8 @@ describe('Monitoring Stations - Licence service', () => {
           }
         ],
         monitoringStationName: 'The Station',
-        pageTitle: 'Details for 99/999'
+        pageTitle: 'Details for 99/999',
+        permissionToManageLinks: true
       })
     })
   })
