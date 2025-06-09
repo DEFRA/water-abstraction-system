@@ -13,17 +13,18 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  *
+ * @param {string} licenceId - The UUID of the licence
  * @param {object[]} bills - The licence's bills
  *
  * @returns {object} The data formatted for the view template
  */
-function go(bills) {
+function go(licenceId, bills) {
   return {
-    bills: _bills(bills)
+    bills: _bills(licenceId, bills)
   }
 }
 
-function _bills(bills) {
+function _bills(licenceId, bills) {
   return bills.map((bill) => {
     const {
       accountNumber,
@@ -39,7 +40,7 @@ function _bills(bills) {
     return {
       accountNumber,
       billingAccountId,
-      billingAccountLink: _billingAccountLink(billingAccountId),
+      billingAccountLink: _billingAccountLink(billingAccountId, licenceId),
       billId,
       billNumber: _formatBillNumber(bill),
       billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
@@ -51,9 +52,9 @@ function _bills(bills) {
   })
 }
 
-function _billingAccountLink(billingAccountId) {
+function _billingAccountLink(billingAccountId, licenceId) {
   if (FeatureFlagsConfig.enableBillingAccountView) {
-    return `/system/billing-accounts/${billingAccountId}`
+    return `/system/billing-accounts/${billingAccountId}?licence-id=${licenceId}`
   }
 
   return `/billing-accounts/${billingAccountId}`
