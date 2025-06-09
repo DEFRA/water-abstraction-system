@@ -30,11 +30,12 @@ async function go(sessionId, payload, auth) {
     return {}
   }
 
-  const pageData = AlertEmailAddressPresenter.go(session, auth, validationResult)
+  const submittedSessionData = _submittedSessionData(session, auth, validationResult, payload)
 
   return {
+    activeNavBar: 'manage',
     error: validationResult,
-    ...pageData
+    ...submittedSessionData
   }
 }
 
@@ -48,6 +49,24 @@ async function _save(session, payload, auth) {
   }
 
   return session.$update()
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ *
+ * @private
+ */
+function _submittedSessionData(session, auth, validationResult, payload) {
+  if (payload.alertEmailAddress === 'username') {
+    session.alertEmailAddress = auth.credentials.user.username
+  }
+
+  if (payload.alertEmailAddress === 'other') {
+    session.alertEmailAddress = payload.otherUser ? payload.otherUser : null
+  }
+
+  return AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
 }
 
 /**
