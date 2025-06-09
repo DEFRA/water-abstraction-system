@@ -103,7 +103,7 @@ describe('Return Logs - Generate Return Log service', () => {
     })
 
     describe('the "id" property', () => {
-      it('returns a unique identifier built from the region code, licence reference, legacy ID, start and end date', () => {
+      it('returns a unique identifier built from the region code, licence reference, reference, start and end date', () => {
         const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
         expect(result.id).to.equal(`v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31`)

@@ -7,7 +7,7 @@
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')
-const { generateLegacyId } = require('./return-requirement.helper.js')
+const { generateReference } = require('./return-requirement.helper.js')
 const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 
 /**
@@ -52,7 +52,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
+  const returnReference = data.returnReference ? data.returnReference : generateReference()
 
   const defaults = {
     reviewLicenceId: generateUUID(),
