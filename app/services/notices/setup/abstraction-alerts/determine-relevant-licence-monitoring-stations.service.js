@@ -6,6 +6,8 @@
  * @module DetermineRelevantLicenceMonitoringStationsService
  */
 
+const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('./determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+
 /**
  * Determines relevant licence monitoring stations for the `abstraction-alerts` journey
  *
@@ -18,21 +20,24 @@
  *
  * We keep the original array intact.
  *
- * @param {Array<object>} licenceMonitoringStations
- * @param {Array<string>} selectedLicenceMonitoringStations
- * @param {Array<string>} removedLicenceMonitoringStations
+ * @param {object[]} licenceMonitoringStations
+ * @param {object[]} selectedLicenceMonitoringStations
+ * @param {object[]} removedLicenceMonitoringStations
  * @param {string} alertType
  *
  * @returns {Array<object>}
  */
 function go(licenceMonitoringStations, selectedLicenceMonitoringStations, removedLicenceMonitoringStations, alertType) {
-  const relevantLicenceMonitoringStations = licenceMonitoringStations
-    .filter((licenceMonitoringStation) => {
-      return _relevantByAlertType(licenceMonitoringStation, alertType)
-    })
-    .filter((licenceMonitoringStation) => {
+  const relevantLicenceMonitoringStationsByAlertType = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+    licenceMonitoringStations,
+    alertType
+  )
+
+  const relevantLicenceMonitoringStations = relevantLicenceMonitoringStationsByAlertType.filter(
+    (licenceMonitoringStation) => {
       return selectedLicenceMonitoringStations.includes(licenceMonitoringStation.thresholdGroup)
-    })
+    }
+  )
 
   if (removedLicenceMonitoringStations) {
     return relevantLicenceMonitoringStations.filter((licenceMonitoringStation) => {
@@ -41,21 +46,6 @@ function go(licenceMonitoringStations, selectedLicenceMonitoringStations, remove
   }
 
   return relevantLicenceMonitoringStations
-}
-
-function _relevantByAlertType(licenceMonitoringStation, alertType) {
-  if (alertType !== 'stop' && alertType !== 'reduce') {
-    return licenceMonitoringStation
-  }
-
-  if (
-    licenceMonitoringStation.restrictionType === alertType ||
-    licenceMonitoringStation.restrictionType === 'stop_or_reduce'
-  ) {
-    return licenceMonitoringStation
-  }
-
-  return false
 }
 
 module.exports = {

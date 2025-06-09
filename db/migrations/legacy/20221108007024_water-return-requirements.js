@@ -26,6 +26,7 @@ exports.up = function (knex) {
     table.boolean('two_part_tariff').notNullable().defaultTo(false)
     table.boolean('fifty_six_exception').notNullable().defaultTo(false)
     table.text('reporting_frequency').notNullable().defaultTo('day')
+    table.integer('reference').notNullable()
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
@@ -33,7 +34,29 @@ exports.up = function (knex) {
 
     // Constraints
     table.unique(['external_id'], { useConstraint: true })
-  })
+    table.unique(['reference'], { useConstraint: true })
+  }).raw(`
+    -- Sequence
+    CREATE SEQUENCE water.return_reference_seq START WITH 10000000;
+
+    ALTER TABLE water.return_requirements ALTER COLUMN reference SET DEFAULT nextval('water.return_reference_seq');
+  `).raw(`
+    CREATE OR REPLACE FUNCTION sync_legacy_id_to_reference()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      -- If legacy_id is NULL, set it to NEW.reference
+      IF NEW.legacy_id IS NULL THEN
+        NEW.legacy_id := NEW.reference;
+      END IF;
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    CREATE TRIGGER trg_sync_legacy_id
+    BEFORE INSERT ON water.return_requirements
+    FOR EACH ROW
+    EXECUTE FUNCTION sync_legacy_id_to_reference();
+  `)
 }
 
 exports.down = function (knex) {

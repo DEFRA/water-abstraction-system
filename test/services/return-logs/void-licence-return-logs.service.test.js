@@ -60,7 +60,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
         describe('and one return log for the matching return cycle that is after the "change date" [C]', () => {
           before(async () => {
-            returnReference = ReturnRequirementHelper.generateLegacyId()
+            returnReference = ReturnRequirementHelper.generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: new Date('2023-03-31'),
               licenceRef,
@@ -124,7 +124,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
       describe('and now the reissued return log [B]', () => {
         before(async () => {
-          returnReference = ReturnRequirementHelper.generateLegacyId()
+          returnReference = ReturnRequirementHelper.generateReference()
           reissuedReturnLog1 = await ReturnLogHelper.add({
             endDate: new Date('2023-03-31'),
             licenceRef,
@@ -161,7 +161,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
     describe('and the licence has an existing return log for the existing return version [A]', () => {
       before(async () => {
-        returnReference = ReturnRequirementHelper.generateLegacyId()
+        returnReference = ReturnRequirementHelper.generateReference()
 
         existingReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-03-31'),

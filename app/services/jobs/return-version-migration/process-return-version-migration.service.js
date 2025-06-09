@@ -32,9 +32,7 @@ async function go() {
     for (const licence of licences) {
       const existingReturnVersion = licence.returnVersions[0]
 
-      const naldRegionId = licence.region.naldRegionId
-
-      const quarterlyReturnVersion = await GenerateReturnVersionService.go(existingReturnVersion, user, naldRegionId)
+      const quarterlyReturnVersion = await GenerateReturnVersionService.go(existingReturnVersion, user)
 
       await _save(existingReturnVersion, quarterlyReturnVersion)
     }
