@@ -38,7 +38,7 @@ function go(payload) {
         'string.empty': ERROR_MESSAGES.selectOrEmpty,
         'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
-      otherwise: Joi.forbidden()
+      otherwise: Joi.string().optional()
     })
   })
   return schema.validate(payload, { abortEarly: false })
