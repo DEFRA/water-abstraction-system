@@ -15,12 +15,28 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session, auth, validationResult) {
+  const { username } = auth.credentials.user
+  const { alertEmailAddress, monitoringStationName, id: sessionId } = session
+
   return {
+    alertEmailAddressOptions: _alertEmailAddressOptions(username, alertEmailAddress),
     anchor: _anchor(validationResult),
-    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-    caption: session.monitoringStationName,
+    backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`,
+    caption: monitoringStationName,
     pageTitle: 'Select an email address to include in the alerts',
     username: auth.credentials.user.username
+  }
+}
+
+function _alertEmailAddressOptions(username, alertEmailAddress) {
+  const usernameChecked = alertEmailAddress && username === alertEmailAddress
+  const otherUserChecked = alertEmailAddress && username !== alertEmailAddress
+  const otherUserEmailAddressInput = otherUserChecked ? alertEmailAddress : ''
+
+  return {
+    otherUserChecked,
+    otherUserEmailAddressInput,
+    usernameChecked
   }
 }
 
