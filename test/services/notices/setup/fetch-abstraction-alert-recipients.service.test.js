@@ -265,7 +265,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         contact_hash_id: 'c661b771974504933d79ca64249570d0',
         contact_type: 'Additional contact',
         email: 'Ron.Burgundy@news.com',
-        licence_refs: `${recipients.primaryUser.licenceRef},${recipients.licenceHolder.licenceRef}`
+        licence_refs: [recipients.licenceHolder.licenceRef, recipients.primaryUser.licenceRef].sort().join(',')
       })
     })
   })

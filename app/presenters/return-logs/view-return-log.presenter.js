@@ -27,10 +27,6 @@ function go(returnLog, auth) {
     endDate,
     id,
     licence,
-    periodEndDay,
-    periodEndMonth,
-    periodStartDay,
-    periodStartMonth,
     purposes,
     receivedDate,
     returnReference,
@@ -51,7 +47,7 @@ function go(returnLog, auth) {
   const formattedStatus = formatStatus(returnLog)
 
   return {
-    abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    abstractionPeriod: _abstractionPeriod(returnLog),
     actionButton: _actionButton(latest, auth, returnLog.id, formattedStatus),
     backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
@@ -80,6 +76,33 @@ function go(returnLog, auth) {
     underQuery,
     versions: _versions(selectedReturnSubmission, versions, id)
   }
+}
+
+/**
+ * Extracts and formats the abstraction period from the return log
+ *
+ * If the abstraction period start day is not defined or is 'null', it returns an empty string. Otherwise, it formats
+ * the abstraction period using the start and end day/month values.
+ *
+ * We have found there are approximately 2K return requirements that were imported from NALD with no abstraction period
+ * set. This means any return logs generated from them won't have any proper values in their `metadata.nald` object.
+ *
+ * This means we need this additional logic to handle these problem records. We show a blank on the page to indicate to
+ * the user there is a problem with this return log's abstraction period.
+ *
+ * @param {object} returnLog - The return log to extract the abstraction period from
+ *
+ * @returns {string} The formatted abstraction period or an empty string if not available
+ */
+
+function _abstractionPeriod(returnLog) {
+  const { periodEndDay, periodEndMonth, periodStartDay, periodStartMonth } = returnLog
+
+  if (!periodStartDay || periodStartDay === 'null') {
+    return ''
+  }
+
+  return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 }
 
 function _actionButton(latest, auth, returnLogId, formattedStatus) {
