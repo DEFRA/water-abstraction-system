@@ -5,7 +5,7 @@
  * @module RemovePresenter
  */
 
-const { sentenceCase } = require('../base.presenter.js')
+const { formatRestrictionType } = require('../monitoring-stations/base.presenter.js')
 
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
@@ -35,7 +35,7 @@ function go(licenceMonitoringStation) {
     pageTitle: 'You’re about to remove the tag for this licence',
     station: _monitoringStationName(monitoringStation),
     threshold: `${thresholdValue}${thresholdUnit}`,
-    type: sentenceCase(restrictionType),
+    type: formatRestrictionType(restrictionType),
     Watercourse: monitoringStation.catchmentName
   }
 }
