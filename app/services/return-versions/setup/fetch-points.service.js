@@ -34,10 +34,56 @@ async function _fetch(licenceId) {
       builder.select(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
 
+  const points = _uniqueCurrentPoints(licence)
+
+  return _sortPoints(points)
+}
+
+function _sortPoints(points) {
+  return points.sort((a, b) => {
+    if (a.ngr1 > b.ngr1) {
+      return 1
+    }
+
+    if (a.ngr1 < b.ngr1) {
+      return -1
+    }
+
+    return 0
+  })
+}
+
+/**
+ * Reduces the points in the licenceVersionPurposes to a flat, unique array of points
+ *
+ * When a new return version is being created, we are required to only display the points from the current licence
+ * version. The first thing this function has to do is using the `$currentVersion()` model modifier, iterate the
+ * purposes linked to it.
+ *
+ * The next scenario we are expected to handle, is where a licence has multiple purposes, but two or more link to the
+ * same point. If we just added all points from each purpose to our result, it would result in duplicate PointModel
+ * records being returned.
+ *
+ * We need to ensure that the list of points we ask the user to select from doesn't contain duplicates. Hence the use
+ * of `uniquePointsIds` to help us determine if we have already added a point to our result.
+ *
+ * @param {module:licence} licence - The licence to fetch points for
+ *
+ * @returns {module:PointModel[]}
+ */
+function _uniqueCurrentPoints(licence) {
+  const uniquePointsIds = []
   const points = []
 
   for (const licenceVersionPurpose of licence.$currentVersion().licenceVersionPurposes) {
-    points.push(...licenceVersionPurpose.points)
+    for (const point of licenceVersionPurpose.points) {
+      if (uniquePointsIds.includes(point.id)) {
+        continue
+      }
+
+      uniquePointsIds.push(point.id)
+      points.push(point)
+    }
   }
 
   return points

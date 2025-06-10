@@ -26,7 +26,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe('View Return Log presenter', () => {
+describe('Return Logs - View Return Log presenter', () => {
   let auth
   let testReturnLog
 
@@ -60,10 +60,42 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "abstractionPeriod" property', () => {
-    it('returns the correctly-formatted date', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when the return log has an abstraction period set', () => {
+      it('returns the correctly-formatted date', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+        expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+      })
+    })
+
+    describe('when the return log has its abstraction period set to "null"', () => {
+      beforeEach(() => {
+        testReturnLog.periodStartDay = 'null'
+        testReturnLog.periodStartMonth = 'null'
+        testReturnLog.periodEndDay = 'null'
+        testReturnLog.periodEndMonth = 'null'
+      })
+
+      it('returns an empty string', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.abstractionPeriod).to.equal('')
+      })
+    })
+
+    describe('when the return log has a NULL abstraction period', () => {
+      beforeEach(() => {
+        testReturnLog.periodStartDay = null
+        testReturnLog.periodStartMonth = null
+        testReturnLog.periodEndDay = null
+        testReturnLog.periodEndMonth = null
+      })
+
+      it('returns an empty string', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.abstractionPeriod).to.equal('')
+      })
     })
   })
 
