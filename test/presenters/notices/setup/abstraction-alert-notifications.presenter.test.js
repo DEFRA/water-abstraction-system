@@ -415,10 +415,6 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('the "personalisation" object', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.primaryUser.licence_refs
-      ])
-
       testRecipients[0].licence_refs = recipients.licenceHolder.licence_refs
     })
 
@@ -434,6 +430,26 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         source: '* Source of supply: Meridian Trench',
         threshold_unit: 'm',
         threshold_value: 1000
+      })
+    })
+
+    describe('when the "notes"', () => {
+      describe('has a value', () => {
+        it('correctly sets "condition_text"', () => {
+          const [, result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+          expect(result.personalisation.condition_text).to.equal(
+            'Effect of restriction: I have a bad feeling about this'
+          )
+        })
+      })
+
+      describe('is null', () => {
+        it('correctly defaults the "condition_text"', () => {
+          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+          expect(result.personalisation.condition_text).to.equal('')
+        })
       })
     })
 
