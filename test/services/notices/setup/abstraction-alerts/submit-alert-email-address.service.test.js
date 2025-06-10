@@ -74,6 +74,29 @@ describe('Submit Alert Email Address Service', () => {
   })
 
   describe('when validation fails', () => {
+    describe('and the payload "alertEmailAddress" is username', () => {
+      it('updates the session "alertEmailAddress" property to the users username', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertEmailAddress).to.equal(auth.credentials.user.username)
+      })
+    })
+
+    describe('and the payload "alertEmailAddress" is other', () => {
+      beforeEach(() => {
+        payload = { alertEmailAddress: 'other', otherUser: 'test@defra.go.uk' }
+      })
+      it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertEmailAddress).to.equal(payload.otherUser)
+      })
+    })
+
     describe('because no option has been selected', () => {
       beforeEach(() => {
         payload = {}
@@ -83,6 +106,12 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: false,
+            otherUserEmailAddressInput: '',
+            usernameChecked: false
+          },
           anchor: '#alertEmailAddress',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
@@ -108,6 +137,12 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: true,
+            otherUserEmailAddressInput: '',
+            usernameChecked: false
+          },
           anchor: '#otherUser',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
@@ -133,6 +168,12 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: true,
+            otherUserEmailAddressInput: '123123123',
+            usernameChecked: false
+          },
           anchor: '#otherUser',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
