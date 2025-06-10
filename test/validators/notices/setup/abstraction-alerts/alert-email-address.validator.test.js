@@ -68,6 +68,19 @@ describe('Alert Email Address Validator', () => {
           expect(result.error).not.to.exist()
         })
       })
+
+      describe('is a valid email address but "alertEmailAddress" is username', () => {
+        beforeEach(() => {
+          payload = { alertEmailAddress: 'username', otherUser: 'test@defra.gov.uk' }
+        })
+
+        it('returns with no errors', () => {
+          const result = AlertEmailAddressValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error).not.to.exist()
+        })
+      })
     })
   })
 
