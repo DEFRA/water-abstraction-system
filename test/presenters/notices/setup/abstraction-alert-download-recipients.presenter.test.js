@@ -18,33 +18,16 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
   let session
   let recipients
   let testRecipients
-  let licenceMonitoringStationOne
-  let licenceMonitoringStationTwo
 
   beforeEach(() => {
     recipients = RecipientsFixture.alertsRecipients()
 
     testRecipients = [...Object.values(recipients)]
 
-    const abstractionAlertSessionData = AbstractionAlertSessionData.monitoringStation()
-
-    licenceMonitoringStationOne = abstractionAlertSessionData.licenceMonitoringStations[0]
-    licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-    const relevantLicenceMonitoringStations = [
-      {
-        ...licenceMonitoringStationOne,
-        licence: {
-          licenceRef: recipients.primaryUser.licence_refs
-        }
-      },
-      {
-        ...licenceMonitoringStationTwo,
-        licence: {
-          licenceRef: recipients.licenceHolder.licence_refs
-        }
-      }
-    ]
+    const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      recipients.primaryUser.licence_refs,
+      recipients.licenceHolder.licence_refs
+    ])
 
     session = {
       relevantLicenceMonitoringStations,
@@ -195,6 +178,64 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
             '\n' // End of CSV line
         )
       })
+    })
+  })
+
+  describe('and there are recipients related to multiple licence refs', () => {
+    let recipients
+
+    beforeEach(async () => {
+      recipients = RecipientsFixture.alertsRecipients()
+
+      testRecipients = [
+        recipients.licenceHolder,
+        recipients.primaryUser,
+        {
+          ...recipients.additionalContact,
+          licence_refs: `${recipients.primaryUser.licence_refs},${recipients.licenceHolder.licence_refs}`
+        }
+      ]
+
+      const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+
+      const licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
+
+      const relevantLicenceMonitoringStations = [
+        {
+          ...licenceMonitoringStationTwo,
+          licence: {
+            licenceRef: recipients.licenceHolder.licence_refs
+          }
+        },
+        {
+          ...licenceMonitoringStationTwo,
+          licence: {
+            licenceRef: recipients.primaryUser.licence_refs
+          }
+        }
+      ]
+
+      session = {
+        relevantLicenceMonitoringStations,
+        notificationType: 'Abstraction alert'
+      }
+    })
+
+    it('correctly returns the csv string, filename and type', () => {
+      const result = AbstractionAlertDownloadRecipientsPresenter.go(testRecipients, session)
+
+      expect(result).to.equal(
+        // Headers
+        'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+          // Row - licence holder
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100 m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive",,,"Little Whinging",,"WD25 7LR"\n` +
+          // Row - additional contact for same recipient - with unique licence ref
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100 m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,,\n` +
+          // Row - Primary user
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100 m3/s","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,,\n` +
+          // Row - additional contact for same recipient - with unique licence ref
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100 m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,,\n`
+      )
     })
   })
 })

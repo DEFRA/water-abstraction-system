@@ -17,12 +17,12 @@ const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
  * @returns {object} the generated return log data
  */
 function go(returnRequirement, returnCycle) {
-  const { legacyId, reportingFrequency, returnVersion } = returnRequirement
+  const { reference, reportingFrequency, returnVersion } = returnRequirement
   const { dueDate, endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
 
   const startDate = _startDate(returnVersion, returnCycleStartDate)
   const endDate = _endDate(returnVersion, returnCycleEndDate)
-  const id = _id(returnVersion, legacyId, startDate, endDate)
+  const id = _id(returnVersion, reference, startDate, endDate)
   const metadata = _metadata(returnRequirement, endDate)
 
   return {
@@ -33,11 +33,30 @@ function go(returnRequirement, returnCycle) {
     metadata,
     returnCycleId,
     returnsFrequency: reportingFrequency,
-    returnReference: legacyId.toString(),
+    returnReference: reference.toString(),
     source: 'WRLS',
     startDate,
     status: 'due'
   }
+}
+
+/**
+ * Converts the given abstraction value to a string if it exists; otherwise returns 'null'
+ *
+ * We are required to match how return logs are created by the legacy service (until such time as we have full control
+ * of returns!) We have found there are approximately 2K return requirements that were imported from NALD with no
+ * abstraction period set.
+ *
+ * When water-abstraction-import encountered these it would set the period properties in the `metadata.nald` object to
+ * the `'null'`. We use this to mirror this behaviour.
+ *
+ * @param {number|null} value - The abstraction value to be converted
+ *
+ * @returns {string} The string representation of the value or 'null'
+ */
+
+function _abstractionPeriodValue(value) {
+  return value ? value.toString() : 'null'
 }
 
 function _endDate(returnVersion, returnCycleEndDate) {
@@ -58,13 +77,13 @@ function _endDate(returnVersion, returnCycleEndDate) {
  *
  * @private
  */
-function _id(returnVersion, legacyId, startDate, endDate) {
+function _id(returnVersion, reference, startDate, endDate) {
   const regionCode = returnVersion.licence.region.naldRegionId
   const licenceReference = returnVersion.licence.licenceRef
   const startDateAsString = formatDateObjectToISO(startDate)
   const endDateAsString = formatDateObjectToISO(endDate)
 
-  return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDateAsString}:${endDateAsString}`
+  return `v1:${regionCode}:${licenceReference}:${reference}:${startDateAsString}:${endDateAsString}`
 }
 
 function _metadata(returnRequirement, endDate) {
@@ -73,8 +92,8 @@ function _metadata(returnRequirement, endDate) {
     abstractionPeriodEndMonth,
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
-    legacyId,
     points,
+    reference,
     returnRequirementPurposes,
     returnVersion,
     siteDescription,
@@ -93,11 +112,11 @@ function _metadata(returnRequirement, endDate) {
     nald: {
       regionCode: returnVersion.licence.region.naldRegionId,
       areaCode: returnVersion.licence.areacode,
-      formatId: legacyId,
-      periodStartDay: abstractionPeriodStartDay.toString(),
-      periodStartMonth: abstractionPeriodStartMonth.toString(),
-      periodEndDay: abstractionPeriodEndDay.toString(),
-      periodEndMonth: abstractionPeriodEndMonth.toString()
+      formatId: reference,
+      periodStartDay: _abstractionPeriodValue(abstractionPeriodStartDay),
+      periodStartMonth: _abstractionPeriodValue(abstractionPeriodStartMonth),
+      periodEndDay: _abstractionPeriodValue(abstractionPeriodEndDay),
+      periodEndMonth: _abstractionPeriodValue(abstractionPeriodEndMonth)
     },
     points: _points(points),
     purposes: _purposes(returnRequirementPurposes),

@@ -49,10 +49,10 @@ async function _fetch(returnId, selectedReturnSubmission) {
       'status',
       'underQuery',
       ref('metadata:description').castText().as('siteDescription'),
-      ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-      ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-      ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-      ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
+      ref('metadata:nald.periodStartDay').as('periodStartDay'),
+      ref('metadata:nald.periodStartMonth').as('periodStartMonth'),
+      ref('metadata:nald.periodEndDay').as('periodEndDay'),
+      ref('metadata:nald.periodEndMonth').as('periodEndMonth'),
       ref('metadata:purposes').as('purposes'),
       ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
     ])

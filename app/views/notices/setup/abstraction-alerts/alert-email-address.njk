@@ -18,16 +18,26 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [{
+        text: error.text,
+        href: anchor
+      }]
     }) }}
   {%endif%}
 
   <div>
     {% set textHtml %}
+      {% if error.emailAddressInputFormError %}
+        {% set errorClass = 'govuk-input--error' %}
+      {% else %}
+        {% set errorClass = '' %}
+      {% endif %}
+
       {{ govukInput({
         id: "other-user",
         name: "otherUser",
-        classes: "govuk-!-width-one-third",
+        classes: "govuk-!-width-one-third " + errorClass,
+        errorMessage: error.emailAddressInputFormError,
         label: {
           text: "Email address"
         },
@@ -43,7 +53,7 @@
 
       {{ govukRadios({
         name: 'alertEmailAddress',
-        errorMessage: error,
+        errorMessage: error.radioFormError,
         fieldset: {
           legend: {
             text: pageTitle,

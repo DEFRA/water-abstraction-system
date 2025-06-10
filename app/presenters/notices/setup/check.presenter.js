@@ -69,7 +69,7 @@ function _formatRecipients(recipients) {
 }
 
 function _links(session) {
-  const { id, journey, monitoringStationId } = session
+  const { id, journey } = session
 
   let back
   let removeLicences = ''
@@ -77,7 +77,7 @@ function _links(session) {
   if (journey === 'ad-hoc') {
     back = `/system/notices/setup/${id}/ad-hoc-licence`
   } else if (journey === 'abstraction-alert') {
-    back = `/system/monitoring-stations/${monitoringStationId}`
+    back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {
     back = `/system/notices/setup/${id}/returns-period`
     removeLicences = `/system/notices/setup/${id}/remove-licences`

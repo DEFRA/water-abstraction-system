@@ -30,7 +30,7 @@ async function _fetch(licenceId, changeDate) {
       'abstractionPeriodStartMonth',
       'externalId',
       'id',
-      'legacyId',
+      'reference',
       'reportingFrequency',
       'returnVersionId',
       'siteDescription',

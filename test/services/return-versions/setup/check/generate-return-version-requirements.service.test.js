@@ -17,15 +17,12 @@ const RegionHelper = require('../../../../support/helpers/region.helper.js')
 // Thing under test
 const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js')
 
-describe('Return Versions Setup - Generate Return Version Requirements service', () => {
+describe('Return Versions - Setup - Generate Return Version Requirements service', () => {
   let licenceId
-  let naldRegionId
   let requirements
 
   beforeEach(async () => {
     const region = RegionHelper.select()
-
-    naldRegionId = region.naldRegionId
 
     const testLicence = await LicenceHelper.add({ regionId: region.id })
 
@@ -39,8 +36,6 @@ describe('Return Versions Setup - Generate Return Version Requirements service',
     let secondaryPurposeId
 
     beforeEach(async () => {
-      // licencePoints = _generateLicencePoints()
-
       requirements = _generateRequirements(purposeId)
 
       const { id: licenceVersionId } = await LicenceVersionHelper.add({ licenceId })
@@ -68,10 +63,8 @@ describe('Return Versions Setup - Generate Return Version Requirements service',
         requirements[0].abstractionPeriod['end-abstraction-period-month']
       )
       expect(result[0].collectionFrequency).to.equal(requirements[0].frequencyCollected)
-      expect(result[0].externalId).to.equal(`${naldRegionId}:${result[0].legacyId}`)
       expect(result[0].fiftySixException).to.be.false()
       expect(result[0].gravityFill).to.be.false()
-      expect(result[0].legacyId).to.be.number()
       expect(result[0].reabstraction).to.be.false()
       expect(result[0].reportingFrequency).to.equal(requirements[0].frequencyReported)
       expect(result[0].returnsFrequency).to.equal('year')
@@ -140,10 +133,8 @@ describe('Return Versions Setup - Generate Return Version Requirements service',
         requirements[1].abstractionPeriod['end-abstraction-period-month']
       )
       expect(result[1].collectionFrequency).to.equal(requirements[1].frequencyCollected)
-      expect(result[1].externalId).to.equal(`${naldRegionId}:${result[1].legacyId}`)
       expect(result[1].fiftySixException).to.be.true()
       expect(result[1].gravityFill).to.be.true()
-      expect(result[1].legacyId).to.be.number()
       expect(result[1].reabstraction).to.be.true()
       expect(result[1].reportingFrequency).to.equal(requirements[1].frequencyReported)
       expect(result[1].returnsFrequency).to.equal('year')

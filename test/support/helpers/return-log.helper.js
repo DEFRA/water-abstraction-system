@@ -8,7 +8,7 @@ const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const { generateLegacyId } = require('./return-requirement.helper.js')
+const { generateReference } = require('./return-requirement.helper.js')
 
 /**
  * Add a new return log
@@ -52,7 +52,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
+  const returnReference = data.returnReference ? data.returnReference : generateReference()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
@@ -131,7 +131,7 @@ function generateReturnLogId(
   }
 
   if (!returnReference) {
-    returnReference = generateLegacyId()
+    returnReference = generateReference()
   }
 
   return `v${version}:1:${licenceRef}:${returnReference}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
