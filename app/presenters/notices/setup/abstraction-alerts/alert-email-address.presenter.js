@@ -32,8 +32,9 @@ function go(session, auth, validationResult, payload = {}) {
 function _alertEmailAddressOptions(username, alertEmailAddress, payload) {
   const usernameChecked = username === alertEmailAddress || payload.alertEmailAddress === 'username'
   const otherUserChecked =
-    payload.alertEmailAddress === 'other' || (alertEmailAddress && username !== alertEmailAddress)
-  const otherUserEmailAddressInput = otherUserChecked ? alertEmailAddress : ''
+    payload.alertEmailAddress === 'other' || (!!alertEmailAddress && username !== alertEmailAddress)
+
+  const otherUserEmailAddressInput = otherUserChecked && alertEmailAddress ? alertEmailAddress : ''
 
   return {
     otherUserChecked,
