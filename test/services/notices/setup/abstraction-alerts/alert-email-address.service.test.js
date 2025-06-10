@@ -37,6 +37,12 @@ describe('Alert Email Address Service', () => {
       const result = await AlertEmailAddressService.go(session.id, auth)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
+        alertEmailAddressOptions: {
+          otherUserChecked: false,
+          otherUserEmailAddressInput: '',
+          usernameChecked: false
+        },
         anchor: null,
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
         caption: 'Death star',
