@@ -40,6 +40,25 @@ function go(returnRequirement, returnCycle) {
   }
 }
 
+/**
+ * Converts the given abstraction value to a string if it exists; otherwise returns 'null'
+ *
+ * We are required to match how return logs are created by the legacy service (until such time as we have full control
+ * of returns!) We have found there are approximately 2K return requirements that were imported from NALD with no
+ * abstraction period set.
+ *
+ * When water-abstraction-import encountered these it would set the period properties in the `metadata.nald` object to
+ * the `'null'`. We use this to mirror this behaviour.
+ *
+ * @param {number|null} value - The abstraction value to be converted
+ *
+ * @returns {string} The string representation of the value or 'null'
+ */
+
+function _abstractionPeriodValue(value) {
+  return value ? value.toString() : 'null'
+}
+
 function _endDate(returnVersion, returnCycleEndDate) {
   const { endDate: returnVersionEndDate, licence } = returnVersion
 
@@ -94,10 +113,10 @@ function _metadata(returnRequirement, endDate) {
       regionCode: returnVersion.licence.region.naldRegionId,
       areaCode: returnVersion.licence.areacode,
       formatId: reference,
-      periodStartDay: abstractionPeriodStartDay.toString(),
-      periodStartMonth: abstractionPeriodStartMonth.toString(),
-      periodEndDay: abstractionPeriodEndDay.toString(),
-      periodEndMonth: abstractionPeriodEndMonth.toString()
+      periodStartDay: _abstractionPeriodValue(abstractionPeriodStartDay),
+      periodStartMonth: _abstractionPeriodValue(abstractionPeriodStartMonth),
+      periodEndDay: _abstractionPeriodValue(abstractionPeriodEndDay),
+      periodEndMonth: _abstractionPeriodValue(abstractionPeriodEndMonth)
     },
     points: _points(points),
     purposes: _purposes(returnRequirementPurposes),
