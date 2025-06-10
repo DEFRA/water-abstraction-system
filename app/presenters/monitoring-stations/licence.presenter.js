@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
+const { formatRestrictionType } = require('./base.presenter.js')
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
@@ -73,7 +74,7 @@ function _licenceTags(licenceMonitoringStations) {
       licenceMonitoringStationId,
       licenceVersionStatus,
       linkedCondition,
-      tag: `${sentenceCase(restrictionType)} tag`,
+      tag: `${formatRestrictionType(restrictionType)} tag`,
       threshold: `${thresholdValue}${thresholdUnit}`,
       type: sentenceCase(restrictionType)
     }
