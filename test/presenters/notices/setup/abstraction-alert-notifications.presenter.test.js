@@ -115,7 +115,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           address_line_4: 'Surrey',
           address_line_5: 'WD25 7LR',
           // common personalisation
-          condition_text: '',
+          condition_text: 'Effect of restriction: I have a bad feeling about this',
           flow_or_level: 'flow',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
           licence_ref: recipients.licenceHolder.licence_refs,
@@ -189,7 +189,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
-            condition_text: '',
+            condition_text: 'Effect of restriction: I have a bad feeling about this',
             flow_or_level: 'flow',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.additionalContact.licence_refs,
@@ -207,7 +207,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
-            condition_text: '',
+            condition_text: 'Effect of restriction: I have a bad feeling about this',
             flow_or_level: 'flow',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
             licence_ref: recipients.primaryUser.licence_refs,

@@ -97,7 +97,7 @@ function _addressLines(contact) {
 
 function _commonPersonalisation(licenceMonitoringStation, monitoringStationName, alertEmailAddress) {
   return {
-    condition_text: '',
+    condition_text: _conditionText(licenceMonitoringStation.notes),
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: alertEmailAddress,
     licence_ref: licenceMonitoringStation.licence.licenceRef,
@@ -106,6 +106,10 @@ function _commonPersonalisation(licenceMonitoringStation, monitoringStationName,
     threshold_unit: licenceMonitoringStation.thresholdUnit,
     threshold_value: licenceMonitoringStation.thresholdValue
   }
+}
+
+function _conditionText(notes) {
+  return notes ? `Effect of restriction: ${notes}` : ''
 }
 
 /**
