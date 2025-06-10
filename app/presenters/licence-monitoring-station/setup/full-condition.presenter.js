@@ -38,26 +38,41 @@ function _backLink(session) {
 }
 
 function _generateRadioButtons(conditions) {
-  // TODO: Return default if there are no conditions
-  // TODO: Add "or" then the final option at the end if there are conditions
-  return (
-    conditions
-      // TODO: confirm whether this filtering is required
-      .filter((row) => {
-        return row.notes
-      })
-      .map((row, n) => {
-        return {
-          value: row.id,
-          text: `Flow cessation condition ${n + 1}`,
-          hint: {
-            text: `${row.notes} (Additional information 1: ${row.param1 || 'None'})  (Additional information 2: ${
-              row.param2 || 'None'
-            })`
-          }
+  if (conditions.length === 0) {
+    return [
+      {
+        value: 'no_conditions',
+        text: 'No known flow conditions - Manually define an abstraction period'
+      }
+    ]
+  }
+
+  const conditionRadioButtons = conditions
+    // Legacy code removes conditions with an empty notes field so we replicate this here
+    // TODO: confirm whether this filtering is required
+    .filter((row) => {
+      return row.notes
+    })
+    .map((row, index) => {
+      return {
+        value: row.id,
+        text: `Flow cessation condition ${index + 1}`,
+        hint: {
+          text: `${row.notes} (Additional information 1: ${row.param1 || 'None'}) (Additional information 2: ${row.param2 || 'None'})`
         }
-      })
-  )
+      }
+    })
+
+  return [
+    ...conditionRadioButtons,
+    {
+      divider: 'or'
+    },
+    {
+      value: 'not_listed',
+      text: 'The condition is not listed for this licence'
+    }
+  ]
 }
 
 module.exports = {
