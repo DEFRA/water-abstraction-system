@@ -97,7 +97,8 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
             notes: '"                   "             "                    "'
           }
         }
-      ]
+      ],
+      riverName: 'A river'
     })
   })
 
@@ -169,7 +170,8 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         }
       ],
       monitoringStationId,
-      monitoringStationName: 'MONITOR PLACE'
+      monitoringStationName: 'MONITOR PLACE',
+      monitoringStationRiverName: 'A river'
     })
   })
 
@@ -214,6 +216,14 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
       expect(result.monitoringStationName).to.equal('MONITOR PLACE')
+    })
+  })
+
+  describe('the "monitoringStationRiverName" property', () => {
+    it('should return the monitoring station river name', async () => {
+      const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+
+      expect(result.monitoringStationRiverName).to.equal('A river')
     })
   })
 })

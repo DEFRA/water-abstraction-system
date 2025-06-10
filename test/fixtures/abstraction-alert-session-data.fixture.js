@@ -85,7 +85,8 @@ function get(_licenceMonitoringStations) {
   return {
     licenceMonitoringStations: [...Object.values(lms)],
     monitoringStationId: generateUUID(),
-    monitoringStationName: 'Death star'
+    monitoringStationName: 'Death star',
+    monitoringStationRiverName: 'Meridian Trench'
   }
 }
 
