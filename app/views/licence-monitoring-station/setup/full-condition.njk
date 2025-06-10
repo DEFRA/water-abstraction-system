@@ -3,6 +3,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
   {{
@@ -21,9 +22,22 @@
     }) }}
   {%endif%}
 
+  {# Main heading #}
+  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </span>
+
   <div>
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {# TODO: Set this up properly (correct naming etc.) #}
+      {{ govukRadios({
+        id: 'condition',
+        name: 'condition',
+        items: radioButtons,
+        errorMessage: error.conditionErrorMessage
+      }) }}
 
       {{ govukButton({
         text: "Continue",
