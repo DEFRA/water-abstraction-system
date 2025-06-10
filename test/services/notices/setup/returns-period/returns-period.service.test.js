@@ -19,7 +19,7 @@ describe('Notices - Setup - Returns Period service', () => {
   let session
 
   before(async () => {
-    session = await SessionHelper.add({ data: { referenceCode: 'RINV-123' } })
+    session = await SessionHelper.add({ data: { referenceCode: 'RINV-123', journey: 'invitations' } })
 
     const testDate = new Date('2024-12-01')
 
