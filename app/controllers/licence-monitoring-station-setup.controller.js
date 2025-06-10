@@ -5,13 +5,44 @@
  * @module LicenceMonitoringStationSetupController
  */
 
+const FullConditionService = require('../services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
 const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+const SubmitFullConditionService = require('../services/licence-monitoring-station/setup/submit-full-condition.service.js')
 const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+
+async function fullCondition(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await FullConditionService.go(sessionId)
+
+  return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
+}
+
+async function submitFullCondition(request, h) {
+  const {
+    params: { sessionId },
+    payload
+  } = request
+
+  const pageData = await SubmitFullConditionService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+  }
+
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`)
+}
 
 async function licenceNumber(request, h) {
   const {
@@ -106,10 +137,12 @@ async function thresholdAndUnit(request, h) {
 }
 
 module.exports = {
+  fullCondition,
   licenceNumber,
-  submitSetup,
   stopOrReduce,
+  submitFullCondition,
   submitLicenceNumber,
+  submitSetup,
   submitStopOrReduce,
   submitThresholdAndUnit,
   thresholdAndUnit
