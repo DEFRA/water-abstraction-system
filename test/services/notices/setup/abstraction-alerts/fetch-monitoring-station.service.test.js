@@ -48,7 +48,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
     licenceVersionPurpose = await LicenceVersionPurposesHelper.add()
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-      licenceVersionPurposeId: licenceVersionPurpose.id
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      notes: 'I have a bad feeling about this'
     })
 
     licenceMonitoringStationWithVersionPurpose = await LicenceMonitoringStationHelper.add({
@@ -100,7 +101,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
               abstractionPeriodEndMonth: 3,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 1
-            }
+            },
+            notes: 'I have a bad feeling about this'
           },
           measureType: 'flow',
           restrictionType: 'reduce',
@@ -135,7 +137,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1
-          }
+          },
+          notes: 'I have a bad feeling about this'
         },
         measureType: 'flow',
         restrictionType: 'reduce',

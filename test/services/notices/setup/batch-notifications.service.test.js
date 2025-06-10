@@ -444,7 +444,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             address_line_3: 'Little Whinging',
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
-            condition_text: '',
+            condition_text: 'Effect of restriction: I have a bad feeling about this',
             threshold_unit: 'm3/s',
             threshold_value: 100,
             issuer_email_address: 'luke.skywalker@rebelmail.test',
