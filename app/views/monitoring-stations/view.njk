@@ -85,6 +85,14 @@
               classes: "govuk-button--secondary"
             })
           }}
+
+          {% if restrictions.length > 0 and showRemoveTagButton %}
+            {{ govukButton({
+              text: "Remove a tag",
+              href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+              classes: "govuk-button--secondary"
+            }) }}
+          {% endif %}
         </form>
       {% else %}
         {{ govukButton({
@@ -93,7 +101,7 @@
           classes: "govuk-button--secondary"
         }) }}
 
-        {% if restrictions.length > 0 %}
+        {% if restrictions.length > 0 and showRemoveTagButton %}
           {{ govukButton({
             text: "Remove a tag",
             href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
