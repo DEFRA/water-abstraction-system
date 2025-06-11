@@ -69,7 +69,7 @@
 
   <div class="divider govuk-!-margin-bottom-7"></div>
 
-  {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, tableCaption) }}
+  <div class="govuk-table__caption--m" data-test="table-caption">{{ tableCaption }}</div>
 
   {% if permissionToManageLinks %}
     <div class="govuk-button-group">
@@ -91,16 +91,18 @@
           href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
           classes: "govuk-button--secondary"
         }) }}
-      {% endif %}
 
-      {% if restrictions.length > 0 %}
-        {{ govukButton({
-          text: "Remove a tag",
-          href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
-          classes: "govuk-button--secondary"
-        }) }}
+        {% if restrictions.length > 0 %}
+          {{ govukButton({
+            text: "Remove a tag",
+            href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+            classes: "govuk-button--secondary"
+          }) }}
+        {% endif %}
       {% endif %}
       </form>
     </div>
   {% endif %}
+
+  {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) }}
 {% endblock %}
