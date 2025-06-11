@@ -491,6 +491,21 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('the "messageRef"', () => {
     describe('when the alert type', () => {
+      describe('and "restrictionType" ', () => {
+        describe('are not set', () => {
+          beforeEach(() => {
+            _setupAlertAndRestrictionTypeData(session, recipients, false, '')
+
+            session.alertType = ''
+          })
+
+          it('correctly sets the default message ref', () => {
+            const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result.messageRef).to.equal('water_abstraction_alert')
+          })
+        })
+      })
       describe('is "resume"', () => {
         beforeEach(() => {
           session.alertType = 'resume'

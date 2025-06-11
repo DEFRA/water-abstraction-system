@@ -295,6 +295,8 @@ function _messageRef(alertType, restrictionType) {
       return 'water_abstraction_alert_stop_warning'
     }
   }
+
+  return 'water_abstraction_alert'
 }
 
 /**
