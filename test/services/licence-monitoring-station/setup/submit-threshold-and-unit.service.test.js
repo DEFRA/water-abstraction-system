@@ -32,7 +32,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
-        payload = { threshold: '1000', unit: 'Ml/d' }
+        payload = { unit: 'Ml/d', 'threshold-Ml/d': '1000' }
       })
 
       it('saves the submitted option', async () => {
@@ -71,9 +71,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
     describe('with an invalid payload', () => {
       beforeEach(async () => {
-        payload = {
-          unit: 'select'
-        }
+        payload = {}
       })
 
       it('returns the page data for the view', async () => {
@@ -84,19 +82,18 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
             activeNavBar: 'search',
             backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
             displayUnits: [
-              { value: 'Ml/d', text: 'Ml/d', selected: false },
-              { value: 'm3/s', text: 'm3/s', selected: false },
-              { value: 'm3/d', text: 'm3/d', selected: false },
-              { value: 'l/s', text: 'l/s', selected: false },
-              { value: 'mAOD', text: 'mAOD', selected: false },
-              { value: 'mBOD', text: 'mBOD', selected: false },
-              { value: 'mASD', text: 'mASD', selected: false },
-              { value: 'm', text: 'm', selected: false },
-              { value: 'SLD', text: 'SLD', selected: false },
-              { value: 'ft3/s', text: 'ft3/s', selected: false },
-              { value: 'gpd', text: 'gpd', selected: false },
-              { value: 'Mgpd', text: 'Mgpd', selected: false },
-              { value: 'select', text: 'Select an option', selected: true }
+              { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },
+              { value: 'm3/s', text: 'm3/s', hint: { text: 'cubic metres per second' }, checked: false },
+              { value: 'm3/d', text: 'm3/d', hint: { text: 'cubic metres per day' }, checked: false },
+              { value: 'l/s', text: 'l/s', hint: { text: 'litres per second' }, checked: false },
+              { value: 'mAOD', text: 'mAOD', hint: { text: 'metres above ordnance datum' }, checked: false },
+              { value: 'mBOD', text: 'mBOD', hint: { text: 'metres below ordnance datum' }, checked: false },
+              { value: 'mASD', text: 'mASD', hint: { text: 'metres above sea datum' }, checked: false },
+              { value: 'm', text: 'm', hint: { text: 'metres' }, checked: false },
+              { value: 'SLD', text: 'SLD', hint: { text: 'south level datum' }, checked: false },
+              { value: 'ft3/s', text: 'ft3/s', hint: { text: 'cubic foot per second' }, checked: false },
+              { value: 'gpd', text: 'gpd', hint: { text: 'gallons per day' }, checked: false },
+              { value: 'Mgpd', text: 'Mgpd', hint: { text: 'million gallons per day' }, checked: false }
             ],
             monitoringStationLabel: 'Monitoring Station Label',
             pageTitle: 'What is the licence hands-off flow or level threshold?',
@@ -112,8 +109,8 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
           expect(result.error).to.equal({
             errorList: [
-              { href: '#threshold', text: 'Enter a threshold' },
-              { href: '#unit', text: 'Select which units to use' }
+              { href: '#unit', text: 'Select which units to use' },
+              { href: '#threshold', text: 'Enter a threshold' }
             ],
             threshold: { message: 'Enter a threshold' },
             unit: { message: 'Select which units to use' }
@@ -134,24 +131,6 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
           expect(result.error).to.equal({
             errorList: [{ href: '#threshold', text: 'Enter a threshold' }],
             threshold: { message: 'Enter a threshold' }
-          })
-        })
-      })
-
-      describe('because the user has not selected the "unit"', () => {
-        beforeEach(async () => {
-          payload = {
-            threshold: '1000',
-            unit: 'select'
-          }
-        })
-
-        it('includes an error for the unit radio elements', async () => {
-          const result = await SubmitThresholdAndUnitService.go(session.id, payload)
-
-          expect(result.error).to.equal({
-            errorList: [{ href: '#unit', text: 'Select which units to use' }],
-            unit: { message: 'Select which units to use' }
           })
         })
       })
