@@ -11,7 +11,7 @@ const LicenceVersionPurposeConditionModel = require('../../../models/licence-ver
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @param {string} sessionId
  *

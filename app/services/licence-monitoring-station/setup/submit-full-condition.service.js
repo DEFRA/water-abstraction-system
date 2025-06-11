@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module SubmitFullConditionService
  */
 
-const FullConditionPresenter = require('../../../presenters/licence-monitoring-station/setup/full-condition.presenter.js')
+const FullConditionService = require('../../../services/licence-monitoring-station/setup/full-condition.service.js')
 const FullConditionValidator = require('../../../validators/licence-monitoring-station/setup/full-condition.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -19,17 +19,18 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
-
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    const session = await SessionModel.query().findById(sessionId)
     await _save(session, payload)
 
-    return {}
+    return {
+      checkPageVisited: session.checkPageVisited
+    }
   }
 
-  const pageData = FullConditionPresenter.go(session)
+  const pageData = await FullConditionService.go(sessionId)
 
   return {
     error: validationResult,

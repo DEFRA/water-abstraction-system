@@ -18,7 +18,12 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: "#condition-error"
+        }
+      ]
     }) }}
   {%endif%}
 
@@ -36,7 +41,7 @@
         id: 'condition',
         name: 'condition',
         items: radioButtons,
-        errorMessage: error.conditionErrorMessage
+        errorMessage: error
       }) }}
 
       {{ govukButton({
