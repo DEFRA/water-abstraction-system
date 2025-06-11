@@ -1,0 +1,74 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-full">
+      {# Licence condition title #}
+      <h2 class="govuk-heading-m">{{ licenceConditionTitle }}</h2>
+
+      {# Warning #}
+      {{ govukWarningText({
+        text: "You will not be able to send a water abstraction alert for the licence at this restriction type and threshold.",
+        iconFallbackText: "Warning",
+        attributes: { 'data-test': 'warning-' + rowIndex }
+      }) }}
+
+      {# Tag details summary list #}
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Watercourse" },
+            value: { html: '<span data-test="watercourse">' + Watercourse + '</span>' }
+          },
+          {
+            key: { text: "Station" },
+            value: { html: '<span data-test="station">' + station + '</span>' }
+          },
+          {
+            key: { text: "Threshold" },
+            value: { html: '<span data-test="threshold">' + threshold + '</span>' }
+          },
+          {
+            key: { text: "Type" },
+            value: { html: '<span data-test="type">' + type + '</span>' }
+          },
+          {
+            key: { text: "Linked condition" },
+            value: { html: '<span data-test="linked-condition">' + linkedCondition + '</span>' }
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+
+  {# "Remove tag" button #}
+  <form method="post">
+    <input type="hidden" name="licenceRef" value="{{licenceRef}}"/>
+    <input type="hidden" name="monitoringStationId" value="{{monitoringStationId}}"/>
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+      {{ govukButton({
+        text: "Remove tag",
+        preventDoubleClick: true
+      }) }}
+  </form>
+{% endblock %}

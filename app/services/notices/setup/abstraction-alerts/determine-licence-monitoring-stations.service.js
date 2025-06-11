@@ -19,6 +19,7 @@ async function go(id) {
   return {
     licenceMonitoringStations: _licenceMonitoringStations(monitoringStation.licenceMonitoringStations),
     monitoringStationId: id,
+    monitoringStationRiverName: monitoringStation.riverName,
     monitoringStationName: monitoringStation.label
   }
 }
@@ -30,6 +31,7 @@ function _licenceMonitoringStations(licenceMonitoringStations) {
     return {
       ...rest,
       ..._licenceVersionPurpose(licenceVersionPurposeCondition),
+      notes: _notes(licenceVersionPurposeCondition),
       thresholdGroup: _thresholdGroup(rest.measureType, rest.thresholdValue, rest.thresholdUnit)
     }
   })
@@ -41,6 +43,26 @@ function _licenceVersionPurpose(licenceVersionPurposeCondition) {
   } else {
     return {}
   }
+}
+
+/**
+ * Notes are used in the personalisation for notify.
+ *
+ * Nots can be:
+ *  - a string
+ *  - null
+ *
+ * Here are some examples from NALD where the notes are set (they may not look 'correct' but we still set them):
+ * - `"                   "             "                    "`
+ * - '\n'
+ * - '-'
+ *
+ * @private
+ */
+function _notes(licenceVersionPurposeCondition) {
+  return licenceVersionPurposeCondition?.notes && licenceVersionPurposeCondition?.notes.length > 0
+    ? licenceVersionPurposeCondition.notes
+    : null
 }
 
 /**

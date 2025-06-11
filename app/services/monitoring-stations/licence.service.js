@@ -15,18 +15,19 @@ const LicencePresenter = require('../../presenters/monitoring-stations/licence.p
  *
  * It fetches details of the tags that have been applied to a licence for the selected monitoring station.
  *
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} licenceId - The UUID of the licence record
  * @param {string} monitoringStationId - The UUID of the monitoring station record
  *
  * @returns {Promise<object>} The view data for the licence tag details page
  */
-async function go(licenceId, monitoringStationId) {
+async function go(auth, licenceId, monitoringStationId) {
   const { lastAlert, monitoringStationLicenceTags } = await FetchLicenceTagDetailsService.go(
     licenceId,
     monitoringStationId
   )
 
-  const formattedData = LicencePresenter.go(lastAlert, monitoringStationLicenceTags)
+  const formattedData = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
 
   return {
     activeNavBar: 'search',

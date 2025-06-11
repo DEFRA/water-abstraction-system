@@ -17,7 +17,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     beforeEach(() => {
       payload = {
         unit: 'm3/d',
-        threshold: '1000'
+        'threshold-m3/d': '1000'
       }
     })
 
@@ -32,7 +32,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     describe('because it contains a "threshold" that is a negative number', () => {
       beforeEach(() => {
         payload = {
-          threshold: '-1000',
+          'threshold-m3/d': '-1000',
           unit: 'm3/d'
         }
       })
@@ -48,7 +48,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     describe('because it contains a "threshold" that is too large', () => {
       beforeEach(() => {
         payload = {
-          threshold: '11000000',
+          'threshold-m3/d': '11000000',
           unit: 'm3/d'
         }
       })
@@ -64,28 +64,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
 
   describe('when no data is provided', () => {
     beforeEach(() => {
-      payload = {
-        unit: 'select'
-      }
-    })
-
-    it('fails validation', () => {
-      const result = ThresholdAndUnitValidator.go(payload)
-
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a threshold')
-      expect(result.error.details[1].message).to.equal('Select which units to use')
-    })
-  })
-
-  describe('when only the "threshold" is provided', () => {
-    beforeEach(() => {
-      // The presenter will always default to the 'Select an option text' if the user hasn't selected a unit, hence why
-      // this is always in the payload
-      payload = {
-        threshold: '1000',
-        unit: 'select'
-      }
+      payload = {}
     })
 
     it('fails validation', () => {
@@ -93,6 +72,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
 
       expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal('Select which units to use')
+      expect(result.error.details[1].message).to.equal('Enter a threshold')
     })
   })
 
@@ -106,6 +86,22 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
 
       expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal('Enter a threshold')
+    })
+  })
+
+  describe('when multiple threshold values are provided', () => {
+    beforeEach(() => {
+      payload = {
+        'threshold-m3/d': '1000',
+        'threshold-m3/s': '2000',
+        unit: 'm3/d'
+      }
+    })
+
+    it('extracts the correct threshold value', () => {
+      const result = ThresholdAndUnitValidator.go(payload)
+
+      expect(result.value.threshold).to.equal(1000)
     })
   })
 })
