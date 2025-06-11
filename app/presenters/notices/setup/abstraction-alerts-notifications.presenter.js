@@ -162,8 +162,6 @@ function _conditionText(notes) {
 function _email(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
 
-  const templateId = _emailTemplate()
-
   const messageType = 'email'
 
   return {
@@ -175,16 +173,12 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
     personalisation: commonPersonalisation,
     recipient: recipient.email,
     reference: referenceCode,
-    templateId
+    templateId: _templateId(alertType, restrictionType, 'email')
   }
 }
 
 function _emailMessageRef(alertType, restrictionType) {
   return `${_messageRef(alertType, restrictionType)}_email`
-}
-
-function _emailTemplate() {
-  return notifyTemplates['abstraction-alerts'].reduceWarningEmail
 }
 
 /**
@@ -215,8 +209,6 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
 
   const name = contactName(recipient.contact)
 
-  const templateId = _letterTemplate()
-
   const messageType = 'letter'
 
   return {
@@ -231,12 +223,8 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
       name
     },
     reference: referenceCode,
-    templateId
+    templateId: _templateId(alertType, restrictionType, 'letter')
   }
-}
-
-function _letterTemplate() {
-  return notifyTemplates['abstraction-alerts'].reduceWarning
 }
 
 /**
@@ -297,6 +285,38 @@ function _messageRef(alertType, restrictionType) {
   }
 
   return 'water_abstraction_alert'
+}
+
+function _templateId(alertType, restrictionType, type) {
+  if (alertType === 'resume') {
+    return notifyTemplates.alerts[type].resume
+  }
+
+  if (alertType === 'reduce') {
+    return restrictionType === 'stop_or_reduce'
+      ? notifyTemplates.alerts[type].reduceOrStop
+      : notifyTemplates.alerts[type].reduce
+  }
+
+  if (alertType === 'stop') {
+    return notifyTemplates.alerts[type].stop
+  }
+
+  if (alertType === 'warning') {
+    if (restrictionType === 'reduce') {
+      return notifyTemplates.alerts[type].reduceWarning
+    }
+
+    if (restrictionType === 'stop_or_reduce') {
+      return notifyTemplates.alerts[type].reduceOrStopWarning
+    }
+
+    if (restrictionType === 'stop') {
+      return notifyTemplates.alerts[type].stopWarning
+    }
+  }
+
+  return null
 }
 
 /**
