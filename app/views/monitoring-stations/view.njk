@@ -85,30 +85,22 @@
               classes: "govuk-button--secondary"
             })
           }}
-
-          {% if restrictions.length > 0 and showRemoveTagButton %}
-            {{ govukButton({
-              text: "Remove a tag",
-              href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
-              classes: "govuk-button--secondary"
-            }) }}
-          {% endif %}
-        </form>
       {% else %}
         {{ govukButton({
           text: "Tag a licence",
           href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
           classes: "govuk-button--secondary"
         }) }}
-
-        {% if restrictions.length > 0 and showRemoveTagButton %}
-          {{ govukButton({
-            text: "Remove a tag",
-            href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
-            classes: "govuk-button--secondary"
-          }) }}
-        {% endif %}
       {% endif %}
+
+      {% if restrictions.length > 0 and showRemoveTagButton %}
+        {{ govukButton({
+          text: "Remove a tag",
+          href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
+      </form>
     </div>
   {% endif %}
 
