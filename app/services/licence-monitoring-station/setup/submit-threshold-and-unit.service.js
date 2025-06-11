@@ -29,19 +29,25 @@ async function go(sessionId, payload) {
 
   const validationResult = _validate(payload)
 
-  if (!validationResult) {
-    await _save(session, payload)
+  // Due to the way the page is structured with multiple threshold fields (one per unit), the validator handles
+  // identifying which field contains the correct threshold value based on the unit selected. This is returned to us
+  // as `valdationResult.value.threshold` (whereas in the payload it is `threshold-{unit}`) and this is how we save it
+  // in the session.
+  if (validationResult.value) {
+    await _save(session, validationResult.value)
 
     return {
       checkPageVisited: session.checkPageVisited
     }
   }
 
+  // We want the page to be re-rendered with any originally submitted threshold values (rather than the one identified
+  // by the validator) hence we use payload here rather than validationResult.value
   const formattedData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error: validationResult.formattedError,
     ...formattedData
   }
 }
@@ -64,10 +70,10 @@ function _validate(payload) {
   const validation = ThresholdAndUnitValidator.go(payload)
 
   if (!validation.error) {
-    return null
+    return { formattedError: null, value: validation.value }
   }
 
-  const result = {
+  const formattedError = {
     errorList: []
   }
 
@@ -79,15 +85,15 @@ function _validate(payload) {
       href = '#unit'
     }
 
-    result.errorList.push({
+    formattedError.errorList.push({
       href,
       text: detail.message
     })
 
-    result[detail.context.key] = { message: detail.message }
+    formattedError[detail.context.key] = { message: detail.message }
   })
 
-  return result
+  return { formattedError, value: null }
 }
 
 module.exports = {
