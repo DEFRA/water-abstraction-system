@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -32,20 +32,38 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     <div class="govuk-body">
-      {{ govukInput({
-        label: {
-          text: "Threshold"
-        },
-        classes: "govuk-input--width-10",
-        value: threshold,
-        errorMessage: {
-          text: error.threshold.message
-        } if error.threshold,
-        id: "threshold",
-        name: "threshold"
-      }) }}
+      {# We can't set the conditional box in the presenter so we need to iterate over the units array to add it #}
+      {% set processedUnits = [] %}
+      {% for unit_item in displayUnits %}
+        {% set thresholdHtml %}
+          {{ govukInput({
+            label: {
+              text: "Threshold"
+            },
+            classes: "govuk-input--width-10",
+            value: threshold if unit_item.checked else "",
+            errorMessage: {
+              text: error.threshold.message
+            } if error.threshold,
+            id: "threshold-" + unit_item.value,
+            name: "threshold-" + unit_item.value
+          }) }}
+        {% endset %}
 
-      {{ govukSelect({
+        {% set modified_item = {
+          "text": unit_item.text,
+          "value": unit_item.value,
+          "checked": unit_item.checked,
+          "hint": unit_item.hint,
+          "conditional": {
+            "html": thresholdHtml
+          }
+        } %}
+
+        {% set processedUnits = (processedUnits.push(modified_item), processedUnits) %}
+      {% endfor %}
+
+      {{ govukRadios({
         id: "unit",
         name: "unit",
         label: {
@@ -54,9 +72,8 @@
         errorMessage: {
           text: error.unit.message
         } if error.unit,
-        items: displayUnits
+        items: processedUnits
       }) }}
-
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </div>

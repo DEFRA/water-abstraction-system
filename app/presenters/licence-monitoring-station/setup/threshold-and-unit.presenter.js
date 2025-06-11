@@ -38,21 +38,16 @@ function _backLink(session) {
 }
 
 function _units(sessionUnit) {
-  const mappedUnits = Object.entries(thresholdUnits).map(([_key, value]) => {
+  return Object.entries(thresholdUnits).map(([_key, { label, value }]) => {
     return {
+      hint: {
+        text: label
+      },
       value,
-      text: value,
-      selected: sessionUnit === value
+      checked: sessionUnit === value,
+      text: value
     }
   })
-
-  mappedUnits.push({
-    value: 'select',
-    text: 'Select an option',
-    selected: sessionUnit === 'select' || sessionUnit === undefined
-  })
-
-  return mappedUnits
 }
 
 module.exports = {
