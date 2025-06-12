@@ -103,6 +103,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
+        messageRef: 'water_abstraction_alert_stop_warning',
         personalisation: {
           name: 'Mr H J Licence holder',
           address_line_1: '1',
@@ -488,6 +489,261 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       })
     })
   })
+
+  describe('the "messageRef"', () => {
+    describe('when the alert type', () => {
+      describe('and "restrictionType" ', () => {
+        describe('are not set', () => {
+          beforeEach(() => {
+            _setupAlertAndRestrictionTypeData(session, recipients, false, '')
+
+            session.alertType = ''
+          })
+
+          it('correctly sets the default message ref', () => {
+            const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result.messageRef).to.equal('water_abstraction_alert')
+          })
+        })
+      })
+      describe('is "resume"', () => {
+        beforeEach(() => {
+          session.alertType = 'resume'
+        })
+
+        describe('and the notification ', () => {
+          describe('is an email', () => {
+            beforeEach(() => {
+              _setupAlertAndRestrictionTypeData(session, recipients, true)
+            })
+
+            it('correctly sets the message ref', () => {
+              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+              expect(result.messageRef).to.equal('water_abstraction_alert_resume_email')
+            })
+
+            describe('is a letter', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients)
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_resume')
+              })
+            })
+          })
+        })
+      })
+
+      describe('is "reduce"', () => {
+        beforeEach(() => {
+          session.alertType = 'reduce'
+        })
+
+        describe('and the "restrictionType" is "stop_or_reduce"', () => {
+          describe('and the notification ', () => {
+            describe('is an email', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients, true, 'stop_or_reduce')
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_email')
+              })
+
+              describe('is a letter', () => {
+                beforeEach(() => {
+                  _setupAlertAndRestrictionTypeData(session, recipients, false, 'stop_or_reduce')
+                })
+
+                it('correctly sets the message ref', () => {
+                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop')
+                })
+              })
+            })
+          })
+        })
+
+        describe('and the "restrictionType" is not "stop_or_reduce"', () => {
+          describe('and the notification ', () => {
+            describe('is an email', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients, true, 'reduce')
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_email')
+              })
+
+              describe('is a letter', () => {
+                beforeEach(() => {
+                  _setupAlertAndRestrictionTypeData(session, recipients, false, 'reduce')
+                })
+
+                it('correctly sets the message ref', () => {
+                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce')
+                })
+              })
+            })
+          })
+        })
+      })
+
+      describe('is "stop"', () => {
+        beforeEach(() => {
+          session.alertType = 'stop'
+        })
+
+        describe('and the notification ', () => {
+          describe('is an email', () => {
+            beforeEach(() => {
+              _setupAlertAndRestrictionTypeData(session, recipients, true)
+            })
+
+            it('correctly sets the message ref', () => {
+              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+              expect(result.messageRef).to.equal('water_abstraction_alert_stop_email')
+            })
+
+            describe('is a letter', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients)
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_stop')
+              })
+            })
+          })
+        })
+      })
+
+      describe('is "warning"', () => {
+        beforeEach(() => {
+          session.alertType = 'warning'
+        })
+
+        describe('and the "restrictionType" is "reduce"', () => {
+          describe('and the notification ', () => {
+            describe('is an email', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients, true, 'reduce')
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning_email')
+              })
+
+              describe('is a letter', () => {
+                beforeEach(() => {
+                  _setupAlertAndRestrictionTypeData(session, recipients, false, 'reduce')
+                })
+
+                it('correctly sets the message ref', () => {
+                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning')
+                })
+              })
+            })
+          })
+        })
+
+        describe('and the "restrictionType" is "stop_or_reduce"', () => {
+          describe('and the notification ', () => {
+            describe('is an email', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients, true, 'stop_or_reduce')
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning_email')
+              })
+
+              describe('is a letter', () => {
+                beforeEach(() => {
+                  _setupAlertAndRestrictionTypeData(session, recipients, false, 'stop_or_reduce')
+                })
+
+                it('correctly sets the message ref', () => {
+                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning')
+                })
+              })
+            })
+          })
+        })
+
+        describe('and the "restrictionType" is "stop"', () => {
+          describe('and the notification ', () => {
+            describe('is an email', () => {
+              beforeEach(() => {
+                _setupAlertAndRestrictionTypeData(session, recipients, true, 'stop')
+              })
+
+              it('correctly sets the message ref', () => {
+                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning_email')
+              })
+
+              describe('is a letter', () => {
+                beforeEach(() => {
+                  _setupAlertAndRestrictionTypeData(session, recipients, false, 'stop')
+                })
+
+                it('correctly sets the message ref', () => {
+                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+
+                  expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning')
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+})
+
+/**
+ * The primary user is an email, the licence holder is a letter
+ *
+ * @private
+ */
+function _setupAlertAndRestrictionTypeData(session, recipients, email = false, restrictionType = 'stop') {
+  if (email) {
+    session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      recipients.primaryUser.licence_refs
+    ])
+  } else {
+    session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
+      recipients.licenceHolder.licence_refs
+    ])
+  }
+
+  session.relevantLicenceMonitoringStations[0].restrictionType = restrictionType
+}
 
   describe('the "messageRef"', () => {
     describe('when the alert type', () => {
