@@ -60,8 +60,6 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-        reference: 'TEST-123',
-        templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f',
         licences: `["${recipients.primaryUser.licence_refs}"]`,
         messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
@@ -75,15 +73,16 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           threshold_unit: 'm',
           threshold_value: 1000
         },
-
-        recipient: 'primary.user@important.com'
+        recipient: 'primary.user@important.com',
+        reference: 'TEST-123',
+        templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
       },
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
-        messageType: 'letter',
         messageRef: 'water_abstraction_alert_stop_warning',
+        messageType: 'letter',
         personalisation: {
           name: 'Mr H J Licence holder',
           address_line_1: '1',
@@ -100,16 +99,17 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           source: '* Source of supply: Meridian Trench',
           threshold_unit: 'm3/s',
           threshold_value: 100
-        }
+        },
+        reference: 'TEST-123',
+        templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
       },
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-        reference: 'TEST-123',
-        templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f',
         licences: `["${recipients.additionalContact.licence_refs}"]`,
-        messageType: 'email',
         messageRef: 'water_abstraction_alert_stop_warning_email',
+        messageType: 'email',
+
         personalisation: {
           condition_text: '',
           flow_or_level: 'level',
@@ -120,7 +120,9 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           threshold_unit: 'm',
           threshold_value: 100
         },
-        recipient: 'additional.contact@important.com'
+        recipient: 'additional.contact@important.com',
+        reference: 'TEST-123',
+        templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21'
       }
     ])
   })
