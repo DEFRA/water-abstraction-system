@@ -32,7 +32,7 @@ function _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType) {
   const usernameChecked = alertEmailAddressType === 'username'
   const otherUserChecked = alertEmailAddressType === 'other'
 
-  const otherUserEmailAddressInput = otherUserChecked ? alertEmailAddress : ''
+  const otherUserEmailAddressInput = otherUserChecked && alertEmailAddress ? alertEmailAddress : ''
 
   return {
     otherUserChecked,
