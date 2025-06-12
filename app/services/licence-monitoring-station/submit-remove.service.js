@@ -5,7 +5,7 @@
  * @module SubmitRemoveService
  */
 
-const GeneralLib = require('../../lib/general.lib.js')
+const { flashNotification, timestampForPostgres } = require('../../lib/general.lib.js')
 const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
 
 /**
@@ -19,9 +19,11 @@ const LicenceMonitoringStationModel = require('../../models/licence-monitoring-s
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(licenceMonitoringStationId, licenceRef, yar) {
-  await LicenceMonitoringStationModel.query().update({ deletedAt: new Date() }).where('id', licenceMonitoringStationId)
+  await LicenceMonitoringStationModel.query()
+    .update({ deletedAt: timestampForPostgres() })
+    .where('id', licenceMonitoringStationId)
 
-  GeneralLib.flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
+  flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }
 
 module.exports = {
