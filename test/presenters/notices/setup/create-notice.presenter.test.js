@@ -187,8 +187,6 @@ describe('Notices - Setup - Create Notice presenter', () => {
       testRecipients = [...Object.values(recipients)]
 
       session = {
-        returnsPeriod: 'quarterFour',
-        removeLicences: [],
         journey: 'abstraction-alert',
         referenceCode: 'WAA-123',
         subType: 'waterAbstractionAlerts',
@@ -202,6 +200,9 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
       expect(result).to.equal({
         issuer: 'hello@world.com',
+        licences:
+          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
+          `"${recipients.primaryUser.licence_refs}"]`,
         metadata: {
           name: 'Water abstraction alert',
           options: {
@@ -212,6 +213,17 @@ describe('Notices - Setup - Create Notice presenter', () => {
         referenceCode: 'WAA-123',
         status: 'completed',
         subtype: 'waterAbstractionAlerts'
+      })
+    })
+
+    describe('the "licences" property', () => {
+      it('correctly return a JSON string containing an array of all licences from all recipients', () => {
+        const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+        expect(result.licences).to.equal(
+          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
+            `"${recipients.primaryUser.licence_refs}"]`
+        )
       })
     })
 
