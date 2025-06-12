@@ -101,7 +101,6 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
-        messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
         messageRef: 'water_abstraction_alert_stop_warning',
         personalisation: {
