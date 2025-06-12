@@ -42,7 +42,8 @@ async function _fetchConditions(licenceId) {
         'licenceVersionPurposeConditions.notes',
         'licenceVersionPurposeConditions.param1',
         'licenceVersionPurposeConditions.param2',
-        'licenceVersionPurposeConditions.createdAt'
+        'licenceVersionPurposeConditions.createdAt',
+        'licenceVersionPurposeConditionType.displayTitle'
       )
       .joinRelated('[licenceVersionPurposeConditionType, licenceVersionPurpose.licenceVersion.licence]')
       .where('licenceVersionPurpose:licenceVersion.licenceId', licenceId)

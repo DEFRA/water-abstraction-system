@@ -47,21 +47,21 @@ function _generateRadioButtons(conditions) {
     ]
   }
 
-  const conditionRadioButtons = conditions
-    // Legacy code removes conditions with an empty notes field so we replicate this here
-    // TODO: confirm whether this filtering is required
-    .filter((row) => {
-      return row.notes
-    })
-    .map((row, index) => {
-      return {
-        value: row.id,
-        text: `Flow cessation condition ${index + 1}`,
-        hint: {
-          text: `${row.notes} (Additional information 1: ${row.param1 || 'None'}) (Additional information 2: ${row.param2 || 'None'})`
-        }
+  const conditionRadioButtons = conditions.map((row, index) => {
+    const hintText = [
+      row.notes ?? '',
+      `(Additional information 1: ${row.param1 || 'None'})`,
+      `(Additional information 2: ${row.param2 || 'None'})`
+    ].join(' ')
+
+    return {
+      value: row.id,
+      text: `${row.displayTitle} ${index + 1}`,
+      hint: {
+        text: hintText
       }
-    })
+    }
+  })
 
   return [
     ...conditionRadioButtons,
