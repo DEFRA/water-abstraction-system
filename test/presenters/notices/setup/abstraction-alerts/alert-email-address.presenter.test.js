@@ -15,7 +15,6 @@ const AlertEmailAddressPresenter = require('../../../../../app/presenters/notice
 
 describe('Alert Email Address Presenter', () => {
   let auth
-  let payload
   let session
   let validationResult
 
@@ -28,21 +27,19 @@ describe('Alert Email Address Presenter', () => {
       }
     }
 
-    payload = { alertEmailAddress: 'username' }
-
     validationResult = null
     session = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+      const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
       expect(result).to.equal({
         alertEmailAddressOptions: {
           otherUserChecked: false,
           otherUserEmailAddressInput: '',
-          usernameChecked: true
+          usernameChecked: false
         },
         anchor: null,
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
@@ -53,78 +50,26 @@ describe('Alert Email Address Presenter', () => {
     })
 
     describe('the "alertEmailAddressOptions" property', () => {
-      describe('the "usernameChecked" property', () => {
-        describe('when the username matches the session.alertEmailAddress', () => {
-          beforeEach(() => {
-            session.alertEmailAddress = 'admin@defra.gov.uk'
-          })
-
-          it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
-
-            expect(result.alertEmailAddressOptions.usernameChecked).to.be.true()
-          })
-        })
-
-        describe('when the payload.alertEmailAddress equals the username', () => {
-          beforeEach(() => {
-            payload = { alertEmailAddress: 'username' }
-          })
-
-          it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
-
-            expect(result.alertEmailAddressOptions.usernameChecked).to.be.true()
-          })
-        })
-
-        describe('when the payload.alertEmailAddress does not equal "username" and session.alertEmailAddress does not match the username', () => {
-          beforeEach(() => {
-            payload = { alertEmailAddress: 'other' }
-            session.alertEmailAddress = 'test@defra.gov.uk'
-          })
-
-          it('returns false', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
-
-            expect(result.alertEmailAddressOptions.usernameChecked).to.be.false()
-          })
-        })
-      })
-
       describe('the "otherUserChecked" property', () => {
-        describe('when the payload.alertEmailAddress equals "other"', () => {
+        describe('when the session.alertEmailAddressType equals "other"', () => {
           beforeEach(() => {
-            payload = { alertEmailAddress: 'other' }
+            session.alertEmailAddressType = 'other'
           })
 
           it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).to.be.true()
           })
         })
 
-        describe('when the session.alertEmailAddress does not equal the username', () => {
+        describe('when the session.alertEmailAddressType does not equal "other"', () => {
           beforeEach(() => {
-            session.alertEmailAddress = 'test@defra.gov.uk'
-          })
-
-          it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
-
-            expect(result.alertEmailAddressOptions.otherUserChecked).to.be.true()
-          })
-        })
-
-        describe('when the payload.alertEmailAddress does not equal other and the session.alertEmailAddress equals the username', () => {
-          beforeEach(() => {
-            payload = { alertEmailAddress: 'username' }
-            session.alertEmailAddress = 'admin@defra.gov.uk'
+            session.alertEmailAddressType = 'username'
           })
 
           it('returns false', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).to.be.false()
           })
@@ -132,29 +77,54 @@ describe('Alert Email Address Presenter', () => {
       })
 
       describe('the "otherUserEmailAddressInput" property', () => {
-        describe('when "otherUserChecked" is true and there is session.alertEmailAddress', () => {
+        describe('when "otherUserChecked" is true', () => {
           beforeEach(() => {
-            payload = { alertEmailAddress: 'other' }
+            session.alertEmailAddressType = 'other'
             session.alertEmailAddress = 'test@defra.gov.uk'
           })
 
           it('returns the session.alertEmailAddress', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).to.equal('test@defra.gov.uk')
           })
         })
 
-        describe('when "otherUserChecked" is false or there is no session.alertEmailAddress', () => {
+        describe('when "otherUserChecked" is false', () => {
           beforeEach(() => {
-            payload = { alertEmailAddress: 'username' }
-            session.alertEmailAddress = null
+            session.alertEmailAddressType = 'username'
           })
 
           it('returns an empty string', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).to.equal('')
+          })
+        })
+      })
+
+      describe('the "usernameChecked" property', () => {
+        describe('when the session.alertEmailAddressType equals "username"', () => {
+          beforeEach(() => {
+            session.alertEmailAddressType = 'username'
+          })
+
+          it('returns true', () => {
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+
+            expect(result.alertEmailAddressOptions.usernameChecked).to.be.true()
+          })
+        })
+
+        describe('when the session.alertEmailAddressType does not equal "username"', () => {
+          beforeEach(() => {
+            session.alertEmailAddressType = 'other'
+          })
+
+          it('returns false', () => {
+            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+
+            expect(result.alertEmailAddressOptions.usernameChecked).to.be.false()
           })
         })
       })
@@ -163,7 +133,7 @@ describe('Alert Email Address Presenter', () => {
     describe('the "anchor" property', () => {
       describe('when the validation result is null', () => {
         it('returns null', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
           expect(result.anchor).to.equal(null)
         })
@@ -179,7 +149,7 @@ describe('Alert Email Address Presenter', () => {
         })
 
         it('returns the ancho "#alertEmailAddress"', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
           expect(result.anchor).to.equal('#alertEmailAddress')
         })
@@ -195,7 +165,7 @@ describe('Alert Email Address Presenter', () => {
         })
 
         it('returns the ancho "#otherUser"', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
           expect(result.anchor).to.equal('#otherUser')
         })
