@@ -24,21 +24,21 @@ const VALID_VALUES = ['username', 'other']
  */
 function go(payload) {
   const schema = Joi.object({
-    alertEmailAddress: Joi.string()
+    alertEmailAddressType: Joi.string()
       .required()
       .valid(...VALID_VALUES)
-      .label('alertEmailAddress')
+      .label('alertEmailAddressType')
       .messages({
         'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
-    otherUser: Joi.alternatives().conditional('alertEmailAddress', {
+    otherUser: Joi.alternatives().conditional('alertEmailAddressType', {
       is: 'other',
       then: Joi.string().email().empty('').required().label('otherUser').messages({
         'string.email': ERROR_MESSAGES.invalidEmail,
         'string.empty': ERROR_MESSAGES.selectOrEmpty,
         'any.required': ERROR_MESSAGES.selectOrEmpty
       }),
-      otherwise: Joi.forbidden()
+      otherwise: Joi.string().optional()
     })
   })
   return schema.validate(payload, { abortEarly: false })

@@ -371,7 +371,8 @@ describe('Notices - Setup - Batch notifications service', () => {
 
       const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
         recipients.primaryUser.licence_refs,
-        recipients.licenceHolder.licence_refs
+        recipients.licenceHolder.licence_refs,
+        recipients.additionalContact.licence_refs
       ])
 
       session = {
@@ -416,7 +417,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             flow_or_level: 'level',
             condition_text: '',
             threshold_unit: 'm',
-            threshold_value: 1000,
+            threshold_value: 100,
             issuer_email_address: 'luke.skywalker@rebelmail.test',
             monitoring_station_name: 'Death star'
           },

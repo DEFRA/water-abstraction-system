@@ -27,12 +27,12 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
   })
 
   describe('when a user submits the licence monitoring station to be removed', () => {
-    it('deletes the licence monitoring station record', async () => {
+    it('adds the current date to the "deletedAt" field of the licence monitoring station record', async () => {
       await SubmitRemoveService.go(licenceMonitoringStation.id, licenceRef, yarStub)
 
       const refreshedSession = await licenceMonitoringStation.$query()
 
-      expect(refreshedSession).not.to.exist()
+      expect(refreshedSession.deletedAt).to.not.be.null()
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for 99/999/9999" ', async () => {
