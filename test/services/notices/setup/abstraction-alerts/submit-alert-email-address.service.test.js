@@ -29,7 +29,7 @@ describe('Submit Alert Email Address Service', () => {
       }
     }
 
-    payload = { alertEmailAddress: 'username' }
+    payload = { alertEmailAddressType: 'username' }
     sessionData = AbstractionAlertSessionData.get()
 
     session = await SessionHelper.add({ data: sessionData })
@@ -54,7 +54,7 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('and the user selects other value as the email address', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: 'test@defra.gov.uk' }
+        payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.gov.uk' }
       })
 
       it('saves the submitted value', async () => {
@@ -74,7 +74,7 @@ describe('Submit Alert Email Address Service', () => {
   })
 
   describe('when validation fails', () => {
-    describe('and the payload "alertEmailAddress" is username', () => {
+    describe('and the payload "alertEmailAddressType" is username', () => {
       it('updates the session "alertEmailAddress" property to the users username', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
@@ -84,16 +84,16 @@ describe('Submit Alert Email Address Service', () => {
       })
     })
 
-    describe('and the payload "alertEmailAddress" is other', () => {
+    describe('and the payload "alertEmailAddressType" is other', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: 'test@defra.go.uk' }
+        payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.go.uk' }
       })
       it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.alertEmailAddress).to.equal(payload.otherUser)
+        expect(refreshedSession.alertEmailAddress).to.equal('test@defra.go.uk')
       })
     })
 
@@ -130,7 +130,7 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('because other email has been selected but no email was provided', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: '' }
+        payload = { alertEmailAddressType: 'other', otherUser: '' }
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -161,7 +161,7 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('because other email has been selected but an invalid email was provided', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: '123123123' }
+        payload = { alertEmailAddressType: 'other', otherUser: '123123123' }
       })
 
       it('returns page data for the view, with errors', async () => {
