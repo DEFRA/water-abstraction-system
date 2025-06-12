@@ -72,7 +72,7 @@ async function _fetch(session) {
 
 function _query() {
   return `
-  WITH additional_contacts AS (
+   WITH additional_contacts AS (
     SELECT
       DISTINCT
       ldh.licence_ref,
@@ -82,102 +82,97 @@ function _query() {
       md5(LOWER(con.email)) AS contact_hash_id
     FROM
       public.licence_document_headers ldh
-        INNER JOIN public.licence_documents ld
-                   ON ld.licence_ref = ldh.licence_ref
-        INNER JOIN public.licence_document_roles ldr
-                   ON ldr.licence_document_id = ld.id
-        INNER JOIN public.company_contacts cct
-                   ON cct.company_id = ldr.company_id
-        INNER JOIN public.contacts con
-                   ON con.id = cct.contact_id
-        INNER JOIN public.licence_roles lr
-                   ON lr.id = cct.licence_role_id
+      INNER JOIN public.licence_documents ld
+        ON ld.licence_ref = ldh.licence_ref
+      INNER JOIN public.licence_document_roles ldr
+        ON ldr.licence_document_id = ld.id
+      INNER JOIN public.company_contacts cct
+        ON cct.company_id = ldr.company_id
+      INNER JOIN public.contacts con
+        ON con.id = cct.contact_id
+      INNER JOIN public.licence_roles lr
+        ON lr.id = cct.licence_role_id
     WHERE
       ldh.licence_ref = ANY (?)
-    -- <- parameterised
   ),
 
-       primary_users AS (
-         SELECT
-           ldh.licence_ref,
-           'Primary user' AS contact_type,
-           le.name AS email,
-           NULL::jsonb AS contact,
-           md5(LOWER(le.name)) AS contact_hash_id
-         FROM
-           public.licence_document_headers ldh
-             INNER JOIN public.licence_entity_roles ler
-                        ON ler.company_entity_id = ldh.company_entity_id
-                          AND ler.role = 'primary_user'
-             INNER JOIN public.licence_entities le
-                        ON le.id = ler.licence_entity_id
-         WHERE
-           ldh.licence_ref = ANY (?)
-         -- <- parameterised
-       ),
+  primary_users AS (
+    SELECT
+      ldh.licence_ref,
+      'Primary user' AS contact_type,
+      le.name AS email,
+      NULL::jsonb AS contact,
+      md5(LOWER(le.name)) AS contact_hash_id
+    FROM
+      public.licence_document_headers ldh
+      INNER JOIN public.licence_entity_roles ler
+        ON ler.company_entity_id = ldh.company_entity_id
+        AND ler.role = 'primary_user'
+      INNER JOIN public.licence_entities le
+        ON le.id = ler.licence_entity_id
+    WHERE
+      ldh.licence_ref = ANY (?)
+  ),
 
-       licence_holders AS (
-         SELECT
-           ldh.licence_ref,
-           'Licence holder' AS contact_type,
-           NULL AS email,
-           contacts AS contact,
-           md5(LOWER(concat_ws(
-             '',
-             contacts ->> 'salutation', contacts ->> 'forename', contacts ->> 'initials',
-             contacts ->> 'name', contacts ->> 'addressLine1', contacts ->> 'addressLine2',
-             contacts ->> 'addressLine3', contacts ->> 'addressLine4', contacts ->> 'town',
-             contacts ->> 'county', contacts ->> 'postcode', contacts ->> 'country'
-                     ))) AS contact_hash_id
-         FROM
-           public.licence_document_headers ldh
-             INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts
-                        ON TRUE
-         WHERE
-           ldh.licence_ref = ANY (?)
-           -- <- parameterised
-           AND contacts ->> 'role' = 'Licence holder'
-       ),
+  licence_holders AS (
+    SELECT
+      ldh.licence_ref,
+      'Licence holder' AS contact_type,
+      NULL AS email,
+      contacts AS contact,
+      md5(LOWER(concat_ws(
+        '',
+        contacts ->> 'salutation',
+        contacts ->> 'forename',
+        contacts ->> 'initials',
+        contacts ->> 'name',
+        contacts ->> 'addressLine1',
+        contacts ->> 'addressLine2',
+        contacts ->> 'addressLine3',
+        contacts ->> 'addressLine4',
+        contacts ->> 'town',
+        contacts ->> 'county',
+        contacts ->> 'postcode',
+        contacts ->> 'country'
+      ))) AS contact_hash_id
+    FROM
+      public.licence_document_headers ldh
+      INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts
+        ON TRUE
+    WHERE
+      ldh.licence_ref = ANY (?)
+      AND contacts ->> 'role' = 'Licence holder'
+  ),
 
-       all_possible AS (
-         SELECT
-           *
-         FROM
-           additional_contacts
-         UNION ALL
-         SELECT
-           *
-         FROM
-           primary_users
-         UNION ALL
-         SELECT
-           *
-         FROM
-           licence_holders
-       ),
+  all_possible AS (
+    SELECT * FROM additional_contacts
+    UNION ALL
+    SELECT * FROM primary_users
+    UNION ALL
+    SELECT * FROM licence_holders
+  ),
 
-       ranked AS (
-         SELECT
-           *,
-           ROW_NUMBER() OVER (
-             PARTITION BY licence_ref
-             ORDER BY
-               CASE
-                 contact_type
-                 WHEN 'Additional contact' THEN 1
-                 WHEN 'Primary user' THEN 2
-                 WHEN 'Licence holder' THEN 3
-                 END
-             ) AS rn,
-           COUNT(*) FILTER (
-             WHERE
-             contact_type = 'Additional contact'
-             ) OVER (
-             PARTITION BY licence_ref
-             ) AS additional_count
-         FROM
-           all_possible
-       )
+  ranked AS (
+    SELECT
+      *,
+      ROW_NUMBER() OVER (
+        PARTITION BY licence_ref
+        ORDER BY
+          CASE
+            contact_type
+            WHEN 'Additional contact' THEN 1
+            WHEN 'Primary user' THEN 2
+            WHEN 'Licence holder' THEN 3
+          END
+      ) AS rn,
+      COUNT(*) FILTER (
+        WHERE contact_type = 'Additional contact'
+      ) OVER (
+        PARTITION BY licence_ref
+      ) AS additional_count
+    FROM
+      all_possible
+  )
 
   SELECT
     licence_ref AS licence_refs,
@@ -190,9 +185,9 @@ function _query() {
   WHERE
     (
       contact_type = 'Additional contact'
-      )
-     OR (
-    additional_count = 0
+    )
+    OR (
+      additional_count = 0
       AND rn = 1
     )
   ORDER BY
