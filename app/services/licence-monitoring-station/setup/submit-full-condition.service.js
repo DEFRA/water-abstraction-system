@@ -25,8 +25,13 @@ async function go(sessionId, payload) {
     const session = await SessionModel.query().findById(sessionId)
     await _save(session, payload)
 
+    // If the user selected a non-condition option then they will proceed to the "enter abstraction period" page.
+    // Ordinarily we would also return `checkPageVisited` to say whether the user should be forwarded there; however,
+    // if the user has selected a condition option then they've reached the end of the journey so will go to the check
+    // page, and if they selected a non-condition option then they must enter an abstraction period no matter what.
+    // We therefore don't care about `checkPageVisited` on this particular page.
     return {
-      checkPageVisited: session.checkPageVisited
+      abstractionPeriod: payload.condition === 'not_listed' || payload.condition === 'no_conditions'
     }
   }
 

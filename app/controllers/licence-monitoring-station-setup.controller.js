@@ -37,11 +37,13 @@ async function submitFullCondition(request, h) {
     return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
   }
 
-  if (pageData.checkPageVisited) {
-    return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+  // If the user selected a non-condition option then they must enter the abstraction period
+  if (pageData.abstractionPeriod) {
+    return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`)
   }
 
-  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`)
+  // Otherwise, they've reached the end of the journey so we send them to the check page
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
 }
 
 async function licenceNumber(request, h) {
