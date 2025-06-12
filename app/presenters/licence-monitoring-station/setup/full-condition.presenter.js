@@ -52,7 +52,10 @@ function _generateRadioButtons(conditions) {
       row.notes ?? '',
       `(Additional information 1: ${row.param1 || 'None'})`,
       `(Additional information 2: ${row.param2 || 'None'})`
-    ].join(' ')
+    ]
+      .join(' ')
+      // If row.notes was null then our joined string starts with a space, so we trim it
+      .trim()
 
     return {
       value: row.id,
