@@ -54,6 +54,7 @@ function go(auth, monitoringStation) {
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
     restrictions: _restrictions(licenceMonitoringStations, monitoringStationId),
+    showRemoveTagButton: !FeatureFlagsConfig.enableLicenceMonitoringStationsView,
     stationReference: stationReference ?? '',
     tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
