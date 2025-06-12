@@ -72,7 +72,7 @@ async function _fetch(session) {
 
 function _query() {
   return `
-   WITH additional_contacts AS (
+  WITH additional_contacts AS (
     SELECT
       DISTINCT
       ldh.licence_ref,
