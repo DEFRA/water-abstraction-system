@@ -25,6 +25,7 @@ async function go(sessionId) {
   const pageData = FullConditionPresenter.go(session, conditions)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
