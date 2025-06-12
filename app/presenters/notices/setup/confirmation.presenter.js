@@ -15,11 +15,9 @@
 function go(event) {
   const { referenceCode, subtype, id: eventId } = event
 
-  const type = _type(subtype)
-
   return {
     forwardLink: `/notifications/report/${eventId}`,
-    pageTitle: `Returns ${type} sent`,
+    pageTitle: _pageTitle(subtype),
     referenceCode
   }
 }
@@ -32,14 +30,18 @@ function go(event) {
  *
  * @private
  */
-function _type(subType) {
+function _pageTitle(subType) {
+  if (subType === 'waterAbstractionAlerts') {
+    return 'Water abstraction alerts sent'
+  }
+
   const subTypes = {
     returnInvitation: 'invitations',
     returnReminder: 'reminders',
     adHocReminder: 'ad-hoc'
   }
 
-  return subTypes[subType]
+  return `Returns ${subTypes[subType]} sent`
 }
 
 module.exports = {
