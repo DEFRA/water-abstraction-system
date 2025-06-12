@@ -18,7 +18,7 @@ const LicenceMonitoringStationModel = require('../../models/licence-monitoring-s
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(licenceMonitoringStationId, licenceRef, yar) {
-  await LicenceMonitoringStationModel.query().deleteById(licenceMonitoringStationId)
+  await LicenceMonitoringStationModel.query().update({ deletedAt: new Date() }).where('id', licenceMonitoringStationId)
 
   GeneralLib.flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }

@@ -32,7 +32,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
 
       const refreshedSession = await licenceMonitoringStation.$query()
 
-      expect(refreshedSession).not.to.exist()
+      expect(refreshedSession.deletedAt).to.not.be.null()
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for 99/999/9999" ', async () => {
