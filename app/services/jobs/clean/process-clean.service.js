@@ -5,8 +5,8 @@
  * @module ProcessCleanService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CleanExpiredSessionsService = require('./clean-expired-sessions.service.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
  * Processes deletion from the service of redundant records, for example, old sessions

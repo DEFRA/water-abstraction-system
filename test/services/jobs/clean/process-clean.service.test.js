@@ -57,7 +57,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      cleanExpiredSessionsStub = Sinon.stub(CleanExpiredSessionsService, 'go').rejects()
+      Sinon.stub(CleanExpiredSessionsService, 'go').rejects()
     })
 
     it('does not throw an error', async () => {
