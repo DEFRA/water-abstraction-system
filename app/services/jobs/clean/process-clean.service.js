@@ -7,7 +7,6 @@
 
 const CleanEmptyVoidReturnLogsService = require('./clean-empty-void-return-logs.service.js')
 const CleanExpiredSessionsService = require('./clean-expired-sessions.service.js')
-const CleanEmptyVoidReturnLogsService = require('./clean-empty-void-return-logs.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
