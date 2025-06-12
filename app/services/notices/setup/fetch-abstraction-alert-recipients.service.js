@@ -94,6 +94,7 @@ function _query() {
         ON lr.id = cct.licence_role_id
     WHERE
       ldh.licence_ref = ANY (?)
+      AND cct.abstraction_alerts = true
   ),
 
   primary_users AS (

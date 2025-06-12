@@ -91,6 +91,34 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         ])
       })
     })
+
+    describe('and there are multiple "additional contact" but some of them are not signed up for abstraction alerts', () => {
+      beforeEach(async () => {
+        await _additionalContact(
+          licenceDocument,
+          {
+            firstName: 'Brick',
+            lastName: 'Tamland',
+            email: 'Brick.Tamland@news.com'
+          },
+          false // not signed up for abstraction alerts
+        )
+      })
+
+      it('correctly returns all the "additional contact" signed up for abstraction alerts', async () => {
+        const result = await FetchAbstractionAlertRecipientsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: null,
+            contact_hash_id: 'c661b771974504933d79ca64249570d0',
+            contact_type: 'Additional contact',
+            email: 'Ron.Burgundy@news.com',
+            licence_refs: licenceDocument.licenceRef
+          }
+        ])
+      })
+    })
   })
 
   describe('when there is a "primary user"', () => {
@@ -272,7 +300,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   })
 })
 
-async function _additionalContact(licenceDocument, contact) {
+async function _additionalContact(licenceDocument, contact, abstractionAlerts = true) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
   await LicenceDocumentHeaderHelper.add({
@@ -288,7 +316,8 @@ async function _additionalContact(licenceDocument, contact) {
 
   const companyContact = await CompanyContactHelper.add({
     companyId: licenceDocumentRole.companyId,
-    licenceRoleId: licenceRole.id
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts
   })
 
   await ContactHelper.add({
