@@ -14,7 +14,7 @@ describe('Alert Email Address Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { alertEmailAddress: 'username' }
+    payload = { alertEmailAddressType: 'username' }
   })
 
   describe('when called with valid data', () => {
@@ -28,7 +28,7 @@ describe('Alert Email Address Validator', () => {
     describe('and the "otherUser"', () => {
       describe('is an invalid email address', () => {
         beforeEach(() => {
-          payload = { alertEmailAddress: 'other', otherUser: '123123123' }
+          payload = { alertEmailAddressType: 'other', otherUser: '123123123' }
         })
 
         it('returns with errors', () => {
@@ -44,7 +44,7 @@ describe('Alert Email Address Validator', () => {
 
       describe('is an empty string', () => {
         beforeEach(() => {
-          payload = { alertEmailAddress: 'other', otherUser: '' }
+          payload = { alertEmailAddressType: 'other', otherUser: '' }
         })
 
         it('returns with errors', () => {
@@ -58,7 +58,7 @@ describe('Alert Email Address Validator', () => {
 
       describe('is a valid email address', () => {
         beforeEach(() => {
-          payload = { alertEmailAddress: 'other', otherUser: 'test@defra.gov.uk' }
+          payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.gov.uk' }
         })
 
         it('returns with no errors', () => {
@@ -69,9 +69,9 @@ describe('Alert Email Address Validator', () => {
         })
       })
 
-      describe('is a valid email address but "alertEmailAddress" is username', () => {
+      describe('is a valid email address but "alertEmailAddressType" is username', () => {
         beforeEach(() => {
-          payload = { alertEmailAddress: 'username', otherUser: 'test@defra.gov.uk' }
+          payload = { alertEmailAddressType: 'username', otherUser: 'test@defra.gov.uk' }
         })
 
         it('returns with no errors', () => {
