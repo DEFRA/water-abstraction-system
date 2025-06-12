@@ -40,13 +40,17 @@ async function go(sessionId, payload, auth) {
 }
 
 async function _save(session, payload, auth) {
-  if (payload.alertEmailAddress === 'username') {
+  const { alertEmailAddressType } = payload
+
+  if (alertEmailAddressType === 'username') {
     session.alertEmailAddress = auth.credentials.user.username
   }
 
-  if (payload.alertEmailAddress === 'other') {
+  if (alertEmailAddressType === 'other') {
     session.alertEmailAddress = payload.otherUser
   }
+
+  session.alertEmailAddressType = alertEmailAddressType
 
   return session.$update()
 }
@@ -58,13 +62,17 @@ async function _save(session, payload, auth) {
  * @private
  */
 function _submittedSessionData(session, auth, validationResult, payload) {
-  if (payload.alertEmailAddress === 'username') {
+  const { alertEmailAddressType } = payload
+
+  if (alertEmailAddressType === 'username') {
     session.alertEmailAddress = auth.credentials.user.username
   }
 
-  if (payload.alertEmailAddress === 'other') {
+  if (alertEmailAddressType === 'other') {
     session.alertEmailAddress = payload.otherUser ? payload.otherUser : null
   }
+
+  session.alertEmailAddressType = alertEmailAddressType
 
   return AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
 }
@@ -96,7 +104,7 @@ function _validate(payload) {
 
   return {
     text: message,
-    radioFormError: context.label === 'alertEmailAddress' ? { text: message } : null,
+    radioFormError: context.label === 'alertEmailAddressType' ? { text: message } : null,
     emailAddressInputFormError: context.label === 'otherUser' ? { text: message } : null
   }
 }
