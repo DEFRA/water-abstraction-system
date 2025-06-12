@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, tableCaption) %}
+{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) %}
 
   {% set showActionHeader = false %}
 
@@ -84,16 +84,7 @@
 
     <div>
       {{ govukTable({
-        caption: tableCaption,
-        captionClasses: "govuk-table__caption--m",
         firstCellIsHeader: false,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
-          }
-        },
         head: [
           {
             text: "Licence"
