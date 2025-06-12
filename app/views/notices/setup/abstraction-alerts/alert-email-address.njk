@@ -43,7 +43,8 @@
         },
         hint: {
           text: "This is usually your area’s team email address"
-        }
+        },
+        value: alertEmailAddressOptions.otherUserEmailAddressInput
       }) }}
     {% endset %}
 
@@ -52,7 +53,7 @@
       <span class="govuk-caption-l">{{caption}}</span>
 
       {{ govukRadios({
-        name: 'alertEmailAddress',
+        name: 'alertEmailAddressType',
         errorMessage: error.radioFormError,
         fieldset: {
           legend: {
@@ -64,7 +65,8 @@
         items: [
           {
             value: 'username',
-            text: username
+            text: username,
+            checked: alertEmailAddressOptions.usernameChecked
           },
           {
             divider: 'or'
@@ -72,6 +74,7 @@
           {
             value: 'other',
             text: 'Use another email address',
+            checked: alertEmailAddressOptions.otherUserChecked,
             conditional: {
               html: textHtml
             }
