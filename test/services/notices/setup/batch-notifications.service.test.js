@@ -377,7 +377,7 @@ describe('Notices - Setup - Batch notifications service', () => {
       session = {
         ...abstractionAlertSessionData,
         alertEmailAddress: 'luke.skywalker@rebelmail.test',
-        alertType: 'stop',
+        alertType: 'reduce',
         journey: 'abstraction-alert',
         name: 'Water abstraction alert',
         referenceCode: 'WAA-123',
@@ -409,7 +409,7 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[0].id,
           recipient: 'additional.contact@important.com',
           messageType: 'email',
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
             source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.additionalContact.licence_refs,
@@ -433,7 +433,7 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[1].id,
           recipient: null,
           messageType: 'letter',
-          messageRef: 'water_abstraction_alert_reduce_warning',
+          messageRef: 'water_abstraction_alert_reduce',
           personalisation: {
             name: 'Mr H J Licence holder',
             source: '* Source of supply: Meridian Trench',
@@ -463,7 +463,7 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[2].id,
           recipient: 'primary.user@important.com',
           messageType: 'email',
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
             source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.primaryUser.licence_refs,
