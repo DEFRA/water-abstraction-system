@@ -15,12 +15,11 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, auth, validationResult, payload = {}) {
-  const { username } = auth.credentials.user
-  const { alertEmailAddress, monitoringStationName, id: sessionId } = session
+function go(session, auth, validationResult) {
+  const { alertEmailAddress, alertEmailAddressType, monitoringStationName, id: sessionId } = session
 
   return {
-    alertEmailAddressOptions: _alertEmailAddressOptions(username, alertEmailAddress, payload),
+    alertEmailAddressOptions: _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType),
     anchor: _anchor(validationResult),
     backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`,
     caption: monitoringStationName,
@@ -29,12 +28,11 @@ function go(session, auth, validationResult, payload = {}) {
   }
 }
 
-function _alertEmailAddressOptions(username, alertEmailAddress, payload) {
-  const usernameChecked = username === alertEmailAddress || payload.alertEmailAddress === 'username'
-  const otherUserChecked =
-    payload.alertEmailAddress === 'other' || (!!alertEmailAddress && username !== alertEmailAddress)
+function _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType) {
+  const usernameChecked = alertEmailAddressType === 'username'
+  const otherUserChecked = alertEmailAddressType === 'other'
 
-  const otherUserEmailAddressInput = otherUserChecked && alertEmailAddress ? alertEmailAddress : ''
+  const otherUserEmailAddressInput = otherUserChecked ? alertEmailAddress : ''
 
   return {
     otherUserChecked,
