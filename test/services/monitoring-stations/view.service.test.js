@@ -104,6 +104,7 @@ describe('Monitoring Stations - View service', () => {
             threshold: '100 m3/s'
           }
         ],
+        showRemoveTagButton: false,
         stationReference: '',
         tableCaption: 'Licences linked to this monitoring station',
         wiskiId: ''
