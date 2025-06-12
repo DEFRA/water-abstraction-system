@@ -22,7 +22,6 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'manage',
-    pageTitle: 'Select the returns periods for the invitations',
     ...formattedData
   }
 }

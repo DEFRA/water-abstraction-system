@@ -2,6 +2,7 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/licence-monitoring-station-restrictions-table.njk" import licenceMonitoringStationRestrictionsTable %}
 
@@ -16,6 +17,14 @@
 {% endblock %}
 
 {% block content %}
+  {# Notification banner #}
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
+
   {# Main heading #}
   <div class="govuk-body">
     {% if catchmentName %}
@@ -60,7 +69,7 @@
 
   <div class="divider govuk-!-margin-bottom-7"></div>
 
-  {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, tableCaption) }}
+  <div class="govuk-table__caption--m" data-test="table-caption">{{ tableCaption }}</div>
 
   {% if permissionToManageLinks %}
     <div class="govuk-button-group">
@@ -84,7 +93,7 @@
         }) }}
       {% endif %}
 
-      {% if restrictions.length > 0 %}
+      {% if restrictions.length > 0 and showRemoveTagButton %}
         {{ govukButton({
           text: "Remove a tag",
           href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
@@ -94,4 +103,6 @@
       </form>
     </div>
   {% endif %}
+
+  {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) }}
 {% endblock %}

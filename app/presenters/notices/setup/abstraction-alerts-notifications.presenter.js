@@ -36,18 +36,34 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 function go(recipients, session, eventId) {
   const notifications = []
 
-  const { alertEmailAddress, monitoringStationName, referenceCode, relevantLicenceMonitoringStations } = session
+  const {
+    alertEmailAddress,
+    alertType,
+    monitoringStationName,
+    monitoringStationRiverName,
+    referenceCode,
+    relevantLicenceMonitoringStations
+  } = session
 
   for (const station of relevantLicenceMonitoringStations) {
-    const commonPersonalisation = _commonPersonalisation(station, monitoringStationName, alertEmailAddress)
+    const commonPersonalisation = _commonPersonalisation(
+      station,
+      monitoringStationName,
+      alertEmailAddress,
+      monitoringStationRiverName
+    )
 
     const matchingRecipients = _matchingRecipients(recipients, station)
 
     for (const matchingRecipient of matchingRecipients) {
       if (matchingRecipient.email) {
-        notifications.push(_email(matchingRecipient, referenceCode, eventId, commonPersonalisation))
+        notifications.push(
+          _email(matchingRecipient, referenceCode, eventId, commonPersonalisation, alertType, station.restrictionType)
+        )
       } else {
-        notifications.push(_letter(matchingRecipient, referenceCode, eventId, commonPersonalisation))
+        notifications.push(
+          _letter(matchingRecipient, referenceCode, eventId, commonPersonalisation, alertType, station.restrictionType)
+        )
       }
     }
   }
@@ -95,17 +111,26 @@ function _addressLines(contact) {
  * @private
  */
 
-function _commonPersonalisation(licenceMonitoringStation, monitoringStationName, alertEmailAddress) {
+function _commonPersonalisation(
+  licenceMonitoringStation,
+  monitoringStationName,
+  alertEmailAddress,
+  monitoringStationRiverName
+) {
   return {
-    condition_text: '',
+    condition_text: _conditionText(licenceMonitoringStation.notes),
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: alertEmailAddress,
     licence_ref: licenceMonitoringStation.licence.licenceRef,
     monitoring_station_name: monitoringStationName,
-    source: '',
+    source: _source(monitoringStationRiverName),
     threshold_unit: licenceMonitoringStation.thresholdUnit,
     threshold_value: licenceMonitoringStation.thresholdValue
   }
+}
+
+function _conditionText(notes) {
+  return notes ? `Effect of restriction: ${notes}` : ''
 }
 
 /**
@@ -134,10 +159,8 @@ function _commonPersonalisation(licenceMonitoringStation, monitoringStationName,
  *
  * @private
  */
-function _email(recipient, referenceCode, eventId, commonPersonalisation) {
+function _email(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
-
-  const templateId = _emailTemplate()
 
   const messageType = 'email'
 
@@ -145,17 +168,17 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation) {
     createdAt,
     eventId,
     licences: _licences(recipient.licence_refs),
-    messageRef: 'water_abstraction_alert_reduce_warning_email',
+    messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
     recipient: recipient.email,
     reference: referenceCode,
-    templateId
+    templateId: _templateId(alertType, restrictionType, 'email')
   }
 }
 
-function _emailTemplate() {
-  return notifyTemplates['abstraction-alerts'].reduceWarningEmail
+function _emailMessageRef(alertType, restrictionType) {
+  return `${_messageRef(alertType, restrictionType)}_email`
 }
 
 /**
@@ -181,12 +204,10 @@ function _emailTemplate() {
  *
  * @private
  */
-function _letter(recipient, referenceCode, eventId, commonPersonalisation) {
+function _letter(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
 
   const name = contactName(recipient.contact)
-
-  const templateId = _letterTemplate()
 
   const messageType = 'letter'
 
@@ -194,7 +215,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation) {
     createdAt,
     eventId,
     licences: _licences(recipient.licence_refs),
-    messageRef: 'water_abstraction_alert_reduce_warning',
+    messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
       ..._addressLines(recipient.contact),
@@ -202,12 +223,8 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation) {
       name
     },
     reference: referenceCode,
-    templateId
+    templateId: _templateId(alertType, restrictionType, 'letter')
   }
-}
-
-function _letterTemplate() {
-  return notifyTemplates['abstraction-alerts'].reduceWarning
 }
 
 /**
@@ -237,6 +254,88 @@ function _matchingRecipients(recipients, station) {
     return recipient.licence_refs === station.licence.licenceRef
   })
 }
+
+function _messageRef(alertType, restrictionType) {
+  if (alertType === 'resume') {
+    return 'water_abstraction_alert_resume'
+  }
+
+  if (alertType === 'reduce') {
+    return restrictionType === 'stop_or_reduce'
+      ? 'water_abstraction_alert_reduce_or_stop'
+      : 'water_abstraction_alert_reduce'
+  }
+
+  if (alertType === 'stop') {
+    return 'water_abstraction_alert_stop'
+  }
+
+  if (alertType === 'warning') {
+    if (restrictionType === 'reduce') {
+      return 'water_abstraction_alert_reduce_warning'
+    }
+
+    if (restrictionType === 'stop_or_reduce') {
+      return 'water_abstraction_alert_reduce_or_stop_warning'
+    }
+
+    if (restrictionType === 'stop') {
+      return 'water_abstraction_alert_stop_warning'
+    }
+  }
+
+  return 'water_abstraction_alert'
+}
+
+function _templateId(alertType, restrictionType, type) {
+  if (alertType === 'resume') {
+    return notifyTemplates.alerts[type].resume
+  }
+
+  if (alertType === 'reduce') {
+    return restrictionType === 'stop_or_reduce'
+      ? notifyTemplates.alerts[type].reduceOrStop
+      : notifyTemplates.alerts[type].reduce
+  }
+
+  if (alertType === 'stop') {
+    return notifyTemplates.alerts[type].stop
+  }
+
+  if (alertType === 'warning') {
+    if (restrictionType === 'reduce') {
+      return notifyTemplates.alerts[type].reduceWarning
+    }
+
+    if (restrictionType === 'stop_or_reduce') {
+      return notifyTemplates.alerts[type].reduceOrStopWarning
+    }
+
+    if (restrictionType === 'stop') {
+      return notifyTemplates.alerts[type].stopWarning
+    }
+  }
+
+  return null
+}
+
+/**
+ * The source is derived from the monitoring stations river name.
+ *
+ * This can be in three states (from the db):
+ * - string - normally the name of the river
+ * - '' an empty string
+ * - null
+ *
+ * When the river name is null or '' we do no want to show this in the notify template. So we set it to an empty string
+ * which tells notify to ignore the field.
+ *
+ * @private
+ */
+function _source(monitoringStationRiverName) {
+  return monitoringStationRiverName ? `* Source of supply: ${monitoringStationRiverName}` : ''
+}
+
 module.exports = {
   go
 }

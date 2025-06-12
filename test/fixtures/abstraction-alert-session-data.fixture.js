@@ -21,6 +21,7 @@ function licenceMonitoringStations() {
         id: generateUUID()
       },
       measureType: 'level',
+      notes: null,
       restrictionType: 'reduce',
       status: 'resume',
       statusUpdatedAt: null,
@@ -39,6 +40,7 @@ function licenceMonitoringStations() {
         id: generateUUID()
       },
       measureType: 'flow',
+      notes: 'I have a bad feeling about this',
       restrictionType: 'stop',
       status: 'resume',
       statusUpdatedAt: null,
@@ -57,6 +59,7 @@ function licenceMonitoringStations() {
         id: generateUUID()
       },
       measureType: 'level',
+      notes: null,
       restrictionType: 'stop',
       status: 'resume',
       statusUpdatedAt: null,
@@ -82,7 +85,8 @@ function get(_licenceMonitoringStations) {
   return {
     licenceMonitoringStations: [...Object.values(lms)],
     monitoringStationId: generateUUID(),
-    monitoringStationName: 'Death star'
+    monitoringStationName: 'Death star',
+    monitoringStationRiverName: 'Meridian Trench'
   }
 }
 

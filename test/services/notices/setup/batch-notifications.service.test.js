@@ -371,13 +371,14 @@ describe('Notices - Setup - Batch notifications service', () => {
 
       const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
         recipients.primaryUser.licence_refs,
-        recipients.licenceHolder.licence_refs
+        recipients.licenceHolder.licence_refs,
+        recipients.additionalContact.licence_refs
       ])
 
       session = {
         ...abstractionAlertSessionData,
         alertEmailAddress: 'luke.skywalker@rebelmail.test',
-        alertType: 'stop',
+        alertType: 'reduce',
         journey: 'abstraction-alert',
         name: 'Water abstraction alert',
         referenceCode: 'WAA-123',
@@ -409,14 +410,14 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[0].id,
           recipient: 'additional.contact@important.com',
           messageType: 'email',
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.additionalContact.licence_refs,
             flow_or_level: 'level',
             condition_text: '',
             threshold_unit: 'm',
-            threshold_value: 1000,
+            threshold_value: 100,
             issuer_email_address: 'luke.skywalker@rebelmail.test',
             monitoring_station_name: 'Death star'
           },
@@ -433,10 +434,10 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[1].id,
           recipient: null,
           messageType: 'letter',
-          messageRef: 'water_abstraction_alert_reduce_warning',
+          messageRef: 'water_abstraction_alert_reduce',
           personalisation: {
             name: 'Mr H J Licence holder',
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.licenceHolder.licence_refs,
             flow_or_level: 'flow',
             address_line_1: '1',
@@ -444,7 +445,7 @@ describe('Notices - Setup - Batch notifications service', () => {
             address_line_3: 'Little Whinging',
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
-            condition_text: '',
+            condition_text: 'Effect of restriction: I have a bad feeling about this',
             threshold_unit: 'm3/s',
             threshold_value: 100,
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -463,9 +464,9 @@ describe('Notices - Setup - Batch notifications service', () => {
           id: result[2].id,
           recipient: 'primary.user@important.com',
           messageType: 'email',
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
-            source: '',
+            source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.primaryUser.licence_refs,
             flow_or_level: 'level',
             condition_text: '',

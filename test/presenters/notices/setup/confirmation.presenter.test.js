@@ -76,4 +76,20 @@ describe('Notices - Setup - Confirmation presenter', () => {
       })
     })
   })
+
+  describe('and the journey is "waterAbstractionAlerts"', () => {
+    beforeEach(() => {
+      event.subtype = 'waterAbstractionAlerts'
+    })
+
+    it('correctly presents the data', () => {
+      const result = ConfirmationPresenter.go(event)
+
+      expect(result).to.equal({
+        forwardLink: '/notifications/report/123',
+        pageTitle: 'Water abstraction alerts sent',
+        referenceCode: 'ADHC-1234'
+      })
+    })
+  })
 })
