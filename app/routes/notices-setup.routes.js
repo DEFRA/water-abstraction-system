@@ -187,6 +187,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/ad-hoc/select-notice-type',
+    options: {
+      handler: NoticesSetupController.viewSelectNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/ad-hoc/select-notice-type',
+    options: {
+      handler: NoticesSetupController.submitSelectNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/cancel',
     options: {
       handler: NoticesSetupController.viewCancel,

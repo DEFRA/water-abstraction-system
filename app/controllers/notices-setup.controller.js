@@ -19,6 +19,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
+const SelectNoticeTypeService = require('../services/notices/setup/ad-hoc/select-notice-type.service.js')
 const SubmitAdHocLicenceService = require('../services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -29,6 +30,7 @@ const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abst
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitSelectNoticeTypeService = require('../services/notices/setup/ad-hoc/submit-select-notice-type.service.js')
 
 const basePath = 'notices/setup'
 
@@ -159,6 +161,14 @@ async function viewRemoveThreshold(request, h) {
   await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
+}
+
+async function viewSelectNoticeType(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SelectNoticeTypeService.go(sessionId)
+
+  return h.view(`notices/setup/ad-hoc/select-notice-type.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -296,6 +306,21 @@ async function submitReturnsPeriod(request, h) {
   return h.redirect(`/system/${basePath}/${pageData.redirect}`)
 }
 
+async function submitSelectNoticeType(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitSelectNoticeTypeService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/ad-hoc/select-notice-type.njk`, pageData)
+  }
+
+  return h.redirect('')
+}
+
 module.exports = {
   downloadRecipients,
   viewAlertEmailAddress,
@@ -310,6 +335,7 @@ module.exports = {
   viewRemoveLicences,
   viewRemoveThreshold,
   viewReturnsPeriod,
+  viewSelectNoticeType,
   setup,
   submitAlertEmailAddress,
   submitAlertThresholds,
@@ -320,5 +346,6 @@ module.exports = {
   submitCheckLicenceMatches,
   submitLicence,
   submitRemoveLicences,
-  submitReturnsPeriod
+  submitReturnsPeriod,
+  submitSelectNoticeType
 }

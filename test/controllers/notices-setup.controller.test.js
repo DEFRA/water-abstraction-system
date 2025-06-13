@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const SelectNoticeTypeService = require('../../app/services/notices/setup/ad-hoc/select-notice-type.service.js')
 const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
@@ -35,6 +36,7 @@ const SubmitCheckLicenceMatchesService = require('../../app/services/notices/set
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitSelectNoticeTypeService = require('../../app/services/notices/setup/ad-hoc/submit-select-notice-type.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -623,6 +625,71 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter a Licence number')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/ad-hoc/select-notice-type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/ad-hoc/select-notice-type`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(SelectNoticeTypeService, 'go').resolves({
+          pageTitle: "'Select the notice type'"
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the notice type')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc/select-notice-type`, {
+            type: 'one'
+          })
+
+          Sinon.stub(SubmitSelectNoticeTypeService, 'go').resolves({})
+        })
+
+        it('returns the same page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(``)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/ad-hoc/select-notice-type`, {})
+
+          Sinon.stub(SubmitAdHocLicenceService, 'go').resolves({
+            error: { text: 'Select the notice type' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the notice type')
           expect(response.payload).to.contain('There is a problem')
         })
       })
