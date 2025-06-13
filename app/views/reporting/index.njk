@@ -1,0 +1,17 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    </div>
+  </div>
+
+  {# Link to report #}
+  <p class="govuk-body">
+    <a href="reporting/download" class="govuk-link govuk-link--no-visited-state">Download report</a>
+  </p>
+{% endblock %}
