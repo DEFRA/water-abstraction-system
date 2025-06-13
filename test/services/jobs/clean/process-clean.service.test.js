@@ -9,14 +9,17 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
 
 // Thing under test
 const ProcessCleanService = require('../../../../app/services/jobs/clean/process-clean.service.js')
 
 describe('Jobs - Clean - Process Clean service', () => {
+  const emptyVoidReturnLogsCount = 4
   const expiredSessionsCount = 5
 
+  let cleanEmptyVoidReturnLogsStub
   let cleanExpiredSessionsStub
   let notifierStub
 
@@ -34,12 +37,16 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
+      cleanEmptyVoidReturnLogsStub = Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').resolves(
+        emptyVoidReturnLogsCount
+      )
       cleanExpiredSessionsStub = Sinon.stub(CleanExpiredSessionsService, 'go').resolves(expiredSessionsCount)
     })
 
     it('cleans expired sessions', async () => {
       await ProcessCleanService.go()
 
+      expect(cleanEmptyVoidReturnLogsStub.called).to.be.true()
       expect(cleanExpiredSessionsStub.called).to.be.true()
     })
 
@@ -51,13 +58,16 @@ describe('Jobs - Clean - Process Clean service', () => {
       expect(notifierStub.omg.calledWith('Clean job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.counts).to.equal({ expiredSessions: expiredSessionsCount })
+      expect(logDataArg.counts).to.equal({
+        emptyVoidReturnLogs: emptyVoidReturnLogsCount,
+        expiredSessions: expiredSessionsCount
+      })
     })
   })
 
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      Sinon.stub(CleanExpiredSessionsService, 'go').rejects()
+      Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').rejects()
     })
 
     it('does not throw an error', async () => {
