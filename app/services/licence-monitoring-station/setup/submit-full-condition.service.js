@@ -44,6 +44,8 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  session.conditionId = payload.condition
+
   return session.$update()
 }
 
