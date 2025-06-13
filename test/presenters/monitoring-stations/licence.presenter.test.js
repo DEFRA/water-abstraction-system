@@ -39,9 +39,9 @@ describe('Monitoring Stations - Licence presenter', () => {
             licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
             licenceVersionStatus: null,
             linkedCondition: 'Not linked to a condition',
-            tag: 'Reduce tag',
+            tag: 'Stop or reduce tag',
             threshold: '175Ml/d',
-            type: 'Reduce'
+            type: 'Stop or reduce'
           }
         ],
         monitoringStationName: 'The Station',
@@ -129,9 +129,9 @@ describe('Monitoring Stations - Licence presenter', () => {
             licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
             licenceVersionStatus: null,
             linkedCondition: 'Not linked to a condition',
-            tag: 'Reduce tag',
+            tag: 'Stop or reduce tag',
             threshold: '175Ml/d',
-            type: 'Reduce'
+            type: 'Stop or reduce'
           }
         ])
       })
@@ -163,9 +163,9 @@ describe('Monitoring Stations - Licence presenter', () => {
             licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
             licenceVersionStatus: 'current',
             linkedCondition: 'Flow cessation condition, NALD ID 98765',
-            tag: 'Reduce tag',
+            tag: 'Stop or reduce tag',
             threshold: '175Ml/d',
-            type: 'Reduce'
+            type: 'Stop or reduce'
           }
         ])
       })
@@ -269,7 +269,7 @@ function _monitoringStationLicenceTags() {
         id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
         createdAt: new Date('2025-04-23'),
         licenceId: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-        restrictionType: 'reduce',
+        restrictionType: 'stop_or_reduce',
         thresholdUnit: 'Ml/d',
         thresholdValue: 175,
         licence: {

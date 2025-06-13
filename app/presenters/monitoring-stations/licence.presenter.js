@@ -76,7 +76,7 @@ function _licenceTags(licenceMonitoringStations) {
       linkedCondition,
       tag: `${formatRestrictionType(restrictionType)} tag`,
       threshold: `${thresholdValue}${thresholdUnit}`,
-      type: sentenceCase(restrictionType)
+      type: formatRestrictionType(restrictionType)
     }
   })
 }
