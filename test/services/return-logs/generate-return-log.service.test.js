@@ -103,7 +103,7 @@ describe('Return Logs - Generate Return Log service', () => {
     })
 
     describe('the "id" property', () => {
-      it('returns a unique identifier built from the region code, licence reference, legacy ID, start and end date', () => {
+      it('returns a unique identifier built from the region code, licence reference, reference, start and end date', () => {
         const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
         expect(result.id).to.equal(`v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31`)
@@ -174,6 +174,49 @@ describe('Return Logs - Generate Return Log service', () => {
             const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
             expect(result.metadata.purposes[0].alias).to.not.exist()
+          })
+        })
+      })
+
+      describe('the metadata "nald" property', () => {
+        describe('when the return requirement has an abstraction period set', () => {
+          it('returns the "nald" property with period details set to the abstraction period', () => {
+            const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
+
+            expect(result.metadata.nald).to.equal({
+              regionCode: 4,
+              areaCode: 'SAAR',
+              formatId: 16999651,
+              periodStartDay: '1',
+              periodStartMonth: '4',
+              periodEndDay: '31',
+              periodEndMonth: '3'
+            })
+          })
+        })
+
+        // NOTE: Some return requirements imported from NALD are missing their abstraction period. It seems this is not
+        // a required field!
+        describe('when the return requirement does not have abstraction period set', () => {
+          beforeEach(() => {
+            testReturnRequirement.abstractionPeriodEndDay = null
+            testReturnRequirement.abstractionPeriodEndMonth = null
+            testReturnRequirement.abstractionPeriodStartDay = null
+            testReturnRequirement.abstractionPeriodStartMonth = null
+          })
+
+          it('returns the "nald" property with period details set to "null"', () => {
+            const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
+
+            expect(result.metadata.nald).to.equal({
+              regionCode: 4,
+              areaCode: 'SAAR',
+              formatId: 16999651,
+              periodStartDay: 'null',
+              periodStartMonth: 'null',
+              periodEndDay: 'null',
+              periodEndMonth: 'null'
+            })
           })
         })
       })

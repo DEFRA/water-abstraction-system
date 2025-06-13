@@ -356,7 +356,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the links for "abstraction-alert"', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
-            back: `/system/monitoring-stations/${session.monitoringStationId}`,
+            back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
             cancel: `/system/notices/setup/${session.id}/cancel`,
             download: `/system/notices/setup/${session.id}/download`,
             removeLicences: ``

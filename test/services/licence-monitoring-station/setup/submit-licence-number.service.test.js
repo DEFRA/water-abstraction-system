@@ -89,7 +89,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        error: { text: 'Enter a valid licence number' },
+        error: { text: 'Licence could not be found' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Enter the licence number this threshold applies to'

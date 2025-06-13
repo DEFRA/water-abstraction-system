@@ -223,5 +223,35 @@ describe('Notices - Setup - Determine Recipients service', () => {
         ])
       })
     })
+
+    describe('when an "Additional contact" is present again', () => {
+      let testRecipients2
+      beforeEach(() => {
+        testRecipients = RecipientsFixture.alertsRecipients()
+        testRecipients2 = RecipientsFixture.alertsRecipients()
+
+        testInput = [
+          testRecipients.additionalContact,
+          // this should make it fail with duplicate licence ref
+          testRecipients.additionalContact,
+          testRecipients2.additionalContact
+        ]
+      })
+
+      it('returns the additional contact', () => {
+        const result = DetermineRecipientsService.go(testInput)
+
+        expect(result).to.equal([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
+            contact_type: 'Additional contact',
+            email: 'additional.contact@important.com',
+            licence_refs: `${testRecipients.additionalContact.licence_refs},${testRecipients2.additionalContact.licence_refs}`,
+            message_type: 'Email'
+          }
+        ])
+      })
+    })
   })
 })

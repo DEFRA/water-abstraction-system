@@ -15,19 +15,17 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const AlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 
 describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => {
-  let alertThresholdGroupOne
-  let alertThresholdGroupTwo
   let session
   let sessionData
+  let licenceMonitoringStations
 
   beforeEach(async () => {
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
+
     sessionData = {
-      ...AbstractionAlertSessionData.monitoringStation(),
+      ...AbstractionAlertSessionData.get(licenceMonitoringStations),
       alertType: 'stop'
     }
-
-    alertThresholdGroupOne = sessionData.licenceMonitoringStations[1].thresholdGroup
-    alertThresholdGroupTwo = sessionData.licenceMonitoringStations[2].thresholdGroup
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -48,7 +46,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
               text: 'Flow threshold'
             },
             text: '100 m3/s',
-            value: alertThresholdGroupOne
+            value: licenceMonitoringStations.two.thresholdGroup
           },
           {
             checked: false,
@@ -56,7 +54,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
               text: 'Level threshold'
             },
             text: '100 m',
-            value: alertThresholdGroupTwo
+            value: licenceMonitoringStations.three.thresholdGroup
           }
         ]
       })

@@ -18,22 +18,33 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [{
+        text: error.text,
+        href: anchor
+      }]
     }) }}
   {%endif%}
 
   <div>
     {% set textHtml %}
+      {% if error.emailAddressInputFormError %}
+        {% set errorClass = 'govuk-input--error' %}
+      {% else %}
+        {% set errorClass = '' %}
+      {% endif %}
+
       {{ govukInput({
         id: "other-user",
         name: "otherUser",
-        classes: "govuk-!-width-one-third",
+        classes: "govuk-!-width-one-third " + errorClass,
+        errorMessage: error.emailAddressInputFormError,
         label: {
           text: "Email address"
         },
         hint: {
           text: "This is usually your area’s team email address"
-        }
+        },
+        value: alertEmailAddressOptions.otherUserEmailAddressInput
       }) }}
     {% endset %}
 
@@ -42,8 +53,8 @@
       <span class="govuk-caption-l">{{caption}}</span>
 
       {{ govukRadios({
-        name: 'alertEmailAddress',
-        errorMessage: error,
+        name: 'alertEmailAddressType',
+        errorMessage: error.radioFormError,
         fieldset: {
           legend: {
             text: pageTitle,
@@ -54,7 +65,8 @@
         items: [
           {
             value: 'username',
-            text: username
+            text: username,
+            checked: alertEmailAddressOptions.usernameChecked
           },
           {
             divider: 'or'
@@ -62,6 +74,7 @@
           {
             value: 'other',
             text: 'Use another email address',
+            checked: alertEmailAddressOptions.otherUserChecked,
             conditional: {
               html: textHtml
             }
