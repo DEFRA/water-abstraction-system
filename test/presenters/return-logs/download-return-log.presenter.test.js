@@ -13,7 +13,7 @@ const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
 // Thing under test
 const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
 
-describe('Download Return Log presenter', () => {
+describe('Return Logs - Download Return Log presenter', () => {
   let testReturnLog
 
   before(() => {

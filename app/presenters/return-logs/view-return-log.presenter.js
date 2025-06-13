@@ -23,6 +23,8 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
  * @returns {object} page data needed by the view template
  */
 function go(returnLog, auth) {
+console.log('🚀🚀🚀 ~ returnLog:')
+console.dir(returnLog, { depth: null, colors: true })
   const {
     endDate,
     id,

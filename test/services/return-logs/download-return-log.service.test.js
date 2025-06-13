@@ -17,7 +17,7 @@ const ReturnLogsFixtures = require('../../fixtures/return-logs.fixture.js')
 // Thing under test
 const DownloadReturnLogService = require('../../../app/services/return-logs/download-return-log.service.js')
 
-describe('Download Return Log Service', () => {
+describe('Return Logs - Download Return Log Service', () => {
   let returnLog
 
   before(() => {
