@@ -27,9 +27,9 @@
   {%endif%}
 
   {# Version warning #}
-  {% if latest == false %}
+  {% if warning %}
     {{ govukWarningText({
-      text: "You are viewing a previous version. This is not the latest submission data.",
+      text: warning,
       iconFallbackText: "Warning"
     }) }}
   {% endif %}

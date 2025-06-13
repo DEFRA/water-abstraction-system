@@ -369,11 +369,11 @@ describe('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  describe('the "licenceref" property', () => {
+  describe('the "licenceRef" property', () => {
     it('returns the licence reference', () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.licenceref).to.equal(testReturnLog.licence.reference)
+      expect(result.licenceRef).to.equal(testReturnLog.licence.licenceRef)
     })
   })
 
