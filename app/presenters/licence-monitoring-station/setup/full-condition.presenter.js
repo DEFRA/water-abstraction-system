@@ -15,9 +15,9 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session, conditions) {
-  const { label, licenceRef } = session
+  const { label, licenceRef, conditionId } = session
 
-  const radioButtons = _generateRadioButtons(conditions)
+  const radioButtons = _generateRadioButtons(conditions, conditionId)
 
   return {
     backLink: _backLink(session),
@@ -37,7 +37,7 @@ function _backLink(session) {
   return `/system/licence-monitoring-station/setup/${id}/licence-number`
 }
 
-function _generateRadioButtons(conditions) {
+function _generateRadioButtons(conditions, conditionId) {
   if (conditions.length === 0) {
     return [
       {
@@ -62,7 +62,8 @@ function _generateRadioButtons(conditions) {
       text: `${row.displayTitle} ${index + 1}`,
       hint: {
         text: hintText
-      }
+      },
+      checked: row.id === conditionId
     }
   })
 
@@ -73,7 +74,8 @@ function _generateRadioButtons(conditions) {
     },
     {
       value: 'not_listed',
-      text: 'The condition is not listed for this licence'
+      text: 'The condition is not listed for this licence',
+      checked: conditionId === 'not_listed'
     }
   ]
 }

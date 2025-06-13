@@ -85,23 +85,50 @@ describe('Full Condition Presenter', () => {
             text: 'First condition title 1',
             hint: {
               text: 'Some notes. (Additional information 1: P1) (Additional information 2: P2)'
-            }
+            },
+            checked: false
           },
           {
             value: '2c1fc38d-17fb-475a-8760-eb3370aae856',
             text: 'Second condition title 2',
             hint: {
               text: 'More notes. (Additional information 1: P3) (Additional information 2: P4)'
-            }
+            },
+            checked: false
           },
           {
             divider: 'or'
           },
           {
             value: 'not_listed',
-            text: 'The condition is not listed for this licence'
+            text: 'The condition is not listed for this licence',
+            checked: false
           }
         ])
+      })
+
+      describe('and the user has previously selected an option', () => {
+        beforeEach(() => {
+          session.conditionId = conditions[0].id
+        })
+
+        it('marks the option as checked', () => {
+          const result = FullConditionPresenter.go(session, conditions)
+
+          expect(result.radioButtons[0].checked).to.be.true()
+        })
+      })
+
+      describe('and the user previously selected the not listed option', () => {
+        beforeEach(() => {
+          session.conditionId = 'not_listed'
+        })
+
+        it('marks the option as checked', () => {
+          const result = FullConditionPresenter.go(session, conditions)
+
+          expect(result.radioButtons[3].checked).to.be.true()
+        })
       })
 
       describe('when notes and/or params are null', () => {
@@ -125,7 +152,8 @@ describe('Full Condition Presenter', () => {
             text: 'A null condition 1',
             hint: {
               text: '(Additional information 1: None) (Additional information 2: None)'
-            }
+            },
+            checked: false
           })
         })
       })
