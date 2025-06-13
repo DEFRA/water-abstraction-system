@@ -13,30 +13,67 @@ const FullConditionValidator = require('../../../../app/validators/licence-monit
 describe('Full Condition Validator', () => {
   let payload
 
-  beforeEach(() => {
-    payload = { placeholder: '' }
-  })
-
   describe('when called with valid data', () => {
-    it('returns with no errors', () => {
-      const result = FullConditionValidator.go(payload)
+    describe('a uuid', () => {
+      beforeEach(() => {
+        payload = {
+          condition: '2c7d8751-6c78-4958-bb88-02bf7801e818'
+        }
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      it('returns with no errors', () => {
+        const result = FullConditionValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
+    })
+
+    describe('the string not_listed', () => {
+      beforeEach(() => {
+        payload = {
+          condition: 'not_listed'
+        }
+      })
+
+      it('returns with no errors', () => {
+        const result = FullConditionValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
     })
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
+    describe('a payload without condition', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('returns with errors', () => {
+        const result = FullConditionValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select a condition')
+      })
     })
 
-    it('returns with errors', () => {
-      const result = FullConditionValidator.go(payload)
+    describe('a payload with an invalid value', () => {
+      beforeEach(() => {
+        payload = {
+          condition: 'INVALID'
+        }
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"placeholder" is required')
+      it('returns with errors', () => {
+        const result = FullConditionValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('"condition" must be a valid GUID')
+      })
     })
   })
 })
