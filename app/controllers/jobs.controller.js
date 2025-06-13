@@ -6,15 +6,21 @@
  */
 
 const ExportService = require('../services/jobs/export/export.service.js')
+const ProcessCleanService = require('../services/jobs/clean/process-clean.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
 const ProcessNotificationsStatusUpdatesService = require('../services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessReturnVersionMigrationService = require('../services/jobs/return-version-migration/process-return-version-migration.service.js')
-const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 const NOT_FOUND_STATUS_CODE = 404
+
+async function clean(_request, h) {
+  ProcessCleanService.go()
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
 
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3
@@ -39,12 +45,6 @@ async function licenceUpdates(_request, h) {
 
 async function notificationsStatusUpdates(_request, h) {
   ProcessNotificationsStatusUpdatesService.go()
-
-  return h.response().code(NO_CONTENT_STATUS_CODE)
-}
-
-async function sessionCleanup(_request, h) {
-  ProcessSessionStorageCleanupService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -74,11 +74,11 @@ async function returnVersionMigration(_request, h) {
 }
 
 module.exports = {
+  clean,
   exportDb,
   licenceUpdates,
   notificationsStatusUpdates,
   returnLogs,
   returnVersionMigration,
-  sessionCleanup,
   timeLimited
 }
