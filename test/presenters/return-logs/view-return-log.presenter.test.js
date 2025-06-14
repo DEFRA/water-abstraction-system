@@ -735,60 +735,55 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "total" property', () => {
-  //   describe('when there is no submission', () => {
-  //     it('returns 0 as a string', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "total" property', () => {
+    describe('when there is no submission', () => {
+      beforeEach(() => {
+        returnLog.receivedDate = null
+        returnLog.status = 'due'
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+      })
 
-  //       expect(result.total).to.equal('0')
-  //     })
-  //   })
+      it('returns 0 as a string', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when there is a submission', () => {
-  //     describe('which is a nil return', () => {
-  //       beforeEach(() => {
-  //         setupSubmission(returnLog, true)
-  //       })
+        expect(result.total).to.equal('0')
+      })
+    })
 
-  //       it('returns 0 as a string', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe('when there is a submission', () => {
+      describe('but it is a nil return', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].nilReturn = true
+          returnLog.returnSubmissions[0].returnSubmissionLines = []
 
-  //         expect(result.total).to.equal('0')
-  //       })
-  //     })
+          returnLog.versions[0].nilReturn = true
+        })
 
-  //     describe('which is not a nil return', () => {
-  //       beforeEach(() => {
-  //         returnLog.versions = [
-  //           createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: returnLog.licence.id })
-  //         ]
+        it('returns 0 as a string', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //         returnLog.returnSubmissions = [
-  //           createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, {
-  //             returnLogId: returnLog.id
-  //           })
-  //         ]
+          expect(result.total).to.equal('0')
+        })
+      })
 
-  //         returnLog.returnSubmissions[0].returnSubmissionLines = [
-  //           createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-  //             returnSubmissionId: returnLog.returnSubmissions[0].id
-  //           }),
-  //           createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-  //             returnSubmissionId: returnLog.returnSubmissions[0].id,
-  //             startDate: new Date(`2022-01-02`),
-  //             endDate: new Date(`2022-02-08`)
-  //           })
-  //         ]
-  //       })
+      describe('which is not a nil return', () => {
+        let total
 
-  //       it('returns the formatted total quantity', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+        beforeEach(() => {
+          total = returnLog.returnSubmissions[0].returnSubmissionLines.reduce((acc, line) => {
+            return acc + line.quantity
+          }, 0)
+        })
 
-  //         expect(result.total).to.equal('8,760')
-  //       })
-  //     })
-  //   })
-  // })
+        it('returns the formatted total quantity', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.total).to.equal(formatNumber(total))
+        })
+      })
+    })
+  })
 
   // describe('the "underQuery" property', () => {
   //   beforeEach(() => {
