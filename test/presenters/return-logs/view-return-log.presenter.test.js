@@ -513,14 +513,6 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "returnPeriod" property', () => {
-  //   it('returns the formatted return period', () => {
-  //     const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //     expect(result.returnPeriod).to.equal('1 April 2022 to 31 March 2023')
-  //   })
-  // })
-
   // describe('the "showUnderQuery" property', () => {
   //   describe('when the return has a status of "not due yet"', () => {
   //     beforeEach(() => {
