@@ -180,7 +180,7 @@ describe('Return Logs - View Return Log presenter', () => {
         returnLog.status = 'due'
       })
 
-      it('returns the expected "Submit return" result', () => {
+      it('returns "Submit return"', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 
         expect(result.actionButton).to.equal({
@@ -217,7 +217,7 @@ describe('Return Logs - View Return Log presenter', () => {
           returnLog.returnSubmissions = [latestSubmission]
         })
 
-        it('returns the expected "Edit return" result', () => {
+        it('returns "Edit return"', () => {
           const result = ViewReturnLogPresenter.go(returnLog, auth)
 
           expect(result.actionButton).to.equal({
@@ -261,7 +261,7 @@ describe('Return Logs - View Return Log presenter', () => {
         returnLog.returnSubmissions = [latestSubmission]
       })
 
-      it('returns the expected "Go back to summary" result', () => {
+      it('returns "Go back to summary"', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 
         expect(result.backLink).to.equal({
@@ -281,7 +281,7 @@ describe('Return Logs - View Return Log presenter', () => {
         // selected.
       })
 
-      it('returns the expected "Go back to the latest version" result', () => {
+      it('returns "Go back to the latest version"', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 
         expect(result.backLink).to.equal({
