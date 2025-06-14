@@ -304,35 +304,27 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "displayReadings" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-  //   })
+  describe('the "displayReadings" property', () => {
+    describe('when the return submission method is "abstractionVolumes"', () => {
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when the return submission method is abstractionVolumes', () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
-  //     })
+        expect(result.displayReadings).to.equal(false)
+      })
+    })
 
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe("when the return submission method isn't 'abstractionVolumes'", () => {
+      beforeEach(() => {
+        returnLog.returnSubmissions[0].metadata.method = 'oneMeter'
+      })
 
-  //       expect(result.displayReadings).to.equal(false)
-  //     })
-  //   })
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe("when the return submission method isn't abstractionVolumes", () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
-  //     })
-
-  //     it('returns true', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.displayReadings).to.equal(true)
-  //     })
-  //   })
-  // })
+        expect(result.displayReadings).to.equal(true)
+      })
+    })
+  })
 
   // describe('the "displayTable" property', () => {
   //   describe('when there are no return submissions', () => {
