@@ -45,6 +45,7 @@ function go(returnLog, auth) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatStatus(returnLog)
+  const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
@@ -69,8 +70,8 @@ function go(returnLog, auth) {
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
-    summaryTableData: _summaryTableData(selectedReturnSubmission, returnsFrequency),
-    tableTitle: _tableTitle(returnsFrequency, method),
+    summaryTableData,
+    tableTitle: _tableTitle(summaryTableData, returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
     underQuery,
@@ -202,7 +203,7 @@ function _startReading(selectedReturnSubmission) {
 }
 
 function _summaryTableData(selectedReturnSubmission, returnsFrequency) {
-  if (!selectedReturnSubmission) {
+  if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 
@@ -216,7 +217,11 @@ function _summaryTableData(selectedReturnSubmission, returnsFrequency) {
   }
 }
 
-function _tableTitle(returnsFrequency, method) {
+function _tableTitle(summaryTableData, returnsFrequency, method) {
+  if (!summaryTableData) {
+    return null
+  }
+
   const frequency = returnRequirementFrequencies[returnsFrequency]
   const postfix = method === 'abstractionVolumes' ? 'abstraction volumes' : 'meter readings'
 

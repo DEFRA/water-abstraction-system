@@ -609,41 +609,131 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "tableTitle" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-  //   })
+  describe('the "tableTitle" property', () => {
+    describe('when the return log has a frequency of "day"', () => {
+      beforeEach(() => {
+        returnLog.returnsFrequency = 'day'
+      })
 
-  //   it('returns the frequency in the title', () => {
-  //     const result = ViewReturnLogPresenter.go(returnLog, auth)
+      describe('and was submitted using abstraction volumes', () => {
+        it('returns "Summary of daily abstraction volumes"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //     expect(result.tableTitle).to.contain('monthly')
-  //   })
+          expect(result.tableTitle).to.equal('Summary of daily abstraction volumes')
+        })
+      })
 
-  //   describe('when the method is abstractionVolumes', () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
-  //     })
+      describe('and was submitted using meter readings', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].metadata.method = 'oneMeter'
+        })
 
-  //     it("returns 'abstraction volumes' in the title", () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+        it('returns "Summary of daily meter readings"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.tableTitle).to.contain('abstraction volumes')
-  //     })
-  //   })
+          expect(result.tableTitle).to.equal('Summary of daily meter readings')
+        })
+      })
 
-  //   describe('when the method is not abstractionVolumes', () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
-  //     })
+      describe('when there is no submission data', () => {
+        beforeEach(() => {
+          returnLog.receivedDate = null
+          returnLog.status = 'due'
+          returnLog.returnSubmissions = []
+          returnLog.versions = []
+        })
 
-  //     it("returns 'meter readings' in the title", () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.tableTitle).to.contain('meter readings')
-  //     })
-  //   })
-  // })
+          expect(result.summaryTableData).to.be.null()
+        })
+      })
+    })
+
+    describe('when the return log has a frequency of "week"', () => {
+      beforeEach(() => {
+        returnLog.returnsFrequency = 'week'
+      })
+
+      describe('and was submitted using abstraction volumes', () => {
+        it('returns "Summary of weekly abstraction volumes"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.tableTitle).to.equal('Summary of weekly abstraction volumes')
+        })
+      })
+
+      describe('and was submitted using meter readings', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].metadata.method = 'oneMeter'
+        })
+
+        it('returns "Summary of weekly meter readings"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.tableTitle).to.equal('Summary of weekly meter readings')
+        })
+      })
+
+      describe('when there is no submission data', () => {
+        beforeEach(() => {
+          returnLog.receivedDate = null
+          returnLog.status = 'due'
+          returnLog.returnSubmissions = []
+          returnLog.versions = []
+        })
+
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.summaryTableData).to.be.null()
+        })
+      })
+    })
+
+    describe('when the return log has a frequency of "month"', () => {
+      beforeEach(() => {
+        returnLog.returnsFrequency = 'month'
+      })
+
+      describe('and was submitted using abstraction volumes', () => {
+        it('returns "Summary of monthly abstraction volumes"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
+        })
+      })
+
+      describe('and was submitted using meter readings', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].metadata.method = 'oneMeter'
+        })
+
+        it('returns "Summary of monthly meter readings"', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.tableTitle).to.equal('Summary of monthly meter readings')
+        })
+      })
+
+      describe('when there is no submission data', () => {
+        beforeEach(() => {
+          // NOTE: We go with a nil return here just to spice things up!
+          returnLog.returnSubmissions[0].nilReturn = true
+          returnLog.returnSubmissions[0].returnSubmissionLines = []
+
+          returnLog.versions[0].nilReturn = true
+        })
+
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.tableTitle).to.be.null()
+        })
+      })
+    })
+  })
 
   // describe('the "total" property', () => {
   //   describe('when there is no submission', () => {
