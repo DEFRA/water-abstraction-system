@@ -27,7 +27,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe('Return Logs - View Return Log presenter', () => {
+describe.only('Return Logs - View Return Log presenter', () => {
   let auth
   let returnLog
 
@@ -116,45 +116,45 @@ describe('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "abstractionPeriod" property', () => {
-  //   describe('when the return log has an abstraction period set', () => {
-  //     it('returns the correctly-formatted date', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "abstractionPeriod" property', () => {
+    describe('when the return log has an abstraction period set', () => {
+      it('returns the correctly-formatted date', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.abstractionPeriod).to.equal('1 April to 28 April')
-  //     })
-  //   })
+        expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+      })
+    })
 
-  //   describe('when the return log has its abstraction period set to "null"', () => {
-  //     beforeEach(() => {
-  //       returnLog.periodStartDay = 'null'
-  //       returnLog.periodStartMonth = 'null'
-  //       returnLog.periodEndDay = 'null'
-  //       returnLog.periodEndMonth = 'null'
-  //     })
+    describe('when the return log has its abstraction period set to "null"', () => {
+      beforeEach(() => {
+        returnLog.periodStartDay = 'null'
+        returnLog.periodStartMonth = 'null'
+        returnLog.periodEndDay = 'null'
+        returnLog.periodEndMonth = 'null'
+      })
 
-  //     it('returns an empty string', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns an empty string', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.abstractionPeriod).to.equal('')
-  //     })
-  //   })
+        expect(result.abstractionPeriod).to.equal('')
+      })
+    })
 
-  //   describe('when the return log has a NULL abstraction period', () => {
-  //     beforeEach(() => {
-  //       returnLog.periodStartDay = null
-  //       returnLog.periodStartMonth = null
-  //       returnLog.periodEndDay = null
-  //       returnLog.periodEndMonth = null
-  //     })
+    describe('when the return log has a NULL abstraction period', () => {
+      beforeEach(() => {
+        returnLog.periodStartDay = null
+        returnLog.periodStartMonth = null
+        returnLog.periodEndDay = null
+        returnLog.periodEndMonth = null
+      })
 
-  //     it('returns an empty string', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns an empty string', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.abstractionPeriod).to.equal('')
-  //     })
-  //   })
-  // })
+        expect(result.abstractionPeriod).to.equal('')
+      })
+    })
+  })
 
   // describe('the "actionButton" property', () => {
   //   describe('when this is a void return', () => {
