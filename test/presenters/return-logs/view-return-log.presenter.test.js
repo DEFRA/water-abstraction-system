@@ -819,18 +819,37 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       describe('which is not a nil return', () => {
-        let total
+        describe('but all the lines have a null "quantity"', () => {
+          beforeEach(() => {
+            for (const line of returnLog.returnSubmissions[0].returnSubmissionLines) {
+              line.quantity = null
+            }
+          })
 
-        beforeEach(() => {
-          total = returnLog.returnSubmissions[0].returnSubmissionLines.reduce((acc, line) => {
-            return acc + line.quantity
-          }, 0)
+          it('returns 0 as a string', () => {
+            const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+            expect(result.total).to.equal('0')
+          })
         })
 
-        it('returns the formatted total quantity', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+        describe('and one or more lines have a non-null "quantity"', () => {
+          let total
 
-          expect(result.total).to.equal(formatNumber(total))
+          beforeEach(() => {
+            // Add a null in just to demonstrate it can handle it
+            returnLog.returnSubmissions[0].returnSubmissionLines[0].quantity = 0
+
+            total = returnLog.returnSubmissions[0].returnSubmissionLines.reduce((acc, line) => {
+              return line.quantity ? acc + line.quantity : acc
+            }, 0)
+          })
+
+          it('returns the formatted total quantity', () => {
+            const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+            expect(result.total).to.equal(formatNumber(total))
+          })
         })
       })
     })
