@@ -580,39 +580,34 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "summaryTableData" property', () => {
-  //   describe('when there is no submission', () => {
-  //     it('returns null', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "summaryTableData" property', () => {
+    describe('when there is no submission', () => {
+      beforeEach(() => {
+        returnLog.receivedDate = null
+        returnLog.status = 'due'
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+      })
 
-  //       expect(result.summaryTableData).to.be.null()
-  //     })
-  //   })
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when there is a submission', () => {
-  //     let StubbedViewReturnLogPresenter
+        expect(result.summaryTableData).to.be.null()
+      })
+    })
 
-  //     beforeEach(() => {
-  //       // We have to use Proxyquire to stub BaseReturnLogsPresenter as Sinon cannot stub dependencies that are imported
-  //       // via destructuring
-  //       StubbedViewReturnLogPresenter = Proxyquire('../../../app/presenters/return-logs/view-return-log.presenter.js', {
-  //         './base-return-logs.presenter.js': {
-  //           generateSummaryTableHeaders: Sinon.stub().returns('GENERATED_HEADERS'),
-  //           generateSummaryTableRows: Sinon.stub().returns('GENERATED_ROWS')
-  //         }
-  //       })
+    describe('when there is a submission', () => {
+      it('returns generated headers and rows', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       setupSubmission(returnLog)
-  //     })
-
-  //     it('returns generated headers and rows', () => {
-  //       const result = StubbedViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.summaryTableData.headers).to.equal('GENERATED_HEADERS')
-  //       expect(result.summaryTableData.rows).to.equal('GENERATED_ROWS')
-  //     })
-  //   })
-  // })
+        // NOTE: The testing is this simple because we have the 'correctly presents the data' test at the very top plus
+        // the generating the headers and the rows is handled by base-return-logs.presenter.js, where they have been
+        // extensively tested
+        expect(result.summaryTableData.headers).to.exist()
+        expect(result.summaryTableData.rows).to.exist()
+      })
+    })
+  })
 
   // describe('the "tableTitle" property', () => {
   //   beforeEach(() => {
