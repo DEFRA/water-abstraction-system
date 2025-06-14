@@ -785,35 +785,27 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "underQuery" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-  //   })
+  describe('the "underQuery" property', () => {
+    describe('when the return log is under query', () => {
+      beforeEach(() => {
+        returnLog.underQuery = true
+      })
 
-  //   describe('when the return log is under query', () => {
-  //     beforeEach(() => {
-  //       returnLog.underQuery = true
-  //     })
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //     it('returns true', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+        expect(result.underQuery).to.equal(true)
+      })
+    })
 
-  //       expect(result.underQuery).to.equal(true)
-  //     })
-  //   })
+    describe('when the return log is not under query', () => {
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when the return log is not under query', () => {
-  //     beforeEach(() => {
-  //       returnLog.underQuery = false
-  //     })
-
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.underQuery).to.equal(false)
-  //     })
-  //   })
-  // })
+        expect(result.underQuery).to.equal(false)
+      })
+    })
+  })
 
   // describe('the "versions" property', () => {
   //   beforeEach(() => {
