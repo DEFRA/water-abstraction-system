@@ -326,63 +326,44 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "displayTable" property', () => {
-  //   describe('when there are no return submissions', () => {
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "displayTable" property', () => {
+    describe('when there are no return submissions', () => {
+      beforeEach(() => {
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+        returnLog.status = 'due'
+      })
 
-  //       expect(result.displayTable).to.equal(false)
-  //     })
-  //   })
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when there is a return submission', () => {
-  //     beforeEach(() => {
-  //       setupSubmission(returnLog)
-  //     })
+        expect(result.displayTable).to.equal(false)
+      })
+    })
 
-  //     describe('which is a nil return', () => {
-  //       beforeEach(() => {
-  //         returnLog.returnSubmissions[0].nilReturn = true
-  //       })
+    describe('when there is a return submission', () => {
+      describe('which is a "nil return"', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].nilReturn = true
+          returnLog.versions[0].nilReturn = true
+        })
 
-  //       it('returns false', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+        it('returns false', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //         expect(result.displayTable).to.equal(false)
-  //       })
-  //     })
+          expect(result.displayTable).to.equal(false)
+        })
+      })
 
-  //     describe('which is not a nil return', () => {
-  //       it('returns true', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+      describe('which is not a nil return', () => {
+        it('returns true', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //         expect(result.displayTable).to.equal(true)
-  //       })
-  //     })
-  //   })
-  // })
-
-  // describe('the "displayTable" property', () => {
-  //   describe('when there is a return submission', () => {
-  //     beforeEach(() => {
-  //       setupSubmission(returnLog)
-  //     })
-
-  //     it('returns true ', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.displayTable).to.equal(true)
-  //     })
-  //   })
-
-  //   describe('when there is no return submission', () => {
-  //     it('returns false when there is no return submissions', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.displayTable).to.equal(false)
-  //     })
-  //   })
-  // })
+          expect(result.displayTable).to.equal(true)
+        })
+      })
+    })
+  })
 
   // describe('the "displayUnits" property', () => {
   //   beforeEach(() => {
