@@ -317,7 +317,7 @@ describe('Return Logs - View Return Log presenter', () => {
   describe('the "displayTable" property', () => {
     describe('when there are no return submissions', () => {
       beforeEach(() => {
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
         returnLog.status = 'due'
       })
@@ -378,7 +378,7 @@ describe('Return Logs - View Return Log presenter', () => {
   describe('the "downloadCSVLink" property', () => {
     describe('when there are no return submissions', () => {
       beforeEach(() => {
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
         returnLog.status = 'due'
       })
@@ -459,7 +459,7 @@ describe('Return Logs - View Return Log presenter', () => {
   describe('the "nilReturn" property', () => {
     describe('when there are no return submissions', () => {
       beforeEach(() => {
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
         returnLog.status = 'due'
       })
@@ -522,7 +522,7 @@ describe('Return Logs - View Return Log presenter', () => {
       beforeEach(() => {
         returnLog.receivedDate = null
         returnLog.status = 'due'
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
       })
 
@@ -571,7 +571,7 @@ describe('Return Logs - View Return Log presenter', () => {
       beforeEach(() => {
         returnLog.receivedDate = null
         returnLog.status = 'due'
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
       })
 
@@ -614,7 +614,7 @@ describe('Return Logs - View Return Log presenter', () => {
       beforeEach(() => {
         returnLog.receivedDate = null
         returnLog.status = 'due'
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
       })
 
@@ -668,7 +668,7 @@ describe('Return Logs - View Return Log presenter', () => {
         beforeEach(() => {
           returnLog.receivedDate = null
           returnLog.status = 'due'
-          returnLog.returnSubmissions = []
+          delete returnLog.returnSubmissions
           returnLog.versions = []
         })
 
@@ -709,7 +709,7 @@ describe('Return Logs - View Return Log presenter', () => {
         beforeEach(() => {
           returnLog.receivedDate = null
           returnLog.status = 'due'
-          returnLog.returnSubmissions = []
+          delete returnLog.returnSubmissions
           returnLog.versions = []
         })
 
@@ -791,7 +791,7 @@ describe('Return Logs - View Return Log presenter', () => {
       beforeEach(() => {
         returnLog.receivedDate = null
         returnLog.status = 'due'
-        returnLog.returnSubmissions = []
+        delete returnLog.returnSubmissions
         returnLog.versions = []
       })
 
