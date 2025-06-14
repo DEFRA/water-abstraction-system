@@ -258,48 +258,51 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "backLink" property', () => {
-  //   describe('when this is the latest return log', () => {
-  //     it('returns the expected "Go back to summary" result', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "backLink" property', () => {
+    describe('and the latest return submission version is selected (or none was selected)', () => {
+      beforeEach(() => {
+        // Create a new return submission. The fixture will use the details from the existing return log, as well as
+        // marking previous versions as no longer current, and using them to determine the next version number
+        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
 
-  //       expect(result.backLink).to.equal({
-  //         href: `/system/licences/${returnLog.licence.id}/returns`,
-  //         text: 'Go back to summary'
-  //       })
-  //     })
-  //   })
+        // We add the new submission to the top of versions as it is the latest
+        returnLog.versions.unshift(latestSubmission)
 
-  //   describe("when this isn't the latest return log", () => {
-  //     beforeEach(() => {
-  //       returnLog.versions = [
-  //         createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: returnLog.licence.id }),
-  //         createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: returnLog.licence.id, version: 101 })
-  //       ]
+        // Though an array, return submissions only ever holds one return submission: either the latest or whichever was
+        // selected. Versions always hold all return submissions so we can display them at the bottom of the page
+        returnLog.returnSubmissions = [latestSubmission]
+      })
 
-  //       returnLog.returnSubmissions = [
-  //         createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: returnLog.id })
-  //       ]
+      it('returns the expected "Go back to summary" result', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       for (const returnSubmission of returnLog.returnSubmissions) {
-  //         returnSubmission.returnSubmissionLines = [
-  //           createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-  //             returnSubmissionId: returnSubmission.id
-  //           })
-  //         ]
-  //       }
-  //     })
+        expect(result.backLink).to.equal({
+          href: `/system/licences/${returnLog.licence.id}/returns`,
+          text: 'Go back to summary'
+        })
+      })
+    })
 
-  //     it('returns the expected "Go back to the latest version" result', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe('and an earlier return submission is selected', () => {
+      beforeEach(() => {
+        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
 
-  //       expect(result.backLink).to.equal({
-  //         href: `/system/return-logs?id=${returnLog.id}`,
-  //         text: 'Go back to the latest version'
-  //       })
-  //     })
-  //   })
-  // })
+        returnLog.versions.unshift(latestSubmission)
+
+        // Note we don't update returnLog.returnSubmissions. This is the equivalent of saying an earlier version was
+        // selected.
+      })
+
+      it('returns the expected "Go back to the latest version" result', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.backLink).to.equal({
+          href: `/system/return-logs?id=${returnLog.id}`,
+          text: 'Go back to the latest version'
+        })
+      })
+    })
+  })
 
   // describe('the "displayReadings" property', () => {
   //   beforeEach(() => {
