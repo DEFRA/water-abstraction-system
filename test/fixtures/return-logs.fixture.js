@@ -114,7 +114,7 @@ function _returnLogData(returnsFrequency) {
   defaults.underQuery = false
 
   defaults.metadata.purposes.push({
-    alias: 'Mineral Washing',
+    alias: 'Mineral Washing alias',
     primary: {
       code: 'I',
       description: 'Industrial, Commercial And Public Services'

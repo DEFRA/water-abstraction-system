@@ -77,7 +77,7 @@ describe.only('Return Logs - View Return Log presenter', () => {
       method: 'abstractionVolumes',
       nilReturn: false,
       pageTitle: 'Abstraction return',
-      purpose: 'Mineral Washing',
+      purpose: 'Mineral Washing alias',
       receivedDate: '12 April 2023',
       returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
@@ -427,7 +427,7 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "nilReturn" property', () => {
+  describe('the "nilReturn" property', () => {
     describe('when there are no return submissions', () => {
       beforeEach(() => {
         returnLog.returnSubmissions = []
@@ -467,26 +467,26 @@ describe.only('Return Logs - View Return Log presenter', () => {
   })
 
   describe('the "purpose" property', () => {
-  //   describe('when the first purpose has an alias', () => {
-  //     it('returns the alias', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe('when the first purpose has an alias', () => {
+      it('returns the alias', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.purpose).to.equal('PURPOSE_ALIAS')
-  //     })
-  //   })
+        expect(result.purpose).to.equal('Mineral Washing alias')
+      })
+    })
 
-  //   describe('when the first purpose has no alias', () => {
-  //     beforeEach(() => {
-  //       returnLog.purposes.unshift({ tertiary: { description: 'TERTIARY_DESCRIPTION' } })
-  //     })
+    describe('when the first purpose has no alias', () => {
+      beforeEach(() => {
+        returnLog.purposes[0].alias = null
+      })
 
-  //     it('returns the tertiary description', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns the tertiary description', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.purpose).to.equal('TERTIARY_DESCRIPTION')
-  //     })
-  //   })
-  // })
+        expect(result.purpose).to.equal('Mineral Washing')
+      })
+    })
+  })
 
   // describe('the "receivedDate" property', () => {
   //   describe('when no received date is present', () => {
