@@ -427,28 +427,6 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "meterDetails" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-
-  //     Sinon.stub(returnLog.returnSubmissions[0], '$meter').returns({
-  //       manufacturer: 'MANUFACTURER',
-  //       multipler: 10,
-  //       serialNumber: 'SERIAL_NUMBER'
-  //     })
-  //   })
-
-  //   it('returns the formatted meter details', () => {
-  //     const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //     expect(result.meterDetails).to.equal({
-  //       make: 'MANUFACTURER',
-  //       serialNumber: 'SERIAL_NUMBER',
-  //       xDisplay: 'Yes'
-  //     })
-  //   })
-  // })
-
   // describe('the "method" property', () => {
   //   beforeEach(() => {
   //     setupSubmission(returnLog)
