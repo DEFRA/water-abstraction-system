@@ -15,7 +15,7 @@ const { formatNumber } = require('../../../app/presenters/base.presenter.js')
 const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe.only('Return Logs - View Return Log presenter', () => {
+describe('Return Logs - View Return Log presenter', () => {
   let auth
   let returnLog
 
