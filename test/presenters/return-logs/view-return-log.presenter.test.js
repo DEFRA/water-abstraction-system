@@ -427,14 +427,6 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "licenceRef" property', () => {
-  //   it('returns the licence reference', () => {
-  //     const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //     expect(result.licenceRef).to.equal(returnLog.licence.licenceRef)
-  //   })
-  // })
-
   // describe('the "meterDetails" property', () => {
   //   beforeEach(() => {
   //     setupSubmission(returnLog)
