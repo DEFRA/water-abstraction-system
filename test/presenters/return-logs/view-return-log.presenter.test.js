@@ -723,6 +723,28 @@ describe('Return Logs - View Return Log presenter', () => {
     })
   })
 
+  describe('the "tariff" property', () => {
+    describe('when the return log is flagged for "two-part tariff"', () => {
+      beforeEach(() => {
+        returnLog.twoPartTariff = true
+      })
+
+      it('returns "Two-part"', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.tariff).to.equal('Two-part')
+      })
+    })
+
+    describe('when the return log is not flagged for "two-part tariff"', () => {
+      it('returns "Standard', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.tariff).to.equal('Standard')
+      })
+    })
+  })
+
   describe('the "total" property', () => {
     describe('when there is no submission', () => {
       beforeEach(() => {
