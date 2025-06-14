@@ -161,7 +161,7 @@ function _displayTable(selectedReturnSubmission) {
 }
 
 function _downloadCSVLink(selectedReturnSubmission, returnLogId) {
-  if (!selectedReturnSubmission) {
+  if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 

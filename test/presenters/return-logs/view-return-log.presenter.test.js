@@ -375,6 +375,47 @@ describe('Return Logs - View Return Log presenter', () => {
     })
   })
 
+  describe('the "downloadCSVLink" property', () => {
+    describe('when there are no return submissions', () => {
+      beforeEach(() => {
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+        returnLog.status = 'due'
+      })
+
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.downloadCSVLink).to.be.null()
+      })
+    })
+
+    describe('when there is a return submission', () => {
+      describe('which is a "nil return"', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].nilReturn = true
+          returnLog.versions[0].nilReturn = true
+        })
+
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.downloadCSVLink).to.be.null()
+        })
+      })
+
+      describe('which is not a nil return', () => {
+        it('returns a link to download the selected version', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          const expectedLink = `/system/return-logs/download?id=${returnLog.id}&version=${returnLog.returnSubmissions[0].version}`
+
+          expect(result.downloadCSVLink).to.equal(expectedLink)
+        })
+      })
+    })
+  })
+
   describe('the "latest" property', () => {
     describe('and the latest return submission version is selected (or none was selected)', () => {
       beforeEach(() => {
