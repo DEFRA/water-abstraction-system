@@ -198,7 +198,7 @@ function _startReading(selectedReturnSubmission) {
     return null
   }
 
-  return selectedReturnSubmission.$meter()?.startReading
+  return selectedReturnSubmission.$meter()?.startReading || null
 }
 
 function _summaryTableData(selectedReturnSubmission, returnsFrequency) {

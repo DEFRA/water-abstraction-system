@@ -83,7 +83,7 @@ describe.only('Return Logs - View Return Log presenter', () => {
       returnPeriod: '1 April 2022 to 31 March 2023',
       showUnderQuery: true,
       siteDescription: 'BOREHOLE AT AVALON',
-      startReading: undefined,
+      startReading: null,
       status: 'complete',
       summaryTableData: {
         headers: [{ text: 'Month' }, { text: 'Cubic metres', format: 'numeric' }],
@@ -513,62 +513,72 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "showUnderQuery" property', () => {
-  //   describe('when the return has a status of "not due yet"', () => {
-  //     beforeEach(() => {
-  //       const notDueUntilDate = new Date()
-  //       returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
-  //       returnLog.status = 'due'
-  //     })
+  describe('the "showUnderQuery" property', () => {
+    describe('when the return is "not due yet"', () => {
+      beforeEach(() => {
+        const notDueUntilDate = new Date()
+        returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        returnLog.status = 'due'
+      })
 
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.showUnderQuery).to.be.false()
-  //     })
-  //   })
+        expect(result.showUnderQuery).to.be.false()
+      })
+    })
 
-  //   describe('when the returns status is not "not due yet"', () => {
-  //     beforeEach(() => {
-  //       returnLog.status = 'completed'
-  //     })
+    describe('when the return is past due, regardless of its status', () => {
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //     it('returns true', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+        expect(result.showUnderQuery).to.be.true()
+      })
+    })
+  })
 
-  //       expect(result.showUnderQuery).to.be.true()
-  //     })
-  //   })
-  // })
+  describe('the "startReading" property', () => {
+    describe('when there is no submission', () => {
+      beforeEach(() => {
+        returnLog.receivedDate = null
+        returnLog.status = 'due'
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+      })
 
-  // describe('the "startReading" property', () => {
-  //   describe('when there is a submission', () => {
-  //     beforeEach(() => {
-  //       setupSubmission(returnLog)
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$meter').returns({
-  //         manufacturer: 'MANUFACTURER',
-  //         multipler: 10,
-  //         serialNumber: 'SERIAL_NUMBER',
-  //         startReading: 1234
-  //       })
-  //     })
+        expect(result.startReading).to.be.null()
+      })
+    })
 
-  //     it('returns the start reading', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe('when there is a submission', () => {
+      describe('but abstraction volumes were recorded', () => {
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.startReading).to.equal(1234)
-  //     })
-  //   })
+          expect(result.startReading).to.be.null()
+        })
+      })
 
-  //   describe('when there is no submission', () => {
-  //     it('returns null', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      describe('and and readings were recorded', () => {
+        let meteredSubmission
 
-  //       expect(result.startReading).to.be.null()
-  //     })
-  //   })
-  // })
+        beforeEach(() => {
+          meteredSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'measured')
+
+          returnLog.returnSubmissions = [meteredSubmission]
+        })
+
+        it('returns the start reading', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.startReading).to.equal(meteredSubmission.metadata.meters[0].startReading)
+        })
+      })
+    })
+  })
 
   // describe('the "summaryTableData" property', () => {
   //   describe('when there is no submission', () => {
