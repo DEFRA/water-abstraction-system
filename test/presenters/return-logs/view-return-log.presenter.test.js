@@ -15,7 +15,7 @@ const { formatNumber } = require('../../../app/presenters/base.presenter.js')
 const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe('Return Logs - View Return Log presenter', () => {
+describe.only('Return Logs - View Return Log presenter', () => {
   let auth
   let returnLog
 
@@ -247,7 +247,7 @@ describe('Return Logs - View Return Log presenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('and the latest return submission version is selected (or none was selected)', () => {
+    describe('when the latest return submission version is selected (or none was selected)', () => {
       beforeEach(() => {
         // Create a new return submission. The fixture will use the details from the existing return log, as well as
         // marking previous versions as no longer current, and using them to determine the next version number
@@ -271,7 +271,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
     })
 
-    describe('and an earlier return submission is selected', () => {
+    describe('when an earlier return submission is selected', () => {
       beforeEach(() => {
         const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
 
@@ -417,7 +417,7 @@ describe('Return Logs - View Return Log presenter', () => {
   })
 
   describe('the "latest" property', () => {
-    describe('and the latest return submission version is selected (or none was selected)', () => {
+    describe('when the latest return submission version is selected (or none was selected)', () => {
       beforeEach(() => {
         // Create a new return submission. The fixture will use the details from the existing return log, as well as
         // marking previous versions as no longer current, and using them to determine the next version number
@@ -438,7 +438,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
     })
 
-    describe('and an earlier return submission is selected', () => {
+    describe('when an earlier return submission is selected', () => {
       beforeEach(() => {
         const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
 
