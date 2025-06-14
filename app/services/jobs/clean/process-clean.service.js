@@ -5,6 +5,7 @@
  * @module ProcessCleanService
  */
 
+const CleanEmptyVoidReturnLogsService = require('./clean-empty-void-return-logs.service.js')
 const CleanExpiredSessionsService = require('./clean-expired-sessions.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
@@ -15,10 +16,11 @@ async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
+    const emptyVoidReturnLogsCount = await CleanEmptyVoidReturnLogsService.go()
     const expiredSessionsCount = await CleanExpiredSessionsService.go()
 
     calculateAndLogTimeTaken(startTime, 'Clean job complete', {
-      counts: { expiredSessions: expiredSessionsCount }
+      counts: { emptyVoidReturnLogs: emptyVoidReturnLogsCount, expiredSessions: expiredSessionsCount }
     })
   } catch (error) {
     global.GlobalNotifier.omfg('Clean job failed', {}, error)
