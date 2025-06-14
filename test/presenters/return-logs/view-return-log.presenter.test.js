@@ -427,20 +427,6 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "method" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-
-  //     Sinon.stub(returnLog.returnSubmissions[0], '$method').returns('METHOD')
-  //   })
-
-  //   it('returns the submission method', () => {
-  //     const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //     expect(result.method).to.equal('METHOD')
-  //   })
-  // })
-
   // describe('the "nilReturn" property', () => {
   //   describe('when there is a submission', () => {
   //     describe('which is a nil return', () => {
