@@ -488,27 +488,30 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "receivedDate" property', () => {
-  //   describe('when no received date is present', () => {
-  //     it('returns null ', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+  describe('the "receivedDate" property', () => {
+    describe('when no received date is present', () => {
+      beforeEach(() => {
+        returnLog.receivedDate = null
+        returnLog.status = 'due'
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+      })
 
-  //       expect(result.receivedDate).to.be.null()
-  //     })
-  //   })
+      it('returns null ', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when a received date is present', () => {
-  //     beforeEach(() => {
-  //       returnLog.receivedDate = new Date(`2022-01-01`)
-  //     })
+        expect(result.receivedDate).to.be.null()
+      })
+    })
 
-  //     it('returns the formatted date', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+    describe('when a received date is present', () => {
+      it('returns the formatted date', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.receivedDate).to.equal('1 January 2022')
-  //     })
-  //   })
-  // })
+        expect(result.receivedDate).to.equal('12 April 2023')
+      })
+    })
+  })
 
   // describe('the "returnPeriod" property', () => {
   //   it('returns the formatted return period', () => {
