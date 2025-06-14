@@ -428,42 +428,45 @@ describe.only('Return Logs - View Return Log presenter', () => {
   })
 
   // describe('the "nilReturn" property', () => {
-  //   describe('when there is a submission', () => {
-  //     describe('which is a nil return', () => {
-  //       beforeEach(() => {
-  //         setupSubmission(returnLog, true)
-  //       })
+    describe('when there are no return submissions', () => {
+      beforeEach(() => {
+        returnLog.returnSubmissions = []
+        returnLog.versions = []
+        returnLog.status = 'due'
+      })
 
-  //       it('returns true', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //         expect(result.nilReturn).to.equal(true)
-  //       })
-  //     })
+        expect(result.nilReturn).to.equal(false)
+      })
+    })
 
-  //     describe('which is not a nil return', () => {
-  //       beforeEach(() => {
-  //         setupSubmission(returnLog)
-  //       })
+    describe('when there is a return submission', () => {
+      describe('which is a "nil return"', () => {
+        beforeEach(() => {
+          returnLog.returnSubmissions[0].nilReturn = true
+          returnLog.versions[0].nilReturn = true
+        })
 
-  //       it('returns false', () => {
-  //         const result = ViewReturnLogPresenter.go(returnLog, auth)
+        it('returns true', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //         expect(result.nilReturn).to.equal(false)
-  //       })
-  //     })
-  //   })
+          expect(result.nilReturn).to.equal(true)
+        })
+      })
 
-  //   describe('when there is no submission', () => {
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      describe('which is not a nil return', () => {
+        it('returns true', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.nilReturn).to.equal(false)
-  //     })
-  //   })
-  // })
+          expect(result.nilReturn).to.equal(false)
+        })
+      })
+    })
+  })
 
-  // describe('the "purpose" property', () => {
+  describe('the "purpose" property', () => {
   //   describe('when the first purpose has an alias', () => {
   //     it('returns the alias', () => {
   //       const result = ViewReturnLogPresenter.go(returnLog, auth)
