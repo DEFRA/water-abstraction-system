@@ -40,7 +40,10 @@ describe.only('Return Logs - View Return Log presenter', () => {
 
     returnLog = ReturnLogsFixture.returnLog('month', true)
     returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
-    returnLog.versions = returnLog.returnSubmissions
+
+    // Warning! Copy the array rather than assign it. Else changes you make to returnLog.returnSubmissions will
+    // automatically apply to returnLog.version. We learnt the hard way!
+    returnLog.versions = [...returnLog.returnSubmissions]
 
     ReturnLogsFixture.applyFetchReturnLogFields(returnLog)
   })
@@ -156,76 +159,104 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "actionButton" property', () => {
-  //   describe('when this is a void return', () => {
-  //     beforeEach(() => {
-  //       returnLog.status = 'void'
-  //     })
+  describe('the "actionButton" property', () => {
+    describe('when this is a "void" return', () => {
+      beforeEach(() => {
+        returnLog.status = 'void'
+      })
 
-  //     it('returns null', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.actionButton).to.be.null()
-  //     })
-  //   })
+        expect(result.actionButton).to.be.null()
+      })
+    })
 
-  //   describe('when auth credentials do not include returns', () => {
-  //     beforeEach(() => {
-  //       auth.credentials.scope = ['NOT_RETURNS']
-  //     })
+    describe('when the return is "not due yet"', () => {
+      beforeEach(() => {
+        const notDueUntilDate = new Date()
+        returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        returnLog.status = 'due'
+      })
 
-  //     it('returns null', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.actionButton).to.be.null()
-  //     })
-  //   })
+        expect(result.actionButton).to.be.null()
+      })
+    })
 
-  //   describe('when the return is completed', () => {
-  //     beforeEach(() => {
-  //       returnLog.status = 'completed'
-  //     })
+    describe('when the return is "due"', () => {
+      beforeEach(() => {
+        // Not strictly needed as 'due' is the default status but we include it here for clarity
+        returnLog.status = 'due'
+      })
 
-  //     it('returns the expected "Edit return" result', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns the expected "Submit return" result', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.actionButton).to.equal({
-  //         value: returnLog.id,
-  //         text: 'Edit return'
-  //       })
-  //     })
-  //   })
+        expect(result.actionButton).to.equal({
+          value: returnLog.id,
+          text: 'Submit return'
+        })
+      })
+    })
 
-  //   describe('when the return is not due yet', () => {
-  //     beforeEach(() => {
-  //       const notDueUntilDate = new Date()
-  //       returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
-  //       returnLog.status = 'due'
-  //     })
+    describe('when auth credentials do not include the "returns" scope', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['NOT_RETURNS']
+      })
 
-  //     it('returns null', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //       expect(result.actionButton).to.be.null()
-  //     })
-  //   })
+        expect(result.actionButton).to.be.null()
+      })
+    })
 
-  //   describe('when the return is due', () => {
-  //     beforeEach(() => {
-  //       // Not strictly needed as 'due' is the default status but we include it here for clarity
-  //       returnLog.status = 'due'
-  //     })
+    describe('when the return is "completed"', () => {
+      describe('and the latest return submission version is selected (or none was selected)', () => {
+        beforeEach(() => {
+          // Create a new return submission. The fixture will use the details from the existing return log, as well as
+          // marking previous versions as no longer current, and using them to determine the next version number
+          const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
 
-  //     it('returns the expected "Submit return" result', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+          // We add the new submission to the top of versions as it is the latest
+          returnLog.versions.unshift(latestSubmission)
 
-  //       expect(result.actionButton).to.equal({
-  //         value: returnLog.id,
-  //         text: 'Submit return'
-  //       })
-  //     })
-  //   })
-  // })
+          // Though an array, return submissions only ever holds one return submission: either the latest or whichever was
+          // selected. Versions always hold all return submissions so we can display them at the bottom of the page
+          returnLog.returnSubmissions = [latestSubmission]
+        })
+
+        it('returns the expected "Edit return" result', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.actionButton).to.equal({
+            value: returnLog.id,
+            text: 'Edit return'
+          })
+        })
+      })
+
+      describe('and an earlier return submission is selected', () => {
+        beforeEach(() => {
+          const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
+
+          returnLog.versions.unshift(latestSubmission)
+
+          // Note we don't update returnLog.returnSubmissions. This is the equivalent of saying an earlier version was
+          // selected.
+        })
+
+        it('returns null', () => {
+          const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+          expect(result.actionButton).to.be.null()
+        })
+      })
+    })
+  })
 
   // describe('the "backLink" property', () => {
   //   describe('when this is the latest return log', () => {
