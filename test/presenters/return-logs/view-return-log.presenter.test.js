@@ -365,35 +365,27 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  // describe('the "displayUnits" property', () => {
-  //   beforeEach(() => {
-  //     setupSubmission(returnLog)
-  //   })
+  describe('the "displayUnits" property', () => {
+    describe('when the unit is not cubic metres', () => {
+      beforeEach(() => {
+        returnLog.returnSubmissions[0].metadata.units = unitNames.GALLONS
+      })
 
-  //   describe('when the unit is not cubic metres', () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
-  //     })
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //     it('returns true', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
+        expect(result.displayUnits).to.equal(true)
+      })
+    })
 
-  //       expect(result.displayUnits).to.equal(true)
-  //     })
-  //   })
+    describe('when the unit is cubic metres', () => {
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-  //   describe('when the unit is cubic metres', () => {
-  //     beforeEach(() => {
-  //       Sinon.stub(returnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
-  //     })
-
-  //     it('returns false', () => {
-  //       const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-  //       expect(result.displayUnits).to.equal(false)
-  //     })
-  //   })
-  // })
+        expect(result.displayUnits).to.equal(false)
+      })
+    })
+  })
 
   // describe('the "latest" property', () => {
   //   describe('when this is the latest return log', () => {
