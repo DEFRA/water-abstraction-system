@@ -9,7 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { returnCycle, returnRequirement } = require('../../../fixtures/return-logs.fixture.js')
+const ReturnCyclesFixture = require('../../../fixtures/return-cycles.fixture.js')
+const ReturnRequirementsFixture = require('../../../fixtures/return-requirements.fixture.js')
 
 // Things we need to stub
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
@@ -42,12 +43,12 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      Sinon.stub(CheckReturnCycleService, 'go').resolves(returnCycle())
+      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.returnCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {
       beforeEach(() => {
-        testReturnRequirement = returnRequirement()
+        testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
         Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
       })
 
@@ -67,7 +68,7 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
     describe('and it has a return version with an end date with return requirements that need return logs created', () => {
       beforeEach(() => {
-        testReturnRequirement = returnRequirement()
+        testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
         testReturnRequirement.returnVersion.endDate = '2023-05-28'
         Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
       })
