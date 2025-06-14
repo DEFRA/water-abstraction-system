@@ -13,21 +13,9 @@ const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view
 // Test helpers
 const { formatNumber } = require('../../../app/presenters/base.presenter.js')
 const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
-
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
-
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe.only('Return Logs - View Return Log presenter', () => {
+describe('Return Logs - View Return Log presenter', () => {
   let auth
   let returnLog
 
@@ -845,33 +833,3 @@ describe.only('Return Logs - View Return Log presenter', () => {
     })
   })
 })
-
-function setupSubmission(testReturnLog, nilReturn = false) {
-  testReturnLog.versions = [
-    createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id })
-  ]
-
-  testReturnLog.returnSubmissions = [
-    createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, {
-      returnLogId: testReturnLog.id,
-      nilReturn
-    })
-  ]
-
-  testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-    createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-      returnSubmissionId: testReturnLog.returnSubmissions[0].id
-    })
-  ]
-}
-
-// Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
-// allows us to pass in the expected models without having to touch the db at all.
-function createInstance(model, helper, data = {}) {
-  return model.fromJson({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    ...helper.defaults(),
-    ...data
-  })
-}
