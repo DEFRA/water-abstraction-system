@@ -59,7 +59,6 @@ describe('Return Logs - View Return Log presenter', () => {
       displayTotal: true,
       displayUnits: false,
       downloadCSVLink: `/system/return-logs/download?id=${returnLog.id}&version=1`,
-      latest: true,
       licenceRef: returnLog.licenceRef,
       meterDetails: null,
       method: 'abstractionVolumes',
@@ -103,7 +102,8 @@ describe('Return Logs - View Return Log presenter', () => {
           version: 1,
           user: 'admin-internal@wrls.gov.uk'
         }
-      ]
+      ],
+      warning: null
     })
   })
 
@@ -412,46 +412,6 @@ describe('Return Logs - View Return Log presenter', () => {
 
           expect(result.downloadCSVLink).to.equal(expectedLink)
         })
-      })
-    })
-  })
-
-  describe('the "latest" property', () => {
-    describe('when the latest return submission version is selected (or none was selected)', () => {
-      beforeEach(() => {
-        // Create a new return submission. The fixture will use the details from the existing return log, as well as
-        // marking previous versions as no longer current, and using them to determine the next version number
-        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
-
-        // We add the new submission to the top of versions as it is the latest
-        returnLog.versions.unshift(latestSubmission)
-
-        // Though an array, return submissions only ever holds one return submission: either the latest or whichever was
-        // selected. Versions always hold all return submissions so we can display them at the bottom of the page
-        returnLog.returnSubmissions = [latestSubmission]
-      })
-
-      it('returns true', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-        expect(result.latest).to.equal(true)
-      })
-    })
-
-    describe('when an earlier return submission is selected', () => {
-      beforeEach(() => {
-        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
-
-        returnLog.versions.unshift(latestSubmission)
-
-        // Note we don't update returnLog.returnSubmissions. This is the equivalent of saying an earlier version was
-        // selected.
-      })
-
-      it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-        expect(result.latest).to.equal(false)
       })
     })
   })
@@ -912,6 +872,58 @@ describe('Return Logs - View Return Log presenter', () => {
         ],
         { skip: ['createdAt'] }
       )
+    })
+  })
+
+  describe('the "warning" property', () => {
+    describe('when the return log is void', () => {
+      beforeEach(() => {
+        returnLog.status = 'void'
+      })
+
+      it('returns "This return is void and has been replaced. Do not use this data."', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.warning).to.equal('This return is void and has been replaced. Do not use this data.')
+      })
+    })
+
+    describe('when the latest return submission version is selected (or none was selected)', () => {
+      beforeEach(() => {
+        // Create a new return submission. The fixture will use the details from the existing return log, as well as
+        // marking previous versions as no longer current, and using them to determine the next version number
+        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
+
+        // We add the new submission to the top of versions as it is the latest
+        returnLog.versions.unshift(latestSubmission)
+
+        // Though an array, return submissions only ever holds one return submission: either the latest or whichever was
+        // selected. Versions always hold all return submissions so we can display them at the bottom of the page
+        returnLog.returnSubmissions = [latestSubmission]
+      })
+
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.warning).to.be.null()
+      })
+    })
+
+    describe('when an earlier return submission is selected', () => {
+      beforeEach(() => {
+        const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
+
+        returnLog.versions.unshift(latestSubmission)
+
+        // Note we don't update returnLog.returnSubmissions. This is the equivalent of saying an earlier version was
+        // selected.
+      })
+
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.warning).to.equal('You are viewing a previous version. This is not the latest submission data.')
+      })
     })
   })
 })

@@ -56,7 +56,6 @@ function go(returnLog, auth) {
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
     downloadCSVLink: _downloadCSVLink(selectedReturnSubmission, id),
-    latest,
     licenceRef: licence.licenceRef,
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
@@ -75,7 +74,8 @@ function go(returnLog, auth) {
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
     underQuery,
-    versions: _versions(selectedReturnSubmission, versions, id)
+    versions: _versions(selectedReturnSubmission, versions, id),
+    warning: _warning(formattedStatus, latest)
   }
 }
 
@@ -260,6 +260,18 @@ function _versions(selectedReturnSubmission, versions, returnLogId) {
       user
     }
   })
+}
+
+function _warning(status, latest) {
+  if (status === 'void') {
+    return 'This return is void and has been replaced. Do not use this data.'
+  }
+
+  if (!latest) {
+    return 'You are viewing a previous version. This is not the latest submission data.'
+  }
+
+  return null
 }
 
 module.exports = {
