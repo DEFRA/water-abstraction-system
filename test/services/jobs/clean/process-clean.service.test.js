@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const CleanEmptyBillRunsService = require('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
 const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
 
@@ -16,9 +17,11 @@ const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean
 const ProcessCleanService = require('../../../../app/services/jobs/clean/process-clean.service.js')
 
 describe('Jobs - Clean - Process Clean service', () => {
+  const emptyBillRunsCount = 3
   const emptyVoidReturnLogsCount = 4
   const expiredSessionsCount = 5
 
+  let cleanEmptyBillRunsStub
   let cleanEmptyVoidReturnLogsStub
   let cleanExpiredSessionsStub
   let notifierStub
@@ -37,6 +40,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
+      cleanEmptyBillRunsStub = Sinon.stub(CleanEmptyBillRunsService, 'go').resolves(emptyBillRunsCount)
       cleanEmptyVoidReturnLogsStub = Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').resolves(
         emptyVoidReturnLogsCount
       )
@@ -46,6 +50,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     it('cleans expired sessions', async () => {
       await ProcessCleanService.go()
 
+      expect(cleanEmptyBillRunsStub.called).to.be.true()
       expect(cleanEmptyVoidReturnLogsStub.called).to.be.true()
       expect(cleanExpiredSessionsStub.called).to.be.true()
     })
@@ -59,6 +64,7 @@ describe('Jobs - Clean - Process Clean service', () => {
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.counts).to.equal({
+        emptyBillRuns: emptyBillRunsCount,
         emptyVoidReturnLogs: emptyVoidReturnLogsCount,
         expiredSessions: expiredSessionsCount
       })
@@ -67,7 +73,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').rejects()
+      Sinon.stub(CleanEmptyBillRunsService, 'go').rejects()
     })
 
     it('does not throw an error', async () => {
