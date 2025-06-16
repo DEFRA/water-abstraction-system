@@ -9,7 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { returnCycle, returnRequirement } = require('../../fixtures/return-logs.fixture.js')
+const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
+const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
 
 // Thing under test
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
@@ -23,8 +24,8 @@ describe('Return Logs - Generate Return Log service', () => {
   let testReturnRequirement
 
   beforeEach(() => {
-    testReturnCycle = returnCycle()
-    testReturnRequirement = returnRequirement()
+    testReturnCycle = ReturnCyclesFixture.returnCycle()
+    testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
   })
 
   afterEach(() => {
