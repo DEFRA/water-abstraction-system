@@ -24,9 +24,10 @@ async function go(sessionId, payload) {
 
   if (!validationResult) {
     const session = await SessionModel.query().findById(sessionId)
-    const absPeriod = await _lookupAbsPeriod(payload.condition)
-    console.log('🚀 ~ go ~ absPeriod:', absPeriod)
-    await _save(session, absPeriod, payload)
+
+    const conditionAbstractionPeriod = await _fetchAbstractionPeriod(payload.condition)
+
+    await _save(session, conditionAbstractionPeriod, payload)
 
     // If the user selected a non-condition option then they will proceed to the "enter abstraction period" page.
     // Ordinarily we would also return `checkPageVisited` to say whether the user should be forwarded there; however,
@@ -46,7 +47,7 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _lookupAbsPeriod(conditionId) {
+async function _fetchAbstractionPeriod(conditionId) {
   if (conditionId === 'not_listed' || conditionId === 'no_conditions') {
     return null
   }
@@ -62,15 +63,15 @@ async function _lookupAbsPeriod(conditionId) {
     )
 }
 
-async function _save(session, absPeriod, payload) {
-  session.conditionId = payload.condition
-
-  if (absPeriod) {
-    session.abstractionPeriodStartDay = absPeriod.abstractionPeriodStartDay
-    session.abstractionPeriodStartMonth = absPeriod.abstractionPeriodStartMonth
-    session.abstractionPeriodEndDay = absPeriod.abstractionPeriodEndDay
-    session.abstractionPeriodEndMonth = absPeriod.abstractionPeriodEndMonth
+async function _save(session, abstractionPeriod, payload) {
+  if (abstractionPeriod) {
+    session.abstractionPeriodStartDay = abstractionPeriod.abstractionPeriodStartDay
+    session.abstractionPeriodStartMonth = abstractionPeriod.abstractionPeriodStartMonth
+    session.abstractionPeriodEndDay = abstractionPeriod.abstractionPeriodEndDay
+    session.abstractionPeriodEndMonth = abstractionPeriod.abstractionPeriodEndMonth
   }
+
+  session.conditionId = payload.condition
 
   return session.$update()
 }
