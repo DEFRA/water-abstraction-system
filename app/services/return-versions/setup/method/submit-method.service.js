@@ -66,7 +66,10 @@ async function _save(session, payload) {
   // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
   if (payload.method === 'use-abstraction-data') {
-    session.requirements = await GenerateFromAbstractionDataService.go(session.licence.id)
+    session.requirements = await GenerateFromAbstractionDataService.go(
+      session.licence.id,
+      session.returnVersionStartDate
+    )
   }
 
   return session.$update()
