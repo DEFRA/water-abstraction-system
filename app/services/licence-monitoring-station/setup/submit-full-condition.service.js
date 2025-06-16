@@ -8,6 +8,7 @@
 
 const FullConditionService = require('../../../services/licence-monitoring-station/setup/full-condition.service.js')
 const FullConditionValidator = require('../../../validators/licence-monitoring-station/setup/full-condition.validator.js')
+const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -23,7 +24,9 @@ async function go(sessionId, payload) {
 
   if (!validationResult) {
     const session = await SessionModel.query().findById(sessionId)
-    await _save(session, payload)
+    const absPeriod = await _lookupAbsPeriod(payload.condition)
+    console.log('🚀 ~ go ~ absPeriod:', absPeriod)
+    await _save(session, absPeriod, payload)
 
     // If the user selected a non-condition option then they will proceed to the "enter abstraction period" page.
     // Ordinarily we would also return `checkPageVisited` to say whether the user should be forwarded there; however,
@@ -43,8 +46,31 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
+async function _lookupAbsPeriod(conditionId) {
+  if (conditionId === 'not_listed' || conditionId === 'no_conditions') {
+    return null
+  }
+
+  return LicenceVersionPurposeConditionModel.query()
+    .findById(conditionId)
+    .joinRelated('licenceVersionPurpose')
+    .select(
+      'licenceVersionPurpose.abstractionPeriodStartDay',
+      'licenceVersionPurpose.abstractionPeriodStartMonth',
+      'licenceVersionPurpose.abstractionPeriodEndDay',
+      'licenceVersionPurpose.abstractionPeriodEndMonth'
+    )
+}
+
+async function _save(session, absPeriod, payload) {
   session.conditionId = payload.condition
+
+  if (absPeriod) {
+    session.abstractionPeriodStartDay = absPeriod.abstractionPeriodStartDay
+    session.abstractionPeriodStartMonth = absPeriod.abstractionPeriodStartMonth
+    session.abstractionPeriodEndDay = absPeriod.abstractionPeriodEndDay
+    session.abstractionPeriodEndMonth = absPeriod.abstractionPeriodEndMonth
+  }
 
   return session.$update()
 }

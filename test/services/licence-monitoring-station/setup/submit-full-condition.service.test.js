@@ -10,6 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
 
 // Things to stub
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
@@ -24,11 +26,16 @@ describe('Full Condition Service', () => {
   const pageData = { pageData: 'PAGE_DATA' }
 
   beforeEach(async () => {
-    payload = {
-      condition: 'f97ef1d2-5775-4b13-926b-b8045c043fa5'
-    }
-
     session = await SessionHelper.add()
+
+    const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
+    const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+      licenceVersionPurposeId: licenceVersionPurpose.id
+    })
+
+    payload = {
+      condition: licenceVersionPurposeCondition.id
+    }
 
     Sinon.stub(FullConditionService, 'go').resolves(pageData)
   })
@@ -51,6 +58,17 @@ describe('Full Condition Service', () => {
         payload = { condition: 'no_conditions' }
       })
 
+      it('does not put abstraction period data in the session', async () => {
+        await SubmitFullConditionService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.abstractionPeriodStartDay).to.not.exist()
+        expect(refreshedSession.abstractionPeriodStartMonth).to.not.exist()
+        expect(refreshedSession.abstractionPeriodEndDay).to.not.exist()
+        expect(refreshedSession.abstractionPeriodEndMonth).to.not.exist()
+      })
+
       it('returns true for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
@@ -59,6 +77,17 @@ describe('Full Condition Service', () => {
     })
 
     describe('and a UUID was passed in the payload', () => {
+      it('puts abstraction period data in the session', async () => {
+        await SubmitFullConditionService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.abstractionPeriodStartDay).to.equal(1)
+        expect(refreshedSession.abstractionPeriodStartMonth).to.equal(1)
+        expect(refreshedSession.abstractionPeriodEndDay).to.equal(31)
+        expect(refreshedSession.abstractionPeriodEndMonth).to.equal(3)
+      })
+
       it('returns false for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
