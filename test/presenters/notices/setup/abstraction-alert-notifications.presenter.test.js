@@ -20,6 +20,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   const referenceCode = 'TEST-123'
 
   let clock
+  let licenceMonitoringStations
   let recipients
   let session
   let testRecipients
@@ -29,13 +30,18 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
     testRecipients = [...Object.values(recipients)]
 
-    const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+    licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-      recipients.primaryUser.licence_refs,
-      recipients.licenceHolder.licence_refs,
-      recipients.additionalContact.licence_refs
-    ])
+    const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
+
+    const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+      [
+        recipients.primaryUser.licence_refs,
+        recipients.licenceHolder.licence_refs,
+        recipients.additionalContact.licence_refs
+      ],
+      licenceMonitoringStations
+    )
 
     session = {
       ...abstractionAlertSessionData,
@@ -64,6 +70,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
         personalisation: {
+          alertType: 'warning',
+          licenceMonitoringStationId: licenceMonitoringStations.one.id,
           condition_text: '',
           flow_or_level: 'level',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -84,6 +92,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
         personalisation: {
+          alertType: 'warning',
+          licenceMonitoringStationId: licenceMonitoringStations.two.id,
           name: 'Mr H J Licence holder',
           address_line_1: '1',
           address_line_2: 'Privet Drive',
@@ -109,8 +119,9 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         licences: `["${recipients.additionalContact.licence_refs}"]`,
         messageRef: 'water_abstraction_alert_stop_warning_email',
         messageType: 'email',
-
         personalisation: {
+          alertType: 'warning',
+          licenceMonitoringStationId: licenceMonitoringStations.three.id,
           condition_text: '',
           flow_or_level: 'level',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -129,10 +140,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a licence has more than one licence monitoring stations to send alerts to', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.primaryUser.licence_refs,
-        recipients.primaryUser.licence_refs
-      ])
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+        [recipients.primaryUser.licence_refs, recipients.primaryUser.licence_refs],
+        { one: licenceMonitoringStations.one, two: licenceMonitoringStations.two }
+      )
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
@@ -148,6 +159,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
+            alertType: 'warning',
+            licenceMonitoringStationId: licenceMonitoringStations.one.id,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -166,6 +179,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
+            alertType: 'warning',
+            licenceMonitoringStationId: licenceMonitoringStations.two.id,
             condition_text: 'Effect of restriction: I have a bad feeling about this',
             flow_or_level: 'flow',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -185,9 +200,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a "additional contact" has abstraction alerts', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.additionalContact.licence_refs
-      ])
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+        [recipients.additionalContact.licence_refs],
+        { one: licenceMonitoringStations.one }
+      )
 
       testRecipients[0].licence_refs = recipients.additionalContact.licence_refs
     })
@@ -205,6 +221,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
+            alertType: 'warning',
+            licenceMonitoringStationId: licenceMonitoringStations.one.id,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -222,9 +240,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a "primaryUser" has abstraction alerts', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.primaryUser.licence_refs
-      ])
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+        [recipients.primaryUser.licence_refs],
+        { one: licenceMonitoringStations.one }
+      )
 
       testRecipients[0].licence_refs = recipients.licenceHolder.licence_refs
     })
@@ -242,6 +261,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
+            alertType: 'warning',
+            licenceMonitoringStationId: licenceMonitoringStations.one.id,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -259,9 +280,10 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
   describe('when a "licenceHolder" has abstraction alerts', () => {
     beforeEach(() => {
-      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.licenceHolder.licence_refs
-      ])
+      session.relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+        [recipients.licenceHolder.licence_refs],
+        { one: licenceMonitoringStations.one }
+      )
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
@@ -284,6 +306,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             address_line_4: 'Surrey',
             address_line_5: 'WD25 7LR',
             // common personalisation
+            alertType: 'warning',
+            licenceMonitoringStationId: licenceMonitoringStations.one.id,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -307,6 +331,8 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result.personalisation).to.equal({
+        alertType: 'warning',
+        licenceMonitoringStationId: licenceMonitoringStations.one.id,
         condition_text: '',
         flow_or_level: 'level',
         issuer_email_address: 'luke.skywalker@rebelmail.test',

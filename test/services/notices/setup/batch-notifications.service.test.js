@@ -353,6 +353,8 @@ describe('Notices - Setup - Batch notifications service', () => {
   })
 
   describe('when the journey is "abstraction-alert"', () => {
+    let licenceMonitoringStations
+
     beforeEach(async () => {
       recipients = RecipientsFixture.alertsRecipients()
 
@@ -367,13 +369,18 @@ describe('Notices - Setup - Batch notifications service', () => {
 
       eventId = event.id
 
-      const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+      licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-      const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-        recipients.primaryUser.licence_refs,
-        recipients.licenceHolder.licence_refs,
-        recipients.additionalContact.licence_refs
-      ])
+      const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
+
+      const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations(
+        [
+          recipients.primaryUser.licence_refs,
+          recipients.licenceHolder.licence_refs,
+          recipients.additionalContact.licence_refs
+        ],
+        licenceMonitoringStations
+      )
 
       session = {
         ...abstractionAlertSessionData,
@@ -412,6 +419,8 @@ describe('Notices - Setup - Batch notifications service', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
+            alertType: 'reduce',
+            licenceMonitoringStationId: licenceMonitoringStations.three.id,
             source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.additionalContact.licence_refs,
             flow_or_level: 'level',
@@ -436,6 +445,8 @@ describe('Notices - Setup - Batch notifications service', () => {
           messageType: 'letter',
           messageRef: 'water_abstraction_alert_reduce',
           personalisation: {
+            alertType: 'reduce',
+            licenceMonitoringStationId: licenceMonitoringStations.two.id,
             name: 'Mr H J Licence holder',
             source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.licenceHolder.licence_refs,
@@ -466,6 +477,8 @@ describe('Notices - Setup - Batch notifications service', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_email',
           personalisation: {
+            alertType: 'reduce',
+            licenceMonitoringStationId: licenceMonitoringStations.one.id,
             source: '* Source of supply: Meridian Trench',
             licence_ref: recipients.primaryUser.licence_refs,
             flow_or_level: 'level',
