@@ -14,7 +14,9 @@ const LicenceAgreementModel = require('../../../../../app/models/licence-agreeme
 // Thing under test
 const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
 
-describe('Return Versions Setup - Fetch Abstraction Data service', () => {
+describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
+  const startDate = new Date('2024-04-01')
+
   let seedData
 
   beforeEach(async () => {
@@ -23,17 +25,18 @@ describe('Return Versions Setup - Fetch Abstraction Data service', () => {
 
   describe('when called', () => {
     it('returns the abstraction data for the licence', async () => {
-      const result = await FetchAbstractionDataService.go(seedData.licenceId)
+      const result = await FetchAbstractionDataService.go(seedData.licenceId, startDate)
 
       expect(result).to.equal({
         id: seedData.licenceId,
+        licenceRef: seedData.licenceRef,
         waterUndertaker: false,
         twoPartTariffAgreement: false,
         licenceVersions: [
           {
             id: seedData.licenceVersions.currentId,
+            endDate: null,
             startDate: new Date('2022-05-01'),
-            status: 'current',
             licenceVersionPurposes: [
               {
                 id: seedData.licenceVersionPurposes.electricity.id,
@@ -135,7 +138,7 @@ describe('Return Versions Setup - Fetch Abstraction Data service', () => {
       })
 
       it('returns "twoPartTariffAgreement" as true', async () => {
-        const result = await FetchAbstractionDataService.go(seedData.licenceId)
+        const result = await FetchAbstractionDataService.go(seedData.licenceId, startDate)
 
         expect(result.twoPartTariffAgreement).to.be.true()
       })

@@ -51,6 +51,7 @@ async function seed(optionalLicenceRef = undefined) {
 
   records.regionId = regionId
   records.licenceId = licenceId
+  records.licenceRef = licenceRef
 
   records.financialAgreements = await _financialAgreements()
   records.allPurposes = await _purposes()
