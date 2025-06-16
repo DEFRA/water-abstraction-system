@@ -19,10 +19,15 @@ function go(session, conditions) {
 
   const radioButtons = _generateRadioButtons(conditions, conditionId)
 
+  const pageTitle =
+    conditions.length === 0
+      ? `There are no flow or level cessation conditions for licence ${licenceRef}`
+      : `Select the full condition for licence ${licenceRef}`
+
   return {
     backLink: _backLink(session),
     monitoringStationLabel: label,
-    pageTitle: `Select the full condition for licence ${licenceRef}`,
+    pageTitle,
     radioButtons
   }
 }
@@ -39,12 +44,7 @@ function _backLink(session) {
 
 function _generateRadioButtons(conditions, conditionId) {
   if (conditions.length === 0) {
-    return [
-      {
-        value: 'no_conditions',
-        text: 'No known flow conditions - Manually define an abstraction period'
-      }
-    ]
+    return []
   }
 
   const conditionRadioButtons = conditions.map((row, index) => {

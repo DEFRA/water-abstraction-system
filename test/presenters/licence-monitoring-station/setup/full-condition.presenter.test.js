@@ -40,13 +40,6 @@ describe('Full Condition Presenter', () => {
   })
 
   describe('when called', () => {
-    it('returns the correct page title and monitoring station label', () => {
-      const result = FullConditionPresenter.go(session, conditions)
-
-      expect(result.pageTitle).to.equal('Select the full condition for licence LIC/001')
-      expect(result.monitoringStationLabel).to.equal('My Test Station')
-    })
-
     describe('when checkPageVisited is true', () => {
       beforeEach(() => {
         session.checkPageVisited = true
@@ -76,6 +69,13 @@ describe('Full Condition Presenter', () => {
     })
 
     describe('when there are conditions', () => {
+      it('returns the correct page title and monitoring station label', () => {
+        const result = FullConditionPresenter.go(session, conditions)
+
+        expect(result.pageTitle).to.equal('Select the full condition for licence LIC/001')
+        expect(result.monitoringStationLabel).to.equal('My Test Station')
+      })
+
       it('formats a list of conditions into radio buttons', () => {
         const result = FullConditionPresenter.go(session, conditions)
 
@@ -164,15 +164,17 @@ describe('Full Condition Presenter', () => {
         conditions = []
       })
 
-      it('returns a single radio button', () => {
+      it('returns the correct page title and monitoring station label', () => {
+        const result = FullConditionPresenter.go(session, conditions)
+
+        expect(result.pageTitle).to.equal('There are no flow or level cessation conditions for licence LIC/001')
+        expect(result.monitoringStationLabel).to.equal('My Test Station')
+      })
+
+      it('returns no radio buttons', () => {
         const result = FullConditionPresenter.go(session, [])
 
-        expect(result.radioButtons).to.equal([
-          {
-            value: 'no_conditions',
-            text: 'No known flow conditions - Manually define an abstraction period'
-          }
-        ])
+        expect(result.radioButtons).to.be.empty()
       })
     })
   })
