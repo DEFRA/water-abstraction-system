@@ -47,7 +47,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const pointsData = await FetchPointsService.go(session.licence.id)
+  const pointsData = await FetchPointsService.go(session.licenceVersion.id)
   const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
 
   return {
