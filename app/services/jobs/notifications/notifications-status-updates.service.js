@@ -11,6 +11,7 @@ const FetchNotificationsService = require('./fetch-notifications.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
 const NotifyStatusRequest = require('../../../requests/notify/notify-status.request.js')
+const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
@@ -38,7 +39,9 @@ async function go() {
   for (let i = 0; i < notifications.length; i += batchSize) {
     const batchNotifications = notifications.slice(i, i + batchSize)
 
-    await _batch(batchNotifications)
+    const updatedNotifications = await _batch(batchNotifications)
+
+    await UpdateAbstractionAlertsService.go(updatedNotifications)
 
     await _delay(delay)
   }
@@ -52,6 +55,8 @@ async function _batch(notifications) {
   const updatedNotifications = await _updateNotifications(toUpdateNotifications)
 
   await UpdateNotificationsService.go(updatedNotifications)
+
+  return toUpdateNotifications
 }
 
 async function _delay(delay) {

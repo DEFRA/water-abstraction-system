@@ -71,9 +71,10 @@ describe('Job - Notifications - Fetch notifications service', () => {
         createdAt: notification.createdAt,
         eventId: event.id,
         id: notification.id,
+        notifyError: null,
         notifyId: null,
         notifyStatus: null,
-        notifyError: null,
+        personalisation: null,
         status: 'pending'
       })
     })

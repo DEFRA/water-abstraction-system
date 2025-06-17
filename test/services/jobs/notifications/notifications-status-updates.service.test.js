@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { stubNotify } = require('../../../../config/notify.config.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -20,14 +19,15 @@ const { NotifyClient } = require('notifications-node-client')
 
 // Thing under test
 const ProcessNotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
+const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 
-describe('Job - Notifications - Process notifications status updates service', () => {
+describe.only('Job - Notifications - Process notifications status updates service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
 
   let event
-  let notifierStub
   let notification
   let notification2
+  let notifierStub
 
   beforeEach(async () => {
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
@@ -36,6 +36,10 @@ describe('Job - Notifications - Process notifications status updates service', (
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
+
+    if (NotifyClient.prototype.getNotificationById.restore) {
+      NotifyClient.prototype.getNotificationById.restore()
+    }
 
     event = await EventHelper.add({
       metadata: {},
@@ -67,11 +71,15 @@ describe('Job - Notifications - Process notifications status updates service', (
   })
 
   describe('when the status update is successful', () => {
-    beforeEach(() => {
-      _stubSuccessfulNotify()
+    beforeEach(async () => {
+      Sinon.stub(NotifyClient.prototype, 'getNotificationById').resolves({
+        data: {
+          status: 'received'
+        }
+      })
     })
 
-    it('returns the first notification data', { timeout: 3000 }, async () => {
+    it('updates the first notification data', { timeout: 3000 }, async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
       const updatedResult = await notification.$query()
@@ -96,7 +104,7 @@ describe('Job - Notifications - Process notifications status updates service', (
       })
     })
 
-    it('returns the second notification data', async () => {
+    it('updates the second notification data', async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
       const updatedResult = await notification2.$query()
@@ -120,24 +128,77 @@ describe('Job - Notifications - Process notifications status updates service', (
         status: 'sent'
       })
     })
+
+    describe('and the notification type is a water abstraction alert', () => {
+      let abstractionNotification
+      let licenceMonitoringStation
+
+      beforeEach(async () => {
+        licenceMonitoringStation = await LicenceMonitoringStationHelper.add()
+
+        abstractionNotification = await NotificationHelper.add({
+          eventId: event.id,
+          status: 'pending',
+          notifyStatus: 'created',
+          messageRef: 'water_abstraction_alert_resume_email',
+          personalisation: {
+            alertType: 'resume',
+            licenceMonitoringStationId: licenceMonitoringStation.id
+          },
+          createdAt: timestampForPostgres()
+        })
+      })
+
+      it('updates the abstraction notification data', async () => {
+        await ProcessNotificationsStatusUpdatesService.go()
+
+        const updatedResult = await abstractionNotification.$query()
+
+        expect(updatedResult.notifyStatus).to.equal('received')
+        expect(updatedResult.status).to.equal('sent')
+
+        expect(updatedResult).to.equal({
+          createdAt: abstractionNotification.createdAt,
+          eventId: event.id,
+          id: abstractionNotification.id,
+          licences: null,
+          messageRef: 'water_abstraction_alert_resume_email',
+          messageType: null,
+          notifyError: null,
+          notifyId: null,
+          notifyStatus: 'received',
+          personalisation: { alertType: 'resume', licenceMonitoringStationId: licenceMonitoringStation.id },
+          plaintext: null,
+          recipient: null,
+          status: 'sent'
+        })
+      })
+
+      it('updates the "status" and "statusUpdatedAt"', async () => {
+        await ProcessNotificationsStatusUpdatesService.go()
+
+        const updatedResult = await licenceMonitoringStation.$query()
+
+        expect(updatedResult.status).to.equal('resume')
+        expect(updatedResult.statusUpdatedAt).to.equal(null)
+      })
+    })
   })
 
   describe('when notify returns a status error', () => {
     beforeEach(() => {
-      if (stubNotify) {
-        Sinon.stub(NotifyClient.prototype, 'getNotificationById')
-          .onFirstCall()
-          .resolves({
-            data: {
-              status: 'temporary-failure'
-            }
-          })
-          .resolves({
-            data: {
-              status: 'received'
-            }
-          })
-      }
+      Sinon.stub(NotifyClient.prototype, 'getNotificationById')
+        .onFirstCall()
+        .resolves({
+          data: {
+            status: 'temporary-failure'
+          }
+        })
+        .resolves({
+          data: {
+            status: 'received'
+          }
+        })
     })
 
     it('updates the event error count ', async () => {
@@ -154,47 +215,31 @@ describe('Job - Notifications - Process notifications status updates service', (
 
   describe('when Notify returns an error (4xx, 5xx)', () => {
     beforeEach(() => {
-      _stubUnSuccessfulNotify()
+      Sinon.stub(NotifyClient.prototype, 'getNotificationById').rejects({
+        status: 404,
+        message: 'Request failed with status code 404',
+        response: {
+          data: {
+            errors: [
+              {
+                error: 'NoResultFound',
+                message: 'No result found'
+              }
+            ]
+          }
+        }
+      })
     })
 
     it('should not update the "notification"', async () => {
       await ProcessNotificationsStatusUpdatesService.go()
 
-      const refreshnotification = await notification.$query()
+      const refreshNotification = await notification.$query()
 
-      expect(refreshnotification.notifyStatus).to.equal('created')
-      expect(refreshnotification.status).to.equal('pending')
+      expect(refreshNotification.notifyStatus).to.equal('created')
+      expect(refreshNotification.status).to.equal('pending')
 
-      expect(refreshnotification).to.equal(notification)
+      expect(refreshNotification).to.equal(notification)
     })
   })
 })
-
-function _stubSuccessfulNotify() {
-  if (stubNotify) {
-    Sinon.stub(NotifyClient.prototype, 'getNotificationById').resolves({
-      data: {
-        status: 'received'
-      }
-    })
-  }
-}
-
-function _stubUnSuccessfulNotify() {
-  if (stubNotify) {
-    Sinon.stub(NotifyClient.prototype, 'getNotificationById').rejects({
-      status: 404,
-      message: 'Request failed with status code 404',
-      response: {
-        data: {
-          errors: [
-            {
-              error: 'NoResultFound',
-              message: 'No result found'
-            }
-          ]
-        }
-      }
-    })
-  }
-}
