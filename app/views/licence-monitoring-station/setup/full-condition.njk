@@ -37,12 +37,12 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {% if radioButtons.length === 0 %}
-        {# If there are no conditions, display explanatory text and return `no_conditions` so the user is correctly routed #}
+        {# If there are no conditions, display explanatory text and return `not_listed` so the user is correctly routed #}
         <p class="govuk-body">
           There are no licence conditions recorded in NALD and stated on the licence.
           Continue to manually enter the abstraction period for the tag.
         </p>
-        <input type="hidden" name="condition" value="no_conditions" />
+        <input type="hidden" name="condition" value="not_listed" />
       {% else %}
         {{ govukRadios({
           id: 'condition',

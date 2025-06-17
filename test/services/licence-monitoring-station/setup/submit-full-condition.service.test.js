@@ -53,9 +53,9 @@ describe('Full Condition Service', () => {
       expect(refreshedSession.conditionId).to.equal(payload.condition)
     })
 
-    describe('and no_conditions was passed in the payload', () => {
+    describe('and not_listed was passed in the payload', () => {
       beforeEach(() => {
-        payload = { condition: 'no_conditions' }
+        payload = { condition: 'not_listed' }
       })
 
       it('does not put abstraction period data in the session', async () => {

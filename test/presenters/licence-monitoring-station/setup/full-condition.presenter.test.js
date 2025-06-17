@@ -119,7 +119,7 @@ describe('Full Condition Presenter', () => {
         })
       })
 
-      describe('and the user previously selected the not listed option', () => {
+      describe('and the user previously selected the not listed', () => {
         beforeEach(() => {
           session.conditionId = 'not_listed'
         })

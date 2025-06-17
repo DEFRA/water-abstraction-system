@@ -20,14 +20,11 @@ function go(payload) {
   const conditionErrorMessage = 'Select a condition'
 
   const schema = Joi.object({
-    condition: Joi.alternatives()
-      .try(Joi.string().valid('no_conditions', 'not_listed'), Joi.string().uuid())
-      .required()
-      .messages({
-        'any.required': conditionErrorMessage,
-        'any.only': conditionErrorMessage,
-        'string.empty': conditionErrorMessage
-      })
+    condition: Joi.alternatives().try(Joi.string().valid('not_listed'), Joi.string().uuid()).required().messages({
+      'any.required': conditionErrorMessage,
+      'any.only': conditionErrorMessage,
+      'string.empty': conditionErrorMessage
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })
