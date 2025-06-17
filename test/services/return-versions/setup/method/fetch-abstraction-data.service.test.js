@@ -4,34 +4,30 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceAbstractionDataSeeder = require('../../../../support/seeders/licence-abstraction-data.seeder.js')
-const LicenceAgreementModel = require('../../../../../app/models/licence-agreement.model.js')
 
 // Thing under test
 const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
 
 describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
-  const startDate = new Date('2024-04-01')
-
   let seedData
 
-  beforeEach(async () => {
+  before(async () => {
     seedData = await LicenceAbstractionDataSeeder.seed()
   })
 
   describe('when called', () => {
-    it('returns the abstraction data for the licence', async () => {
-      const result = await FetchAbstractionDataService.go(seedData.licenceId, startDate)
+    it('returns the abstraction data for the licence and licence version', async () => {
+      const result = await FetchAbstractionDataService.go(seedData.licenceId, seedData.licenceVersions.currentId)
 
       expect(result).to.equal({
         id: seedData.licenceId,
         licenceRef: seedData.licenceRef,
         waterUndertaker: false,
-        twoPartTariffAgreement: false,
         licenceVersions: [
           {
             id: seedData.licenceVersions.currentId,
@@ -123,24 +119,6 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
             ]
           }
         ]
-      })
-    })
-
-    describe('and the licence has a two-part tariff agreement', () => {
-      beforeEach(async () => {
-        // NOTE: The licence we seed is connected to a two-part tariff financial agreement but it has an end date in
-        // the past. This is why FetchAbstractionDataService returns `twoPartTariffAgreement: false`. We remove the end
-        // date here before calling the service to demonstrate that it will return true if a relevant licence agreement
-        // record is found
-        await LicenceAgreementModel.query()
-          .patch({ endDate: null })
-          .findById(seedData.licenceFinancialAgreements.endedTwoPartId)
-      })
-
-      it('returns "twoPartTariffAgreement" as true', async () => {
-        const result = await FetchAbstractionDataService.go(seedData.licenceId, startDate)
-
-        expect(result.twoPartTariffAgreement).to.be.true()
       })
     })
   })
