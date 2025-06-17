@@ -5,7 +5,7 @@
  * @module GenerateFromAbstractionDataService
  */
 
-const DetermineTwoPartTariffAgreementService = require('../determine-two-part-tariff-agreement.service.js')
+const DetermineTwoPartTariffAgreementService = require('./determine-two-part-tariff-agreement.service.js')
 const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'

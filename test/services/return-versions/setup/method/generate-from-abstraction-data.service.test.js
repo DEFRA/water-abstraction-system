@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/determine-two-part-tariff-agreement.service.js')
+const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
 const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
 const LicenceModel = require('../../../../../app/models/licence.model.js')
 const LicenceVersionPurposeModel = require('../../../../../app/models/licence-version-purpose.model.js')

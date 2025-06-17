@@ -8,12 +8,12 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const FinancialAgreementHelper = require('../../../support/helpers/financial-agreement.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const LicenceAgreementHelper = require('../../../support/helpers/licence-agreement.helper.js')
+const FinancialAgreementHelper = require('../../../../support/helpers/financial-agreement.helper.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const LicenceAgreementHelper = require('../../../../support/helpers/licence-agreement.helper.js')
 
 // Thing under test
-const DetermineTwoPartTariffAgreementService = require('../../../../app/services/return-versions/setup/determine-two-part-tariff-agreement.service.js')
+const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
 
 describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service', () => {
   const licenceAgreements = {}

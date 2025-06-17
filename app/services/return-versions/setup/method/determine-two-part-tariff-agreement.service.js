@@ -5,7 +5,7 @@
  * @module DetermineTwoPartTariffAgreementService
  */
 
-const LicenceAgreementModel = require('../../../models/licence-agreement.model.js')
+const LicenceAgreementModel = require('../../../../models/licence-agreement.model.js')
 
 /**
  * Determines if a licence has a two-part tariff (Section 127 )licence agreement in place for the start date selected
