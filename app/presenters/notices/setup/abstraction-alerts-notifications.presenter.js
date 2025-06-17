@@ -50,7 +50,8 @@ function go(recipients, session, eventId) {
       station,
       monitoringStationName,
       alertEmailAddress,
-      monitoringStationRiverName
+      monitoringStationRiverName,
+      alertType
     )
 
     const matchingRecipients = _matchingRecipients(recipients, station)
@@ -108,6 +109,9 @@ function _addressLines(contact) {
  *
  * In the case of a letter, the address is also required.
  *
+ * The 'licenceMonitoringStationId' and 'alertType' are not required for Notify, we use them to update the licence
+ * monitoring 'status_updated_at' and 'status' field.
+ *
  * @private
  */
 
@@ -115,9 +119,12 @@ function _commonPersonalisation(
   licenceMonitoringStation,
   monitoringStationName,
   alertEmailAddress,
-  monitoringStationRiverName
+  monitoringStationRiverName,
+  alertType
 ) {
   return {
+    alertType,
+    licenceMonitoringStationId: licenceMonitoringStation.id,
     condition_text: _conditionText(licenceMonitoringStation.notes),
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: alertEmailAddress,
