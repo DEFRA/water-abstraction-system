@@ -17,7 +17,7 @@ const GenerateFromAbstractionDataService = require('../../../../../app/services/
 // Thing under test
 const SubmitMethodService = require('../../../../../app/services/return-versions/setup/method/submit-method.service.js')
 
-describe('Return Versions Setup - Submit Method service', () => {
+describe('Return Versions - Setup - Submit Method service', () => {
   let payload
   let session
 
@@ -43,7 +43,12 @@ describe('Return Versions Setup - Submit Method service', () => {
         journey: 'returns-required',
         requirements: [{}],
         startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        reason: 'major-change',
+        licenceVersion: {
+          id: '2ecb1d63-dc20-4bb2-b3de-318a5bf86916',
+          endDate: null,
+          startDate: '2023-01-01T00:00:00.000Z'
+        }
       }
     })
   })

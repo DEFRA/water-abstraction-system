@@ -68,6 +68,7 @@ async function _save(session, payload) {
   if (payload.method === 'use-abstraction-data') {
     session.requirements = await GenerateFromAbstractionDataService.go(
       session.licence.id,
+      session.licenceVersion.id,
       session.returnVersionStartDate
     )
   }
