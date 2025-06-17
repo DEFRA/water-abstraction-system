@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches a licence's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
+ * Fetches a licence version's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
  * @module FetchPurposesService
  */
 
 const PurposeModel = require('../../../models/purpose.model.js')
 
 /**
- * Fetches a licence's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
+ * Fetches a licence version's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
  *
  * @param {string} licenceVersionId - The UUID for the relevant licence version to fetch purposes from
  *
