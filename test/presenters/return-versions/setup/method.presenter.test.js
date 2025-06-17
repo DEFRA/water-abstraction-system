@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const MethodPresenter = require('../../../../app/presenters/return-versions/setup/method.presenter.js')
 
-describe('Return Versions Setup - Method presenter', () => {
+describe('Return Versions - Setup - Method presenter', () => {
   let session
 
   beforeEach(() => {
@@ -27,7 +27,8 @@ describe('Return Versions Setup - Method presenter', () => {
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
             startDate: '2023-01-01T00:00:00.000Z',
-            reason: null
+            reason: null,
+            modLogs: []
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
@@ -35,6 +36,20 @@ describe('Return Versions Setup - Method presenter', () => {
       journey: 'returns-required',
       requirements: [{}],
       startDateOptions: 'licenceStartDate',
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      licenceVersion: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        startDate: '2022-04-01T00:00:00.000Z',
+        copyableReturnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ]
+      },
       reason: 'major-change'
     }
   })
@@ -63,7 +78,7 @@ describe('Return Versions Setup - Method presenter', () => {
   })
 
   describe('the "displayCopyExisting" property', () => {
-    describe('when the licence has return versions (something to copy from)', () => {
+    describe('when the licence version has copyable return versions (something to copy from)', () => {
       it('returns true', () => {
         const result = MethodPresenter.go(session)
 
@@ -71,9 +86,9 @@ describe('Return Versions Setup - Method presenter', () => {
       })
     })
 
-    describe('when the does not have return versions (nothing to copy from)', () => {
+    describe('when the licence version does not have copyable return versions (nothing to copy from)', () => {
       beforeEach(() => {
-        session.licence.returnVersions = []
+        session.licenceVersion.copyableReturnVersions = []
       })
 
       it('returns false', () => {
