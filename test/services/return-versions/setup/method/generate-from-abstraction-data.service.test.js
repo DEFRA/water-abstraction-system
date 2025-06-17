@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/determine-two-part-tariff-agreement.service.js')
 const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
 const LicenceModel = require('../../../../../app/models/licence.model.js')
 const LicenceVersionPurposeModel = require('../../../../../app/models/licence-version-purpose.model.js')
@@ -18,9 +19,11 @@ const GenerateFromAbstractionDataService = require('../../../../../app/services/
 
 describe('Return Versions - Setup - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'
+  const licenceVersionId = '8e57b3c9-8656-4062-92ce-c7df34ca10bf'
   const startDate = new Date('2024-04-01')
 
-  let fetchResult
+  let abstractionData
+  let twoPartTariffAgreement
 
   afterEach(() => {
     Sinon.restore()
@@ -29,13 +32,15 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   describe('when called with a licence ID that exists', () => {
     describe('with the abstraction data returned', () => {
       beforeEach(() => {
-        fetchResult = _fetchResult(licenceId)
+        abstractionData = _fetchAbstractionDataResult(licenceId)
+        twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
+        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
+        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
       })
 
       it('generates return requirements setup data', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, startDate)
+        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
         expect(result).to.equal([
           {
@@ -107,14 +112,15 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
 
     describe('and the licence has a "current" two-part tariff agreement', () => {
       beforeEach(() => {
-        fetchResult = _fetchResult(licenceId)
-        fetchResult.twoPartTariffAgreement = true
+        abstractionData = _fetchAbstractionDataResult(licenceId)
+        twoPartTariffAgreement = true
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
+        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
+        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
       })
 
       it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, startDate)
+        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
         // We assert the others haven't changed because of this
         expect(result[0].frequencyCollected).to.equal('day')
@@ -127,16 +133,18 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
 
     describe('and the licence has a "current" purpose that is two-part tariff', () => {
       beforeEach(() => {
-        fetchResult = _fetchResult(licenceId)
+        abstractionData = _fetchAbstractionDataResult(licenceId)
         // The 3rd licence version purpose is already linked to a two-part tariff purpose. We set the second to be true
         // as well just to emphasise this is what is driving the logic in the service.
-        fetchResult.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
+        abstractionData.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
+        twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
+        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
+        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
       })
 
       it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, startDate)
+        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
         expect(result[0].agreementsExceptions).to.equal(['none'])
         expect(result[1].agreementsExceptions).to.equal(['two-part-tariff'])
@@ -146,14 +154,16 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
 
     describe('and the licensee is a "water undertaker"', () => {
       beforeEach(() => {
-        fetchResult = _fetchResult(licenceId)
-        fetchResult.waterUndertaker = true
+        abstractionData = _fetchAbstractionDataResult(licenceId)
+        abstractionData.waterUndertaker = true
+        twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
+        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
+        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
       })
 
       it('sets the collection and reporting frequencies to "day"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, startDate)
+        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
         expect(result[0].frequencyCollected).to.equal('day')
         expect(result[0].frequencyReported).to.equal('day')
@@ -172,11 +182,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   })
 })
 
-function _fetchResult(licenceId) {
+function _fetchAbstractionDataResult(licenceId) {
   return LicenceModel.fromJson({
     id: licenceId,
     waterUndertaker: false,
-    twoPartTariffAgreement: false,
     licenceVersions: [
       {
         id: 'f7a5ba6a-ceaa-41e9-a8b5-27f33f42d05e',
