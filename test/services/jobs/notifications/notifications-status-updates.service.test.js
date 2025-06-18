@@ -21,9 +21,11 @@ const { NotifyClient } = require('notifications-node-client')
 const ProcessNotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
 const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 
-describe.only('Job - Notifications - Process notifications status updates service', () => {
+describe('Job - Notifications - Process notifications status updates service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
 
+  let clock
+  let date
   let event
   let notification
   let notification2
@@ -63,10 +65,14 @@ describe.only('Job - Notifications - Process notifications status updates servic
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
+
+    date = new Date(`2025-01-01`)
+    clock = Sinon.useFakeTimers(date)
   })
 
   afterEach(() => {
     Sinon.restore()
+    clock.restore()
     delete global.GlobalNotifier
   })
 
@@ -180,7 +186,7 @@ describe.only('Job - Notifications - Process notifications status updates servic
         const updatedResult = await licenceMonitoringStation.$query()
 
         expect(updatedResult.status).to.equal('resume')
-        expect(updatedResult.statusUpdatedAt).to.equal(null)
+        expect(updatedResult.statusUpdatedAt).to.equal(date)
       })
     })
   })

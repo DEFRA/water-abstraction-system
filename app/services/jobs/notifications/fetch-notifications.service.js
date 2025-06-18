@@ -24,7 +24,17 @@ async function go() {
   sevenDaysAgo.setDate(today.getDate() - SEVEN_DAYS)
 
   return NotificationModel.query()
-    .select(['id', 'notifyId', 'status', 'notifyStatus', 'notify_error', 'eventId', 'createdAt', 'personalisation'])
+    .select([
+      'createdAt',
+      'eventId',
+      'id',
+      'messageRef',
+      'notifyId',
+      'notifyStatus',
+      'notify_error',
+      'personalisation',
+      'status'
+    ])
     .where('status', 'pending')
     .andWhere('createdAt', '>=', sevenDaysAgo)
 }

@@ -56,7 +56,7 @@ async function _batch(notifications) {
 
   await UpdateNotificationsService.go(updatedNotifications)
 
-  return toUpdateNotifications
+  return updatedNotifications
 }
 
 async function _delay(delay) {

@@ -28,6 +28,7 @@ describe('Job - Notifications - Fetch notifications service', () => {
 
     notification = await NotificationHelper.add({
       eventId: event.id,
+      messageRef: 'returns_invitation_licence_holder_letter',
       status: 'pending'
     })
 
@@ -71,6 +72,7 @@ describe('Job - Notifications - Fetch notifications service', () => {
         createdAt: notification.createdAt,
         eventId: event.id,
         id: notification.id,
+        messageRef: 'returns_invitation_licence_holder_letter',
         notifyError: null,
         notifyId: null,
         notifyStatus: null,
