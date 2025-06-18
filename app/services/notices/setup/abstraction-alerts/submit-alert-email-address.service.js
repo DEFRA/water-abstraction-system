@@ -30,24 +30,51 @@ async function go(sessionId, payload, auth) {
     return {}
   }
 
-  const pageData = AlertEmailAddressPresenter.go(session, auth, validationResult)
+  const submittedSessionData = _submittedSessionData(session, auth, validationResult, payload)
 
   return {
+    activeNavBar: 'manage',
     error: validationResult,
-    ...pageData
+    ...submittedSessionData
   }
 }
 
 async function _save(session, payload, auth) {
-  if (payload.alertEmailAddress === 'username') {
+  const { alertEmailAddressType } = payload
+
+  if (alertEmailAddressType === 'username') {
     session.alertEmailAddress = auth.credentials.user.username
   }
 
-  if (payload.alertEmailAddress === 'other') {
+  if (alertEmailAddressType === 'other') {
     session.alertEmailAddress = payload.otherUser
   }
 
+  session.alertEmailAddressType = alertEmailAddressType
+
   return session.$update()
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ *
+ * @private
+ */
+function _submittedSessionData(session, auth, validationResult, payload) {
+  const { alertEmailAddressType } = payload
+
+  if (alertEmailAddressType === 'username') {
+    session.alertEmailAddress = auth.credentials.user.username
+  }
+
+  if (alertEmailAddressType === 'other') {
+    session.alertEmailAddress = payload.otherUser ? payload.otherUser : null
+  }
+
+  session.alertEmailAddressType = alertEmailAddressType
+
+  return AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
 }
 
 /**
@@ -77,7 +104,7 @@ function _validate(payload) {
 
   return {
     text: message,
-    radioFormError: context.label === 'alertEmailAddress' ? { text: message } : null,
+    radioFormError: context.label === 'alertEmailAddressType' ? { text: message } : null,
     emailAddressInputFormError: context.label === 'otherUser' ? { text: message } : null
   }
 }

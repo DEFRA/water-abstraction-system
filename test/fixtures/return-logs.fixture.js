@@ -1,571 +1,203 @@
 'use strict'
 
+const {
+  formatDateObjectToISO,
+  daysFromPeriod,
+  weeksFromPeriod,
+  monthsFromPeriod
+} = require('../../app/lib/dates.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
+const LicenceModel = require('../../app/models/licence.model.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
 const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
 
 /**
- * Represents a complete response from `FetchCurrentReturnCycleService`
+ * Applies the fields that are returned by the FetchReturnLogService to a return log instance
  *
- * @param {boolean} [summer=false] - true to return a summer return cycle else false
+ * This is needed because the service does some pre-work for the presenter, by extracting values from `metadata` and
+ * applying them to the result as top-level fields.
  *
- * @returns {object}
+ * @param {module:ReturnLogModel} returnLog - The return log instance to apply the fields to
  */
-function returnCycle(summer = false) {
-  if (summer) {
-    return returnCycles()[0]
+function applyFetchReturnLogFields(returnLog) {
+  returnLog.siteDescription = returnLog.metadata.description
+  returnLog.periodStartDay = returnLog.metadata.nald.periodStartDay
+  returnLog.periodStartMonth = returnLog.metadata.nald.periodStartMonth
+  returnLog.periodEndDay = returnLog.metadata.nald.periodEndDay
+  returnLog.periodEndMonth = returnLog.metadata.nald.periodEndMonth
+  returnLog.purposes = returnLog.metadata.purposes
+  returnLog.twoPartTariff = returnLog.metadata.isTwoPartTariff
+}
+
+/**
+ * Generates a return log instance with specified frequency and default date range.
+ *
+ * @param {string} returnsFrequency - The frequency of the returns (e.g., 'month', 'week', 'day'). Defaults to 'month'
+ * @param {boolean} addLicence - Whether to add an instance of `LicenceModel` to the return log
+ * @returns {module:ReturnLogModel} The generated return log instance with attributes such as start date, end date,
+ * licence reference, return reference, and status
+ */
+function returnLog(returnsFrequency = 'month', addLicence = false) {
+  const returnLogData = _returnLogData(returnsFrequency)
+  const returnLog = ReturnLogModel.fromJson(returnLogData)
+
+  if (addLicence) {
+    returnLog.licence = LicenceModel.fromJson({
+      id: generateUUID(),
+      licenceRef: returnLog.licenceRef
+    })
   }
-
-  return returnCycles()[1]
-}
-
-/**
- * Represents a list of return cycles from the database, as fetched in `ProcessLicenceReturnLogsService`
- *
- * @param {number} [numberOfCycles=2] - the number of return cycles to return - defaults to the first two
- * @returns {object[]} an array of objects, each representing a return cycle
- */
-function returnCycles(numberOfCycles = 2) {
-  const cycles = [
-    {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
-      startDate: new Date('2025-11-01'),
-      endDate: new Date('2026-10-31'),
-      dueDate: new Date('2026-11-28'),
-      summer: true,
-      submittedInWrls: true
-    },
-    {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
-      startDate: new Date('2025-04-01'),
-      endDate: new Date('2026-03-31'),
-      dueDate: new Date('2026-04-28'),
-      summer: false,
-      submittedInWrls: true
-    },
-    {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
-      startDate: new Date('2024-11-01'),
-      endDate: new Date('2025-10-31'),
-      dueDate: new Date('2025-11-28'),
-      summer: true,
-      submittedInWrls: true
-    },
-    {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a1',
-      startDate: new Date('2024-04-01'),
-      endDate: new Date('2025-03-31'),
-      dueDate: new Date('2025-04-28'),
-      summer: false,
-      submittedInWrls: true
-    },
-    {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b5',
-      startDate: new Date('2023-11-01'),
-      endDate: new Date('2024-10-31'),
-      dueDate: new Date('2024-11-28'),
-      summer: true,
-      submittedInWrls: true
-    },
-    {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a2',
-      startDate: new Date('2023-04-01'),
-      endDate: new Date('2024-03-31'),
-      dueDate: new Date('2024-04-28'),
-      summer: false,
-      submittedInWrls: true
-    }
-  ]
-
-  return cycles.slice(0, numberOfCycles)
-}
-
-/**
- * Represents a complete response from `FetchDownloadReturnLogService`
- *
- * @param {string} method - The method for the return submission, which is set to 'abstractionVolumes' by default but
- * can be passed other methods.
- *
- * @returns {<module:ReturnLogModel>} a returnLog instance with its related returnSubmission and returnSubmissionLines
- */
-function returnLog(method = 'abstractionVolumes') {
-  const returnSubmissionLineOne = ReturnSubmissionLineModel.fromJson({
-    id: '5215fc36-b3da-44db-8d21-77f9f180a213',
-    startDate: new Date('2022-11-01T00:00:00.000Z'),
-    quantity: 123,
-    reading: 321
-  })
-
-  const returnSubmissionLineTwo = ReturnSubmissionLineModel.fromJson({
-    id: 'db1df580-3381-43af-9751-3f842833373f',
-    startDate: new Date('2022-12-01T00:00:00.000Z'),
-    quantity: 456,
-    reading: 654
-  })
-
-  const returnSubmissionLineThree = ReturnSubmissionLineModel.fromJson({
-    id: '9f22d3b4-769e-4856-8591-8a890e8c45fe',
-    startDate: new Date('2023-01-01T00:00:00.000Z'),
-    quantity: 789,
-    reading: 987
-  })
-
-  const returnSubmission = ReturnSubmissionModel.fromJson({
-    id: 'a9909721-1110-4c3c-9b18-e92389b9af00',
-    metadata: {
-      type: 'estimated',
-      total: 22.918,
-      units: 'Ml',
-      meters: [],
-      method,
-      totalFlag: true,
-      totalCustomDates: false
-    },
-    version: 2,
-    returnSubmissionLines: [returnSubmissionLineOne, returnSubmissionLineTwo, returnSubmissionLineThree]
-  })
-
-  const returnLog = ReturnLogModel.fromJson({
-    id: 'v1:6:11/42/18.6.3/295:10055412:2022-11-01:2023-10-31',
-    returnReference: '10055412',
-    startDate: new Date('2022-11-01T00:00:00.000Z'),
-    endDate: new Date('2023-10-31T00:00:00.000Z'),
-    returnSubmissions: [returnSubmission]
-  })
 
   return returnLog
 }
 
 /**
- * Represents a single result from either `FetchReturnRequirementsService` or
- * `FetchLicenceReturnRequirementsService`
+ * Generates a return submission for a given return log, with the given type and units
  *
- * @param {boolean} [summer=false] - true to return a summer requirement else false
- * @returns {object}
+ * @param {module:ReturnLogModel} returnLog - The return log that the return submission is for
+ * @param {string} type - The type of the return submission, defaults to 'estimated'
+ * @param {string} userUnit - The unit of measurement for the return submission, defaults to 'm³'
+ *
+ * @returns {module:ReturnSubmissionModel} The generated return submission
  */
-function returnRequirement(summer = false) {
-  if (summer) {
-    return returnRequirements()[0]
+function returnSubmission(returnLog, type = 'estimated', userUnit = 'm³') {
+  returnLog.status = 'completed'
+  returnLog.receivedDate = new Date('2023-04-12')
+
+  let version = 1
+
+  if (returnLog.returnSubmissions) {
+    for (const submission of returnLog.returnSubmissions) {
+      submission.current = false
+      version++
+    }
   }
 
-  return returnRequirements()[1]
+  const returnSubmission = ReturnSubmissionModel.fromJson({
+    id: generateUUID(),
+    createdAt: new Date('2023-12-16 09:42:11.000'),
+    current: true,
+    metadata: _returnSubmissionMetadata(returnLog, type),
+    nilReturn: false,
+    notes: null,
+    returnLogId: returnLog.id,
+    userId: 'admin-internal@wrls.gov.uk',
+    userType: 'internal',
+    version
+  })
+
+  returnSubmission.returnSubmissionLines = _returnSubmissionLines(returnLog, returnSubmission.id, type, userUnit)
+  returnSubmission.$applyReadings()
+
+  return returnSubmission
 }
 
-/**
- * Represents multiple results from either `FetchReturnRequirementsService` or
- * `FetchLicenceReturnRequirementsService`
- *
- * @returns {object[]}
- */
-function returnRequirements() {
-  return [
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 10,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 5,
-      externalId: '4:16999652',
-      id: '3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2',
-      legacyId: 16999652,
-      reference: 16999652,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'PUMP AT TINTAGEL',
-      summer: true,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: null,
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-        reason: 'new-licence',
-        startDate: new Date('2022-04-01'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        }
-      },
-      points: [
-        {
-          description: 'Summer cycle - live licence - live return version - summer return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '8a5164fd-1705-45bd-a01c-6b09d066e403',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
-    },
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 3,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
-      externalId: '4:16999651',
-      id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
-      legacyId: 16999651,
-      reference: 16999651,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'BOREHOLE AT AVALON',
-      summer: false,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: null,
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-        reason: 'new-licence',
-        startDate: new Date('2022-04-01'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        },
-        quarterlyReturns: true
-      },
-      points: [
-        {
-          description: 'Winter cycle - live licence - live return version - winter return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
-    }
-  ]
+function _datedLines(returnLog) {
+  const { endDate, returnsFrequency, startDate } = returnLog
+
+  if (returnsFrequency === 'day') {
+    return daysFromPeriod(startDate, endDate)
+  }
+
+  if (returnsFrequency === 'week') {
+    return weeksFromPeriod(startDate, endDate)
+  }
+
+  return monthsFromPeriod(startDate, endDate)
 }
 
-/**
- * Represents multiple results from either `FetchReturnRequirementsService` or
- * `FetchLicenceReturnRequirementsService` that have different return versions
- *
- * @returns {object[]}
- */
-function returnRequirementsAcrossReturnVersions() {
-  return [
-    ...returnRequirements(),
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 10,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 5,
-      externalId: '4:16999652',
-      id: '3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2',
-      legacyId: 16999642,
-      reference: 16999642,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'PUMP AT TINTAGEL',
-      summer: true,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: new Date('2024-05-26'),
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-        reason: 'new-licence',
-        startDate: new Date('2022-04-01'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        }
-      },
-      points: [
-        {
-          description: 'Summer cycle - live licence - live return version - summer return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '8a5164fd-1705-45bd-a01c-6b09d066e403',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
+function _returnLogData(returnsFrequency) {
+  const defaults = ReturnLogHelper.defaults(returnsFrequency)
+
+  defaults.underQuery = false
+
+  defaults.metadata.purposes.push({
+    alias: 'Mineral Washing alias',
+    primary: {
+      code: 'I',
+      description: 'Industrial, Commercial And Public Services'
     },
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 3,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
-      externalId: '4:16999641',
-      id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
-      legacyId: 16999641,
-      reference: 16999641,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'BOREHOLE AT AVALON',
-      summer: false,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: null,
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f094',
-        reason: 'new-licence',
-        startDate: new Date('2024-05-27'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        }
-      },
-      points: [
-        {
-          description: 'Winter cycle - live licence - live return version - winter return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
+    tertiary: {
+      code: '300',
+      description: 'Mineral Washing'
     },
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 3,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
-      externalId: '4:16999643',
-      id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
-      legacyId: 16999643,
-      reference: 16999643,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'BOREHOLE AT AVALON',
-      summer: false,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: new Date('2025-05-26'),
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f095',
-        reason: 'new-licence',
-        startDate: new Date('2025-04-01'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        },
-        quarterlyReturns: true
-      },
-      points: [
-        {
-          description: 'Winter cycle - live licence - live return version - winter return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
-    },
-    {
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 3,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
-      externalId: '4:16999644',
-      id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
-      legacyId: 16999644,
-      reference: 16999644,
-      reportingFrequency: 'day',
-      returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      siteDescription: 'BOREHOLE AT AVALON',
-      summer: false,
-      twoPartTariff: false,
-      upload: false,
-      returnVersion: {
-        endDate: null,
-        id: '5a077661-05fc-4fc4-a2c6-d84ec908f095',
-        reason: 'new-licence',
-        startDate: new Date('2025-07-27'),
-        licence: {
-          expiredDate: null,
-          id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-          lapsedDate: null,
-          licenceRef: '01/25/90/3242',
-          revokedDate: null,
-          areacode: 'SAAR',
-          region: {
-            id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-            naldRegionId: 4
-          }
-        },
-        quarterlyReturns: true
-      },
-      points: [
-        {
-          description: 'Winter cycle - live licence - live return version - winter return requirement',
-          ngr1: 'TG 713 291',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null
-        }
-      ],
-      returnRequirementPurposes: [
-        {
-          alias: 'Purpose alias for testing',
-          id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
-          primaryPurpose: {
-            description: 'Agriculture',
-            id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-            legacyId: 'A'
-          },
-          purpose: {
-            description: 'General Farming & Domestic',
-            id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-            legacyId: '140'
-          },
-          secondaryPurpose: {
-            description: 'General Agriculture',
-            id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-            legacyId: 'AGR'
-          }
-        }
-      ]
+    secondary: {
+      code: 'MIN',
+      description: 'Mineral Products'
     }
-  ]
+  })
+
+  return defaults
+}
+
+function _returnSubmissionMetadata(returnLog, type) {
+  if (type === 'estimated') {
+    return {
+      type: 'estimated',
+      units: 'm³',
+      meters: [],
+      method: 'abstractionVolumes',
+      totalFlag: false
+    }
+  }
+
+  const startReading = generateRandomInteger(50, 150)
+  const metadata = {
+    type: 'measured',
+    units: 'm³',
+    meters: [
+      {
+        units: 'm³',
+        multiplier: 10,
+        manufacturer: 'MeterMaid',
+        serialNumber: '123456X',
+        startReading,
+        meterDetailsProvided: true
+      }
+    ],
+    method: 'oneMeter',
+    totalFlag: false
+  }
+
+  const lines = _datedLines(returnLog)
+
+  let reading = startReading
+
+  metadata.meters[0].readings = lines.reduce((acc, line) => {
+    const { startDate, endDate } = line
+
+    reading++
+
+    const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
+    acc[key] = reading
+
+    return acc
+  }, {})
+
+  return metadata
+}
+
+function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
+  const lines = _datedLines(returnLog)
+
+  return lines.map((line) => {
+    const { endDate, startDate } = line
+    return ReturnSubmissionLineModel.fromJson({
+      endDate,
+      id: generateUUID(),
+      quantity: generateRandomInteger(10, 5000),
+      readingType: type === 'estimated' ? 'estimated' : 'measured',
+      returnSubmissionId,
+      startDate,
+      userUnit
+    })
+  })
 }
 
 module.exports = {
-  returnCycle,
-  returnCycles,
+  applyFetchReturnLogFields,
   returnLog,
-  returnRequirement,
-  returnRequirements,
-  returnRequirementsAcrossReturnVersions
+  returnSubmission
 }

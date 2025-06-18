@@ -36,12 +36,12 @@ async function go(licenceId, newVersionStartDate) {
     return null
   }
 
-  result = await _insertBeforeVersions(previousVersions, newVersionStartDate)
+  result = await _insertBetweenVersions(previousVersions, newVersionStartDate, previousVersionEndDate)
   if (result) {
     return result
   }
 
-  result = await _insertBetweenVersions(previousVersions, newVersionStartDate, previousVersionEndDate)
+  result = await _insertBeforeVersions(previousVersions, newVersionStartDate)
   if (result) {
     return result
   }

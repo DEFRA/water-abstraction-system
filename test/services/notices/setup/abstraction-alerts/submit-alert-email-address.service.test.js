@@ -29,7 +29,7 @@ describe('Submit Alert Email Address Service', () => {
       }
     }
 
-    payload = { alertEmailAddress: 'username' }
+    payload = { alertEmailAddressType: 'username' }
     sessionData = AbstractionAlertSessionData.get()
 
     session = await SessionHelper.add({ data: sessionData })
@@ -54,7 +54,7 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('and the user selects other value as the email address', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: 'test@defra.gov.uk' }
+        payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.gov.uk' }
       })
 
       it('saves the submitted value', async () => {
@@ -74,6 +74,29 @@ describe('Submit Alert Email Address Service', () => {
   })
 
   describe('when validation fails', () => {
+    describe('and the payload "alertEmailAddressType" is username', () => {
+      it('updates the session "alertEmailAddress" property to the users username', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertEmailAddress).to.equal(auth.credentials.user.username)
+      })
+    })
+
+    describe('and the payload "alertEmailAddressType" is other', () => {
+      beforeEach(() => {
+        payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.go.uk' }
+      })
+      it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
+        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.alertEmailAddress).to.equal('test@defra.go.uk')
+      })
+    })
+
     describe('because no option has been selected', () => {
       beforeEach(() => {
         payload = {}
@@ -83,6 +106,12 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: false,
+            otherUserEmailAddressInput: '',
+            usernameChecked: false
+          },
           anchor: '#alertEmailAddress',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
@@ -101,13 +130,19 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('because other email has been selected but no email was provided', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: '' }
+        payload = { alertEmailAddressType: 'other', otherUser: '' }
       })
 
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: true,
+            otherUserEmailAddressInput: '',
+            usernameChecked: false
+          },
           anchor: '#otherUser',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
@@ -126,13 +161,19 @@ describe('Submit Alert Email Address Service', () => {
 
     describe('because other email has been selected but an invalid email was provided', () => {
       beforeEach(() => {
-        payload = { alertEmailAddress: 'other', otherUser: '123123123' }
+        payload = { alertEmailAddressType: 'other', otherUser: '123123123' }
       })
 
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'manage',
+          alertEmailAddressOptions: {
+            otherUserChecked: true,
+            otherUserEmailAddressInput: '123123123',
+            usernameChecked: false
+          },
           anchor: '#otherUser',
           backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           caption: 'Death star',
