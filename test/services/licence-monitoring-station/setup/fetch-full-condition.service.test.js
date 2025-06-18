@@ -58,7 +58,7 @@ describe('Fetch Full Condition Service', () => {
       })
     })
 
-    it.only('returns current CES conditions for the specified licence', async () => {
+    it('returns current CES conditions for the specified licence', async () => {
       const results = await FetchFullConditionService.go(licence.id)
 
       const ids = results.map((condition) => {
