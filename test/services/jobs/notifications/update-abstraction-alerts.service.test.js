@@ -22,7 +22,9 @@ describe('Job - Notifications - Update abstraction alerts service', () => {
   let notifications
 
   beforeEach(async () => {
-    licenceMonitoringStation = await LicenceMonitoringStationHelper.add()
+    licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
+      status: 'stop'
+    })
 
     licenceMonitoringStationUnTouched = await LicenceMonitoringStationHelper.add()
 
@@ -45,20 +47,46 @@ describe('Job - Notifications - Update abstraction alerts service', () => {
     clock.restore()
   })
 
-  it('updates the "status" and "statusUpdatedAt"', async () => {
-    await UpdateAbstractionAlertsService.go(notifications)
+  describe('when a notice has been successful', () => {
+    it('updates the "status" and "statusUpdatedAt"', async () => {
+      await UpdateAbstractionAlertsService.go(notifications)
 
-    const updatedResult = await licenceMonitoringStation.$query()
+      const updatedResult = await licenceMonitoringStation.$query()
 
-    expect(updatedResult.status).to.equal('resume')
-    expect(updatedResult.statusUpdatedAt).to.equal(date)
+      expect(updatedResult.status).to.equal('resume')
+      expect(updatedResult.statusUpdatedAt).to.equal(date)
+    })
+
+    it('does nto update ', async () => {
+      await UpdateAbstractionAlertsService.go(notifications)
+
+      const updatedResult = await licenceMonitoringStationUnTouched.$query()
+
+      expect(updatedResult).to.equal(licenceMonitoringStationUnTouched)
+    })
   })
 
-  it('does nto update ', async () => {
-    await UpdateAbstractionAlertsService.go(notifications)
+  describe('when a notice has failed', () => {
+    beforeEach(() => {
+      notifications = [
+        {
+          messageRef: 'water_abstraction_alert_resume_email',
+          personalisation: {
+            alertType: 'resume',
+            licenceMonitoringStationId: licenceMonitoringStation.id
+          },
+          status: 'error'
+        }
+      ]
+    })
 
-    const updatedResult = await licenceMonitoringStationUnTouched.$query()
+    it('does not update the "status" and "statusUpdatedAt"', async () => {
+      await UpdateAbstractionAlertsService.go(notifications)
 
-    expect(updatedResult).to.equal(licenceMonitoringStationUnTouched)
+      const updatedResult = await licenceMonitoringStation.$query()
+
+      expect(updatedResult.status).to.equal('stop')
+      expect(updatedResult.statusUpdatedAt).to.equal(null)
+    })
   })
 })

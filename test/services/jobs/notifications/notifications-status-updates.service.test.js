@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
+const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
@@ -19,7 +20,6 @@ const { NotifyClient } = require('notifications-node-client')
 
 // Thing under test
 const ProcessNotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
-const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 
 describe('Job - Notifications - Process notifications status updates service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100

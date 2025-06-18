@@ -19,7 +19,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  */
 async function go(notifications) {
   for (const notification of notifications) {
-    if (notification.messageRef?.includes('water_abstraction_alert'))
+    if (notification.messageRef?.includes('water_abstraction_alert') && notification.status !== 'error')
       await _update(notification.personalisation.licenceMonitoringStationId, notification.personalisation.alertType)
   }
 }
