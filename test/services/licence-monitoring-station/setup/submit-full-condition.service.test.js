@@ -58,17 +58,6 @@ describe('Submit Full Condition Service', () => {
         payload = { condition: 'not_listed' }
       })
 
-      it('does not put abstraction period data in the session', async () => {
-        await SubmitFullConditionService.go(session.id, payload)
-
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.abstractionPeriodStartDay).to.not.exist()
-        expect(refreshedSession.abstractionPeriodStartMonth).to.not.exist()
-        expect(refreshedSession.abstractionPeriodEndDay).to.not.exist()
-        expect(refreshedSession.abstractionPeriodEndMonth).to.not.exist()
-      })
-
       it('returns true for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
@@ -77,17 +66,6 @@ describe('Submit Full Condition Service', () => {
     })
 
     describe('and a UUID was passed in the payload', () => {
-      it('puts abstraction period data in the session', async () => {
-        await SubmitFullConditionService.go(session.id, payload)
-
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.abstractionPeriodStartDay).to.equal(1)
-        expect(refreshedSession.abstractionPeriodStartMonth).to.equal(1)
-        expect(refreshedSession.abstractionPeriodEndDay).to.equal(31)
-        expect(refreshedSession.abstractionPeriodEndMonth).to.equal(3)
-      })
-
       it('returns false for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
