@@ -65,8 +65,10 @@ function _relevantThresholds(relevantLicenceMonitoringStations) {
  *
  * The sorting logic works as follows:
  * - Measurement type priority: Thresholds are sorted with flow entries appearing before level entries.
+ *
  * - Normalised quantity: Within each measurement type, the thresholds are numerically sorted based on the actual
  * quantity they represent, using the `UNIT_CONVERSION` map to normalise different units to a common base.
+ *
  * - For level-related thresholds (e.g. m, mAOD, mASD), no unit scaling is necessary and are all treated as having a
  * multiplier of 1.
  *
@@ -91,7 +93,7 @@ function _sortedThresholds(relevantThresholds) {
     const normalisedA = parseFloat(valueA) * multiplierA
     const normalisedB = parseFloat(valueB) * multiplierB
 
-    return normalisedA - normalisedB
+    return normalisedB - normalisedA
   })
 
   return sortedThresholds
