@@ -308,6 +308,55 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       })
     })
   })
+
+  // TODO: Complete tests
+  describe('licence-monitoring-station/setup/{sessionId}/abstraction-period', () => {
+    const path = 'abstraction-period'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          // Set up succesful request
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          // expect(response.payload).to.contain('')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          // Set up succesful request
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('and the validation fails', () => {
+        beforeEach(() => {
+          // Set up failing request
+        })
+
+        it('returns the page successfully with the error summary banner', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(200)
+          // expect(response.payload).to.contain('')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
 })
 
 function _getOptions(path) {

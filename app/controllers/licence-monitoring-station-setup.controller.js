@@ -5,13 +5,25 @@
  * @module LicenceMonitoringStationSetupController
  */
 
+const AbstractionPeriodService = require('../services/licence-monitoring-station/setup/abstraction-period.service.js')
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
 const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+const SubmitAbstractionPeriodService = require('../services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
 const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+
+async function abstractionPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await AbstractionPeriodService.go(sessionId)
+
+  return h.view('licence-monitoring-station/setup/abstraction-period.njk', pageData)
+}
 
 async function licenceNumber(request, h) {
   const {
@@ -21,6 +33,22 @@ async function licenceNumber(request, h) {
   const pageData = await LicenceNumberService.go(sessionId)
 
   return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
+}
+
+async function submitAbstractionPeriod(request, h) {
+  const {
+    params: { sessionId },
+    payload
+  } = request
+
+  const pageData = await SubmitAbstractionPeriodService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`licence-monitoring-station/setup/abstraction-period.njk`, pageData)
+  }
+
+  // This is the last step in the journey so we will always move on to the check page
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
 }
 
 async function submitLicenceNumber(request, h) {
@@ -106,9 +134,11 @@ async function thresholdAndUnit(request, h) {
 }
 
 module.exports = {
+  abstractionPeriod,
   licenceNumber,
   submitSetup,
   stopOrReduce,
+  submitAbstractionPeriod,
   submitLicenceNumber,
   submitStopOrReduce,
   submitThresholdAndUnit,
