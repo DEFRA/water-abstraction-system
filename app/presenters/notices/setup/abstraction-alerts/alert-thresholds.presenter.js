@@ -67,7 +67,8 @@ function _relevantThresholds(relevantLicenceMonitoringStations) {
  * - Measurement type priority: Thresholds are sorted with flow entries appearing before level entries.
  *
  * - Normalised quantity: Within each measurement type, the thresholds are numerically sorted based on the actual
- * quantity they represent, using the `UNIT_CONVERSION` map to normalise different units to a common base.
+ * quantity they represent, using the `UNIT_CONVERSION` map to normalise different units to a common base (metres per
+ * second).
  *
  * - For level-related thresholds (e.g. m, mAOD, mASD), no unit scaling is necessary and are all treated as having a
  * multiplier of 1.
