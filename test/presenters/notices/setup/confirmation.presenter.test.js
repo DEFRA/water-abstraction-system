@@ -19,7 +19,8 @@ describe('Notices - Setup - Confirmation presenter', () => {
     event = {
       id: '123',
       subtype: 'adHocReminder',
-      referenceCode
+      referenceCode,
+      metadata: {}
     }
   })
 
@@ -28,6 +29,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
     expect(result).to.equal({
       forwardLink: '/notifications/report/123',
+      monitoringStationLink: null,
       pageTitle: `Returns ad-hoc sent`,
       referenceCode: 'ADHC-1234'
     })
@@ -39,6 +41,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
       expect(result).to.equal({
         forwardLink: '/notifications/report/123',
+        monitoringStationLink: null,
         pageTitle: `Returns ad-hoc sent`,
         referenceCode: 'ADHC-1234'
       })
@@ -55,6 +58,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
       expect(result).to.equal({
         forwardLink: '/notifications/report/123',
+        monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
         referenceCode: 'ADHC-1234'
       })
@@ -71,6 +75,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
       expect(result).to.equal({
         forwardLink: '/notifications/report/123',
+        monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
         referenceCode: 'ADHC-1234'
       })
@@ -80,6 +85,8 @@ describe('Notices - Setup - Confirmation presenter', () => {
   describe('and the journey is "waterAbstractionAlerts"', () => {
     beforeEach(() => {
       event.subtype = 'waterAbstractionAlerts'
+
+      event.metadata = { options: { monitoringStationId: '123' } }
     })
 
     it('correctly presents the data', () => {
@@ -87,6 +94,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
       expect(result).to.equal({
         forwardLink: '/notifications/report/123',
+        monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
         referenceCode: 'ADHC-1234'
       })
