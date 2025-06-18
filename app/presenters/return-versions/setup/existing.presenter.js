@@ -16,11 +16,11 @@ const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { id: sessionId, licence } = session
+  const { id: sessionId, licence, licenceVersion } = session
 
   return {
     backLink: `/system/return-versions/setup/${sessionId}/method`,
-    existingOptions: _existingOptions(licence.returnVersions),
+    existingOptions: _existingOptions(licenceVersion.copyableReturnVersions),
     licenceRef: licence.licenceRef,
     pageTitle: 'Use previous requirements for returns',
     sessionId

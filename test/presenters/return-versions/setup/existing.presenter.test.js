@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ExistingPresenter = require('../../../../app/presenters/return-versions/setup/existing.presenter.js')
 
-describe('Return Versions Setup - Existing presenter', () => {
+describe('Return Versions - Setup - Existing presenter', () => {
   let session
 
   beforeEach(() => {
@@ -35,7 +35,22 @@ describe('Return Versions Setup - Existing presenter', () => {
       },
       journey: 'returns-required',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate'
+      startDateOptions: 'licenceStartDate',
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      licenceVersion: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        startDate: '2022-04-01T00:00:00.000Z',
+        copyableReturnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ]
+      },
+      reason: 'major-change'
     }
   })
 
@@ -76,7 +91,7 @@ describe('Return Versions Setup - Existing presenter', () => {
       describe('but do contain mod logs', () => {
         describe('but the first entry does not have a reason', () => {
           beforeEach(() => {
-            session.licence.returnVersions[0].modLogs.push({ reasonDescription: null })
+            session.licenceVersion.copyableReturnVersions[0].modLogs.push({ reasonDescription: null })
           })
 
           it('returns the version ID as the option value and just the start date as the option text', () => {
@@ -90,7 +105,9 @@ describe('Return Versions Setup - Existing presenter', () => {
 
         describe('and the first entry does have a reason', () => {
           beforeEach(() => {
-            session.licence.returnVersions[0].modLogs.push({ reasonDescription: 'Record Loaded During Migration' })
+            session.licenceVersion.copyableReturnVersions[0].modLogs.push({
+              reasonDescription: 'Record Loaded During Migration'
+            })
           })
 
           it('returns the version ID as the option value and the start date and reason as the option text', () => {
@@ -106,7 +123,7 @@ describe('Return Versions Setup - Existing presenter', () => {
 
     describe('when the return versions contain a "reason"', () => {
       beforeEach(() => {
-        session.licence.returnVersions.unshift({
+        session.licenceVersion.copyableReturnVersions.unshift({
           id: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5',
           reason: 'major-change',
           startDate: '2024-05-07T00:00:00.000Z'
