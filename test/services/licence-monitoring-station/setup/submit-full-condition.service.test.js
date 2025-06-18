@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things to stub
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
@@ -19,7 +19,7 @@ const FullConditionService = require('../../../../app/services/licence-monitorin
 // Thing under test
 const SubmitFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
 
-describe('Full Condition Service', () => {
+describe('Submit Full Condition Service', () => {
   let payload
   let session
 
