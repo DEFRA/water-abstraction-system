@@ -59,13 +59,13 @@ function _fullDate(payload) {
  * We are 99.999% certain no one will add a new licence with a start date before 1959-04-01. But just in case, for that
  * 0.001% chance, we will extend the start date validation in the return version setup journey.
  *
- * This logice ensures that the start date entered equals or exceeds the licence’s start date. But should we
+ * This logic ensures that the start date entered equals or exceeds the licence’s start date. But should we
  * encounter a licence with a start date before 1959-04-01 we need to stop it from being created as no return logs
  * will be added.
  *
- * @param {Date} licenceStartDate - The licenec start date
+ * @param {Date} licenceStartDate - The licence start date
  *
- * @returns {object} The date and messsage to use for earliest allowable date
+ * @returns {object} The date and message to use for earliest allowable date
  */
 function _minimumDateDetails(licenceStartDate) {
   if (new Date(licenceStartDate) < new Date('1959-04-01')) {

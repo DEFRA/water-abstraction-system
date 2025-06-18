@@ -7,8 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
-const LicenceModel = require('../../../models/licence.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -21,13 +20,17 @@ const SessionModel = require('../../../models/session.model.js')
  * At the end when the journey is complete the data from the session will be used to create the return requirement and
  * the session record itself deleted.
  *
- * @param {string} licenceId - the ID of the licence the return requirement will be created for
+ * @param {string} licenceId - the UUID of the licence the return requirement will be created for
  * @param {string} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(licenceId, journey) {
-  const licence = await _fetchLicence(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
+
+  if (!licence) {
+    throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
+  }
 
   const data = _data(licence, journey)
 
@@ -64,41 +67,6 @@ function _data(licence, journey) {
     journey,
     requirements: [{}]
   }
-}
-
-async function _fetchLicence(licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .select(['id', 'expiredDate', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate', 'waterUndertaker'])
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder.select(['id', 'startDate']).where('status', 'current').orderBy('startDate', 'desc')
-    })
-    .withGraphFetched('returnVersions')
-    .modifyGraph('returnVersions', (builder) => {
-      builder
-        .select(['id', 'startDate', 'reason'])
-        .where('status', 'current')
-        // A return version must include return requirements in order for us to be able to copy from it
-        .whereExists(
-          ReturnRequirementModel.query()
-            .select(1)
-            .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
-        )
-        .orderBy('startDate', 'desc')
-    })
-    .withGraphFetched('returnVersions.modLogs')
-    .modifyGraph('returnVersions.modLogs', (builder) => {
-      builder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
-    })
-    // See licence.model.js `static get modifiers` if you are unsure about what this is doing
-    .modify('licenceHolder')
-
-  if (!licence) {
-    throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
-  }
-
-  return licence
 }
 
 function _currentVersionStartDate(licenceVersions) {
