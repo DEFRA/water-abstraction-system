@@ -50,7 +50,8 @@ function go(recipients, session, eventId) {
       station,
       monitoringStationName,
       alertEmailAddress,
-      monitoringStationRiverName
+      monitoringStationRiverName,
+      alertType
     )
 
     const matchingRecipients = _matchingRecipients(recipients, station)
@@ -108,6 +109,9 @@ function _addressLines(contact) {
  *
  * In the case of a letter, the address is also required.
  *
+ * The 'licenceMonitoringStationId' and 'alertType' are not required for Notify, we use them to update the licence
+ * monitoring 'status_updated_at' and 'status' field.
+ *
  * @private
  */
 
@@ -115,9 +119,12 @@ function _commonPersonalisation(
   licenceMonitoringStation,
   monitoringStationName,
   alertEmailAddress,
-  monitoringStationRiverName
+  monitoringStationRiverName,
+  alertType
 ) {
   return {
+    alertType,
+    licenceMonitoringStationId: licenceMonitoringStation.id,
     condition_text: _conditionText(licenceMonitoringStation.notes),
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: alertEmailAddress,
@@ -241,9 +248,12 @@ function _licences(licenceRefs) {
 }
 
 /**
- * Each licence monitoring station has a licence ref. Multiple stations could have the licence ref.
+ * Matches a recipient to a licence monitoring station by the licence ref.
  *
- * When finding the recipients for the station we do so by the licence ref.
+ * 'recipient.licence_refs' will be a comma seperated string: 'licenceOne,licenceTwo'.
+ *
+ * To match a recipient to a licence monitoring station we use the licence monitoring stations licenceRef and check if
+ * the licence ref is present in the 'recipient.licence_refs' string.
  *
  * This does mean that a recipient can / will receive multiple notifications from different licence monitoring stations.
  *
@@ -251,7 +261,7 @@ function _licences(licenceRefs) {
  */
 function _matchingRecipients(recipients, station) {
   return recipients.filter((recipient) => {
-    return recipient.licence_refs === station.licence.licenceRef
+    return recipient.licence_refs.split(',').includes(station.licence.licenceRef)
   })
 }
 

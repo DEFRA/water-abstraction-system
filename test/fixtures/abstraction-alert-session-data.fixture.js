@@ -75,7 +75,7 @@ function licenceMonitoringStations() {
  *
  * We do not use the fetch service for the fixture as we format the data to be in a usable state for the session
  *
- * @param {object[]} [_licenceMonitoringStations] - override the default licenceMonitoringStations
+ * @param {object} [_licenceMonitoringStations] - override the default licenceMonitoringStations
  *
  * @returns {object} an object representing the monitoring stations service
  */
@@ -100,17 +100,20 @@ function get(_licenceMonitoringStations) {
  * We mainly need to map licence monitoring stations to recipients. This is done through matching the licence ref.
  *
  * @param {string[]} licenceRefs
+ * @param {object} [_licenceMonitoringStations] - override the default licenceMonitoringStations
  *
  * @returns {object[]} an array of the licence monitoring station
  */
-function relevantLicenceMonitoringStations(licenceRefs) {
-  const lms = [...Object.values(licenceMonitoringStations())]
+function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStations) {
+  const lms = _licenceMonitoringStations || licenceMonitoringStations()
+
+  const lmsArray = [...Object.values(lms)]
 
   for (let i = 0; i < licenceRefs.length; i++) {
-    lms[i].licence.licenceRef = licenceRefs[i]
+    lmsArray[i].licence.licenceRef = licenceRefs[i]
   }
 
-  return lms
+  return lmsArray
 }
 
 module.exports = {
