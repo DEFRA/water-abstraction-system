@@ -15,7 +15,7 @@ const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 // Thing under test
 const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
 
-describe('Return Versions Setup - Fetch Purposes service', () => {
+describe('Return Versions - Setup - Fetch Purposes service', () => {
   let licenceVersion
   let purposes
 
@@ -56,9 +56,9 @@ describe('Return Versions Setup - Fetch Purposes service', () => {
     ])
   })
 
-  describe('when called with a valid licenceId', () => {
+  describe('when called with a valid licenceVersionId', () => {
     it('fetches the data', async () => {
-      const result = await FetchPurposesService.go(licenceVersion.licenceId)
+      const result = await FetchPurposesService.go(licenceVersion.id)
 
       expect(result[0]).to.equal({
         id: purposes[1].id,
@@ -75,7 +75,7 @@ describe('Return Versions Setup - Fetch Purposes service', () => {
     })
   })
 
-  describe('when called with an invalid licenceId', () => {
+  describe('when called with an invalid licenceVersionId', () => {
     it('returns an empty result', async () => {
       const result = await FetchPurposesService.go('5505ca34-270a-4dfb-894c-168c8a4d6e23')
 
