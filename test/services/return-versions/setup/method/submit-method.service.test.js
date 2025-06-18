@@ -35,20 +35,32 @@ describe('Return Versions - Setup - Submit Method service', () => {
             {
               id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
               startDate: '2023-01-01T00:00:00.000Z',
-              reason: null
+              reason: null,
+              modLogs: []
             }
           ],
-          startDate: '2022-04-01T00:00:00.000Z'
+          startDate: '2022-04-01T00:00:00.000Z',
+          waterUndertaker: false
         },
+        multipleUpload: false,
         journey: 'returns-required',
         requirements: [{}],
         startDateOptions: 'licenceStartDate',
-        reason: 'major-change',
+        returnVersionStartDate: '2023-01-01T00:00:00.000Z',
         licenceVersion: {
-          id: '2ecb1d63-dc20-4bb2-b3de-318a5bf86916',
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           endDate: null,
-          startDate: '2023-01-01T00:00:00.000Z'
-        }
+          startDate: '2022-04-01T00:00:00.000Z',
+          copyableReturnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ]
+        },
+        reason: 'major-change'
       }
     })
   })

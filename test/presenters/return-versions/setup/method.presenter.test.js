@@ -31,8 +31,10 @@ describe('Return Versions - Setup - Method presenter', () => {
             modLogs: []
           }
         ],
-        startDate: '2022-04-01T00:00:00.000Z'
+        startDate: '2022-04-01T00:00:00.000Z',
+        waterUndertaker: false
       },
+      multipleUpload: false,
       journey: 'returns-required',
       requirements: [{}],
       startDateOptions: 'licenceStartDate',
