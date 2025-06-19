@@ -18,7 +18,7 @@ describe('Notices - Setup - Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'ADHC-1234', journey: 'ad-hoc' } })
+    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'RNIV-123' } })
   })
 
   afterEach(() => {
@@ -33,7 +33,7 @@ describe('Notices - Setup - Cancel service', () => {
         activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/check`,
         pageTitle: 'You are about to cancel this notice',
-        referenceCode: 'ADHC-1234',
+        referenceCode: 'RNIV-123',
         summaryList: {
           text: 'Licence number',
           value: '01/111'

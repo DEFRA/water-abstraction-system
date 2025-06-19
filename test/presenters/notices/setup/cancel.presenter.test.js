@@ -14,7 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const CancelPresenter = require('../../../../app/presenters/notices/setup/cancel.presenter.js')
 
 describe('Notices - Setup - Cancel presenter', () => {
-  const referenceCode = 'ADHC-1234'
+  const referenceCode = 'RNIV-1234'
 
   let licenceRef
   let session
@@ -23,27 +23,36 @@ describe('Notices - Setup - Cancel presenter', () => {
     licenceRef = generateLicenceRef()
 
     session = {
-      journey: 'ad-hoc',
-      licenceRef,
+      journey: 'invitations',
       referenceCode
     }
   })
 
-  it('correctly presents the data', () => {
-    const result = CancelPresenter.go(session)
+  describe('the data', () => {
+    beforeEach(() => {
+      session.licenceRef = licenceRef
+    })
 
-    expect(result).to.equal({
-      backLink: `/system/notices/setup/${session.id}/check`,
-      pageTitle: 'You are about to cancel this notice',
-      referenceCode: 'ADHC-1234',
-      summaryList: {
-        text: 'Licence number',
-        value: licenceRef
-      }
+    it('correctly presents the data', () => {
+      const result = CancelPresenter.go(session)
+
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/check`,
+        pageTitle: 'You are about to cancel this notice',
+        referenceCode,
+        summaryList: {
+          text: 'Licence number',
+          value: licenceRef
+        }
+      })
     })
   })
 
-  describe('when the journey is "ad-hoc"', () => {
+  describe('when the journey is for an individual licence', () => {
+    beforeEach(() => {
+      session.licenceRef = licenceRef
+    })
+
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 

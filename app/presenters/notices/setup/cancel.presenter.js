@@ -26,7 +26,7 @@ function go(session) {
 }
 
 function _summaryList(session) {
-  if (session.journey === 'ad-hoc') {
+  if (session.licenceRef) {
     return {
       text: 'Licence number',
       value: session.licenceRef
