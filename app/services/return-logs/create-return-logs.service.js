@@ -71,16 +71,13 @@ async function _persistReturnLogs(returnLogs) {
   for (const returnLog of returnLogs) {
     const timestamp = timestampForPostgres()
 
-    const insertedRow = await db('returnLogs')
+    await db('returnLogs')
       .withSchema('public')
       .insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
       .onConflict('id')
       .ignore()
-      .returning('id')
 
-    if (insertedRow.length > 0) {
-      createdIds.push(insertedRow[0].id)
-    }
+    createdIds.push(returnLog.id)
   }
 
   return createdIds
