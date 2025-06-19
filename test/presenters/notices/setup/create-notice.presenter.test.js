@@ -187,11 +187,12 @@ describe('Notices - Setup - Create Notice presenter', () => {
       testRecipients = [...Object.values(recipients)]
 
       session = {
+        alertType: 'stop',
         journey: 'abstraction-alert',
-        referenceCode: 'WAA-123',
-        subType: 'waterAbstractionAlerts',
+        monitoringStationId: '123',
         name: 'Water abstraction alert',
-        alertType: 'stop'
+        referenceCode: 'WAA-123',
+        subType: 'waterAbstractionAlerts'
       }
     })
 
@@ -206,6 +207,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         metadata: {
           name: 'Water abstraction alert',
           options: {
+            monitoringStationId: '123',
             sendingAlertType: 'stop'
           },
           recipients: 3
@@ -245,6 +247,24 @@ describe('Notices - Setup - Create Notice presenter', () => {
           const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
           expect(result.metadata.recipients).to.equal(3)
+        })
+      })
+
+      describe('the "options" property', () => {
+        describe('the "sendingAlertType" property', () => {
+          it('return the sessions value', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.options.sendingAlertType).to.equal('stop')
+          })
+        })
+
+        describe('the "monitoringStationId" property', () => {
+          it('correctly returns the length of recipients', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.options.monitoringStationId).to.equal('123')
+          })
         })
       })
     })

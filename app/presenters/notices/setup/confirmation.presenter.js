@@ -13,13 +13,20 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(event) {
-  const { referenceCode, subtype, id: eventId } = event
+  const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
     forwardLink: `/notifications/report/${eventId}`,
+    monitoringStationLink: _monitoringStationLink(metadata),
     pageTitle: _pageTitle(subtype),
     referenceCode
   }
+}
+
+function _monitoringStationLink(metadata) {
+  return metadata.options?.monitoringStationId
+    ? `/system/monitoring-stations/${metadata.options?.monitoringStationId}`
+    : null
 }
 
 /**
