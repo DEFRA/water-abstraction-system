@@ -5,8 +5,8 @@
  * @module UpdateAbstractionAlertsService
  */
 
-const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
