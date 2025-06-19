@@ -104,12 +104,12 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
 
   const sortedThresholds = _sortedThresholds(relevantThresholds)
 
-  return sortedThresholds.map((threshold) => {
-    const [measureType, thresholdValue, thresholdUnit] = threshold.split('-')
+  return sortedThresholds.map((thresholdGroup) => {
+    const [measureType, thresholdValue, thresholdUnit] = thresholdGroup.split('-')
 
     return {
-      checked: alertThresholds.includes(threshold),
-      value: threshold,
+      checked: alertThresholds.includes(thresholdGroup),
+      value: thresholdGroup,
       text: `${thresholdValue} ${thresholdUnit}`,
       hint: {
         text: `${titleCase(measureType)} threshold`
