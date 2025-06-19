@@ -13,7 +13,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Thing under test
 const ExistingService = require('../../../../../app/services/return-versions/setup/existing/existing.service.js')
 
-describe('Return Versions Setup - Existing service', () => {
+describe('Return Versions - Setup - Existing service', () => {
   let session
 
   beforeEach(async () => {
@@ -34,11 +34,28 @@ describe('Return Versions Setup - Existing service', () => {
               modLogs: []
             }
           ],
-          startDate: '2022-04-01T00:00:00.000Z'
+          startDate: '2022-04-01T00:00:00.000Z',
+          waterUndertaker: false
         },
+        multipleUpload: false,
         journey: 'returns-required',
         requirements: [{}],
-        startDateOptions: 'licenceStartDate'
+        startDateOptions: 'licenceStartDate',
+        returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+        licenceVersion: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          endDate: null,
+          startDate: '2022-04-01T00:00:00.000Z',
+          copyableReturnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ]
+        },
+        reason: 'major-change'
       }
     })
   })
