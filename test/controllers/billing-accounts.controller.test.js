@@ -49,6 +49,32 @@ describe('Billing Accounts controller', () => {
 
   describe('/billing-accounts/{billingAccountId}', () => {
     describe('GET', () => {
+      describe('when a chargeVersionId and licenceId is passed as query parameters', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037&charge-version-id=0defacc2-6db7-4fdc-90e5-70a6d8f65235',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(() => {
+            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+          })
+        })
+      })
+
       describe('when a licenceId is passed as a query parameter', () => {
         beforeEach(() => {
           options = {
