@@ -209,10 +209,10 @@ describe('Return Logs - Create Return Logs service', () => {
       })
     })
 
-    it('returns an empty array', async () => {
+    it('returns one return log for the year', async () => {
       const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
 
-      expect(results).to.equal([])
+      expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
     })
   })
 })

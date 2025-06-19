@@ -7,6 +7,7 @@
 
 const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 const { titleCase } = require('../../../base.presenter.js')
+const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -43,6 +44,49 @@ function _relevantThresholds(relevantLicenceMonitoringStations) {
 }
 
 /**
+ * Sorts a list of threshold identifiers by measurement type and quantity
+ *
+ * Each threshold in the array follows the format `${measureType}-${thresholdValue}-${thresholdUnit}`,
+ * for example: 'flow-1000-m3/d' or 'level-5-mAOD'.
+ *
+ * The sorting logic works as follows:
+ * - Measurement type priority: Thresholds are sorted with flow entries appearing before level entries.
+ *
+ * - Normalised quantity: Within each measurement type, the thresholds are numerically sorted based on the actual
+ * quantity they represent, using the `UNIT_CONVERSION` map to normalise different units to a common base (metres per
+ * second).
+ *
+ * - For level-related thresholds (e.g. m, mAOD, mASD), no unit scaling is necessary and are all treated as having a
+ * multiplier of 1.
+ *
+ * @param {string[]} relevantThresholds - An array of thresholds
+ * @returns {string[]} The sorted array of thresholds
+ */
+function _sortedThresholds(relevantThresholds) {
+  const sortedThresholds = relevantThresholds.slice().sort((a, b) => {
+    const [typeA, valueA, unitA] = a.split('-')
+    const [typeB, valueB, unitB] = b.split('-')
+
+    const typeOrder = ['flow', 'level']
+    const typeCompare = typeOrder.indexOf(typeA) - typeOrder.indexOf(typeB)
+
+    if (typeCompare !== 0) {
+      return typeCompare
+    }
+
+    const multiplierA = unitConversion[unitA] ?? 1
+    const multiplierB = unitConversion[unitB] ?? 1
+
+    const normalisedA = parseFloat(valueA) * multiplierA
+    const normalisedB = parseFloat(valueB) * multiplierB
+
+    return normalisedB - normalisedA
+  })
+
+  return sortedThresholds
+}
+
+/**
  * Builds threshold options based on grouped threshold identifiers.
  *
  * Each threshold group key has the format: `${measureType}-${thresholdValue}-${thresholdUnit}`
@@ -58,12 +102,14 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
 
   const relevantThresholds = _relevantThresholds(relevantLicenceMonitoringStations)
 
-  return relevantThresholds.map((relevantThreshold) => {
-    const [measureType, thresholdValue, thresholdUnit] = relevantThreshold.split('-')
+  const sortedThresholds = _sortedThresholds(relevantThresholds)
+
+  return sortedThresholds.map((thresholdGroup) => {
+    const [measureType, thresholdValue, thresholdUnit] = thresholdGroup.split('-')
 
     return {
-      checked: alertThresholds.includes(relevantThreshold),
-      value: relevantThreshold,
+      checked: alertThresholds.includes(thresholdGroup),
+      value: thresholdGroup,
       text: `${thresholdValue} ${thresholdUnit}`,
       hint: {
         text: `${titleCase(measureType)} threshold`
