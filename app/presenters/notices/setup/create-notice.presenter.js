@@ -36,7 +36,7 @@ function go(session, recipients, auth) {
   }
 
   if (session.journey === 'abstraction-alert') {
-    notice.metadata.options = { sendingAlertType: session.alertType }
+    notice.metadata.options = { sendingAlertType: session.alertType, monitoringStationId: session.monitoringStationId }
   } else {
     notice.metadata.options = { excludeLicences: session.removeLicences ? session.removeLicences : [] }
     notice.metadata.returnCycle = _returnCycle(session.determinedReturnsPeriod)
