@@ -9,45 +9,35 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things to stub
+const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
 
 // Thing under test
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 
-const CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(20)
-
 describe('Full Condition Service', () => {
   let condition
-  let licence
   let session
 
   beforeEach(async () => {
-    licence = await LicenceHelper.add()
+    condition = {
+      id: 'd5d05f06-b380-4f74-a479-9cbdb81bc279',
+      notes: 'NOTES',
+      param1: 'PARAM_1',
+      param2: 'PARAM_2',
+      createdAt: Date.now(),
+      displayTitle: 'DISPLAY_TITLE'
+    }
 
-    const licenceVersion = await LicenceVersionHelper.add({
-      licenceId: licence.id,
-      status: 'current'
-    })
-
-    const licenceVersionPurposeHelper = await LicenceVersionPurposeHelper.add({
-      licenceVersionId: licenceVersion.id
-    })
-
-    condition = await LicenceVersionPurposeConditionHelper.add({
-      licenceVersionPurposeId: licenceVersionPurposeHelper.id,
-      licenceVersionPurposeConditionTypeId: CES_CONDITION_TYPE.id
-    })
+    Sinon.stub(FetchFullConditionService, 'go').resolves([condition])
 
     session = await SessionHelper.add({
       data: {
         label: 'Monitoring Station',
-        licenceId: licence.id,
-        licenceRef: licence.licenceRef
+        licenceId: 'LICENCE_ID',
+        licenceRef: 'LICENCE_REF'
       }
     })
   })
@@ -64,13 +54,13 @@ describe('Full Condition Service', () => {
         activeNavBar: 'search',
         backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
         monitoringStationLabel: 'Monitoring Station',
-        pageTitle: `Select the full condition for licence ${licence.licenceRef}`,
+        pageTitle: `Select the full condition for licence LICENCE_REF`,
         radioButtons: [
           {
             value: condition.id,
-            text: 'Chemical cessation condition 1',
+            text: 'DISPLAY_TITLE 1',
             hint: {
-              text: '(Additional information 1: None) (Additional information 2: None)'
+              text: 'NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
             },
             checked: false
           },
