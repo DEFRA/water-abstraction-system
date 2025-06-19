@@ -1003,7 +1003,7 @@ describe('View Licence Set Up presenter', () => {
             }
           }
           describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
-            it('return the associated links', () => {
+            it('returns no return version setup links', () => {
               const result = ViewLicenceSetUpPresenter.go(
                 chargeVersions,
                 workflows,
@@ -1022,7 +1022,7 @@ describe('View Licence Set Up presenter', () => {
               Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
             })
 
-            it('return no returnVersions links', () => {
+            it('returns no return version setup links', () => {
               const result = ViewLicenceSetUpPresenter.go(
                 chargeVersions,
                 workflows,
