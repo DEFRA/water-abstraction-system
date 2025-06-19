@@ -15,6 +15,7 @@
 function go(session) {
   const { label, licenceRef } = session
 
+  // TODO: Populate page with abstraction period data if entered
   return {
     backLink: _backLink(session),
     monitoringStationLabel: label,
