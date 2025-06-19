@@ -950,7 +950,7 @@ describe('View Licence Set Up presenter', () => {
           })
         })
 
-        describe('when the user wants to manage return versions', () => {
+        describe('when the billing user wants to manage return versions', () => {
           describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
             it('return the associated links', () => {
               const result = ViewLicenceSetUpPresenter.go(
@@ -983,6 +983,52 @@ describe('View Licence Set Up presenter', () => {
                 agreements,
                 returnVersions,
                 auth,
+                commonData
+              )
+
+              expect(result.links.returnVersions).to.equal({})
+            })
+          })
+        })
+
+        describe('when the user with view permissions wants to manage return versions', () => {
+          const viewAuth = {
+            isValid: true,
+            credentials: {
+              user: { id: 123 },
+              roles: ['view_charge_versions'],
+              groups: [],
+              scope: ['view_charge_versions'],
+              permissions: { abstractionReform: false, billRuns: true, manage: true }
+            }
+          }
+          describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
+            it('return the associated links', () => {
+              const result = ViewLicenceSetUpPresenter.go(
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                viewAuth,
+                commonData
+              )
+
+              expect(result.links.returnVersions).to.equal({})
+            })
+          })
+
+          describe('and the "enableRequirementsForReturns" feature toggle is false', () => {
+            beforeEach(() => {
+              Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+            })
+
+            it('return no returnVersions links', () => {
+              const result = ViewLicenceSetUpPresenter.go(
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                viewAuth,
                 commonData
               )
 
