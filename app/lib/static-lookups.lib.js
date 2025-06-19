@@ -123,6 +123,21 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
+const unitConversion = {
+  'Ml/d': 1_000_000,
+  'm3/d': 1_000,
+  'm3/s': 86_400_000,
+  'l/s': 86_400,
+  gpd: 3.78541,
+  Mgpd: 3_785_410,
+  'ft3/s': 28_316.8466 * 86400,
+  m: 1,
+  mAOD: 1,
+  mASD: 1,
+  mBOD: 1,
+  SLD: 1
+}
+
 const unitNames = {
   CUBIC_METRES: 'm³',
   LITRES: 'l',
@@ -185,5 +200,6 @@ module.exports = {
   thresholdUnits,
   twoPartTariffReviewIssues,
   quarterlyReturnPeriods,
+  unitConversion,
   unitNames
 }
