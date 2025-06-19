@@ -14,7 +14,7 @@ const PointModel = require('../../../app/models/point.model.js')
 // Thing under test
 const ViewLicencePurposePresenter = require('../../../app/presenters/licences/view-licence-purposes.presenter.js')
 
-describe('View Licence Purpose presenter', () => {
+describe('Licences - View Licence Purpose presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('View Licence Purpose presenter', () => {
               '180000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
-              '40.00 cubic metres per second'
+              '40.00 litres per second'
             ],
             abstractionAmountsTitle: 'Abstraction amounts',
             abstractionMethods: 'Unspecified Pump',
@@ -75,7 +75,7 @@ describe('View Licence Purpose presenter', () => {
             '180000.00 cubic metres per year',
             '720.00 cubic metres per day',
             '144.00 cubic metres per hour',
-            '40.00 cubic metres per second'
+            '40.00 litres per second'
           ])
         })
       })

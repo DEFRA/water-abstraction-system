@@ -35,7 +35,7 @@ describe('View Licence Purposes service', () => {
               '180000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
-              '40.00 cubic metres per second'
+              '40.00 litres per second'
             ],
             abstractionAmountsTitle: 'Abstraction amounts',
             abstractionMethods: 'Unspecified Pump',

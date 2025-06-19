@@ -52,7 +52,7 @@ describe('Return Versions controller', () => {
             url: `/return-versions/${id}/`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['billing'] }
+              credentials: { scope: ['view_charge_versions'] }
             }
           })
 
