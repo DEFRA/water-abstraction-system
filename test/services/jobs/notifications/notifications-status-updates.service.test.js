@@ -39,10 +39,6 @@ describe('Job - Notifications - Process notifications status updates service', (
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
 
-    if (NotifyClient.prototype.getNotificationById.restore) {
-      NotifyClient.prototype.getNotificationById.restore()
-    }
-
     event = await EventHelper.add({
       metadata: {},
       status: 'completed',
