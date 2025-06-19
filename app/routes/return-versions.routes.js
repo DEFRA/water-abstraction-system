@@ -10,7 +10,7 @@ const routes = [
       handler: ReturnVersionsController.view,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['view_charge_versions']
         }
       }
     }
