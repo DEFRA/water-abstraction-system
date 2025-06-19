@@ -123,6 +123,9 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
+/**
+ * Conversion multipliers to normalise flow units to litres per day (L/d) and level units to metres (m)
+ */
 const unitConversion = {
   'Ml/d': 1_000_000,
   'm3/d': 1_000,
