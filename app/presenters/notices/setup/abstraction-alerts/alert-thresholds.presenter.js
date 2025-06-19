@@ -7,21 +7,7 @@
 
 const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 const { titleCase } = require('../../../base.presenter.js')
-
-const UNIT_CONVERSION = {
-  'Ml/d': 1_000_000,
-  'm3/d': 1_000,
-  'm3/s': 86_400_000,
-  'l/s': 86_400,
-  gpd: 3.78541,
-  Mgpd: 3_785_410,
-  'ft3/s': 28_316.8466 * 86400,
-  m: 1,
-  mAOD: 1,
-  mASD: 1,
-  mBOD: 1,
-  SLD: 1
-}
+const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -88,8 +74,8 @@ function _sortedThresholds(relevantThresholds) {
       return typeCompare
     }
 
-    const multiplierA = UNIT_CONVERSION[unitA] ?? 1
-    const multiplierB = UNIT_CONVERSION[unitB] ?? 1
+    const multiplierA = unitConversion[unitA] ?? 1
+    const multiplierB = unitConversion[unitB] ?? 1
 
     const normalisedA = parseFloat(valueA) * multiplierA
     const normalisedB = parseFloat(valueB) * multiplierB
