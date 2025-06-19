@@ -89,6 +89,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
+    options: {
+      handler: LicenceMonitoringStationSetupController.fullCondition,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitFullCondition,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period',
     options: {
       handler: LicenceMonitoringStationSetupController.abstractionPeriod,
