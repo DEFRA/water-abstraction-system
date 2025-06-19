@@ -25,15 +25,8 @@ async function go(notifications) {
   await Promise.all(toUpdateStations)
 }
 
-async function _update(id, status) {
-  await LicenceMonitoringStationModel.query().findById(id).patch({
-    status,
-    statusUpdatedAt: timestampForPostgres()
-  })
-}
-
 /**
- * Determine which notification are for the water abstraction alerts and have not failed to send.
+ * Determine which notifications are for the water abstraction alerts and have not failed to send.
  * @private
  */
 function _stations(notifications) {
@@ -43,6 +36,13 @@ function _stations(notifications) {
 
   return stationsToUpdate.map((notification) => {
     return _update(notification.personalisation.licenceMonitoringStationId, notification.personalisation.alertType)
+  })
+}
+
+async function _update(id, status) {
+  await LicenceMonitoringStationModel.query().findById(id).patch({
+    status,
+    statusUpdatedAt: timestampForPostgres()
   })
 }
 
