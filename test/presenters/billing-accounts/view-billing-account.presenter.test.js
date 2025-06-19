@@ -165,7 +165,7 @@ describe('View Billing Account presenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('when the licenceId and chargeVersionId is undefined', () => {
+    describe('when the licenceId and chargeVersionId are undefined', () => {
       beforeEach(() => {
         licenceId = undefined
         chargeVersionId = undefined
@@ -192,7 +192,7 @@ describe('View Billing Account presenter', () => {
       })
     })
 
-    describe('when the chargeVersionId is undefined but the licenceId is not', () => {
+    describe('when the chargeVersionId is undefined but the licenceId is populated', () => {
       beforeEach(() => {
         chargeVersionId = undefined
       })
