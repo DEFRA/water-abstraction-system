@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  *
  * @module SubmitAbstractionPeriodService
  */
@@ -11,9 +11,9 @@ const AbstractionPeriodValidator = require('../../../validators/licence-monitori
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} - The data formatted for the view template
@@ -38,20 +38,25 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  // TODO: Update session with abstraction period before saving
   return session.$update()
 }
 
 function _validate(payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
-  if (!validation.error) {
+  if (!validation.startResult.error && !validation.endResult.error) {
     return null
   }
 
-  const { message } = validation.error.details[0]
+  const startResult = validation.startResult.error ? validation.startResult.error.details[0].message : null
+  const endResult = validation.endResult.error ? validation.endResult.error.details[0].message : null
 
   return {
-    text: message
+    text: {
+      startResult,
+      endResult
+    }
   }
 }
 
