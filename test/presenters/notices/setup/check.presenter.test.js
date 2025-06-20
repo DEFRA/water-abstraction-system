@@ -13,6 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/notices/setup/check.presenter.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 describe('Notices - Setup - Check presenter', () => {
   let session
@@ -319,10 +320,10 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "ad-hoc"', () => {
+    describe('when the journey is for an individual licence', () => {
       beforeEach(() => {
-        session.journey = 'ad-hoc'
-        session.referenceCode = 'ADHC-123'
+        session.licenceRef = generateLicenceRef()
+        session.referenceCode = 'RNIV-123'
       })
 
       describe('the "links" property', () => {
@@ -340,7 +341,7 @@ describe('Notices - Setup - Check presenter', () => {
       describe('the "readyToSend" property', () => {
         it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.readyToSend).to.equal('Ad-hoc notifications are ready to send.')
+          expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
         })
       })
     })

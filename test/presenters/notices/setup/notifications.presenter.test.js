@@ -603,7 +603,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
     })
   })
 
-  describe('when the journey is for "ad-hoc"', () => {
+  describe('when the journey is for an individual licence', () => {
     beforeEach(() => {
       journey = 'ad-hoc'
     })

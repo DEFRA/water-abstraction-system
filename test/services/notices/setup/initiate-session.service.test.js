@@ -105,18 +105,18 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
-    describe('when the "notificationType" is "ad-hoc"', () => {
+    describe('when the "notificationType" is for an individual licence', () => {
       it('creates a new session record', async () => {
         const result = await InitiateSessionService.go('ad-hoc')
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
         expect(matchingSession.data).to.equal({
-          journey: 'ad-hoc',
-          name: 'Returns: ad-hoc',
-          notificationType: 'Ad hoc',
+          journey: 'invitations',
+          name: 'Returns: invitation',
+          notificationType: 'Returns invitation',
           referenceCode: matchingSession.referenceCode, // randomly generated
-          subType: 'adHocReminder'
+          subType: 'returnInvitation'
         })
       })
 
@@ -130,12 +130,12 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       describe('the "referenceCode" property', () => {
-        it('returns a reference code for an "ad-hoc" notification', async () => {
+        it('returns a reference code for an "invitations" notification', async () => {
           const result = await InitiateSessionService.go('ad-hoc')
 
           const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-          expect(matchingSession.referenceCode).to.include('ADHC-')
+          expect(matchingSession.referenceCode).to.include('RINV-')
           expect(matchingSession.referenceCode.length).to.equal(11)
         })
       })

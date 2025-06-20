@@ -38,13 +38,14 @@ const NOTIFICATION_TYPES = {
     subType: 'returnReminder',
     type: 'Returns reminder'
   },
+  // This is a temporary change to enable the journey to keep working. This will be replaced when the type is selected
   'ad-hoc': {
-    journey: 'ad-hoc',
-    name: 'Returns: ad-hoc',
-    prefix: 'ADHC-',
+    journey: 'invitations',
+    name: 'Returns: invitation',
+    prefix: 'RINV-',
     redirectPath: 'ad-hoc-licence',
-    subType: 'adHocReminder',
-    type: 'Ad hoc'
+    subType: 'returnInvitation',
+    type: 'Returns invitation'
   },
   'abstraction-alert': {
     journey: 'abstraction-alert',

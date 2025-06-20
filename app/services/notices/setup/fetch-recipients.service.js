@@ -163,7 +163,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
-  if (session.journey === 'ad-hoc') {
+  if (session.licenceRef) {
     return _fetchRecipient(session)
   }
 

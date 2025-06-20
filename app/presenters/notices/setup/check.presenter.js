@@ -69,12 +69,12 @@ function _formatRecipients(recipients) {
 }
 
 function _links(session) {
-  const { id, journey } = session
+  const { id, journey, licenceRef } = session
 
   let back
   let removeLicences = ''
 
-  if (journey === 'ad-hoc') {
+  if (licenceRef) {
     back = `/system/notices/setup/${id}/ad-hoc-licence`
   } else if (journey === 'abstraction-alert') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
