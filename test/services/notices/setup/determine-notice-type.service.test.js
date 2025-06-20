@@ -84,7 +84,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
-    describe.only('when the "notificationType" is "abstraction-alert"', () => {
+    describe('when the "notificationType" is "abstraction-alert"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('abstraction-alert')
 
