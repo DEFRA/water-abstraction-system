@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AdHocLicenceValidator = require('../../../../app/validators/notices/setup/ad-hoc-licence.validator.js')
+const LicenceValidator = require('../../../../app/validators/notices/setup/licence.validator.js')
 
-describe('Notices - Setup - Ad Hoc licence validator', () => {
+describe('Notices - Setup - licence validator', () => {
   let dueReturns
   let licenceExists
   let payload
@@ -22,7 +22,7 @@ describe('Notices - Setup - Ad Hoc licence validator', () => {
   })
 
   it('confirms the data is valid', () => {
-    const result = AdHocLicenceValidator.go(payload, licenceExists, dueReturns)
+    const result = LicenceValidator.go(payload, licenceExists, dueReturns)
 
     expect(result.value).to.exist()
     expect(result.error).not.to.exist()
@@ -36,7 +36,7 @@ describe('Notices - Setup - Ad Hoc licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = AdHocLicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -50,7 +50,7 @@ describe('Notices - Setup - Ad Hoc licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = AdHocLicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -64,7 +64,7 @@ describe('Notices - Setup - Ad Hoc licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = AdHocLicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

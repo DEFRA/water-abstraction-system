@@ -125,7 +125,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(result).to.equal({
           sessionId: result.sessionId,
-          path: 'ad-hoc-licence'
+          path: 'licence'
         })
       })
 
