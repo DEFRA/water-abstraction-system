@@ -6,6 +6,7 @@
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')
+const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
@@ -36,31 +37,11 @@ function _abstractionPeriod(licenceVersionPurpose) {
 }
 
 function _formatAbstractionAmounts(licenceVersionPurpose) {
-  const details = []
-
   if (!licenceVersionPurpose) {
-    return details
+    return []
   }
 
-  const { annualQuantity, dailyQuantity, hourlyQuantity, instantQuantity } = licenceVersionPurpose
-
-  if (annualQuantity) {
-    details.push(`${parseFloat(annualQuantity).toFixed(2)} cubic metres per year`)
-  }
-
-  if (dailyQuantity) {
-    details.push(`${parseFloat(dailyQuantity).toFixed(2)} cubic metres per day`)
-  }
-
-  if (hourlyQuantity) {
-    details.push(`${parseFloat(hourlyQuantity).toFixed(2)} cubic metres per hour`)
-  }
-
-  if (instantQuantity) {
-    details.push(`${parseFloat(instantQuantity).toFixed(2)} litres per second`)
-  }
-
-  return details
+  return formatAbstractionAmounts(licenceVersionPurpose)
 }
 
 function _formatAbstractionMethod(licenceVersionPurposePoints) {
