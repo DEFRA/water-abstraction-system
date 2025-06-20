@@ -247,6 +247,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/preview/{contactHashId}',
+    options: {
+      handler: NoticesSetupController.preview,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.viewReturnsPeriod,
