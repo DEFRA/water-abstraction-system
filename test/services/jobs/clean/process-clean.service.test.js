@@ -44,7 +44,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
-      // We these tests we have the first task complete successfully
+      // For these tests we have the first task complete successfully
       cleanEmptyBillRunsStub = Sinon.stub(CleanEmptyBillRunsService, 'go').resolves(emptyBillRunsCount)
     })
 
@@ -72,10 +72,11 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
   })
 
+  // NOTE: The clean tasks are written to handle any errors, so we are not expecting that ProcessCleanService will ever
+  // catch one. But as a safety net in case we make a change that does lead to something getting through, it has a
+  // try/catch. Hence, we have tests to confirm it is doing what we expect.
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      // For these tests we have this task fail. We know its the first task, so we can test that the others are still
-      // called
       Sinon.stub(CleanEmptyBillRunsService, 'go').rejects()
     })
 
@@ -91,14 +92,6 @@ describe('Jobs - Clean - Process Clean service', () => {
       expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({})
       expect(errorLogArgs[2]).to.be.instanceOf(Error)
-    })
-
-    it('does not stop other tasks from being run', async () => {
-      await ProcessCleanService.go()
-
-      expect(cleanEmptyBillRunsStub.called).to.be.true()
-      expect(cleanEmptyVoidReturnLogsStub.called).to.be.true()
-      expect(cleanExpiredSessionsStub.called).to.be.true()
     })
   })
 })
