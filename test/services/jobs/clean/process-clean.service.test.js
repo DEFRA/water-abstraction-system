@@ -27,6 +27,10 @@ describe('Jobs - Clean - Process Clean service', () => {
   let notifierStub
 
   beforeEach(async () => {
+    // We stub these services to always runs successfully
+    cleanEmptyVoidReturnLogsStub = Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').resolves(emptyVoidReturnLogsCount)
+    cleanExpiredSessionsStub = Sinon.stub(CleanExpiredSessionsService, 'go').resolves(expiredSessionsCount)
+
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -40,11 +44,8 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
+      // For these tests we have the first task complete successfully
       cleanEmptyBillRunsStub = Sinon.stub(CleanEmptyBillRunsService, 'go').resolves(emptyBillRunsCount)
-      cleanEmptyVoidReturnLogsStub = Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').resolves(
-        emptyVoidReturnLogsCount
-      )
-      cleanExpiredSessionsStub = Sinon.stub(CleanExpiredSessionsService, 'go').resolves(expiredSessionsCount)
     })
 
     it('cleans expired sessions', async () => {
@@ -71,6 +72,9 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
   })
 
+  // NOTE: The clean tasks are written to handle any errors, so we are not expecting that ProcessCleanService will ever
+  // catch one. But as a safety net in case we make a change that does lead to something getting through, it has a
+  // try/catch. Hence, we have tests to confirm it is doing what we expect.
   describe('when a clean task errors', () => {
     beforeEach(() => {
       Sinon.stub(CleanEmptyBillRunsService, 'go').rejects()

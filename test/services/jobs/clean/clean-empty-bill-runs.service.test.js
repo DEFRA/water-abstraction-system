@@ -17,6 +17,15 @@ const CleanEmptyBillRunsService = require('../../../../app/services/jobs/clean/c
 
 describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   let billRun
+  let notifierStub
+
+  beforeEach(async () => {
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -60,8 +69,18 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
     })
 
-    it('throws an error', async () => {
-      await expect(CleanEmptyBillRunsService.go()).to.reject()
+    it('does not throw an error', async () => {
+      await expect(CleanEmptyBillRunsService.go()).not.to.reject()
+    })
+
+    it('logs the error', async () => {
+      await CleanEmptyBillRunsService.go()
+
+      const errorLogArgs = notifierStub.omfg.firstCall.args
+
+      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+      expect(errorLogArgs[1]).to.equal({ job: 'clean-empty-bill-runs' })
+      expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })
   })
 })

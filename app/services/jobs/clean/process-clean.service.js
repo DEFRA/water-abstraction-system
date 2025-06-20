@@ -12,6 +12,10 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
 
 /**
  * Processes deletion from the service of redundant records, for example, old sessions
+ *
+ * > The calls are wrapped in a try/catch but they should never be called. Each task is written to handle its own
+ * > errors. This is a safety net in case me miss something. An error here would be an uncaught exception as it is not
+ * > handled by the controller. This would cause the app itself to fall over.
  */
 async function go() {
   try {

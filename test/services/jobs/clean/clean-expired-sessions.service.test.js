@@ -18,7 +18,16 @@ const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
   const todayMinusOneDay = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString()
 
+  let notifierStub
   let session
+
+  beforeEach(async () => {
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -62,8 +71,18 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
       })
     })
 
-    it('throws an error', async () => {
-      await expect(CleanExpiredSessionsService.go()).to.reject()
+    it('does not throw an error', async () => {
+      await expect(CleanExpiredSessionsService.go()).not.to.reject()
+    })
+
+    it('logs the error', async () => {
+      await CleanExpiredSessionsService.go()
+
+      const errorLogArgs = notifierStub.omfg.firstCall.args
+
+      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+      expect(errorLogArgs[1]).to.equal({ job: 'clean-expired-sessions' })
+      expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })
   })
 })
