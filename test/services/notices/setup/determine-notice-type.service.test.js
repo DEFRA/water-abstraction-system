@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const DetermineNoticeTypeService = require('../../../../app/services/notices/setup/determine-notice-type.service.js')
 
-describe('Notices - Setup - Initiate Session service', () => {
+describe('Notices - Setup - Determine Notice Type service', () => {
   describe('when called', () => {
     describe('when the "notificationType" is "invitations"', () => {
       it('creates a new session record', () => {
