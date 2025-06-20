@@ -16,6 +16,7 @@ const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
+const PreviewService = require('../services/notices/setup/preview.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
@@ -45,6 +46,14 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function preview(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await PreviewService.go(contactHashId, sessionId)
+
+  return h.view(`${basePath}/preview.njk`, pageData)
 }
 
 async function viewAlertEmailAddress(request, h) {
@@ -298,6 +307,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  preview,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,
