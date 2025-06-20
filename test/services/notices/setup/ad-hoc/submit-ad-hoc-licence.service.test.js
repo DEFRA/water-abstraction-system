@@ -13,16 +13,16 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const SubmitAdHocLicenceService = require('../../../../../app/services/notices/setup/ad-hoc/submit-ad-hoc-licence.service.js')
+const SubmitLicenceService = require('../../../../../app/services/notices/setup/submit-licence.service.js')
 const Sinon = require('sinon')
 
-describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
+describe('Notices - Setup - Submit Licence service', () => {
   let clock
   let payload
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { referenceCode: 'ADHC-1234' } })
+    session = await SessionHelper.add({ data: {} })
 
     clock = Sinon.useFakeTimers(new Date('2020-06-06'))
   })
@@ -43,7 +43,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAdHocLicenceService.go(session.id, payload)
+        await SubmitLicenceService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
@@ -51,7 +51,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
       })
 
       it('saves the "determinedReturnsPeriod" with the "dueDate" set 28 days from "today"', async () => {
-        await SubmitAdHocLicenceService.go(session.id, payload)
+        await SubmitLicenceService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
@@ -65,7 +65,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitAdHocLicenceService.go(session.id, payload)
+        const result = await SubmitLicenceService.go(session.id, payload)
 
         expect(result).to.equal({})
       })
@@ -78,7 +78,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitAdHocLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -86,8 +86,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
             error: {
               text: 'Enter a licence number'
             },
-            pageTitle: 'Enter a licence number',
-            referenceCode: 'ADHC-1234'
+            pageTitle: 'Enter a licence number'
           })
         })
       })
@@ -100,7 +99,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitAdHocLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -108,8 +107,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
             error: {
               text: 'Enter a valid licence number'
             },
-            pageTitle: 'Enter a licence number',
-            referenceCode: 'ADHC-1234'
+            pageTitle: 'Enter a licence number'
           })
         })
       })
@@ -124,7 +122,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitAdHocLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -132,8 +130,7 @@ describe('Notices - Setup - Submit Ad Hoc Licence service', () => {
               text: 'There are no returns due for licence 01/145'
             },
             licenceRef: '01/145',
-            pageTitle: 'Enter a licence number',
-            referenceCode: 'ADHC-1234'
+            pageTitle: 'Enter a licence number'
           })
         })
       })
