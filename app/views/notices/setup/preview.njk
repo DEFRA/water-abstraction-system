@@ -1,0 +1,31 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">{{ caption }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="message-preview govuk-body">
+    <div class="govuk-!-margin-bottom-5">
+      {% if messageType === 'letter' %}
+        {{ newLineArrayItems(address) }}
+      {% endif %}
+    </div>
+
+    {{ contents | markdown | safe }}
+  </div>
+{% endblock %}
