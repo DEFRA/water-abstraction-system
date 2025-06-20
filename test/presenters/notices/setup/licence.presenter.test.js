@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const LicencePresenter = require('../../../../../app/presenters/notices/setup/licence.presenter.js')
+const LicencePresenter = require('../../../../app/presenters/notices/setup/licence.presenter.js')
 
 describe('Notices - Setup - Licence presenter', () => {
   let licenceRef
