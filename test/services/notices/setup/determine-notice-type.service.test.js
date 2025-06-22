@@ -36,7 +36,7 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('when the "notificationType" is "reminders"', () => {
+    describe('and the "notificationType" is "reminders"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('reminders')
 
