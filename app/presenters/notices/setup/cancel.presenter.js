@@ -5,7 +5,7 @@
  * @module CancelPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page
@@ -15,12 +15,36 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { referenceCode } = session
+  const { referenceCode, journey } = session
+
+  let pageData
+
+  if (journey === 'abstraction-alert') {
+    pageData = _alerts(session)
+  } else {
+    pageData = _returns(session)
+  }
 
   return {
     backLink: `/system/notices/setup/${session.id}/check`,
-    pageTitle: 'You are about to cancel this notice',
     referenceCode,
+    ...pageData
+  }
+}
+
+function _alerts(session) {
+  return {
+    pageTitle: 'You are about to cancel this alert',
+    summaryList: {
+      text: 'Alert type',
+      value: `${sentenceCase(session.alertType)}`
+    }
+  }
+}
+
+function _returns(session) {
+  return {
+    pageTitle: 'You are about to cancel this notice',
     summaryList: _summaryList(session)
   }
 }
