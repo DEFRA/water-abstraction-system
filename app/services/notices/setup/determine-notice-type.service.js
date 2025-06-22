@@ -8,7 +8,7 @@
 const { generateRandomInteger } = require('../../../lib/general.lib.js')
 
 /**
- * Defines the configuration for supported notification types.
+ * Defines the configuration for supported notice types.
  *
  * This structure enables consistent handling and display of different notification types
  * across the system. Each type includes legacy fields (`name` and `subType`) required for backwards compatibility.
@@ -19,7 +19,7 @@ const { generateRandomInteger } = require('../../../lib/general.lib.js')
  *
  * @private
  */
-const NOTIFICATION_TYPES = {
+const NOTICE_TYPES = {
   invitations: {
     journey: 'invitations',
     name: 'Returns: invitation',
@@ -63,12 +63,12 @@ const NOTIFICATION_TYPES = {
  * The notice type data is saved directly to the database and is used raw in the UI. For example the 'name' is used on
  * the reports page.
  *
- * @param notificationType
+ * @param {string} noticeType
  *
- * @returns {object}
+ * @returns {object} - data specific to the notice type
  */
-function go(notificationType) {
-  const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
+function go(noticeType) {
+  const { journey, name, prefix, redirectPath, subType, type } = NOTICE_TYPES[noticeType]
 
   return {
     journey,
@@ -81,7 +81,7 @@ function go(notificationType) {
 }
 
 /**
- * A function to generate a pseudo-unique reference code for recipients notifications
+ * A function to generate a pseudo-unique reference code for recipients notices
  *
  * @param {string} prefix
  *
