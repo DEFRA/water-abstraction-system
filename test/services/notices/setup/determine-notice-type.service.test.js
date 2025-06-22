@@ -60,7 +60,7 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('when the "notificationType" is "ad-hoc"', () => {
+    describe('and the "notificationType" is "ad-hoc"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('ad-hoc')
 
