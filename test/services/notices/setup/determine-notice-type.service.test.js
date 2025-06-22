@@ -12,7 +12,7 @@ const DetermineNoticeTypeService = require('../../../../app/services/notices/set
 
 describe('Notices - Setup - Determine Notice Type service', () => {
   describe('when called', () => {
-    describe('when the "notificationType" is "invitations"', () => {
+    describe('and the "notificationType" is "invitations"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('invitations')
 
