@@ -22,6 +22,7 @@ const ConfirmationService = require('../../app/services/notices/setup/confirmati
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
+const PreviewService = require('../../app/services/notices/setup/preview.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
@@ -672,6 +673,36 @@ describe('Notices Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter a Licence number')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(PreviewService, 'go').resolves({
+          pageTitle: 'Preview notice'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Preview notice')
         })
       })
     })
