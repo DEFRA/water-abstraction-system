@@ -2,7 +2,7 @@
 
 /**
  * Formats notification data ready for presenting in the preview notification page
- * @module ViewNotificationPresenter
+ * @module PreviewPresenter
  */
 
 const NotifyPreviewRequest = require('../../../requests/notify/notify-preview.request.js')

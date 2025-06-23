@@ -2,7 +2,7 @@
 
 /**
  * Generate a preview template using GOV.UK Notify
- * @module NotifyLetterRequest
+ * @module NotifyPreviewRequest
  */
 
 const NotifyClientRequest = require('./notify-client.request.js')
