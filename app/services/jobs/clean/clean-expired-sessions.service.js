@@ -13,14 +13,18 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<number>} The number of rows deleted
  */
 async function go() {
+  let deletedCount = 0
+
   try {
     const maxAgeInDays = 1
     const maxSessionAge = new Date(new Date().setDate(new Date().getDate() - maxAgeInDays)).toISOString()
 
-    return await SessionModel.query().delete().where('created_at', '<', maxSessionAge)
+    deletedCount = await SessionModel.query().delete().where('created_at', '<', maxSessionAge)
   } catch (error) {
     global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-expired-sessions' }, error)
   }
+
+  return deletedCount
 }
 
 module.exports = {

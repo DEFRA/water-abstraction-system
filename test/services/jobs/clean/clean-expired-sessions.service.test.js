@@ -39,12 +39,15 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
         session = await SessionHelper.add({ createdAt: todayMinusOneDay })
       })
 
-      it('removes the session', async () => {
-        await CleanExpiredSessionsService.go()
+      it('removes the session and returns the count', async () => {
+        const result = await CleanExpiredSessionsService.go()
 
-        const results = await SessionModel.query().whereIn('id', [session.id])
+        const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
-        expect(results).to.have.length(0)
+        expect(existsResults).to.have.length(0)
+
+        // We can't check the exact count in case the test deletes void return logs created by other tests
+        expect(result).to.be.greaterThan(0)
       })
     })
 
@@ -53,12 +56,16 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
         session = await SessionHelper.add()
       })
 
-      it('does not remove the session', async () => {
-        await CleanExpiredSessionsService.go()
+      it('does not remove the session and returns the count', async () => {
+        const result = await CleanExpiredSessionsService.go()
 
-        const results = await SessionModel.query().whereIn('id', [session.id])
+        const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
-        expect(results).to.have.length(1)
+        expect(existsResults).to.have.length(1)
+
+        // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
+        // by other tests. We just want to check we are always getting a number
+        expect(typeof result).to.equal('number')
       })
     })
   })
@@ -83,6 +90,14 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
       expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({ job: 'clean-expired-sessions' })
       expect(errorLogArgs[2]).to.be.instanceOf(Error)
+    })
+
+    it('still returns a count', async () => {
+      const result = await CleanExpiredSessionsService.go()
+
+      // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created by
+      // other tests. We just want to check we are always getting a number
+      expect(typeof result).to.equal('number')
     })
   })
 })
