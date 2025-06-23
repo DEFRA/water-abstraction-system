@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {string} contactHashId - The recipients unique identifier
  * @param {string} sessionId - The UUID for returns notices session record
  *
- * @returns {object} The view data for the preview page
+ * @returns {Promise<object>} The view data for the preview page
  */
 async function go(contactHashId, sessionId) {
   const session = await SessionModel.query().findById(sessionId)

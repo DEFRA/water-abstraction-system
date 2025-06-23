@@ -14,7 +14,7 @@ const { titleCase } = require('../../base.presenter.js')
  * @param {object} notification - The data relating to the recipients notification
  * @param {string} sessionId - The UUID for returns notices session record
  *
- * @returns {object} The data formatted for the preview template
+ * @returns {Promise<object>} The data formatted for the preview template
  */
 async function go(notification, sessionId) {
   const { licences, messageRef, messageType, personalisation, templateId } = notification
