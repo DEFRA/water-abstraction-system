@@ -18,7 +18,14 @@ describe('Abstraction Period Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    sessionData = {
+      label: 'FRENCHAY',
+      licenceRef: '01/115',
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '2',
+      abstractionPeriodEndDay: '3',
+      abstractionPeriodEndMonth: '4'
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -27,7 +34,15 @@ describe('Abstraction Period Service', () => {
     it('returns page data for the view', async () => {
       const result = await AbstractionPeriodService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodEndDay: '3',
+        abstractionPeriodStartMonth: '2',
+        abstractionPeriodEndMonth: '4',
+        backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
+        monitoringStationLabel: 'FRENCHAY',
+        pageTitle: 'Enter an abstraction period for licence 01/115'
+      })
     })
   })
 })
