@@ -228,9 +228,9 @@ async function submitAlertType(request, h) {
 async function submitCancel(request, h) {
   const { sessionId } = request.params
 
-  await SubmitCancelService.go(sessionId)
+  const redirectURl = await SubmitCancelService.go(sessionId)
 
-  return h.redirect(`/manage`)
+  return h.redirect(redirectURl)
 }
 
 async function submitCancelAlerts(request, h) {

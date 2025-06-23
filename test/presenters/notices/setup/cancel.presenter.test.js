@@ -54,6 +54,26 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
   })
 
+  describe('when the journey is "abstraction-alerts"', () => {
+    beforeEach(() => {
+      session = {
+        alertType: 'stop',
+        journey: 'abstraction-alert',
+        monitoringStationId: '123',
+        referenceCode: 'WAA-1234'
+      }
+    })
+
+    it('correctly formats the summary list', () => {
+      const result = CancelPresenter.go(session)
+
+      expect(result.summaryList).to.equal({
+        text: 'Alert type',
+        value: 'Stop'
+      })
+    })
+  })
+
   describe('and the journey is "invitations"', () => {
     beforeEach(() => {
       session.journey = 'invitations'
