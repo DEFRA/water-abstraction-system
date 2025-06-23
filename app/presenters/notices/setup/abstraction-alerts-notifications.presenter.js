@@ -174,7 +174,7 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
   return {
     createdAt,
     eventId,
-    licences: _licences(recipient.licence_refs),
+    licences: _licences(commonPersonalisation.licence_ref),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
@@ -221,7 +221,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
   return {
     createdAt,
     eventId,
-    licences: _licences(recipient.licence_refs),
+    licences: _licences(commonPersonalisation.licence_ref),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
