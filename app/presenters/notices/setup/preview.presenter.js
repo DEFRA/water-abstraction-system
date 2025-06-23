@@ -36,7 +36,7 @@ function _address(personalisation) {
     personalisation['address_line_3'],
     personalisation['address_line_4'],
     personalisation['address_line_5'],
-    personalisation['postcode']
+    personalisation['address_line_6']
   ]
 
   return addressLines.filter((addressLine) => {
