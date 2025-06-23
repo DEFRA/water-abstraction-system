@@ -39,7 +39,7 @@ describe('Notice Type Presenter', () => {
       })
     })
 
-    describe('when the a previous "noticeType" has been selected', () => {
+    describe('when a previous "noticeType" has been selected', () => {
       describe('and the selected notice type was "invitations"', () => {
         beforeEach(() => {
           session.noticeType = 'invitations'
