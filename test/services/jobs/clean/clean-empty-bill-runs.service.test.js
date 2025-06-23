@@ -89,8 +89,8 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         })
       })
 
-      it('removes the empty bill runs', async () => {
-        await CleanEmptyBillRunsService.go()
+      it('removes the empty bill runs and returns the count', async () => {
+        const result = await CleanEmptyBillRunsService.go()
 
         expect(cancelBillRunStub.calledTwice).to.be.true()
         expect(cancelBillRunStub.firstCall.calledWith(emptyBillRuns[0].id)).to.be.true()
@@ -101,6 +101,8 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(unassignBillRunStub.secondCall.calledWith(emptyBillRuns[1].id)).to.be.true()
 
         expect(deleteBillRunStub.calledTwice).to.be.true()
+
+        expect(result).to.equal(2)
       })
     })
 
@@ -119,8 +121,8 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         })
       })
 
-      it('removes only the one that could be cancelled', async () => {
-        await CleanEmptyBillRunsService.go()
+      it('removes only the one that could be cancelled and returns the count', async () => {
+        const result = await CleanEmptyBillRunsService.go()
 
         expect(cancelBillRunStub.calledTwice).to.be.true()
         expect(cancelBillRunStub.firstCall.calledWith(emptyBillRuns[0].id)).to.be.true()
@@ -130,6 +132,8 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(unassignBillRunStub.firstCall.calledWith(emptyBillRuns[0].id)).to.be.true()
 
         expect(deleteBillRunStub.calledOnce).to.be.true()
+
+        expect(result).to.equal(1)
       })
     })
   })
@@ -153,6 +157,12 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(errorLogArgs[1]).to.equal({ billRunId: undefined, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).to.be.instanceOf(Error)
       })
+
+      it('still returns a count', async () => {
+        const result = await CleanEmptyBillRunsService.go()
+
+        expect(result).to.equal(0)
+      })
     })
 
     describe('whilst cancelling a bill run', () => {
@@ -174,6 +184,12 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
         expect(errorLogArgs[1]).to.equal({ billRunId: emptyBillRuns[0].id, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      })
+
+      it('still returns a count', async () => {
+        const result = await CleanEmptyBillRunsService.go()
+
+        expect(result).to.equal(0)
       })
     })
   })

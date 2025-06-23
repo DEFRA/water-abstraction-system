@@ -38,11 +38,11 @@ async function go() {
       // Up the count if the bill run was deleted
       deletedCount = deleted ? deletedCount + 1 : deletedCount
     }
-
-    return deletedCount
   } catch (error) {
     global.GlobalNotifier.omfg('Clean job failed', { billRunId, job: 'clean-empty-bill-runs' }, error)
   }
+
+  return deletedCount
 }
 
 async function _deleteEmptyBillRun(billRunId) {
