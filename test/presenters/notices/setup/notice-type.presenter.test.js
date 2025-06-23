@@ -14,14 +14,77 @@ describe('Notice Type Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = { id: '123' }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = NoticeTypePresenter.go(session)
 
-      expect(result).to.equal({ pageTitle: 'Select the notice type' })
+      expect(result).to.equal({
+        backLink: '/system/notices/setup/123/licence',
+        options: [
+          {
+            checked: false,
+            text: 'Standard returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Submit using a paper form invitation',
+            value: 'paper-invitation'
+          }
+        ],
+        pageTitle: 'Select the notice type'
+      })
+    })
+
+    describe('when the a previous "noticeType" has been selected', () => {
+      describe('and the selected notice type was "invitations"', () => {
+        beforeEach(() => {
+          session.noticeType = 'invitations'
+        })
+
+        it('returns the invitations checked', () => {
+          const result = NoticeTypePresenter.go(session)
+
+          expect(result.options).to.equal([
+            {
+              checked: true,
+              text: 'Standard returns invitation',
+              value: 'invitations'
+            },
+            {
+              checked: false,
+              text: 'Submit using a paper form invitation',
+              value: 'paper-invitation'
+            }
+          ])
+        })
+      })
+
+      describe('and the selected notice type was "paper-invitations"', () => {
+        beforeEach(() => {
+          session.noticeType = 'paper-invitation'
+        })
+
+        it('returns the paper invitation checked', () => {
+          const result = NoticeTypePresenter.go(session)
+
+          expect(result.options).to.equal([
+            {
+              checked: false,
+              text: 'Standard returns invitation',
+              value: 'invitations'
+            },
+            {
+              checked: true,
+              text: 'Submit using a paper form invitation',
+              value: 'paper-invitation'
+            }
+          ])
+        })
+      })
     })
   })
 })

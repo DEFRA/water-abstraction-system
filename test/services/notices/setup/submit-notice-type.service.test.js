@@ -17,21 +17,23 @@ describe('Notice Type Service', () => {
   let payload
   let session
   let sessionData
+  let noticeType
 
   beforeEach(async () => {
-    payload = { noticeType: 'returns' }
+    noticeType = 'invitations'
+    payload = { noticeType }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('saves the submitted value', async () => {
+    it('saves the submitted "noticeType"', async () => {
       await SubmitNoticeTypeService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession.noticeType).to.equal(noticeType)
     })
 
     it('continues the journey', async () => {
@@ -49,7 +51,23 @@ describe('Notice Type Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload)
 
-      expect(result).to.equal({ error: { text: '"noticeType" is required' }, pageTitle: 'Select the notice type' })
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/licence`,
+        error: { text: 'Select the notice type' },
+        options: [
+          {
+            checked: false,
+            text: 'Standard returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Submit using a paper form invitation',
+            value: 'paper-invitation'
+          }
+        ],
+        pageTitle: 'Select the notice type'
+      })
     })
   })
 })
