@@ -14,8 +14,10 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @returns {Promise<number>} The number of rows deleted
  */
 async function go() {
+  let deletedCount = 0
+
   try {
-    return await ReturnLogModel.query()
+    deletedCount = await ReturnLogModel.query()
       .delete()
       .where('status', 'void')
       .whereNull('receivedDate')
@@ -25,6 +27,8 @@ async function go() {
   } catch (error) {
     global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-empty-void-return-logs' }, error)
   }
+
+  return deletedCount
 }
 
 module.exports = {
