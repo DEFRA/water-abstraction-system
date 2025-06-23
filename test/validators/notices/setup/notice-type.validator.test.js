@@ -36,7 +36,7 @@ describe('Notice Type Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"noticeType" is required')
+      expect(result.error.details[0].message).to.equal('Select the notice type')
     })
   })
 })

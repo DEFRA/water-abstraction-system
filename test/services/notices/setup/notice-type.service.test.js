@@ -27,7 +27,22 @@ describe('Notice Type Service', () => {
     it('returns page data for the view', async () => {
       const result = await NoticeTypeService.go(session.id)
 
-      expect(result).to.equal({ pageTitle: 'Select the notice type' })
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/licence`,
+        options: [
+          {
+            checked: false,
+            text: 'Standard returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Submit using a paper form invitation',
+            value: 'paper-invitation'
+          }
+        ],
+        pageTitle: 'Select the notice type'
+      })
     })
   })
 })

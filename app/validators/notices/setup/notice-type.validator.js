@@ -8,6 +8,8 @@
 
 const Joi = require('joi')
 
+const errorMessage = 'Select the notice type'
+
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/notice-type` page
  *
@@ -17,7 +19,9 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const schema = Joi.object({ noticeType: Joi.required() })
+  const schema = Joi.object({ noticeType: Joi.required() }).messages({
+    'any.required': errorMessage
+  })
 
   return schema.validate(payload, { abortEarly: false })
 }
