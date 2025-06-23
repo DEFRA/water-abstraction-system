@@ -13,10 +13,20 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { abstractionPeriod, label, licenceRef } = session
+  const {
+    abstractionPeriodStartDay,
+    abstractionPeriodEndDay,
+    abstractionPeriodStartMonth,
+    abstractionPeriodEndMonth,
+    label,
+    licenceRef
+  } = session
 
   return {
-    abstractionPeriod,
+    abstractionPeriodStartDay,
+    abstractionPeriodEndDay,
+    abstractionPeriodStartMonth,
+    abstractionPeriodEndMonth,
     backLink: _backLink(session),
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`
