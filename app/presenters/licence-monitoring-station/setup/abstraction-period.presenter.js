@@ -13,10 +13,10 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { label, licenceRef } = session
+  const { abstractionPeriod, label, licenceRef } = session
 
-  // TODO: Populate page with abstraction period data if entered
   return {
+    abstractionPeriod,
     backLink: _backLink(session),
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`

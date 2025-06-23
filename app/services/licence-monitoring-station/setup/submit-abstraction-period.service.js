@@ -29,17 +29,34 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = AbstractionPeriodPresenter.go(session)
+  const formattedData = _submittedSessionData(session, payload)
 
   return {
     error: validationResult,
-    ...pageData
+    ...formattedData
   }
 }
 
 async function _save(session, payload) {
-  // TODO: Update session with abstraction period before saving
+  session.abstractionPeriod = {
+    abstractionPeriodStartDay: payload['abstraction-period-start-day'],
+    abstractionPeriodEndDay: payload['abstraction-period-end-day'],
+    abstractionPeriodStartMonth: payload['abstraction-period-start-month'],
+    abstractionPeriodEndMonth: payload['abstraction-period-end-month']
+  }
+
   return session.$update()
+}
+
+function _submittedSessionData(session, payload) {
+  session.abstractionPeriod = {
+    abstractionPeriodStartDay: payload['abstraction-period-start-day'] ?? null,
+    abstractionPeriodEndDay: payload['abstraction-period-end-day'] ?? null,
+    abstractionPeriodStartMonth: payload['abstraction-period-start-month'] ?? null,
+    abstractionPeriodEndMonth: payload['abstraction-period-end-month'] ?? null
+  }
+
+  return AbstractionPeriodPresenter.go(session)
 }
 
 function _validate(payload) {

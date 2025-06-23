@@ -14,7 +14,7 @@
   }}
 {% endblock %}
 
-{# If there is a startAbstractionPeriod error, the error class and message are set #}
+{# If there is an abstractionPeriodStart error, the error class and message are set #}
 {% if error.text.startResult %}
   {% set startResultErrorClass = " govuk-input--error" %}
   {% set startResultErrorMessage = { text: error.text.startResult } %}
@@ -23,7 +23,7 @@
   {% set startResultErrorMessage = null %}
 {% endif %}
 
-{# If there is a endAbstractionPeriod error, the error class and message are set #}
+{# If there is an abstractionPeriodEnd error, the error class and message are set #}
 {% if error.text.endResult %}
     {% set endResultErrorClass = " govuk-input--error" %}
     {% set endResultErrorMessage = { text: error.text.endResult } %}
@@ -61,7 +61,7 @@
     {# From #}
     {{ govukDateInput({
       id: "abstraction-period-start",
-      namePrefix: "start-abstraction-period",
+      namePrefix: "abstraction-period-start",
       errorMessage: startResultErrorMessage,
       fieldset: {
         legend: {
@@ -73,12 +73,12 @@
         {
           name: "day",
           classes: "govuk-input--width-2" + startResultErrorClass,
-          value: abstractionPeriod['start-abstraction-period-day']
+          value: abstractionPeriod.abstractionPeriodStartDay
         },
         {
           name: "month",
           classes: "govuk-input--width-2" + startResultErrorClass,
-          value: abstractionPeriod['start-abstraction-period-month']
+          value: abstractionPeriod.abstractionPeriodStartMonth
         }
       ]
     }) }}
@@ -86,7 +86,7 @@
     {# To #}
     {{ govukDateInput({
       id: "abstraction-period-end",
-      namePrefix: "end-abstraction-period",
+      namePrefix: "abstraction-period-end",
       errorMessage: endResultErrorMessage,
       fieldset: {
         legend: {
@@ -98,12 +98,12 @@
         {
           name: "day",
           classes: "govuk-input--width-2" + endResultErrorClass,
-          value: abstractionPeriod['end-abstraction-period-day']
+          value: abstractionPeriod.abstractionPeriodEndDay
         },
         {
           name: "month",
           classes: "govuk-input--width-2" + endResultErrorClass,
-          value: abstractionPeriod['end-abstraction-period-month']
+          value: abstractionPeriod.abstractionPeriodEndMonth
         }
       ]
     }) }}

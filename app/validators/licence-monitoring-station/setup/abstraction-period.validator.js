@@ -20,10 +20,10 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  */
 function go(payload) {
   const {
-    'start-abstraction-period-day': startDay,
-    'start-abstraction-period-month': startMonth,
-    'end-abstraction-period-day': endDay,
-    'end-abstraction-period-month': endMonth
+    'abstraction-period-start-day': startDay,
+    'abstraction-period-start-month': startMonth,
+    'abstraction-period-end-day': endDay,
+    'abstraction-period-end-month': endMonth
   } = payload
 
   const parsedPayload = {
