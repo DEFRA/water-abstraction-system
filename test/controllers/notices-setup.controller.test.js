@@ -665,7 +665,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns()
+          Sinon.stub(SubmitCancelService, 'go').returns('/manage')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
         })
 
