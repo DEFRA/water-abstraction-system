@@ -15,41 +15,24 @@ const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { referenceCode, journey } = session
-
-  let pageData
-
-  if (journey === 'abstraction-alert') {
-    pageData = _alerts(session)
-  } else {
-    pageData = _returns(session)
-  }
+  const { referenceCode } = session
 
   return {
     backLink: `/system/notices/setup/${session.id}/check`,
-    referenceCode,
-    ...pageData
-  }
-}
-
-function _alerts(session) {
-  return {
-    pageTitle: 'You are about to cancel this alert',
-    summaryList: {
-      text: 'Alert type',
-      value: `${sentenceCase(session.alertType)}`
-    }
-  }
-}
-
-function _returns(session) {
-  return {
     pageTitle: 'You are about to cancel this notice',
+    referenceCode,
     summaryList: _summaryList(session)
   }
 }
 
 function _summaryList(session) {
+  if (session.journey === 'abstraction-alert') {
+    return {
+      text: 'Alert type',
+      value: `${sentenceCase(session.alertType)}`
+    }
+  }
+
   if (session.journey === 'ad-hoc') {
     return {
       text: 'Licence number',

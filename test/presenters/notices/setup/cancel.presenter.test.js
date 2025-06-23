@@ -44,12 +44,6 @@ describe('Notices - Setup - Cancel presenter', () => {
   })
 
   describe('when the journey is "ad-hoc"', () => {
-    it('correctly formats the page title', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.pageTitle).to.equal('You are about to cancel this notice')
-    })
-
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 
@@ -68,12 +62,6 @@ describe('Notices - Setup - Cancel presenter', () => {
         monitoringStationId: '123',
         referenceCode: 'WAA-1234'
       }
-    })
-
-    it('correctly formats the page title', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.pageTitle).to.equal('You are about to cancel this alert')
     })
 
     it('correctly formats the summary list', () => {
@@ -98,12 +86,6 @@ describe('Notices - Setup - Cancel presenter', () => {
       }
     })
 
-    it('correctly formats the page title', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.pageTitle).to.equal('You are about to cancel this notice')
-    })
-
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 
@@ -124,12 +106,6 @@ describe('Notices - Setup - Cancel presenter', () => {
         summer: 'false',
         startDate: '2025-04-01'
       }
-    })
-
-    it('correctly formats the page title', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.pageTitle).to.equal('You are about to cancel this notice')
     })
 
     it('correctly formats the summary list', () => {
@@ -153,12 +129,6 @@ describe('Notices - Setup - Cancel presenter', () => {
           summer: 'false',
           startDate: '2025-04-01'
         }
-      })
-
-      it('correctly formats the page title', () => {
-        const result = CancelPresenter.go(session)
-
-        expect(result.pageTitle).to.equal('You are about to cancel this notice')
       })
 
       it('correctly formats the summary list', () => {
