@@ -13,6 +13,14 @@ const UnassignBillRunToLicencesService = require('../../bill-runs/unassign-bill-
 /**
  * Deletes empty bill runs
  *
+ * It first identifies which bill runs are empty, then deletes them using the same process as when a user manually
+ * cancels a bill run through the UI.
+ *
+ * This is because there could be numerous child records linked to the bill run that need deleting, plus there is the
+ * record in the Charging Module API that also needs dealing with.
+ *
+ * The services in the cancel bill run feature already handle all this. So, it makes sense to reuse them here.
+ *
  * @returns {Promise<number>} The number of rows deleted
  */
 async function go() {
