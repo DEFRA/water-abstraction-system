@@ -215,7 +215,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           reference: 'TEST-123',
           templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21',
-          licences: `["${recipients.additionalContact.licence_refs}","12/345"]`,
+          licences: `["${recipients.additionalContact.licence_refs}"]`,
           messageType: 'email',
           messageRef: 'water_abstraction_alert_stop_warning_email',
           personalisation: {
