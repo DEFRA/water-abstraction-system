@@ -77,12 +77,14 @@ function go(recipients, session, eventId) {
  *
  * @private
  */
-function _addressLines(contact) {
+function _addressLines(contact, name) {
   const address = contactAddress(contact)
+
+  const fullContact = [name, ...address]
 
   const addressLines = {}
 
-  for (const [index, value] of address.entries()) {
+  for (const [index, value] of fullContact.entries()) {
     addressLines[`address_line_${index + 1}`] = value
   }
 
@@ -174,7 +176,7 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
   return {
     createdAt,
     eventId,
-    licences: _licences(recipient.licence_refs),
+    licences: _licences(commonPersonalisation.licence_ref),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
@@ -221,11 +223,11 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
   return {
     createdAt,
     eventId,
-    licences: _licences(recipient.licence_refs),
+    licences: _licences(commonPersonalisation.licence_ref),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
-      ..._addressLines(recipient.contact),
+      ..._addressLines(recipient.contact, name),
       ...commonPersonalisation,
       name
     },
