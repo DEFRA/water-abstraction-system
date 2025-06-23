@@ -47,12 +47,14 @@ function go(recipients, returnsPeriod, referenceCode, journey, eventId) {
  *
  * @private
  */
-function _addressLines(contact) {
+function _addressLines(contact, name) {
   const address = contactAddress(contact)
+
+  const fullContact = [name, ...address]
 
   const addressLines = {}
 
-  for (const [index, value] of address.entries()) {
+  for (const [index, value] of fullContact.entries()) {
     addressLines[`address_line_${index + 1}`] = value
   }
 
@@ -155,9 +157,9 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
     messageType,
     messageRef: _messageRef(journey, messageType, recipient.contact_type),
     personalisation: {
-      name,
-      ..._addressLines(recipient.contact),
-      ..._returnsPeriod(returnsPeriod)
+      ..._addressLines(recipient.contact, name),
+      ..._returnsPeriod(returnsPeriod),
+      name
     }
   }
 }
