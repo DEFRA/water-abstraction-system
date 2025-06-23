@@ -127,6 +127,54 @@ describe('Notices Setup controller', () => {
     })
   })
 
+  describe('notices/setup/cancel', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/cancel`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(CancelService, 'go').returns(_viewCancel())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewCancel()
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
+          expect(response.payload).to.contain(pageData.referenceCode)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitCancelService, 'go').returns()
+          postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
+        })
+
+        it('redirects the to the next page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/manage')
+        })
+      })
+    })
+  })
+
   describe('notices/setup/check', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -624,54 +672,6 @@ describe('Notices Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter a Licence number')
           expect(response.payload).to.contain('There is a problem')
-        })
-      })
-    })
-  })
-
-  describe('notices/setup/cancel', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/cancel`,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
-        }
-      })
-
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(CancelService, 'go').returns(_viewCancel())
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(getOptions)
-
-          const pageData = _viewCancel()
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
-          expect(response.payload).to.contain(pageData.pageTitle)
-          expect(response.payload).to.contain(pageData.referenceCode)
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns()
-          postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
-        })
-
-        it('redirects the to the next page', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/manage')
         })
       })
     })
