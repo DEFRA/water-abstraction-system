@@ -42,7 +42,7 @@ const NOTIFICATION_TYPES = {
     journey: 'ad-hoc',
     name: 'Returns: ad-hoc',
     prefix: 'ADHC-',
-    redirectPath: 'ad-hoc-licence',
+    redirectPath: 'licence',
     subType: 'adHocReminder',
     type: 'Ad hoc'
   },

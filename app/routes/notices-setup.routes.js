@@ -163,7 +163,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.viewLicence,
       auth: {
@@ -175,7 +175,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.submitLicence,
       auth: {

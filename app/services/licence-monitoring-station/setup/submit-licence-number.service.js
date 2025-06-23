@@ -22,10 +22,12 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = await _validate(payload)
+  const licence = await _fetchLicence(payload.licenceRef)
+
+  const validationResult = await _validate(payload, licence)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, payload, licence)
 
     return {
       checkPageVisited: session.checkPageVisited
@@ -41,23 +43,19 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _licenceExists(licenceRef) {
-  const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').first()
-
-  return !!licence
+async function _fetchLicence(licenceRef) {
+  return LicenceModel.query().where('licenceRef', licenceRef).select('id', 'licenceRef').first()
 }
 
-async function _save(session, payload) {
+async function _save(session, payload, licence) {
+  session.licenceId = licence.id
   session.licenceRef = payload.licenceRef
-  return session.$update()
+
+  await session.$update()
 }
 
-async function _validate(payload) {
-  let licenceExists = false
-
-  if (payload.licenceRef) {
-    licenceExists = await _licenceExists(payload.licenceRef)
-  }
+async function _validate(payload, licence) {
+  const licenceExists = !!licence
 
   const validation = LicenceNumberValidator.go(payload, licenceExists)
 
