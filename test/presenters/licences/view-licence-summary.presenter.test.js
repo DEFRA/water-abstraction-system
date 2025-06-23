@@ -16,7 +16,7 @@ const PointModel = require('../../../app/models/point.model.js')
 // Thing under test
 const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
 
-describe('View Licence Summary presenter', () => {
+describe('Licences - View Licence Summary presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -27,43 +27,41 @@ describe('View Licence Summary presenter', () => {
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
   })
 
-  describe('when provided with a populated licence', () => {
-    it('correctly presents the data', () => {
-      const result = ViewLicenceSummaryPresenter.go(licence)
+  it('correctly presents the data', () => {
+    const result = ViewLicenceSummaryPresenter.go(licence)
 
-      expect(result).to.equal({
-        abstractionAmounts: [],
-        abstractionConditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
-        abstractionPeriods: ['1 April to 31 October', '1 November to 31 March'],
-        abstractionPeriodsAndPurposesLinkText: 'View details of your purposes, periods and amounts',
-        abstractionPeriodsCaption: 'Periods of abstraction',
-        abstractionPoints: ['At National Grid Reference TL 23198 88603'],
-        abstractionPointsCaption: 'Point of abstraction',
-        abstractionPointsLinkText: 'View details of the abstraction point',
-        activeTab: 'summary',
-        documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
-        enableLicenceConditionsView: true,
-        enableLicencePointsView: true,
-        enableLicencePurposesView: true,
-        enableMonitoringStationsView: true,
-        endDate: null,
-        licenceHolder: 'Unregistered licence',
-        licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        monitoringStations: [
-          {
-            id: 'ac075651-4781-4e24-a684-b943b98607ca',
-            label: 'MEVAGISSEY FIRE STATION'
-          }
-        ],
-        purposes: {
-          caption: 'Purposes',
-          data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
-        },
-        purposesCount: 3,
-        region: 'Avalon',
-        sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
-        startDate: '1 April 2019'
-      })
+    expect(result).to.equal({
+      abstractionAmounts: [],
+      abstractionConditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
+      abstractionPeriods: ['1 April to 31 October', '1 November to 31 March'],
+      abstractionPeriodsAndPurposesLinkText: 'View details of your purposes, periods and amounts',
+      abstractionPeriodsCaption: 'Periods of abstraction',
+      abstractionPoints: ['At National Grid Reference TL 23198 88603'],
+      abstractionPointsCaption: 'Point of abstraction',
+      abstractionPointsLinkText: 'View details of the abstraction point',
+      activeTab: 'summary',
+      documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+      enableLicenceConditionsView: true,
+      enableLicencePointsView: true,
+      enableLicencePurposesView: true,
+      enableMonitoringStationsView: true,
+      endDate: null,
+      licenceHolder: 'Unregistered licence',
+      licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      monitoringStations: [
+        {
+          id: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }
+      ],
+      purposes: {
+        caption: 'Purposes',
+        data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
+      },
+      purposesCount: 3,
+      region: 'Avalon',
+      sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
+      startDate: '1 April 2019'
     })
   })
 
@@ -89,10 +87,10 @@ describe('View Licence Summary presenter', () => {
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
-            annualQuantity: null,
-            dailyQuantity: null,
-            hourlyQuantity: null,
-            instantQuantity: null,
+            annualQuantity: 180000,
+            dailyQuantity: 720,
+            hourlyQuantity: 144,
+            instantQuantity: 40,
             purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
             points: [
               PointModel.fromJson({
@@ -118,60 +116,15 @@ describe('View Licence Summary presenter', () => {
         ]
       })
 
-      describe('but it has no abstraction amounts', () => {
-        it('returns an empty array', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+      it('returns abstractions amounts formatted for display', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
-          expect(result.abstractionAmounts).to.be.empty()
-        })
-      })
-
-      describe('and it has an annual abstraction quantity', () => {
-        beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].annualQuantity = 180000
-        })
-
-        it('returns the "per year" abstraction amount message', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
-
-          expect(result.abstractionAmounts).to.include('180000.00 cubic metres per year')
-        })
-      })
-
-      describe('and it has a daily abstraction quantity', () => {
-        beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].dailyQuantity = 720
-        })
-
-        it('returns the "per day" abstraction amount message', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
-
-          expect(result.abstractionAmounts).to.include('720.00 cubic metres per day')
-        })
-      })
-
-      describe('and it has an hourly abstraction quantity', () => {
-        beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].hourlyQuantity = 144
-        })
-
-        it('returns the "per hour" abstraction amount message', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
-
-          expect(result.abstractionAmounts).to.include('144.00 cubic metres per hour')
-        })
-      })
-
-      describe('and it has an instant abstraction quantity', () => {
-        beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].instantQuantity = 40
-        })
-
-        it('returns the "per second" abstraction amount message', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
-
-          expect(result.abstractionAmounts).to.include('40.00 cubic metres per second')
-        })
+        expect(result.abstractionAmounts).to.equal([
+          '180,000.00 cubic metres per year',
+          '720.00 cubic metres per day',
+          '144.00 cubic metres per hour',
+          '40.00 litres per second'
+        ])
       })
     })
 

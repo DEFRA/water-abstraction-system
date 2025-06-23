@@ -30,7 +30,7 @@ describe('Licences - View Licence Purpose presenter', () => {
         licencePurposes: [
           {
             abstractionAmounts: [
-              '180000.00 cubic metres per year',
+              '180,000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
               '40.00 litres per second'
@@ -72,7 +72,7 @@ describe('Licences - View Licence Purpose presenter', () => {
           const result = ViewLicencePurposePresenter.go(licence)
 
           expect(result.licencePurposes[0].abstractionAmounts).to.equal([
-            '180000.00 cubic metres per year',
+            '180,000.00 cubic metres per year',
             '720.00 cubic metres per day',
             '144.00 cubic metres per hour',
             '40.00 litres per second'
