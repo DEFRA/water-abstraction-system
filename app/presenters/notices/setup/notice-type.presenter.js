@@ -8,7 +8,8 @@
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
  *
- * @param session
+ * @param {module:SessionModel} session - The session instance
+ *
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
