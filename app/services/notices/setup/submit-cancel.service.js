@@ -21,13 +21,11 @@ async function go(sessionId) {
 
   await SessionModel.query().delete().where('id', sessionId)
 
-  let redirectURl = '/manage'
-
   if (session.journey === 'abstraction-alert') {
-    redirectURl = `/system/monitoring-stations/${session.monitoringStationId}`
+    return `/system/monitoring-stations/${session.monitoringStationId}`
   }
 
-  return redirectURl
+  return '/manage'
 }
 
 module.exports = {
