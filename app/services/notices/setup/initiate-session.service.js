@@ -30,12 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(notificationType, monitoringStationId = null) {
   if (notificationType === 'ad-hoc') {
-    const session = await SessionModel.query().insert({ data: {} }).returning('id')
-
-    return {
-      sessionId: session.id,
-      path: `licence`
-    }
+    return _adHoc()
   }
 
   const { redirectPath, ...noticeType } = DetermineNoticeTypeService.go(notificationType)
@@ -61,6 +56,14 @@ async function go(notificationType, monitoringStationId = null) {
   }
 }
 
+async function _adHoc() {
+  const session = await SessionModel.query().insert({ data: {} }).returning('id')
+
+  return {
+    sessionId: session.id,
+    path: `licence`
+  }
+}
 module.exports = {
   go
 }
