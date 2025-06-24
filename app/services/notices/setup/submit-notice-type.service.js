@@ -6,10 +6,10 @@
  * @module SubmitNoticeTypeService
  */
 
+const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/notice-type` page
