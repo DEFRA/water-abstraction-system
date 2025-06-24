@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const licence = await _fetchLicence(payload.licenceRef)
+  const licence = payload.licenceRef ? await _fetchLicence(payload.licenceRef) : null
 
   const validationResult = await _validate(payload, licence)
 

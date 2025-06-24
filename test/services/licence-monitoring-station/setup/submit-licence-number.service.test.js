@@ -97,4 +97,23 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       })
     })
   })
+
+  describe('and no licence reference was submitted', () => {
+    beforeEach(() => {
+      payload = {}
+    })
+
+    it('returns page data for the view, with errors', async () => {
+      const result = await SubmitLicenceNumberService.go(session.id, payload)
+
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        error: { text: 'Enter a licence number' },
+        backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
+        licenceRef: null,
+        monitoringStationLabel: 'LABEL',
+        pageTitle: 'Enter the licence number this threshold applies to'
+      })
+    })
+  })
 })
