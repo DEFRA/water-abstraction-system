@@ -282,7 +282,7 @@ async function submitLicence(request, h) {
     return h.view(`${basePath}/licence.njk`, pageData)
   }
 
-  return h.redirect(`/system/${basePath}/${sessionId}/check`)
+  return h.redirect(`/system/${basePath}/${sessionId}/notice-type`)
 }
 
 async function submitNoticeType(request, h) {
@@ -297,7 +297,7 @@ async function submitNoticeType(request, h) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/check`)
+  return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
 }
 
 async function submitRemoveLicences(request, h) {
