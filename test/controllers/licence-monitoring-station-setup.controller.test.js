@@ -12,12 +12,14 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/abstraction-period.service.js')
 const FullConditionService = require('../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../../app/services/licence-monitoring-station/setup/licence-number.service.js')
 const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
 const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+const SubmitAbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
 const SubmitFullConditionService = require('../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
 const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
@@ -387,21 +389,25 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     })
   })
 
-  // TODO: Complete tests
   describe('licence-monitoring-station/setup/{sessionId}/abstraction-period', () => {
     const path = 'abstraction-period'
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          // Set up succesful request
+          Sinon.stub(AbstractionPeriodService, 'go').resolves({
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Enter an abstraction period for licence 01/234',
+            activeNavBar: 'search'
+          })
         })
 
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
-          // expect(response.payload).to.contain('')
+          expect(response.payload).to.contain('Enter an abstraction period for licence 01/234')
         })
       })
     })
@@ -409,7 +415,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          // Set up succesful request
+          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -422,15 +428,31 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
       describe('and the validation fails', () => {
         beforeEach(() => {
-          // Set up failing request
+          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({
+            error: {
+              text: {
+                startResult: 'Enter a valid start date',
+                endResult: 'Enter a valid end date'
+              }
+            },
+            abstractionPeriodStartDay: 'INVALID',
+            abstractionPeriodEndDay: 'INVALID',
+            abstractionPeriodStartMonth: 'INVALID',
+            abstractionPeriodEndMonth: 'INVALID',
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Enter an abstraction period for licence 01/234',
+            activeNavBar: 'search'
+          })
         })
 
         it('returns the page successfully with the error summary banner', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
           expect(response.statusCode).to.equal(200)
-          // expect(response.payload).to.contain('')
           expect(response.payload).to.contain('There is a problem')
+          expect(response.payload).to.contain('Enter a valid start date')
+          expect(response.payload).to.contain('Enter a valid end date')
         })
       })
     })
