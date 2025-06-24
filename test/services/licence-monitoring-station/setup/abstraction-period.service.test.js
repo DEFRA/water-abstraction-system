@@ -39,6 +39,7 @@ describe('Abstraction Period Service', () => {
         abstractionPeriodEndDay: '3',
         abstractionPeriodStartMonth: '2',
         abstractionPeriodEndMonth: '4',
+        activeNavBar: 'search',
         backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
         monitoringStationLabel: 'FRENCHAY',
         pageTitle: 'Enter an abstraction period for licence 01/115'
