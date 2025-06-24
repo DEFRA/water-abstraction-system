@@ -28,12 +28,36 @@ describe('Notice Type Service', () => {
   })
 
   describe('when called', () => {
+    it('saves the notice type session data', async () => {
+      await SubmitNoticeTypeService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession).to.equal({
+        ...session,
+        data: {
+          journey: 'invitations',
+          name: 'Returns: invitation',
+          noticeType: 'invitations',
+          notificationType: 'Returns invitation',
+          referenceCode: refreshedSession.referenceCode,
+          subType: 'returnInvitation'
+        },
+        journey: 'invitations',
+        name: 'Returns: invitation',
+        noticeType: 'invitations',
+        notificationType: 'Returns invitation',
+        referenceCode: refreshedSession.referenceCode,
+        subType: 'returnInvitation'
+      })
+    })
+
     it('saves the submitted "noticeType"', async () => {
       await SubmitNoticeTypeService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.noticeType).to.equal(noticeType)
+      expect(refreshedSession.noticeType).to.equal('invitations')
     })
 
     it('continues the journey', async () => {

@@ -9,6 +9,7 @@
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/notice-type` page
@@ -37,8 +38,17 @@ async function go(sessionId, payload) {
   }
 }
 
+/**
+ * We use the object assign as we need to maintain the session as a class with the '$update' method
+ * @private
+ */
 async function _save(session, payload) {
-  session.noticeType = payload.noticeType
+  const { redirectPath, ...noticeTypeData } = DetermineNoticeTypeService.go(payload.noticeType)
+
+  Object.assign(session, {
+    ...noticeTypeData,
+    noticeType: payload.noticeType
+  })
 
   return session.$update()
 }
