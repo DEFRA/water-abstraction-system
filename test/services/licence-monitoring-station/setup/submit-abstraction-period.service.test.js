@@ -69,7 +69,7 @@ describe('Abstraction Period Service', () => {
           abstractionPeriodEndDay: 'INVALID_END_DAY',
           abstractionPeriodEndMonth: '4',
           activeNavBar: 'search',
-          backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
+          backLink: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
           monitoringStationLabel: 'LABEL',
           pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
         },

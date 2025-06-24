@@ -61,11 +61,11 @@ describe('Abstraction Period Presenter', () => {
         session.checkPageVisited = false
       })
 
-      it('returns the back link to the licence number page', () => {
+      it('returns the back link to the full condition page', () => {
         const result = AbstractionPeriodPresenter.go(session)
 
         expect(result.backLink).to.equal(
-          `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/licence-number`
+          `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/full-condition`
         )
       })
     })
