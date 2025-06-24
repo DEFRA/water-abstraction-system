@@ -87,4 +87,21 @@ describe('Notices - Setup - Confirmation presenter', () => {
       })
     })
   })
+
+  describe('and the journey is "paper-invitations"', () => {
+    beforeEach(() => {
+      event.subtype = 'paperReturnForms'
+    })
+
+    it('correctly presents the data', () => {
+      const result = ConfirmationPresenter.go(event)
+
+      expect(result).to.equal({
+        forwardLink: '/notifications/report/123',
+        monitoringStationLink: null,
+        pageTitle: 'Paper return forms sent',
+        referenceCode: 'RNIV-1234'
+      })
+    })
+  })
 })

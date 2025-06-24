@@ -36,6 +36,30 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
+    describe('and the "notificationType" is "paper-invitation"', () => {
+      it('creates a new session record', () => {
+        const result = DetermineNoticeTypeService.go('paper-invitation')
+
+        expect(result).to.equal({
+          journey: 'paper-invitation',
+          name: 'Paper returns',
+          notificationType: 'Paper invitation',
+          redirectPath: undefined,
+          referenceCode: result.referenceCode, // randomly generated
+          subType: 'paperReturnForms'
+        })
+      })
+
+      describe('the "referenceCode" property', () => {
+        it('returns a reference code for "invitations" notifications', () => {
+          const result = DetermineNoticeTypeService.go('paper-invitation')
+
+          expect(result.referenceCode).to.include('PRTF-')
+          expect(result.referenceCode.length).to.equal(11)
+        })
+      })
+    })
+
     describe('and the "notificationType" is "reminders"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('reminders')

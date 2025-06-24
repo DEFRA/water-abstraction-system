@@ -20,13 +20,28 @@ const { generateRandomInteger } = require('../../../lib/general.lib.js')
  * @private
  */
 const NOTICE_TYPES = {
+  'abstraction-alert': {
+    journey: 'abstraction-alert',
+    name: 'Water abstraction alert',
+    prefix: 'WAA-',
+    redirectPath: 'abstraction-alerts/alert-type',
+    subType: 'waterAbstractionAlerts',
+    notificationType: 'Abstraction alert'
+  },
   invitations: {
     journey: 'invitations',
     name: 'Returns: invitation',
     prefix: 'RINV-',
     redirectPath: 'returns-period',
     subType: 'returnInvitation',
-    type: 'Returns invitation'
+    notificationType: 'Returns invitation'
+  },
+  'paper-invitation': {
+    journey: 'paper-invitation',
+    name: 'Paper returns',
+    prefix: 'PRTF-',
+    subType: 'paperReturnForms',
+    notificationType: 'Paper invitation'
   },
   reminders: {
     journey: 'reminders',
@@ -34,15 +49,7 @@ const NOTICE_TYPES = {
     prefix: 'RREM-',
     redirectPath: 'returns-period',
     subType: 'returnReminder',
-    type: 'Returns reminder'
-  },
-  'abstraction-alert': {
-    journey: 'abstraction-alert',
-    name: 'Water abstraction alert',
-    prefix: 'WAA-',
-    redirectPath: 'abstraction-alerts/alert-type',
-    subType: 'waterAbstractionAlerts',
-    type: 'Abstraction alert'
+    notificationType: 'Returns reminder'
   }
 }
 
@@ -60,12 +67,12 @@ const NOTICE_TYPES = {
  * @returns {object} - data specific to the notice type
  */
 function go(noticeType) {
-  const { journey, name, prefix, redirectPath, subType, type } = NOTICE_TYPES[noticeType]
+  const { journey, name, prefix, redirectPath, subType, notificationType } = NOTICE_TYPES[noticeType]
 
   return {
     journey,
     name,
-    notificationType: type,
+    notificationType,
     redirectPath,
     referenceCode: _generateReferenceCode(prefix),
     subType
