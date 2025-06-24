@@ -76,7 +76,7 @@ function _links(session) {
   let removeLicences = ''
 
   if (journey === 'ad-hoc') {
-    back = `/system/notices/setup/${id}/ad-hoc-licence`
+    back = `/system/notices/setup/${id}/licence`
   } else if (journey === 'abstraction-alert') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {

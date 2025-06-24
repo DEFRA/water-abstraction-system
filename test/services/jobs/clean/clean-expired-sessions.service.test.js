@@ -18,7 +18,16 @@ const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
   const todayMinusOneDay = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString()
 
+  let notifierStub
   let session
+
+  beforeEach(async () => {
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -30,12 +39,15 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
         session = await SessionHelper.add({ createdAt: todayMinusOneDay })
       })
 
-      it('removes the session', async () => {
-        await CleanExpiredSessionsService.go()
+      it('removes the session and returns the count', async () => {
+        const result = await CleanExpiredSessionsService.go()
 
-        const results = await SessionModel.query().whereIn('id', [session.id])
+        const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
-        expect(results).to.have.length(0)
+        expect(existsResults).to.have.length(0)
+
+        // We can't check the exact count in case the test deletes void return logs created by other tests
+        expect(result).to.be.greaterThan(0)
       })
     })
 
@@ -44,12 +56,16 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
         session = await SessionHelper.add()
       })
 
-      it('does not remove the session', async () => {
-        await CleanExpiredSessionsService.go()
+      it('does not remove the session and returns the count', async () => {
+        const result = await CleanExpiredSessionsService.go()
 
-        const results = await SessionModel.query().whereIn('id', [session.id])
+        const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
-        expect(results).to.have.length(1)
+        expect(existsResults).to.have.length(1)
+
+        // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
+        // by other tests. We just want to check we are always getting a number
+        expect(typeof result).to.equal('number')
       })
     })
   })
@@ -62,8 +78,26 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
       })
     })
 
-    it('throws an error', async () => {
-      await expect(CleanExpiredSessionsService.go()).to.reject()
+    it('does not throw an error', async () => {
+      await expect(CleanExpiredSessionsService.go()).not.to.reject()
+    })
+
+    it('logs the error', async () => {
+      await CleanExpiredSessionsService.go()
+
+      const errorLogArgs = notifierStub.omfg.firstCall.args
+
+      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+      expect(errorLogArgs[1]).to.equal({ job: 'clean-expired-sessions' })
+      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+    })
+
+    it('still returns a count', async () => {
+      const result = await CleanExpiredSessionsService.go()
+
+      // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created by
+      // other tests. We just want to check we are always getting a number
+      expect(typeof result).to.equal('number')
     })
   })
 })
