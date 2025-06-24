@@ -91,6 +91,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         activeNavBar: 'search',
         error: { text: 'Licence could not be found' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
+        licenceRef: '1234567890',
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Enter the licence number this threshold applies to'
       })
