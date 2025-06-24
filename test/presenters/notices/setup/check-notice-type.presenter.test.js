@@ -18,7 +18,6 @@ describe('Check Notice Type Presenter', () => {
   })
 
   describe('when called', () => {
-    k
     it('returns page data for the view', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
