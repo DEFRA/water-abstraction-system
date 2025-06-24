@@ -19,7 +19,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'ADHC-1234', journey: 'ad-hoc' } })
+    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'RNIV-1234' } })
   })
 
   afterEach(() => {

@@ -11,14 +11,14 @@ const { expect } = Code
 const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
 
 describe('Notices - Setup - Confirmation presenter', () => {
-  const referenceCode = 'ADHC-1234'
+  const referenceCode = 'RNIV-1234'
 
   let event
 
   beforeEach(() => {
     event = {
       id: '123',
-      subtype: 'adHocReminder',
+      subtype: 'returnInvitation',
       referenceCode,
       metadata: {}
     }
@@ -30,21 +30,8 @@ describe('Notices - Setup - Confirmation presenter', () => {
     expect(result).to.equal({
       forwardLink: '/notifications/report/123',
       monitoringStationLink: null,
-      pageTitle: `Returns ad-hoc sent`,
-      referenceCode: 'ADHC-1234'
-    })
-  })
-
-  describe('when the journey is "ad-hoc"', () => {
-    it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
-
-      expect(result).to.equal({
-        forwardLink: '/notifications/report/123',
-        monitoringStationLink: null,
-        pageTitle: `Returns ad-hoc sent`,
-        referenceCode: 'ADHC-1234'
-      })
+      pageTitle: `Returns invitations sent`,
+      referenceCode: 'RNIV-1234'
     })
   })
 
@@ -60,7 +47,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
-        referenceCode: 'ADHC-1234'
+        referenceCode: 'RNIV-1234'
       })
     })
   })
@@ -77,7 +64,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
-        referenceCode: 'ADHC-1234'
+        referenceCode: 'RNIV-1234'
       })
     })
   })
@@ -96,7 +83,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
-        referenceCode: 'ADHC-1234'
+        referenceCode: 'RNIV-1234'
       })
     })
   })
