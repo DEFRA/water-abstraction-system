@@ -47,6 +47,25 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
+    describe('when the "notificationType" is "ad-hoc"', () => {
+      it('creates a new session record', async () => {
+        const result = await InitiateSessionService.go('ad-hoc')
+
+        const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+        expect(matchingSession.data).to.equal({})
+      })
+
+      it('correctly returns the redirect path and session id', async () => {
+        const result = await InitiateSessionService.go('ad-hoc')
+
+        expect(result).to.equal({
+          sessionId: result.sessionId,
+          path: 'licence'
+        })
+      })
+    })
+
     describe('when the "notificationType" is "abstraction-alert"', () => {
       const monitoringStationId = '1234'
 

@@ -26,8 +26,7 @@ const { db } = require('../../../../db/db.js')
  * Each licence can have multiple additional contacts, regardless of the total number if there is at least one
  * 'additional contact'. Then this is the recipient.
  *
- * Otherwise, we revert to the logic listed below, which is similar to how we get recipients for the ad-hoc and returns
- * journeys.
+ * Otherwise, we revert to the logic listed below, which is similar to how we get recipients for the returns journeys.
  *
  * For each licence, we extract the contact information, if a licence is _registered_ (more details below), we only care
  * about the email addresses registered against it, all licences should have a 'licence holder' contact to fall back on.
