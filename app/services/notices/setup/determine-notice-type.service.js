@@ -36,14 +36,6 @@ const NOTICE_TYPES = {
     subType: 'returnReminder',
     type: 'Returns reminder'
   },
-  'ad-hoc': {
-    journey: 'ad-hoc',
-    name: 'Returns: ad-hoc',
-    prefix: 'ADHC-',
-    redirectPath: 'licence',
-    subType: 'adHocReminder',
-    type: 'Ad hoc'
-  },
   'abstraction-alert': {
     journey: 'abstraction-alert',
     name: 'Water abstraction alert',
