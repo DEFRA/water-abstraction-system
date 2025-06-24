@@ -37,7 +37,9 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, _payload) {
+async function _save(session, payload) {
+  session.noticeType = payload.noticeType
+
   return session.$update()
 }
 
