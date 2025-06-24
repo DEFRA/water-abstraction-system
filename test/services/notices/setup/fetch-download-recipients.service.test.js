@@ -209,11 +209,11 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
     })
   })
 
-  describe('when the "journey" is for an ad hoc licence', () => {
+  describe('when a licence ref has been chosen', () => {
     describe('when there are recipients', () => {
       describe('when there is a "primary user"', () => {
         beforeEach(() => {
-          session = { journey: 'ad-hoc', licenceRef: testRecipients.primaryUser.licenceRef }
+          session = { licenceRef: testRecipients.primaryUser.licenceRef }
         })
 
         it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
@@ -252,7 +252,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('when the licence number only has one recipient which has the "licence holder" role', () => {
         beforeEach(() => {
-          session = { journey: 'ad-hoc', licenceRef: testRecipients.licenceHolder.licenceRef }
+          session = { licenceRef: testRecipients.licenceHolder.licenceRef }
         })
 
         it('correctly returns "Licence holder" contact', async () => {
@@ -294,7 +294,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
         beforeEach(() => {
-          session = { journey: 'ad-hoc', licenceRef: testRecipients.licenceHolderAndReturnTo.licenceRef }
+          session = { licenceRef: testRecipients.licenceHolderAndReturnTo.licenceRef }
         })
 
         it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {

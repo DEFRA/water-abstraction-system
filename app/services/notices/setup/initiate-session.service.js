@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * At the end when the journey is complete the data from the session will be used to create the returns
  * notification and the session record itself deleted.
  *
- * This session will be used for all types of notifications (invitations, reminders and ad-hoc). We set the prefix and type
+ * This session will be used for all types of notifications (invitations, reminders). We set the prefix and type
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
  * @param {string} notificationType - A string relating to one of the keys for `NOTIFICATION_TYPES`
@@ -29,6 +29,15 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(notificationType, monitoringStationId = null) {
+  if (notificationType === 'ad-hoc') {
+    const session = await SessionModel.query().insert({ data: {} }).returning('id')
+
+    return {
+      sessionId: session.id,
+      path: `licence`
+    }
+  }
+
   const { redirectPath, ...noticeType } = DetermineNoticeTypeService.go(notificationType)
 
   let additionalData = {}
