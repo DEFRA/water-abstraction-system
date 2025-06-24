@@ -163,7 +163,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.viewLicence,
       auth: {
@@ -175,7 +175,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.submitLicence,
       auth: {
@@ -238,6 +238,30 @@ const routes = [
     path: basePath + '/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + '/{sessionId}/notice-type',
+    options: {
+      handler: NoticesSetupController.viewNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/notice-type',
+    options: {
+      handler: NoticesSetupController.submitNoticeType,
       auth: {
         access: {
           scope: ['returns']

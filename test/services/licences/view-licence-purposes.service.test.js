@@ -17,7 +17,7 @@ const FetchLicencePurposesService = require('../../../app/services/licences/fetc
 // Thing under test
 const ViewLicencePurposesService = require('../../../app/services/licences/view-licence-purposes.service.js')
 
-describe('View Licence Purposes service', () => {
+describe('Licences - View Licence Purposes service', () => {
   beforeEach(() => {
     Sinon.stub(FetchLicencePurposesService, 'go').returns(_testFetchLicencePurposes())
   })
@@ -32,7 +32,7 @@ describe('View Licence Purposes service', () => {
         licencePurposes: [
           {
             abstractionAmounts: [
-              '180000.00 cubic metres per year',
+              '180,000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
               '40.00 litres per second'

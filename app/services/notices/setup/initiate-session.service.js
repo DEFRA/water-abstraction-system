@@ -5,56 +5,9 @@
  * @module InitiateSessionService
  */
 
-const { generateRandomInteger } = require('../../../lib/general.lib.js')
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
+const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
-
-/**
- * Defines the configuration for supported notification types.
- *
- * This structure enables consistent handling and display of different notification types
- * across the system. Each type includes legacy fields (`name` and `subType`) required for backwards compatibility.
- *
- * Legacy context:
- * - `name` is used in the legacy UI to render the notification type on `/notifications/report`
- * - `subType` is used when querying notifications in the legacy system
- *
- * @private
- */
-const NOTIFICATION_TYPES = {
-  invitations: {
-    journey: 'invitations',
-    name: 'Returns: invitation',
-    prefix: 'RINV-',
-    redirectPath: 'returns-period',
-    subType: 'returnInvitation',
-    type: 'Returns invitation'
-  },
-  reminders: {
-    journey: 'reminders',
-    name: 'Returns: reminder',
-    prefix: 'RREM-',
-    redirectPath: 'returns-period',
-    subType: 'returnReminder',
-    type: 'Returns reminder'
-  },
-  'ad-hoc': {
-    journey: 'ad-hoc',
-    name: 'Returns: ad-hoc',
-    prefix: 'ADHC-',
-    redirectPath: 'ad-hoc-licence',
-    subType: 'adHocReminder',
-    type: 'Ad hoc'
-  },
-  'abstraction-alert': {
-    journey: 'abstraction-alert',
-    name: 'Water abstraction alert',
-    prefix: 'WAA-',
-    redirectPath: 'abstraction-alerts/alert-type',
-    subType: 'waterAbstractionAlerts',
-    type: 'Abstraction alert'
-  }
-}
 
 /**
  * Initiates the session record used for setting up a new returns notification
@@ -76,7 +29,7 @@ const NOTIFICATION_TYPES = {
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(notificationType, monitoringStationId = null) {
-  const { journey, name, prefix, redirectPath, subType, type } = NOTIFICATION_TYPES[notificationType]
+  const { redirectPath, ...noticeType } = DetermineNoticeTypeService.go(notificationType)
 
   let additionalData = {}
 
@@ -88,11 +41,7 @@ async function go(notificationType, monitoringStationId = null) {
     .insert({
       data: {
         ...additionalData,
-        journey,
-        name,
-        notificationType: type,
-        referenceCode: _generateReferenceCode(prefix),
-        subType
+        ...noticeType
       }
     })
     .returning('id')
@@ -101,25 +50,6 @@ async function go(notificationType, monitoringStationId = null) {
     sessionId: session.id,
     path: `${redirectPath}`
   }
-}
-
-/**
- * A function to generate a pseudo-unique reference code for recipients notifications
- *
- * @param {string} prefix
- *
- * @returns {string} A reference code with a prefix and random string (RINV-A14GB8)
- */
-function _generateReferenceCode(prefix) {
-  const possible = 'ABCDEFGHJKLMNPQRTUVWXYZ0123456789'
-  const length = 6
-
-  let text = ''
-
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(generateRandomInteger(0, possible.length))
-  }
-  return prefix + text
 }
 
 module.exports = {
