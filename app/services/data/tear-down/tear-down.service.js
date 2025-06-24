@@ -18,13 +18,9 @@ const WaterSchemaService = require('./water-schema.service.js')
 async function go() {
   const startTime = currentTimeInNanoseconds()
 
-  await Promise.all([
-    CrmSchemaService.go(),
-    IdmSchemaService.go(),
-    PermitSchemaService.go(),
-    ReturnsSchemaService.go(),
-    WaterSchemaService.go()
-  ])
+  await Promise.all([CrmSchemaService.go(), IdmSchemaService.go(), PermitSchemaService.go(), ReturnsSchemaService.go()])
+
+  await WaterSchemaService.go()
 
   calculateAndLogTimeTaken(startTime, 'Tear down complete')
 }
