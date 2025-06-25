@@ -19,7 +19,9 @@ describe('Address - Submit Select Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
+    payload = {
+      address: '123 fake street'
+    }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
