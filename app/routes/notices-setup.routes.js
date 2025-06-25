@@ -235,6 +235,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + `/{sessionId}/check-notice-type`,
+    options: {
+      handler: NoticesSetupController.viewCheckNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
