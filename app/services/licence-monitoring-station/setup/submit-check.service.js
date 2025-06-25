@@ -12,11 +12,10 @@ const SessionModel = require('../../../models/session.model.js')
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @param {string} sessionId
- * @param {object} payload - The submitted form data
  *
  * @returns
  */
-async function go(sessionId, payload) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   // TODO: Add tag to licence
@@ -24,7 +23,7 @@ async function go(sessionId, payload) {
 
   await session.$query().delete()
 
-  return session.licenceId
+  return session.monitoringStationId
 }
 
 module.exports = {

@@ -5,15 +5,37 @@
  * @module LicenceMonitoringStationSetupController
  */
 
+const CheckService = require('../services/licence-monitoring-station/setup/check.service.js')
 const FullConditionService = require('../services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
 const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+const SubmitCheckService = require('../services/licence-monitoring-station/setup/submit-check.service.js')
 const SubmitFullConditionService = require('../services/licence-monitoring-station/setup/submit-full-condition.service.js')
 const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+
+async function check(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await CheckService.go(sessionId)
+
+  return h.view(`licence-monitoring-station/setup/check.njk`, pageData)
+}
+
+async function submitCheck(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const monitoringStationId = await SubmitCheckService.go(sessionId)
+
+  return h.redirect(`/system/monitoring-station/${monitoringStationId}`)
+}
 
 async function fullCondition(request, h) {
   const {
@@ -139,9 +161,11 @@ async function thresholdAndUnit(request, h) {
 }
 
 module.exports = {
+  check,
   fullCondition,
   licenceNumber,
   stopOrReduce,
+  submitCheck,
   submitFullCondition,
   submitLicenceNumber,
   submitSetup,
