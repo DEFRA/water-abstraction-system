@@ -351,7 +351,7 @@ describe('Notices - Setup - Check presenter', () => {
           it('should return the links for "invitations"', () => {
             const result = CheckPresenter.go(testInput, page, pagination, session)
             expect(result.links).to.equal({
-              back: `/system/notices/setup/${session.id}/licence`,
+              back: `/system/notices/setup/${session.id}/check-notice-type`,
               cancel: `/system/notices/setup/${session.id}/cancel`,
               download: `/system/notices/setup/${session.id}/download`,
               removeLicences: ``

@@ -75,7 +75,7 @@ function _links(session) {
   let removeLicences = ''
 
   if (licenceRef) {
-    back = `/system/notices/setup/${id}/licence`
+    back = `/system/notices/setup/${id}/check-notice-type`
   } else if (journey === 'abstraction-alert') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {
