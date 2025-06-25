@@ -13,7 +13,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitPostcodeService = require('../../../app/services/address/submit-postcode.service.js')
 
-describe('Submit Postcode Service', () => {
+describe('Address - Submit Postcode Service', () => {
   let payload
   let session
   let sessionData
