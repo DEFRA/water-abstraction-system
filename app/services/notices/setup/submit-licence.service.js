@@ -6,12 +6,12 @@
  */
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const GeneralLib = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const GeneralLib = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
