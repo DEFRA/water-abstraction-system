@@ -9,16 +9,19 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const CheckNoticeTypeService = require('../../../../app/services/notices/setup/check-notice-type.service.js')
 
-describe('Check Notice Type Service', () => {
+describe('Notices - Setup - Check Notice Type Service', () => {
+  let licenceRef
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    licenceRef = generateLicenceRef()
+    sessionData = { licenceRef, noticeType: 'invitations' }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -33,7 +36,25 @@ describe('Check Notice Type Service', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
         },
-        pageTitle: 'Check the notice type'
+        pageTitle: 'Check the notice type',
+        summaryList: [
+          {
+            key: {
+              text: 'Licence number'
+            },
+            value: {
+              text: licenceRef
+            }
+          },
+          {
+            key: {
+              text: 'Returns notice type'
+            },
+            value: {
+              text: 'Standard returns invitation'
+            }
+          }
+        ]
       })
     })
   })
