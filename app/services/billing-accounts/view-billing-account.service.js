@@ -18,13 +18,15 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/v
  * determine the backlink
  * @param {string|undefined} chargeVersionId - The UUID of the charge version related to the billing account, if
  * available, used to determine the backlink
+ * @param {string|undefined} companyId - The UUID of the company (customer) related to the billing account, if
+ * available, used to determine the backlink
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
-async function go(id, page, licenceId, chargeVersionId) {
+async function go(id, page, licenceId, chargeVersionId, companyId) {
   const billingAccountData = await FetchViewBillingAccountService.go(id, page)
 
-  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId)
+  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
   const queryArgs = _queryArgs(chargeVersionId, licenceId)
 

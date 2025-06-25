@@ -17,7 +17,7 @@ const FetchViewBillingAccountService = require('../../../app/services/billing-ac
 // Thing under test
 const ViewBillingAccountService = require('../../../app/services/billing-accounts/view-billing-account.service.js')
 
-describe('View Billing Account service', () => {
+describe('Billing Accounts - View Billing Account service', () => {
   beforeEach(() => {
     Sinon.stub(FetchViewBillingAccountService, 'go').returns(BillingAccountsFixture.billingAccount())
   })
