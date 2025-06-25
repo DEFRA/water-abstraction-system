@@ -12,7 +12,7 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = CheckPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
