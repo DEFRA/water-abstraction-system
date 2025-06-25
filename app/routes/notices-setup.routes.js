@@ -2,12 +2,10 @@
 
 const NoticesSetupController = require('../controllers/notices-setup.controller.js')
 
-const basePath = '/notices/setup'
-
 const routes = [
   {
     method: 'GET',
-    path: basePath,
+    path: '/notices/setup',
     options: {
       handler: NoticesSetupController.setup,
       auth: {
@@ -19,7 +17,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/download',
+    path: '/notices/setup/{sessionId}/download',
     options: {
       handler: NoticesSetupController.downloadRecipients,
       auth: {
@@ -31,7 +29,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
       handler: NoticesSetupController.viewAlertEmailAddress,
       auth: {
@@ -43,7 +41,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-email-address',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
       handler: NoticesSetupController.submitAlertEmailAddress,
       auth: {
@@ -55,7 +53,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.viewAlertType,
       auth: {
@@ -67,7 +65,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-type',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
       handler: NoticesSetupController.submitAlertType,
       auth: {
@@ -79,7 +77,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.viewAlertThresholds,
       auth: {
@@ -91,7 +89,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
       handler: NoticesSetupController.viewCancelAlerts,
       auth: {
@@ -103,7 +101,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/cancel',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
       handler: NoticesSetupController.submitCancelAlerts,
       auth: {
@@ -115,7 +113,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/abstraction-alerts/alert-thresholds',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.submitAlertThresholds,
       auth: {
@@ -127,7 +125,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
       handler: NoticesSetupController.viewCheckLicenceMatches,
       auth: {
@@ -139,7 +137,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + `/{sessionId}/abstraction-alerts/check-licence-matches`,
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
       handler: NoticesSetupController.submitCheckLicenceMatches,
       auth: {
@@ -151,7 +149,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + `/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}`,
+    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {
       handler: NoticesSetupController.viewRemoveThreshold,
       auth: {
@@ -163,7 +161,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/licence',
+    path: '/notices/setup/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.viewLicence,
       auth: {
@@ -175,7 +173,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/licence',
+    path: '/notices/setup/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.submitLicence,
       auth: {
@@ -187,7 +185,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/cancel',
+    path: '/notices/setup/{sessionId}/cancel',
     options: {
       handler: NoticesSetupController.viewCancel,
       auth: {
@@ -199,7 +197,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/cancel',
+    path: '/notices/setup/{sessionId}/cancel',
     options: {
       handler: NoticesSetupController.submitCancel,
       auth: {
@@ -211,7 +209,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/check',
+    path: '/notices/setup/{sessionId}/check',
     options: {
       handler: NoticesSetupController.viewCheck,
       auth: {
@@ -223,7 +221,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/check',
+    path: '/notices/setup/{sessionId}/check',
     options: {
       handler: NoticesSetupController.submitCheck,
       auth: {
@@ -235,7 +233,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + `/{sessionId}/check-notice-type`,
+    path: '/notices/setup/{sessionId}/check-notice-type',
     options: {
       handler: NoticesSetupController.viewCheckNoticeType,
       auth: {
@@ -247,7 +245,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{eventId}/confirmation',
+    path: '/notices/setup/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
       auth: {
@@ -259,7 +257,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/notice-type',
+    path: '/notices/setup/{sessionId}/notice-type',
     options: {
       handler: NoticesSetupController.viewNoticeType,
       auth: {
@@ -271,7 +269,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/notice-type',
+    path: '/notices/setup/{sessionId}/notice-type',
     options: {
       handler: NoticesSetupController.submitNoticeType,
       auth: {
@@ -295,7 +293,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/remove-licences',
+    path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,
       auth: {
@@ -307,7 +305,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/remove-licences',
+    path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.submitRemoveLicences,
       auth: {
@@ -319,7 +317,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/returns-period',
+    path: '/notices/setup/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.viewReturnsPeriod,
       auth: {
@@ -331,7 +329,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/returns-period',
+    path: '/notices/setup/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.submitReturnsPeriod,
       auth: {
@@ -343,7 +341,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
     options: {
       handler: NoticesSetupController.viewReturnsForPaperForms,
       auth: {
@@ -355,7 +353,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
     options: {
       handler: NoticesSetupController.submitReturnsForPaperForms,
       auth: {
