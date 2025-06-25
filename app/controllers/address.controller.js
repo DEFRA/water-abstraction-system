@@ -11,7 +11,7 @@ const SubmitPostcodeService = require('../services/address/submit-postcode.servi
 const SubmitSelectAddressService = require('../services/address/submit-select.service.js')
 
 async function postcode(request, h) {
-  const { id: sessionId } = request.params
+  const { sessionId } = request.params
 
   const pageData = await PostcodeService.go(sessionId)
 
@@ -19,7 +19,7 @@ async function postcode(request, h) {
 }
 
 async function submitPostcode(request, h) {
-  const { id: sessionId } = request.params
+  const { sessionId } = request.params
 
   const pageData = await SubmitPostcodeService.go(sessionId, request.payload)
 
@@ -31,7 +31,7 @@ async function submitPostcode(request, h) {
 }
 
 async function select(request, h) {
-  const { id: sessionId } = request.params
+  const { sessionId } = request.params
 
   const pageData = await SelectAddressService.go(sessionId)
 
@@ -39,7 +39,7 @@ async function select(request, h) {
 }
 
 async function submitSelect(request, h) {
-  const { id: sessionId } = request.params
+  const { sessionId } = request.params
 
   const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
 

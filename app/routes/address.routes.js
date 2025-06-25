@@ -5,7 +5,7 @@ const AddressController = require('../controllers/address.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/address/{id}/postcode',
+    path: '/address/{sessionId}/postcode',
     options: {
       handler: AddressController.postcode,
       auth: {
@@ -17,7 +17,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/address/{id}/postcode',
+    path: '/address/{sessionId}/postcode',
     options: {
       handler: AddressController.submitPostcode,
       auth: {
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/address/{id}/select',
+    path: '/address/{sessionId}/select',
     options: {
       handler: AddressController.select,
       auth: {
@@ -41,7 +41,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/address/{id}/select',
+    path: '/address/{sessionId}/select',
     options: {
       handler: AddressController.submitSelect,
       auth: {
