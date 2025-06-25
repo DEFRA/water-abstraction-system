@@ -26,6 +26,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/address/{id}/select',
+    options: {
+      handler: AddressController.select,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/address/{id}/select',
+    options: {
+      handler: AddressController.submitSelect,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
