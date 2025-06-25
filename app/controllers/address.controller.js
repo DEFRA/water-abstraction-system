@@ -30,7 +30,7 @@ async function submitPostcode(request, h) {
   return h.redirect(`/system/address/${sessionId}/select`)
 }
 
-async function select(request, h) {
+async function viewSelect(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SelectAddressService.go(sessionId)
@@ -52,7 +52,7 @@ async function submitSelect(request, h) {
 
 module.exports = {
   postcode,
-  select,
+  viewSelect,
   submitPostcode,
   submitSelect
 }

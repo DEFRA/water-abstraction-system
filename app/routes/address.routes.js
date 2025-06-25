@@ -31,7 +31,7 @@ const routes = [
     method: 'GET',
     path: '/address/{sessionId}/select',
     options: {
-      handler: AddressController.select,
+      handler: AddressController.viewSelect,
       auth: {
         access: {
           scope: ['billing']
