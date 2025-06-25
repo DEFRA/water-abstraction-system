@@ -14,7 +14,7 @@ describe('Check Notice Type Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = { id: '123' }
   })
 
   describe('when called', () => {
@@ -22,6 +22,11 @@ describe('Check Notice Type Presenter', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
       expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/notice-type`,
+        continueButton: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Continue to check recipients'
+        },
         pageTitle: 'Check the notice type'
       })
     })
