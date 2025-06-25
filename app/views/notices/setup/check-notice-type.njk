@@ -13,11 +13,9 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <div class="govuk-body">
+      <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
+      {{ govukButton(continueButton) }}
   </div>
 {% endblock %}
