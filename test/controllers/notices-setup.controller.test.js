@@ -17,6 +17,7 @@ const AlertTypeService = require('../../app/services/notices/setup/abstraction-a
 const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
+const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
@@ -25,6 +26,7 @@ const LicenceService = require('../../app/services/notices/setup/licence.service
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
+const ReturnsForPaperFormsService = require('../../app/services/notices/setup/returns-for-paper-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -36,6 +38,7 @@ const SubmitCheckService = require('../../app/services/notices/setup/submit-chec
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
+const SubmitReturnsForPaperFormsService = require('../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
 // For running our service
@@ -175,6 +178,36 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/notices/setup/${eventId}/confirmation`)
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/check-notice-type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/check-notice-type`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(CheckNoticeTypeService, 'go').returns({
+            pageTitle: 'Check the notice type'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check the notice type')
         })
       })
     })
@@ -872,6 +905,72 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/notices/setup/send-notice')
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/returns-for-paper-forms', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/returns-for-paper-forms`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(ReturnsForPaperFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the returns for the paper forms')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(session)
+            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+              pageTile: 'Select the returns for the paper forms'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
           })
         })
       })
