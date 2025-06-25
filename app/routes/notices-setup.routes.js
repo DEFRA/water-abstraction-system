@@ -271,7 +271,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/preview/{contactHashId}',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
       handler: NoticesSetupController.preview,
       auth: {
