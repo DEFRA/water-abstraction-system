@@ -13,10 +13,11 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { label } = session
+  const { label, licenceRef } = session
 
   return {
     backLink: _backLink(session),
+    licenceRef,
     monitoringStationLabel: label,
     pageTitle: 'Enter the licence number this threshold applies to'
   }

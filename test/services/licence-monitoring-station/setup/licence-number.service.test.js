@@ -20,6 +20,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   beforeEach(async () => {
     sessionData = {
       label: 'MONITORING_STATION_LABEL',
+      licenceRef: 'LICENCE_REF',
       id: 'd9afac37-9754-4bfa-95f7-87ab26824423',
       checkPageVisited: false
     }
@@ -34,6 +35,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         backLink: '/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/stop-or-reduce',
+        licenceRef: 'LICENCE_REF',
         monitoringStationLabel: 'MONITORING_STATION_LABEL',
         pageTitle: 'Enter the licence number this threshold applies to'
       })
