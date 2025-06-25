@@ -639,7 +639,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
+          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/notice-type`)
         })
       })
 
@@ -751,7 +751,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
+          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
         })
       })
 

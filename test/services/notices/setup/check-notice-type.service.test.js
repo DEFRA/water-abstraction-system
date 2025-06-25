@@ -27,7 +27,14 @@ describe('Check Notice Type Service', () => {
     it('returns page data for the view', async () => {
       const result = await CheckNoticeTypeService.go(session.id)
 
-      expect(result).to.equal({ pageTitle: 'Check the notice type' })
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/notice-type`,
+        continueButton: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Continue to check recipients'
+        },
+        pageTitle: 'Check the notice type'
+      })
     })
   })
 })
