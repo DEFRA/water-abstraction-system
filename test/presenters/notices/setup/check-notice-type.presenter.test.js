@@ -7,14 +7,22 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
 // Thing under test
 const CheckNoticeTypePresenter = require('../../../../app/presenters/notices/setup/check-notice-type.presenter.js')
 
-describe('Check Notice Type Presenter', () => {
+describe('Notices - Setup - Check Notice Type Presenter', () => {
+  let licenceRef
+  let noticeType
   let session
 
   beforeEach(() => {
-    session = { id: '123' }
+    licenceRef = generateLicenceRef()
+    noticeType = 'invitations'
+
+    session = { id: '123', licenceRef, noticeType }
   })
 
   describe('when called', () => {
@@ -27,7 +35,83 @@ describe('Check Notice Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
         },
-        pageTitle: 'Check the notice type'
+        pageTitle: 'Check the notice type',
+        summaryList: [
+          {
+            key: {
+              text: 'Licence number'
+            },
+            value: {
+              text: licenceRef
+            }
+          },
+          {
+            key: {
+              text: 'Returns notice type'
+            },
+            value: {
+              text: 'Standard returns invitation'
+            }
+          }
+        ]
+      })
+    })
+
+    describe('and the notice type is "invitations"', () => {
+      beforeEach(() => {
+        session.noticeType = 'invitations'
+      })
+
+      it('returns the summary list', () => {
+        const result = CheckNoticeTypePresenter.go(session)
+
+        expect(result.summaryList).to.equal([
+          {
+            key: {
+              text: 'Licence number'
+            },
+            value: {
+              text: licenceRef
+            }
+          },
+          {
+            key: {
+              text: 'Returns notice type'
+            },
+            value: {
+              text: 'Standard returns invitation'
+            }
+          }
+        ])
+      })
+    })
+
+    describe('and the notice type is "paper-forms"', () => {
+      beforeEach(() => {
+        session.noticeType = 'paper-forms'
+      })
+
+      it('returns the summary list', () => {
+        const result = CheckNoticeTypePresenter.go(session)
+
+        expect(result.summaryList).to.equal([
+          {
+            key: {
+              text: 'Licence number'
+            },
+            value: {
+              text: licenceRef
+            }
+          },
+          {
+            key: {
+              text: 'Returns notice type'
+            },
+            value: {
+              text: 'Submit using a paper form invitation'
+            }
+          }
+        ])
       })
     })
   })
