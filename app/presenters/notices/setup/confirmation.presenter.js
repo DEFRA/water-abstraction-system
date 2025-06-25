@@ -44,8 +44,7 @@ function _pageTitle(subType) {
 
   const subTypes = {
     returnInvitation: 'invitations',
-    returnReminder: 'reminders',
-    adHocReminder: 'ad-hoc'
+    returnReminder: 'reminders'
   }
 
   return `Returns ${subTypes[subType]} sent`

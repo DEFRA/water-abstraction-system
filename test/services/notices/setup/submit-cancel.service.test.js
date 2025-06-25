@@ -19,7 +19,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'ADHC-1234', journey: 'ad-hoc' } })
+    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'RNIV-1234' } })
   })
 
   afterEach(() => {
@@ -33,6 +33,33 @@ describe('Notices - Setup - Submit Cancel service', () => {
       const noSession = await SessionModel.query().where('id', session.id)
 
       expect(noSession).to.equal([])
+    })
+
+    describe('when the journey is for a return', () => {
+      it('returns the redirect url', async () => {
+        const result = await SubmitCancelService.go(session.id)
+
+        expect(result).to.equal('/manage')
+      })
+    })
+
+    describe('when the journey is for "abstraction-alerts"', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          data: {
+            alertType: 'stop',
+            journey: 'abstraction-alert',
+            monitoringStationId: '123',
+            referenceCode: 'WAA-1234'
+          }
+        })
+      })
+
+      it('returns the redirect url', async () => {
+        const result = await SubmitCancelService.go(session.id)
+
+        expect(result).to.equal('/system/monitoring-stations/123')
+      })
     })
   })
 })

@@ -247,6 +247,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/notice-type',
+    options: {
+      handler: NoticesSetupController.viewNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/notice-type',
+    options: {
+      handler: NoticesSetupController.submitNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.viewReturnsPeriod,

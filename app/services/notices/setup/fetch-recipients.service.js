@@ -17,11 +17,10 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
- * We have two mechanisms for returning a recipient. One is for the 'ad-hoc' journey which is for an individual licence
- * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
- * returns period.
+ * We have two mechanisms for returning a recipient. One is for an individual licence, based on the 'licenceRef. And
+ * the other is for any journey that needs multiple recipients based on the selected returns period.
  *
- * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRef'.
+ * For the individual licence we determine the recipients from the returns logs based on the provided 'licenceRef'.
  *
  * We start by determining which licence we need to send notifications for, by
  * looking for return logs with a matching 'licenceRef' the user has entered.
@@ -105,7 +104,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
  * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
  *
- * For the 'ad-hoc' journey the end result is all the email, or letter contacts for that  licence with a 'due'
+ * For the individual licence the end result is all the email, or letter contacts for that  licence with a 'due'
  * return for any period.
  *
  * For the multiple recipient journeys the end result is all the email, or letter contacts for each licence with a 'due'
@@ -163,7 +162,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
-  if (session.journey === 'ad-hoc') {
+  if (session.licenceRef) {
     return _fetchRecipient(session)
   }
 

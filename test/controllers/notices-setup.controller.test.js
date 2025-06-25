@@ -22,10 +22,10 @@ const ConfirmationService = require('../../app/services/notices/setup/confirmati
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
+const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
-const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
@@ -33,6 +33,8 @@ const SubmitCancelAlertsService = require('../../app/services/notices/setup/abst
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
+const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
+const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
@@ -663,7 +665,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns()
+          Sinon.stub(SubmitCancelService, 'go').returns('/manage')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
         })
 
@@ -672,6 +674,70 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal('/manage')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/notice-type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/notice-type`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(NoticeTypeService, 'go').resolves({
+          pageTitle: 'Select the notice type'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the notice type')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' })
+
+          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({})
+        })
+
+        it('returns the same page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: '' })
+
+          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({
+            error: { text: 'Select the notice type' },
+            pageTitle: 'Select the notice type'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the notice type')
+          expect(response.payload).to.contain('There is a problem')
         })
       })
     })

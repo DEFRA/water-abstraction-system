@@ -2,7 +2,7 @@
 
 /**
  * Deletes expired temporary sessions where the `created_at` date is more than 1 day ago
- * @module CleanNotSubmittedVoidReturnsService
+ * @module CleanExpiredSessionsService
  */
 
 const SessionModel = require('../../../models/session.model.js')
@@ -13,10 +13,18 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<number>} The number of rows deleted
  */
 async function go() {
-  const maxAgeInDays = 1
-  const maxSessionAge = new Date(new Date().setDate(new Date().getDate() - maxAgeInDays)).toISOString()
+  let deletedCount = 0
 
-  return SessionModel.query().delete().where('created_at', '<', maxSessionAge)
+  try {
+    const maxAgeInDays = 1
+    const maxSessionAge = new Date(new Date().setDate(new Date().getDate() - maxAgeInDays)).toISOString()
+
+    deletedCount = await SessionModel.query().delete().where('created_at', '<', maxSessionAge)
+  } catch (error) {
+    global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-expired-sessions' }, error)
+  }
+
+  return deletedCount
 }
 
 module.exports = {
