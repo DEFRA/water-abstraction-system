@@ -744,7 +744,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' })
 
-          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({})
+          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({ redirectUrl: 'check-notice-type' })
         })
 
         it('returns the same page', async () => {
