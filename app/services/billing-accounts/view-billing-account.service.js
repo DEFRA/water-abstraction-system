@@ -7,7 +7,7 @@
 
 const FetchViewBillingAccountService = require('../billing-accounts/fetch-view-billing-account.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewBillingAccountPresenter = require('../../presenters/billing-account/view-billing-account.presenter.js')
+const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/view-billing-account.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the view billing account page

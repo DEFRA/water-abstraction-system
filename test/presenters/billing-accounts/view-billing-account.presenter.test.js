@@ -11,7 +11,7 @@ const { expect } = Code
 const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
-const ViewBillingAccountPresenter = require('../../../app/presenters/billing-account/view-billing-account.presenter.js')
+const ViewBillingAccountPresenter = require('../../../app/presenters/billing-accounts/view-billing-account.presenter.js')
 
 describe('View Billing Account presenter', () => {
   let billingAccountData
