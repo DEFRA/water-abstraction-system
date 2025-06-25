@@ -235,6 +235,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + `/{sessionId}/check-notice-type`,
+    options: {
+      handler: NoticesSetupController.viewCheckNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
@@ -271,18 +283,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/returns-period',
-    options: {
-      handler: NoticesSetupController.viewReturnsPeriod,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: basePath + '/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,
@@ -306,10 +306,46 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + '/{sessionId}/returns-period',
+    options: {
+      handler: NoticesSetupController.viewReturnsPeriod,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.submitReturnsPeriod,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    options: {
+      handler: NoticesSetupController.viewReturnsForPaperForms,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    options: {
+      handler: NoticesSetupController.submitReturnsForPaperForms,
       auth: {
         access: {
           scope: ['returns']
