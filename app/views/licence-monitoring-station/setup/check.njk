@@ -1,25 +1,86 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
+  {# Main heading #}
+  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </span>
+
+  {# Summary list #}
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Threshold" },
+          value: { text: threshold },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "threshold"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Type" },
+          value: { text: type },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "type"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Licence number" },
+          value: { text: licenceNumber },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "licence number"
+              }
+            ]
+          }
+        } if nilReturn === "No",
+        {
+          key: { text: "Licence condition" },
+          value: { text: licenceCondition },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "licence condition"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Abstraction period" },
+          value: { text: abstractionPeriod },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "abstraction period"
+              }
+            ]
+          }
+        } if licenceCondition === "None"
+      ]
     }) }}
-  {%endif%}
+  </div>
 
   <div>
     <form method="post">
