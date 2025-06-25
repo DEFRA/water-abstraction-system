@@ -29,7 +29,7 @@ async function view(request, h) {
   const { id } = request.params
   const { 'charge-version-id': chargeVersionId, 'licence-id': licenceId, page = 1 } = request.query
 
-  const pageData = await ViewBillingAccountService.go(id, licenceId, page, chargeVersionId)
+  const pageData = await ViewBillingAccountService.go(id, page, licenceId, chargeVersionId)
 
   return h.view('billing-accounts/view.njk', pageData)
 }

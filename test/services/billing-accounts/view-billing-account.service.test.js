@@ -26,8 +26,8 @@ describe('View Billing Account service', () => {
     it('correctly presents the data', async () => {
       const result = await ViewBillingAccountService.go(
         '64d7fc10-f046-4444-ba32-bb917dd8cde6',
-        '53325713-1364-4f6b-a244-8771a36a1248',
         1,
+        '53325713-1364-4f6b-a244-8771a36a1248',
         '6e2cbd57-81d6-4653-a063-c93bae4fe6ee'
       )
 
