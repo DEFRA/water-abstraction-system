@@ -11,6 +11,7 @@
  * @module RouterPlugin
  */
 
+const AddressRoutes = require('../routes/address.routes.js')
 const AssetRoutes = require('../routes/assets.routes.js')
 const BillLicences = require('../routes/bill-licences.routes.js')
 const BillRoutes = require('../routes/bills.routes.js')
@@ -42,6 +43,7 @@ const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const routes = [
   ...RootRoutes,
+  ...AddressRoutes,
   ...AssetRoutes,
   ...HealthRoutes,
   ...BillLicences,

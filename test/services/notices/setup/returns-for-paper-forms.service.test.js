@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckNoticeTypeService = require('../../../../app/services/notices/setup/check-notice-type.service.js')
+const ReturnsForPaperFormsService = require('../../../../app/services/notices/setup/returns-for-paper-forms.service.js')
 
-describe('Check Notice Type Service', () => {
+describe('Returns For Paper Forms Service', () => {
   let session
   let sessionData
 
@@ -25,16 +25,9 @@ describe('Check Notice Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckNoticeTypeService.go(session.id)
+      const result = await ReturnsForPaperFormsService.go(session.id)
 
-      expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/notice-type`,
-        continueButton: {
-          href: `/system/notices/setup/${session.id}/check`,
-          text: 'Continue to check recipients'
-        },
-        pageTitle: 'Check the notice type'
-      })
+      expect(result).to.equal({ pageTile: 'Select the returns for the paper forms' })
     })
   })
 })
