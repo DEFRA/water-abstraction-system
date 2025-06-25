@@ -23,7 +23,10 @@ describe('Submit Full Condition Service', () => {
   let payload
   let session
 
-  const pageData = { pageData: 'PAGE_DATA' }
+  const pageData = {
+    activeNavBar: 'search',
+    pageData: 'PAGE_DATA'
+  }
 
   beforeEach(async () => {
     session = await SessionHelper.add()
