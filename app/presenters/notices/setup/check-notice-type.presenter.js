@@ -24,7 +24,7 @@ function go(session) {
     backLink: `/system/notices/setup/${sessionId}/notice-type`,
     continueButton: _continueButton(sessionId),
     pageTitle: 'Check the notice type',
-    summaryList: _summaryList(licenceRef, noticeType)
+    summaryList: _summaryList(licenceRef, noticeType, sessionId)
   }
 }
 
@@ -32,7 +32,7 @@ function _continueButton(sessionId) {
   return { text: 'Continue to check recipients', href: `/system/notices/setup/${sessionId}/check` }
 }
 
-function _summaryList(licenceRef, noticeType) {
+function _summaryList(licenceRef, noticeType, sessionId) {
   return [
     {
       key: {
@@ -40,6 +40,15 @@ function _summaryList(licenceRef, noticeType) {
       },
       value: {
         text: licenceRef
+      },
+      actions: {
+        items: [
+          {
+            href: `/system/notices/setup/${sessionId}/licence`,
+            text: 'Change',
+            visuallyHiddenText: 'licence number'
+          }
+        ]
       }
     },
     {
@@ -48,6 +57,15 @@ function _summaryList(licenceRef, noticeType) {
       },
       value: {
         text: NOTICE_TYPE_TEXT[noticeType]
+      },
+      actions: {
+        items: [
+          {
+            href: `/system/notices/setup/${sessionId}/notice-type`,
+            text: 'Change',
+            visuallyHiddenText: 'notice type'
+          }
+        ]
       }
     }
   ]
