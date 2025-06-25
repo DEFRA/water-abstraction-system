@@ -30,7 +30,6 @@ async function go(sessionId, payload) {
     return {
       activeNavBar: 'manage',
       error: validationResult,
-      pageTitle: 'Select the returns periods for the invitations',
       ...formattedData
     }
   }

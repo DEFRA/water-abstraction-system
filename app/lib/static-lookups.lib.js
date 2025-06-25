@@ -123,6 +123,24 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
+/**
+ * Conversion multipliers to normalise flow units to litres per day (L/d) and level units to metres (m)
+ */
+const unitConversion = {
+  'Ml/d': 1_000_000,
+  'm3/d': 1_000,
+  'm3/s': 86_400_000,
+  'l/s': 86_400,
+  gpd: 3.78541,
+  Mgpd: 3_785_410,
+  'ft3/s': 28_316.8466 * 86400,
+  m: 1,
+  mAOD: 1,
+  mASD: 1,
+  mBOD: 1,
+  SLD: 1
+}
+
 const unitNames = {
   CUBIC_METRES: 'm³',
   LITRES: 'l',
@@ -140,18 +158,18 @@ const returnUnits = {
 const sources = ['nald', 'wrls']
 
 const thresholdUnits = {
-  MEGALITRES_PER_DAY: 'Ml/d',
-  CUBIC_METRES_PER_SECOND: 'm3/s',
-  CUBIC_METRES_PER_DAY: 'm3/d',
-  LITRES_PER_SECOND: 'l/s',
-  METRES_ABOVE_ORDNANCE_DATUM: 'mAOD',
-  METRES_BELOW_ORDNANCE_DATUM: 'mBOD',
-  METRES_ABOVE_SEA_DATUM: 'mASD',
-  METRES: 'm',
-  SOUTH_LEVEL_DATUM: 'SLD',
-  CUBIC_FOOT_PER_SECOND: 'ft3/s',
-  GALLONS_PER_DAY: 'gpd',
-  MILLION_GALLONS_PER_DAY: 'Mgpd'
+  MEGALITRES_PER_DAY: { value: 'Ml/d', label: 'megalitres per day' },
+  CUBIC_METRES_PER_SECOND: { value: 'm3/s', label: 'cubic metres per second' },
+  CUBIC_METRES_PER_DAY: { value: 'm3/d', label: 'cubic metres per day' },
+  LITRES_PER_SECOND: { value: 'l/s', label: 'litres per second' },
+  METRES_ABOVE_ORDNANCE_DATUM: { value: 'mAOD', label: 'metres above ordnance datum' },
+  METRES_BELOW_ORDNANCE_DATUM: { value: 'mBOD', label: 'metres below ordnance datum' },
+  METRES_ABOVE_SEA_DATUM: { value: 'mASD', label: 'metres above sea datum' },
+  METRES: { value: 'm', label: 'metres' },
+  SOUTH_LEVEL_DATUM: { value: 'SLD', label: 'south level datum' },
+  CUBIC_FOOT_PER_SECOND: { value: 'ft3/s', label: 'cubic foot per second' },
+  GALLONS_PER_DAY: { value: 'gpd', label: 'gallons per day' },
+  MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day' }
 }
 
 const twoPartTariffReviewIssues = {
@@ -185,5 +203,6 @@ module.exports = {
   thresholdUnits,
   twoPartTariffReviewIssues,
   quarterlyReturnPeriods,
+  unitConversion,
   unitNames
 }

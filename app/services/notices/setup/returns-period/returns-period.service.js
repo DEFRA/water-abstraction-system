@@ -11,7 +11,7 @@ const SessionModel = require('../../../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup returns period page
  *
- * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {string} sessionId - The UUID for setup returns notification session record
  *
  * @returns {object} The view data for the returns period page
  */
@@ -22,7 +22,6 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'manage',
-    pageTitle: 'Select the returns periods for the invitations',
     ...formattedData
   }
 }

@@ -8,55 +8,84 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
 
 // Thing under test
 const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
 
-describe('Download Return Log presenter', () => {
-  let testReturnLog
-
-  before(() => {
-    testReturnLog = ReturnLogsFixture.returnLog('abstractionVolumes')
-  })
+describe('Return Logs - Download Return Log presenter', () => {
+  let returnLog
 
   describe('the "data" property', () => {
-    describe('when provided with a returnLog with a returnSubmission.method of "abstractionVolumes"', () => {
-      it('correctly formats the data into a CSV string where the "reading" column is empty, with the first row as headers and the subsequent rows containing values corresponding to each column', () => {
-        const result = DownloadReturnLogPresenter.go(testReturnLog)
+    describe('when provided with a returnLog submitted using "abstraction volumes"', () => {
+      before(() => {
+        returnLog = ReturnLogsFixture.returnLog('month')
+        returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
+      })
+
+      it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
+        const result = DownloadReturnLogPresenter.go(returnLog)
 
         const rows = result.data.split('\n')
 
         expect(rows[0]).to.equal('start date,reading,volume')
-        expect(rows[1]).to.equal('2022-11-01,,123')
-        expect(rows[2]).to.equal('2022-12-01,,456')
-        expect(rows[3]).to.equal('2023-01-01,,789')
+
+        // Drop the first header row
+        rows.shift()
+        // Drop the last blank line row
+        rows.pop()
+
+        for (let i = 0; i < rows.length - 1; i++) {
+          const { quantity, startDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
+
+          expect(rows[i]).to.equal(`${formatDateObjectToISO(startDate)},,${quantity}`)
+        }
       })
     })
 
-    describe('when provided with a returnLog with a returnSubmission.method of other than "abstractionVolumes"', () => {
+    describe('when provided with a returnLog submitted using "readings"', () => {
       before(() => {
-        testReturnLog = ReturnLogsFixture.returnLog('NOT_ABSTRACTION_VOLUMES')
+        returnLog = ReturnLogsFixture.returnLog('month')
+        returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'measured')]
       })
 
-      it('correctly formats the data into a CSV string, with the first row as headers and the subsequent rows containing values corresponding to each column', () => {
-        const result = DownloadReturnLogPresenter.go(testReturnLog)
+      it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
+        const result = DownloadReturnLogPresenter.go(returnLog)
 
         const rows = result.data.split('\n')
 
         expect(rows[0]).to.equal('start date,reading,volume')
-        expect(rows[1]).to.equal('2022-11-01,321,123')
-        expect(rows[2]).to.equal('2022-12-01,654,456')
-        expect(rows[3]).to.equal('2023-01-01,987,789')
+
+        // Drop the first header row
+        rows.shift()
+        // Drop the last blank line row
+        rows.pop()
+
+        for (let i = 0; i < rows.length - 1; i++) {
+          const { quantity, reading, startDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
+
+          expect(rows[i]).to.equal(`${formatDateObjectToISO(startDate)},${reading},${quantity}`)
+        }
       })
     })
   })
 
   describe('the "filename" property', () => {
-    it('returns the formatted name for the csv file in the following format: returnReference_startDate_endDate_version', () => {
-      const result = DownloadReturnLogPresenter.go(testReturnLog)
+    before(() => {
+      returnLog = ReturnLogsFixture.returnLog('month')
+      returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
+    })
 
-      expect(result.filename).to.equal('10055412_2022-11-01_2023-10-31_v2.csv')
+    it('returns the name in the format: returnReference_startDate_endDate_version', () => {
+      const result = DownloadReturnLogPresenter.go(returnLog)
+
+      const { endDate, returnReference, returnSubmissions, startDate } = returnLog
+      const { version } = returnSubmissions[0]
+
+      expect(result.filename).to.equal(
+        `${returnReference}_${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}_v${version}.csv`
+      )
     })
   })
 })

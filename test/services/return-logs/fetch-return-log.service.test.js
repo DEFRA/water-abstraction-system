@@ -20,7 +20,7 @@ const ReturnSubmissionLineHelper = require('../../support/helpers/return-submiss
 // Thing under test
 const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
 
-describe('Fetch Return Log service', () => {
+describe('Return Logs - Fetch Return Log service', () => {
   let testLicence
   let testReturnLog
   let testSubmissions = []

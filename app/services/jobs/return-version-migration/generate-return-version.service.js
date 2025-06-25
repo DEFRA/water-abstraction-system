@@ -19,19 +19,17 @@ const CHANGE_NOTE = 'Changed due to water company licences moving to quarterly r
  *
  * @param {object} existingReturnVersion - The existing return version to create a quarterly version from
  * @param {object} user - The user to be assigned recorded as the 'created by'
- * @param {number} naldRegionId - Needed when generating the 'reference' for the new return requirements
  *
  * @returns The new quarterly return version, and its dependents (requirements, requirement points, and requirement
  * purposes)
  */
-async function go(existingReturnVersion, user, naldRegionId) {
+async function go(existingReturnVersion, user) {
   const nextVersionNumber = await _nextVersionNumber(existingReturnVersion.licenceId)
 
   const quarterlyReturnVersion = _quarterlyReturnVersion(existingReturnVersion, user, nextVersionNumber)
   const returnRequirementsData = await GenerateReturnRequirementsData.go(
     existingReturnVersion.returnRequirements,
-    quarterlyReturnVersion,
-    naldRegionId
+    quarterlyReturnVersion
   )
 
   quarterlyReturnVersion.returnRequirements = returnRequirementsData.returnRequirements

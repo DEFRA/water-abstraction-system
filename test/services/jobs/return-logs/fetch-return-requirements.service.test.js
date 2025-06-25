@@ -100,9 +100,11 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             describe("but the return log's status is 'void'", () => {
               before(async () => {
                 await ReturnLogHelper.add({
-                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  metadata: {
+                    nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
+                  },
                   returnCycleId: returnCycle.id,
-                  returnReference: returnRequirement.legacyId,
+                  returnReference: returnRequirement.reference,
                   status: 'void'
                 })
               })
@@ -119,9 +121,11 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             describe("and the return log's status is anything other than 'void'", () => {
               before(async () => {
                 await ReturnLogHelper.add({
-                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  metadata: {
+                    nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
+                  },
                   returnCycleId: returnCycle.id,
-                  returnReference: returnRequirement.legacyId,
+                  returnReference: returnRequirement.reference,
                   status: 'due'
                 })
               })
@@ -329,9 +333,11 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             describe("but the return log's status is 'void'", () => {
               before(async () => {
                 await ReturnLogHelper.add({
-                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  metadata: {
+                    nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
+                  },
                   returnCycleId: returnCycle.id,
-                  returnReference: returnRequirement.legacyId,
+                  returnReference: returnRequirement.reference,
                   status: 'void'
                 })
               })
@@ -348,9 +354,11 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             describe("and the return log's status is anything other than 'void'", () => {
               before(async () => {
                 await ReturnLogHelper.add({
-                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  metadata: {
+                    nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
+                  },
                   returnCycleId: returnCycle.id,
-                  returnReference: returnRequirement.legacyId,
+                  returnReference: returnRequirement.reference,
                   status: 'completed'
                 })
               })
@@ -508,7 +516,7 @@ function _expectedResult() {
     abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
     externalId: returnRequirement.externalId,
     id: returnRequirement.id,
-    legacyId: returnRequirement.legacyId,
+    reference: returnRequirement.reference,
     reportingFrequency: returnRequirement.reportingFrequency,
     returnVersionId: returnRequirement.returnVersionId,
     siteDescription: returnRequirement.siteDescription,

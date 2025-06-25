@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
-  const points = await FetchPointsService.go(session.licence.id)
+  const points = await FetchPointsService.go(session.licenceVersion.id)
 
   const formattedData = PointsPresenter.go(session, requirementIndex, points)
 

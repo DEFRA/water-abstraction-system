@@ -116,7 +116,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         ]
       })
 
-      it('returns the licence monitoring stations, with "stop_or_reduce" but without the reduce type)', () => {
+      it('returns the licence monitoring stations, without the "stop_or_reduce" licence monitoring station', () => {
         const result = DetermineRelevantLicenceMonitoringStationsService.go(
           licenceMonitoringStations,
           selectedLicenceMonitoringStations,
@@ -124,7 +124,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStationTwo, licenceMonitoringStationThree])
+        expect(result).to.equal([licenceMonitoringStationTwo])
       })
     })
   })

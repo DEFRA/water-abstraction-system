@@ -285,7 +285,7 @@ function _expectedResult(
     abstractionPeriodStartMonth: _returnRequirement.abstractionPeriodStartMonth,
     externalId: _returnRequirement.externalId,
     id: _returnRequirement.id,
-    legacyId: _returnRequirement.legacyId,
+    reference: _returnRequirement.reference,
     reportingFrequency: _returnRequirement.reportingFrequency,
     returnVersionId: _returnRequirement.returnVersionId,
     siteDescription: _returnRequirement.siteDescription,

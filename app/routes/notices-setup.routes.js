@@ -163,7 +163,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.viewLicence,
       auth: {
@@ -175,7 +175,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
+    path: basePath + '/{sessionId}/licence',
     options: {
       handler: NoticesSetupController.submitLicence,
       auth: {
@@ -235,6 +235,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + `/{sessionId}/check-notice-type`,
+    options: {
+      handler: NoticesSetupController.viewCheckNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
@@ -247,9 +259,21 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/returns-period',
+    path: basePath + '/{sessionId}/notice-type',
     options: {
-      handler: NoticesSetupController.viewReturnsPeriod,
+      handler: NoticesSetupController.viewNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/notice-type',
+    options: {
+      handler: NoticesSetupController.submitNoticeType,
       auth: {
         access: {
           scope: ['returns']
@@ -282,10 +306,46 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + '/{sessionId}/returns-period',
+    options: {
+      handler: NoticesSetupController.viewReturnsPeriod,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NoticesSetupController.submitReturnsPeriod,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    options: {
+      handler: NoticesSetupController.viewReturnsForPaperForms,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/returns-for-paper-forms',
+    options: {
+      handler: NoticesSetupController.submitReturnsForPaperForms,
       auth: {
         access: {
           scope: ['returns']

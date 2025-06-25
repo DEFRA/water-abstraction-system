@@ -86,7 +86,7 @@ describe('Notices - Setup - Check service', () => {
         activeNavBar: 'manage',
         defaultPageSize: 25,
         links: {
-          back: `/system/monitoring-stations/${session.data.monitoringStationId}`,
+          back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
           removeLicences: ``

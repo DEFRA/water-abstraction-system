@@ -55,10 +55,8 @@ describe('Return Versions Setup - Persist Return Version service', () => {
       expect(returnRequirement[0].abstractionPeriodEndDay).to.equal(31)
       expect(returnRequirement[0].abstractionPeriodEndMonth).to.equal(3)
       expect(returnRequirement[0].collectionFrequency).to.equal(requirementData.collectionFrequency)
-      expect(returnRequirement[0].externalId).to.equal(requirementData.externalId)
       expect(returnRequirement[0].fiftySixException).to.equal(requirementData.fiftySixException)
       expect(returnRequirement[0].gravityFill).to.equal(requirementData.gravityFill)
-      expect(returnRequirement[0].legacyId).to.equal(requirementData.legacyId)
       expect(returnRequirement[0].reabstraction).to.equal(requirementData.reabstraction)
       expect(returnRequirement[0].reportingFrequency).to.equal(requirementData.reportingFrequency)
       expect(returnRequirement[0].returnsFrequency).to.equal(requirementData.returnsFrequency)
@@ -100,10 +98,8 @@ function _generateReturnVersionData() {
         abstractionPeriodEndDay: '31',
         abstractionPeriodEndMonth: '3',
         collectionFrequency: 'week',
-        externalId: '5:10063928',
         fiftySixException: false,
         gravityFill: false,
-        legacyId: 10063928,
         reabstraction: false,
         reportingFrequency: 'month',
         returnsFrequency: 'year',

@@ -45,7 +45,7 @@ function go(chargeVersions, workflows, agreements, returnVersions, auth, commonD
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
-      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns),
+      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns, auth),
       recalculateBills: _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary)
     },
     agreements: _agreements(commonData, agreements, auth, enableTwoPartSupplementary),
@@ -234,8 +234,8 @@ function _returnVersions(returnVersions = [{}]) {
   })
 }
 
-function _returnVersionsLinks(commonData, enableRequirementsForReturns) {
-  if (enableRequirementsForReturns) {
+function _returnVersionsLinks(commonData, enableRequirementsForReturns, auth) {
+  if (auth.credentials.scope.includes(ROLES.billing) && enableRequirementsForReturns) {
     return {
       returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
       noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`

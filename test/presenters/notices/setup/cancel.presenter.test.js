@@ -14,7 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const CancelPresenter = require('../../../../app/presenters/notices/setup/cancel.presenter.js')
 
 describe('Notices - Setup - Cancel presenter', () => {
-  const referenceCode = 'ADHC-1234'
+  const referenceCode = 'RNIV-1234'
 
   let licenceRef
   let session
@@ -23,7 +23,6 @@ describe('Notices - Setup - Cancel presenter', () => {
     licenceRef = generateLicenceRef()
 
     session = {
-      journey: 'ad-hoc',
       licenceRef,
       referenceCode
     }
@@ -35,7 +34,7 @@ describe('Notices - Setup - Cancel presenter', () => {
     expect(result).to.equal({
       backLink: `/system/notices/setup/${session.id}/check`,
       pageTitle: 'You are about to cancel this notice',
-      referenceCode: 'ADHC-1234',
+      referenceCode: 'RNIV-1234',
       summaryList: {
         text: 'Licence number',
         value: licenceRef
@@ -43,7 +42,7 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
   })
 
-  describe('when the journey is "ad-hoc"', () => {
+  describe('when a licence ref has been chosen', () => {
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 
@@ -54,15 +53,38 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
   })
 
+  describe('when the journey is "abstraction-alerts"', () => {
+    beforeEach(() => {
+      session = {
+        alertType: 'stop',
+        journey: 'abstraction-alert',
+        monitoringStationId: '123',
+        referenceCode: 'WAA-1234'
+      }
+    })
+
+    it('correctly formats the summary list', () => {
+      const result = CancelPresenter.go(session)
+
+      expect(result.summaryList).to.equal({
+        text: 'Alert type',
+        value: 'Stop'
+      })
+    })
+  })
+
   describe('and the journey is "invitations"', () => {
     beforeEach(() => {
-      session.journey = 'invitations'
-      session.determinedReturnsPeriod = {
-        name: 'quarterOne',
-        dueDate: '2025-07-28',
-        endDate: '2025-06-30',
-        summer: 'false',
-        startDate: '2025-04-01'
+      session = {
+        determinedReturnsPeriod: {
+          name: 'quarterOne',
+          dueDate: '2025-07-28',
+          endDate: '2025-06-30',
+          summer: 'false',
+          startDate: '2025-04-01'
+        },
+        journey: 'invitations',
+        referenceCode
       }
     })
 
@@ -78,13 +100,16 @@ describe('Notices - Setup - Cancel presenter', () => {
 
   describe('and the journey is "reminders"', () => {
     beforeEach(() => {
-      session.journey = 'reminders'
-      session.determinedReturnsPeriod = {
-        name: 'quarterOne',
-        dueDate: '2025-07-28',
-        endDate: '2025-06-30',
-        summer: 'false',
-        startDate: '2025-04-01'
+      session = {
+        determinedReturnsPeriod: {
+          name: 'quarterOne',
+          dueDate: '2025-07-28',
+          endDate: '2025-06-30',
+          summer: 'false',
+          startDate: '2025-04-01'
+        },
+        journey: 'reminders',
+        referenceCode
       }
     })
 
@@ -101,13 +126,16 @@ describe('Notices - Setup - Cancel presenter', () => {
   describe('when the journey has a "returnsPeriod"', () => {
     describe('and the "returnsPeriod" is for a "quarter"', () => {
       beforeEach(() => {
-        session.journey = 'invitations'
-        session.determinedReturnsPeriod = {
-          name: 'quarterOne',
-          dueDate: '2025-07-28',
-          endDate: '2025-06-30',
-          summer: 'false',
-          startDate: '2025-04-01'
+        session = {
+          determinedReturnsPeriod: {
+            name: 'quarterOne',
+            dueDate: '2025-07-28',
+            endDate: '2025-06-30',
+            summer: 'false',
+            startDate: '2025-04-01'
+          },
+          journey: 'invitations',
+          referenceCode
         }
       })
 
@@ -123,13 +151,16 @@ describe('Notices - Setup - Cancel presenter', () => {
 
     describe('and the "returnsPeriod" is "summer"', () => {
       beforeEach(() => {
-        session.journey = 'invitations'
-        session.determinedReturnsPeriod = {
-          name: 'summer',
-          dueDate: '2025-11-28',
-          endDate: '2025-10-31',
-          summer: true,
-          startDate: '2024-11-01'
+        session = {
+          determinedReturnsPeriod: {
+            name: 'summer',
+            dueDate: '2025-11-28',
+            endDate: '2025-10-31',
+            summer: true,
+            startDate: '2024-11-01'
+          },
+          journey: 'invitations',
+          referenceCode
         }
       })
 
@@ -145,13 +176,16 @@ describe('Notices - Setup - Cancel presenter', () => {
 
     describe('and the "returnsPeriod" is "allYear"', () => {
       beforeEach(() => {
-        session.journey = 'invitations'
-        session.determinedReturnsPeriod = {
-          name: 'allYear',
-          dueDate: '2025-04-28',
-          endDate: '2025-03-31',
-          summer: true,
-          startDate: '2024-04-01'
+        session = {
+          determinedReturnsPeriod: {
+            name: 'allYear',
+            dueDate: '2025-04-28',
+            endDate: '2025-03-31',
+            summer: true,
+            startDate: '2024-04-01'
+          },
+          journey: 'invitations',
+          referenceCode
         }
       })
 

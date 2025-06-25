@@ -187,13 +187,12 @@ describe('Notices - Setup - Create Notice presenter', () => {
       testRecipients = [...Object.values(recipients)]
 
       session = {
-        returnsPeriod: 'quarterFour',
-        removeLicences: [],
+        alertType: 'stop',
         journey: 'abstraction-alert',
-        referenceCode: 'WAA-123',
-        subType: 'waterAbstractionAlerts',
+        monitoringStationId: '123',
         name: 'Water abstraction alert',
-        alertType: 'stop'
+        referenceCode: 'WAA-123',
+        subType: 'waterAbstractionAlerts'
       }
     })
 
@@ -202,9 +201,13 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
       expect(result).to.equal({
         issuer: 'hello@world.com',
+        licences:
+          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
+          `"${recipients.primaryUser.licence_refs}"]`,
         metadata: {
           name: 'Water abstraction alert',
           options: {
+            monitoringStationId: '123',
             sendingAlertType: 'stop'
           },
           recipients: 3
@@ -212,6 +215,17 @@ describe('Notices - Setup - Create Notice presenter', () => {
         referenceCode: 'WAA-123',
         status: 'completed',
         subtype: 'waterAbstractionAlerts'
+      })
+    })
+
+    describe('the "licences" property', () => {
+      it('correctly return a JSON string containing an array of all licences from all recipients', () => {
+        const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+        expect(result.licences).to.equal(
+          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
+            `"${recipients.primaryUser.licence_refs}"]`
+        )
       })
     })
 
@@ -233,6 +247,24 @@ describe('Notices - Setup - Create Notice presenter', () => {
           const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
           expect(result.metadata.recipients).to.equal(3)
+        })
+      })
+
+      describe('the "options" property', () => {
+        describe('the "sendingAlertType" property', () => {
+          it('return the sessions value', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.options.sendingAlertType).to.equal('stop')
+          })
+        })
+
+        describe('the "monitoringStationId" property', () => {
+          it('correctly returns the length of recipients', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.options.monitoringStationId).to.equal('123')
+          })
         })
       })
     })

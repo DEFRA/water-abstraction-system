@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
+const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -57,31 +58,11 @@ function go(licence) {
 }
 
 function _abstractionAmounts(licenceVersionPurposes) {
-  const details = []
-
   if (!licenceVersionPurposes || licenceVersionPurposes.length > 1) {
-    return details
+    return []
   }
 
-  const { annualQuantity, dailyQuantity, hourlyQuantity, instantQuantity } = licenceVersionPurposes[0]
-
-  if (annualQuantity) {
-    details.push(`${parseFloat(annualQuantity).toFixed(2)} cubic metres per year`)
-  }
-
-  if (dailyQuantity) {
-    details.push(`${parseFloat(dailyQuantity).toFixed(2)} cubic metres per day`)
-  }
-
-  if (hourlyQuantity) {
-    details.push(`${parseFloat(hourlyQuantity).toFixed(2)} cubic metres per hour`)
-  }
-
-  if (instantQuantity) {
-    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per second`)
-  }
-
-  return details
+  return formatAbstractionAmounts(licenceVersionPurposes[0])
 }
 
 function _abstractionConditions(licenceVersionPurposes) {

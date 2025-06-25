@@ -13,15 +13,20 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(event) {
-  const { referenceCode, subtype, id: eventId } = event
-
-  const type = _type(subtype)
+  const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
     forwardLink: `/notifications/report/${eventId}`,
-    pageTitle: `Returns ${type} sent`,
+    monitoringStationLink: _monitoringStationLink(metadata),
+    pageTitle: _pageTitle(subtype),
     referenceCode
   }
+}
+
+function _monitoringStationLink(metadata) {
+  return metadata.options?.monitoringStationId
+    ? `/system/monitoring-stations/${metadata.options?.monitoringStationId}`
+    : null
 }
 
 /**
@@ -32,14 +37,17 @@ function go(event) {
  *
  * @private
  */
-function _type(subType) {
-  const subTypes = {
-    returnInvitation: 'invitations',
-    returnReminder: 'reminders',
-    adHocReminder: 'ad-hoc'
+function _pageTitle(subType) {
+  if (subType === 'waterAbstractionAlerts') {
+    return 'Water abstraction alerts sent'
   }
 
-  return subTypes[subType]
+  const subTypes = {
+    returnInvitation: 'invitations',
+    returnReminder: 'reminders'
+  }
+
+  return `Returns ${subTypes[subType]} sent`
 }
 
 module.exports = {

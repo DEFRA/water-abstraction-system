@@ -9,13 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const {
-  returnCycle,
-  returnCycles,
-  returnRequirement,
-  returnRequirements,
-  returnRequirementsAcrossReturnVersions
-} = require('../../fixtures/return-logs.fixture.js')
+const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
+const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
 
 // Things we need to stub
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
@@ -45,7 +40,7 @@ describe('Process licence return logs service', () => {
     createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go')
     voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
 
-    returnCycleModelStub = Sinon.stub().resolves(returnCycles())
+    returnCycleModelStub = Sinon.stub().resolves(ReturnCyclesFixture.returnCycles())
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
@@ -61,12 +56,12 @@ describe('Process licence return logs service', () => {
   describe('when called with a known licence ID', () => {
     describe('and the licence has both "summer" and "all-year" return requirements', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(returnRequirements())
+        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirements())
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(returnCycles())
+          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
 
           createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
           createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-03-31'])
@@ -82,7 +77,7 @@ describe('Process licence return logs service', () => {
 
       describe('but the change date means only a single return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([returnCycle(true)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(true)])
 
           createReturnLogsStub.resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
         })
@@ -107,14 +102,14 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements but also a revoked date', () => {
       beforeEach(() => {
-        const _returnRequirement = returnRequirement()
+        const _returnRequirement = ReturnRequirementsFixture.returnRequirement()
         _returnRequirement.returnVersion.licence.revokedDate = new Date('2024-12-31')
         fetchReturnRequirementsStub.resolves([_returnRequirement])
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(returnCycles(4))
+          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles(4))
 
           createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
           createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-03-31'])
@@ -131,12 +126,12 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(returnRequirementsAcrossReturnVersions())
+        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions())
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(returnCycles())
+          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
 
           createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
           createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-05-26'])
@@ -156,12 +151,12 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(returnRequirementsAcrossReturnVersions())
+        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions())
       })
 
       describe('and the change date replaces the earliest return version', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(returnCycles(4))
+          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles(4))
 
           createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999652:2024-11-01:2025-10-31'])
           createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31'])
@@ -185,13 +180,13 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has only a "summer" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([returnRequirement(true)])
+        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.returnRequirement(true)])
         createReturnLogsStub.resolves()
       })
 
       describe('but the change date means only an "all-year" return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([returnCycle(false)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(false)])
         })
 
         it('does not process any return requirements for the licence', async () => {
@@ -205,13 +200,13 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has only an "all-year" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([returnRequirement(false)])
+        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.returnRequirement(false)])
         createReturnLogsStub.resolves()
       })
 
       describe('but the change date means only a "summer" return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([returnCycle(true)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(true)])
         })
 
         it('does not process any return requirements for the licence', async () => {
@@ -244,7 +239,7 @@ describe('Process licence return logs service', () => {
 
   describe('when called with no "change date"', () => {
     beforeEach(() => {
-      returnCycleModelStub.resolves(returnCycles())
+      returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
       fetchReturnRequirementsStub.resolves([])
       createReturnLogsStub.resolves()
       voidReturnLogsStub.resolves()

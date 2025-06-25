@@ -28,7 +28,7 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
   let monitoringStation
 
   beforeEach(async () => {
-    monitoringStation = await MonitoringStationHelper.add()
+    monitoringStation = await MonitoringStationHelper.add({ riverName: 'A river' })
 
     // A licence with the abstraction data from the Licence monitoring station
     licence = await LicenceHelper.add({ licenceRef: `01/01/01/${generateRandomInteger(1, 9999)}` })
@@ -48,7 +48,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
     licenceVersionPurpose = await LicenceVersionPurposesHelper.add()
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-      licenceVersionPurposeId: licenceVersionPurpose.id
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      notes: 'I have a bad feeling about this'
     })
 
     licenceMonitoringStationWithVersionPurpose = await LicenceMonitoringStationHelper.add({
@@ -100,7 +101,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
               abstractionPeriodEndMonth: 3,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 1
-            }
+            },
+            notes: 'I have a bad feeling about this'
           },
           measureType: 'flow',
           restrictionType: 'reduce',
@@ -109,7 +111,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
           thresholdUnit: 'm3/s',
           thresholdValue: 100
         }
-      ]
+      ],
+      riverName: 'A river'
     })
   })
 
@@ -134,7 +137,8 @@ describe('Notices Setup - Abstraction Alerts - Fetch Monitoring Station service'
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1
-          }
+          },
+          notes: 'I have a bad feeling about this'
         },
         measureType: 'flow',
         restrictionType: 'reduce',

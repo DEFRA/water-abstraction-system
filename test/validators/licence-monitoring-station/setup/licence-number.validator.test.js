@@ -74,7 +74,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid licence number')
+        expect(result.error.details[0].message).to.equal('Licence could not be found')
       })
     })
   })

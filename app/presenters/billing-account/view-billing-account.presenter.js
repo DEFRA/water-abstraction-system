@@ -14,10 +14,12 @@ const { formatBillRunType } = require('../billing.presenter.js')
  * @param {object} billingAccountData -The results from `FetchViewBillingAccountService`
  * @param {string|undefined} licenceId - The UUID of the licence related to the billing account, if available, used to
  * determine the backlink
+ * @param {string|undefined} chargeVersionId - The UUID of the charge version related to the billing account, if
+ * available, used to determine the backlink
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billingAccountData, licenceId) {
+function go(billingAccountData, licenceId, chargeVersionId) {
   const { billingAccount, bills, pagination } = billingAccountData
   const { billingAccountAddresses, company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } =
     billingAccount
@@ -25,7 +27,7 @@ function go(billingAccountData, licenceId) {
   return {
     accountNumber: billingAccount.accountNumber,
     address: _address(billingAccountAddresses[0].address, billingAccountAddresses[0].contact, company),
-    backLink: _backLink(licenceId),
+    backLink: _backLink(licenceId, chargeVersionId),
     billingAccountId: id,
     bills: _bills(bills),
     createdDate: formatLongDate(createdAt),
@@ -70,7 +72,14 @@ function _address(address, contact, company) {
   return [companyName, contactName, ...addressLines].filter(Boolean)
 }
 
-function _backLink(licenceId) {
+function _backLink(licenceId, chargeVersionId) {
+  if (licenceId && chargeVersionId) {
+    return {
+      title: 'Go back to charge information',
+      link: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+    }
+  }
+
   if (licenceId) {
     return {
       title: 'Go back to bills',

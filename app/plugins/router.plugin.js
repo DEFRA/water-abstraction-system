@@ -11,6 +11,7 @@
  * @module RouterPlugin
  */
 
+const AddressRoutes = require('../routes/address.routes.js')
 const AssetRoutes = require('../routes/assets.routes.js')
 const BillLicences = require('../routes/bill-licences.routes.js')
 const BillRoutes = require('../routes/bills.routes.js')
@@ -28,6 +29,7 @@ const NotificationRoutes = require('../routes/notifications.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
 const LicenceEndDatesRoutes = require('../routes/licences-end-dates.routes.js')
+const LicenceMonitoringStationRoutes = require('../routes/licence-monitoring-station.routes.js')
 const LicenceMonitoringStationSetupRoutes = require('../routes/licence-monitoring-station-setup.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
 const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
@@ -41,6 +43,7 @@ const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const routes = [
   ...RootRoutes,
+  ...AddressRoutes,
   ...AssetRoutes,
   ...HealthRoutes,
   ...BillLicences,
@@ -53,6 +56,7 @@ const routes = [
   ...NotificationRoutes,
   ...LicenceRoutes,
   ...LicenceEndDatesRoutes,
+  ...LicenceMonitoringStationRoutes,
   ...LicenceMonitoringStationSetupRoutes,
   ...JobRoutes,
   ...MonitoringStationRoutes,

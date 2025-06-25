@@ -27,7 +27,8 @@ describe('View Billing Account service', () => {
       const result = await ViewBillingAccountService.go(
         '64d7fc10-f046-4444-ba32-bb917dd8cde6',
         '53325713-1364-4f6b-a244-8771a36a1248',
-        1
+        1,
+        '6e2cbd57-81d6-4653-a063-c93bae4fe6ee'
       )
 
       expect(result).to.equal({
@@ -43,8 +44,8 @@ describe('View Billing Account service', () => {
           'ME15 0NE'
         ],
         backLink: {
-          title: 'Go back to bills',
-          link: `/system/licences/53325713-1364-4f6b-a244-8771a36a1248/bills`
+          title: 'Go back to charge information',
+          link: `/licences/53325713-1364-4f6b-a244-8771a36a1248/charge-information/6e2cbd57-81d6-4653-a063-c93bae4fe6ee/view`
         },
         billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
         bills: [

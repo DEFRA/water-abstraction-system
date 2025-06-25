@@ -10,7 +10,6 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   'abstraction-alert': 'Abstraction alerts',
-  'ad-hoc': 'Ad-hoc notifications',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
@@ -69,15 +68,15 @@ function _formatRecipients(recipients) {
 }
 
 function _links(session) {
-  const { id, journey, monitoringStationId } = session
+  const { id, journey, licenceRef } = session
 
   let back
   let removeLicences = ''
 
-  if (journey === 'ad-hoc') {
-    back = `/system/notices/setup/${id}/ad-hoc-licence`
+  if (licenceRef) {
+    back = `/system/notices/setup/${id}/check-notice-type`
   } else if (journey === 'abstraction-alert') {
-    back = `/system/monitoring-stations/${monitoringStationId}`
+    back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {
     back = `/system/notices/setup/${id}/returns-period`
     removeLicences = `/system/notices/setup/${id}/remove-licences`

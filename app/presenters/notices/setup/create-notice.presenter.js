@@ -25,6 +25,7 @@ function go(session, recipients, auth) {
 
   const notice = {
     issuer: auth.credentials.user.username,
+    licences: _licences(recipients),
     metadata: {
       name,
       recipients: recipients.length
@@ -35,9 +36,8 @@ function go(session, recipients, auth) {
   }
 
   if (session.journey === 'abstraction-alert') {
-    notice.metadata.options = { sendingAlertType: session.alertType }
+    notice.metadata.options = { sendingAlertType: session.alertType, monitoringStationId: session.monitoringStationId }
   } else {
-    notice.licences = _licences(recipients)
     notice.metadata.options = { excludeLicences: session.removeLicences ? session.removeLicences : [] }
     notice.metadata.returnCycle = _returnCycle(session.determinedReturnsPeriod)
   }

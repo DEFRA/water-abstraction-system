@@ -13,11 +13,11 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { id: sessionId, licence, method } = session
+  const { id: sessionId, licence, licenceVersion, method } = session
 
   return {
     backLink: `/system/return-versions/setup/${sessionId}/reason`,
-    displayCopyExisting: licence.returnVersions.length > 0,
+    displayCopyExisting: licenceVersion.copyableReturnVersions.length > 0,
     licenceRef: licence.licenceRef,
     method: method ?? null,
     pageTitle: 'How do you want to set up the requirements for returns?',

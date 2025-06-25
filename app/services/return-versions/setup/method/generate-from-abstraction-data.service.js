@@ -5,6 +5,7 @@
  * @module GenerateFromAbstractionDataService
  */
 
+const DetermineTwoPartTariffAgreementService = require('./determine-two-part-tariff-agreement.service.js')
 const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
@@ -18,22 +19,26 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
  * Fetches a licence's abstraction data and generates setup return requirements from it
  *
  * During the return requirements setup journey we offer users the option of setting up the new requirements using the
- * current abstraction data against the licence.
+ * abstraction data against the licence.
  *
- * Specifically, we look to the licence's current licence version, which in turn is linked to one or more licence
- * version purposes. For each one of these we create a return requirement setup object.
+ * Specifically, we look to the relevant licence version for the selected start date, which in turn is linked to one or
+ * more licence version purposes. For each one of these we create a return requirement setup object.
  *
  * Note, we are not creating a `return_requirement` record but an object that matches what the setup journey expects.
  * This means the requirements will display correctly in the `/check` page, and users can amend the values using the
  * 'Change' links shown.
  *
  * @param {string} licenceId - The UUID of the licence to fetch abstraction data from and generate return requirements
+ * @param {string} licenceVersionId - The UUID of the relevant licence version to generate the abstraction data from
+ * @param {Date} startDate - The start date the user has selected for the new return version, needed to determine if
+ * they have a two-part tariff licence agreement in place
  *
- * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction and ready to
- * be persisted to the setup session
+ * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction data and ready
+ * to be persisted to the setup session
  */
-async function go(licenceId) {
-  const licence = await FetchAbstractionDataService.go(licenceId)
+async function go(licenceId, licenceVersionId, startDate) {
+  const licence = await FetchAbstractionDataService.go(licenceId, licenceVersionId)
+  licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService.go(licence.licenceRef, startDate)
 
   const returnRequirements = _transformForSetup(licence)
 
@@ -226,7 +231,7 @@ function _siteDescription(points) {
  * @private
  */
 function _transformForSetup(licence) {
-  const { licenceVersionPurposes } = licence.$currentVersion()
+  const { licenceVersionPurposes } = licence.licenceVersions[0]
 
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
     const {

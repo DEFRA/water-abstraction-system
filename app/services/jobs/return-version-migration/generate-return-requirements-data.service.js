@@ -6,7 +6,6 @@
  */
 
 const { generateUUID } = require('../../../lib/general.lib.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
 
 /**
  * Generate return requirement records for new quarterly return version from the existing one
@@ -19,47 +18,27 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
  *
  * @param {object[]} existingReturnRequirements - the existing return requirements to copy
  * @param {object} quarterlyReturnVersion - the new quarterly return version to link them to
- * @param {number} naldRegionId - Used when generating the 'reference' for the new return requirements
  *
  * @returns {object} return requirement records ready for persisting
  */
-async function go(existingReturnRequirements, quarterlyReturnVersion, naldRegionId) {
+async function go(existingReturnRequirements, quarterlyReturnVersion) {
   const { id: quarterlyReturnVersionId, createdAt: timestamp } = quarterlyReturnVersion
-
-  let legacyId = await _nextLegacyId(naldRegionId)
 
   const returnRequirements = []
   const returnRequirementPoints = []
   const returnRequirementPurposes = []
 
   for (const existingReturnRequirement of existingReturnRequirements) {
-    const returnRequirement = _returnRequirement(
-      existingReturnRequirement,
-      quarterlyReturnVersionId,
-      legacyId,
-      timestamp
-    )
+    const returnRequirement = _returnRequirement(existingReturnRequirement, quarterlyReturnVersionId, timestamp)
     const points = _points(existingReturnRequirement, returnRequirement.id, timestamp)
     const purposes = _purposes(existingReturnRequirement, returnRequirement.id, timestamp)
 
     returnRequirements.push(returnRequirement)
     returnRequirementPoints.push(...points)
     returnRequirementPurposes.push(...purposes)
-
-    legacyId++
   }
 
   return { returnRequirements, returnRequirementPoints, returnRequirementPurposes }
-}
-
-async function _nextLegacyId(naldRegionId) {
-  const { lastLegacyId } = await ReturnRequirementModel.query()
-    .max('legacyId as lastLegacyId')
-    .whereLike('externalId', `${naldRegionId}%`)
-    .limit(1)
-    .first()
-
-  return lastLegacyId + 1
 }
 
 function _points(existingReturnRequirement, returnRequirementId, timestamp) {
@@ -97,7 +76,7 @@ function _purposes(existingReturnRequirement, returnRequirementId, timestamp) {
   })
 }
 
-function _returnRequirement(existingReturnRequirement, quarterlyReturnVersionId, legacyId, timestamp) {
+function _returnRequirement(existingReturnRequirement, quarterlyReturnVersionId, timestamp) {
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
@@ -124,7 +103,6 @@ function _returnRequirement(existingReturnRequirement, quarterlyReturnVersionId,
     fiftySixException,
     gravityFill,
     id: generateUUID(),
-    legacyId,
     reabstraction,
     reportingFrequency,
     returnsFrequency,

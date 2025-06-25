@@ -4,8 +4,6 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
-const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
@@ -29,7 +27,6 @@ const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-
  *
  * - 2 licence versions; one current and one superseded
  * - 3 licence version purposes; one for an electricity purpose, one for a two-part purpose, one standard
- * - 2 licence financial agreements: one that is current but not 2PT, the other is 2PT but has ended
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
  * points and the rest 1
  *
@@ -51,38 +48,15 @@ async function seed(optionalLicenceRef = undefined) {
 
   records.regionId = regionId
   records.licenceId = licenceId
+  records.licenceRef = licenceRef
 
-  records.financialAgreements = await _financialAgreements()
   records.allPurposes = await _purposes()
 
-  records.licenceFinancialAgreements = await _licenceFinancialAgreement(licenceRef, records.financialAgreements)
   records.licenceVersions = await _licenceVersions(licenceId)
   records.licenceVersionPurposes = await _licenceVersionPurposes(records.licenceVersions.currentId, records.allPurposes)
   records.points = await _points(records.licenceVersionPurposes)
 
   return records
-}
-
-async function _financialAgreements() {
-  const section126 = FinancialAgreementHelper.select(2)
-  const twoPartTariff = FinancialAgreementHelper.select(3)
-
-  return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
-}
-
-async function _licenceFinancialAgreement(licenceRef, financialAgreements) {
-  const { id: currentNonTwoPartId } = await LicenceFinancialAgreement.add({
-    financialAgreementId: financialAgreements.section126Id,
-    licenceRef
-  })
-
-  const { id: endedTwoPartId } = await LicenceFinancialAgreement.add({
-    endDate: new Date('2024-03-01'),
-    financialAgreementId: financialAgreements.twoPartTariffId,
-    licenceRef
-  })
-
-  return { currentNonTwoPartId, endedTwoPartId }
 }
 
 async function _licenceVersions(licenceId) {

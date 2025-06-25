@@ -5,7 +5,7 @@
  * @module CancelPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page
@@ -26,7 +26,14 @@ function go(session) {
 }
 
 function _summaryList(session) {
-  if (session.journey === 'ad-hoc') {
+  if (session.journey === 'abstraction-alert') {
+    return {
+      text: 'Alert type',
+      value: `${sentenceCase(session.alertType)}`
+    }
+  }
+
+  if (session.licenceRef) {
     return {
       text: 'Licence number',
       value: session.licenceRef

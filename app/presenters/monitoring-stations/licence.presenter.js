@@ -6,17 +6,19 @@
  */
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
+const { formatRestrictionType } = require('./base.presenter.js')
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
  *
+ * @param {object} auth - The auth object taken from `request.auth`
  * @param {module:NotificationModel} lastAlert - The last water abstraction alert sent
  * @param {module:MonitoringStationModel} monitoringStationLicenceTags - The licence monitoring station and associated
  * licence tag data
  *
  * @returns {object} page data needed by the view template
  */
-function go(lastAlert, monitoringStationLicenceTags) {
+function go(auth, lastAlert, monitoringStationLicenceTags) {
   const { id: monitoringStationId, label, licenceMonitoringStations, riverName } = monitoringStationLicenceTags
   const { licence } = licenceMonitoringStations[0]
 
@@ -25,7 +27,8 @@ function go(lastAlert, monitoringStationLicenceTags) {
     lastAlertSent: _lastAlertSent(lastAlert),
     licenceTags: _licenceTags(licenceMonitoringStations),
     monitoringStationName: _monitoringStationName(label, riverName),
-    pageTitle: `Details for ${licence.licenceRef}`
+    pageTitle: `Details for ${licence.licenceRef}`,
+    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links')
   }
 }
 
@@ -52,8 +55,15 @@ function _lastAlertSent(lastAlert) {
 
 function _licenceTags(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { createdAt, licenceVersionPurposeCondition, restrictionType, thresholdUnit, thresholdValue, user } =
-      licenceMonitoringStation
+    const {
+      id: licenceMonitoringStationId,
+      createdAt,
+      licenceVersionPurposeCondition,
+      restrictionType,
+      thresholdUnit,
+      thresholdValue,
+      user
+    } = licenceMonitoringStation
 
     const { effectOfRestriction, licenceVersionStatus, linkedCondition } =
       _linkedConditionDetails(licenceVersionPurposeCondition)
@@ -61,11 +71,12 @@ function _licenceTags(licenceMonitoringStations) {
     return {
       created: _created(createdAt, user),
       effectOfRestriction,
+      licenceMonitoringStationId,
       licenceVersionStatus,
       linkedCondition,
-      tag: `${sentenceCase(restrictionType)} tag`,
+      tag: `${formatRestrictionType(restrictionType)} tag`,
       threshold: `${thresholdValue}${thresholdUnit}`,
-      type: sentenceCase(restrictionType)
+      type: formatRestrictionType(restrictionType)
     }
   })
 }

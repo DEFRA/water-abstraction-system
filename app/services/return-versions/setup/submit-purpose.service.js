@@ -30,7 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const licencePurposes = await FetchPurposesService.go(session.licence.id)
+  const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
 
   _handleOneOptionSelected(payload)
 

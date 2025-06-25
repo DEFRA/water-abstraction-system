@@ -3,167 +3,134 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const ModLogHelper = require('../../../support/helpers/mod-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
+
+// Things we need to stub
+const FetchLicenceService = require('../../../../app/services/return-versions/setup/fetch-licence.service.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/return-versions/setup/initiate-session.service.js')
 
-describe('Return Versions Setup - Initiate Session service', () => {
-  let journey
-  let licence
-  let licenceRef
-  let modLog
-  let returnVersionId
+describe('Return Versions - Setup - Initiate Session service', () => {
+  const journey = 'returns-required'
 
-  beforeEach(async () => {
-    // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
-    // 'ends' information
-    licenceRef = generateLicenceRef()
-    licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef })
+  let licence
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
-    describe('and the licence exists', () => {
-      beforeEach(async () => {
-        journey = 'returns-required'
-
-        // Create two licence versions so we can test the service only gets the 'current' version
-        await LicenceVersionHelper.add({
-          licenceId: licence.id,
-          startDate: new Date('2021-10-11'),
-          status: 'superseded'
-        })
-        await LicenceVersionHelper.add({
-          licenceId: licence.id,
-          startDate: new Date('2022-05-01')
-        })
-
-        // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
-        await LicenceHolderSeeder.seed(licence.licenceRef)
-      })
-
-      it('creates a new session record containing details of the licence', async () => {
-        const result = await InitiateSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data).to.equal(
-          {
-            checkPageVisited: false,
-            licence: {
-              id: licence.id,
-              currentVersionStartDate: new Date('2022-05-01'),
-              endDate: new Date('2024-08-10'),
-              licenceRef,
-              licenceHolder: 'Licence Holder Ltd',
-              returnVersions: [],
-              startDate: new Date('2022-01-01'),
-              waterUndertaker: false
-            },
-            multipleUpload: false,
-            journey: 'returns-required',
-            requirements: [{}]
-          },
-          { skip: ['id'] }
-        )
-      })
-
-      describe('and has return versions with return requirements to copy from', () => {
+    describe('and the matching licence exists', () => {
+      describe('and it "ends"', () => {
         beforeEach(async () => {
-          const returnVersion = await ReturnVersionHelper.add({
-            licenceId: licence.id,
-            startDate: new Date('2022-05-01')
-          })
+          licence = _licence()
 
-          returnVersionId = returnVersion.id
-
-          modLog = await ModLogHelper.add({ reasonDescription: 'Record Loaded During Migration', returnVersionId })
-          await ReturnRequirementHelper.add({ returnVersionId })
+          Sinon.stub(FetchLicenceService, 'go').resolves(licence)
         })
 
-        it('includes details of the return versions in the session record created', async () => {
+        it('creates a new session record containing details of the licence', async () => {
           const result = await InitiateSessionService.go(licence.id, journey)
 
-          const { returnVersions } = result.data.licence
+          const { data } = result
 
-          expect(returnVersions).to.equal([
+          expect(data).to.equal(
             {
-              id: returnVersionId,
-              reason: 'new-licence',
-              startDate: new Date('2022-05-01'),
-              modLogs: [{ id: modLog.id, reasonDescription: modLog.reasonDescription }]
-            }
-          ])
+              checkPageVisited: false,
+              licence: {
+                id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
+                currentVersionStartDate: licence.licenceVersions[0].startDate,
+                endDate: licence.expiredDate,
+                licenceRef: '01/94/56/9693',
+                licenceHolder: 'Licence Holder Ltd',
+                returnVersions: [
+                  {
+                    id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
+                    startDate: licence.returnVersions[0].startDate,
+                    reason: 'new-licence',
+                    modLogs: [
+                      {
+                        id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
+                        reasonDescription: 'Record Loaded During Migration'
+                      }
+                    ]
+                  }
+                ],
+                startDate: licence.startDate,
+                waterUndertaker: false
+              },
+              multipleUpload: false,
+              journey,
+              requirements: [{}]
+            },
+            { skip: ['id'] }
+          )
         })
       })
 
-      describe('and has return versions but they are not "current" (so cannot be copied from)', () => {
+      describe('and it does not "end"', () => {
         beforeEach(async () => {
-          const returnVersion = await ReturnVersionHelper.add({
-            licenceId: licence.id,
-            startDate: new Date('2021-10-11'),
-            status: 'superseded'
-          })
+          licence = _licence()
+          licence.expiredDate = null
 
-          returnVersionId = returnVersion.id
-
-          await ReturnRequirementHelper.add({ returnVersionId })
+          Sinon.stub(FetchLicenceService, 'go').resolves(licence)
         })
 
-        it('does not contain any return version details in the session record created', async () => {
+        it('creates a new session record containing details of the licence', async () => {
           const result = await InitiateSessionService.go(licence.id, journey)
 
-          const { returnVersions } = result.data.licence
+          const { data } = result
 
-          expect(returnVersions).to.be.empty()
-        })
-      })
-
-      describe('and has return versions but they do not have requirements (so cannot be copied from)', () => {
-        beforeEach(async () => {
-          await ReturnVersionHelper.add({
-            licenceId: licence.id,
-            reason: 'returns-exception',
-            startDate: new Date('2021-10-11'),
-            status: 'current'
-          })
-        })
-
-        it('does not contain any return version details in the session record created', async () => {
-          const result = await InitiateSessionService.go(licence.id, journey)
-
-          const { returnVersions } = result.data.licence
-
-          expect(returnVersions).to.be.empty()
-        })
-      })
-
-      describe('and has no return versions (so nothing to copy from)', () => {
-        it('does not contain any return version details in the session record created', async () => {
-          const result = await InitiateSessionService.go(licence.id, journey)
-
-          const { returnVersions } = result.data.licence
-
-          expect(returnVersions).to.be.empty()
+          expect(data).to.equal(
+            {
+              checkPageVisited: false,
+              licence: {
+                id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
+                currentVersionStartDate: licence.licenceVersions[0].startDate,
+                endDate: null,
+                licenceRef: '01/94/56/9693',
+                licenceHolder: 'Licence Holder Ltd',
+                returnVersions: [
+                  {
+                    id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
+                    startDate: licence.returnVersions[0].startDate,
+                    reason: 'new-licence',
+                    modLogs: [
+                      {
+                        id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
+                        reasonDescription: 'Record Loaded During Migration'
+                      }
+                    ]
+                  }
+                ],
+                startDate: licence.startDate,
+                waterUndertaker: false
+              },
+              multipleUpload: false,
+              journey,
+              requirements: [{}]
+            },
+            { skip: ['id'] }
+          )
         })
       })
     })
 
-    describe('but the licence does not exist', () => {
+    describe('and the matching licence does not exist', () => {
+      beforeEach(async () => {
+        licence = undefined
+        Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+      })
+
       it('throws a Boom not found error', async () => {
         const error = await expect(
-          InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')
+          InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', journey)
         ).to.reject()
 
         expect(error.isBoom).to.be.true()
@@ -178,3 +145,48 @@ describe('Return Versions Setup - Initiate Session service', () => {
     })
   })
 })
+
+function _licence() {
+  return LicenceModel.fromJson({
+    id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
+    expiredDate: new Date('2026-06-16'),
+    lapsedDate: null,
+    licenceRef: '01/94/56/9693',
+    revokedDate: null,
+    startDate: new Date('2022-01-01'),
+    waterUndertaker: false,
+    licenceVersions: [
+      {
+        id: 'a2e39067-3076-4106-b83a-fb48b6307c50',
+        startDate: new Date('2022-05-01')
+      }
+    ],
+    returnVersions: [
+      {
+        id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
+        startDate: new Date('2022-05-01'),
+        reason: 'new-licence',
+        modLogs: [
+          {
+            id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
+            reasonDescription: 'Record Loaded During Migration'
+          }
+        ]
+      }
+    ],
+    licenceDocument: {
+      id: '57a815e5-83a0-46a5-b60e-231edd098501',
+      licenceDocumentRoles: [
+        {
+          id: '5e975fad-dc76-4f7b-8fe0-01887553c6fd',
+          contact: null,
+          company: {
+            id: 'af8ad37b-248b-4aa4-a85c-a6c892f0f15e',
+            name: 'Licence Holder Ltd',
+            type: 'organisation'
+          }
+        }
+      ]
+    }
+  })
+}

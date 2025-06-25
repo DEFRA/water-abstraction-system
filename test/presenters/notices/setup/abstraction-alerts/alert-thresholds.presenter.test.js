@@ -107,25 +107,25 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
 
         describe('and a licence monitoring station is "stop_or_reduce" ', () => {
           beforeEach(() => {
-            licenceMonitoringStations.two.responseType = 'stop_or_reduce'
-            licenceMonitoringStations.three.responseType = 'stop'
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'stop'
+            }
           })
 
-          it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
+          it('returns page data for the view, with only the thresholds with stop restrictions', () => {
             const result = AlertThresholdsPresenter.go(session)
 
             expect(result.thresholdOptions).to.equal([
               {
                 checked: false,
-                value: licenceMonitoringStations.two.thresholdGroup,
+                hint: { text: 'Flow threshold' },
                 text: '100 m3/s',
-                hint: { text: 'Flow threshold' }
-              },
-              {
-                checked: false,
-                value: licenceMonitoringStations.three.thresholdGroup,
-                text: '100 m',
-                hint: { text: 'Level threshold' }
+                value: licenceMonitoringStations.two.thresholdGroup
               }
             ])
           })
@@ -149,9 +149,43 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
             }
           ])
         })
+
+        describe('and a licence monitoring station is "stop_or_reduce" ', () => {
+          beforeEach(() => {
+            licenceMonitoringStations.one.restrictionType = 'reduce'
+            licenceMonitoringStations.two.restrictionType = 'stop'
+            licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
+
+            session = {
+              ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+              alertType: 'reduce'
+            }
+          })
+
+          it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
+            const result = AlertThresholdsPresenter.go(session)
+
+            expect(result.thresholdOptions).to.equal([
+              // reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '1000 m',
+                value: licenceMonitoringStations.one.thresholdGroup
+              },
+              // stop_or_reduce
+              {
+                checked: false,
+                hint: { text: 'Level threshold' },
+                text: '100 m',
+                value: licenceMonitoringStations.three.thresholdGroup
+              }
+            ])
+          })
+        })
       })
 
-      describe('"and the alert type is not "stop" or "reduce"', () => {
+      describe('and the alert type is not "stop" or "reduce"', () => {
         beforeEach(() => {
           // This could be 'resume' or 'warning'
           delete session.alertType
@@ -163,20 +197,91 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
           expect(result.thresholdOptions).to.equal([
             {
               checked: false,
-              value: licenceMonitoringStations.one.thresholdGroup,
-              text: '1000 m',
-              hint: { text: 'Level threshold' }
-            },
-            {
-              checked: false,
               value: licenceMonitoringStations.two.thresholdGroup,
               text: '100 m3/s',
               hint: { text: 'Flow threshold' }
             },
             {
               checked: false,
+              value: licenceMonitoringStations.one.thresholdGroup,
+              text: '1000 m',
+              hint: { text: 'Level threshold' }
+            },
+            {
+              checked: false,
               value: licenceMonitoringStations.three.thresholdGroup,
               text: '100 m',
+              hint: { text: 'Level threshold' }
+            }
+          ])
+        })
+      })
+
+      describe('when there are multiple different thresholds all with different types and measurement quantities', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = AbstractionAlertSessionData.unsortedLicenceMonitoringStations()
+
+          session = {
+            ...AbstractionAlertSessionData.get(licenceMonitoringStations)
+          }
+        })
+
+        it('sorts relevant thresholds first by flow/level alphabetically then by measurement quantity', () => {
+          const result = AlertThresholdsPresenter.go(session)
+
+          expect(result.thresholdOptions).to.equal([
+            {
+              checked: false,
+              value: 'flow-100-m3/s',
+              text: '100 m3/s',
+              hint: { text: 'Flow threshold' }
+            },
+            {
+              checked: false,
+              value: 'flow-1-Mgpd',
+              text: '1 Mgpd',
+              hint: { text: 'Flow threshold' }
+            },
+            {
+              checked: false,
+              value: 'flow-10-l/s',
+              text: '10 l/s',
+              hint: { text: 'Flow threshold' }
+            },
+            {
+              checked: false,
+              value: 'flow-0.5-Ml/d',
+              text: '0.5 Ml/d',
+              hint: { text: 'Flow threshold' }
+            },
+            {
+              checked: false,
+              value: 'flow-5000-gpd',
+              text: '5000 gpd',
+              hint: { text: 'Flow threshold' }
+            },
+            {
+              checked: false,
+              value: 'level-1000-m',
+              text: '1000 m',
+              hint: { text: 'Level threshold' }
+            },
+            {
+              checked: false,
+              value: 'level-100-m',
+              text: '100 m',
+              hint: { text: 'Level threshold' }
+            },
+            {
+              checked: false,
+              value: 'level-50-SLD',
+              text: '50 SLD',
+              hint: { text: 'Level threshold' }
+            },
+            {
+              checked: false,
+              value: 'level-2-mBOD',
+              text: '2 mBOD',
               hint: { text: 'Level threshold' }
             }
           ])

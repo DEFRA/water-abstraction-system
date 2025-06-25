@@ -14,7 +14,7 @@ const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-up
 const ProcessNotificationsStatusUpdatesServiceService = require('../../app/services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessReturnVersionMigrationService = require('../../app/services/jobs/return-version-migration/process-return-version-migration.service.js')
-const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
+const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
@@ -40,6 +40,26 @@ describe('Jobs controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/jobs/clean', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/clean' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessCleanService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
   })
 
   describe('/jobs/export', () => {
@@ -91,26 +111,6 @@ describe('Jobs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ProcessNotificationsStatusUpdatesServiceService, 'go').resolves()
-        })
-
-        it('returns a 204 response', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(204)
-        })
-      })
-    })
-  })
-
-  describe('/jobs/session-cleanup', () => {
-    describe('POST', () => {
-      beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/session-cleanup' }
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          Sinon.stub(ProcessSessionStorageCleanupService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {

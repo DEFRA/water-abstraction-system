@@ -1,46 +1,30 @@
 'use strict'
 
 /**
- * Fetches all LicenceVersionPurposePoints for the matching licenceId
+ * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
  * @module FetchPointsService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+const PointModel = require('../../../models/point.model.js')
 
 /**
- * Fetches all LicenceVersionPurposePoints for the matching licenceId
+ * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
  *
- * @param {string} licenceId - The UUID for the licence to fetch points for
+ * @param {string} licenceVersionId - The UUID for the relevant licence version to fetch purposes from
  *
- * @returns {Promise<module:LicenceVersionPurposePoints[]>} All LicenceVersionPurposePoints for the matching licenceId
+ * @returns {Promise<module:PointModel[]>} The distinct points for the matching licence version
  */
-async function go(licenceId) {
-  return _fetch(licenceId)
-}
-
-// NOTE: We could have gone direct to the LicenceVersionPurposePoints table and then worked back to the selected
-// licence. But we have the added complexity of only wanting the points for the current licence version, something we
-// already have logic for on the licence model.
-//
-// It made sense to go from licence to the points via our 'currentVersion' modifier. It just means we need to bring
-// the points back into a single array afterwards.
-async function _fetch(licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .select(['id'])
-    .modify('currentVersion')
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
-      builder.select(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
-    })
-
-  const points = []
-
-  for (const licenceVersionPurpose of licence.$currentVersion().licenceVersionPurposes) {
-    points.push(...licenceVersionPurpose.points)
-  }
-
-  return points
+async function go(licenceVersionId) {
+  return PointModel.query()
+    .distinct(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+    .innerJoin('licenceVersionPurposePoints', 'licenceVersionPurposePoints.pointId', 'points.id')
+    .innerJoin(
+      'licenceVersionPurposes',
+      'licenceVersionPurposes.id',
+      'licenceVersionPurposePoints.licenceVersionPurposeId'
+    )
+    .innerJoin('licenceVersions', 'licenceVersions.id', 'licenceVersionPurposes.licenceVersionId')
+    .where('licenceVersions.id', licenceVersionId)
 }
 
 module.exports = {

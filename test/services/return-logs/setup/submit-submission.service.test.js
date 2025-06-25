@@ -31,7 +31,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         receivedDateOptions: 'today',
         receivedDate: new Date('2025-02-14'),
         returnLogId,
-        returnReference: ReturnRequirementHelper.generateLegacyId()
+        returnReference: ReturnRequirementHelper.generateReference()
       }
     })
   })

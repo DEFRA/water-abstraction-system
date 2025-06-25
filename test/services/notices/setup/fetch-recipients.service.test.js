@@ -186,10 +186,10 @@ describe('Notices - Setup - Fetch recipients service', () => {
     })
   })
 
-  describe('when the "journey" is for an ad hoc licence', () => {
+  describe('when the a licence ref has been chosen', () => {
     describe('when there is a "primary user"', () => {
       beforeEach(() => {
-        session = { journey: 'ad-hoc', licenceRef: recipients.primaryUser.licenceRef }
+        session = { licenceRef: recipients.primaryUser.licenceRef }
       })
 
       it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
@@ -210,7 +210,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
       describe('and there is a "returns agent" (known as userReturns in the DB)', () => {
         beforeEach(() => {
-          session = { journey: 'ad-hoc', licenceRef: recipients.primaryUser.licenceRef }
+          session = { licenceRef: recipients.primaryUser.licenceRef }
         })
 
         it('correctly returns the "returns agent" as well as the primary user', async () => {
@@ -233,7 +233,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
     describe('when the licence number only has one recipient which has the "licence holder" role', () => {
       beforeEach(() => {
-        session = { journey: 'ad-hoc', licenceRef: recipients.licenceHolder.licenceRef }
+        session = { licenceRef: recipients.licenceHolder.licenceRef }
       })
 
       it('correctly returns the licence holder data', async () => {
@@ -270,7 +270,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
     describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
       beforeEach(() => {
-        session = { journey: 'ad-hoc', licenceRef: recipients.licenceHolderAndReturnTo.licenceRef }
+        session = { licenceRef: recipients.licenceHolderAndReturnTo.licenceRef }
       })
 
       it('correctly returns the licence holder and returns to data', async () => {

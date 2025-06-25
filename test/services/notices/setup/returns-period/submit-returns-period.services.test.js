@@ -69,9 +69,10 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
     describe('fails validation', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234' } })
+        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234', journey: 'invitations' } })
         payload = {}
       })
+
       it('correctly presents the data with the error', async () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload)
 

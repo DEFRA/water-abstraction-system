@@ -100,7 +100,7 @@ describe('Monitoring stations controller', () => {
           url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3/licence/bf1befed-2ece-4805-89fd-3056a5cf5020',
           auth: {
             strategy: 'session',
-            credentials: { scope: [] }
+            credentials: { scope: ['manage_gauging_station_licence_links'] }
           }
         }
 
@@ -119,7 +119,8 @@ describe('Monitoring stations controller', () => {
             }
           ],
           monitoringStationName: 'The Station',
-          pageTitle: 'Details for 99/9999'
+          pageTitle: 'Details for 99/9999',
+          permissionToManageLinks: true
         })
       })
 

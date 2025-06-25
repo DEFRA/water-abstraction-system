@@ -34,7 +34,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
       describe('and the year is in the SROC period', () => {
         beforeEach(() => {
           payload = {
-            year: '2023'
+            year: '2025'
           }
         })
 
@@ -43,7 +43,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.year).to.equal('2023')
+          expect(refreshedSession.year).to.equal('2025')
           expect(result.setupComplete).to.be.true()
         })
       })

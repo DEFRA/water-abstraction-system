@@ -27,10 +27,6 @@ function go(returnLog, auth) {
     endDate,
     id,
     licence,
-    periodEndDay,
-    periodEndMonth,
-    periodStartDay,
-    periodStartMonth,
     purposes,
     receivedDate,
     returnReference,
@@ -49,9 +45,10 @@ function go(returnLog, auth) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatStatus(returnLog)
+  const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
-    abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    abstractionPeriod: _abstractionPeriod(returnLog),
     actionButton: _actionButton(latest, auth, returnLog.id, formattedStatus),
     backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
@@ -59,7 +56,6 @@ function go(returnLog, auth) {
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
     downloadCSVLink: _downloadCSVLink(selectedReturnSubmission, id),
-    latest,
     licenceRef: licence.licenceRef,
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
@@ -73,13 +69,41 @@ function go(returnLog, auth) {
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
-    summaryTableData: _summaryTableData(selectedReturnSubmission, returnsFrequency),
-    tableTitle: _tableTitle(returnsFrequency, method),
+    summaryTableData,
+    tableTitle: _tableTitle(summaryTableData, returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
     underQuery,
-    versions: _versions(selectedReturnSubmission, versions, id)
+    versions: _versions(selectedReturnSubmission, versions, id),
+    warning: _warning(formattedStatus, latest)
   }
+}
+
+/**
+ * Extracts and formats the abstraction period from the return log
+ *
+ * If the abstraction period start day is not defined or is 'null', it returns an empty string. Otherwise, it formats
+ * the abstraction period using the start and end day/month values.
+ *
+ * We have found there are approximately 2K return requirements that were imported from NALD with no abstraction period
+ * set. This means any return logs generated from them won't have any proper values in their `metadata.nald` object.
+ *
+ * This means we need this additional logic to handle these problem records. We show a blank on the page to indicate to
+ * the user there is a problem with this return log's abstraction period.
+ *
+ * @param {object} returnLog - The return log to extract the abstraction period from
+ *
+ * @returns {string} The formatted abstraction period or an empty string if not available
+ */
+
+function _abstractionPeriod(returnLog) {
+  const { periodEndDay, periodEndMonth, periodStartDay, periodStartMonth } = returnLog
+
+  if (!periodStartDay || periodStartDay === 'null') {
+    return ''
+  }
+
+  return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 }
 
 function _actionButton(latest, auth, returnLogId, formattedStatus) {
@@ -137,7 +161,7 @@ function _displayTable(selectedReturnSubmission) {
 }
 
 function _downloadCSVLink(selectedReturnSubmission, returnLogId) {
-  if (!selectedReturnSubmission) {
+  if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 
@@ -175,11 +199,11 @@ function _startReading(selectedReturnSubmission) {
     return null
   }
 
-  return selectedReturnSubmission.$meter()?.startReading
+  return selectedReturnSubmission.$meter()?.startReading || null
 }
 
 function _summaryTableData(selectedReturnSubmission, returnsFrequency) {
-  if (!selectedReturnSubmission) {
+  if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 
@@ -193,7 +217,11 @@ function _summaryTableData(selectedReturnSubmission, returnsFrequency) {
   }
 }
 
-function _tableTitle(returnsFrequency, method) {
+function _tableTitle(summaryTableData, returnsFrequency, method) {
+  if (!summaryTableData) {
+    return null
+  }
+
   const frequency = returnRequirementFrequencies[returnsFrequency]
   const postfix = method === 'abstractionVolumes' ? 'abstraction volumes' : 'meter readings'
 
@@ -232,6 +260,18 @@ function _versions(selectedReturnSubmission, versions, returnLogId) {
       user
     }
   })
+}
+
+function _warning(status, latest) {
+  if (status === 'void') {
+    return 'This return is void and has been replaced. Do not use this data.'
+  }
+
+  if (!latest) {
+    return 'You are viewing a previous version. This is not the latest submission data.'
+  }
+
+  return null
 }
 
 module.exports = {

@@ -76,8 +76,8 @@ async function seed() {
  * @private
  */
 function _legacyIds() {
-  const legacyId1 = ReturnRequirementHelper.generateLegacyId()
-  const legacyId2 = ReturnRequirementHelper.generateLegacyId()
+  const legacyId1 = ReturnRequirementHelper.generateReference()
+  const legacyId2 = ReturnRequirementHelper.generateReference()
 
   return legacyId1 > legacyId2 ? [legacyId1, legacyId2] : [legacyId2, legacyId1]
 }
@@ -89,6 +89,7 @@ async function _returnRequirement(returnVersionId, legacyId, reportingFrequency,
     gravityFill: agreements,
     legacyId,
     reabstraction: agreements,
+    reference: legacyId,
     reportingFrequency,
     returnVersionId,
     siteDescription: summer ? 'SUMMER BOREHOLE AT AVALON' : 'WINTER BOREHOLE AT AVALON',

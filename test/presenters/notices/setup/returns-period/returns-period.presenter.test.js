@@ -27,7 +27,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   describe('the data', () => {
     beforeEach(() => {
-      session = { referenceCode: 'RINV-123' }
+      session = { referenceCode: 'RINV-123', journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
@@ -38,10 +38,39 @@ describe('Notices - Setup - Returns Period presenter', () => {
       expect(result).to.equal(
         {
           backLink: '/manage',
+          pageTitle: 'Select the returns periods for the invitations',
           referenceCode: 'RINV-123'
         },
         { skip: ['returnsPeriod'] }
       )
+    })
+  })
+
+  describe('the "pageTitle" property', () => {
+    beforeEach(() => {
+      session = { referenceCode: 'RINV-123', journey: 'invitations' }
+      testDate = new Date(`${currentYear}-01-15`)
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    describe('when the journey is "invitations"', () => {
+      it('correctly presents the data', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.pageTitle).to.equal('Select the returns periods for the invitations')
+      })
+    })
+
+    describe('when the journey is "reminders"', () => {
+      beforeEach(() => {
+        session.journey = 'reminders'
+      })
+
+      it('correctly presents the data', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.pageTitle).to.equal('Select the returns periods for the reminders')
+      })
     })
   })
 

@@ -133,4 +133,44 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
       expect(existingReturnVersion.status).to.equal('superseded')
     })
   })
+
+  describe('When a return version is inserted in between two existing return versions', () => {
+    beforeEach(async () => {
+      existingReturnVersionId = generateUUID()
+      licenceId = generateUUID()
+      newVersionStartDate = new Date('2025-04-01')
+
+      await ReturnVersionHelper.add({
+        id: generateUUID(),
+        licenceId,
+        startDate: new Date('1993-04-27'),
+        endDate: new Date('2008-03-31')
+      })
+      await ReturnVersionHelper.add({
+        id: existingReturnVersionId,
+        licenceId,
+        startDate: new Date('2008-04-01'),
+        endDate: new Date('2025-05-11')
+      })
+      await ReturnVersionHelper.add({
+        id: generateUUID(),
+        licenceId,
+        startDate: new Date('2025-05-12')
+      })
+      await ReturnVersionHelper.add({
+        id: generateUUID(),
+        licenceId,
+        status: 'superseded',
+        startDate: new Date('2025-05-12')
+      })
+    })
+
+    it('the correct "endDate" is returned for the existing return version and the previous ones endDate is updated', async () => {
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
+
+      expect(result).to.equal(new Date('2025-05-11'))
+      expect(existingReturnVersion.endDate).to.equal(new Date('2025-03-31'))
+    })
+  })
 })

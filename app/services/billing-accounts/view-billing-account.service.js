@@ -16,15 +16,17 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-account/vi
  * @param {string|undefined} licenceId - The UUID of the licence related to the billing account, if available, used to
  * determine the backlink
  * @param {number|string} page - The current page for the pagination service
+ * @param {string|undefined} chargeVersionId - The UUID of the charge version related to the billing account, if
+ * available, used to determine the backlink
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
-async function go(id, licenceId, page) {
+async function go(id, licenceId, page, chargeVersionId) {
   const billingAccountData = await FetchViewBillingAccountService.go(id, page)
 
-  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId)
+  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId)
 
-  const queryArgs = licenceId ? { 'licence-id': licenceId } : {}
+  const queryArgs = _queryArgs(chargeVersionId, licenceId)
 
   const pagination = PaginatorPresenter.go(
     pageData.pagination.total,
@@ -38,6 +40,20 @@ async function go(id, licenceId, page) {
     ...pageData,
     pagination
   }
+}
+
+function _queryArgs(chargeVersionId, licenceId) {
+  const queryArgs = {}
+
+  if (licenceId) {
+    queryArgs['licence-id'] = licenceId
+  }
+
+  if (chargeVersionId) {
+    queryArgs['charge-version-id'] = chargeVersionId
+  }
+
+  return queryArgs
 }
 
 module.exports = {
