@@ -71,7 +71,7 @@ describe('Notices - Setup - Submit Licence service', () => {
         })
       })
 
-      it('returns an empty object (no page data is needed for a redirect)', async () => {
+      it('returns the redirect url', async () => {
         const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({ redirectUrl: 'notice-type' })
