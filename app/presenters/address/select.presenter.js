@@ -1,0 +1,19 @@
+'use strict'
+
+/**
+ * Formats data for the `address/{sessionId}/select` page
+ * @module SelectPresenter
+ */
+
+/**
+ * Formats data for the `address/{sessionId}/select` page
+ *
+ * @returns {object} - The data formatted for the view template
+ */
+function go() {
+  return {}
+}
+
+module.exports = {
+  go
+}
