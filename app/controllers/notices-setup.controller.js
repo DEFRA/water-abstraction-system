@@ -307,7 +307,7 @@ async function submitNoticeType(request, h) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
+  return h.redirect(`/system/notices/setup/${sessionId}/${pageData.redirectUrl}`)
 }
 
 async function submitRemoveLicences(request, h) {

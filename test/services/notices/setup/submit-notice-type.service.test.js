@@ -63,7 +63,20 @@ describe('Notice Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+    })
+
+    describe('and the notice types is "paper-invitation"', () => {
+      beforeEach(() => {
+        noticeType = 'paper-invitation'
+        payload = { noticeType }
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitNoticeTypeService.go(session.id, payload)
+
+        expect(result).to.equal({ redirectUrl: 'returns-for-paper-forms' })
+      })
     })
   })
 

@@ -27,7 +27,7 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return _redirect(payload.noticeType)
   }
 
   const pageData = NoticeTypePresenter.go(session)
@@ -35,6 +35,18 @@ async function go(sessionId, payload) {
   return {
     error: validationResult,
     ...pageData
+  }
+}
+
+function _redirect(noticeType) {
+  if (noticeType === 'paper-invitation') {
+    return {
+      redirectUrl: 'returns-for-paper-forms'
+    }
+  }
+
+  return {
+    redirectUrl: 'check-notice-type'
   }
 }
 
