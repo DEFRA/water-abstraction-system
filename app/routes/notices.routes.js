@@ -2,12 +2,10 @@
 
 const NoticesController = require('../controllers/notices.controller.js')
 
-const basePath = '/notices'
-
 const routes = [
   {
     method: 'GET',
-    path: basePath,
+    path: '/notices',
     options: {
       handler: NoticesController.index,
       auth: {
@@ -19,7 +17,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath,
+    path: '/notices',
     options: {
       handler: NoticesController.submitIndex,
       auth: {
@@ -31,7 +29,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{id}',
+    path: '/notices/{id}',
     options: {
       handler: NoticesController.view,
       auth: {

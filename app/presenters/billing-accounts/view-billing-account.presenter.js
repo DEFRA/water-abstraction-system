@@ -16,10 +16,12 @@ const { formatBillRunType } = require('../billing.presenter.js')
  * determine the backlink
  * @param {string|undefined} chargeVersionId - The UUID of the charge version related to the billing account, if
  * available, used to determine the backlink
+ * @param {string|undefined} companyId - The UUID of the company (customer) related to the billing account, if
+ * available, used to determine the backlink
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billingAccountData, licenceId, chargeVersionId) {
+function go(billingAccountData, licenceId, chargeVersionId, companyId) {
   const { billingAccount, bills, pagination } = billingAccountData
   const { billingAccountAddresses, company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } =
     billingAccount
@@ -27,7 +29,7 @@ function go(billingAccountData, licenceId, chargeVersionId) {
   return {
     accountNumber: billingAccount.accountNumber,
     address: _address(billingAccountAddresses[0].address, billingAccountAddresses[0].contact, company),
-    backLink: _backLink(licenceId, chargeVersionId),
+    backLink: _backLink(licenceId, chargeVersionId, companyId),
     billingAccountId: id,
     bills: _bills(bills),
     createdDate: formatLongDate(createdAt),
@@ -72,7 +74,7 @@ function _address(address, contact, company) {
   return [companyName, contactName, ...addressLines].filter(Boolean)
 }
 
-function _backLink(licenceId, chargeVersionId) {
+function _backLink(licenceId, chargeVersionId, companyId) {
   if (licenceId && chargeVersionId) {
     return {
       title: 'Go back to charge information',
@@ -84,6 +86,13 @@ function _backLink(licenceId, chargeVersionId) {
     return {
       title: 'Go back to bills',
       link: `/system/licences/${licenceId}/bills`
+    }
+  }
+
+  if (companyId) {
+    return {
+      title: 'Go back to customer',
+      link: `/customer/${companyId}/#billing-accounts`
     }
   }
 

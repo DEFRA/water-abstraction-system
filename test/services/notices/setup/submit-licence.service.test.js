@@ -3,28 +3,35 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
-const Sinon = require('sinon')
 
 describe('Notices - Setup - Submit Licence service', () => {
   let clock
+  let licenceRef
   let payload
   let session
+  let yarStub
 
   beforeEach(async () => {
+    licenceRef = generateLicenceRef()
+
     session = await SessionHelper.add({ data: {} })
 
     clock = Sinon.useFakeTimers(new Date('2020-06-06'))
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   afterEach(() => {
@@ -33,25 +40,25 @@ describe('Notices - Setup - Submit Licence service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      before(async () => {
-        await LicenceHelper.add({ licenceRef: '01/111' })
-        await ReturnLogHelper.add({ licenceRef: '01/111' })
+      beforeEach(async () => {
+        await LicenceHelper.add({ licenceRef })
+        await ReturnLogHelper.add({ licenceRef })
 
         payload = {
-          licenceRef: '01/111'
+          licenceRef
         }
       })
 
       it('saves the submitted value', async () => {
-        await SubmitLicenceService.go(session.id, payload)
+        await SubmitLicenceService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.licenceRef).to.equal('01/111')
+        expect(refreshedSession.licenceRef).to.equal(licenceRef)
       })
 
       it('saves the "determinedReturnsPeriod" with the "dueDate" set 28 days from "today"', async () => {
-        await SubmitLicenceService.go(session.id, payload)
+        await SubmitLicenceService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -64,21 +71,54 @@ describe('Notices - Setup - Submit Licence service', () => {
         })
       })
 
-      it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitLicenceService.go(session.id, payload)
+      it('returns the redirect url', async () => {
+        const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({ redirectUrl: 'notice-type' })
+      })
+
+      describe('and from the check page', () => {
+        describe('and the licence ref has been updated', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({ data: { licenceRef: '01/11', checkPageVisited: true } })
+          })
+
+          it('sets a flash message', async () => {
+            await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            // Check we add the flash message
+            const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+            expect(flashType).to.equal('notification')
+            expect(bannerMessage).to.equal({
+              text: 'Licence number updated',
+              title: 'Updated'
+            })
+          })
+        })
+
+        describe('and the licence ref has not been updated', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({ data: { licenceRef, checkPageVisited: true } })
+          })
+
+          it('does not set a flash message', async () => {
+            await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(yarStub.flash.args[0]).to.be.undefined()
+          })
+        })
       })
     })
 
     describe('with an invalid payload', () => {
       describe('because the user has not inputted anything', () => {
-        before(() => {
+        beforeEach(() => {
           payload = {}
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -92,14 +132,14 @@ describe('Notices - Setup - Submit Licence service', () => {
       })
 
       describe('because the user has entered a licence that does not exist', () => {
-        before(() => {
+        beforeEach(() => {
           payload = {
             licenceRef: '1111'
           }
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -113,7 +153,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       })
 
       describe('because the user has entered a licence that has no due returns', () => {
-        before(async () => {
+        beforeEach(async () => {
           await LicenceHelper.add({ licenceRef: '01/145' })
 
           payload = {
@@ -122,7 +162,7 @@ describe('Notices - Setup - Submit Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'manage',

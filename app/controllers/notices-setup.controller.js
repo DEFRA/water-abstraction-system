@@ -109,9 +109,12 @@ async function viewCheckLicenceMatches(request, h) {
 }
 
 async function viewCheckNoticeType(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    yar
+  } = request
 
-  const pageData = await CheckNoticeTypeService.go(sessionId)
+  const pageData = await CheckNoticeTypeService.go(sessionId, yar)
 
   return h.view(`notices/setup/check-notice-type.njk`, pageData)
 }
@@ -284,15 +287,18 @@ async function submitCheckLicenceMatches(request, h) {
 }
 
 async function submitLicence(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    yar
+  } = request
 
-  const pageData = await SubmitLicenceService.go(sessionId, request.payload)
+  const pageData = await SubmitLicenceService.go(sessionId, request.payload, yar)
 
   if (pageData.error) {
     return h.view(`${basePath}/licence.njk`, pageData)
   }
 
-  return h.redirect(`/system/${basePath}/${sessionId}/notice-type`)
+  return h.redirect(`/system/${basePath}/${sessionId}/${pageData.redirectUrl}`)
 }
 
 async function submitNoticeType(request, h) {
@@ -307,7 +313,7 @@ async function submitNoticeType(request, h) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
+  return h.redirect(`/system/notices/setup/${sessionId}/${pageData.redirectUrl}`)
 }
 
 async function submitRemoveLicences(request, h) {

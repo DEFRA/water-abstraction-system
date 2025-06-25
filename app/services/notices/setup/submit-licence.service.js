@@ -6,6 +6,7 @@
  */
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const GeneralLib = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
@@ -23,11 +24,12 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the licence page including
  * the validation error details
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = await _validate(payload)
@@ -42,9 +44,15 @@ async function go(sessionId, payload) {
     }
   }
 
+  if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
+    GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
+  }
+
   await _save(session, payload)
 
-  return {}
+  return {
+    redirectUrl: _redirect(session.checkPageVisited)
+  }
 }
 
 /**
@@ -95,6 +103,14 @@ async function _save(session, payload) {
   session.determinedReturnsPeriod = _determinedReturnsPeriod()
 
   return session.$update()
+}
+
+function _redirect(checkPageVisited) {
+  if (checkPageVisited) {
+    return 'check-notice-type'
+  }
+
+  return 'notice-type'
 }
 
 async function _validate(payload) {

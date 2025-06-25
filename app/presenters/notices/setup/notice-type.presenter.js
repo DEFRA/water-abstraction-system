@@ -30,8 +30,8 @@ function _options(noticeType) {
       text: 'Standard returns invitation'
     },
     {
-      checked: noticeType === 'paper-invitation',
-      value: 'paper-invitation',
+      checked: noticeType === 'paper-forms',
+      value: 'paper-forms',
       text: 'Submit using a paper form invitation'
     }
   ]
