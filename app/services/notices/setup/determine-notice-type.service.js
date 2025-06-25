@@ -36,8 +36,8 @@ const NOTICE_TYPES = {
     subType: 'returnInvitation',
     notificationType: 'Returns invitation'
   },
-  'paper-invitation': {
-    journey: 'paper-invitation',
+  'paper-forms': {
+    journey: 'paper-forms',
     name: 'Paper returns',
     prefix: 'PRTF-',
     subType: 'paperReturnForms',

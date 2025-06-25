@@ -402,9 +402,9 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "paper-invitation"', () => {
+    describe('when the journey is for "paper-forms"', () => {
       beforeEach(() => {
-        session.journey = 'paper-invitation'
+        session.journey = 'paper-forms'
       })
 
       describe('the "readyToSend" property', () => {

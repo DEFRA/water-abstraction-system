@@ -39,7 +39,7 @@ async function go(sessionId, payload) {
 }
 
 function _redirect(noticeType) {
-  if (noticeType === 'paper-invitation') {
+  if (noticeType === 'paper-forms') {
     return {
       redirectUrl: 'returns-for-paper-forms'
     }
