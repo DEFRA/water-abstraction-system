@@ -21,7 +21,56 @@ describe('Returns For Paper Forms Presenter', () => {
     it('returns page data for the view', () => {
       const result = ReturnsForPaperFormsPresenter.go(session)
 
-      expect(result).to.equal({ pageTile: 'Select the returns for the paper forms' })
+      expect(result).to.equal({
+        pageTitle: 'Select the returns for the paper forms',
+        returns: [
+          {
+            checked: false,
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '1 Potable Water Supply - Direct',
+            value: '1'
+          },
+          {
+            checked: false,
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '2 Potable Water Supply - Direct',
+            value: '2'
+          }
+        ]
+      })
+    })
+
+    describe('and returns have previously been selected', () => {
+      beforeEach(() => {
+        session.returns = ['1']
+      })
+
+      it('returns the "returns" previously selected as checked', () => {
+        const result = ReturnsForPaperFormsPresenter.go(session)
+
+        expect(result.returns).to.equal([
+          {
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '1 Potable Water Supply - Direct',
+            value: '1',
+            checked: true
+          },
+          {
+            checked: false,
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '2 Potable Water Supply - Direct',
+            value: '2'
+          }
+        ])
+      })
     })
   })
 })

@@ -19,25 +19,42 @@ describe('Returns For Paper Forms Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = { returns: [] }
+    payload = { returns: ['1'] }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('saves the submitted value', async () => {
+    it('saves the selected returns', async () => {
       await SubmitReturnsForPaperFormsService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession.returns).to.equal(['1'])
     })
 
     it('continues the journey', async () => {
       const result = await SubmitReturnsForPaperFormsService.go(session.id, payload)
 
       expect(result).to.equal({})
+    })
+
+    describe('and the payload has one item (is not an array)', () => {
+      beforeEach(async () => {
+        payload = { returns: '1' }
+        sessionData = {}
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the selected returns', async () => {
+        await SubmitReturnsForPaperFormsService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.returns).to.equal(['1'])
+      })
     })
   })
 
@@ -51,9 +68,28 @@ describe('Returns For Paper Forms Service', () => {
 
       expect(result).to.equal({
         error: {
-          text: '"returns" is required'
+          text: 'Select the returns for the paper forms'
         },
-        pageTile: 'Select the returns for the paper forms'
+
+        pageTitle: 'Select the returns for the paper forms',
+        returns: [
+          {
+            checked: false,
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '1 Potable Water Supply - Direct',
+            value: '1'
+          },
+          {
+            checked: false,
+            hint: {
+              text: '1 January 2025 to 1 January 2026'
+            },
+            text: '2 Potable Water Supply - Direct',
+            value: '2'
+          }
+        ]
       })
     })
   })
