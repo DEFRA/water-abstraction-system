@@ -23,6 +23,7 @@ function go(session) {
     abstractionPeriodEndMonth,
     conditionDisplayText,
     label,
+    licenceRef,
     reduceAtThreshold,
     stopOrReduce,
     threshold,
@@ -37,6 +38,7 @@ function go(session) {
       abstractionPeriodEndMonth
     ),
     condition: conditionDisplayText,
+    licenceRef,
     links: _links(session.id),
     monitoringStationLabel: label,
     pageTitle: 'Check the restriction details',
