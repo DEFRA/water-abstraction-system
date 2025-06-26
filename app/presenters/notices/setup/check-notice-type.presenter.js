@@ -21,7 +21,6 @@ function go(session) {
   const { licenceRef, noticeType, id: sessionId } = session
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/notice-type`,
     continueButton: _continueButton(sessionId),
     pageTitle: 'Check the notice type',
     summaryList: _summaryList(licenceRef, noticeType, sessionId)

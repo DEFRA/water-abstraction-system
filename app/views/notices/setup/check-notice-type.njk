@@ -5,15 +5,6 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
-
 {% block content %}
     <div class="govuk-body">
       {% if notification %}
