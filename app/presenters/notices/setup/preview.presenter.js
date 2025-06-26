@@ -6,7 +6,7 @@
  */
 
 const NotifyPreviewRequest = require('../../../requests/notify/notify-preview.request.js')
-const { titleCase } = require('../../base.presenter.js')
+const { sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats notification data ready for presenting in the preview notification page
@@ -17,15 +17,15 @@ const { titleCase } = require('../../base.presenter.js')
  * @returns {Promise<object>} The data formatted for the preview template
  */
 async function go(notification, sessionId) {
-  const { licences, messageRef, messageType, personalisation, templateId } = notification
+  const { messageRef, messageType, personalisation, reference, templateId } = notification
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : null,
     backLink: `/system/notices/setup/${sessionId}/check`,
-    caption: _caption(licences),
+    caption: `Notice ${reference}`,
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
-    pageTitle: titleCase(messageRef.replace(/_/g, ' '))
+    pageTitle: sentenceCase(messageRef.replace(/_/g, ' '))
   }
 }
 
@@ -42,21 +42,6 @@ function _address(personalisation) {
   return addressLines.filter((addressLine) => {
     return addressLine
   })
-}
-
-function _caption(licences) {
-  const licencesArray = JSON.parse(licences)
-  const maxLicencesToDisplay = 4
-
-  if (licencesArray.length === 1) {
-    return `Licence ${licencesArray[0]}`
-  }
-
-  if (licencesArray.length > maxLicencesToDisplay) {
-    return `Licences ${licencesArray.slice(0, maxLicencesToDisplay).join(', ')}...`
-  }
-
-  return `Licences ${licencesArray.join(', ')}`
 }
 
 async function _notifyPreview(personalisation, templateId) {

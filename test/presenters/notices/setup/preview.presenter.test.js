@@ -36,10 +36,10 @@ describe('Preview presenter', () => {
       expect(result).to.equal({
         address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
         backLink: `/system/notices/setup/${sessionId}/check`,
-        caption: 'Licence 11/1111',
+        caption: 'Notice RINV-0Q7AD8',
         contents: 'Preview of the notification contents',
         messageType: 'letter',
-        pageTitle: 'Returns Invitation Returns To Letter'
+        pageTitle: 'Returns invitation returns to letter'
       })
     })
 
@@ -76,44 +76,6 @@ describe('Preview presenter', () => {
       })
     })
 
-    describe('the "caption" property', () => {
-      describe('when there is a single licence', () => {
-        beforeEach(() => {
-          testNotification.licences = '["11/1111"]'
-        })
-
-        it('correctly displays the caption for a single licence', async () => {
-          const result = await PreviewPresenter.go(testNotification, sessionId)
-
-          expect(result.caption).to.equal('Licence 11/1111')
-        })
-      })
-
-      describe('when there is more than one licence but less than five', () => {
-        beforeEach(() => {
-          testNotification.licences = '["11/1111","22/2222","33/3333","44/4444"]'
-        })
-
-        it('correctly displays the caption for the licences', async () => {
-          const result = await PreviewPresenter.go(testNotification, sessionId)
-
-          expect(result.caption).to.equal('Licences 11/1111, 22/2222, 33/3333, 44/4444')
-        })
-      })
-
-      describe('when there are more than four licences', () => {
-        beforeEach(() => {
-          testNotification.licences = '["11/1111","22/2222","33/3333","44/4444","55/5555"]'
-        })
-
-        it('correctly displays the caption for the first four licences', async () => {
-          const result = await PreviewPresenter.go(testNotification, sessionId)
-
-          expect(result.caption).to.equal('Licences 11/1111, 22/2222, 33/3333, 44/4444...')
-        })
-      })
-    })
-
     describe('the "pageTitle" property', () => {
       beforeEach(() => {
         testNotification.messageRef = 'returns_reminder_returns_to_letter'
@@ -122,7 +84,7 @@ describe('Preview presenter', () => {
       it('correctly formats the notifications "messageRef"', async () => {
         const result = await PreviewPresenter.go(testNotification, sessionId)
 
-        expect(result.pageTitle).to.equal('Returns Reminder Returns To Letter')
+        expect(result.pageTitle).to.equal('Returns reminder returns to letter')
       })
     })
   })
@@ -145,6 +107,7 @@ function _testNotification() {
       periodEndDate: '30 June 2025',
       periodStartDate: '1 April 2025',
       returnDueDate: '28 July 2025'
-    }
+    },
+    reference: 'RINV-0Q7AD8'
   }
 }

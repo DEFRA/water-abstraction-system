@@ -53,7 +53,8 @@ describe('Notices - Setup - Preview service', () => {
             endDate: '2023-03-31',
             summer: 'false',
             startDate: '2022-04-01'
-          }
+          },
+          referenceCode: 'RINV-0Q7AD8'
         }
       })
 
@@ -68,10 +69,10 @@ describe('Notices - Setup - Preview service', () => {
         activeNavBar: 'manage',
         address: null,
         backLink: `/system/notices/setup/${session.id}/check`,
-        caption: `Licence ${testRecipient.licence_refs}`,
+        caption: 'Notice RINV-0Q7AD8',
         contents: 'Preview of the notification contents',
         messageType: 'email',
-        pageTitle: 'Returns Invitation Primary User Email'
+        pageTitle: 'Returns invitation primary user email'
       })
     })
   })
@@ -107,10 +108,10 @@ describe('Notices - Setup - Preview service', () => {
         activeNavBar: 'manage',
         address: null,
         backLink: `/system/notices/setup/${session.id}/check`,
-        caption: `Licence ${testRecipient.licence_refs}`,
+        caption: 'Notice undefined',
         contents: 'Preview of the notification contents',
         messageType: 'email',
-        pageTitle: 'Water Abstraction Alert Email'
+        pageTitle: 'Water abstraction alert email'
       })
     })
   })
