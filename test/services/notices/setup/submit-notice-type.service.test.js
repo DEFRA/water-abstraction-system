@@ -107,7 +107,7 @@ describe('Notice Type Service', () => {
         })
       })
 
-      describe('and the licence ref has not been updated', () => {
+      describe('and the notice type has not been updated', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: { noticeType, checkPageVisited: true } })
         })
