@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -319,28 +320,30 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "ad-hoc"', () => {
-      beforeEach(() => {
-        session.journey = 'ad-hoc'
-        session.referenceCode = 'ADHC-123'
-      })
+    describe('when a licence ref has been chosen', () => {
+      describe('and the notice type is "invitations"', () => {
+        beforeEach(() => {
+          session.journey = 'invitations'
+          session.licenceRef = generateLicenceRef()
+        })
 
-      describe('the "links" property', () => {
-        it('should return the links for "invitations"', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/licence`,
-            cancel: `/system/notices/setup/${session.id}/cancel`,
-            download: `/system/notices/setup/${session.id}/download`,
-            removeLicences: ``
+        describe('the "links" property', () => {
+          it('should return the links for "invitations"', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.links).to.equal({
+              back: `/system/notices/setup/${session.id}/check-notice-type`,
+              cancel: `/system/notices/setup/${session.id}/cancel`,
+              download: `/system/notices/setup/${session.id}/download`,
+              removeLicences: ``
+            })
           })
         })
-      })
 
-      describe('the "readyToSend" property', () => {
-        it('should return the correct message', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.readyToSend).to.equal('Ad-hoc notifications are ready to send.')
+        describe('the "readyToSend" property', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
+          })
         })
       })
     })
@@ -395,6 +398,19 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
+        })
+      })
+    })
+
+    describe('when the journey is for "paper-forms"', () => {
+      beforeEach(() => {
+        session.journey = 'paper-forms'
+      })
+
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.readyToSend).to.equal('Paper invitations are ready to send.')
         })
       })
     })

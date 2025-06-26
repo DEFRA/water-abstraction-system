@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const licence = await _fetchLicence(payload.licenceRef)
+  const licence = payload.licenceRef ? await _fetchLicence(payload.licenceRef) : null
 
   const validationResult = await _validate(payload, licence)
 
@@ -34,12 +34,12 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = LicenceNumberPresenter.go(session)
+  const formattedData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...pageData
+    ...formattedData
   }
 }
 
@@ -52,6 +52,12 @@ async function _save(session, payload, licence) {
   session.licenceRef = payload.licenceRef
 
   await session.$update()
+}
+
+function _submittedSessionData(session, payload) {
+  session.licenceRef = payload['licenceRef'] ?? null
+
+  return LicenceNumberPresenter.go(session)
 }
 
 async function _validate(payload, licence) {

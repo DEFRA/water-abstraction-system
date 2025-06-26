@@ -42,10 +42,13 @@ function _pageTitle(subType) {
     return 'Water abstraction alerts sent'
   }
 
+  if (subType === 'paperReturnForms') {
+    return 'Paper return forms sent'
+  }
+
   const subTypes = {
     returnInvitation: 'invitations',
-    returnReminder: 'reminders',
-    adHocReminder: 'ad-hoc'
+    returnReminder: 'reminders'
   }
 
   return `Returns ${subTypes[subType]} sent`

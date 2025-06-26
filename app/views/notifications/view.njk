@@ -29,11 +29,11 @@
   </div>
 
   <div class="message-preview govuk-body">
-    <div class="govuk-!-margin-bottom-5">
-      {% if messageType === 'letter' %}
+    {% if messageType === 'letter' %}
+      <div class="govuk-!-margin-bottom-5">
         {{ newLineArrayItems(address) }}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
     {{ contents | markdown | safe }}
   </div>

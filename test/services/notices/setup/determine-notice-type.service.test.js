@@ -36,6 +36,30 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
+    describe('and the "notificationType" is "paper-forms"', () => {
+      it('creates a new session record', () => {
+        const result = DetermineNoticeTypeService.go('paper-forms')
+
+        expect(result).to.equal({
+          journey: 'paper-forms',
+          name: 'Paper returns',
+          notificationType: 'Paper invitation',
+          redirectPath: undefined,
+          referenceCode: result.referenceCode, // randomly generated
+          subType: 'paperReturnForms'
+        })
+      })
+
+      describe('the "referenceCode" property', () => {
+        it('returns a reference code for "invitations" notifications', () => {
+          const result = DetermineNoticeTypeService.go('paper-forms')
+
+          expect(result.referenceCode).to.include('PRTF-')
+          expect(result.referenceCode.length).to.equal(11)
+        })
+      })
+    })
+
     describe('and the "notificationType" is "reminders"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('reminders')
@@ -55,30 +79,6 @@ describe('Notices - Setup - Determine Notice Type service', () => {
           const result = DetermineNoticeTypeService.go('reminders')
 
           expect(result.referenceCode).to.include('RREM-')
-          expect(result.referenceCode.length).to.equal(11)
-        })
-      })
-    })
-
-    describe('and the "notificationType" is "ad-hoc"', () => {
-      it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('ad-hoc')
-
-        expect(result).to.equal({
-          journey: 'ad-hoc',
-          name: 'Returns: ad-hoc',
-          notificationType: 'Ad hoc',
-          redirectPath: 'licence',
-          referenceCode: result.referenceCode, // randomly generated
-          subType: 'adHocReminder'
-        })
-      })
-
-      describe('the "referenceCode" property', () => {
-        it('returns a reference code for an "ad-hoc" notification', () => {
-          const result = DetermineNoticeTypeService.go('ad-hoc')
-
-          expect(result.referenceCode).to.include('ADHC-')
           expect(result.referenceCode.length).to.equal(11)
         })
       })
