@@ -19,12 +19,20 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
+  await _markCheckPageVisited(session)
+
   const pageData = CheckPresenter.go(session)
 
   return {
     activeNavBar: 'search',
     ...pageData
   }
+}
+
+async function _markCheckPageVisited(session) {
+  session.checkPageVisited = true
+
+  return session.$update()
 }
 
 module.exports = {
