@@ -31,7 +31,7 @@ describe('Returns For Paper Forms Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.returns).to.equal(['1'])
+      expect(refreshedSession.selectedReturns).to.equal(['1'])
     })
 
     it('continues the journey', async () => {
@@ -53,7 +53,7 @@ describe('Returns For Paper Forms Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.returns).to.equal(['1'])
+        expect(refreshedSession.selectedReturns).to.equal(['1'])
       })
     })
   })

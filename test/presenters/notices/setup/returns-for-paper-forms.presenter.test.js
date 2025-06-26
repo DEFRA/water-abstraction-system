@@ -46,7 +46,7 @@ describe('Returns For Paper Forms Presenter', () => {
 
     describe('and returns have previously been selected', () => {
       beforeEach(() => {
-        session.returns = ['1']
+        session.selectedReturns = ['1']
       })
 
       it('returns the "returns" previously selected as checked', () => {

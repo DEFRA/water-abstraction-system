@@ -17,11 +17,11 @@ const { formatLongDate } = require('../../base.presenter.js')
 function go(session) {
   return {
     pageTitle: 'Select the returns for the paper forms',
-    returns: _returns(session.returns)
+    returns: _returns(session.selectedReturns)
   }
 }
 
-function _returns(returns = []) {
+function _returns(selectedReturns = []) {
   const mock = [
     {
       returnReference: '1',
@@ -39,7 +39,7 @@ function _returns(returns = []) {
 
   return mock.map((returnItem) => {
     return {
-      checked: returns.includes(returnItem.returnReference),
+      checked: selectedReturns.includes(returnItem.returnReference),
       hint: {
         text: `${formatLongDate(returnItem.startDate)} to ${formatLongDate(returnItem.endDate)}`
       },

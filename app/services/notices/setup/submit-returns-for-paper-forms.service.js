@@ -42,7 +42,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.returns = payload.returns
+  session.selectedReturns = payload.returns
 
   return session.$update()
 }
