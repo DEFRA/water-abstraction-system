@@ -37,10 +37,23 @@ function go(session) {
       abstractionPeriodEndMonth
     ),
     condition: conditionDisplayText,
+    links: _links(session.id),
     monitoringStationLabel: label,
     pageTitle: 'Check the restriction details',
     threshold: `${threshold}${unit}`,
     type: _type(stopOrReduce, reduceAtThreshold)
+  }
+}
+
+function _links(sessionId) {
+  const base = `/system/licence-monitoring-station/setup/${sessionId}`
+
+  return {
+    threshold: `${base}/threshold-and-unit`,
+    type: `${base}/stop-or-reduce`,
+    licenceNumber: `${base}/licence-number`,
+    licenceCondition: `${base}/full-condition`,
+    abstractionPeriod: `${base}/abstraction-period`
   }
 }
 
