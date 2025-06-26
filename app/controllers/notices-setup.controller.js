@@ -303,11 +303,12 @@ async function submitLicence(request, h) {
 
 async function submitNoticeType(request, h) {
   const {
+    params: { sessionId },
     payload,
-    params: { sessionId }
+    yar
   } = request
 
-  const pageData = await SubmitNoticeTypeService.go(sessionId, payload)
+  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
