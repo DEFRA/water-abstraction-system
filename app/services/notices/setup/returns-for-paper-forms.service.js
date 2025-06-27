@@ -6,6 +6,7 @@
  * @module ReturnsForPaperFormsService
  */
 
+const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
 const ReturnsForPaperFormsPresenter = require('../../../presenters/notices/setup/returns-for-paper-forms.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -19,7 +20,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = ReturnsForPaperFormsPresenter.go(session)
+  const returns = await FetchReturnsDueByLicenceRefService.go(session.licenceRef)
+
+  const pageData = ReturnsForPaperFormsPresenter.go(session, returns)
 
   return {
     ...pageData
