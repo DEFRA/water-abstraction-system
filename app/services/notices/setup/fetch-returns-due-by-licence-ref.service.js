@@ -29,6 +29,10 @@ async function _fetch(licenceRef) {
     ])
     .where('licenceRef', licenceRef)
     .where('status', 'due')
+    .orderBy([
+      { column: 'startDate', order: 'desc' },
+      { column: 'returnReference', order: 'asc' }
+    ])
 }
 
 module.exports = {
