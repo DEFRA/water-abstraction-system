@@ -39,7 +39,6 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       const result = await CheckNoticeTypeService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/notice-type`,
         continueButton: {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
