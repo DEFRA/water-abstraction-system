@@ -30,7 +30,6 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/notice-type`,
         continueButton: {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
@@ -38,6 +37,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         pageTitle: 'Check the notice type',
         summaryList: [
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/licence`,
+                  text: 'Change',
+                  visuallyHiddenText: 'licence number'
+                }
+              ]
+            },
             key: {
               text: 'Licence number'
             },
@@ -46,6 +54,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
             }
           },
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/notice-type`,
+                  text: 'Change',
+                  visuallyHiddenText: 'notice type'
+                }
+              ]
+            },
             key: {
               text: 'Returns notice type'
             },
@@ -67,6 +84,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
         expect(result.summaryList).to.equal([
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/licence`,
+                  text: 'Change',
+                  visuallyHiddenText: 'licence number'
+                }
+              ]
+            },
             key: {
               text: 'Licence number'
             },
@@ -75,6 +101,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
             }
           },
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/notice-type`,
+                  text: 'Change',
+                  visuallyHiddenText: 'notice type'
+                }
+              ]
+            },
             key: {
               text: 'Returns notice type'
             },
@@ -96,6 +131,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
         expect(result.summaryList).to.equal([
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/licence`,
+                  text: 'Change',
+                  visuallyHiddenText: 'licence number'
+                }
+              ]
+            },
             key: {
               text: 'Licence number'
             },
@@ -104,6 +148,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
             }
           },
           {
+            actions: {
+              items: [
+                {
+                  href: `/system/notices/setup/${session.id}/notice-type`,
+                  text: 'Change',
+                  visuallyHiddenText: 'notice type'
+                }
+              ]
+            },
             key: {
               text: 'Returns notice type'
             },
