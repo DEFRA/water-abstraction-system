@@ -87,8 +87,6 @@ function _id(returnVersion, reference, startDate, endDate) {
 }
 
 function _metadata(returnRequirement, endDate) {
-  console.log('returnRequirement')
-  console.log(returnRequirement)
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
