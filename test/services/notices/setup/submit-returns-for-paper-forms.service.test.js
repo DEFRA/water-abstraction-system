@@ -8,19 +8,37 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const SubmitReturnsForPaperFormsService = require('../../../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
 
-describe('Returns For Paper Forms Service', () => {
+describe('Notices - Setup - Returns For Paper Forms Service', () => {
+  let licenceRef
+  let returnLog
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { returns: ['1'] }
-    sessionData = {}
+    licenceRef = generateLicenceRef()
+
+    returnLog = await ReturnLogHelper.add({
+      licenceRef,
+      metadata: {
+        purposes: [
+          {
+            tertiary: { description: 'Potable Water Supply - Direct' }
+          }
+        ]
+      }
+    })
+
+    payload = { returns: [returnLog.returnReference] }
+
+    sessionData = { licenceRef }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +49,7 @@ describe('Returns For Paper Forms Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.selectedReturns).to.equal(['1'])
+      expect(refreshedSession.selectedReturns).to.equal([returnLog.returnReference])
     })
 
     it('continues the journey', async () => {
@@ -42,7 +60,7 @@ describe('Returns For Paper Forms Service', () => {
 
     describe('and the payload has one item (is not an array)', () => {
       beforeEach(async () => {
-        payload = { returns: '1' }
+        payload = { returns: returnLog.returnReference }
         sessionData = {}
 
         session = await SessionHelper.add({ data: sessionData })
@@ -53,7 +71,7 @@ describe('Returns For Paper Forms Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.selectedReturns).to.equal(['1'])
+        expect(refreshedSession.selectedReturns).to.equal([returnLog.returnReference])
       })
     })
   })
@@ -76,18 +94,10 @@ describe('Returns For Paper Forms Service', () => {
           {
             checked: false,
             hint: {
-              text: '1 January 2025 to 1 January 2026'
+              text: '1 April 2022 to 31 March 2023'
             },
-            text: '1 Potable Water Supply - Direct',
-            value: '1'
-          },
-          {
-            checked: false,
-            hint: {
-              text: '1 January 2025 to 1 January 2026'
-            },
-            text: '2 Potable Water Supply - Direct',
-            value: '2'
+            text: `${returnLog.returnReference} Potable Water Supply - Direct`,
+            value: `${returnLog.returnReference}`
           }
         ]
       })

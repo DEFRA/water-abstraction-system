@@ -9,24 +9,17 @@ const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const ReturnsForPaperFormsService = require('../../../../app/services/notices/setup/returns-for-paper-forms.service.js')
+const FetchReturnsDueByLicenceRefService = require('../../../../app/services/notices/setup/fetch-returns-due-by-licence-ref.service.js')
 
 describe('Notices - Setup - Returns For Paper Forms Service', () => {
   let licenceRef
   let returnLog
-  let session
-  let sessionData
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
-
-    sessionData = { licenceRef }
-
-    session = await SessionHelper.add({ data: sessionData })
 
     returnLog = await ReturnLogHelper.add({
       licenceRef,
@@ -38,25 +31,26 @@ describe('Notices - Setup - Returns For Paper Forms Service', () => {
         ]
       }
     })
+
+    // Add a record not due
+    await ReturnLogHelper.add({
+      licenceRef,
+      status: 'not due'
+    })
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ReturnsForPaperFormsService.go(session.id)
+    it('returns the data', async () => {
+      const result = await FetchReturnsDueByLicenceRefService.go(licenceRef)
 
-      expect(result).to.equal({
-        pageTitle: 'Select the returns for the paper forms',
-        returns: [
-          {
-            checked: false,
-            hint: {
-              text: '1 April 2022 to 31 March 2023'
-            },
-            text: `${returnLog.returnReference} Potable Water Supply - Direct`,
-            value: `${returnLog.returnReference}`
-          }
-        ]
-      })
+      expect(result).to.equal([
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31'),
+          returnReference: returnLog.returnReference,
+          description: 'Potable Water Supply - Direct'
+        }
+      ])
     })
   })
 })
