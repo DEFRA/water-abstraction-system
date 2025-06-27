@@ -22,7 +22,6 @@ function go(session, returns) {
   }
 }
 
-// selected rows need to be unque? like threshold - use date ? - otherwise it slected all return ref
 function _returns(returns, selectedReturns = []) {
   return returns.map((returnItem) => {
     return {
