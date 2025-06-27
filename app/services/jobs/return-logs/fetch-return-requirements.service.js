@@ -37,8 +37,7 @@ async function _fetch(returnCycle) {
       'returnVersionId',
       'siteDescription',
       'summer',
-      'twoPartTariff',
-      'upload'
+      'twoPartTariff'
     ])
     .where('returnRequirements.summer', summer)
     .whereNotExists(
@@ -71,7 +70,7 @@ async function _fetch(returnCycle) {
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (returnVersionBuilder) => {
       returnVersionBuilder
-        .select(['endDate', 'id', 'reason', 'startDate', 'quarterlyReturns'])
+        .select(['endDate', 'id', 'reason', 'startDate', 'quarterlyReturns', 'multipleUpload'])
         .withGraphFetched('licence')
         .modifyGraph('licence', (licenceBuilder) => {
           licenceBuilder
