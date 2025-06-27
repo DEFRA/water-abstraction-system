@@ -87,6 +87,8 @@ function _id(returnVersion, reference, startDate, endDate) {
 }
 
 function _metadata(returnRequirement, endDate) {
+  console.log('returnRequirement')
+  console.log(returnRequirement)
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
@@ -98,8 +100,7 @@ function _metadata(returnRequirement, endDate) {
     returnVersion,
     siteDescription,
     summer,
-    twoPartTariff,
-    upload
+    twoPartTariff
   } = returnRequirement
 
   return {
@@ -108,7 +109,7 @@ function _metadata(returnRequirement, endDate) {
     isFinal: endDate < determineCycleEndDate(summer),
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
-    isUpload: upload,
+    isUpload: returnVersion.multipleUpload,
     nald: {
       regionCode: returnVersion.licence.region.naldRegionId,
       areaCode: returnVersion.licence.areacode,

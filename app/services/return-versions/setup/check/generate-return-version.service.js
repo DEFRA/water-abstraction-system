@@ -59,7 +59,8 @@ async function _generateReturnVersion(nextVersionNumber, sessionData, userId) {
   if (isQuarterlyReturnSubmissions(sessionData.returnVersionStartDate)) {
     quarterlyReturns = sessionData.quarterlyReturns
   }
-
+console.log('gerateReturnVersion')
+console.log(sessionData)
   return {
     createdBy: userId,
     endDate,
