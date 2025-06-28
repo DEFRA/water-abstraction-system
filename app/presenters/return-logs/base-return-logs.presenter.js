@@ -44,6 +44,32 @@ function formatMeterDetails(meter) {
 }
 
 /**
+ * Formats a return log's purposes into a string for display in the UI
+ *
+ * 99.999% of return logs the `metadata` field's `purposes` property is set. But there are 38 that we know of where
+ * the return version information was deleted yet.
+ *
+ * The water-abstraction-import service still created return logs in WRLS, but they are missing key details like
+ * purposes, points and the abstraction period.
+ *
+ * We don't want these few to block access to other returns for a licence. So, we have to handle them in code.
+ *
+ * @param {string[]} purposes - the list of purposes taken from the return log's metadata field
+ *
+ * @returns {string|null} The first purpose's alias, else tertiary description of the first purpose else an empty string
+ * if purposes is empty
+ */
+function formatPurpose(purposes) {
+  if (!purposes || purposes.length === 0) {
+    return ''
+  }
+
+  const [firstPurpose] = purposes
+
+  return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
+}
+
+/**
  * Formats the status for a return log, adjusting for specific conditions.
  *
  * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due', but there are
@@ -251,6 +277,7 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 module.exports = {
   convertToCubicMetres,
   formatMeterDetails,
+  formatPurpose,
   formatQuantity,
   formatStatus,
   generateSummaryTableHeaders,
