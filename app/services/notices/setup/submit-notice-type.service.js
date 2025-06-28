@@ -7,6 +7,7 @@
  */
 
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
+const GeneralLib = require('../../../lib/general.lib.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -16,15 +17,20 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
+      GeneralLib.flashNotification(yar, 'Updated', 'Notice type updated')
+    }
+
     await _save(session, payload)
 
     return _redirect(payload.noticeType)
