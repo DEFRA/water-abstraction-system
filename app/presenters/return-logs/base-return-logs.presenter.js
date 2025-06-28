@@ -278,7 +278,6 @@ module.exports = {
   convertToCubicMetres,
   formatMeterDetails,
   formatPurpose,
-  formatQuantity,
   formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
