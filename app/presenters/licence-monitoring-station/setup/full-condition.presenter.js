@@ -9,10 +9,11 @@
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
- * @param session
- * @param conditions
+ * @param {module:SessionModel} session - The licence monitoring station setup session instance
+ * @param {module:LicenceVersionPurposeConditionModel[]} conditions - Array of licence version purpose conditions to be
+ * displayed as options
  *
- * @returns {object} - The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go(session, conditions) {
   const { label, licenceRef, conditionId } = session
