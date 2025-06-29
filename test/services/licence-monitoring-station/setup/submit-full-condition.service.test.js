@@ -14,6 +14,7 @@ const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-ve
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things to stub
+const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 
 // Thing under test
@@ -40,6 +41,7 @@ describe('Submit Full Condition Service', () => {
       condition: licenceVersionPurposeCondition.id
     }
 
+    Sinon.stub(FetchFullConditionService, 'go').resolves([licenceVersionPurposeCondition])
     Sinon.stub(FullConditionService, 'go').resolves(pageData)
   })
 
