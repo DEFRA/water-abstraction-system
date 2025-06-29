@@ -20,6 +20,7 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'search',
+    pageTitle: 'Enter a UK postcode',
     ...(session.address?.postcode && { postcode: session.address.postcode }),
     sessionId: session.id
   }
