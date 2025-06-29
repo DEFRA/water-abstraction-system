@@ -36,7 +36,7 @@ describe('Returns For Paper Forms Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"returns" is required')
+      expect(result.error.details[0].message).to.equal('Select the returns for the paper forms')
     })
   })
 })
