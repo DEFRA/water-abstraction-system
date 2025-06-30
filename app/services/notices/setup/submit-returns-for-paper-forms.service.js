@@ -21,9 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  if (payload.returns && !Array.isArray(payload?.returns)) {
-    payload.returns = [payload?.returns]
-  }
+  _handleOneOptionSelected(payload)
 
   const validationResult = _validate(payload)
 
@@ -38,6 +36,12 @@ async function go(sessionId, payload) {
   return {
     error: validationResult,
     ...pageData
+  }
+}
+
+function _handleOneOptionSelected(payload) {
+  if (payload.returns && !Array.isArray(payload?.returns)) {
+    payload.returns = [payload?.returns]
   }
 }
 
