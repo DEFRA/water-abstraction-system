@@ -7,6 +7,7 @@
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { formatPurpose } = require('../return-logs/base-return-logs.presenter.js')
 
 const DUE_PERIOD_DAYS = 27
 
@@ -59,12 +60,6 @@ function _noReturnsMessage(hasReturns, hasRequirements) {
   return null
 }
 
-function _purpose(purpose) {
-  const [firstPurpose] = purpose
-
-  return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
-}
-
 function _returns(returns, canManageReturns) {
   return returns.map((returnLog) => {
     const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate, status } = returnLog
@@ -74,7 +69,7 @@ function _returns(returns, canManageReturns) {
       description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: formatLongDate(new Date(dueDate)),
       link: _link(status, returnLogId, canManageReturns),
-      purpose: _purpose(metadata.purposes),
+      purpose: formatPurpose(metadata.purposes),
       reference: returnReference,
       returnLogId,
       status: _status(returnLog)
