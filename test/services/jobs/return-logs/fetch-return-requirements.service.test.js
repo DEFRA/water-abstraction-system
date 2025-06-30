@@ -522,7 +522,6 @@ function _expectedResult() {
     siteDescription: returnRequirement.siteDescription,
     summer: returnRequirement.summer,
     twoPartTariff: returnRequirement.twoPartTariff,
-    upload: returnRequirement.upload,
     returnVersion: {
       endDate: returnVersion.endDate,
       id: returnVersion.id,
@@ -540,7 +539,8 @@ function _expectedResult() {
           naldRegionId: region.naldRegionId
         }
       },
-      quarterlyReturns: returnVersion.quarterlyReturns
+      quarterlyReturns: returnVersion.quarterlyReturns,
+      multipleUpload: returnVersion.multipleUpload
     },
     points: [
       {

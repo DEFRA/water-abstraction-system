@@ -8,6 +8,7 @@
 const { formatAbstractionPeriod, formatLongDate, formatNumber } = require('../base.presenter.js')
 const {
   formatMeterDetails,
+  formatPurpose,
   formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
@@ -61,7 +62,7 @@ function go(returnLog, auth) {
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
     pageTitle: 'Abstraction return',
-    purpose: _purpose(purposes),
+    purpose: formatPurpose(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
@@ -178,12 +179,6 @@ function _latest(versions, selectedReturnSubmission) {
   }
 
   return versions[0].id === selectedReturnSubmission.id
-}
-
-function _purpose(purposes) {
-  const [firstPurpose] = purposes
-
-  return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
 }
 
 function _selectedReturnSubmission(returnSubmissions) {
