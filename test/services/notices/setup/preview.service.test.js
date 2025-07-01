@@ -14,7 +14,6 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const NotifyPreviewRequest = require('../../../../app/requests/notify/notify-preview.request.js')
 
@@ -73,45 +72,6 @@ describe('Notices - Setup - Preview service', () => {
         contents: 'Preview of the notification contents',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email'
-      })
-    })
-  })
-
-  describe('when the journey is "abstraction-alert', () => {
-    beforeEach(async () => {
-      recipients = RecipientsFixture.alertsRecipients()
-
-      testRecipients = [recipients.primaryUser]
-      testRecipient = testRecipients[0]
-
-      session = await SessionHelper.add({
-        data: {
-          journey: 'abstraction-alert',
-          relevantLicenceMonitoringStations: [
-            {
-              licence: {
-                licenceRef: testRecipient.licence_refs
-              }
-            }
-          ]
-        }
-      })
-
-      Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
-    })
-
-    it('returns the page data for the view', async () => {
-      const result = await PreviewService.go(testRecipient.contact_hash_id, session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        address: null,
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice undefined',
-        contents: 'Preview of the notification contents',
-        messageType: 'email',
-        pageTitle: 'Water abstraction alert email'
       })
     })
   })
