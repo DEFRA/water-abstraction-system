@@ -7,7 +7,7 @@
 
 const Joi = require('joi').extend(require('@joi/date'))
 
-const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
+const { leftPadZeroes } = require('../presenters/base.presenter.js')
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/abstraction-period` page

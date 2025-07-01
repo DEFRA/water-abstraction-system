@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AbstractionPeriodValidator = require('../../../../app/validators/return-versions/setup/abstraction-period.validator.js')
+const AbstractionPeriodValidator = require('../../app/validators/abstraction-period.validator.js')
 
-describe('Return Versions Setup - Abstraction Period validator', () => {
+describe('Abstraction Period validator', () => {
   let payload
 
   describe('when valid data is provided', () => {
