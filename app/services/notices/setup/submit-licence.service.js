@@ -111,7 +111,7 @@ function _redirect(checkPageVisited) {
   if (checkPageVisited) {
     return 'check-notice-type'
   }
-  k
+
   return 'notice-type'
 }
 
