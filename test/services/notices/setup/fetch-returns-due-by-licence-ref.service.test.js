@@ -40,7 +40,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
   })
 
   describe('when called', () => {
-    it('returns the data', async () => {
+    it('returns the "due" returns for the licence', async () => {
       const result = await FetchReturnsDueByLicenceRefService.go(licenceRef)
 
       expect(result).to.equal([
