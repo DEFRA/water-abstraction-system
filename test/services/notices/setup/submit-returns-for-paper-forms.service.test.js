@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const SubmitReturnsForPaperFormsService = require('../../../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
-describe('Notices - Setup - Submit Returns For Paper Forms Service', () => {
+describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
   let dueReturn
   let licenceRef
   let payload
