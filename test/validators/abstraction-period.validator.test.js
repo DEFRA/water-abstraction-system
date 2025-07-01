@@ -139,10 +139,10 @@ describe('Abstraction Period validator', () => {
     describe('for both dates', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': 'abc',
-          'start-abstraction-period-month': '123',
-          'end-abstraction-period-day': 'def',
-          'end-abstraction-period-month': '456'
+          'start-abstraction-period-day': 'INVALID_START_DAY',
+          'start-abstraction-period-month': 'INVALID_START_MONTH',
+          'end-abstraction-period-day': 'INVALID_END_DAY',
+          'end-abstraction-period-month': 'INVALID_END_MONTH'
         }
       })
 
