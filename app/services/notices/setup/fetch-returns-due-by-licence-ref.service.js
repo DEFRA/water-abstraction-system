@@ -5,8 +5,8 @@
  * @module FetchReturnsDueByLicenceRefService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
 const { db } = require('../../../../db/db.js')
+const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
  * Fetches the returns due for `/notices/setup/{sessionId}/returns-for-paper-forms` page
