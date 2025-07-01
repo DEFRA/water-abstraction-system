@@ -11,7 +11,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 /**
  * Fetches the returns due for `/notices/setup/{sessionId}/returns-for-paper-forms` page
  *
- * @param {string} licenceRef
+ * @param {string} licenceRef - The licence reference to fetch 'due' return logs for
  *
  * @returns {Promise<module:ReturnLogModel[]>}
  */
