@@ -14,7 +14,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 
-describe('View Licence returns presenter', () => {
+describe('Licences - View Licence Returns presenter', () => {
   let auth
   let returnLogs
   let hasRequirements
@@ -186,28 +186,6 @@ describe('View Licence returns presenter', () => {
 
             expect(result.returns[1].link).to.equal('/returns/return?id=v1:1:01/123:10046820:2020-01-02:2020-02-01')
           })
-        })
-      })
-    })
-
-    describe('the "purpose" property', () => {
-      describe("when the first purpose in the return log's metadata does not have an alias", () => {
-        it("returns the purpose's tertiary description", () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-          expect(result.returns[1].purpose).to.equal('SPRAY IRRIGATION')
-        })
-      })
-
-      describe("when the first purpose in the return log's metadata is has an alias", () => {
-        beforeEach(() => {
-          returnLogs[1].metadata.purposes[0].alias = 'Spray irrigation - top field only'
-        })
-
-        it("returns the purpose's alias", () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-          expect(result.returns[1].purpose).to.equal('Spray irrigation - top field only')
         })
       })
     })

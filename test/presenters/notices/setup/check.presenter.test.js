@@ -9,11 +9,11 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/notices/setup/check.presenter.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 describe('Notices - Setup - Check presenter', () => {
   let session
@@ -418,6 +418,19 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
+        })
+      })
+    })
+
+    describe('when the journey is for "paper-forms"', () => {
+      beforeEach(() => {
+        session.journey = 'paper-forms'
+      })
+
+      describe('the "readyToSend" property', () => {
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.readyToSend).to.equal('Paper invitations are ready to send.')
         })
       })
     })

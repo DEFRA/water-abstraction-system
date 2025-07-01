@@ -2,8 +2,8 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block breadcrumbs %}
   {{
@@ -18,12 +18,7 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#returns"
-        }
-      ]
+      errorList: error.errorList
     }) }}
   {%endif%}
 
@@ -31,20 +26,13 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukCheckboxes({
-        name: "returns",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
+      {{ govukSelect({
+        id: "address",
+        name: "address",
+        label: {
+          text: "Address"
         },
-        hint: {
-          text: "Select all that apply"
-        },
-        items: returns
+        items: []
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

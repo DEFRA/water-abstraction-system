@@ -2,19 +2,23 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
     <div class="govuk-body">
+      {% if notification %}
+        {{ govukNotificationBanner({
+          titleText: notification.title,
+          text: notification.text
+        }) }}
+      {% endif %}
+
       <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+
+      {{ govukSummaryList({
+        rows: summaryList
+      }) }}
 
       {{ govukButton(continueButton) }}
   </div>

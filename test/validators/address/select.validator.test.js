@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ReturnsForPaperFormsValidator = require('../../../../app/validators/notices/setup/returns-for-paper-forms.validator.js')
+const SelectValidator = require('../../../app/validators/address/select.validator.js')
 
-describe('Returns For Paper Forms Validator', () => {
+describe('Address - Select Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { returns: [] }
+    payload = { address: '123 street' }
   })
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ReturnsForPaperFormsValidator.go(payload)
+      const result = SelectValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,11 +32,11 @@ describe('Returns For Paper Forms Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ReturnsForPaperFormsValidator.go(payload)
+      const result = SelectValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select the returns for the paper forms')
+      expect(result.error.details[0].message).to.equal('Select an address')
     })
   })
 })

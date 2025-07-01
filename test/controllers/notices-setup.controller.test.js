@@ -681,7 +681,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '01/115' })
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({})
+          Sinon.stub(SubmitLicenceService, 'go').resolves({ redirectUrl: 'notice-type' })
         })
 
         it('returns the same page', async () => {
@@ -775,7 +775,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' })
 
-          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({})
+          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({ redirectUrl: 'check-notice-type' })
         })
 
         it('returns the same page', async () => {

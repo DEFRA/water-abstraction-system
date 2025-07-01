@@ -1,17 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Validates data submitted for the `address/{sessionId}/select` page
  *
- * @module ReturnsForPaperFormsValidator
+ * @module SelectValidator
  */
 
 const Joi = require('joi')
 
-const errorMessage = 'Select the returns for the paper forms'
-
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Validates data submitted for the `address/{sessionId}/select` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -20,9 +18,8 @@ const errorMessage = 'Select the returns for the paper forms'
  */
 function go(payload) {
   const schema = Joi.object({
-    returns: Joi.array().required().messages({
-      'any.required': errorMessage,
-      'any.only': errorMessage
+    address: Joi.string().required().messages({
+      'any.required': 'Select an address'
     })
   })
 
