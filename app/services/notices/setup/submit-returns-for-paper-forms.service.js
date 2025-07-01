@@ -6,10 +6,10 @@
  * @module SubmitReturnsForPaperFormsService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const ReturnsForPaperFormsPresenter = require('../../../presenters/notices/setup/returns-for-paper-forms.presenter.js')
 const ReturnsForPaperFormsValidator = require('../../../validators/notices/setup/returns-for-paper-forms.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const GeneralLib = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/returns-for-paper-forms` page
