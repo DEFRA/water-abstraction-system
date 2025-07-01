@@ -13,7 +13,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  *
  * @param {string} licenceRef
  *
- * @returns {Promise<object[]>}
+ * @returns {Promise<module:ReturnLogModel[]>}
  */
 async function go(licenceRef) {
   return _fetch(licenceRef)
