@@ -64,13 +64,8 @@ function _arraysDiffer(a, b) {
     return true
   }
 
-  const sortedA = [...a].sort((a, b) => {
-    return a.toLowerCase().localeCompare(b.toLowerCase())
-  })
-
-  const sortedB = [...b].sort((a, b) => {
-    return a.toLowerCase().localeCompare(b.toLowerCase())
-  })
+  const sortedA = [...a].sort()
+  const sortedB = [...b].sort()
 
   for (let i = 0; i < sortedA.length; i++) {
     if (sortedA[i] !== sortedB[i]) {
