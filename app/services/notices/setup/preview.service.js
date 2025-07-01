@@ -5,9 +5,7 @@
  * @module PreviewService
  */
 
-const AbstractionAlertsNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
@@ -38,25 +36,13 @@ async function go(contactHashId, sessionId) {
 function _notification(recipient, session) {
   const { determinedReturnsPeriod, referenceCode, journey } = session
 
-  let notifications
-
-  if (session.journey === 'abstraction-alert') {
-    notifications = AbstractionAlertsNotificationsPresenter.go(recipient, session)
-  } else {
-    notifications = NotificationsPresenter.go(recipient, determinedReturnsPeriod, referenceCode, journey)
-  }
+  const notifications = NotificationsPresenter.go(recipient, determinedReturnsPeriod, referenceCode, journey)
 
   return notifications[0] // Only one record will be returned as we are looking for a single recipient
 }
 
 async function _recipient(contactHashId, session) {
-  let recipientsData
-
-  if (session.journey === 'abstraction-alert') {
-    recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
-  } else {
-    recipientsData = await FetchRecipientsService.go(session)
-  }
+  const recipientsData = await FetchRecipientsService.go(session)
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 
