@@ -35,7 +35,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
     // Add a record not due
     await ReturnLogHelper.add({
       licenceRef,
-      status: 'not due'
+      status: 'void'
     })
   })
 
