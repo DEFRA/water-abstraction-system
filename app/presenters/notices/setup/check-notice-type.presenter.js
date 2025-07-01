@@ -20,7 +20,7 @@ const NOTICE_TYPE_TEXT = {
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { dueReturns, selectedReturns = [], licenceRef, noticeType, id: sessionId } = session
+  const { dueReturns, id: sessionId, licenceRef, noticeType, selectedReturns = [] } = session
 
   return {
     continueButton: _continueButton(sessionId),
