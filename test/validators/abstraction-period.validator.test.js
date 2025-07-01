@@ -17,10 +17,10 @@ describe('Abstraction Period validator', () => {
     describe('and the data is provided as strings', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': '01',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': '02',
-          'end-abstraction-period-month': '7'
+          'abstraction-period-start-day': '01',
+          'abstraction-period-start-month': '12',
+          'abstraction-period-end-day': '02',
+          'abstraction-period-end-month': '7'
         }
       })
 
@@ -37,10 +37,10 @@ describe('Abstraction Period validator', () => {
     describe('and the data is provided as numbers', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': 1,
-          'start-abstraction-period-month': 12,
-          'end-abstraction-period-day': 2,
-          'end-abstraction-period-month': 7
+          'abstraction-period-start-day': 1,
+          'abstraction-period-start-month': 12,
+          'abstraction-period-end-day': 2,
+          'abstraction-period-end-month': 7
         }
       })
 
@@ -59,10 +59,10 @@ describe('Abstraction Period validator', () => {
     describe('for the start date, with a valid end date', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': 'INVALID_START_DAY',
-          'start-abstraction-period-month': 'INVALID_START_MONTH',
-          'end-abstraction-period-day': '02',
-          'end-abstraction-period-month': '07'
+          'abstraction-period-start-day': 'INVALID_START_DAY',
+          'abstraction-period-start-month': 'INVALID_START_MONTH',
+          'abstraction-period-end-day': '02',
+          'abstraction-period-end-month': '07'
         }
       })
 
@@ -79,10 +79,10 @@ describe('Abstraction Period validator', () => {
     describe('for the end date, with a valid start date', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': '01',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': 'INVALID_END_DAY',
-          'end-abstraction-period-month': 'INVALID_END_MONTH'
+          'abstraction-period-start-day': '01',
+          'abstraction-period-start-month': '12',
+          'abstraction-period-end-day': 'INVALID_END_DAY',
+          'abstraction-period-end-month': 'INVALID_END_MONTH'
         }
       })
 
@@ -99,10 +99,10 @@ describe('Abstraction Period validator', () => {
     describe('for the start date, with no end date', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': 'INVALID_START_DAY',
-          'start-abstraction-period-month': 'INVALID_START_MONTH',
-          'end-abstraction-period-day': null,
-          'end-abstraction-period-month': null
+          'abstraction-period-start-day': 'INVALID_START_DAY',
+          'abstraction-period-start-month': 'INVALID_START_MONTH',
+          'abstraction-period-end-day': null,
+          'abstraction-period-end-month': null
         }
       })
 
@@ -119,10 +119,10 @@ describe('Abstraction Period validator', () => {
     describe('for the end date, with no start date', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': null,
-          'start-abstraction-period-month': null,
-          'end-abstraction-period-day': 'INVALID_END_DAY',
-          'end-abstraction-period-month': 'INVALID_END_MONTH'
+          'abstraction-period-start-day': null,
+          'abstraction-period-start-month': null,
+          'abstraction-period-end-day': 'INVALID_END_DAY',
+          'abstraction-period-end-month': 'INVALID_END_MONTH'
         }
       })
 
@@ -139,10 +139,10 @@ describe('Abstraction Period validator', () => {
     describe('for both dates', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': 'INVALID_START_DAY',
-          'start-abstraction-period-month': 'INVALID_START_MONTH',
-          'end-abstraction-period-day': 'INVALID_END_DAY',
-          'end-abstraction-period-month': 'INVALID_END_MONTH'
+          'abstraction-period-start-day': 'INVALID_START_DAY',
+          'abstraction-period-start-month': 'INVALID_START_MONTH',
+          'abstraction-period-end-day': 'INVALID_END_DAY',
+          'abstraction-period-end-month': 'INVALID_END_MONTH'
         }
       })
 
@@ -160,10 +160,10 @@ describe('Abstraction Period validator', () => {
   describe('when only start abstraction period data is provided', () => {
     beforeEach(() => {
       payload = {
-        'start-abstraction-period-day': '01',
-        'start-abstraction-period-month': '12',
-        'end-abstraction-period-day': null,
-        'end-abstraction-period-month': null
+        'abstraction-period-start-day': '01',
+        'abstraction-period-start-month': '12',
+        'abstraction-period-end-day': null,
+        'abstraction-period-end-month': null
       }
     })
 
@@ -180,10 +180,10 @@ describe('Abstraction Period validator', () => {
   describe('when only end abstraction period data is provided', () => {
     beforeEach(() => {
       payload = {
-        'start-abstraction-period-day': null,
-        'start-abstraction-period-month': null,
-        'end-abstraction-period-day': '02',
-        'end-abstraction-period-month': '7'
+        'abstraction-period-start-day': null,
+        'abstraction-period-start-month': null,
+        'abstraction-period-end-day': '02',
+        'abstraction-period-end-month': '7'
       }
     })
 

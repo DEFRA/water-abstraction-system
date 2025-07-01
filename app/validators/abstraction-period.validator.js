@@ -14,10 +14,10 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  *
  * The payload is expected to contain the following properties, which can be either strings or numbers:
  *
- * - start-abstraction-period-day
- * - start-abstraction-period-month
- * - end-abstraction-period-day
- * - end-abstraction-period-month
+ * - abstraction-period-start-day
+ * - abstraction-period-start-month
+ * - abstraction-period-end-day
+ * - abstraction-period-end-month
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -27,10 +27,10 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  */
 function go(payload) {
   const {
-    'start-abstraction-period-day': startDay,
-    'start-abstraction-period-month': startMonth,
-    'end-abstraction-period-day': endDay,
-    'end-abstraction-period-month': endMonth
+    'abstraction-period-start-day': startDay,
+    'abstraction-period-start-month': startMonth,
+    'abstraction-period-end-day': endDay,
+    'abstraction-period-end-month': endMonth
   } = payload
 
   const parsedStartDate = _parseDate(startDay, startMonth)
