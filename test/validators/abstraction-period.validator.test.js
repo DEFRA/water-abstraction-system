@@ -66,12 +66,12 @@ describe('Abstraction Period validator', () => {
         }
       })
 
-      it('fails validation', () => {
+      it('fails validation for only the start date', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
         expect(result.startResult.value).to.exist()
-        expect(result.startResult.error.details[0].message).to.equal('Enter a real start date')
         expect(result.endResult.value).to.exist()
+        expect(result.startResult.error.details[0].message).to.equal('Enter a real start date')
         expect(result.endResult.error).to.not.exist()
       })
     })
@@ -86,12 +86,12 @@ describe('Abstraction Period validator', () => {
         }
       })
 
-      it('fails validation', () => {
+      it('fails validation for only the end date', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
         expect(result.startResult.value).to.exist()
-        expect(result.startResult.error).to.not.exist()
         expect(result.endResult.value).to.exist()
+        expect(result.startResult.error).to.not.exist()
         expect(result.endResult.error.details[0].message).to.equal('Enter a real end date')
       })
     })
@@ -106,7 +106,7 @@ describe('Abstraction Period validator', () => {
         }
       })
 
-      it('fails validation', () => {
+      it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
         expect(result.startResult.value).to.exist()
@@ -126,7 +126,7 @@ describe('Abstraction Period validator', () => {
         }
       })
 
-      it('fails validation', () => {
+      it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
         expect(result.startResult.value).to.exist()
@@ -146,7 +146,7 @@ describe('Abstraction Period validator', () => {
         }
       })
 
-      it('fails validation', () => {
+      it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
         expect(result.startResult.value).to.exist()
@@ -167,7 +167,7 @@ describe('Abstraction Period validator', () => {
       }
     })
 
-    it('fails validation', () => {
+    it('fails validation for only the end date', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
       expect(result.startResult.value).to.exist()
@@ -187,7 +187,7 @@ describe('Abstraction Period validator', () => {
       }
     })
 
-    it('fails validation', () => {
+    it('fails validation for only the start date', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
       expect(result.startResult.value).to.exist()
@@ -202,7 +202,7 @@ describe('Abstraction Period validator', () => {
       payload = {}
     })
 
-    it('fails validation', () => {
+    it('fails validation correctly for both dates', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
       expect(result.startResult.value).to.exist()
