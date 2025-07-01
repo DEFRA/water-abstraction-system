@@ -54,6 +54,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       expect(result).to.equal({
         defaultPageSize: 25,
+        displayPreviewLink: true,
         links: {
           back: `/system/notices/setup/${session.id}/returns-period`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -373,6 +374,13 @@ describe('Notices - Setup - Check presenter', () => {
         session.journey = 'abstraction-alert'
         session.referenceCode = 'WAA-123'
         session.monitoringStationId = '345'
+      })
+
+      describe('the "displayPreviewLink" property', () => {
+        it('should be false', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.displayPreviewLink).to.be.false()
+        })
       })
 
       describe('the "links" property', () => {
