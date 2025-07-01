@@ -15,7 +15,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const ReturnsForPaperFormsService = require('../../../../app/services/notices/setup/returns-for-paper-forms.service.js')
 
-describe('Notices - Setup - Returns For Paper Forms Service', () => {
+describe('Notices - Setup - Returns For Paper Forms service', () => {
   let dueReturn
   let licenceRef
   let session
