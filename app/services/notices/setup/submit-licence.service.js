@@ -6,11 +6,11 @@
  */
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -86,9 +86,9 @@ function _determinedReturnsPeriod() {
 }
 
 async function _dueReturnsExist(licenceRef) {
-  const dueReturns = await ReturnLogModel.query().where('licenceRef', licenceRef).where('status', 'due').first()
+  const dueReturns = await FetchReturnsDueByLicenceRefService.go(licenceRef)
 
-  return !!dueReturns
+  return dueReturns.length > 0
 }
 
 async function _licenceExists(licenceRef) {
@@ -101,6 +101,8 @@ async function _save(session, payload) {
   session.licenceRef = payload.licenceRef
 
   session.determinedReturnsPeriod = _determinedReturnsPeriod()
+
+  session.dueReturns = await FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
 
   return session.$update()
 }

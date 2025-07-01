@@ -4,11 +4,11 @@
  * @module ReturnLogHelper
  */
 
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
+const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReference } = require('./return-requirement.helper.js')
+const { timestampForPostgres, generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new return log
@@ -61,6 +61,7 @@ function defaults(data = {}) {
 
   const defaults = {
     id: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),
+    returnId: generateUUID(),
     createdAt: timestamp,
     dueDate,
     endDate,
