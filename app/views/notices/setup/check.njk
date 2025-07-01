@@ -46,7 +46,7 @@
     },
     {
       html: '<a href="' + recipient.previewLink + '">Preview</a>'
-    }
+    } if displayPreviewLink
   ]), rows) %}
 {% endfor %}
 
@@ -98,7 +98,7 @@
         },
         {
           text: "Action"
-        }
+        } if displayPreviewLink
       ],
       rows: rows
     }) }}

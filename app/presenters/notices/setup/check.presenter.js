@@ -30,6 +30,7 @@ function go(recipients, page, pagination, session) {
 
   return {
     defaultPageSize,
+    displayPreviewLink: journey !== 'abstraction-alert',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
