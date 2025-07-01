@@ -60,13 +60,22 @@ async function go(sessionId, payload, yar) {
  * @private
  */
 function _arraysDiffer(a, b) {
-  if (a.length !== b.length) return true
+  if (a.length !== b.length) {
+    return true
+  }
 
-  const sortedA = [...a].sort()
-  const sortedB = [...b].sort()
+  const sortedA = [...a].sort((a, b) => {
+    return a.toLowerCase().localeCompare(b.toLowerCase())
+  })
+
+  const sortedB = [...b].sort((a, b) => {
+    return a.toLowerCase().localeCompare(b.toLowerCase())
+  })
 
   for (let i = 0; i < sortedA.length; i++) {
-    if (sortedA[i] !== sortedB[i]) return true
+    if (sortedA[i] !== sortedB[i]) {
+      return true
+    }
   }
 
   return false
