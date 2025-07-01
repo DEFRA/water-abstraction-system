@@ -9,18 +9,33 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const SubmitReturnsForPaperFormsService = require('../../../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
-describe('Returns For Paper Forms Service', () => {
+describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
+  let dueReturn
+  let licenceRef
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { returns: ['1'] }
-    sessionData = {}
+    licenceRef = generateLicenceRef()
+
+    dueReturn = {
+      description: 'Potable Water Supply - Direct',
+      endDate: '2003-03-31',
+      returnId: generateUUID(),
+      returnReference: '3135',
+      startDate: '2002-04-01'
+    }
+
+    payload = { returns: [dueReturn.returnId] }
+
+    sessionData = { licenceRef }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +46,7 @@ describe('Returns For Paper Forms Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.selectedReturns).to.equal(['1'])
+      expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnId])
     })
 
     it('continues the journey', async () => {
@@ -42,7 +57,7 @@ describe('Returns For Paper Forms Service', () => {
 
     describe('and the payload has one item (is not an array)', () => {
       beforeEach(async () => {
-        payload = { returns: '1' }
+        payload = { returns: dueReturn.returnId }
         sessionData = {}
 
         session = await SessionHelper.add({ data: sessionData })
@@ -53,14 +68,18 @@ describe('Returns For Paper Forms Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.selectedReturns).to.equal(['1'])
+        expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnId])
       })
     })
   })
 
   describe('when validation fails', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       payload = {}
+
+      sessionData = { licenceRef, dueReturns: [dueReturn] }
+
+      session = await SessionHelper.add({ data: sessionData })
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -76,18 +95,10 @@ describe('Returns For Paper Forms Service', () => {
           {
             checked: false,
             hint: {
-              text: '1 January 2025 to 1 January 2026'
+              text: '1 April 2002 to 31 March 2003'
             },
-            text: '1 Potable Water Supply - Direct',
-            value: '1'
-          },
-          {
-            checked: false,
-            hint: {
-              text: '1 January 2025 to 1 January 2026'
-            },
-            text: '2 Potable Water Supply - Direct',
-            value: '2'
+            text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
+            value: dueReturn.returnId
           }
         ]
       })
