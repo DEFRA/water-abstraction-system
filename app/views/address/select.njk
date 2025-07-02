@@ -18,37 +18,55 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: '#addresses'
+        }
+      ]
     }) }}
   {%endif%}
 
-  <div class="govuk-body">
-    <div class="govuk-body">
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
-        {{ pageTitle }}
-      </h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-5">{{ pageTitle }}</h1>
+
+  <div class="govuk-form-group">
+    <p class="govuk-!-margin-bottom-0">Postcode</p>
+    <p class="govuk-!-font-weight-bold govuk-!-display-inline">{{ postcode }}</p>
+    <a href="/system/address/{{ sessionId }}/postcode" class="govuk-!-padding-left-5">Change postcode</a>
+  </div>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukSelect({
+      id: "addresses",
+      name: "addresses",
+      errorMessage: {
+        text: error.text
+      } if error,
+      label: {
+        text: "Address"
+      },
+      items: addresses
+    }) }}
+
+    <div class="govuk-form-group">
+      <a href="/system/address/{{ sessionId }}/manual">I cannot find the address in the list</a>
     </div>
 
-    <p class="govuk-!-margin-bottom-0">Postcode</p>
-    <p>
-      <span class="govuk-!-font-weight-bold govuk-!-display-inline">{{ postcode }}</span>
-      <a href="/system/address/{{ sessionId }}/postcode" class="govuk-link govuk-!-padding-left-5">Change postcode</a>
-    </p>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 
+  <div class="govuk-grid-row govuk-!-margin-top-9">
+    <div class="govuk-grid-column-full">
+      <p>© Crown copyright and database rights 2018 Ordnance Survey 100024198.</p>
 
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-      {{ govukSelect({
-        id: "address",
-        name: "address",
-        label: {
-          text: "Address"
-        },
-        items: addresses
-      }) }}
-
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
+      <p>
+        Use of this addressing data is subject to the
+        <a rel="noreferrer noopener" target="_blank" class="govuk-link" href="https://wasteexemptions.service.gov.uk/pages/os-terms">
+          address data terms and conditions (opens new tab).
+        </a>
+      </p>
+    </div>
   </div>
 {% endblock %}

@@ -31,6 +31,7 @@ async function go(sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
+    pageTitle: 'Enter a UK postcode',
     sessionId: session.id
   }
 }

@@ -72,6 +72,7 @@ describe('Address - Submit Postcode Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        pageTitle: 'Enter a UK postcode',
         error: { text: 'Enter a UK postcode' },
         sessionId: session.id
       })

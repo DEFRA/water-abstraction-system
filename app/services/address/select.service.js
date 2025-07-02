@@ -3,13 +3,12 @@
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
  *
- * @module SelectService
+ * @module SelectAddressService
  */
 
-const BaseRequest = require('../../requests/base.request.js')
+const AddressLookupRequest = require('../../requests/address-lookup.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SessionModel = require('../../models/session.model.js')
-const servicesConfig = require('../../../config/services.config.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
@@ -21,22 +20,19 @@ const servicesConfig = require('../../../config/services.config.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  try {
-    const statusUrl = new URL(
-      'address-service/v1/addresses/postcode?query-string=sw2%201an&key=client1',
-      servicesConfig.addressFacade.url
-    )
-    const result = await BaseRequest.get(statusUrl.href)
-    const resultJson = JSON.parse(result.response.body)
-    console.log(resultJson.results[0])
-  } catch (error) {
-    console.log(error)
+  const addresses = await AddressLookupRequest.getByPostcode(session.address.postcode)
+
+  if (addresses.succeeded === false || addresses.results.length === 0) {
+    return {
+      redirect: true
+    }
   }
 
-  const pageData = SelectPresenter.go(session)
+  const pageData = SelectPresenter.go(addresses.results)
 
   return {
-    pageTitle: 'Select the address',
+    backLink: `/system/address/${session.id}/postcode`,
+    sessionId: session.id,
     ...pageData
   }
 }
