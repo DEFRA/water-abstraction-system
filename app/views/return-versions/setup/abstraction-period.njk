@@ -62,7 +62,7 @@
     {# From #}
     {{ govukDateInput({
       id: "abstraction-period-start",
-      namePrefix: "start-abstraction-period",
+      namePrefix: "abstraction-period-start",
       errorMessage: startResultErrorMessage,
       fieldset: {
         legend: {
@@ -74,12 +74,12 @@
         {
           name: "day",
           classes: "govuk-input--width-2" + startResultErrorClass,
-          value: abstractionPeriod['start-abstraction-period-day']
+          value: abstractionPeriod['abstraction-period-start-day']
         },
         {
           name: "month",
           classes: "govuk-input--width-2" + startResultErrorClass,
-          value: abstractionPeriod['start-abstraction-period-month']
+          value: abstractionPeriod['abstraction-period-start-month']
         }
       ]
     }) }}
@@ -87,7 +87,7 @@
     {# To #}
     {{ govukDateInput({
       id: "abstraction-period-end",
-      namePrefix: "end-abstraction-period",
+      namePrefix: "abstraction-period-end",
       errorMessage: endResultErrorMessage,
       fieldset: {
         legend: {
@@ -99,12 +99,12 @@
         {
           name: "day",
           classes: "govuk-input--width-2" + endResultErrorClass,
-          value: abstractionPeriod['end-abstraction-period-day']
+          value: abstractionPeriod['abstraction-period-end-day']
         },
         {
           name: "month",
           classes: "govuk-input--width-2" + endResultErrorClass,
-          value: abstractionPeriod['end-abstraction-period-month']
+          value: abstractionPeriod['abstraction-period-end-month']
         }
       ]
     }) }}

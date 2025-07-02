@@ -359,10 +359,11 @@ async function submitReturnsPeriod(request, h) {
 async function submitReturnsForPaperForms(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitReturnsForPaperFormsService.go(sessionId, payload)
+  const pageData = await SubmitReturnsForPaperFormsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/returns-for-paper-forms.njk`, pageData)
