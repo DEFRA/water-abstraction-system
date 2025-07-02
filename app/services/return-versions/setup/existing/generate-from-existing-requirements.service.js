@@ -111,10 +111,10 @@ function _transformForSetup(returnVersion) {
       returnsCycle: summer ? 'summer' : 'winter-and-all-year',
       siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
-        'end-abstraction-period-day': abstractionPeriodEndDay,
-        'end-abstraction-period-month': abstractionPeriodEndMonth,
-        'start-abstraction-period-day': abstractionPeriodStartDay,
-        'start-abstraction-period-month': abstractionPeriodStartMonth
+        'abstraction-period-end-day': abstractionPeriodEndDay,
+        'abstraction-period-end-month': abstractionPeriodEndMonth,
+        'abstraction-period-start-day': abstractionPeriodStartDay,
+        'abstraction-period-start-month': abstractionPeriodStartMonth
       },
       frequencyReported: reportingFrequency,
       frequencyCollected: collectionFrequency,

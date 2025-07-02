@@ -6,7 +6,7 @@
  */
 
 const AbstractionPeriodPresenter = require('../../../presenters/return-versions/setup/abstraction-period.presenter.js')
-const AbstractionPeriodValidator = require('../../../validators/return-versions/setup/abstraction-period.validator.js')
+const AbstractionPeriodValidator = require('../../../validators/abstraction-period.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
