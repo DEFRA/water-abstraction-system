@@ -27,6 +27,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
     }
 
     session = {
+      id: '123',
       dueReturns: [dueReturn]
     }
   })
@@ -36,6 +37,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
       const result = ReturnsForPaperFormsPresenter.go(session)
 
       expect(result).to.equal({
+        backLink: '/system/notices/setup/123/notice-type',
         pageTitle: 'Select the returns for the paper forms',
         returns: [
           {
@@ -64,6 +66,18 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
             value: dueReturn.returnId
           }
         ])
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('correctly set the back link to the check page', () => {
+          const result = ReturnsForPaperFormsPresenter.go(session)
+
+          expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+        })
       })
     })
   })

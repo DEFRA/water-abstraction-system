@@ -50,7 +50,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
 
   describe('when called', () => {
     it('saves the selected returns', async () => {
-      await SubmitReturnsForPaperFormsService.go(session.id, payload)
+      await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
       const refreshedSession = await session.$query()
 
@@ -58,7 +58,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitReturnsForPaperFormsService.go(session.id, payload)
+      const result = await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({})
     })
@@ -72,7 +72,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
       })
 
       it('saves the selected returns', async () => {
-        await SubmitReturnsForPaperFormsService.go(session.id, payload)
+        await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -124,9 +124,10 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitReturnsForPaperFormsService.go(session.id, payload)
+      const result = await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/notice-type`,
         error: {
           text: 'Select the returns for the paper forms'
         },
