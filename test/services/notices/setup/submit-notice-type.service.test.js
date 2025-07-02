@@ -81,7 +81,7 @@ describe('Notice Type Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload)
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({ redirectUrl: 'returns-for-paper-forms' })
       })
@@ -91,6 +91,14 @@ describe('Notice Type Service', () => {
       describe('and the notice type has been updated', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: { noticeType: 'test', checkPageVisited: true } })
+        })
+
+        it('updates the sessions "checkPageVisited" flag', async () => {
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.checkPageVisited).to.be.false()
         })
 
         it('sets a flash message', async () => {
@@ -110,6 +118,14 @@ describe('Notice Type Service', () => {
       describe('and the notice type has not been updated', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: { noticeType, checkPageVisited: true } })
+        })
+
+        it('does not update the session "checkPageVisited" flag', async () => {
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.checkPageVisited).to.be.true()
         })
 
         it('does not set a flash message', async () => {

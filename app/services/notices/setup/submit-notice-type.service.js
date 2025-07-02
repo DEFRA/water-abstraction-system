@@ -29,11 +29,13 @@ async function go(sessionId, payload, yar) {
   if (!validationResult) {
     if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
       GeneralLib.flashNotification(yar, 'Updated', 'Notice type updated')
+
+      session.checkPageVisited = false
     }
 
     await _save(session, payload)
 
-    return _redirect(payload.noticeType)
+    return _redirect(payload.noticeType, session.checkPageVisited)
   }
 
   const pageData = NoticeTypePresenter.go(session)
@@ -44,8 +46,8 @@ async function go(sessionId, payload, yar) {
   }
 }
 
-function _redirect(noticeType) {
-  if (noticeType === 'paper-forms') {
+function _redirect(noticeType, checkPageVisited) {
+  if (noticeType === 'paper-forms' && !checkPageVisited) {
     return {
       redirectUrl: 'returns-for-paper-forms'
     }
