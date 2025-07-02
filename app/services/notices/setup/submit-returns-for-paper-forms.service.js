@@ -48,8 +48,6 @@ async function go(sessionId, payload, yar) {
 /**
  * Checks whether two arrays of primitive values differ.
  *
- * Sorts the two arrays to assure elements match
- *
  * Returns `true` if arrays have different lengths or different elements
  * Returns `false` if arrays contain the same elements
  *
@@ -59,21 +57,25 @@ async function go(sessionId, payload, yar) {
  *
  * @private
  */
-function _arraysDiffer(a, b) {
-  if (a.length !== b.length) {
+function _arraysDiffer(arrayA, arrayB) {
+  if (arrayA.length !== arrayB.length) {
     return true
   }
 
-  const sortedA = [...a].sort()
-  const sortedB = [...b].sort()
+  let result = false
 
-  for (let i = 0; i < sortedA.length; i++) {
-    if (sortedA[i] !== sortedB[i]) {
-      return true
+  for (const valueA of arrayA) {
+    const match = arrayB.find((valueB) => {
+      return valueA === valueB
+    })
+
+    if (!match) {
+      result = true
+      break
     }
   }
 
-  return false
+  return result
 }
 
 function _handleOneOptionSelected(payload) {
