@@ -21,7 +21,7 @@
 
   <div class="govuk-body">
     {% if contents === 'error' %}
-      Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.
+      <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
     {% else %}
       <div class="message-preview">
         {% if messageType === 'letter' %}
