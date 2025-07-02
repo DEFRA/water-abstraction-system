@@ -51,16 +51,16 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       // The data that will populate the "return_requirements" table
       expect(result).to.have.length(1)
       expect(result[0].abstractionPeriodStartDay).to.equal(
-        requirements[0].abstractionPeriod['start-abstraction-period-day']
+        requirements[0].abstractionPeriod['abstraction-period-start-day']
       )
       expect(result[0].abstractionPeriodStartMonth).to.equal(
-        requirements[0].abstractionPeriod['start-abstraction-period-month']
+        requirements[0].abstractionPeriod['abstraction-period-start-month']
       )
       expect(result[0].abstractionPeriodEndDay).to.equal(
-        requirements[0].abstractionPeriod['end-abstraction-period-day']
+        requirements[0].abstractionPeriod['abstraction-period-end-day']
       )
       expect(result[0].abstractionPeriodEndMonth).to.equal(
-        requirements[0].abstractionPeriod['end-abstraction-period-month']
+        requirements[0].abstractionPeriod['abstraction-period-end-month']
       )
       expect(result[0].collectionFrequency).to.equal(requirements[0].frequencyCollected)
       expect(result[0].fiftySixException).to.be.false()
@@ -121,16 +121,16 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       // The data that will populate the "return_requirements" table
       expect(result).to.have.length(2)
       expect(result[1].abstractionPeriodStartDay).to.equal(
-        requirements[1].abstractionPeriod['start-abstraction-period-day']
+        requirements[1].abstractionPeriod['abstraction-period-start-day']
       )
       expect(result[1].abstractionPeriodStartMonth).to.equal(
-        requirements[1].abstractionPeriod['start-abstraction-period-month']
+        requirements[1].abstractionPeriod['abstraction-period-start-month']
       )
       expect(result[1].abstractionPeriodEndDay).to.equal(
-        requirements[1].abstractionPeriod['end-abstraction-period-day']
+        requirements[1].abstractionPeriod['abstraction-period-end-day']
       )
       expect(result[1].abstractionPeriodEndMonth).to.equal(
-        requirements[1].abstractionPeriod['end-abstraction-period-month']
+        requirements[1].abstractionPeriod['abstraction-period-end-month']
       )
       expect(result[1].collectionFrequency).to.equal(requirements[1].frequencyCollected)
       expect(result[1].fiftySixException).to.be.true()
@@ -174,10 +174,10 @@ function _generateRequirements(purposeOneId, purposeTwoId) {
       returnsCycle: 'winter-and-all-year',
       siteDescription: 'Site Number One',
       abstractionPeriod: {
-        'end-abstraction-period-day': 31,
-        'end-abstraction-period-month': 3,
-        'start-abstraction-period-day': 1,
-        'start-abstraction-period-month': 4
+        'abstraction-period-end-day': 31,
+        'abstraction-period-end-month': 3,
+        'abstraction-period-start-day': 1,
+        'abstraction-period-start-month': 4
       },
       frequencyReported: 'month',
       frequencyCollected: 'week',
@@ -202,10 +202,10 @@ function _generateRequirements(purposeOneId, purposeTwoId) {
     // NOTE: When abstraction periods are manually entered they are saved in the session as strings rather than integers
     // The ORM isn't fussy and correctly converts the strings to integers when writing the data to the database
     abstractionPeriod: {
-      'end-abstraction-period-day': '31',
-      'end-abstraction-period-month': '8',
-      'start-abstraction-period-day': '1',
-      'start-abstraction-period-month': '6'
+      'abstraction-period-end-day': '31',
+      'abstraction-period-end-month': '8',
+      'abstraction-period-start-day': '1',
+      'abstraction-period-start-month': '6'
     },
     frequencyReported: 'day',
     frequencyCollected: 'day',
