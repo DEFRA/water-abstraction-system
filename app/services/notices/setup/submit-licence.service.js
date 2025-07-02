@@ -34,9 +34,11 @@ async function go(sessionId, payload, yar) {
 
   const validationResult = await _validate(payload)
 
-  const formattedData = LicencePresenter.go(payload.licenceRef)
-
   if (validationResult) {
+    session.licenceRef = payload.licenceRef
+
+    const formattedData = LicencePresenter.go(session)
+
     return {
       activeNavBar: 'manage',
       error: validationResult,
@@ -46,6 +48,8 @@ async function go(sessionId, payload, yar) {
 
   if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
     GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
+
+    session.checkPageVisited = false
   }
 
   await _save(session, payload)
