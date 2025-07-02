@@ -43,44 +43,13 @@ describe('Notices - Setup - Check Notice Type Service', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
         },
-        pageTitle: 'Check the notice type',
+        licenceRef,
+        noticeType: 'invitations',
         notification: undefined,
-        summaryList: [
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
-          },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Standard returns invitation'
-            }
-          }
-        ]
+        pageTitle: 'Check the notice type',
+        returnNoticeType: 'Standard returns invitation',
+        selectedDueReturns: [],
+        sessionId: session.id
       })
     })
 
