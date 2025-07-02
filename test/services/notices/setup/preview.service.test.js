@@ -71,7 +71,8 @@ describe('Notices - Setup - Preview service', () => {
         caption: 'Notice RINV-0Q7AD8',
         contents: 'Preview of the notification contents',
         messageType: 'email',
-        pageTitle: 'Returns invitation primary user email'
+        pageTitle: 'Returns invitation primary user email',
+        refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}`
       })
     })
   })
