@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckNoticeTypePresenter = require('../../../../app/presenters/notices/setup/check-notice-type.presenter.js')
@@ -34,43 +35,12 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
         },
+        licenceRef,
+        noticeType: 'invitations',
         pageTitle: 'Check the notice type',
-        summaryList: [
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
-          },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Standard returns invitation'
-            }
-          }
-        ]
+        returnNoticeType: 'Standard returns invitation',
+        selectedDueReturns: [],
+        sessionId: '123'
       })
     })
 
@@ -79,92 +49,82 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         session.noticeType = 'invitations'
       })
 
-      it('returns the summary list', () => {
+      it('returns page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result.summaryList).to.equal([
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
+        expect(result).to.equal({
+          continueButton: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Continue to check recipients'
           },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Standard returns invitation'
-            }
-          }
-        ])
+          licenceRef,
+          noticeType: 'invitations',
+          pageTitle: 'Check the notice type',
+          returnNoticeType: 'Standard returns invitation',
+          selectedDueReturns: [],
+          sessionId: '123'
+        })
       })
     })
 
     describe('and the notice type is "paper-forms"', () => {
+      let dueReturnOne
+      let dueReturnTwo
+
       beforeEach(() => {
+        dueReturnOne = {
+          description: 'Potable Water Supply - Direct',
+          endDate: '2003-03-31',
+          returnId: generateUUID(),
+          returnReference: '3135',
+          startDate: '2002-04-01'
+        }
+
+        dueReturnTwo = {
+          description: 'Potable Water Supply - Direct',
+          endDate: '2004-03-31',
+          returnId: generateUUID(),
+          returnReference: '3135',
+          startDate: '2003-04-01'
+        }
+
         session.noticeType = 'paper-forms'
+
+        session.dueReturns = [dueReturnOne, dueReturnTwo]
+
+        session.selectedReturns = [dueReturnOne.returnId]
       })
 
-      it('returns the summary list', () => {
+      it('returns the page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result.summaryList).to.equal([
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
+        expect(result).to.equal({
+          continueButton: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Continue to check recipients'
           },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Submit using a paper form invitation'
-            }
-          }
-        ])
+          licenceRef,
+          noticeType: 'paper-forms',
+          pageTitle: 'Check the notice type',
+          returnNoticeType: 'Submit using a paper form invitation',
+          selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],
+          sessionId: '123'
+        })
+      })
+
+      describe('and there are more than one "selectedReturns"', () => {
+        beforeEach(() => {
+          session.selectedReturns = [dueReturnOne.returnId, dueReturnTwo.returnId]
+        })
+
+        it('returns an array of "selectedDueReturns"', () => {
+          const result = CheckNoticeTypePresenter.go(session)
+
+          expect(result.selectedDueReturns).to.equal([
+            '3135 - 1 April 2002 to 31 March 2003',
+            '3135 - 1 April 2003 to 31 March 2004'
+          ])
+        })
       })
     })
   })
