@@ -37,6 +37,8 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
+  session.selectedReturns = []
+
   const pageData = ReturnsForPaperFormsPresenter.go(session)
 
   return {
