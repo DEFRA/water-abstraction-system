@@ -7,7 +7,7 @@
  */
 
 const AbstractionPeriodPresenter = require('../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js')
-const AbstractionPeriodValidator = require('../../../validators/licence-monitoring-station/setup/abstraction-period.validator.js')
+const AbstractionPeriodValidator = require('../../../validators/abstraction-period.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

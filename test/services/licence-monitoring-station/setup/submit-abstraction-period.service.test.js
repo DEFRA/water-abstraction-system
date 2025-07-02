@@ -82,8 +82,8 @@ describe('Abstraction Period Service', () => {
 
       expect(result.error).to.equal({
         text: {
-          startResult: 'Enter a valid start date',
-          endResult: 'Enter a valid end date'
+          startResult: 'Enter a real start date',
+          endResult: 'Enter a real end date'
         }
       })
     })
