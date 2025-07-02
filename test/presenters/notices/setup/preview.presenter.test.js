@@ -15,14 +15,13 @@ const NotifyPreviewRequest = require('../../../../app/requests/notify/notify-pre
 const PreviewPresenter = require('../../../../app/presenters/notices/setup/preview.presenter.js')
 
 describe('Preview presenter', () => {
+  const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
 
   let testNotification
 
   beforeEach(() => {
     testNotification = _testNotification()
-
-    Sinon.stub(NotifyPreviewRequest, 'send').resolves({ plaintext: 'Preview of the notification contents' })
   })
 
   afterEach(() => {
@@ -30,61 +29,111 @@ describe('Preview presenter', () => {
   })
 
   describe('when provided with a populated notification', () => {
-    it('correctly presents the data', async () => {
-      const result = await PreviewPresenter.go(testNotification, sessionId)
-
-      expect(result).to.equal({
-        address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
-        backLink: `/system/notices/setup/${sessionId}/check`,
-        caption: 'Notice RINV-0Q7AD8',
-        contents: 'Preview of the notification contents',
-        messageType: 'letter',
-        pageTitle: 'Returns invitation returns to letter'
-      })
-    })
-
-    describe('the "address" property', () => {
-      describe('when the "messageType" is "letter"', () => {
-        beforeEach(() => {
-          testNotification.messageType = 'letter'
-        })
-
-        describe('and only some of the address values in the "notifications.personalisation" property are filled', () => {
-          beforeEach(() => {
-            testNotification.personalisation.address_line_1 = ''
-            testNotification.personalisation.address_line_3 = ''
-          })
-
-          it('correctly formats the address data into an array with the populated values', async () => {
-            const result = await PreviewPresenter.go(testNotification, sessionId)
-
-            expect(result.address).to.equal(['Water Lane', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'])
-          })
-        })
-      })
-
-      describe('when the "messageType" is "email"', () => {
-        beforeEach(() => {
-          testNotification.messageType = 'email'
-        })
-
-        it('returns null', async () => {
-          const result = await PreviewPresenter.go(testNotification, sessionId)
-
-          expect(result.address).to.be.null()
-        })
-      })
-    })
-
-    describe('the "pageTitle" property', () => {
+    describe('and notify succeeds in returning the preview data', () => {
       beforeEach(() => {
-        testNotification.messageRef = 'returns_reminder_returns_to_letter'
+        Sinon.stub(NotifyPreviewRequest, 'send').resolves({ plaintext: 'Preview of the notification contents' })
       })
 
-      it('correctly formats the notifications "messageRef"', async () => {
-        const result = await PreviewPresenter.go(testNotification, sessionId)
+      it('correctly presents the data', async () => {
+        const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
 
-        expect(result.pageTitle).to.equal('Returns reminder returns to letter')
+        expect(result).to.equal({
+          address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
+          backLink: `/system/notices/setup/${sessionId}/check`,
+          caption: 'Notice RINV-0Q7AD8',
+          contents: 'Preview of the notification contents',
+          messageType: 'letter',
+          pageTitle: 'Returns invitation returns to letter',
+          refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
+        })
+      })
+
+      describe('the "address" property', () => {
+        describe('when the "messageType" is "letter"', () => {
+          beforeEach(() => {
+            testNotification.messageType = 'letter'
+          })
+
+          describe('and only some of the address values in the "notifications.personalisation" property are filled', () => {
+            beforeEach(() => {
+              testNotification.personalisation.address_line_1 = ''
+              testNotification.personalisation.address_line_3 = ''
+            })
+
+            it('correctly formats the address data into an array with the populated values', async () => {
+              const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+              expect(result.address).to.equal(['Water Lane', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'])
+            })
+          })
+        })
+
+        describe('when the "messageType" is "email"', () => {
+          beforeEach(() => {
+            testNotification.messageType = 'email'
+          })
+
+          it('returns null', async () => {
+            const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+            expect(result.address).to.be.null()
+          })
+        })
+      })
+
+      describe('the "contents" property', () => {
+        it('returns the preview data', async () => {
+          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+          expect(result.contents).to.equal('Preview of the notification contents')
+        })
+      })
+
+      describe('the "pageTitle" property', () => {
+        beforeEach(() => {
+          testNotification.messageRef = 'returns_reminder_returns_to_letter'
+        })
+
+        it('correctly formats the notifications "messageRef"', async () => {
+          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+          expect(result.pageTitle).to.equal('Returns reminder returns to letter')
+        })
+      })
+    })
+
+    describe('and notify fails and returns an error', () => {
+      beforeEach(() => {
+        Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+          errors: [
+            {
+              error: 'ValidationError',
+              message: 'id is not a valid UUID'
+            }
+          ]
+        })
+      })
+
+      it('correctly presents the data', async () => {
+        const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+        expect(result).to.equal({
+          address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
+          backLink: `/system/notices/setup/${sessionId}/check`,
+          caption: 'Notice RINV-0Q7AD8',
+          contents: 'error',
+          messageType: 'letter',
+          pageTitle: 'Returns invitation returns to letter',
+          refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
+        })
+      })
+
+      describe('the "contents" property', () => {
+        it('returns "error"', async () => {
+          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+
+          expect(result.contents).to.equal('error')
+        })
       })
     })
   })
