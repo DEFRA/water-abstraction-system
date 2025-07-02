@@ -47,7 +47,7 @@ function _address(personalisation) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const { errors, plaintext } = await NotifyPreviewRequest.send('templateId', personalisation)
+  const { errors, plaintext } = await NotifyPreviewRequest.send(templateId, personalisation)
 
   if (errors) {
     return 'error'
