@@ -21,7 +21,7 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  *
  * @param {object} payload - The payload from the request to be validated
  *
- * @returns {{startResult: object, endResult: object}} - An object containing validation results for the start and end
+ * @returns {object} - An object containing validation results for the start and end
  * dates. Each result object will be the output of Joi's schema.validate(). If any errors are found, the 'error'
  * property will be present, detailing the issue.
  */
