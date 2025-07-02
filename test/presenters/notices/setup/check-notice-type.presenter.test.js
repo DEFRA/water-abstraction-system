@@ -35,43 +35,12 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'
         },
+        licenceRef,
+        noticeType: 'invitations',
         pageTitle: 'Check the notice type',
-        summaryList: [
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
-          },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Standard returns invitation'
-            }
-          }
-        ]
+        returnNoticeType: 'Standard returns invitation',
+        selectedDueReturns: [],
+        sessionId: '123'
       })
     })
 
@@ -80,45 +49,21 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         session.noticeType = 'invitations'
       })
 
-      it('returns the summary list', () => {
+      it('returns page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result.summaryList).to.equal([
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
+        expect(result).to.equal({
+          continueButton: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Continue to check recipients'
           },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Standard returns invitation'
-            }
-          }
-        ])
+          licenceRef,
+          noticeType: 'invitations',
+          pageTitle: 'Check the notice type',
+          returnNoticeType: 'Standard returns invitation',
+          selectedDueReturns: [],
+          sessionId: '123'
+        })
       })
     })
 
@@ -150,62 +95,21 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         session.selectedReturns = [dueReturnOne.returnId]
       })
 
-      it('returns the summary list', () => {
+      it('returns the page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result.summaryList).to.equal([
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/licence`,
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
-            },
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            }
+        expect(result).to.equal({
+          continueButton: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Continue to check recipients'
           },
-          {
-            actions: {
-              items: [
-                {
-                  href: `/system/notices/setup/${session.id}/notice-type`,
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: 'Submit using a paper form invitation'
-            }
-          },
-          {
-            actions: {
-              items: [
-                {
-                  href: '/system/notices/setup/123/returns-for-paper-forms',
-                  text: 'Change',
-                  visuallyHiddenText: 'returns for paper forms'
-                }
-              ]
-            },
-            key: {
-              text: 'Returns'
-            },
-            value: {
-              html: '3135 - 1 April 2002 to 31 March 2003'
-            }
-          }
-        ])
+          licenceRef,
+          noticeType: 'paper-forms',
+          pageTitle: 'Check the notice type',
+          returnNoticeType: 'Submit using a paper form invitation',
+          selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],
+          sessionId: '123'
+        })
       })
 
       describe('and there are more than one "selectedReturns"', () => {
@@ -213,12 +117,13 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           session.selectedReturns = [dueReturnOne.returnId, dueReturnTwo.returnId]
         })
 
-        it('returns the html with a line break', () => {
+        it('returns an array of "selectedDueReturns"', () => {
           const result = CheckNoticeTypePresenter.go(session)
 
-          expect(result.summaryList[2].value.html).to.equal(
-            '3135 - 1 April 2002 to 31 March 2003<br>3135 - 1 April 2003 to 31 March 2004'
-          )
+          expect(result.selectedDueReturns).to.equal([
+            '3135 - 1 April 2002 to 31 March 2003',
+            '3135 - 1 April 2003 to 31 March 2004'
+          ])
         })
       })
     })
