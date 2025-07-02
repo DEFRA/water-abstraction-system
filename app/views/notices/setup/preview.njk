@@ -19,17 +19,19 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
   </div>
 
-  <div class="message-preview govuk-body">
+  <div class="govuk-body">
     {% if contents === 'error' %}
-      Failed to generate a preview for this notice. Click <a href="{{ refreshPageLink }}" class="govuk-link">here</a> to try again.
+      Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.
     {% else %}
-      {% if messageType === 'letter' %}
-        <div class="govuk-!-margin-bottom-5">
-          {{ newLineArrayItems(address) }}
-        </div>
-      {% endif %}
+      <div class="message-preview">
+        {% if messageType === 'letter' %}
+          <div class="govuk-!-margin-bottom-5">
+            {{ newLineArrayItems(address) }}
+          </div>
+        {% endif %}
 
-      {{ contents | markdown | safe }}
+        {{ contents | markdown | safe }}
+      </div>
     {% endif %}
   </div>
 {% endblock %}
