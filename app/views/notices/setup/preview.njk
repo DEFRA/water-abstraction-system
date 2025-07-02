@@ -20,12 +20,16 @@
   </div>
 
   <div class="message-preview govuk-body">
-    {% if messageType === 'letter' %}
-      <div class="govuk-!-margin-bottom-5">
-        {{ newLineArrayItems(address) }}
-      </div>
-    {% endif %}
+    {% if contents === 'error' %}
+      Failed to generate a preview for this notice. Click <a href="{{ refreshPageLink }}" class="govuk-link">here</a> to try again.
+    {% else %}
+      {% if messageType === 'letter' %}
+        <div class="govuk-!-margin-bottom-5">
+          {{ newLineArrayItems(address) }}
+        </div>
+      {% endif %}
 
-    {{ contents | markdown | safe }}
+      {{ contents | markdown | safe }}
+    {% endif %}
   </div>
 {% endblock %}
