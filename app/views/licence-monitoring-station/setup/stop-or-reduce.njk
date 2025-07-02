@@ -31,60 +31,58 @@
     <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
   </h1>
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% set reduceAtThresholdHTML %}
-        {{ govukRadios({
-          classes: "govuk-radios--inline",
-          name: "reduceAtThreshold",
-          fieldset: {
-            legend: {
-              text: 'Does the licence holder need to stop abstraction when they reach a certain amount?',
-              classes: "govuk-fieldset__legend"
-            }
-          },
-          hint: {
-            text: 'For example, you must not exceed 4000ML in total from the start of your abstraction period.'
-          },
-          items: [
-            {
-              value: "yes",
-              text: "Yes",
-              checked: reduceAtThreshold === 'yes'
-            },
-            {
-              value: "no",
-              text: "No",
-              checked: reduceAtThreshold === 'no'
-            }
-          ],
-          errorMessage: error.reduceAtThresholdRadioElement
-        }) }}
-      {% endset %}
-
+    {% set reduceAtThresholdHTML %}
       {{ govukRadios({
-        name: "stopOrReduce",
+        classes: "govuk-radios--inline",
+        name: "reduceAtThreshold",
+        fieldset: {
+          legend: {
+            text: 'Does the licence holder need to stop abstraction when they reach a certain amount?',
+            classes: "govuk-fieldset__legend"
+          }
+        },
+        hint: {
+          text: 'For example, you must not exceed 4000ML in total from the start of your abstraction period.'
+        },
         items: [
           {
-            value: "stop",
-            text: "Stop",
-            checked: stopOrReduce === 'stop'
+            value: "yes",
+            text: "Yes",
+            checked: reduceAtThreshold === 'yes'
           },
           {
-            value: "reduce",
-            text: "Reduce",
-            checked: stopOrReduce === 'reduce',
-            conditional: {
-              html: reduceAtThresholdHTML
-            }
+            value: "no",
+            text: "No",
+            checked: reduceAtThreshold === 'no'
           }
         ],
-        errorMessage: error.stopOrReduceRadioElement
+        errorMessage: error.reduceAtThresholdRadioElement
       }) }}
+    {% endset %}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukRadios({
+      name: "stopOrReduce",
+      items: [
+        {
+          value: "stop",
+          text: "Stop",
+          checked: stopOrReduce === 'stop'
+        },
+        {
+          value: "reduce",
+          text: "Reduce",
+          checked: stopOrReduce === 'reduce',
+          conditional: {
+            html: reduceAtThresholdHTML
+          }
+        }
+      ],
+      errorMessage: error.stopOrReduceRadioElement
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

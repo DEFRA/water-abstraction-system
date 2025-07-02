@@ -32,31 +32,29 @@
     <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
   </h1>
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% if radioButtons.length === 0 %}
-        {# If there are no conditions, display explanatory text and return `not_listed` so the user is correctly routed #}
-        <p class="govuk-body">
-          There are no licence conditions recorded in NALD and stated on the licence.
-          Continue to manually enter the abstraction period for the tag.
-        </p>
-        <input type="hidden" name="condition" value="not_listed" />
-      {% else %}
-        {{ govukRadios({
-          id: 'condition',
-          name: 'condition',
-          items: radioButtons,
-          errorMessage: error
-        }) }}
-      {% endif %}
-
-      {{ govukButton({
-        text: "Continue",
-        preventDoubleClick: true
+    {% if radioButtons.length === 0 %}
+      {# If there are no conditions, display explanatory text and return `not_listed` so the user is correctly routed #}
+      <p class="govuk-body">
+        There are no licence conditions recorded in NALD and stated on the licence.
+        Continue to manually enter the abstraction period for the tag.
+      </p>
+      <input type="hidden" name="condition" value="not_listed" />
+    {% else %}
+      {{ govukRadios({
+        id: 'condition',
+        name: 'condition',
+        items: radioButtons,
+        errorMessage: error
       }) }}
+    {% endif %}
 
-    </form>
-  </div>
+    {{ govukButton({
+      text: "Continue",
+      preventDoubleClick: true
+    }) }}
+
+  </form>
 {% endblock %}
