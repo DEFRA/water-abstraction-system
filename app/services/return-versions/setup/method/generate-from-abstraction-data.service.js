@@ -249,10 +249,10 @@ function _transformForSetup(licence) {
       returnsCycle: _returnsCycle(startMonth, endMonth),
       siteDescription: _siteDescription(points),
       abstractionPeriod: {
-        'end-abstraction-period-day': endDay,
-        'end-abstraction-period-month': endMonth,
-        'start-abstraction-period-day': startDay,
-        'start-abstraction-period-month': startMonth
+        'abstraction-period-end-day': endDay,
+        'abstraction-period-end-month': endMonth,
+        'abstraction-period-start-day': startDay,
+        'abstraction-period-start-month': startMonth
       },
       frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
       frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
