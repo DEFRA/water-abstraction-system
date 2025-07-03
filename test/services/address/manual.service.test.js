@@ -13,7 +13,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const ManualService = require('../../../app/services/address/manual.service.js')
 
-describe('Manual Service', () => {
+describe('Address - Manual Service', () => {
   let session
   let sessionData
 

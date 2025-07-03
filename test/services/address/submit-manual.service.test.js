@@ -13,19 +13,27 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitManualService = require('../../../app/services/address/submit-manual.service.js')
 
-describe('Manual Service', () => {
+describe('Address - Manual Service', () => {
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
+    payload = {
+      addressLine1: '1 Fake street'
+    }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
+    beforeEach(async () => {
+      payload = {
+        addressLine1: '1 Fake street'
+      }
+    })
+
     it('saves the submitted value', async () => {
       await SubmitManualService.go(session.id, payload)
 
@@ -42,10 +50,18 @@ describe('Manual Service', () => {
   })
 
   describe('when validation fails', () => {
+    beforeEach(async () => {
+      payload = {}
+    })
+
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitManualService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        error: {
+          text: 'Enter addresss line 1'
+        }
+      })
     })
   })
 })
