@@ -409,6 +409,13 @@ describe('Notices - Setup - Check presenter', () => {
         session.referenceCode = 'RINV-123'
       })
 
+      describe('the "displayPreviewLink" property', () => {
+        it('should be true', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.displayPreviewLink).to.be.true()
+        })
+      })
+
       describe('the "readyToSend" property', () => {
         it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
@@ -422,6 +429,13 @@ describe('Notices - Setup - Check presenter', () => {
         session.journey = 'reminders'
       })
 
+      describe('the "displayPreviewLink" property', () => {
+        it('should be true', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.displayPreviewLink).to.be.true()
+        })
+      })
+
       describe('the "readyToSend" property', () => {
         it('should return the correct message', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
@@ -433,6 +447,13 @@ describe('Notices - Setup - Check presenter', () => {
     describe('when the journey is for "paper-forms"', () => {
       beforeEach(() => {
         session.journey = 'paper-forms'
+      })
+
+      describe('the "displayPreviewLink" property', () => {
+        it('should be false', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.displayPreviewLink).to.be.false()
+        })
       })
 
       describe('the "readyToSend" property', () => {
