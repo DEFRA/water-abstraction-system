@@ -15,12 +15,21 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { dueReturns, selectedReturns } = session
+  const { checkPageVisited, dueReturns, id: sessionId, selectedReturns } = session
 
   return {
+    backLink: _backLink(sessionId, checkPageVisited),
     pageTitle: 'Select the returns for the paper forms',
     returns: _returns(dueReturns, selectedReturns)
   }
+}
+
+function _backLink(sessionId, checkPageVisited) {
+  if (checkPageVisited) {
+    return `/system/notices/setup/${sessionId}/check-notice-type`
+  }
+
+  return `/system/notices/setup/${sessionId}/notice-type`
 }
 
 function _returns(returns, selectedReturns = []) {
