@@ -127,10 +127,10 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
       const result = await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/notice-type`,
         error: {
           text: 'Select the returns for the paper forms'
         },
-
         pageTitle: 'Select the returns for the paper forms',
         returns: [
           {
@@ -156,10 +156,10 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
         const result = await SubmitReturnsForPaperFormsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
+          backLink: `/system/notices/setup/${session.id}/notice-type`,
           error: {
             text: 'Select the returns for the paper forms'
           },
-
           pageTitle: 'Select the returns for the paper forms',
           returns: [
             {
