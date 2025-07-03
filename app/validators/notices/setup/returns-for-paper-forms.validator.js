@@ -8,6 +8,8 @@
 
 const Joi = require('joi')
 
+const errorMessage = 'Select the returns for the paper forms'
+
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
  *
@@ -18,7 +20,10 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    returns: Joi.array().required()
+    returns: Joi.array().required().messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

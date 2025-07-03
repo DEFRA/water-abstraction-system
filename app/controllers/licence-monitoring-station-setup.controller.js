@@ -5,17 +5,29 @@
  * @module LicenceMonitoringStationSetupController
  */
 
+const AbstractionPeriodService = require('../services/licence-monitoring-station/setup/abstraction-period.service.js')
 const CheckService = require('../services/licence-monitoring-station/setup/check.service.js')
 const FullConditionService = require('../services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
 const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
 const SubmitCheckService = require('../services/licence-monitoring-station/setup/submit-check.service.js')
+const SubmitAbstractionPeriodService = require('../services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
 const SubmitFullConditionService = require('../services/licence-monitoring-station/setup/submit-full-condition.service.js')
 const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+
+async function abstractionPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await AbstractionPeriodService.go(sessionId)
+
+  return h.view('licence-monitoring-station/setup/abstraction-period.njk', pageData)
+}
 
 async function check(request, h) {
   const {
@@ -27,16 +39,6 @@ async function check(request, h) {
   return h.view(`licence-monitoring-station/setup/check.njk`, pageData)
 }
 
-async function submitCheck(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const monitoringStationId = await SubmitCheckService.go(sessionId)
-
-  return h.redirect(`/system/monitoring-station/${monitoringStationId}`)
-}
-
 async function fullCondition(request, h) {
   const {
     params: { sessionId }
@@ -45,6 +47,42 @@ async function fullCondition(request, h) {
   const pageData = await FullConditionService.go(sessionId)
 
   return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
+}
+
+async function licenceNumber(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await LicenceNumberService.go(sessionId)
+
+  return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
+}
+
+async function submitAbstractionPeriod(request, h) {
+  const {
+    params: { sessionId },
+    payload
+  } = request
+
+  const pageData = await SubmitAbstractionPeriodService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`licence-monitoring-station/setup/abstraction-period.njk`, pageData)
+  }
+
+  // This is the last step in the journey so we will always move on to the check page
+  return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+}
+
+async function submitCheck(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const monitoringStationId = await SubmitCheckService.go(sessionId)
+
+  return h.redirect(`/system/monitoring-station/${monitoringStationId}`)
 }
 
 async function submitFullCondition(request, h) {
@@ -66,16 +104,6 @@ async function submitFullCondition(request, h) {
 
   // Otherwise, they've reached the end of the journey so we send them to the check page
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
-}
-
-async function licenceNumber(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const pageData = await LicenceNumberService.go(sessionId)
-
-  return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
 }
 
 async function submitLicenceNumber(request, h) {
@@ -165,6 +193,8 @@ module.exports = {
   fullCondition,
   licenceNumber,
   stopOrReduce,
+  abstractionPeriod,
+  submitAbstractionPeriod,
   submitCheck,
   submitFullCondition,
   submitLicenceNumber,

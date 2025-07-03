@@ -13,13 +13,21 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { noticeType, id: sessionId } = session
+  const { checkPageVisited, id: sessionId, noticeType } = session
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/licence`,
+    backLink: _backLink(sessionId, checkPageVisited),
     options: _options(noticeType),
     pageTitle: 'Select the notice type'
   }
+}
+
+function _backLink(sessionId, checkPageVisited) {
+  if (checkPageVisited) {
+    return `/system/notices/setup/${sessionId}/check-notice-type`
+  }
+
+  return `/system/notices/setup/${sessionId}/licence`
 }
 
 function _options(noticeType) {
