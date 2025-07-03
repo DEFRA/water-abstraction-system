@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ManualValidator = require('../../../app/validators/address/manual.validator.js')
+const ManualAddressValidator = require('../../../app/validators/address/manual.validator.js')
 
-describe('Manual Validator', () => {
+describe('Address - Manual Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { placeholder: '' }
+    payload = { addressLine1: '1 Fake street' }
   })
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ManualValidator.go(payload)
+      const result = ManualAddressValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,11 +32,11 @@ describe('Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualValidator.go(payload)
+      const result = ManualAddressValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"placeholder" is required')
+      expect(result.error.details[0].message).to.equal('Enter addresss line 1')
     })
   })
 })
