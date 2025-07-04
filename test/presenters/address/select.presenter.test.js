@@ -30,13 +30,13 @@ describe('Address - Select Presenter', () => {
       expect(result).to.equal({
         addresses: [
           {
-            text: 'address 1',
-            value: '123456789'
-          },
-          {
             value: 'select',
             selected: true,
             text: `1 address found`
+          },
+          {
+            text: 'address 1',
+            value: '123456789'
           }
         ],
         pageTitle: 'Select the address',
@@ -67,17 +67,17 @@ describe('Address - Select Presenter', () => {
       expect(result).to.equal({
         addresses: [
           {
+            value: 'select',
+            selected: true,
+            text: `2 addresses found`
+          },
+          {
             text: 'address 1',
             value: '123456789'
           },
           {
             text: 'address 2',
             value: '123456780'
-          },
-          {
-            value: 'select',
-            selected: true,
-            text: `2 addresses found`
           }
         ],
         pageTitle: 'Select the address',

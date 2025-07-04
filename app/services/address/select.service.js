@@ -6,7 +6,7 @@
  * @module SelectAddressService
  */
 
-const AddressLookupRequest = require('../../requests/address-lookup.request.js')
+const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -20,7 +20,7 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const addresses = await AddressLookupRequest.getByPostcode(session.address.postcode)
+  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
 
   if (addresses.succeeded === false || addresses.results.length === 0) {
     return {

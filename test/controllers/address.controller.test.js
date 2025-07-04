@@ -13,7 +13,10 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const PostcodeService = require('../../app/services/address/postcode.service.js')
 const SelectAddressService = require('../../app/services/address/select.service.js')
+<<<<<<< HEAD
 const SubmitSelectService = require('../../app/services/address/submit-select.service.js')
+=======
+>>>>>>> main
 const SubmitPostcodeService = require('../../app/services/address/submit-postcode.service.js')
 
 // For running our service
@@ -100,6 +103,48 @@ describe('Address controller', () => {
         })
       })
     })
+
+    describe('/address/{id}/select', () => {
+      describe('GET', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          }
+        })
+
+        describe('when addresses are found', () => {
+          beforeEach(() => {
+            Sinon.stub(SelectAddressService, 'go').returns({})
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+          })
+        })
+
+        describe('when addresses are not found', () => {
+          beforeEach(() => {
+            Sinon.stub(SelectAddressService, 'go').returns({
+              redirect: true
+            })
+          })
+
+          it('redirects to the manual page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual`)
+          })
+        })
+      })
+    })
   })
 
   describe('/address/{id}/select', () => {
@@ -183,7 +228,6 @@ describe('Address controller', () => {
 
 function _postcodePageData(error = false) {
   const pageData = {
-    activeNavBar: 'search',
     sessionId: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
   }
 
@@ -193,6 +237,7 @@ function _postcodePageData(error = false) {
 
   return pageData
 }
+
 function _selectPageData(error = false) {
   const pageData = {
     activeNavBar: 'search',

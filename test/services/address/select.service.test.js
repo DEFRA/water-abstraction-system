@@ -12,7 +12,7 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things to stub
-const AddressLookupRequest = require('../../../app/requests/address-lookup.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')
@@ -39,7 +39,7 @@ describe('Address - Select Service', () => {
   describe('when called with a postcode that returns one result', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
         results: [
@@ -59,13 +59,13 @@ describe('Address - Select Service', () => {
         backLink: `/system/address/${session.id}/postcode`,
         addresses: [
           {
-            text: 'address 1',
-            value: '123456789'
-          },
-          {
             value: 'select',
             selected: true,
             text: `1 address found`
+          },
+          {
+            text: 'address 1',
+            value: '123456789'
           }
         ],
         pageTitle: 'Select the address',
@@ -78,7 +78,7 @@ describe('Address - Select Service', () => {
   describe('when called with a postcode that returns multiple results', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
         results: [
@@ -103,17 +103,17 @@ describe('Address - Select Service', () => {
         backLink: `/system/address/${session.id}/postcode`,
         addresses: [
           {
+            value: 'select',
+            selected: true,
+            text: `2 addresses found`
+          },
+          {
             text: 'address 1',
             value: '123456789'
           },
           {
             text: 'address 2',
             value: '123456780'
-          },
-          {
-            value: 'select',
-            selected: true,
-            text: `2 addresses found`
           }
         ],
         pageTitle: 'Select the address',
@@ -126,7 +126,7 @@ describe('Address - Select Service', () => {
   describe('when called with a postcode that returns no results', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
         results: []
@@ -145,7 +145,7 @@ describe('Address - Select Service', () => {
   describe('when called with a postcode but the request to the look up service fails', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: false
       })
