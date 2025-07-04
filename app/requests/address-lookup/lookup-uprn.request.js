@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Sends a request to the address facade for the provided postcode
- * @module LookupPostcodeRequest
+ * Sends a request to the address facade for the provided uprn
+ * @module LookupUPRNRequest
  */
 
 const BaseRequest = require('../base.request.js')
@@ -11,14 +11,14 @@ const requestConfig = require('../../../config/request.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
- * Sends a request to the address facade for the provided postcode
+ * Sends a request to the address facade for the provided uprn
  *
- * @param {string} postcode - The postcode to look up addresses for
+ * @param {string} uprn - The UPRN to look up
  *
- * @returns {Promise<object[]>} An array of found addresses
+ * @returns {Promise<object>} An array with the address information
  */
-async function send(postcode) {
-  const uri = `address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`
+async function send(uprn) {
+  const uri = `address-service/v1/addresses/${uprn}?key=client1`
   const result = await BaseRequest.get(uri, _requestOptions())
 
   return {
