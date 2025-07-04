@@ -31,6 +31,7 @@ describe('Address - Postcode Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        pageTitle: 'Enter a UK postcode',
         sessionId: session.id
       })
     })
@@ -52,6 +53,7 @@ describe('Address - Postcode Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        pageTitle: 'Enter a UK postcode',
         postcode: 'SW1A 1AA',
         sessionId: session.id
       })
