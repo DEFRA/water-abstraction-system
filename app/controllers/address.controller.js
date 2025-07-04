@@ -10,14 +10,6 @@ const SelectAddressService = require('../services/address/select.service.js')
 const SubmitPostcodeService = require('../services/address/submit-postcode.service.js')
 const SubmitSelectAddressService = require('../services/address/submit-select.service.js')
 
-async function postcode(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await PostcodeService.go(sessionId)
-
-  return h.view('address/postcode.njk', pageData)
-}
-
 async function submitPostcode(request, h) {
   const { sessionId } = request.params
 
@@ -50,9 +42,17 @@ async function submitSelect(request, h) {
   return h.redirect(`/system/address/${sessionId}/select`)
 }
 
+async function viewPostcode(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await PostcodeService.go(sessionId)
+
+  return h.view('address/postcode.njk', pageData)
+}
+
 module.exports = {
-  postcode,
-  viewSelect,
   submitPostcode,
-  submitSelect
+  submitSelect,
+  viewPostcode,
+  viewSelect
 }
