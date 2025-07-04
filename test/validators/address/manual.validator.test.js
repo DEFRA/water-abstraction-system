@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const PostcodeValidator = require('../../../app/validators/address/postcode.validator.js')
+const ManualAddressValidator = require('../../../app/validators/address/manual.validator.js')
 
-describe('Address - Postcode Validator', () => {
+describe('Address - Manual Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { postcode: 'SW1A 1AA' }
+    payload = { addressLine1: '1 Fake street' }
   })
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = ManualAddressValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,11 +32,11 @@ describe('Address - Postcode Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = ManualAddressValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a UK postcode')
+      expect(result.error.details[0].message).to.equal('Enter addresss line 1')
     })
   })
 })

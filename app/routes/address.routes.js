@@ -50,6 +50,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/address/{sessionId}/manual',
+    options: {
+      handler: AddressController.viewManual,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/address/{sessionId}/manual',
+    options: {
+      handler: AddressController.submitManual,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
