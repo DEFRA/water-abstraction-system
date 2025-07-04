@@ -18,24 +18,44 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: '#addresses'
+        }
+      ]
     }) }}
   {%endif%}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-5">{{ pageTitle }}</h1>
 
-      {{ govukSelect({
-        id: "address",
-        name: "address",
-        label: {
-          text: "Address"
-        },
-        items: []
-      }) }}
-
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
+  <div class="govuk-form-group">
+    <p class="govuk-!-margin-bottom-0">Postcode</p>
+    <p class="govuk-!-font-weight-bold govuk-!-display-inline">{{ postcode }}</p>
+    <a href="/system/address/{{ sessionId }}/postcode" class="govuk-!-padding-left-5">Change postcode</a>
   </div>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukSelect({
+      id: "addresses",
+      name: "addresses",
+      errorMessage: {
+        text: error.text
+      } if error,
+      label: {
+        text: "Address"
+      },
+      items: addresses
+    }) }}
+
+    <p class="govuk-form-group">
+      <a href="/system/address/{{ sessionId }}/manual">I cannot find the address in the list</a>
+    </p>
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+
+  {% include "address/os-places-declaration.njk" %}
 {% endblock %}
