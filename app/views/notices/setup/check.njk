@@ -37,11 +37,16 @@
   {% set rows = (rows.push([
     {
       text: newLineArrayItems(recipient.contact)
-    }, {
+    },
+    {
       html: licenceNumbers
-    }, {
+    },
+    {
       text: recipient.method
-    }
+    },
+    {
+      html: '<a href="' + recipient.previewLink + '">Preview</a>'
+    } if displayPreviewLink
   ]), rows) %}
 {% endfor %}
 
@@ -83,17 +88,17 @@
       firstCellIsHeader: false,
       head: [
         {
-          text: "Recipient",
-          classes: "govuk-!-width-one-third"
+          text: "Recipient"
         },
         {
-          text: "Licence number",
-          classes: "govuk-!-width-one-third"
+          text: "Licence number"
         },
         {
-          text: "Method",
-          classes: "govuk-!-width-one-third"
-        }
+          text: "Method"
+        },
+        {
+          text: "Action"
+        } if displayPreviewLink
       ],
       rows: rows
     }) }}
