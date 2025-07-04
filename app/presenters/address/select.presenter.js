@@ -28,7 +28,7 @@ function _addresses(addresses) {
     }
   })
 
-  displayAddresses.push({
+  displayAddresses.unshift({
     value: 'select',
     selected: true,
     text: addresses.length === 1 ? '1 address found' : `${addresses.length} addresses found`
