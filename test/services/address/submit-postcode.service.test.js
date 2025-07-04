@@ -58,23 +58,49 @@ describe('Address - Submit Postcode Service', () => {
     })
   })
 
-  describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = {}
-      sessionData = {
-        address: {}
-      }
+  describe('when called with a invalid payload', () => {
+    describe('when there is no value provided', () => {
+      beforeEach(async () => {
+        payload = {}
+        sessionData = {
+          address: {}
+        }
 
-      session = await SessionHelper.add({ data: sessionData })
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns the page data with an appropriate error', async () => {
+        const result = await SubmitPostcodeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Enter a UK postcode',
+          error: { text: 'Enter a UK postcode' },
+          sessionId: session.id
+        })
+      })
     })
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitPostcodeService.go(session.id, payload)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        pageTitle: 'Enter a UK postcode',
-        error: { text: 'Enter a UK postcode' },
-        sessionId: session.id
+    describe('when there is an invalid value provided', () => {
+      beforeEach(async () => {
+        payload = { postcode: 'notapostcode' }
+        sessionData = {
+          address: {}
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns the page data with an appropriate error', async () => {
+        const result = await SubmitPostcodeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Enter a UK postcode',
+          postcode: 'notapostcode',
+          error: { text: 'Enter a valid UK postcode' },
+          sessionId: session.id
+        })
       })
     })
   })

@@ -7,10 +7,10 @@
 
 {% block breadcrumbs %}
   {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
   }}
 {% endblock %}
 
@@ -28,10 +28,11 @@
   {%endif%}
 
   <form method="post">
+
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukInput({
       label: {
-        text: pageTitle,
+        text: "Enter a UK postcode",
         classes: "govuk-label--l",
         isPageHeading: true
       },
@@ -42,9 +43,9 @@
       errorMessage: error
     }) }}
 
-    <div class="govuk-form-group">
+    <p class="govuk-body govuk-form-group">
       <a class="govuk-link" href="/system/address/{{ sessionId }}/international">The address is outside the UK</a>
-    </div>
+    </p>
 
 
     {{ govukButton({ text: "Find addresses", preventDoubleClick: true }) }}
