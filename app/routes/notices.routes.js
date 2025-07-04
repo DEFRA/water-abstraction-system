@@ -10,7 +10,7 @@ const routes = [
       handler: NoticesController.index,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
       }
     }
@@ -22,7 +22,7 @@ const routes = [
       handler: NoticesController.submitIndex,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
       }
     }
@@ -34,7 +34,7 @@ const routes = [
       handler: NoticesController.view,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
       }
     }

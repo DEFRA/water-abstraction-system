@@ -455,28 +455,6 @@ describe('Return Logs - View Return Log presenter', () => {
     })
   })
 
-  describe('the "purpose" property', () => {
-    describe('when the first purpose has an alias', () => {
-      it('returns the alias', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-        expect(result.purpose).to.equal('Mineral Washing alias')
-      })
-    })
-
-    describe('when the first purpose has no alias', () => {
-      beforeEach(() => {
-        returnLog.purposes[0].alias = null
-      })
-
-      it('returns the tertiary description', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
-
-        expect(result.purpose).to.equal('Mineral Washing')
-      })
-    })
-  })
-
   describe('the "receivedDate" property', () => {
     describe('when no received date is present', () => {
       beforeEach(() => {

@@ -86,20 +86,6 @@ const routes = [
         crumb: false
       }
     }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/return-version-migration',
-    options: {
-      handler: JobsController.returnVersionMigration,
-      app: {
-        plainOutput: true
-      },
-      auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
   }
 ]
 

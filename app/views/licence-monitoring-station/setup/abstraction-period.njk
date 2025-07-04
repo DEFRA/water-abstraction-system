@@ -1,0 +1,95 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text.startResult,
+          href: "#abstraction-period-start"
+        },
+        {
+          text: error.text.endResult,
+          href: "#abstraction-period-end"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </h1>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {# From #}
+      {{ govukDateInput({
+        id: "abstraction-period-start",
+        namePrefix: "abstraction-period-start",
+        errorMessage: { text: error.text.startResult } if error.text.startResult,
+        fieldset: {
+          legend: {
+            text: "Start date",
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+          }
+        },
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
+            value: abstractionPeriodStartDay
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
+            value: abstractionPeriodStartMonth
+          }
+        ]
+      }) }}
+
+      {# To #}
+      {{ govukDateInput({
+        id: "abstraction-period-end",
+        namePrefix: "abstraction-period-end",
+        errorMessage: { text: error.text.endResult } if error.text.endResult,
+        fieldset: {
+          legend: {
+            text: "End date",
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+          }
+        },
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
+            value: abstractionPeriodEndDay
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
+            value: abstractionPeriodEndMonth
+          }
+        ]
+      }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

@@ -24,13 +24,22 @@
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
     {% set rowIndex = loop.index0 %}
 
+    {# Purpose sits above site description in the output. In the few cases it is missing in the return log, if we don't
+      set it &nbsp; then the site description sits where purpose normally is and it is no longer clear purpose is
+      missing #}
+    {% if returnItem.purpose %}
+      {% set purpose = returnItem.purpose %}
+    {% else %}
+      {% set purpose = '&nbsp;' %}
+    {% endif %}
+
     {% set row = [
       {
         html: referenceColumn(returnItem),
         attributes: { 'data-test': 'return-reference-' + rowIndex }
       },
       {
-        html:  returnItem.purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
+        html:  purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
         attributes: { 'data-test': 'return-purpose-' + rowIndex }
       },
       {

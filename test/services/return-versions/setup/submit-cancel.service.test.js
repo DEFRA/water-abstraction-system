@@ -46,10 +46,10 @@ describe('Return Versions Setup - Submit Cancel service', () => {
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'Bore hole in rear field',
             abstractionPeriod: {
-              'end-abstraction-period-day': '31',
-              'end-abstraction-period-month': '10',
-              'start-abstraction-period-day': '1',
-              'start-abstraction-period-month': '4'
+              'abstraction-period-end-day': '31',
+              'abstraction-period-end-month': '10',
+              'abstraction-period-start-day': '1',
+              'abstraction-period-start-month': '4'
             },
             frequencyReported: 'month',
             frequencyCollected: 'month',

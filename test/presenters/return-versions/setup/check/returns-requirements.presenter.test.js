@@ -218,10 +218,10 @@ function _point() {
 function _requirement() {
   return {
     abstractionPeriod: {
-      'end-abstraction-period-day': '01',
-      'end-abstraction-period-month': '03',
-      'start-abstraction-period-day': '01',
-      'start-abstraction-period-month': '06'
+      'abstraction-period-end-day': '01',
+      'abstraction-period-end-month': '03',
+      'abstraction-period-start-day': '01',
+      'abstraction-period-start-month': '06'
     },
     agreementsExceptions: ['gravity-fill'],
     frequencyCollected: 'day',

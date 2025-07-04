@@ -291,7 +291,6 @@ function _expectedResult(
     siteDescription: _returnRequirement.siteDescription,
     summer: _returnRequirement.summer,
     twoPartTariff: _returnRequirement.twoPartTariff,
-    upload: _returnRequirement.upload,
     returnVersion: {
       endDate: _returnVersion.endDate,
       id: _returnVersion.id,
@@ -309,7 +308,8 @@ function _expectedResult(
           naldRegionId: region.naldRegionId
         }
       },
-      quarterlyReturns: _returnVersion.quarterlyReturns
+      quarterlyReturns: _returnVersion.quarterlyReturns,
+      multipleUpload: returnVersion.multipleUpload
     },
     points: [
       {

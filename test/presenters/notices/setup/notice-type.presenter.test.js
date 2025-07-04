@@ -85,6 +85,18 @@ describe('Notice Type Presenter', () => {
           ])
         })
       })
+
+      describe('and the page has been visited', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('correctly set the back link to the check page', () => {
+          const result = NoticeTypePresenter.go(session)
+
+          expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+        })
+      })
     })
   })
 })

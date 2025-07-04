@@ -25,10 +25,10 @@ async function go(licenceId, requirements) {
     const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
-      abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
-      abstractionPeriodStartMonth: requirement.abstractionPeriod['start-abstraction-period-month'],
-      abstractionPeriodEndDay: requirement.abstractionPeriod['end-abstraction-period-day'],
-      abstractionPeriodEndMonth: requirement.abstractionPeriod['end-abstraction-period-month'],
+      abstractionPeriodStartDay: requirement.abstractionPeriod['abstraction-period-start-day'],
+      abstractionPeriodStartMonth: requirement.abstractionPeriod['abstraction-period-start-month'],
+      abstractionPeriodEndDay: requirement.abstractionPeriod['abstraction-period-end-day'],
+      abstractionPeriodEndMonth: requirement.abstractionPeriod['abstraction-period-end-month'],
       collectionFrequency: requirement.frequencyCollected,
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
       gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),

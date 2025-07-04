@@ -57,10 +57,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'summer',
             siteDescription: 'INTAKE POINT',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 10,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 4
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 10,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 4
             },
             frequencyReported: 'day',
             frequencyCollected: 'day',
@@ -78,10 +78,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'MAIN INTAKE',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 12,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 5
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 12,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 5
             },
             frequencyReported: 'month',
             frequencyCollected: 'month',
@@ -99,10 +99,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 11
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 3,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 11
             },
             frequencyReported: 'week',
             frequencyCollected: 'week',

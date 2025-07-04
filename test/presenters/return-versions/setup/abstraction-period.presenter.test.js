@@ -53,10 +53,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
     describe('when the user has previously submitted an abstraction period', () => {
       beforeEach(() => {
         session.requirements[0].abstractionPeriod = {
-          'start-abstraction-period-day': '07',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': '22',
-          'end-abstraction-period-month': '07'
+          'abstraction-period-start-day': '07',
+          'abstraction-period-start-month': '12',
+          'abstraction-period-end-day': '22',
+          'abstraction-period-end-month': '07'
         }
       })
 
@@ -64,10 +64,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
         expect(result.abstractionPeriod).to.equal({
-          'start-abstraction-period-day': '07',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': '22',
-          'end-abstraction-period-month': '07'
+          'abstraction-period-start-day': '07',
+          'abstraction-period-start-month': '12',
+          'abstraction-period-end-day': '22',
+          'abstraction-period-end-month': '07'
         })
       })
     })

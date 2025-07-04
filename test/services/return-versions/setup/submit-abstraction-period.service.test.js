@@ -58,10 +58,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'start-abstraction-period-day': '01',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': '02',
-          'end-abstraction-period-month': '7'
+          'abstraction-period-start-day': '01',
+          'abstraction-period-start-month': '12',
+          'abstraction-period-end-day': '02',
+          'abstraction-period-end-month': '7'
         }
       })
 
@@ -71,10 +71,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.requirements[0].abstractionPeriod).to.equal({
-          'end-abstraction-period-day': '02',
-          'start-abstraction-period-day': '01',
-          'end-abstraction-period-month': '7',
-          'start-abstraction-period-month': '12'
+          'abstraction-period-end-day': '02',
+          'abstraction-period-start-day': '01',
+          'abstraction-period-end-month': '7',
+          'abstraction-period-start-month': '12'
         })
       })
 
@@ -149,10 +149,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       describe('because the user has not submitted a start abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'start-abstraction-period-day': null,
-            'start-abstraction-period-month': null,
-            'end-abstraction-period-day': '02',
-            'end-abstraction-period-month': '7'
+            'abstraction-period-start-day': null,
+            'abstraction-period-start-month': null,
+            'abstraction-period-end-day': '02',
+            'abstraction-period-end-month': '7'
           }
         })
 
@@ -171,10 +171,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
           const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).to.equal({
-            'start-abstraction-period-day': null,
-            'start-abstraction-period-month': null,
-            'end-abstraction-period-day': '02',
-            'end-abstraction-period-month': '7'
+            'abstraction-period-start-day': null,
+            'abstraction-period-start-month': null,
+            'abstraction-period-end-day': '02',
+            'abstraction-period-end-month': '7'
           })
         })
       })
@@ -182,10 +182,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       describe('because the user has not submitted an end abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'start-abstraction-period-day': '08',
-            'start-abstraction-period-month': '12',
-            'end-abstraction-period-day': null,
-            'end-abstraction-period-month': null
+            'abstraction-period-start-day': '08',
+            'abstraction-period-start-month': '12',
+            'abstraction-period-end-day': null,
+            'abstraction-period-end-month': null
           }
         })
 
@@ -204,10 +204,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
           const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).to.equal({
-            'start-abstraction-period-day': '08',
-            'start-abstraction-period-month': '12',
-            'end-abstraction-period-day': null,
-            'end-abstraction-period-month': null
+            'abstraction-period-start-day': '08',
+            'abstraction-period-start-month': '12',
+            'abstraction-period-end-day': null,
+            'abstraction-period-end-month': null
           })
         })
       })
@@ -215,10 +215,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       describe('because the user has submitted invalid values', () => {
         beforeEach(() => {
           payload = {
-            'start-abstraction-period-day': 'abc',
-            'start-abstraction-period-month': '123',
-            'end-abstraction-period-day': 'abc',
-            'end-abstraction-period-month': '123'
+            'abstraction-period-start-day': 'abc',
+            'abstraction-period-start-month': '123',
+            'abstraction-period-end-day': 'abc',
+            'abstraction-period-end-month': '123'
           }
         })
 
@@ -237,10 +237,10 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
           const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).to.equal({
-            'start-abstraction-period-day': 'abc',
-            'start-abstraction-period-month': '123',
-            'end-abstraction-period-day': 'abc',
-            'end-abstraction-period-month': '123'
+            'abstraction-period-start-day': 'abc',
+            'abstraction-period-start-month': '123',
+            'abstraction-period-end-day': 'abc',
+            'abstraction-period-end-month': '123'
           })
         })
       })

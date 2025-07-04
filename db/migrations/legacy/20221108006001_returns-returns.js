@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.string('return_id').primary()
 
     // Data
+    table.uuid('id')
     table.string('regime').notNullable().defaultTo('water')
     table.string('licence_type').notNullable().defaultTo('abstraction')
     table.string('licence_ref').notNullable()

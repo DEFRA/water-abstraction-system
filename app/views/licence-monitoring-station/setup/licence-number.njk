@@ -27,29 +27,27 @@
   {%endif%}
 
   {# Main heading #}
-  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
     <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
-  </span>
+  </h1>
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukInput({
-        classes: "govuk-input--width-20",
-        hint: {
-          text: "You need to tag and add other licences with this threshold individually"
-        },
-        id: "licence-ref",
-        name: "licenceRef",
-        value: licenceRef,
-        errorMessage: error
-      }) }}
+    {{ govukInput({
+      classes: "govuk-input--width-20",
+      hint: {
+        text: "You need to tag and add other licences with this threshold individually"
+      },
+      id: "licence-ref",
+      name: "licenceRef",
+      value: licenceRef,
+      errorMessage: error
+    }) }}
 
-      {{ govukButton({
-        text: "Continue",
-        preventDoubleClick: true
-      }) }}
-    </form>
-  </div>
+    {{ govukButton({
+      text: "Continue",
+      preventDoubleClick: true
+    }) }}
+  </form>
 {% endblock %}

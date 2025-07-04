@@ -30,6 +30,7 @@ describe('Notices - Setup - Licence service', () => {
       const result = await LicenceService.go(session.id)
 
       expect(result).to.equal({
+        backLink: `/manage`,
         activeNavBar: 'manage',
         licenceRef: '01/111',
         pageTitle: 'Enter a licence number'

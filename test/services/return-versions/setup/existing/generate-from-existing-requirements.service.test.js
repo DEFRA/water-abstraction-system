@@ -75,10 +75,10 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 4
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 3,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 4
             },
             frequencyReported: 'week',
             frequencyCollected: 'week',
@@ -96,10 +96,10 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             returnsCycle: 'summer',
             siteDescription: 'SECOND BOREHOLE AT AVALON',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 4
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 3,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 4
             },
             frequencyReported: 'month',
             frequencyCollected: 'week',
@@ -138,10 +138,10 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 4
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 3,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 4
             },
             frequencyReported: 'week',
             frequencyCollected: 'week',
@@ -159,10 +159,10 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             returnsCycle: 'summer',
             siteDescription: 'WELL AT WELLINGTON',
             abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 4
+              'abstraction-period-end-day': 31,
+              'abstraction-period-end-month': 3,
+              'abstraction-period-start-day': 1,
+              'abstraction-period-start-month': 4
             },
             frequencyReported: 'month',
             frequencyCollected: 'week',

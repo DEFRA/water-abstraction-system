@@ -77,10 +77,24 @@ describe('Notices - Setup - Submit Licence service', () => {
         expect(result).to.equal({ redirectUrl: 'notice-type' })
       })
 
-      describe('and from the check page', () => {
+      describe('from the check page', () => {
         describe('and the licence ref has been updated', () => {
           beforeEach(async () => {
             session = await SessionHelper.add({ data: { licenceRef: '01/11', checkPageVisited: true } })
+          })
+
+          it('redirects to the notice type page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result.redirectUrl).to.equal('notice-type')
+          })
+
+          it('updates the sessions "checkPageVisited" flag', async () => {
+            await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.checkPageVisited).to.be.false()
           })
 
           it('sets a flash message', async () => {
@@ -100,6 +114,12 @@ describe('Notices - Setup - Submit Licence service', () => {
         describe('and the licence ref has not been updated', () => {
           beforeEach(async () => {
             session = await SessionHelper.add({ data: { licenceRef, checkPageVisited: true } })
+          })
+
+          it('redirects to the check notice type page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result.redirectUrl).to.equal('check-notice-type')
           })
 
           it('does not set a flash message', async () => {
@@ -122,6 +142,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
+            backLink: `/manage`,
             licenceRef: null,
             error: {
               text: 'Enter a licence number'
@@ -143,6 +164,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
+            backLink: `/manage`,
             licenceRef: '1111',
             error: {
               text: 'Enter a valid licence number'
@@ -166,6 +188,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
+            backLink: `/manage`,
             error: {
               text: 'There are no returns due for licence 01/145'
             },

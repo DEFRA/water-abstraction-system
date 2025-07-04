@@ -98,8 +98,7 @@ function _metadata(returnRequirement, endDate) {
     returnVersion,
     siteDescription,
     summer,
-    twoPartTariff,
-    upload
+    twoPartTariff
   } = returnRequirement
 
   return {
@@ -108,7 +107,7 @@ function _metadata(returnRequirement, endDate) {
     isFinal: endDate < determineCycleEndDate(summer),
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
-    isUpload: upload,
+    isUpload: returnVersion.multipleUpload,
     nald: {
       regionCode: returnVersion.licence.region.naldRegionId,
       areaCode: returnVersion.licence.areacode,

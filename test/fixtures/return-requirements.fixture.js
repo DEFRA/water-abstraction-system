@@ -37,12 +37,12 @@ function returnRequirements() {
       siteDescription: 'PUMP AT TINTAGEL',
       summer: true,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: null,
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
         reason: 'new-licence',
         startDate: new Date('2022-04-01'),
+        multipleUpload: false,
         licence: {
           expiredDate: null,
           id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
@@ -101,7 +101,6 @@ function returnRequirements() {
       siteDescription: 'BOREHOLE AT AVALON',
       summer: false,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: null,
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
@@ -119,7 +118,8 @@ function returnRequirements() {
             naldRegionId: 4
           }
         },
-        quarterlyReturns: true
+        quarterlyReturns: true,
+        multipleUpload: false
       },
       points: [
         {
@@ -178,12 +178,12 @@ function returnRequirementsAcrossReturnVersions() {
       siteDescription: 'PUMP AT TINTAGEL',
       summer: true,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: new Date('2024-05-26'),
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
         reason: 'new-licence',
         startDate: new Date('2022-04-01'),
+        multipleUpload: false,
         licence: {
           expiredDate: null,
           id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
@@ -242,12 +242,12 @@ function returnRequirementsAcrossReturnVersions() {
       siteDescription: 'BOREHOLE AT AVALON',
       summer: false,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: null,
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f094',
         reason: 'new-licence',
         startDate: new Date('2024-05-27'),
+        multipleUpload: false,
         licence: {
           expiredDate: null,
           id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
@@ -306,7 +306,6 @@ function returnRequirementsAcrossReturnVersions() {
       siteDescription: 'BOREHOLE AT AVALON',
       summer: false,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: new Date('2025-05-26'),
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f095',
@@ -324,7 +323,8 @@ function returnRequirementsAcrossReturnVersions() {
             naldRegionId: 4
           }
         },
-        quarterlyReturns: true
+        quarterlyReturns: true,
+        multipleUpload: false
       },
       points: [
         {
@@ -371,7 +371,6 @@ function returnRequirementsAcrossReturnVersions() {
       siteDescription: 'BOREHOLE AT AVALON',
       summer: false,
       twoPartTariff: false,
-      upload: false,
       returnVersion: {
         endDate: null,
         id: '5a077661-05fc-4fc4-a2c6-d84ec908f095',
@@ -389,7 +388,8 @@ function returnRequirementsAcrossReturnVersions() {
             naldRegionId: 4
           }
         },
-        quarterlyReturns: true
+        quarterlyReturns: true,
+        multipleUpload: false
       },
       points: [
         {

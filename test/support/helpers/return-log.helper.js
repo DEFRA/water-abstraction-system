@@ -5,7 +5,7 @@
  */
 
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateReference } = require('./return-requirement.helper.js')
@@ -86,6 +86,7 @@ function defaults(data = {}) {
       version: 1
     },
     receivedDate,
+    returnId: generateUUID(),
     returnReference,
     returnsFrequency: 'month',
     startDate,

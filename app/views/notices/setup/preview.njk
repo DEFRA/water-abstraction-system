@@ -1,0 +1,37 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">{{ caption }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-body">
+    {% if contents === 'error' %}
+      <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
+    {% else %}
+      <div class="message-preview">
+        {% if messageType === 'letter' %}
+          <div class="govuk-!-margin-bottom-5">
+            {{ newLineArrayItems(address) }}
+          </div>
+        {% endif %}
+
+        {{ contents | markdown | safe }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

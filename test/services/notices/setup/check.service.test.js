@@ -44,6 +44,7 @@ describe('Notices - Setup - Check service', () => {
     expect(result).to.equal({
       activeNavBar: 'manage',
       defaultPageSize: 25,
+      displayPreviewLink: true,
       links: {
         back: `/system/notices/setup/${session.id}/returns-period`,
         cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -60,7 +61,8 @@ describe('Notices - Setup - Check service', () => {
         {
           contact: ['primary.user@important.com'],
           licences: [`${testRecipients.primaryUser.licence_refs}`],
-          method: 'Email - Primary user'
+          method: 'Email - Primary user',
+          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
         }
       ],
       recipientsAmount: 1,
@@ -85,6 +87,7 @@ describe('Notices - Setup - Check service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         defaultPageSize: 25,
+        displayPreviewLink: false,
         links: {
           back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -101,7 +104,8 @@ describe('Notices - Setup - Check service', () => {
           {
             contact: ['additional.contact@important.com'],
             licences: [`${testRecipients.additionalContact.licence_refs}`],
-            method: 'Email - Additional contact'
+            method: 'Email - Additional contact',
+            previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}`
           }
         ],
         recipientsAmount: 1,
