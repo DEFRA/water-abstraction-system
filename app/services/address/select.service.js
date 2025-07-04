@@ -3,9 +3,10 @@
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
  *
- * @module SelectService
+ * @module SelectAddressService
  */
 
+const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -19,9 +20,19 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = SelectPresenter.go(session)
+  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
+
+  if (addresses.succeeded === false || addresses.results.length === 0) {
+    return {
+      redirect: true
+    }
+  }
+
+  const pageData = SelectPresenter.go(addresses.results)
 
   return {
+    backLink: `/system/address/${session.id}/postcode`,
+    sessionId: session.id,
     ...pageData
   }
 }

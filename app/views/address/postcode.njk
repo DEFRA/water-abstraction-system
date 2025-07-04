@@ -27,29 +27,29 @@
     }) }}
   {%endif%}
 
-  <div class="govuk-body">
-    <form method="post">
+  <form method="post">
 
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-      {{ govukInput({
-        label: {
-          text: "Enter a UK postcode",
-          classes: "govuk-label--l",
-          isPageHeading: true
-        },
-        classes: "govuk-input--width-10",
-        value: postcode,
-        id: "postcode",
-        name: "postcode",
-        errorMessage: error
-      }) }}
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    {{ govukInput({
+      label: {
+        text: "Enter a UK postcode",
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      classes: "govuk-input--width-10",
+      value: postcode,
+      id: "postcode",
+      name: "postcode",
+      errorMessage: error
+    }) }}
 
-      <div class="govuk-form-group">
-        <a class="govuk-link" href="/system/address/{{ sessionId }}/international">The address is outside the UK</a>
-      </div>
+    <div class="govuk-form-group">
+      <a class="govuk-link" href="/system/address/{{ sessionId }}/international">The address is outside the UK</a>
+    </div>
 
 
-      {{ govukButton({ text: "Find addresses", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Find addresses", preventDoubleClick: true }) }}
+  </form>
+
+  {% include "address/os-places-declaration.njk" %}
 {% endblock %}
