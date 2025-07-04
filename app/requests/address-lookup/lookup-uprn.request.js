@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Use for making http requests to the address facade
+ * Sends a request to the address facade for the provided uprn
  * @module LookupUPRNRequest
  */
 
