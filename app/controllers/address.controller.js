@@ -22,14 +22,6 @@ async function submitPostcode(request, h) {
   return h.redirect(`/system/address/${sessionId}/select`)
 }
 
-async function viewSelect(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SelectAddressService.go(sessionId)
-
-  return h.view('address/select.njk', pageData)
-}
-
 async function submitSelect(request, h) {
   const { sessionId } = request.params
 
@@ -39,7 +31,8 @@ async function submitSelect(request, h) {
     return h.view('address/select.njk', pageData)
   }
 
-  return h.redirect(`/system/address/${sessionId}/select`)
+  // TODO: Update to return to which ever journey is using the address lookup service
+  return h.redirect(`/system/address/${sessionId}/check`)
 }
 
 async function viewPostcode(request, h) {
@@ -48,6 +41,18 @@ async function viewPostcode(request, h) {
   const pageData = await PostcodeService.go(sessionId)
 
   return h.view('address/postcode.njk', pageData)
+}
+
+async function viewSelect(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SelectAddressService.go(sessionId)
+
+  if (pageData.redirect) {
+    return h.redirect(`/system/address/${sessionId}/manual`)
+  }
+
+  return h.view('address/select.njk', pageData)
 }
 
 module.exports = {
