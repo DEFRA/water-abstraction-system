@@ -95,7 +95,6 @@ const data = [
     badLogins: 0,
     application: 'water_vml',
     resetGuidCreatedAt: null,
-    role: '{"scopes": ["external"]}',
     enabled: true
   },
   {
@@ -108,7 +107,6 @@ const data = [
     badLogins: 0,
     application: 'water_vml',
     resetGuidCreatedAt: null,
-    role: '{"scopes": ["external"]}',
     enabled: true
   },
   {
@@ -121,7 +119,6 @@ const data = [
     badLogins: 0,
     application: 'water_vml',
     resetGuidCreatedAt: null,
-    role: '{"scopes": ["external"]}',
     enabled: true
   },
   {
