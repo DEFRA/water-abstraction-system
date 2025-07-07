@@ -121,13 +121,13 @@ describe('Address - Submit Select Service', () => {
         },
         addresses: [
           {
-            text: 'address 1',
-            value: '123456789'
-          },
-          {
             value: 'select',
             selected: true,
             text: `1 address found`
+          },
+          {
+            text: 'address 1',
+            value: '123456789'
           }
         ],
         pageTitle: 'Select the address',
@@ -167,13 +167,13 @@ describe('Address - Submit Select Service', () => {
         },
         addresses: [
           {
-            text: 'address 1',
-            value: '123456789'
-          },
-          {
             value: 'select',
             selected: true,
             text: `1 address found`
+          },
+          {
+            text: 'address 1',
+            value: '123456789'
           }
         ],
         pageTitle: 'Select the address',
