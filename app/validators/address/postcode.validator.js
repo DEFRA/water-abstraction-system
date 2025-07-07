@@ -6,6 +6,8 @@
  * @module PostcodeValidator
  */
 
+const { postcodeValidator } = require('postcode-validator')
+
 const Joi = require('joi')
 
 /**
@@ -18,9 +20,18 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    postcode: Joi.string().required().messages({
-      'any.required': 'Enter a UK postcode'
-    })
+    postcode: Joi.string()
+      .required()
+      .custom((value, helper) => {
+        if (!postcodeValidator(value, 'GB')) {
+          return helper.error('string.custom')
+        }
+        return value
+      }, 'Enter a valid UK postcode')
+      .messages({
+        'any.required': 'Enter a UK postcode',
+        'string.custom': 'Enter a valid UK postcode'
+      })
   })
 
   return schema.validate(payload, { abortEarly: false })

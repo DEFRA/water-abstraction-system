@@ -26,7 +26,7 @@ describe('Address - Postcode Validator', () => {
     })
   })
 
-  describe('when called with invalid data', () => {
+  describe('when called with no postcode', () => {
     beforeEach(() => {
       payload = {}
     })
@@ -37,6 +37,20 @@ describe('Address - Postcode Validator', () => {
       expect(result.value).to.exist()
       expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal('Enter a UK postcode')
+    })
+  })
+
+  describe('when called with an invalid postcode', () => {
+    beforeEach(() => {
+      payload = { postcode: 'notapostcode' }
+    })
+
+    it('returns with errors', () => {
+      const result = PostcodeValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter a valid UK postcode')
     })
   })
 })
