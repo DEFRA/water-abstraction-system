@@ -27,11 +27,16 @@ async function submitSelect(request, h) {
 
   const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
 
+  if (pageData.redirect) {
+    return h.redirect(`/system/address/${sessionId}/manual`)
+  }
+
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
   }
 
-  return h.redirect(`/system/address/${sessionId}/select`)
+  // TODO: Update to return to which ever journey is using the address lookup service
+  return h.redirect(`/system/address/${sessionId}/check`)
 }
 
 async function viewPostcode(request, h) {

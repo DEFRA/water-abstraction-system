@@ -133,7 +133,7 @@ describe('Address - Select Service', () => {
       })
     })
 
-    it('returns page data for the view', async () => {
+    it('returns page data that causes a redirect to the manual page', async () => {
       const result = await SelectService.go(session.id)
 
       expect(result).to.equal({

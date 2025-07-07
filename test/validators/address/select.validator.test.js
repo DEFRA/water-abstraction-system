@@ -13,11 +13,11 @@ const SelectValidator = require('../../../app/validators/address/select.validato
 describe('Address - Select Validator', () => {
   let payload
 
-  beforeEach(() => {
-    payload = { address: '123 street' }
-  })
-
   describe('when called with valid data', () => {
+    beforeEach(() => {
+      payload = { addresses: '1234567' }
+    })
+
     it('returns with no errors', () => {
       const result = SelectValidator.go(payload)
 
@@ -27,6 +27,20 @@ describe('Address - Select Validator', () => {
   })
 
   describe('when called with invalid data', () => {
+    beforeEach(() => {
+      payload = { addresses: 'select' }
+    })
+
+    it('returns with errors', () => {
+      const result = SelectValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Select an address')
+    })
+  })
+
+  describe('when called with no data', () => {
     beforeEach(() => {
       payload = {}
     })
