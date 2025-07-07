@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcryptjs')
 
+const { db } = require('../db.js')
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { data: users } = require('./data/users.js')
 const UserModel = require('../../app/models/user.model.js')
@@ -25,7 +26,40 @@ async function seed() {
     } else {
       await _insert(user, password)
     }
+
+    await _applyRoleToExternalUsers(user)
   }
+}
+
+/**
+ * Sets the `role` property for external users, which is not a field we expose in the view or the model
+ *
+ * Whilst working on WATER-5129 we encountered a scenario where the water-abstraction-service is requesting an external
+ * user's details by making a request to water-abstraction-tactical-idm via hapi-pg-rest-api. The request does not
+ * include a select, so hapi-pg-rest-api is grabbing all fields.
+ *
+ * However, also within tactical-idm, someone has added a custom prequery hook that automatically tries to convert the
+ * contents of the `role` field to JSON if it exists in the object being returned.
+ *
+ * Frustratingly, the information in the field is never used. So, our choice to disregard the field in our view and
+ * model was correct. But if not populated, you cannot upload a CSV returns file as an external user (the scenario that
+ * exposed this).
+ *
+ * This extra call, means we can still populate the field _and_ continue to ignore it in our view and model!
+ *
+ * @private
+ */
+async function _applyRoleToExternalUsers(user) {
+  const { application, username } = user
+
+  if (application === 'water_admin') {
+    return
+  }
+
+  const params = [username]
+  const query = `UPDATE idm.users SET "role" = '{"scopes": ["external"]}' WHERE user_name = ?;`
+
+  return db.raw(query, params)
 }
 
 async function _exists(user) {
