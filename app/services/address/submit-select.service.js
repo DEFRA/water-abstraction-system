@@ -26,7 +26,7 @@ async function go(sessionId, payload) {
   let validationResult = _validate(payload)
 
   if (!validationResult) {
-    const address = await LookupUPRNRequest.send(payload.addresses.value)
+    const address = await LookupUPRNRequest.send(payload.addresses)
 
     if (address.succeeded) {
       await _save(session, address.results[0])
