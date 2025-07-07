@@ -26,6 +26,10 @@ async function submitSelect(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
+console.log(pageData)
+  if (pageData.redirect) {
+    return h.redirect(`/system/address/${sessionId}/manual`)
+  }
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)

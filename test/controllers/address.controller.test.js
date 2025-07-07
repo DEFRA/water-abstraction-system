@@ -13,7 +13,7 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const PostcodeService = require('../../app/services/address/postcode.service.js')
 const SelectAddressService = require('../../app/services/address/select.service.js')
-const SubmitSelectService = require('../../app/services/address/submit-select.service.js')
+const SubmitSelectAddressService = require('../../app/services/address/submit-select.service.js')
 const SubmitPostcodeService = require('../../app/services/address/submit-postcode.service.js')
 
 // For running our service
@@ -150,7 +150,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectService, 'go').returns({})
+          Sinon.stub(SubmitSelectAddressService, 'go').returns({})
         })
 
         it('redirects to the check page', async () => {
@@ -162,19 +162,36 @@ describe('Address controller', () => {
       })
 
       describe('when the request fails because an address was not selected', () => {
-        beforeEach(() => {
-          const pageData = _selectPageData(true)
+        describe('and we get resutls back from the postcode lookup', () => {
+          beforeEach(() => {
+            const pageData = _selectPageData(true)
 
-          Sinon.stub(SubmitSelectService, 'go').returns(pageData)
+            Sinon.stub(SubmitSelectAddressService, 'go').returns(pageData)
+          })
+
+          it('re-renders the select page with an error', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Select an address')
+          })
         })
 
-        it('re-renders the select page with an error', async () => {
-          const response = await server.inject(postOptions)
+        describe('and we do not get any resutls back from the postcode lookup', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSelectAddressService, 'go').returns({
+              redirect: true
+            })
+          })
 
-          expect(response.statusCode).to.equal(200)
+          it('redirects to the manual page successfully', async () => {
+            const response = await server.inject(postOptions)
 
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Select an address')
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual`)
+          })
         })
       })
     })

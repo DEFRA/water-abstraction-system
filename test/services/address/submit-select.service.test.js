@@ -12,7 +12,8 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things to stub
-const AddressLookupRequest = require('../../../app/requests/address-lookup.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../../app/requests/address-lookup/lookup-uprn.request.js')
 
 // Thing under test
 const SubmitSelectService = require('../../../app/services/address/submit-select.service.js')
@@ -41,8 +42,8 @@ describe('Address - Submit Select Service', () => {
   describe('when called with a valid UPRN', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
-      getByUPRNStub = Sinon.stub(AddressLookupRequest, 'getByUPRN')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+      getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
       payload = {
         addresses: '123456789'
       }
@@ -87,11 +88,57 @@ describe('Address - Submit Select Service', () => {
     })
   })
 
+  describe('when an address has not been selected', () => {
+    beforeEach(async () => {
+      session = await SessionHelper.add({ data: sessionData })
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+      getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
+      payload = {
+        addresses: 'select'
+      }
+      getByPostcodeStub.resolves({
+        succeeded: true,
+        results: [
+          {
+            address: 'address 1',
+            postcode: 'SW1A 1AA',
+            uprn: '123456789'
+          }
+        ]
+      })
+    })
+
+    it('renders the page with an error', async () => {
+      const result = await SubmitSelectService.go(session.id, payload)
+
+      expect(result).to.equal({
+        backLink: `/system/address/${session.id}/postcode`,
+        error: {
+          text: 'Select an address'
+        },
+        addresses: [
+          {
+            value: 'select',
+            selected: true,
+            text: `1 address found`
+          },
+          {
+            text: 'address 1',
+            value: '123456789'
+          }
+        ],
+        pageTitle: 'Select the address',
+        postcode: 'SW1A 1AA',
+        sessionId: session.id
+      })
+    })
+  })
+
   describe('when called with a invalid UPRN', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
-      getByUPRNStub = Sinon.stub(AddressLookupRequest, 'getByUPRN')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+      getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
       payload = {
         addresses: '123456789'
       }
@@ -137,48 +184,56 @@ describe('Address - Submit Select Service', () => {
     })
   })
 
-  describe('when an address has not been selected', () => {
+  describe('when called with a invalid UPRN but the postcode lookup fails', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(AddressLookupRequest, 'getByPostcode')
-      getByUPRNStub = Sinon.stub(AddressLookupRequest, 'getByUPRN')
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+      getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
       payload = {
-        addresses: 'select'
+        addresses: '123456789'
       }
+      getByUPRNStub.resolves({
+        succeeded: false,
+        results: []
+      })
       getByPostcodeStub.resolves({
-        succeeded: true,
-        results: [
-          {
-            address: 'address 1',
-            postcode: 'SW1A 1AA',
-            uprn: '123456789'
-          }
-        ]
+        succeeded: false,
+        results: []
       })
     })
 
-    it('renders the page with an error', async () => {
+    it('returns page data that causes a redirect to the manual page', async () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
       expect(result).to.equal({
-        backLink: `/system/address/${session.id}/postcode`,
-        error: {
-          text: 'Select an address'
-        },
-        addresses: [
-          {
-            value: 'select',
-            selected: true,
-            text: `1 address found`
-          },
-          {
-            text: 'address 1',
-            value: '123456789'
-          }
-        ],
-        pageTitle: 'Select the address',
-        postcode: 'SW1A 1AA',
-        sessionId: session.id
+        redirect: true
+      })
+    })
+  })
+
+  describe('when called with a invalid UPRN but the postcode lookup succeeds but has no results', () => {
+    beforeEach(async () => {
+      session = await SessionHelper.add({ data: sessionData })
+      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+      getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
+      payload = {
+        addresses: '123456789'
+      }
+      getByUPRNStub.resolves({
+        succeeded: false,
+        results: []
+      })
+      getByPostcodeStub.resolves({
+        succeeded: true,
+        results: []
+      })
+    })
+
+    it('returns page data that causes a redirect to the manual page', async () => {
+      const result = await SubmitSelectService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirect: true
       })
     })
   })
