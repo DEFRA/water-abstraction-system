@@ -18,7 +18,7 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-console.log(session.address)
+
   const pageData = ManualAddressPresenter.go(session.address)
 
   return {
