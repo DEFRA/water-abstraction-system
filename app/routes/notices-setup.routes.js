@@ -293,6 +293,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview-paper-form',
+    options: {
+      handler: NoticesSetupController.previewPaperForm,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,
