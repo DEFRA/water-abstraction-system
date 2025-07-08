@@ -12,7 +12,7 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things to stub
-const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')

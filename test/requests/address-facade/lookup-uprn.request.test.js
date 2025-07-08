@@ -15,9 +15,9 @@ const servicesConfig = require('../../../config/services.config.js')
 const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
-const LookupUPRNRequest = require('../../../app/requests/address-lookup/lookup-uprn.request.js')
+const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
 
-describe('Lookup UPRN Request', () => {
+describe('Requests - Address Facade - Lookup UPRN request', () => {
   const uprn = '123456789'
   const uprnPath = `address-service/v1/addresses/${uprn}?key=client1`
 

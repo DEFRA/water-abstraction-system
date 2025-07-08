@@ -6,8 +6,8 @@
  * @module SubmitSelectService
  */
 
-const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../requests/address-lookup/lookup-uprn.request.js')
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
 const SessionModel = require('../../models/session.model.js')

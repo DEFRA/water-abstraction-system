@@ -6,7 +6,7 @@
  * @module SelectAddressService
  */
 
-const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 

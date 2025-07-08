@@ -12,8 +12,8 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things to stub
-const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../../app/requests/address-lookup/lookup-uprn.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
 
 // Thing under test
 const SubmitSelectService = require('../../../app/services/address/submit-select.service.js')

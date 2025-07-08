@@ -15,9 +15,9 @@ const servicesConfig = require('../../../config/services.config.js')
 const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
-const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 
-describe('Lookup Postcode Request', () => {
+describe('Requests - Address Facade - Lookup Postcode request', () => {
   const postcode = 'SW1A 1AA'
   const postcodePath = `address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`
 
