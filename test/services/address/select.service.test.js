@@ -32,16 +32,9 @@ describe('Address - Select service', () => {
 
   let getByPostcodeStub
   let session
-  let sessionData
 
   beforeEach(async () => {
-    sessionData = {
-      address: {
-        postcode: 'BS1 5AH'
-      }
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
+    session = await SessionHelper.add({ data: { address: { postcode: 'BS1 5AH' } } })
 
     getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
   })
@@ -57,7 +50,7 @@ describe('Address - Select service', () => {
         response: {
           statusCode: 200,
           body: {
-            results: []
+            results: [match]
           }
         },
         matches: [match]
@@ -94,7 +87,7 @@ describe('Address - Select service', () => {
         response: {
           statusCode: 200,
           body: {
-            results: []
+            results: [match]
           }
         },
         matches: [match, { ...match, uprn: 12345, address: 'DEFRA, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH' }]
