@@ -17,17 +17,68 @@ describe('Address - Manual Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
-    sessionData = {}
+  describe('when called with no saved address', () => {
+    beforeEach(async () => {
+      sessionData = {
+        address: {}
+      }
 
-    session = await SessionHelper.add({ data: sessionData })
-  })
+      session = await SessionHelper.add({ data: sessionData })
+    })
 
-  describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ManualService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        backLink: `/system/address/${session.id}/postcode`,
+        pageTitle: 'Enter the address'
+      })
+    })
+  })
+
+  describe('when called with just the postcode saved', () => {
+    beforeEach(async () => {
+      sessionData = {
+        address: {
+          postcode: 'SW1A 1AA'
+        }
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('returns page data for the view', async () => {
+      const result = await ManualService.go(session.id)
+
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        backLink: `/system/address/${session.id}/postcode`,
+        pageTitle: 'Enter the address',
+        postcode: 'SW1A 1AA'
+      })
+    })
+  })
+
+  describe('when called with just the uprn saved', () => {
+    beforeEach(async () => {
+      sessionData = {
+        address: {
+          uprn: '123456789'
+        }
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('returns page data for the view', async () => {
+      const result = await ManualService.go(session.id)
+
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        backLink: `/system/address/${session.id}/select`,
+        pageTitle: 'Enter the address'
+      })
     })
   })
 })

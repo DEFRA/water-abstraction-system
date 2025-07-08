@@ -58,7 +58,7 @@ async function viewManual(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ManualAddressService.go(sessionId)
-
+console.log(pageData)
   return h.view('address/manual.njk', pageData)
 }
 
