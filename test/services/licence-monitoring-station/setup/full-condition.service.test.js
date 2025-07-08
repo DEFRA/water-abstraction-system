@@ -17,7 +17,7 @@ const FetchFullConditionService = require('../../../../app/services/licence-moni
 // Thing under test
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 
-describe('Full Condition Service', () => {
+describe('Licence Monitoring Station Setup - Full Condition Service', () => {
   let condition
   let session
 

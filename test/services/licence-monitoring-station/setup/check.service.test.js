@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const CheckService = require('../../../../app/services/licence-monitoring-station/setup/check.service.js')
 
-describe('Check Service', () => {
+describe('Licence Monitoring Station Setup - Check Service', () => {
   let session
   let sessionData
 

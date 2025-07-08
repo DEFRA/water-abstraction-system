@@ -20,7 +20,7 @@ const FullConditionService = require('../../../../app/services/licence-monitorin
 // Thing under test
 const SubmitFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
 
-describe('Submit Full Condition Service', () => {
+describe('Licence Monitoring Station Setup - Submit Full Condition Service', () => {
   let payload
   let session
 
