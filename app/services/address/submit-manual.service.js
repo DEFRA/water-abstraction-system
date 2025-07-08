@@ -1,16 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `address/{sessionId}/postcode` page
+ * Orchestrates validating the data for `address/{sessionId}/manual` page
  *
- * @module SubmitPostcodeService
+ * @module SubmitManualService
  */
 
-const PostcodeValidator = require('../../validators/address/postcode.validator.js')
+const ManualAddressPresenter = require('../../presenters/address/manual.presenter.js')
+const ManualAddressValidator = require('../../validators/address/manual.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `address/{sessionId}/postcode` page
+ * Orchestrates validating the data for `address/{sessionId}/manual` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -28,23 +29,20 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  const pageData = ManualAddressPresenter.go(session)
+
   return {
-    activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Enter a UK postcode',
-    ...(payload.postcode && { postcode: payload.postcode }),
-    sessionId: session.id
+    ...pageData
   }
 }
 
 async function _save(session, payload) {
-  session.address = { postcode: payload.postcode }
-
   return session.$update()
 }
 
 function _validate(payload) {
-  const validation = PostcodeValidator.go(payload)
+  const validation = ManualAddressValidator.go(payload)
 
   if (!validation.error) {
     return null

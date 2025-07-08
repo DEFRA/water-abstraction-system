@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/address/{sessionId}/postcode',
     options: {
-      handler: AddressController.postcode,
+      handler: AddressController.viewPostcode,
       auth: {
         access: {
           scope: ['billing']
@@ -44,6 +44,30 @@ const routes = [
     path: '/address/{sessionId}/select',
     options: {
       handler: AddressController.submitSelect,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/address/{sessionId}/manual',
+    options: {
+      handler: AddressController.viewManual,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/address/{sessionId}/manual',
+    options: {
+      handler: AddressController.submitManual,
       auth: {
         access: {
           scope: ['billing']
