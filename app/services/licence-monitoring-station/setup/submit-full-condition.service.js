@@ -25,12 +25,15 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     const session = await SessionModel.query().findById(sessionId)
 
-    // We want to display the exact text of the chosen condition on the check page, including the condition number. In
-    // order to determine the number we need to re-fetch the conditions for this licence. We can then save its info in
-    // the session. We do this once here to avoid hitting the db every time we render the check page.
-    const conditionDisplayText = await _determineConditionDisplayText(session.licenceId, payload.condition)
+    // On the check page we want to display the exact text of the chosen condition (including the condition number) plus
+    // its abstraction period. To do this we need to re-fetch the condition. We can then save the info in the session.
+    // We do this once here to avoid hitting the db every time we render the check page.
+    const { condition, conditionIndex } = await _fetchCondition(session.licenceId, payload.condition)
 
-    await _save(session, conditionDisplayText, payload)
+    const conditionDisplayText = await _determineConditionDisplayText(condition, conditionIndex)
+    const abstractionPeriod = await _determineAbstractionPeriod(condition)
+
+    await _save(session, abstractionPeriod, conditionDisplayText, payload)
 
     // If the user selected a non-condition option then they will proceed to the "enter abstraction period" page.
     // Ordinarily we would also return `checkPageVisited` to say whether the user should be forwarded there; however,
@@ -51,18 +54,21 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _determineConditionDisplayText(licenceId, conditionId) {
-  if (conditionId === 'not_listed') {
-    return 'None'
+async function _determineAbstractionPeriod(condition) {
+  if (!condition) {
+    return null
   }
 
-  const conditions = await FetchFullConditionService.go(licenceId)
+  const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
+    condition
 
-  const conditionIndex = conditions.findIndex((condition) => {
-    return condition.id === conditionId
-  })
+  return { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth }
+}
 
-  const condition = conditions[conditionIndex]
+async function _determineConditionDisplayText(condition, conditionIndex) {
+  if (!condition) {
+    return 'None'
+  }
 
   // Construct the display text in the format we want, eg:
   // 'Flow cessation condition 2: DESCRIPTION (Additional information 1: INFO_1) (Additional information 2: INFO_2)'
@@ -76,7 +82,28 @@ async function _determineConditionDisplayText(licenceId, conditionId) {
   ].join('')
 }
 
-async function _save(session, conditionDisplayText, payload) {
+async function _fetchCondition(licenceId, conditionId) {
+  if (conditionId === 'not_listed') {
+    return { condition: null, conditionIndex: null }
+  }
+
+  const conditions = await FetchFullConditionService.go(licenceId)
+
+  const conditionIndex = conditions.findIndex((condition) => {
+    return condition.id === conditionId
+  })
+
+  return { condition: conditions[conditionIndex], conditionIndex }
+}
+
+async function _save(session, abstractionPeriod, conditionDisplayText, payload) {
+  if (abstractionPeriod) {
+    session.abstractionPeriodStartDay = abstractionPeriod.abstractionPeriodStartDay
+    session.abstractionPeriodStartMonth = abstractionPeriod.abstractionPeriodStartMonth
+    session.abstractionPeriodEndDay = abstractionPeriod.abstractionPeriodEndDay
+    session.abstractionPeriodEndMonth = abstractionPeriod.abstractionPeriodEndMonth
+  }
+
   session.conditionId = payload.condition
   session.conditionDisplayText = conditionDisplayText
 

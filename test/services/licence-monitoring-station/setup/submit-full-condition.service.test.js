@@ -34,14 +34,26 @@ describe('Submit Full Condition Service', () => {
 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-      licenceVersionPurposeId: licenceVersionPurpose.id
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      param1: 'PARAM_1',
+      param2: 'PARAM_2',
+      notes: 'NOTES'
     })
 
     payload = {
       condition: licenceVersionPurposeCondition.id
     }
 
-    Sinon.stub(FetchFullConditionService, 'go').resolves([licenceVersionPurposeCondition])
+    Sinon.stub(FetchFullConditionService, 'go').resolves([
+      {
+        ...licenceVersionPurposeCondition,
+        abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
+        abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth,
+        abstractionPeriodEndDay: licenceVersionPurpose.abstractionPeriodEndDay,
+        abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
+        displayTitle: 'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE'
+      }
+    ])
     Sinon.stub(FullConditionService, 'go').resolves(pageData)
   })
 
@@ -56,6 +68,27 @@ describe('Submit Full Condition Service', () => {
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.conditionId).to.equal(payload.condition)
+    })
+
+    it('saves the abstraction period', async () => {
+      await SubmitFullConditionService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.abstractionPeriodEndDay).to.equal(31)
+      expect(refreshedSession.abstractionPeriodEndMonth).to.equal(3)
+      expect(refreshedSession.abstractionPeriodStartDay).to.equal(1)
+      expect(refreshedSession.abstractionPeriodStartMonth).to.equal(1)
+    })
+
+    it('saves the condition display text', async () => {
+      await SubmitFullConditionService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.conditionDisplayText).to.equal(
+        'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE 1: NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
+      )
     })
 
     describe('and not_listed was passed in the payload', () => {
