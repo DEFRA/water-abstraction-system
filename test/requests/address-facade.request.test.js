@@ -44,7 +44,44 @@ describe('Requests - Address Facade request', () => {
           succeeded: true,
           response: {
             statusCode: 200,
-            body: { results: [] }
+            body: {
+              results: [
+                {
+                  uprn: 340116,
+                  address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+                  organisation: 'ENVIRONMENT AGENCY',
+                  premises: 'HORIZON HOUSE',
+                  street_address: 'DEANERY ROAD',
+                  locality: null,
+                  city: 'BRISTOL',
+                  postcode: 'BS1 5AH',
+                  country: 'United Kingdom',
+                  x: 358205.03,
+                  y: 172708.06,
+                  coordinate_system: null,
+                  blpu_state_date: '12/10/2009',
+                  blpu_state_code: 2,
+                  postal_address_code: 'D',
+                  logical_status_code: 1,
+                  source_data_type: 'dpa',
+                  blpu_state_code_description: 'In use',
+                  classification_code: 'CO01',
+                  classification_code_description: 'Office / Work Studio',
+                  lpi_logical_status_code: null,
+                  lpi_logical_status_code_description: null,
+                  match: 1,
+                  match_description: 'EXACT',
+                  topography_layer_toid: 'osgb1000002529079737',
+                  parent_uprn: null,
+                  last_update_date: '10/02/2016',
+                  status: 'APPROVED',
+                  entry_date: '12/10/2009',
+                  postal_address_code_description: 'A record which is linked to PAF',
+                  usrn: null,
+                  language: 'EN'
+                }
+              ]
+            }
           }
         })
       })
@@ -71,10 +108,12 @@ describe('Requests - Address Facade request', () => {
         expect(result.succeeded).to.be.true()
       })
 
-      it('returns the response body as an object', async () => {
+      it('returns the matches from the Address Facade', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.response.body.results).to.exist()
+        expect(result.matches).to.exist()
+        expect(result.matches).to.be.instanceOf(Array)
+        expect(result.matches[0].uprn).to.equal(340116)
       })
 
       it('returns the status code', async () => {
@@ -113,6 +152,14 @@ describe('Requests - Address Facade request', () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
         expect(result.response.statusCode).to.equal(404)
+      })
+
+      it('does not returns any matches', async () => {
+        const result = await AddressFacadeRequest.get(testRoute)
+
+        expect(result.matches).to.exist()
+        expect(result.matches).to.be.instanceOf(Array)
+        expect(result.matches).to.be.empty()
       })
     })
   })

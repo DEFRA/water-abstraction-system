@@ -50,7 +50,8 @@ function _parseResult(result) {
       response: {
         statusCode,
         body
-      }
+      },
+      matches: body?.results || []
     }
   }
 
