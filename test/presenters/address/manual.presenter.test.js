@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ManualPresenter = require('../../../app/presenters/address/manual.presenter.js')
 
-describe('Manual Presenter', () => {
+describe('Address - Manual Presenter', () => {
   let session
 
   beforeEach(() => {
