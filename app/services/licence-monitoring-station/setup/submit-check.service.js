@@ -6,7 +6,9 @@
  * @module SubmitCheckService
  */
 
+const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js') // TODO: Double-check the require ordering
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -18,12 +20,34 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  // TODO: Add tag to licence
   // TODO: Ensure success banner is displayed when we return to the monitoring stations page
+
+  await _createTag(session)
 
   await session.$query().delete()
 
   return session.monitoringStationId
+}
+
+async function _createTag(session) {
+  return LicenceMonitoringStationModel.query().insert({
+    licenceId: session.licenceId,
+    monitoringStationId: session.monitoringStationId,
+    // TODO: Correctly set the following:
+    // licenceVersionPurposeConditionId: null,
+    // abstractionPeriodStartDay: null,
+    // abstractionPeriodStartMonth: null,
+    // abstractionPeriodEndDay: null,
+    // abstractionPeriodEndMonth: null,
+    measureType: 'flow', // TODO: Confirm how we determine `flow` or `unit`
+    source: 'wrls',
+    thresholdUnit: session.unit, // TODO: Confirm we're using the correct unit names
+    thresholdValue: session.threshold,
+    // status: 'resume', // TODO: Check if this is actually needed
+    restrictionType: session.stopOrReduce, // TODO: Check about the `stop_or_reduce` entries we can see in the db
+    createdAt: timestampForPostgres(),
+    updatedAt: timestampForPostgres()
+  })
 }
 
 module.exports = {
