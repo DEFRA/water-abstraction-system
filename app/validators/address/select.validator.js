@@ -18,8 +18,9 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    address: Joi.string().required().messages({
-      'any.required': 'Select an address'
+    addresses: Joi.string().required().invalid('select').messages({
+      'any.required': 'Select an address',
+      'any.invalid': 'Select an address'
     })
   })
 

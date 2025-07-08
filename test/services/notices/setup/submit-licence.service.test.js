@@ -42,7 +42,7 @@ describe('Notices - Setup - Submit Licence service', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
         await LicenceHelper.add({ licenceRef })
-        await ReturnLogHelper.add({ licenceRef })
+        await ReturnLogHelper.add({ licenceRef, endDate: '2020-01-01' })
 
         payload = {
           licenceRef

@@ -37,6 +37,12 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
       licenceRef,
       status: 'void'
     })
+
+    // Add a record due but after the endDate
+    await ReturnLogHelper.add({
+      licenceRef,
+      endDate: '3000-01-01'
+    })
   })
 
   describe('when called', () => {

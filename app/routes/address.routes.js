@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/address/{sessionId}/postcode',
     options: {
-      handler: AddressController.postcode,
+      handler: AddressController.viewPostcode,
       auth: {
         access: {
           scope: ['billing']
