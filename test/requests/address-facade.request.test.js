@@ -15,7 +15,7 @@ const BaseRequest = require('../../app/requests/base.request.js')
 // Thing under test
 const AddressFacadeRequest = require('../../app/requests/address-facade.request.js')
 
-describe('Requests - Address Facade request', () => {
+describe('Address Facade request', () => {
   const headers = {
     'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
     'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'

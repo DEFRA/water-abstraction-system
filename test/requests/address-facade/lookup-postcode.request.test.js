@@ -14,7 +14,7 @@ const AddressFacadeRequest = require('../../../app/requests/address-facade.reque
 // Thing under test
 const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 
-describe('Requests - Address Facade - Lookup Postcode request', () => {
+describe('Address Facade - Lookup Postcode request', () => {
   const match = {
     uprn: 340116,
     address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
