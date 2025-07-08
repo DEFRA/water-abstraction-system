@@ -36,6 +36,10 @@ describe('Info service', () => {
         }
       }
     },
+    htmlToPdf: {
+      succeeded: true,
+      response: { body: JSON.stringify({ status: 'up', details: { chromium: { status: 'up' } } }) }
+    },
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
@@ -77,6 +81,8 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
+      baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
@@ -102,11 +108,12 @@ describe('Info service', () => {
       const result = await InfoService.go()
 
       expect(result).to.include([
-        'virusScannerData',
-        'redisConnectivityData',
         'addressFacadeData',
+        'appData',
         'chargingModuleData',
-        'appData'
+        'gotenbergData',
+        'redisConnectivityData',
+        'virusScannerData'
       ])
 
       expect(result.appData).to.have.length(10)
@@ -117,6 +124,7 @@ describe('Info service', () => {
 
       expect(result.redisConnectivityData).to.equal('Up and running')
       expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      expect(result.gotenbergData).to.equal('Up - Chromium Up')
     })
   })
 
@@ -126,6 +134,8 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
+      baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
       const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
@@ -153,11 +163,12 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData',
-          'redisConnectivityData',
           'addressFacadeData',
+          'appData',
           'chargingModuleData',
-          'appData'
+          'gotenbergData',
+          'redisConnectivityData',
+          'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -176,6 +187,8 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
+      baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
     })
 
@@ -200,11 +213,12 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData',
-          'redisConnectivityData',
           'addressFacadeData',
+          'appData',
           'chargingModuleData',
-          'appData'
+          'gotenbergData',
+          'redisConnectivityData',
+          'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -234,11 +248,12 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData',
-          'redisConnectivityData',
           'addressFacadeData',
+          'appData',
           'chargingModuleData',
-          'appData'
+          'gotenbergData',
+          'redisConnectivityData',
+          'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -272,6 +287,8 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
+        baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
@@ -279,11 +296,12 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData',
-          'redisConnectivityData',
           'addressFacadeData',
+          'appData',
           'chargingModuleData',
-          'appData'
+          'gotenbergData',
+          'redisConnectivityData',
+          'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -300,6 +318,8 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
+        baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
@@ -307,11 +327,12 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData',
-          'redisConnectivityData',
           'addressFacadeData',
+          'appData',
           'chargingModuleData',
-          'appData'
+          'gotenbergData',
+          'redisConnectivityData',
+          'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
