@@ -60,7 +60,8 @@ describe('Address - Manual Service', () => {
       expect(result).to.equal({
         error: {
           text: 'Enter addresss line 1'
-        }
+        },
+        pageTitle: 'Enter the address'
       })
     })
   })
