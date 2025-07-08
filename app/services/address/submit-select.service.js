@@ -26,10 +26,10 @@ async function go(sessionId, payload) {
   let validationResult = _validate(payload)
 
   if (!validationResult) {
-    const address = await LookupUPRNRequest.send(payload.addresses)
+    const result = await LookupUPRNRequest.send(payload.addresses)
 
-    if (address.succeeded) {
-      await _save(session, address.results[0])
+    if (result.succeeded) {
+      await _save(session, result.matches[0])
 
       return {}
     }
@@ -39,15 +39,15 @@ async function go(sessionId, payload) {
     }
   }
 
-  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
+  const result = await LookupPostcodeRequest.send(session.address.postcode)
 
-  if (addresses.succeeded === false || addresses.results.length === 0) {
+  if (result.succeeded === false || result.matches.length === 0) {
     return {
       redirect: true
     }
   }
 
-  const pageData = SelectPresenter.go(addresses.results)
+  const pageData = SelectPresenter.go(result.matches)
 
   return {
     backLink: `/system/address/${session.id}/postcode`,
