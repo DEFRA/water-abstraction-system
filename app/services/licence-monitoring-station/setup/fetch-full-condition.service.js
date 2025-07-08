@@ -3,7 +3,7 @@
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
- * @module FullConditionService
+ * @module FetchFullConditionService
  */
 
 const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
