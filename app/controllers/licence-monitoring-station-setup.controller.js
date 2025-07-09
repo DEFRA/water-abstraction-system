@@ -163,11 +163,10 @@ async function submitStopOrReduce(request, h) {
 async function submitThresholdAndUnit(request, h) {
   const {
     params: { sessionId },
-    payload,
-    yar
+    payload
   } = request
 
-  const pageData = await SubmitThresholdAndUnitService.go(sessionId, payload, yar)
+  const pageData = await SubmitThresholdAndUnitService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
