@@ -22,10 +22,10 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   beforeEach(async () => {
     sessionData = {
       unit: 'Ml/d',
-      label: 'FRENCHAY',
+      label: 'LABEL',
       licenceId: generateUUID(),
       threshold: 100,
-      licenceRef: '6/33/03/*S/0010',
+      licenceRef: 'LICENCE_REF',
       conditionId: generateUUID(),
       stopOrReduce: 'stop',
       checkPageVisited: true,
@@ -135,6 +135,55 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
           expect(result.restrictionType).to.equal('stop_or_reduce')
         })
+      })
+    })
+
+    describe('and licenceVersionPurposeConditionId is provided', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          data: {
+            ...sessionData,
+            licenceVersionPurposeConditionId: generateUUID()
+          }
+        })
+      })
+
+      it('persists the licence version purpose condition id', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.licenceVersionPurposeConditionId).to.equal(session.data.licenceVersionPurposeConditionId)
+      })
+
+      it('does not persist abstraction period', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.abstractionPeriodStartDay).to.not.exist()
+        expect(result.abstractionPeriodStartMonth).to.not.exist()
+        expect(result.abstractionPeriodEndDay).to.not.exist()
+        expect(result.abstractionPeriodEndMonth).to.not.exist()
+      })
+    })
+
+    describe('and licenceVersionPurposeConditionId is not provided', () => {
+      it('persists the abstraction period', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.abstractionPeriodStartDay).to.equal(sessionData.abstractionPeriodStartDay)
+        expect(result.abstractionPeriodStartMonth).to.equal(sessionData.abstractionPeriodStartMonth)
+        expect(result.abstractionPeriodEndDay).to.equal(sessionData.abstractionPeriodEndDay)
+        expect(result.abstractionPeriodEndMonth).to.equal(sessionData.abstractionPeriodEndMonth)
       })
     })
 
