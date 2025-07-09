@@ -19,21 +19,12 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = ManualAddressPresenter.go(session.address)
+  const pageData = ManualAddressPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    backLink: _backLink(session.address, sessionId),
     ...pageData
   }
-}
-
-function _backLink(address, sessionId) {
-  if (address.uprn) {
-    return `/system/address/${sessionId}/select`
-  }
-
-  return `/system/address/${sessionId}/postcode`
 }
 
 module.exports = {
