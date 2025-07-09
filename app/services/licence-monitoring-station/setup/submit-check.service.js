@@ -33,7 +33,7 @@ async function go(sessionId, yar) {
 
 async function _createTag(session) {
   return LicenceMonitoringStationModel.query().insert({
-    ..._determineConditionOrAbstractionPeriod(session),
+    ..._determineAbstractionPeriodOrCondition(session),
     licenceId: session.licenceId,
     measureType: _determineMeasureType(session.unit),
     monitoringStationId: session.monitoringStationId,
@@ -46,16 +46,16 @@ async function _createTag(session) {
   })
 }
 
-function _determineConditionOrAbstractionPeriod(session) {
-  return session.licenceVersionPurposeConditionId
+function _determineAbstractionPeriodOrCondition(session) {
+  return session.conditionId === 'not_listed'
     ? {
-        licenceVersionPurposeConditionId: session.licenceVersionPurposeConditionId
-      }
-    : {
         abstractionPeriodStartDay: session.abstractionPeriodStartDay,
         abstractionPeriodStartMonth: session.abstractionPeriodStartMonth,
         abstractionPeriodEndDay: session.abstractionPeriodEndDay,
         abstractionPeriodEndMonth: session.abstractionPeriodEndMonth
+      }
+    : {
+        licenceVersionPurposeConditionId: session.conditionId
       }
 }
 

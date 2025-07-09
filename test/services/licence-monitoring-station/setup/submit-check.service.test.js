@@ -28,7 +28,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       licenceId: generateUUID(),
       threshold: 100,
       licenceRef: 'LICENCE_REF',
-      conditionId: generateUUID(),
+      conditionId: 'not_listed',
       stopOrReduce: 'stop',
       checkPageVisited: true,
       reduceAtThreshold: null,
@@ -84,7 +84,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         session = await SessionHelper.add({ data: { ...sessionData, unit: 'm3/s' } })
       })
 
-      it('sets measureType as flow', async () => {
+      it('sets "measureType" as "flow"', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
@@ -100,7 +100,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         session = await SessionHelper.add({ data: { ...sessionData, unit: 'mAOD' } })
       })
 
-      it('sets measureType as level', async () => {
+      it('sets "measureType" as "level"', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
@@ -111,12 +111,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
-    describe('and stopOrReduce is stop', () => {
+    describe('and "stopOrReduce" is "stop"', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({ data: { ...sessionData, stopOrReduce: 'stop' } })
       })
 
-      it('sets restrictionType as stop', async () => {
+      it('sets "restrictionType" as "stop"', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
@@ -127,15 +127,15 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
-    describe('and stopOrReduce is reduce', () => {
-      describe('and reduceAtThreshold is no', () => {
+    describe('and "stopOrReduce" is "reduce"', () => {
+      describe('and "reduceAtThreshold" is "no"', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({
             data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
           })
         })
 
-        it('sets restrictionType as reduce', async () => {
+        it('sets "restrictionType" as "reduce"', async () => {
           await SubmitCheckService.go(session.id, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
@@ -146,14 +146,14 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         })
       })
 
-      describe('and reduceAtThreshold is yes', () => {
+      describe('and "reduceAtThreshold" is "yes"', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({
             data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
           })
         })
 
-        it('sets restrictionType as stop_or_reduce', async () => {
+        it('sets "restrictionType" as "stop_or_reduce"', async () => {
           await SubmitCheckService.go(session.id, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
@@ -165,12 +165,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
-    describe('and licenceVersionPurposeConditionId is provided', () => {
+    describe('and "conditionId" is a condition UUID', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
           data: {
             ...sessionData,
-            licenceVersionPurposeConditionId: generateUUID()
+            conditionId: generateUUID()
           }
         })
       })
@@ -182,7 +182,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.licenceVersionPurposeConditionId).to.equal(session.data.licenceVersionPurposeConditionId)
+        expect(result.licenceVersionPurposeConditionId).to.equal(session.data.conditionId)
       })
 
       it('does not persist abstraction period', async () => {
@@ -199,7 +199,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
-    describe('and licenceVersionPurposeConditionId is not provided', () => {
+    describe('and "conditionId" is "not_listed"', () => {
       it('persists the abstraction period', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 
