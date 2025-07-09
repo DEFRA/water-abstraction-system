@@ -377,9 +377,18 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       describe('the "displayPreviewLink" property', () => {
-        it('should be false', () => {
+        it('should be true', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.displayPreviewLink).to.be.false()
+          expect(result.displayPreviewLink).to.be.true()
+        })
+      })
+
+      describe('the "previewLink" property', () => {
+        it('should end in "/select-alert"', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.recipients[0].previewLink).to.equal(
+            `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateLicenceHolder.contact_hash_id}/select-alert`
+          )
         })
       })
 

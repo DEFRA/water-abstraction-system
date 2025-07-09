@@ -26,15 +26,15 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { journey, referenceCode } = session
+  const { id: sessionId, journey, referenceCode } = session
 
   return {
     defaultPageSize,
-    displayPreviewLink: journey !== 'abstraction-alert' && journey !== 'paper-forms',
+    displayPreviewLink: journey !== 'paper-forms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
-    recipients: _recipients(page, recipients, session.id),
+    recipients: _recipients(journey, page, recipients, sessionId),
     recipientsAmount: recipients.length,
     referenceCode
   }
@@ -59,13 +59,18 @@ function _contact(recipient) {
   return [name, ...address]
 }
 
-function _formatRecipients(recipients, sessionId) {
+function _formatRecipients(journey, recipients, sessionId) {
   return recipients.map((recipient) => {
+    const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+
+    // For abstraction alerts we need to go to an intermediate page to select the alert to preview
+    const previewLink = journey === 'abstraction-alert' ? `${basePreviewLink}/select-alert` : basePreviewLink
+
     return {
       contact: _contact(recipient),
       licences: recipient.licence_refs.split(','),
       method: `${recipient.message_type} - ${recipient.contact_type}`,
-      previewLink: `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+      previewLink
     }
   })
 }
@@ -125,8 +130,8 @@ function _paginateRecipients(recipients, page) {
  *
  * @private
  */
-function _recipients(page, recipients, sessionId) {
-  const formattedRecipients = _formatRecipients(recipients, sessionId)
+function _recipients(journey, page, recipients, sessionId) {
+  const formattedRecipients = _formatRecipients(journey, recipients, sessionId)
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)
