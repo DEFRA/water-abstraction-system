@@ -17,10 +17,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('invitations')
 
         expect(result).to.equal({
-          journey: 'invitations',
           name: 'Returns: invitation',
+          noticeType: 'invitations',
           notificationType: 'Returns invitation',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnInvitation'
         })
@@ -41,10 +40,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('paper-forms')
 
         expect(result).to.equal({
-          journey: 'paper-forms',
           name: 'Paper returns',
+          noticeType: 'paper-forms',
           notificationType: 'Paper invitation',
-          redirectPath: undefined,
           referenceCode: result.referenceCode, // randomly generated
           subType: 'paperReturnForms'
         })
@@ -65,10 +63,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('reminders')
 
         expect(result).to.equal({
-          journey: 'reminders',
           name: 'Returns: reminder',
+          noticeType: 'reminders',
           notificationType: 'Returns reminder',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnReminder'
         })
@@ -89,10 +86,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('abstraction-alert')
 
         expect(result).to.equal({
-          journey: 'abstraction-alert',
           name: 'Water abstraction alert',
+          noticeType: 'abstraction-alert',
           notificationType: 'Abstraction alert',
-          redirectPath: 'abstraction-alerts/alert-type',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts'
         })

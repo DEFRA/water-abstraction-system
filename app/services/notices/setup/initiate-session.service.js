@@ -9,6 +9,8 @@ const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
+const STANDARD_JOURNEY = ['reminders', 'invitations']
+
 /**
  * Initiates the session record used for setting up a new returns notification
  *
@@ -29,11 +31,14 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(notificationType, monitoringStationId = null) {
-  if (notificationType === 'ad-hoc') {
-    return _adHoc()
-  }
+  const journey = _journey(notificationType)
+  const redirect = _redirect(notificationType)
 
-  const { redirectPath, ...noticeType } = DetermineNoticeTypeService.go(notificationType)
+  let noticeType
+
+  if (journey !== 'adHoc') {
+    noticeType = DetermineNoticeTypeService.go(notificationType)
+  }
 
   let additionalData = {}
 
@@ -45,25 +50,46 @@ async function go(notificationType, monitoringStationId = null) {
     .insert({
       data: {
         ...additionalData,
-        ...noticeType
+        ...noticeType,
+        journey
       }
     })
     .returning('id')
 
   return {
     sessionId: session.id,
-    path: `${redirectPath}`
+    path: redirect
   }
 }
 
-async function _adHoc() {
-  const session = await SessionModel.query().insert({ data: {} }).returning('id')
-
-  return {
-    sessionId: session.id,
-    path: `licence`
+/**
+ * const journeys = ['adHoc', 'standard', 'abstractionAlerts']
+ * @private
+ */
+function _journey(notificationType) {
+  if (notificationType === 'ad-hoc') {
+    return 'adHoc'
+  } else if (STANDARD_JOURNEY.includes(notificationType)) {
+    return 'standard'
+  } else if (notificationType === 'abstraction-alert') {
+    return 'abstraction-alert'
+  } else {
+    return null
   }
 }
+
+function _redirect(notificationType) {
+  if (notificationType === 'ad-hoc') {
+    return 'licence'
+  } else if (STANDARD_JOURNEY.includes(notificationType)) {
+    return 'returns-period'
+  } else if (notificationType === 'abstraction-alert') {
+    return 'abstraction-alerts/alert-type'
+  } else {
+    return null
+  }
+}
+
 module.exports = {
   go
 }

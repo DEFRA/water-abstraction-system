@@ -30,8 +30,9 @@ describe('Notices - Setup - Initiate Session service', () => {
       const matchingSession = await SessionModel.query().findById(result.sessionId)
 
       expect(matchingSession.data).to.equal({
-        journey: 'invitations',
+        journey: 'standard',
         name: 'Returns: invitation',
+        noticeType: 'invitations',
         notificationType: 'Returns invitation',
         referenceCode: matchingSession.referenceCode, // randomly generated
         subType: 'returnInvitation'
@@ -53,7 +54,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data).to.equal({})
+        expect(matchingSession.data).to.equal({ journey: 'adHoc' })
       })
 
       it('correctly returns the redirect path and session id', async () => {
@@ -85,6 +86,7 @@ describe('Notices - Setup - Initiate Session service', () => {
         expect(matchingSession.data).to.equal({
           journey: 'abstraction-alert',
           name: 'Water abstraction alert',
+          noticeType: 'abstraction-alert',
           notificationType: 'Abstraction alert',
           referenceCode: matchingSession.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts',

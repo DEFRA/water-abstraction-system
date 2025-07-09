@@ -26,7 +26,13 @@ describe('Notices - Setup - Check service', () => {
     removeLicences = ''
 
     session = await SessionHelper.add({
-      data: { returnsPeriod: 'quarterFour', removeLicences, journey: 'invitations', referenceCode: 'RINV-123' }
+      data: {
+        returnsPeriod: 'quarterFour',
+        removeLicences,
+        journey: 'standard',
+        noticeType: 'invitations',
+        referenceCode: 'RINV-123'
+      }
     })
 
     testRecipients = RecipientsFixture.recipients()
@@ -70,10 +76,15 @@ describe('Notices - Setup - Check service', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alert"', () => {
+  describe('when the "noticeType" is "abstraction-alert"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
-        data: { journey: 'abstraction-alert', referenceCode: 'WAA-123', monitoringStationId: '456' }
+        data: {
+          journey: 'abstraction-alert',
+          monitoringStationId: '456',
+          noticeType: 'abstraction-alert',
+          referenceCode: 'WAA-123'
+        }
       })
 
       testRecipients = RecipientsFixture.alertsRecipients()

@@ -29,7 +29,7 @@ describe('Notices - Setup - Check presenter', () => {
       numberOfPages: 1
     }
 
-    session = { id: generateUUID(), journey: 'invitations', referenceCode: 'RINV-123' }
+    session = { id: generateUUID(), journey: 'standard', noticeType: 'invitations', referenceCode: 'RINV-123' }
 
     testRecipients = RecipientsFixture.recipients()
     // This data is used to ensure the recipients are grouped when they have the same licence ref / name.
@@ -372,6 +372,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('when the journey is for "abstraction-alert"', () => {
       beforeEach(() => {
         session.journey = 'abstraction-alert'
+        session.noticeType = 'abstraction-alert'
         session.referenceCode = 'WAA-123'
         session.monitoringStationId = '345'
       })
@@ -403,63 +404,74 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "invitations"', () => {
+    describe('when the journey is for "standard"', () => {
       beforeEach(() => {
         session.journey = 'invitations'
-        session.referenceCode = 'RINV-123'
       })
 
-      describe('the "displayPreviewLink" property', () => {
-        it('should be true', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.displayPreviewLink).to.be.true()
+      describe('and the "noticeType" is "invitations"', () => {
+        beforeEach(() => {
+          session.referenceCode = 'RINV-123'
+        })
+
+        describe('the "displayPreviewLink" property', () => {
+          it('should be true', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.displayPreviewLink).to.be.true()
+          })
+        })
+
+        describe('the "readyToSend" property', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
+          })
         })
       })
 
-      describe('the "readyToSend" property', () => {
-        it('should return the correct message', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
+      describe('and the "noticeType" is "reminders"', () => {
+        beforeEach(() => {
+          session.noticeType = 'reminders'
+        })
+
+        describe('the "displayPreviewLink" property', () => {
+          it('should be true', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.displayPreviewLink).to.be.true()
+          })
+        })
+
+        describe('the "readyToSend" property', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
+          })
         })
       })
     })
 
-    describe('when the journey is for "reminders"', () => {
+    describe('when the journey is for "adHoc"', () => {
       beforeEach(() => {
-        session.journey = 'reminders'
+        session.journey = 'adHoc'
       })
 
-      describe('the "displayPreviewLink" property', () => {
-        it('should be true', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.displayPreviewLink).to.be.true()
+      describe('and the "noticeType" is "paper-forms"', () => {
+        beforeEach(() => {
+          session.noticeType = 'paper-forms'
         })
-      })
 
-      describe('the "readyToSend" property', () => {
-        it('should return the correct message', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
+        describe('the "displayPreviewLink" property', () => {
+          it('should be false', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.displayPreviewLink).to.be.false()
+          })
         })
-      })
-    })
 
-    describe('when the journey is for "paper-forms"', () => {
-      beforeEach(() => {
-        session.journey = 'paper-forms'
-      })
-
-      describe('the "displayPreviewLink" property', () => {
-        it('should be false', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.displayPreviewLink).to.be.false()
-        })
-      })
-
-      describe('the "readyToSend" property', () => {
-        it('should return the correct message', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.readyToSend).to.equal('Paper invitations are ready to send.')
+        describe('the "readyToSend" property', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.readyToSend).to.equal('Paper invitations are ready to send.')
+          })
         })
       })
     })
