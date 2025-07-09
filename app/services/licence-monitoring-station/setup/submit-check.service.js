@@ -8,24 +8,25 @@
 
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js') // TODO: Double-check the require ordering
+const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js') // TODO: Double-check the require ordering
 const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns
  */
-async function go(sessionId) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
-
-  // TODO: Ensure success banner is displayed when we return to the monitoring stations page
 
   await _createTag(session)
 
   await session.$query().delete()
+
+  flashNotification(yar, 'Success', `Tag for licence ${session.data.licenceRef} added`)
 
   return session.monitoringStationId
 }
@@ -34,12 +35,12 @@ async function _createTag(session) {
   return LicenceMonitoringStationModel.query().insert({
     ..._determineConditionOrAbstractionPeriod(session),
     licenceId: session.licenceId,
-    monitoringStationId: session.monitoringStationId,
     measureType: _determineMeasureType(session.unit),
+    monitoringStationId: session.monitoringStationId,
+    restrictionType: _determineRestrictionType(session.stopOrReduce, session.reduceAtThreshold),
     source: 'wrls',
     thresholdUnit: session.unit,
     thresholdValue: session.threshold,
-    restrictionType: _determineRestrictionType(session.stopOrReduce, session.reduceAtThreshold),
     createdAt: timestampForPostgres(),
     updatedAt: timestampForPostgres()
   })

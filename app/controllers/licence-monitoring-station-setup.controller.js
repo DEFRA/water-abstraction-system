@@ -77,12 +77,13 @@ async function submitAbstractionPeriod(request, h) {
 
 async function submitCheck(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const monitoringStationId = await SubmitCheckService.go(sessionId)
+  const monitoringStationId = await SubmitCheckService.go(sessionId, yar)
 
-  return h.redirect(`/system/monitoring-station/${monitoringStationId}`)
+  return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
 async function submitFullCondition(request, h) {

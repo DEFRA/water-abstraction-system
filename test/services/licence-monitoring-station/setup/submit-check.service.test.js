@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -18,6 +19,7 @@ const SubmitCheckService = require('../../../../app/services/licence-monitoring-
 describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     sessionData = {
@@ -39,11 +41,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
     it('creates the monitoring station tag', async () => {
-      await SubmitCheckService.go(session.id)
+      await SubmitCheckService.go(session.id, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -52,13 +56,36 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       expect(result.monitoringStationId).to.exist()
     })
 
+    it('deletes the session', async () => {
+      await SubmitCheckService.go(session.id, yarStub)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession).to.not.exist()
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitCheckService.go(session.id, yarStub)
+
+      expect(result).to.equal(sessionData.monitoringStationId)
+    })
+
+    it('sets the notification message title to "Success" and the text to "Tag for licence ... added" ', async () => {
+      await SubmitCheckService.go(session.id, yarStub)
+
+      const [flashType, notification] = yarStub.flash.args[0]
+
+      expect(flashType).to.equal('notification')
+      expect(notification).to.equal({ title: 'Success', text: `Tag for licence ${session.data.licenceRef} added` })
+    })
+
     describe('and the session unit is a flow unit', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({ data: { ...sessionData, unit: 'm3/s' } })
       })
 
       it('sets measureType as flow', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -74,7 +101,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('sets measureType as level', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -90,7 +117,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('sets restrictionType as stop', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -109,7 +136,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         })
 
         it('sets restrictionType as reduce', async () => {
-          await SubmitCheckService.go(session.id)
+          await SubmitCheckService.go(session.id, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -127,7 +154,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         })
 
         it('sets restrictionType as stop_or_reduce', async () => {
-          await SubmitCheckService.go(session.id)
+          await SubmitCheckService.go(session.id, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -149,7 +176,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('persists the licence version purpose condition id', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -159,7 +186,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('does not persist abstraction period', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -174,7 +201,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     describe('and licenceVersionPurposeConditionId is not provided', () => {
       it('persists the abstraction period', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -185,20 +212,6 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         expect(result.abstractionPeriodEndDay).to.equal(sessionData.abstractionPeriodEndDay)
         expect(result.abstractionPeriodEndMonth).to.equal(sessionData.abstractionPeriodEndMonth)
       })
-    })
-
-    it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.not.exist()
-    })
-
-    it('continues the journey', async () => {
-      const result = await SubmitCheckService.go(session.id)
-
-      expect(result).to.equal(sessionData.monitoringStationId)
     })
   })
 })
