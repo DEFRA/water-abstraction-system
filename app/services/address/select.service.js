@@ -6,7 +6,7 @@
  * @module SelectAddressService
  */
 
-const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -20,15 +20,15 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
+  const result = await LookupPostcodeRequest.send(session.address.postcode)
 
-  if (addresses.succeeded === false || addresses.results.length === 0) {
+  if (result.succeeded === false || result.matches.length === 0) {
     return {
       redirect: true
     }
   }
 
-  const pageData = SelectPresenter.go(addresses.results)
+  const pageData = SelectPresenter.go(result.matches)
 
   return {
     backLink: `/system/address/${session.id}/postcode`,
