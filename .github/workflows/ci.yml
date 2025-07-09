@@ -15,18 +15,19 @@ jobs:
       AIRBRAKE_KEY: longvaluefullofnumbersandlettersinlowercase
       PORT: 3000
       # External services - they don't exist here but we have code that depends on these values being present
-      EA_ADDRESS_FACADE_URL: http://localhost:8009
       CHARGING_MODULE_URL: http://localhost:8020
-      SERVICE_FOREGROUND_URL: http://localhost:8001
-      SERVICE_BACKGROUND_URL: http://localhost:8012
-      REPORTING_URL: http://localhost:8011
-      IMPORT_URL: http://localhost:8007
-      TACTICAL_CRM_URL: http://localhost:8002
+      EA_ADDRESS_FACADE_URL: http://localhost:8009
       EXTERNAL_UI_URL: http://localhost:8000
+      HTML_TO_PDF_URL: http://localhost:8040
+      IMPORT_URL: http://localhost:8007
       INTERNAL_UI_URL: http://localhost:8008
-      TACTICAL_IDM_URL: http://localhost:8003
       PERMIT_REPOSITORY_URL: http://localhost:8004
+      REPORTING_URL: http://localhost:8011
       RETURNS_URL: http://localhost:8006
+      SERVICE_BACKGROUND_URL: http://localhost:8012
+      SERVICE_FOREGROUND_URL: http://localhost:8001
+      TACTICAL_CRM_URL: http://localhost:8002
+      TACTICAL_IDM_URL: http://localhost:8003
       GOV_UK_NOTIFY_API_KEY: 'test-api-key'
       # JWT Auth token shared by all legacy external services
       LEGACY_AUTH_TOKEN: longvalueofnumbersandletters.inbothcases.splitin3by2periods
