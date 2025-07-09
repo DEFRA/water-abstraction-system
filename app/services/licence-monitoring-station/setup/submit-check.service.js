@@ -40,24 +40,28 @@ async function _createTag(session) {
     // abstractionPeriodStartMonth: null,
     // abstractionPeriodEndDay: null,
     // abstractionPeriodEndMonth: null,
-    measureType: _determineMeasureType(session),
+    measureType: _determineMeasureType(session.unit),
     source: 'wrls',
     thresholdUnit: session.unit,
     thresholdValue: session.threshold,
-    restrictionType: session.stopOrReduce, // TODO: Check about the `stop_or_reduce` entries we can see in the db
+    restrictionType: _determineRestrictionType(session.stopOrReduce, session.reduceAtThreshold),
     createdAt: timestampForPostgres(),
     updatedAt: timestampForPostgres()
   })
 }
 
-function _determineMeasureType(session) {
+function _determineMeasureType(unit) {
   const thresholdUnitsArray = Object.values(thresholdUnits)
 
   const matchedUnit = thresholdUnitsArray.find(({ value }) => {
-    return value === session.unit
+    return value === unit
   })
 
   return matchedUnit.measureType
+}
+
+function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {
+  return stopOrReduce === 'reduce' && reduceAtThreshold === 'yes' ? 'stop_or_reduce' : stopOrReduce
 }
 
 module.exports = {

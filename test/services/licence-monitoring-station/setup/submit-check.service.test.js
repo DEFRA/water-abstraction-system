@@ -84,6 +84,60 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
+    describe('and stopOrReduce is stop', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ data: { ...sessionData, stopOrReduce: 'stop' } })
+      })
+
+      it('sets restrictionType as stop', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.restrictionType).to.equal('stop')
+      })
+    })
+
+    describe('and stopOrReduce is reduce', () => {
+      describe('and reduceAtThreshold is no', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
+          })
+        })
+
+        it('sets restrictionType as reduce', async () => {
+          await SubmitCheckService.go(session.id)
+
+          const result = await LicenceMonitoringStationModel.query()
+            .where('monitoringStationId', sessionData.monitoringStationId)
+            .first()
+
+          expect(result.restrictionType).to.equal('reduce')
+        })
+      })
+
+      describe('and reduceAtThreshold is yes', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
+          })
+        })
+
+        it('sets restrictionType as stop_or_reduce', async () => {
+          await SubmitCheckService.go(session.id)
+
+          const result = await LicenceMonitoringStationModel.query()
+            .where('monitoringStationId', sessionData.monitoringStationId)
+            .first()
+
+          expect(result.restrictionType).to.equal('stop_or_reduce')
+        })
+      })
+    })
+
     it('deletes the session', async () => {
       await SubmitCheckService.go(session.id)
 
