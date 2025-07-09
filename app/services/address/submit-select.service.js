@@ -6,6 +6,8 @@
  * @module SubmitSelectService
  */
 
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -21,23 +23,50 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  let validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
-    return {}
+    if (uprnResult.succeeded) {
+      await _save(session, uprnResult.matches[0])
+
+      return {}
+    }
+
+    validationResult = {
+      text: 'Address not found'
+    }
   }
 
-  const pageData = SelectPresenter.go(session)
+  const postcodeResult = await LookupPostcodeRequest.send(session.address.postcode)
+
+  if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
+    return {
+      redirect: true
+    }
+  }
+
+  const pageData = SelectPresenter.go(postcodeResult.matches)
 
   return {
+    backLink: `/system/address/${session.id}/postcode`,
+    sessionId: session.id,
     error: validationResult,
     ...pageData
   }
 }
 
-async function _save(session, payload) {
+async function _save(session, address) {
+  session.address.uprn = address.uprn
+  session.address.addressLine1 = address.organisation
+  session.address.addressLine2 = address.premises
+  session.address.addressLine3 = address.street_address
+  session.address.addressLine4 = address.locality
+  session.address.town = address.city
+  session.address.postcode = address.postcode
+  session.address.country = address.country
+
   return session.$update()
 }
 

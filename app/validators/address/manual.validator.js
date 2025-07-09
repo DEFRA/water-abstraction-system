@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the `address/{sessionId}/select` page
+ * Validates data submitted for the `address/{sessionId}/manual` page
  *
- * @module SelectValidator
+ * @module ManualAddressValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `address/{sessionId}/select` page
+ * Validates data submitted for the `address/{sessionId}/manual` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -18,9 +18,8 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    addresses: Joi.string().required().invalid('select').messages({
-      'any.required': 'Select an address',
-      'any.invalid': 'Select an address'
+    addressLine1: Joi.string().required().messages({
+      'any.required': 'Enter addresss line 1'
     })
   })
 
