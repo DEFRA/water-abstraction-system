@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceMonitoringStationModel = require('../../../../app/models/licence-monitoring-station.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
@@ -15,23 +16,21 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitCheckService = require('../../../../app/services/licence-monitoring-station/setup/submit-check.service.js')
 
 describe('Licence Monitoring Station Setup - Submit Check Service', () => {
-  let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
     sessionData = {
       unit: 'Ml/d',
       label: 'FRENCHAY',
-      licenceId: 'ebefaaca-e837-442f-8a23-79e247d56a94',
+      licenceId: generateUUID(),
       threshold: 100,
       licenceRef: '6/33/03/*S/0010',
-      conditionId: '789e3bbe-1505-4e61-9f60-51f089004f7d',
+      conditionId: generateUUID(),
       stopOrReduce: 'stop',
       checkPageVisited: true,
       reduceAtThreshold: null,
-      monitoringStationId: 'bb560226-ca09-4b6b-8a16-b6e285514a65',
+      monitoringStationId: generateUUID(),
       conditionDisplayText: 'CONDITION_DISPLAY_TEXT',
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 12,
@@ -44,7 +43,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
   describe('when called', () => {
     it('creates the monitoring station tag', async () => {
-      await SubmitCheckService.go(session.id, payload)
+      await SubmitCheckService.go(session.id)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -53,8 +52,40 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       expect(result.monitoringStationId).to.exist()
     })
 
+    describe('and the session unit is a flow unit', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ data: { ...sessionData, unit: 'm3/s' } })
+      })
+
+      it('sets measureType as flow', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.measureType).to.equal('flow')
+      })
+    })
+
+    describe('and the session unit is a level unit', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ data: { ...sessionData, unit: 'mAOD' } })
+      })
+
+      it('sets measureType as level', async () => {
+        await SubmitCheckService.go(session.id)
+
+        const result = await LicenceMonitoringStationModel.query()
+          .where('monitoringStationId', sessionData.monitoringStationId)
+          .first()
+
+        expect(result.measureType).to.equal('level')
+      })
+    })
+
     it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id, payload)
+      await SubmitCheckService.go(session.id)
 
       const refreshedSession = await session.$query()
 
@@ -62,7 +93,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCheckService.go(session.id, payload)
+      const result = await SubmitCheckService.go(session.id)
 
       expect(result).to.equal(sessionData.monitoringStationId)
     })

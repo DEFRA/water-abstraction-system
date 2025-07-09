@@ -9,6 +9,7 @@
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js') // TODO: Double-check the require ordering
+const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -39,15 +40,24 @@ async function _createTag(session) {
     // abstractionPeriodStartMonth: null,
     // abstractionPeriodEndDay: null,
     // abstractionPeriodEndMonth: null,
-    measureType: 'flow', // TODO: Confirm how we determine `flow` or `unit`
+    measureType: _determineMeasureType(session), // TODO: Confirm if ft3/s should be `flow` or `level`
     source: 'wrls',
-    thresholdUnit: session.unit, // TODO: Confirm we're using the correct unit names
+    thresholdUnit: session.unit,
     thresholdValue: session.threshold,
-    // status: 'resume', // TODO: Check if this is actually needed
     restrictionType: session.stopOrReduce, // TODO: Check about the `stop_or_reduce` entries we can see in the db
     createdAt: timestampForPostgres(),
     updatedAt: timestampForPostgres()
   })
+}
+
+function _determineMeasureType(session) {
+  const thresholdUnitsArray = Object.values(thresholdUnits)
+
+  const matchedUnit = thresholdUnitsArray.find(({ value }) => {
+    return value === session.unit
+  })
+
+  return matchedUnit.measureType
 }
 
 module.exports = {
