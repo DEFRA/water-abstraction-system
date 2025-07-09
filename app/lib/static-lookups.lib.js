@@ -167,9 +167,9 @@ const thresholdUnits = {
   METRES_ABOVE_SEA_DATUM: { value: 'mASD', label: 'metres above sea datum', measureType: 'level' },
   METRES: { value: 'm', label: 'metres', measureType: 'level' },
   SOUTH_LEVEL_DATUM: { value: 'SLD', label: 'south level datum', measureType: 'level' },
-  CUBIC_FOOT_PER_SECOND: { value: 'ft3/s', label: 'cubic foot per second', measureType: 'level' },
-  GALLONS_PER_DAY: { value: 'gpd', label: 'gallons per day', measureType: 'level' },
-  MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day', measureType: 'level' }
+  CUBIC_FOOT_PER_SECOND: { value: 'ft3/s', label: 'cubic foot per second', measureType: 'flow' },
+  GALLONS_PER_DAY: { value: 'gpd', label: 'gallons per day', measureType: 'flow' },
+  MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day', measureType: 'flow' }
 }
 
 const twoPartTariffReviewIssues = {

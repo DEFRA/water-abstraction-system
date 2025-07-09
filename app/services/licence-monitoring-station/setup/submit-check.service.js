@@ -40,7 +40,7 @@ async function _createTag(session) {
     // abstractionPeriodStartMonth: null,
     // abstractionPeriodEndDay: null,
     // abstractionPeriodEndMonth: null,
-    measureType: _determineMeasureType(session), // TODO: Confirm if ft3/s should be `flow` or `level`
+    measureType: _determineMeasureType(session),
     source: 'wrls',
     thresholdUnit: session.unit,
     thresholdValue: session.threshold,
