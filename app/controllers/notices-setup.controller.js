@@ -18,6 +18,7 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
+const PreviewPaperFormService = require('../services/notices/setup/preview-paper-form.service.js')
 const PreviewService = require('../services/notices/setup/preview.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -59,6 +60,14 @@ async function preview(request, h) {
   const pageData = await PreviewService.go(contactHashId, sessionId)
 
   return h.view(`${basePath}/preview.njk`, pageData)
+}
+
+async function previewPaperForm(request, h) {
+  const { sessionId } = request.params
+
+  const fileBuffer = await PreviewPaperFormService.go(sessionId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
 async function viewAlertEmailAddress(request, h) {
@@ -375,6 +384,7 @@ async function submitReturnsForPaperForms(request, h) {
 module.exports = {
   downloadRecipients,
   preview,
+  previewPaperForm,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,

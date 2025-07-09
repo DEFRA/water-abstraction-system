@@ -48,6 +48,9 @@ const config = {
   },
   returns: {
     url: process.env.RETURNS_URL
+  },
+  htmlToPdf: {
+    url: process.env.HTML_TO_PDF_URL
   }
 }
 
