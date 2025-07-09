@@ -77,7 +77,7 @@ async function viewAlertThresholds(request, h) {
 
   const pageData = await AlertThresholdsService.go(sessionId)
 
-  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
 }
 
 async function viewAlertType(request, h) {
@@ -235,7 +235,7 @@ async function submitAlertThresholds(request, h) {
   const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
