@@ -9,7 +9,7 @@
 const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
+const { flowUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -60,13 +60,7 @@ function _determineAbstractionPeriodOrCondition(session) {
 }
 
 function _determineMeasureType(unit) {
-  const thresholdUnitsArray = Object.values(thresholdUnits)
-
-  const matchedUnit = thresholdUnitsArray.find(({ value }) => {
-    return value === unit
-  })
-
-  return matchedUnit.measureType
+  return flowUnits.includes(unit) ? 'flow' : 'level'
 }
 
 function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {

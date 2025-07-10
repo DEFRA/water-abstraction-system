@@ -158,19 +158,29 @@ const returnUnits = {
 const sources = ['nald', 'wrls']
 
 const thresholdUnits = {
-  MEGALITRES_PER_DAY: { value: 'Ml/d', label: 'megalitres per day', measureType: 'flow' },
-  CUBIC_METRES_PER_SECOND: { value: 'm3/s', label: 'cubic metres per second', measureType: 'flow' },
-  CUBIC_METRES_PER_DAY: { value: 'm3/d', label: 'cubic metres per day', measureType: 'flow' },
-  LITRES_PER_SECOND: { value: 'l/s', label: 'litres per second', measureType: 'flow' },
-  METRES_ABOVE_ORDNANCE_DATUM: { value: 'mAOD', label: 'metres above ordnance datum', measureType: 'level' },
-  METRES_BELOW_ORDNANCE_DATUM: { value: 'mBOD', label: 'metres below ordnance datum', measureType: 'level' },
-  METRES_ABOVE_SEA_DATUM: { value: 'mASD', label: 'metres above sea datum', measureType: 'level' },
-  METRES: { value: 'm', label: 'metres', measureType: 'level' },
-  SOUTH_LEVEL_DATUM: { value: 'SLD', label: 'south level datum', measureType: 'level' },
-  CUBIC_FOOT_PER_SECOND: { value: 'ft3/s', label: 'cubic foot per second', measureType: 'flow' },
-  GALLONS_PER_DAY: { value: 'gpd', label: 'gallons per day', measureType: 'flow' },
-  MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day', measureType: 'flow' }
+  MEGALITRES_PER_DAY: { value: 'Ml/d', label: 'megalitres per day' },
+  CUBIC_METRES_PER_SECOND: { value: 'm3/s', label: 'cubic metres per second' },
+  CUBIC_METRES_PER_DAY: { value: 'm3/d', label: 'cubic metres per day' },
+  LITRES_PER_SECOND: { value: 'l/s', label: 'litres per second' },
+  METRES_ABOVE_ORDNANCE_DATUM: { value: 'mAOD', label: 'metres above ordnance datum' },
+  METRES_BELOW_ORDNANCE_DATUM: { value: 'mBOD', label: 'metres below ordnance datum' },
+  METRES_ABOVE_SEA_DATUM: { value: 'mASD', label: 'metres above sea datum' },
+  METRES: { value: 'm', label: 'metres' },
+  SOUTH_LEVEL_DATUM: { value: 'SLD', label: 'south level datum' },
+  CUBIC_FOOT_PER_SECOND: { value: 'ft3/s', label: 'cubic foot per second' },
+  GALLONS_PER_DAY: { value: 'gpd', label: 'gallons per day' },
+  MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day' }
 }
+
+const flowUnits = [
+  thresholdUnits.MEGALITRES_PER_DAY.value,
+  thresholdUnits.CUBIC_METRES_PER_SECOND.value,
+  thresholdUnits.CUBIC_METRES_PER_DAY.value,
+  thresholdUnits.LITRES_PER_SECOND.value,
+  thresholdUnits.CUBIC_FOOT_PER_SECOND.value,
+  thresholdUnits.GALLONS_PER_DAY.value,
+  thresholdUnits.MILLION_GALLONS_PER_DAY.value
+]
 
 const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',
@@ -192,6 +202,7 @@ module.exports = {
   companyTypes,
   contactTypes,
   engineTriggers,
+  flowUnits,
   naldRegions,
   organisationTypes,
   returnCycleDates,
