@@ -17,7 +17,7 @@ const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns
+ * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
