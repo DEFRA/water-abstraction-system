@@ -15,7 +15,7 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
  * to be included in the recipients list
  * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
- * @param {string} returnLogEndDate - defaulted to the same due date set by the returnsLogHelper
+ * @param {string} returnLogEndDate - defaulted to the same end date set by the returnsLogHelper
  *
  * @returns {Promise<object>} an object containing different licence document header instances and related entities
  * representing different scenarios
