@@ -63,7 +63,7 @@ function _redirect(noticeType, checkPageVisited) {
  * @private
  */
 async function _save(session, payload) {
-  const { redirectPath, ...noticeTypeData } = DetermineNoticeTypeService.go(payload.noticeType)
+  const noticeTypeData = DetermineNoticeTypeService.go(payload.noticeType)
 
   Object.assign(session, {
     ...noticeTypeData,

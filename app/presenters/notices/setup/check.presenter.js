@@ -26,14 +26,14 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { journey, referenceCode } = session
+  const { referenceCode, noticeType } = session
 
   return {
     defaultPageSize,
-    displayPreviewLink: journey !== 'abstraction-alert' && journey !== 'paper-forms',
+    displayPreviewLink: noticeType !== 'abstraction-alert' && noticeType !== 'paper-forms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
-    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
+    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: _recipients(page, recipients, session.id),
     recipientsAmount: recipients.length,
     referenceCode

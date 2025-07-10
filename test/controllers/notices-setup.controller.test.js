@@ -75,11 +75,11 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       let response
 
-      describe('when the "notification" query string is "invitations" ', () => {
+      describe('when the journey is "standard"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notices/setup?journey=invitations',
+            url: '/notices/setup/standard',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -103,11 +103,11 @@ describe('Notices Setup controller', () => {
         })
       })
 
-      describe('when the "notification" query string is "ad-hoc" ', () => {
+      describe('when the journey is "adhoc"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notices/setup?journey=ad-hoc',
+            url: '/notices/setup/adhoc',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }

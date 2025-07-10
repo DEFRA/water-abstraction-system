@@ -14,7 +14,6 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const EventModel = require('../../../../app/models/event.model.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const { stubNotify } = require('../../../../config/notify.config.js')
 
 // Things we need to stub
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -74,7 +73,8 @@ describe('Notices - Setup - Batch notifications service', () => {
           summer: 'false',
           startDate: '2022-04-01'
         },
-        journey: 'invitations',
+        journey: 'standard',
+        noticeType: 'invitations',
         referenceCode
       }
     })
@@ -220,49 +220,46 @@ describe('Notices - Setup - Batch notifications service', () => {
         ])
       })
 
-      if (stubNotify) {
-        it('correctly sends the "email" data to Notify', async () => {
-          await BatchNotificationsService.go(testRecipients, session, eventId)
+      it('correctly sends the "email" data to Notify', async () => {
+        await BatchNotificationsService.go(testRecipients, session, eventId)
 
-          expect(
-            NotifyClient.prototype.sendEmail.calledWith(
-              '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
-              'primary.user@important.com',
-              {
-                personalisation: {
-                  periodEndDate: '31 March 2023',
-                  periodStartDate: '1 April 2022',
-                  returnDueDate: '28 April 2025'
-                },
-                reference: 'RINV-123'
-              }
-            )
-          ).to.be.true()
-        })
-      }
-      if (stubNotify) {
-        it('correctly sends the "letter" data to Notify', async () => {
-          await BatchNotificationsService.go(testRecipients, session, eventId)
-
-          expect(
-            NotifyClient.prototype.sendLetter.calledWith('4fe80aed-c5dd-44c3-9044-d0289d635019', {
+        expect(
+          NotifyClient.prototype.sendEmail.calledWith(
+            '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
+            'primary.user@important.com',
+            {
               personalisation: {
-                address_line_1: 'Mr H J Licence holder',
-                address_line_2: '1',
-                address_line_3: 'Privet Drive',
-                address_line_4: 'Little Whinging',
-                address_line_5: 'Surrey',
-                address_line_6: 'WD25 7LR',
-                name: 'Mr H J Licence holder',
                 periodEndDate: '31 March 2023',
                 periodStartDate: '1 April 2022',
                 returnDueDate: '28 April 2025'
               },
               reference: 'RINV-123'
-            })
-          ).to.be.true()
-        })
-      }
+            }
+          )
+        ).to.be.true()
+      })
+
+      it('correctly sends the "letter" data to Notify', async () => {
+        await BatchNotificationsService.go(testRecipients, session, eventId)
+
+        expect(
+          NotifyClient.prototype.sendLetter.calledWith('4fe80aed-c5dd-44c3-9044-d0289d635019', {
+            personalisation: {
+              address_line_1: 'Mr H J Licence holder',
+              address_line_2: '1',
+              address_line_3: 'Privet Drive',
+              address_line_4: 'Little Whinging',
+              address_line_5: 'Surrey',
+              address_line_6: 'WD25 7LR',
+              name: 'Mr H J Licence holder',
+              periodEndDate: '31 March 2023',
+              periodStartDate: '1 April 2022',
+              returnDueDate: '28 April 2025'
+            },
+            reference: 'RINV-123'
+          })
+        ).to.be.true()
+      })
     })
 
     describe('when a call to "notify" is unsuccessful', () => {
@@ -512,41 +509,37 @@ async function _getNotifications(eventId) {
 }
 
 function _stubSuccessfulNotify(response) {
-  if (stubNotify) {
-    Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
-    Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
-  }
+  Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
+  Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
 }
 
 function _stubUnSuccessfulNotify() {
-  if (stubNotify) {
-    const emailStub = Sinon.stub(NotifyClient.prototype, 'sendEmail')
-    emailStub
-      .onCall(0)
-      .rejects({
-        status: 400,
-        message: 'Request failed with status code 400',
-        response: {
-          data: {
-            errors: [
-              {
-                error: 'ValidationError',
-                message: 'email_address Not a valid email address'
-              }
-            ]
-          }
-        }
-      })
-      .onCall(1)
-      .resolves({
+  const emailStub = Sinon.stub(NotifyClient.prototype, 'sendEmail')
+  emailStub
+    .onCall(0)
+    .rejects({
+      status: 400,
+      message: 'Request failed with status code 400',
+      response: {
         data: {
-          id: '12345',
-          content: {
-            body: 'My dearest margery'
-          }
-        },
-        status: 201,
-        statusText: 'CREATED'
-      })
-  }
+          errors: [
+            {
+              error: 'ValidationError',
+              message: 'email_address Not a valid email address'
+            }
+          ]
+        }
+      }
+    })
+    .onCall(1)
+    .resolves({
+      data: {
+        id: '12345',
+        content: {
+          body: 'My dearest margery'
+        }
+      },
+      status: 201,
+      statusText: 'CREATED'
+    })
 }

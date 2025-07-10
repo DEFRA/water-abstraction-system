@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const { NotifyClient } = require('notifications-node-client')
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
-const { stubNotify } = require('../../../config/notify.config.js')
 
 // Thing under test
 const NotifyPreviewRequest = require('../../../app/requests/notify/notify-preview.request.js')
@@ -35,7 +34,7 @@ describe('Notify - Letter request', () => {
       returnDueDate: '28th April 2025'
     }
 
-    templateId = notifyTemplates.returns.invitations.licenceHolderLetter
+    templateId = notifyTemplates.standard.invitations.licenceHolderLetter
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -69,13 +68,11 @@ describe('Notify - Letter request', () => {
       })
     })
 
-    if (stubNotify) {
-      it('should use the notify client', async () => {
-        await NotifyPreviewRequest.send(templateId, personalisation)
+    it('should use the notify client', async () => {
+      await NotifyPreviewRequest.send(templateId, personalisation)
 
-        expect(notifyStub.calledWith(templateId, personalisation)).to.equal(true)
-      })
-    }
+      expect(notifyStub.calledWith(templateId, personalisation)).to.equal(true)
+    })
   })
 
   describe('when the call to "notify" is unsuccessful', () => {
@@ -118,13 +115,9 @@ describe('Notify - Letter request', () => {
 })
 
 function _stubSuccessfulNotify(response) {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').resolves(response)
-  }
+  return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').resolves(response)
 }
 
 function _stubUnSuccessfulNotify(response) {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').rejects(response)
-  }
+  return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').rejects(response)
 }

@@ -23,17 +23,18 @@ const SessionModel = require('../../../models/session.model.js')
  * This session will be used for all types of notifications (invitations, reminders). We set the prefix and type
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
- * @param {string} notificationType - A string relating to one of the keys for `NOTIFICATION_TYPES`
+ * @param {string} journey - A string of 'adhoc', 'standard' or 'abstraction-alerts'
+ * @param {string} [noticeType=null] - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - The UUID of the monitoring station we are creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(notificationType, monitoringStationId = null) {
-  if (notificationType === 'ad-hoc') {
-    return _adHoc()
-  }
+async function go(journey, noticeType = null, monitoringStationId = null) {
+  let notice
 
-  const { redirectPath, ...noticeType } = DetermineNoticeTypeService.go(notificationType)
+  if (noticeType) {
+    notice = DetermineNoticeTypeService.go(noticeType)
+  }
 
   let additionalData = {}
 
@@ -45,25 +46,34 @@ async function go(notificationType, monitoringStationId = null) {
     .insert({
       data: {
         ...additionalData,
-        ...noticeType
+        ...notice,
+        journey
       }
     })
     .returning('id')
 
   return {
     sessionId: session.id,
-    path: `${redirectPath}`
+    path: _redirect(journey)
   }
 }
 
-async function _adHoc() {
-  const session = await SessionModel.query().insert({ data: {} }).returning('id')
-
-  return {
-    sessionId: session.id,
-    path: `licence`
+function _redirect(journey) {
+  if (journey === 'standard') {
+    return 'returns-period'
   }
+
+  if (journey === 'standard') {
+    return 'returns-period'
+  }
+
+  if (journey === 'abstraction-alert') {
+    return 'abstraction-alerts/alert-type'
+  }
+
+  return 'licence'
 }
+
 module.exports = {
   go
 }
