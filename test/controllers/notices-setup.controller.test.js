@@ -103,11 +103,11 @@ describe('Notices Setup controller', () => {
         })
       })
 
-      describe('when the journey is "adHoc"', () => {
+      describe('when the journey is "adhoc"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notices/setup/adHoc',
+            url: '/notices/setup/adhoc',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }

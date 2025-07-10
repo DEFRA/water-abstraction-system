@@ -450,9 +450,9 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "adHoc"', () => {
+    describe('when the journey is for "adhoc"', () => {
       beforeEach(() => {
-        session.journey = 'adHoc'
+        session.journey = 'adhoc'
       })
 
       describe('and the "noticeType" is "paper-forms"', () => {

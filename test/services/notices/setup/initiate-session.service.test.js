@@ -58,9 +58,9 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
-    describe('when the "journey" is "adHoc"', () => {
+    describe('when the "journey" is "adhoc"', () => {
       beforeEach(() => {
-        journey = 'adHoc'
+        journey = 'adhoc'
         noticeType = undefined
       })
 
@@ -69,7 +69,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data).to.equal({ journey: 'adHoc' })
+        expect(matchingSession.data).to.equal({ journey: 'adhoc' })
       })
 
       it('correctly returns the redirect path and session id', async () => {

@@ -23,7 +23,7 @@ const SessionModel = require('../../../models/session.model.js')
  * This session will be used for all types of notifications (invitations, reminders). We set the prefix and type
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
- * @param {string} journey - A string of 'adHoc', 'standard' or 'abstraction-alerts'
+ * @param {string} journey - A string of 'adhoc', 'standard' or 'abstraction-alerts'
  * @param {string} noticeType - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - The UUID of the monitoring station we are creating an alert for
  *
@@ -59,7 +59,7 @@ async function go(journey, noticeType, monitoringStationId = null) {
 }
 
 function _redirect(journey) {
-  if (journey === 'adHoc') {
+  if (journey === 'adhoc') {
     return 'licence'
   } else if (journey === 'standard') {
     return 'returns-period'
