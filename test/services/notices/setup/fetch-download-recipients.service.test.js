@@ -366,7 +366,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
           session = { licenceRef: testRecipients.primaryUser.licenceRef }
         })
 
-        it('correctly an empty array - no return logs found', async () => {
+        it('correctly returns an empty array (no return logs found)', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
           expect(result).to.equal([])
