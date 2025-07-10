@@ -293,6 +293,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
+    options: {
+      handler: NoticesSetupController.preview,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/select-alert',
     options: {
       handler: NoticesSetupController.previewSelectAlert,
