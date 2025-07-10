@@ -37,7 +37,7 @@ function go(session) {
       abstractionPeriodEndDay,
       abstractionPeriodEndMonth
     ),
-    abstractionPeriodManuallyEntered: conditionId === 'not_listed',
+    abstractionPeriodManuallyEntered: conditionId === 'no_condition',
     condition: conditionDisplayText,
     licenceRef,
     links: _links(session.id),

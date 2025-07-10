@@ -67,9 +67,9 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       })
     })
 
-    describe('when "conditionId" is "not_listed"', () => {
+    describe('when "conditionId" is "no_condition"', () => {
       beforeEach(() => {
-        session.conditionId = 'not_listed'
+        session.conditionId = 'no_condition'
       })
 
       it('correctly sets "abstractionPeriodManuallyEntered" to "true"', () => {
@@ -79,7 +79,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       })
     })
 
-    describe('when "conditionId" is not "not_listed"', () => {
+    describe('when "conditionId" is not "no_condition"', () => {
       beforeEach(() => {
         session.conditionId = 'some_other_condition_id'
       })

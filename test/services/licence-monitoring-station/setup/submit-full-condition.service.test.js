@@ -91,9 +91,9 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       )
     })
 
-    describe('and not_listed was passed in the payload', () => {
+    describe('and no_condition was passed in the payload', () => {
       beforeEach(() => {
-        payload = { condition: 'not_listed' }
+        payload = { condition: 'no_condition' }
       })
 
       it('returns true for abstractionPeriod', async () => {

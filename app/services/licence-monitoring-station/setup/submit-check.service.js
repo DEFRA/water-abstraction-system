@@ -47,7 +47,7 @@ async function _createTag(session) {
 }
 
 function _determineAbstractionPeriodOrCondition(session) {
-  return session.conditionId === 'not_listed'
+  return session.conditionId === 'no_condition'
     ? {
         abstractionPeriodStartDay: session.abstractionPeriodStartDay,
         abstractionPeriodStartMonth: session.abstractionPeriodStartMonth,

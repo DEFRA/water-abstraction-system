@@ -28,7 +28,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       licenceId: generateUUID(),
       threshold: 100,
       licenceRef: 'LICENCE_REF',
-      conditionId: 'not_listed',
+      conditionId: 'no_condition',
       stopOrReduce: 'stop',
       checkPageVisited: true,
       reduceAtThreshold: null,
@@ -199,7 +199,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
     })
 
-    describe('and "conditionId" is "not_listed"', () => {
+    describe('and "conditionId" is "no_condition"', () => {
       it('persists the abstraction period', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 

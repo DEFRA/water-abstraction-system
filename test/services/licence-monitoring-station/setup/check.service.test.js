@@ -24,7 +24,7 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
         label: 'LABEL',
         threshold: 100,
         licenceRef: 'LICENCE_REF',
-        conditionId: 'not_listed',
+        conditionId: 'no_condition',
         stopOrReduce: 'stop',
         reduceAtThreshold: null,
         conditionDisplayText: 'None',

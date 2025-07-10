@@ -41,7 +41,7 @@ async function go(sessionId, payload) {
     // page, and if they selected a non-condition option then they must enter an abstraction period no matter what.
     // We therefore don't care about `checkPageVisited` on this particular page.
     return {
-      abstractionPeriod: payload.condition === 'not_listed'
+      abstractionPeriod: payload.condition === 'no_condition'
     }
   }
 
@@ -83,7 +83,7 @@ async function _determineConditionDisplayText(condition, conditionIndex) {
 }
 
 async function _fetchCondition(licenceId, conditionId) {
-  if (conditionId === 'not_listed') {
+  if (conditionId === 'no_condition') {
     return { condition: null, conditionIndex: null }
   }
 

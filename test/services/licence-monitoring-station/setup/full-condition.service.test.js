@@ -66,7 +66,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
           },
           { divider: 'or' },
           {
-            value: 'not_listed',
+            value: 'no_condition',
             text: 'The condition is not listed for this licence',
             checked: false
           }
