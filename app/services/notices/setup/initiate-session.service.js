@@ -67,6 +67,10 @@ function _redirect(journey) {
     return 'returns-period'
   }
 
+  if (journey === 'abstraction-alerts') {
+    return 'abstraction-alerts/alert-type'
+  }
+
   return 'licence'
 }
 
