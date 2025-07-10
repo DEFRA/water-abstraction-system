@@ -29,7 +29,13 @@ async function go(contactHashId, licenceMonitoringStationId, sessionId) {
   const recipient = await _recipient(contactHashId, session)
   const notification = _notification(licenceMonitoringStationId, recipient, session)
 
-  const formattedData = await PreviewPresenter.go(contactHashId, notification, session.journey, sessionId)
+  const formattedData = await PreviewPresenter.go(
+    contactHashId,
+    session.journey,
+    licenceMonitoringStationId,
+    notification,
+    sessionId
+  )
 
   return {
     activeNavBar: 'manage',
