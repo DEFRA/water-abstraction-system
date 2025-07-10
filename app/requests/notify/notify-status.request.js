@@ -7,6 +7,8 @@
 
 const NotifyClientRequest = require('./notify-client.request.js')
 
+const NotifyRequest = require('../notify.request.js')
+
 /**
  * Get the status of a notification from GOV.UK Notify
  *
@@ -29,9 +31,13 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(notificationId) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = `v2/notifications/${notificationId}`
 
-  return _statusById(notifyClient, notificationId)
+  return NotifyRequest.get(path)
+
+  // const notifyClient = NotifyClientRequest.go()
+
+  // return _statusById(notifyClient, notificationId)
 }
 
 async function _statusById(notifyClient, notificationId) {

@@ -22,6 +22,10 @@ const config = {
     }
   },
   legacyAuthToken: process.env.LEGACY_AUTH_TOKEN,
+  notify: {
+    url: process.env.NOTIFY_URL,
+    apiKey: process.env.GOV_UK_NOTIFY_API_KEY
+  },
   serviceForeground: {
     url: process.env.SERVICE_FOREGROUND_URL
   },
