@@ -10,6 +10,33 @@ const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
+const MESSAGE_REFS = {
+  invitations: {
+    email: {
+      'Primary user': 'returns_invitation_primary_user_email',
+      both: 'returns_invitation_primary_user_email',
+      'Returns agent': 'returns_invitation_returns_agent_email'
+    },
+    letter: {
+      'Licence holder': 'returns_invitation_licence_holder_letter',
+      both: 'returns_invitation_licence_holder_letter',
+      'Returns to': 'returns_invitation_returns_to_letter'
+    }
+  },
+  reminders: {
+    email: {
+      'Primary user': 'returns_reminder_primary_user_email',
+      both: 'returns_reminder_primary_user_email',
+      'Returns agent': 'returns_reminder_returns_agent_email'
+    },
+    letter: {
+      'Licence holder': 'returns_reminder_licence_holder_letter',
+      both: 'returns_reminder_licence_holder_letter',
+      'Returns to': 'returns_reminder_returns_to_letter'
+    }
+  }
+}
+
 /**
  * Formats recipients into notifications for a returns invitation or reminder
  *
@@ -208,50 +235,8 @@ function _licences(licenceRefs) {
  *
  * @private
  */
-function _messageRef(journey, noticeType, messageType, contactType) {
-  const MESSAGE_REFS = {
-    standard: {
-      invitations: {
-        email: {
-          'Primary user': 'returns_invitation_primary_user_email',
-          both: 'returns_invitation_primary_user_email',
-          'Returns agent': 'returns_invitation_returns_agent_email'
-        },
-        letter: {
-          'Licence holder': 'returns_invitation_licence_holder_letter',
-          both: 'returns_invitation_licence_holder_letter',
-          'Returns to': 'returns_invitation_returns_to_letter'
-        }
-      },
-      reminders: {
-        email: {
-          'Primary user': 'returns_reminder_primary_user_email',
-          both: 'returns_reminder_primary_user_email',
-          'Returns agent': 'returns_reminder_returns_agent_email'
-        },
-        letter: {
-          'Licence holder': 'returns_reminder_licence_holder_letter',
-          both: 'returns_reminder_licence_holder_letter',
-          'Returns to': 'returns_reminder_returns_to_letter'
-        }
-      }
-    },
-    // Todo: add tests
-    adHoc: {
-      invitations: {
-        email: {
-          'Primary user': 'returns_invitation_primary_user_email',
-          'Returns agent': 'returns_invitation_returns_agent_email'
-        },
-        letter: {
-          'Licence holder': 'returns_invitation_licence_holder_letter',
-          'Returns to': 'returns_invitation_returns_to_letter'
-        }
-      }
-    }
-  }
-
-  return MESSAGE_REFS[journey][noticeType][messageType][contactType]
+function _messageRef(noticeType, messageType, contactType) {
+  return MESSAGE_REFS[noticeType][messageType][contactType]
 }
 
 module.exports = {

@@ -15,7 +15,6 @@ const notifyTemplates = {
       returnsToLetter: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
     }
   },
-  // Todo: add tests
   adHoc: {
     invitations: {
       primaryUserEmail: '7bb89469-1dbc-458a-9526-fad8ab71285f',
