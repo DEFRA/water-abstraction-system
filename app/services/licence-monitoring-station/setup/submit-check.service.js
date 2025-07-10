@@ -6,9 +6,9 @@
  * @module SubmitCheckService
  */
 
+const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js') // TODO: Double-check the require ordering
 const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
