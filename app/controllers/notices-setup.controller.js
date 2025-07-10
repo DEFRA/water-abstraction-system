@@ -19,6 +19,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PreviewService = require('../services/notices/setup/preview.service.js')
+const PreviewSelectAlertService = require('../services/notices/setup/preview-select-alert.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsForPaperFormsService = require('../services/notices/setup/returns-for-paper-forms.service.js')
@@ -58,7 +59,15 @@ async function preview(request, h) {
 
   const pageData = await PreviewService.go(contactHashId, sessionId)
 
-  return h.view(`${basePath}/preview.njk`, pageData)
+  return h.view('notices/setup/preview.njk', pageData)
+}
+
+async function previewSelectAlert(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await PreviewSelectAlertService.go(contactHashId, sessionId)
+
+  return h.view('notices/setup/preview-select-alert.njk', pageData)
 }
 
 async function viewAlertEmailAddress(request, h) {
@@ -375,6 +384,7 @@ async function submitReturnsForPaperForms(request, h) {
 module.exports = {
   downloadRecipients,
   preview,
+  previewSelectAlert,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,
