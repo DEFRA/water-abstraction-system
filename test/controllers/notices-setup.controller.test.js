@@ -75,7 +75,7 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       let response
 
-      describe('when the "notification" query string is "invitations" ', () => {
+      describe('when the journey is "standard"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
@@ -103,7 +103,7 @@ describe('Notices Setup controller', () => {
         })
       })
 
-      describe('when the journey is "adHoc" ', () => {
+      describe('when the journey is "adHoc"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',

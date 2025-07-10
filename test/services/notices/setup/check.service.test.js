@@ -76,7 +76,7 @@ describe('Notices - Setup - Check service', () => {
     })
   })
 
-  describe('when the "noticeType" is "abstraction-alert"', () => {
+  describe('when the journey is "abstraction-alert"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: {
