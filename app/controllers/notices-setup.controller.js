@@ -19,6 +19,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PreviewService = require('../services/notices/setup/preview.service.js')
+const PreviewSelectAlertService = require('../services/notices/setup/preview-select-alert.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsForPaperFormsService = require('../services/notices/setup/returns-for-paper-forms.service.js')
@@ -54,11 +55,19 @@ async function downloadRecipients(request, h) {
 }
 
 async function preview(request, h) {
+  const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
+
+  const pageData = await PreviewService.go(contactHashId, licenceMonitoringStationId, sessionId)
+
+  return h.view('notices/setup/preview.njk', pageData)
+}
+
+async function previewSelectAlert(request, h) {
   const { contactHashId, sessionId } = request.params
 
-  const pageData = await PreviewService.go(contactHashId, sessionId)
+  const pageData = await PreviewSelectAlertService.go(contactHashId, sessionId)
 
-  return h.view(`${basePath}/preview.njk`, pageData)
+  return h.view('notices/setup/preview-select-alert.njk', pageData)
 }
 
 async function viewAlertEmailAddress(request, h) {
@@ -77,7 +86,7 @@ async function viewAlertThresholds(request, h) {
 
   const pageData = await AlertThresholdsService.go(sessionId)
 
-  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
 }
 
 async function viewAlertType(request, h) {
@@ -235,7 +244,7 @@ async function submitAlertThresholds(request, h) {
   const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.view.njk`, pageData)
+    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
@@ -375,6 +384,7 @@ async function submitReturnsForPaperForms(request, h) {
 module.exports = {
   downloadRecipients,
   preview,
+  previewSelectAlert,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,
