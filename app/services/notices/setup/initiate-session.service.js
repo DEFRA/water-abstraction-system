@@ -67,7 +67,7 @@ function _redirect(journey) {
     return 'returns-period'
   }
 
-  if (journey === 'abstraction-alerts') {
+  if (journey === 'abstraction-alert') {
     return 'abstraction-alerts/alert-type'
   }
 
