@@ -29,7 +29,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(journey, noticeType, monitoringStationId = null) {
+async function go(journey, noticeType = null, monitoringStationId = null) {
   let notice
 
   if (noticeType) {
