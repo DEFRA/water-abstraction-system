@@ -10,7 +10,6 @@ const { formatAbstractionPeriod } = require('../../base.presenter.js')
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
- * // TODO: JS Docs
  * @param {module:SessionModel} session - The licence monitoring station setup session instance
  *
  * @returns {object} The data formatted for the view template
