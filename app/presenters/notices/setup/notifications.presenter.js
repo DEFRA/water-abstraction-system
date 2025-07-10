@@ -128,7 +128,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId, notic
     ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(journey, noticeType, messageType, recipient.contact_type),
+    messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
@@ -182,7 +182,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noti
     ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(journey, noticeType, messageType, recipient.contact_type),
+    messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ..._addressLines(recipient.contact, name),
       ..._returnsPeriod(returnsPeriod),
