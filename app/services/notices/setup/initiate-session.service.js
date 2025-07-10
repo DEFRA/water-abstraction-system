@@ -9,8 +9,6 @@ const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
-const STANDARD_JOURNEY = ['reminders', 'invitations']
-
 /**
  * Initiates the session record used for setting up a new returns notification
  *
@@ -25,19 +23,17 @@ const STANDARD_JOURNEY = ['reminders', 'invitations']
  * This session will be used for all types of notifications (invitations, reminders). We set the prefix and type
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
- * @param {string} notificationType - A string relating to one of the keys for `NOTIFICATION_TYPES`
+ * @param {string} journey - A string of 'adHoc', 'standard' or 'abstraction-alerts'
+ * @param {string} noticeType - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - The UUID of the monitoring station we are creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(notificationType, monitoringStationId = null) {
-  const journey = _journey(notificationType)
-  const redirect = _redirect(notificationType)
+async function go(journey, noticeType, monitoringStationId = null) {
+  let notice
 
-  let noticeType
-
-  if (journey !== 'adHoc') {
-    noticeType = DetermineNoticeTypeService.go(notificationType)
+  if (noticeType) {
+    notice = DetermineNoticeTypeService.go(noticeType)
   }
 
   let additionalData = {}
@@ -50,7 +46,7 @@ async function go(notificationType, monitoringStationId = null) {
     .insert({
       data: {
         ...additionalData,
-        ...noticeType,
+        ...notice,
         journey
       }
     })
@@ -58,32 +54,16 @@ async function go(notificationType, monitoringStationId = null) {
 
   return {
     sessionId: session.id,
-    path: redirect
+    path: _redirect(journey)
   }
 }
 
-/**
- * const journeys = ['adHoc', 'standard', 'abstractionAlerts']
- * @private
- */
-function _journey(notificationType) {
-  if (notificationType === 'ad-hoc') {
-    return 'adHoc'
-  } else if (STANDARD_JOURNEY.includes(notificationType)) {
-    return 'standard'
-  } else if (notificationType === 'abstraction-alert') {
-    return 'abstraction-alert'
-  } else {
-    return null
-  }
-}
-
-function _redirect(notificationType) {
-  if (notificationType === 'ad-hoc') {
+function _redirect(journey) {
+  if (journey === 'adHoc') {
     return 'licence'
-  } else if (STANDARD_JOURNEY.includes(notificationType)) {
+  } else if (journey === 'standard') {
     return 'returns-period'
-  } else if (notificationType === 'abstraction-alert') {
+  } else if (journey === 'abstraction-alert') {
     return 'abstraction-alerts/alert-type'
   } else {
     return null

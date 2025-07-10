@@ -19,13 +19,23 @@ const DetermineLicenceMonitoringStationsService = require('../../../../app/servi
 const InitiateSessionService = require('../../../../app/services/notices/setup/initiate-session.service.js')
 
 describe('Notices - Setup - Initiate Session service', () => {
+  let journey
+  let monitoringStationId
+  let noticeType
+
+  beforeEach(() => {
+    journey = 'standard'
+    noticeType = 'invitations'
+    monitoringStationId = undefined
+  })
+
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when called', () => {
     it('creates a new session record', async () => {
-      const result = await InitiateSessionService.go('invitations')
+      const result = await InitiateSessionService.go(journey, noticeType)
 
       const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -40,7 +50,7 @@ describe('Notices - Setup - Initiate Session service', () => {
     })
 
     it('correctly returns the redirect path and session id', async () => {
-      const result = await InitiateSessionService.go('invitations')
+      const result = await InitiateSessionService.go(journey, noticeType)
 
       expect(result).to.equal({
         sessionId: result.sessionId,
@@ -48,9 +58,14 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
-    describe('when the "notificationType" is "ad-hoc"', () => {
+    describe('when the "journey" is "adHoc"', () => {
+      beforeEach(() => {
+        journey = 'adHoc'
+        noticeType = undefined
+      })
+
       it('creates a new session record', async () => {
-        const result = await InitiateSessionService.go('ad-hoc')
+        const result = await InitiateSessionService.go(journey, noticeType)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -58,7 +73,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('correctly returns the redirect path and session id', async () => {
-        const result = await InitiateSessionService.go('ad-hoc')
+        const result = await InitiateSessionService.go(journey, noticeType)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
@@ -68,18 +83,20 @@ describe('Notices - Setup - Initiate Session service', () => {
     })
 
     describe('when the "notificationType" is "abstraction-alert"', () => {
-      const monitoringStationId = '1234'
-
       let monitoringStationData
 
       beforeEach(() => {
+        journey = 'abstraction-alert'
+        noticeType = 'abstraction-alert'
+        monitoringStationId = '1234'
+
         monitoringStationData = AbstractionAlertSessionData.get()
 
         Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
       })
 
       it('creates a new session record', async () => {
-        const result = await InitiateSessionService.go('abstraction-alert', monitoringStationId)
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -95,7 +112,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('adds the additional monitoring session data', async () => {
-        const result = await InitiateSessionService.go('abstraction-alert', monitoringStationId)
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -103,7 +120,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('correctly returns the redirect path and session id', async () => {
-        const result = await InitiateSessionService.go('abstraction-alert', monitoringStationId)
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
