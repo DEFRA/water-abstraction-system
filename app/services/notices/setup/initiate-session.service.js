@@ -24,7 +24,7 @@ const SessionModel = require('../../../models/session.model.js')
  * for the upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
  * @param {string} journey - A string of 'adhoc', 'standard' or 'abstraction-alerts'
- * @param {string} noticeType - A string relating to one of the keys for `NOTIFICATION_TYPES`
+ * @param {string} [noticeType=null] - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - The UUID of the monitoring station we are creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
