@@ -80,7 +80,7 @@ describe('Monitoring Stations - View service', () => {
         enableLicenceMonitoringStationsSetup: true,
         gridReference: 'TL2664640047',
         links: {
-          createAlert: `/system/notices/setup?journey=abstraction-alert&noticeType=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+          createAlert: `/system/notices/setup/abstraction-alert?noticeType=abstraction-alert&monitoringStationId=${monitoringStation.id}`
         },
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         notification: 'Tag removed for 99/999/9999',

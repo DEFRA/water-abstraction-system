@@ -203,7 +203,10 @@ async function viewReturnsForPaperForms(request, h) {
 }
 
 async function setup(request, h) {
-  const { journey, noticeType, monitoringStationId } = request.query
+  const {
+    params: { journey },
+    query: { noticeType, monitoringStationId }
+  } = request
 
   const { sessionId, path } = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 

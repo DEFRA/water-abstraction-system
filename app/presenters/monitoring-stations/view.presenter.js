@@ -93,7 +93,7 @@ function _licenceVersionPurpose(licenceVersionPurposeCondition) {
 }
 
 function _links(monitoringStationId) {
-  let createAlert = `/system/notices/setup?journey=abstraction-alert&noticeType=abstraction-alert&monitoringStationId=${monitoringStationId}`
+  let createAlert = `/system/notices/setup/abstraction-alert?noticeType=abstraction-alert&monitoringStationId=${monitoringStationId}`
 
   if (!FeatureFlagsConfig.enableMonitoringStationsAlertNotifications) {
     createAlert = '/monitoring-stations/' + monitoringStationId + '/send-alert/alert-type'
