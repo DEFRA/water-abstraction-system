@@ -3,6 +3,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
   {{
@@ -21,8 +22,74 @@
     }) }}
   {%endif%}
 
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-5">{{ pageTitle }}</h1>
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    {{ govukInput({
+      label: {
+        text: "Address line 1"
+      },
+      classes: "govuk-input--width-30",
+      value: addressLine1,
+      id: "addressLine1",
+      name: "addressLine1",
+      errorMessage: {
+          text: error.addressLine1
+        } if error.addressLine1
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Address line 2 (optional)"
+      },
+      classes: "govuk-input--width-30",
+      value: addressLine2,
+      id: "addressLine2",
+      name: "addressLine2",
+      errorMessage: {
+          text: error.addressLine2
+        } if error.addressLine2
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Town or city"
+      },
+      classes: "govuk-input--width-20",
+      value: town,
+      id: "town",
+      name: "town",
+      errorMessage: {
+          text: error.town
+        } if error.town
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "County (optional)"
+      },
+      classes: "govuk-input--width-20",
+      value: county,
+      id: "county",
+      name: "county",
+      errorMessage: {
+          text: error.county
+        } if error.county
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Postcode"
+      },
+      classes: "govuk-input--width-10",
+      value: postcode,
+      id: "postcode",
+      name: "postcode",
+      errorMessage: {
+          text: error.postcode
+        } if error.postcode
+    }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>

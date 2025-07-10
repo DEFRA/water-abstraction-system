@@ -6,8 +6,8 @@
  * @module SubmitSelectService
  */
 
-const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../requests/address-lookup/lookup-uprn.request.js')
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -26,10 +26,10 @@ async function go(sessionId, payload) {
   let validationResult = _validate(payload)
 
   if (!validationResult) {
-    const address = await LookupUPRNRequest.send(payload.addresses)
+    const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
-    if (address.succeeded) {
-      await _save(session, address.results[0])
+    if (uprnResult.succeeded) {
+      await _save(session, uprnResult.matches[0])
 
       return {}
     }
@@ -39,15 +39,15 @@ async function go(sessionId, payload) {
     }
   }
 
-  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
+  const postcodeResult = await LookupPostcodeRequest.send(session.address.postcode)
 
-  if (addresses.succeeded === false || addresses.results.length === 0) {
+  if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
       redirect: true
     }
   }
 
-  const pageData = SelectPresenter.go(addresses.results)
+  const pageData = SelectPresenter.go(postcodeResult.matches)
 
   return {
     backLink: `/system/address/${session.id}/postcode`,
