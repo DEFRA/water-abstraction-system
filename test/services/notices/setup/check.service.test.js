@@ -76,13 +76,13 @@ describe('Notices - Setup - Check service', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alert"', () => {
+  describe('when the journey is "alerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: {
-          journey: 'abstraction-alert',
+          journey: 'alerts',
           monitoringStationId: '456',
-          noticeType: 'abstraction-alert',
+          noticeType: 'abstractionAlerts',
           referenceCode: 'WAA-123'
         }
       })

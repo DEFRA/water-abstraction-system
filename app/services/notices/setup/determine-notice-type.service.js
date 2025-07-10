@@ -20,7 +20,7 @@ const { generateRandomInteger } = require('../../../lib/general.lib.js')
  * @private
  */
 const NOTICE_TYPES = {
-  'abstraction-alert': {
+  abstractionAlerts: {
     name: 'Water abstraction alert',
     prefix: 'WAA-',
     subType: 'waterAbstractionAlerts',

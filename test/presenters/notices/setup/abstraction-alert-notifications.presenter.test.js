@@ -47,7 +47,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
       ...abstractionAlertSessionData,
       alertEmailAddress: 'luke.skywalker@rebelmail.test',
       alertType: 'warning',
-      journey: 'abstraction-alerts',
+      journey: 'alerts',
       referenceCode,
       relevantLicenceMonitoringStations
     }

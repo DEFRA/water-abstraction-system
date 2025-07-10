@@ -81,13 +81,13 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('when the "notificationType" is "abstraction-alert"', () => {
+    describe('when the "notificationType" is "abstractionAlerts"', () => {
       it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('abstraction-alert')
+        const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
         expect(result).to.equal({
           name: 'Water abstraction alert',
-          noticeType: 'abstraction-alert',
+          noticeType: 'abstractionAlerts',
           notificationType: 'Abstraction alert',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts'
@@ -95,8 +95,8 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
 
       describe('the "referenceCode" property', () => {
-        it('returns a reference code for an "abstraction-alert" notification', () => {
-          const result = DetermineNoticeTypeService.go('abstraction-alert')
+        it('returns a reference code for an "abstractionAlerts" notification', () => {
+          const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
           expect(result.referenceCode).to.include('WAA-')
           expect(result.referenceCode.length).to.equal(10)
