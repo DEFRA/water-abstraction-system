@@ -102,6 +102,7 @@ async function deleteRequest(url, additionalOptions = {}) {
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function get(url, additionalOptions = {}) {
+  console.log('🚀🚀🚀 ~ url:', url)
   return _sendRequest('get', url, additionalOptions)
 }
 
@@ -152,6 +153,7 @@ async function patch(url, additionalOptions = {}) {
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function post(url, additionalOptions = {}) {
+  console.log('🚀🚀🚀 ~ url:', url)
   return _sendRequest('post', url, additionalOptions)
 }
 
