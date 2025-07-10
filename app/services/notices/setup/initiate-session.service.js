@@ -59,15 +59,15 @@ async function go(journey, noticeType, monitoringStationId = null) {
 }
 
 function _redirect(journey) {
-  if (journey === 'adhoc') {
-    return 'licence'
-  } else if (journey === 'standard') {
+  if (journey === 'standard') {
     return 'returns-period'
-  } else if (journey === 'abstraction-alert') {
-    return 'abstraction-alerts/alert-type'
-  } else {
-    return null
   }
+
+  if (journey === 'standard') {
+    return 'returns-period'
+  }
+
+  return 'licence'
 }
 
 module.exports = {
