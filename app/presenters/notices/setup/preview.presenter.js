@@ -13,16 +13,17 @@ const { sentenceCase } = require('../../base.presenter.js')
  *
  * @param {string} contactHashId - The recipients unique identifier
  * @param {object} notification - The data relating to the recipients notification
+ * @param {string} journey - The type of alert being sent
  * @param {string} sessionId - The UUID for returns notices session record
  *
  * @returns {Promise<object>} The data formatted for the preview template
  */
-async function go(contactHashId, notification, sessionId) {
+async function go(contactHashId, notification, journey, sessionId) {
   const { messageRef, messageType, personalisation, reference, templateId } = notification
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : null,
-    backLink: `/system/notices/setup/${sessionId}/check`,
+    backLink: _backLink(contactHashId, journey, sessionId),
     caption: `Notice ${reference}`,
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
@@ -44,6 +45,14 @@ function _address(personalisation) {
   return addressLines.filter((addressLine) => {
     return addressLine
   })
+}
+
+function _backLink(contactHashId, journey, sessionId) {
+  if (journey === 'abstraction-alert') {
+    return `/system/notices/setup/${sessionId}/preview/${contactHashId}/select-alert`
+  }
+
+  return `/system/notices/setup/${sessionId}/check`
 }
 
 async function _notifyPreview(personalisation, templateId) {
