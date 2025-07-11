@@ -27,7 +27,13 @@ async function go(sessionId, payload) {
   const validationResult = await _validate(payload, licence)
 
   if (!validationResult) {
-    await _save(session, payload, licence)
+    // If the submitted licence ref is different to what we already have in the session then all the info on the
+    // following pages (condition and abstraction period) is invalid, so we ensure the checkPageVisited flag is false
+    // and save the new values to the session.
+    if (payload.licenceRef !== session.licenceRef) {
+      session.checkPageVisited = false
+      await _save(session, payload, licence)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited
