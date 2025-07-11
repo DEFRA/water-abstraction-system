@@ -36,7 +36,7 @@ describe('Info service', () => {
         }
       }
     },
-    htmlToPdf: {
+    gotenberg: {
       succeeded: true,
       response: { body: JSON.stringify({ status: 'up', details: { chromium: { status: 'up' } } }) }
     },
