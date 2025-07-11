@@ -287,7 +287,7 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
