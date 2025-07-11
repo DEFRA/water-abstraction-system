@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the returns due for `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Fetches the returns due for `/notices/setup/{sessionId}/return-forms` page
  * @module FetchReturnsDueByLicenceRefService
  */
 
@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
- * Fetches the returns due for `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Fetches the returns due for `/notices/setup/{sessionId}/return-forms` page
  *
  * @param {string} licenceRef - The licence reference to fetch 'due' return logs for
  *

@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
- * @module ReturnsForPaperFormsPresenter
+ * Formats data for the `/notices/setup/{sessionId}/return-forms` page
+ * @module ReturnFormsPresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Formats data for the `/notices/setup/{sessionId}/return-forms` page
  *
  * @param {module:SessionModel} session - The session instance
  *

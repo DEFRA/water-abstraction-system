@@ -81,7 +81,7 @@ describe('Notice Type Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({ redirectUrl: 'returns-for-paper-forms' })
+        expect(result).to.equal({ redirectUrl: 'return-forms' })
       })
     })
 
