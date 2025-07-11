@@ -18,7 +18,7 @@ jobs:
       CHARGING_MODULE_URL: http://localhost:8020
       EA_ADDRESS_FACADE_URL: http://localhost:8009
       EXTERNAL_UI_URL: http://localhost:8000
-      HTML_TO_PDF_URL: http://localhost:8040
+      GOTENBERG_URL: http://localhost:8040
       IMPORT_URL: http://localhost:8007
       INTERNAL_UI_URL: http://localhost:8008
       PERMIT_REPOSITORY_URL: http://localhost:8004
