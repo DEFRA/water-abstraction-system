@@ -26,7 +26,7 @@ async function go(sessionId, yar) {
 
   await session.$query().delete()
 
-  flashNotification(yar, 'Success', `Tag for licence ${session.data.licenceRef} added`)
+  flashNotification(yar, 'Success', `Tag for licence ${session.licenceRef} added`)
 
   return session.monitoringStationId
 }
