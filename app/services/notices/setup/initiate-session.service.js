@@ -67,6 +67,8 @@ function _notice(journey, noticeType) {
   if (noticeType) {
     return DetermineNoticeTypeService.go(noticeType)
   }
+
+  return null
 }
 
 function _redirect(journey) {
