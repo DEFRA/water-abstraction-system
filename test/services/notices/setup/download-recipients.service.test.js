@@ -27,7 +27,7 @@ describe('Notices - Setup - Download recipients service', () => {
     Sinon.restore()
   })
 
-  describe('when the journey is for returns ', () => {
+  describe('when the journey is for returns', () => {
     let removeLicences
 
     before(async () => {
@@ -57,7 +57,7 @@ describe('Notices - Setup - Download recipients service', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alerts"', () => {
+  describe('when the journey is "alerts"', () => {
     let recipients
 
     describe('and there are recipients', () => {
@@ -75,7 +75,7 @@ describe('Notices - Setup - Download recipients service', () => {
         session = await SessionHelper.add({
           data: {
             notificationType: 'Abstraction alert',
-            journey: 'abstraction-alert',
+            journey: 'alerts',
             referenceCode,
             relevantLicenceMonitoringStations
           }
@@ -138,7 +138,7 @@ describe('Notices - Setup - Download recipients service', () => {
         session = await SessionHelper.add({
           data: {
             notificationType: 'Abstraction alert',
-            journey: 'abstraction-alert',
+            journey: 'alerts',
             referenceCode,
             relevantLicenceMonitoringStations
           }

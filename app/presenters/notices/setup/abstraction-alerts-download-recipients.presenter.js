@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for 'abstraction-alert'
+ * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
  * @module AbstractionAlertDownloadRecipientsPresenter
  */
 
@@ -29,7 +29,7 @@ const HEADERS = [
 ]
 
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for 'abstraction-alert'
+ * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
  *
  * A licence monitoring station can share the same licence reference as other stations. As a result, recipients may
  * receive multiple notifications for the same licence but from different monitoring stations. This leads to duplicate
