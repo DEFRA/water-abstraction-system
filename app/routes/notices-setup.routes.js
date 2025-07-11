@@ -5,7 +5,7 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 const routes = [
   {
     method: 'GET',
-    path: '/notices/setup',
+    path: '/notices/setup/{journey}',
     options: {
       handler: NoticesSetupController.setup,
       auth: {

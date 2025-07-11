@@ -54,28 +54,28 @@
 
     {{ govukInput({
       label: {
-        text: "Town or city"
+        text: "Address line 3 (optional)"
       },
-      classes: "govuk-input--width-20",
-      value: town,
-      id: "town",
-      name: "town",
+      classes: "govuk-input--width-30",
+      value: addressLine3,
+      id: "addressLine3",
+      name: "addressLine3",
       errorMessage: {
-          text: error.town
-        } if error.town
+          text: error.addressLine3
+        } if error.addressLine3
     }) }}
 
     {{ govukInput({
       label: {
-        text: "County (optional)"
+        text: "Address line 4 (optional)"
       },
-      classes: "govuk-input--width-20",
-      value: county,
-      id: "county",
-      name: "county",
+      classes: "govuk-input--width-30",
+      value: addressLine4,
+      id: "addressLine4",
+      name: "addressLine4",
       errorMessage: {
-          text: error.county
-        } if error.county
+          text: error.addressLine4
+        } if error.addressLine4
     }) }}
 
     {{ govukInput({
