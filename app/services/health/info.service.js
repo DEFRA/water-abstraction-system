@@ -69,7 +69,7 @@ async function _getAddressFacadeData() {
 }
 
 async function _getGotenbergData() {
-  const statusUrl = new URL('/health', servicesConfig.htmlToPdf.url)
+  const statusUrl = new URL('/health', servicesConfig.gotenberg.url)
   const result = await BaseRequest.get(statusUrl.href)
 
   if (result.succeeded) {
