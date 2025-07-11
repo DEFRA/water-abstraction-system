@@ -11,7 +11,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const ReturnsForPaperFormsPresenter = require('../../../../app/presenters/notices/setup/returns-for-paper-forms.presenter.js')
+const ReturnFormsPresenter = require('../../../../app/presenters/notices/setup/return-forms.presenter.js')
 
 describe('Notices - Setup - Returns For Paper Forms presenter', () => {
   let dueReturn
@@ -34,7 +34,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ReturnsForPaperFormsPresenter.go(session)
+      const result = ReturnFormsPresenter.go(session)
 
       expect(result).to.equal({
         backLink: '/system/notices/setup/123/notice-type',
@@ -56,7 +56,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
       })
 
       it('returns the "returns" previously selected as checked', () => {
-        const result = ReturnsForPaperFormsPresenter.go(session)
+        const result = ReturnFormsPresenter.go(session)
 
         expect(result.returns).to.equal([
           {
@@ -74,7 +74,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
         })
 
         it('correctly set the back link to the check page', () => {
-          const result = ReturnsForPaperFormsPresenter.go(session)
+          const result = ReturnFormsPresenter.go(session)
 
           expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
         })

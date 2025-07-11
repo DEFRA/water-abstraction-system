@@ -10,7 +10,7 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   abstractionAlerts: 'Abstraction alerts',
-  'paper-forms': 'Paper invitations',
+  returnForms: 'Paper invitations',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
@@ -30,7 +30,7 @@ function go(recipients, page, pagination, session) {
 
   return {
     defaultPageSize,
-    displayPreviewLink: noticeType !== 'abstractionAlerts' && noticeType !== 'paper-forms',
+    displayPreviewLink: noticeType !== 'abstractionAlerts' && noticeType !== 'returnForms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
