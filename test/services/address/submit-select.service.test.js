@@ -31,6 +31,18 @@ describe('Address - Submit Select Service', () => {
     country: 'United Kingdom'
   }
 
+  const matchWithoutOrganisation = {
+    uprn: 340116,
+    address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+    organisation: null,
+    premises: 'HORIZON HOUSE',
+    street_address: 'DEANERY ROAD',
+    locality: 'VILLAGE GREEN',
+    city: 'BRISTOL',
+    postcode: 'BS1 5AH',
+    country: 'United Kingdom'
+  }
+
   let getByPostcodeStub
   let getByUPRNStub
   let payload
@@ -47,7 +59,7 @@ describe('Address - Submit Select Service', () => {
     Sinon.restore()
   })
 
-  describe('when an address has been selected', () => {
+  describe('when an address has been selected with an organisation', () => {
     beforeEach(async () => {
       payload = {
         addresses: '340116'
@@ -70,15 +82,53 @@ describe('Address - Submit Select Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.address).to.equal({
+      expect(refreshedSession.data.address).to.equal({
         uprn: 340116,
         addressLine1: 'ENVIRONMENT AGENCY',
-        addressLine2: 'HORIZON HOUSE',
-        addressLine3: 'DEANERY ROAD',
-        addressLine4: null,
-        town: 'BRISTOL',
-        postcode: 'BS1 5AH',
-        country: 'United Kingdom'
+        addressLine2: 'HORIZON HOUSE DEANERY ROAD',
+        addressLine3: null,
+        addressLine4: 'BRISTOL',
+        postcode: 'BS1 5AH'
+      })
+    })
+
+    it('continues on the journey', async () => {
+      const result = await SubmitSelectService.go(session.id, payload)
+
+      expect(result).to.equal({})
+    })
+  })
+
+  describe('when an address has been selected without an organisation', () => {
+    beforeEach(async () => {
+      payload = {
+        addresses: '340116'
+      }
+
+      getByUPRNStub.resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            results: [matchWithoutOrganisation]
+          }
+        },
+        matches: [matchWithoutOrganisation]
+      })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitSelectService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.data.address).to.equal({
+        uprn: 340116,
+        addressLine1: 'HORIZON HOUSE DEANERY ROAD',
+        addressLine2: null,
+        addressLine3: 'VILLAGE GREEN',
+        addressLine4: 'BRISTOL',
+        postcode: 'BS1 5AH'
       })
     })
 
