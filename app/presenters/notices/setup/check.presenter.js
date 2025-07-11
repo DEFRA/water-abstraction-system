@@ -9,7 +9,7 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
-  'abstraction-alert': 'Abstraction alerts',
+  abstractionAlerts: 'Abstraction alerts',
   'paper-forms': 'Paper invitations',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
@@ -26,14 +26,14 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { journey, referenceCode } = session
+  const { referenceCode, noticeType } = session
 
   return {
     defaultPageSize,
-    displayPreviewLink: journey !== 'abstraction-alert' && journey !== 'paper-forms',
+    displayPreviewLink: noticeType !== 'abstractionAlerts' && noticeType !== 'paper-forms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
-    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
+    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: _recipients(page, recipients, session.id),
     recipientsAmount: recipients.length,
     referenceCode
@@ -78,7 +78,7 @@ function _links(session) {
 
   if (licenceRef) {
     back = `/system/notices/setup/${id}/check-notice-type`
-  } else if (journey === 'abstraction-alert') {
+  } else if (journey === 'alerts') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {
     back = `/system/notices/setup/${id}/returns-period`

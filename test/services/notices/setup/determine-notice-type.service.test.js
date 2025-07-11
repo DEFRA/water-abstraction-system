@@ -17,10 +17,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('invitations')
 
         expect(result).to.equal({
-          journey: 'invitations',
           name: 'Returns: invitation',
+          noticeType: 'invitations',
           notificationType: 'Returns invitation',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnInvitation'
         })
@@ -41,10 +40,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('paper-forms')
 
         expect(result).to.equal({
-          journey: 'paper-forms',
           name: 'Paper returns',
+          noticeType: 'paper-forms',
           notificationType: 'Paper invitation',
-          redirectPath: undefined,
           referenceCode: result.referenceCode, // randomly generated
           subType: 'paperReturnForms'
         })
@@ -65,10 +63,9 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         const result = DetermineNoticeTypeService.go('reminders')
 
         expect(result).to.equal({
-          journey: 'reminders',
           name: 'Returns: reminder',
+          noticeType: 'reminders',
           notificationType: 'Returns reminder',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnReminder'
         })
@@ -84,23 +81,22 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('when the "notificationType" is "abstraction-alert"', () => {
+    describe('when the "notificationType" is "abstractionAlerts"', () => {
       it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('abstraction-alert')
+        const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
         expect(result).to.equal({
-          journey: 'abstraction-alert',
           name: 'Water abstraction alert',
+          noticeType: 'abstractionAlerts',
           notificationType: 'Abstraction alert',
-          redirectPath: 'abstraction-alerts/alert-type',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts'
         })
       })
 
       describe('the "referenceCode" property', () => {
-        it('returns a reference code for an "abstraction-alert" notification', () => {
-          const result = DetermineNoticeTypeService.go('abstraction-alert')
+        it('returns a reference code for an "abstractionAlerts" notification', () => {
+          const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
           expect(result.referenceCode).to.include('WAA-')
           expect(result.referenceCode.length).to.equal(10)

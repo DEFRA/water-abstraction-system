@@ -44,14 +44,12 @@ describe('Notice Type Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
-          journey: 'invitations',
           name: 'Returns: invitation',
           noticeType: 'invitations',
           notificationType: 'Returns invitation',
           referenceCode: refreshedSession.referenceCode,
           subType: 'returnInvitation'
         },
-        journey: 'invitations',
         name: 'Returns: invitation',
         noticeType: 'invitations',
         notificationType: 'Returns invitation',
