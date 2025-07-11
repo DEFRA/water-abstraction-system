@@ -189,11 +189,11 @@ async function thresholdAndUnit(request, h) {
 }
 
 module.exports = {
+  abstractionPeriod,
   check,
   fullCondition,
   licenceNumber,
   stopOrReduce,
-  abstractionPeriod,
   submitAbstractionPeriod,
   submitCheck,
   submitFullCondition,

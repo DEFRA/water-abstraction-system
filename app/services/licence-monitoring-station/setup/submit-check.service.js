@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
+ * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @module SubmitCheckService
  */
@@ -12,7 +12,7 @@ const SessionModel = require('../../../models/session.model.js')
 const { flowUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
+ * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
