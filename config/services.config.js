@@ -48,6 +48,9 @@ const config = {
   },
   returns: {
     url: process.env.RETURNS_URL
+  },
+  gotenberg: {
+    url: process.env.GOTENBERG_URL
   }
 }
 
