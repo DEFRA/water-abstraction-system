@@ -72,9 +72,9 @@ describe('Notice Type Service', () => {
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
     })
 
-    describe('and the notice types is "paper-forms"', () => {
+    describe('and the notice types is "returnForms"', () => {
       beforeEach(() => {
-        noticeType = 'paper-forms'
+        noticeType = 'returnForms'
         payload = { noticeType }
       })
 
@@ -155,7 +155,7 @@ describe('Notice Type Service', () => {
           {
             checked: false,
             text: 'Submit using a paper form invitation',
-            value: 'paper-forms'
+            value: 'returnForms'
           }
         ],
         pageTitle: 'Select the notice type'

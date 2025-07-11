@@ -30,15 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(journey, noticeType = null, monitoringStationId = null) {
-  let notice
-
-  if (journey === 'alerts') {
-    noticeType = 'abstractionAlerts'
-  }
-
-  if (noticeType) {
-    notice = DetermineNoticeTypeService.go(noticeType)
-  }
+  const notice = _notice(journey, noticeType)
 
   let additionalData = {}
 
@@ -59,6 +51,21 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
   return {
     sessionId: session.id,
     path: _redirect(journey)
+  }
+}
+
+/**
+ * The 'adhoc' journey does not have a noticeType set. This is set later in the journey.
+ *
+ * @private
+ */
+function _notice(journey, noticeType) {
+  if (journey === 'alerts') {
+    noticeType = 'abstractionAlerts'
+  }
+
+  if (noticeType) {
+    return DetermineNoticeTypeService.go(noticeType)
   }
 }
 
