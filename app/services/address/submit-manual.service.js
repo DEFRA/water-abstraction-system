@@ -29,7 +29,14 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = ManualAddressPresenter.go(session)
+  const _submittedData = {
+    id: session.id,
+    address: {
+      ...payload
+    }
+  }
+
+  const pageData = ManualAddressPresenter.go(_submittedData)
 
   return {
     error: validationResult,
@@ -38,6 +45,12 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  session.address.addressLine1 = payload.addressLine1
+  session.address.addressLine2 = payload.addressLine2 ?? null
+  session.address.addressLine3 = payload.addressLine3 ?? null
+  session.address.addressLine4 = payload.addressLine4 ?? null
+  session.address.postcode = payload.postcode
+
   return session.$update()
 }
 
@@ -48,11 +61,20 @@ function _validate(payload) {
     return null
   }
 
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
+  const result = {
+    errorList: []
   }
+
+  validation.error.details.forEach((detail) => {
+    result.errorList.push({
+      href: `#${detail.context.key}`,
+      text: detail.message
+    })
+
+    result[detail.context.key] = detail.message
+  })
+
+  return result
 }
 
 module.exports = {
