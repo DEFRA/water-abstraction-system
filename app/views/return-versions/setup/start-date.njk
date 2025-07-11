@@ -4,9 +4,9 @@
 {% from 'govuk/components/date-input/macro.njk' import govukDateInput %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 {% from 'govuk/components/radios/macro.njk' import govukRadios %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,12 +16,6 @@
 {% endblock %}
 
 {% set dateInputHTML %}
-  {% if error %}
-    {% set errorClass = 'govuk-input--error' %}
-  {% else %}
-    {% set errorClass = '' %}
-  {% endif %}
-
   {{ govukDateInput({
     id: 'other-start-date',
     namePrefix: 'start-date',
@@ -34,17 +28,17 @@
     },
     items: [
       {
-        classes: 'govuk-input--width-2 ' + errorClass,
+        classes: "govuk-input--width-2 {{ 'govuk-input--error' if error }}",
         name: 'day',
         value: anotherStartDateDay
       },
       {
-        classes: 'govuk-input--width-2 ' + errorClass,
+        classes: "govuk-input--width-2 {{ 'govuk-input--error' if error }}",
         name: 'month',
         value: anotherStartDateMonth
       },
       {
-        classes: 'govuk-input--width-4 ' + errorClass,
+        classes: "govuk-input--width-4 {{ 'govuk-input--error' if error }}",
         name: 'year',
         value: anotherStartDateYear
       }
@@ -65,46 +59,46 @@
     }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: 'start-date-options',
-        errorMessage: error.radioFormElement,
-        fieldset: {
-          legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l'
-          }
-        },
-        items: [
-          {
-            id: 'licence-start-date',
-            value: 'licenceStartDate',
-            text: 'Licence version start date',
-            hint: {
-              text:  licenceVersionStartDate
-            },
-            checked: startDateOption === 'licenceStartDate'
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: 'start-date-options',
+      errorMessage: error.radioFormElement,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          id: 'licence-start-date',
+          value: 'licenceStartDate',
+          text: 'Licence version start date',
+          hint: {
+            text:  licenceVersionStartDate
           },
-          {
-            id: 'another-start-date',
-            value: 'anotherStartDate',
-            text: 'Another date',
-            hint: {
-              text: 'For example, 27 3 2007'
-            },
-            checked: startDateOption === 'anotherStartDate',
-            conditional: {
-              html: dateInputHTML
-            }
+          checked: startDateOption === 'licenceStartDate'
+        },
+        {
+          id: 'another-start-date',
+          value: 'anotherStartDate',
+          text: 'Another date',
+          hint: {
+            text: 'For example, 27 3 2007'
+          },
+          checked: startDateOption === 'anotherStartDate',
+          conditional: {
+            html: dateInputHTML
           }
-        ]
-      }) }}
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

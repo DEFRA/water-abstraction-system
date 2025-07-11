@@ -3,9 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -37,27 +37,27 @@
     {% set radioItems = (radioItems.push(radioItem), radioItems) %}
   {% endfor %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: "existing",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
-          }
-        },
-        hint: {
-          text: "Select which requirements you want to use for this return."
-        },
-        items: radioItems
-      }) }}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukRadios({
+      name: "existing",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      hint: {
+        text: "Select which requirements you want to use for this return."
+      },
+      items: radioItems
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

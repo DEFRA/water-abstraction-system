@@ -3,9 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -14,26 +14,7 @@
   }}
 {% endblock %}
 
-{# If there is a startAbstractionPeriod error, the error class and message are set #}
-{% if error.text.startResult %}
-  {% set startResultErrorClass = " govuk-input--error" %}
-  {% set startResultErrorMessage = { text: error.text.startResult } %}
-{% else %}
-  {% set startResultErrorClass = "" %}
-  {% set startResultErrorMessage = null %}
-{% endif %}
-
-{# If there is a endAbstractionPeriod error, the error class and message are set #}
-{% if error.text.endResult %}
-    {% set endResultErrorClass = " govuk-input--error" %}
-    {% set endResultErrorMessage = { text: error.text.endResult } %}
-{% else %}
-  {% set endResultErrorClass = "" %}
-  {% set endResultErrorMessage = null %}
-{% endif %}
-
 {% block content %}
-{# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -50,11 +31,7 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div class="govuk-body">
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(licenceRef, pageTitle, 'govuk-heading-xl') }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
@@ -63,7 +40,7 @@
     {{ govukDateInput({
       id: "abstraction-period-start",
       namePrefix: "abstraction-period-start",
-      errorMessage: startResultErrorMessage,
+      errorMessage: { text: error.text.startResult } if error.text.startResult,
       fieldset: {
         legend: {
           text: "Start date",
@@ -73,12 +50,12 @@
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2" + startResultErrorClass,
+          classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
           value: abstractionPeriod['abstraction-period-start-day']
         },
         {
           name: "month",
-          classes: "govuk-input--width-2" + startResultErrorClass,
+          classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
           value: abstractionPeriod['abstraction-period-start-month']
         }
       ]
@@ -88,7 +65,7 @@
     {{ govukDateInput({
       id: "abstraction-period-end",
       namePrefix: "abstraction-period-end",
-      errorMessage: endResultErrorMessage,
+      errorMessage: { text: error.text.endResult } if error.text.endResult,
       fieldset: {
         legend: {
           text: "End date",
@@ -98,19 +75,17 @@
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2" + endResultErrorClass,
+          classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
           value: abstractionPeriod['abstraction-period-end-day']
         },
         {
           name: "month",
-          classes: "govuk-input--width-2" + endResultErrorClass,
+          classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
           value: abstractionPeriod['abstraction-period-end-month']
         }
       ]
     }) }}
 
-    <div class="govuk-body">
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
 {% endblock %}

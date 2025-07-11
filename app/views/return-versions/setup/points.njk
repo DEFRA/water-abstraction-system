@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -28,38 +29,40 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle, 'govuk-heading-xl') }}
+  {% endset %}
 
-    <div class="govuk-hint"> Select all that apply </div>
-  </div>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    {% set checkBoxItems = [] %}
+    {% for licencePoint in licencePoints %}
 
-      {% set checkBoxItems = [] %}
-      {% for licencePoint in licencePoints %}
+      {% set checkBoxItem = {
+        value: licencePoint.id,
+        text: licencePoint.description,
+        checked: licencePoint.id in selectedPointIds
+      } %}
 
-        {% set checkBoxItem = {
-          value: licencePoint.id,
-          text: licencePoint.description,
-          checked: licencePoint.id in selectedPointIds
-        } %}
+      {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
 
-        {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
+    {% endfor %}
 
-      {% endfor %}
+    {{ govukCheckboxes({
+      name: "points",
+      errorMessage: error,
+      hint: {
+        text: "Select all that apply"
+      },
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: checkBoxItems
+    }) }}
 
-      {{ govukCheckboxes({
-        name: "points",
-        errorMessage: error,
-        items: checkBoxItems
-      }) }}
-
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}
