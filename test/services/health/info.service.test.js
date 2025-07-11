@@ -134,7 +134,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.htmlToPdf.url}/health`).resolves(goodRequestResults.htmlToPdf)
+      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
