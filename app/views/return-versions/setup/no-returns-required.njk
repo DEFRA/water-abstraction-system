@@ -3,9 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -27,45 +27,45 @@
     }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: "reason",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
-          }
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "reason",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          text: 'Abstraction amount below 100 cubic metres per day',
+          value:  'abstraction-below-100-cubic-metres-per-day',
+          checked: reason === 'abstraction-below-100-cubic-metres-per-day'
         },
-        items: [
-          {
-            text: 'Abstraction amount below 100 cubic metres per day',
-            value:  'abstraction-below-100-cubic-metres-per-day',
-            checked: reason === 'abstraction-below-100-cubic-metres-per-day'
-          },
-          {
-            text: 'Licence conditions do not require returns',
-            value: 'licence-conditions-do-not-require-returns',
-            checked: reason === 'licence-conditions-do-not-require-returns'
-          },
-          {
-            text: 'Returns exception',
-            value: 'returns-exception',
-            checked: reason === 'returns-exception'
-          },
-          {
-            text: 'Temporary trade',
-            value: 'temporary-trade',
-            checked: reason === 'temporary-trade'
-          }
-        ]
-      }) }}
+        {
+          text: 'Licence conditions do not require returns',
+          value: 'licence-conditions-do-not-require-returns',
+          checked: reason === 'licence-conditions-do-not-require-returns'
+        },
+        {
+          text: 'Returns exception',
+          value: 'returns-exception',
+          checked: reason === 'returns-exception'
+        },
+        {
+          text: 'Temporary trade',
+          value: 'temporary-trade',
+          checked: reason === 'temporary-trade'
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

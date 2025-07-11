@@ -4,9 +4,9 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,7 +16,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -29,12 +28,9 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-
-  </div>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
@@ -43,6 +39,11 @@
       name: "agreementsExceptions",
       hint: {
         text: "Select all that apply"
+      },
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
       },
       errorMessage: error,
       items: [
@@ -81,8 +82,6 @@
       ]
     }) }}
 
-    <div class="govuk-body">
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
