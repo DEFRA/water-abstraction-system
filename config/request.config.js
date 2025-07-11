@@ -18,7 +18,7 @@ const config = {
   // Note - Why lowercase? It's just the convention for http_proxy, https_proxy
   // and no_proxy. ¯\_(ツ)_/¯ https://unix.stackexchange.com/a/212972
   httpProxy: process.env.http_proxy,
-  htmlToPdfTimeout: parseInt(process.env.HTML_TO_PDF_TIMEOUT) || 20000
+  gotenbergTimeout: parseInt(process.env.GOTENBERG_TIMEOUT) || 20000
 }
 
 module.exports = config
