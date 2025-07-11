@@ -5,24 +5,9 @@ const CheckController = require('../controllers/check.controller.js')
 const routes = [
   {
     method: 'POST',
-    path: '/check/flag-for-billing',
+    path: '/check/placeholder',
     options: {
-      handler: CheckController.flagForBilling,
-      app: {
-        excludeFromProd: true,
-        plainOutput: true
-      },
-      auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/check/licence-return-logs/{licenceId}',
-    options: {
-      handler: CheckController.licenceReturnLogs,
+      handler: CheckController.placeholder,
       app: {
         excludeFromProd: true,
         plainOutput: true

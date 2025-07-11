@@ -27,11 +27,11 @@ describe('Address - Manual Presenter', () => {
       expect(result).to.equal({
         addressLine1: null,
         addressLine2: null,
+        addressLine3: null,
+        addressLine4: null,
         backLink: `/system/address/${session.id}/postcode`,
-        county: null,
         pageTitle: 'Enter the address',
-        postcode: null,
-        town: null
+        postcode: null
       })
     })
   })
@@ -42,10 +42,10 @@ describe('Address - Manual Presenter', () => {
         id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
         address: {
           uprn: '123456789',
-          addressLine1: '1 Fake appartment',
+          addressLine1: '1 Fake Farm',
           addressLine2: '1 Fake street',
-          town: 'Fake Town',
-          county: 'Fake County',
+          addressLine3: 'Fake Village',
+          addressLine4: 'Fake City',
           postcode: 'SW1A 1AA'
         }
       }
@@ -54,13 +54,13 @@ describe('Address - Manual Presenter', () => {
       const result = ManualPresenter.go(session)
 
       expect(result).to.equal({
-        addressLine1: '1 Fake appartment',
+        addressLine1: '1 Fake Farm',
         addressLine2: '1 Fake street',
+        addressLine3: 'Fake Village',
+        addressLine4: 'Fake City',
         backLink: `/system/address/${session.id}/select`,
-        county: 'Fake County',
         pageTitle: 'Enter the address',
-        postcode: 'SW1A 1AA',
-        town: 'Fake Town'
+        postcode: 'SW1A 1AA'
       })
     })
   })

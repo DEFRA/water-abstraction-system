@@ -59,13 +59,20 @@ async function go(sessionId, payload) {
 
 async function _save(session, address) {
   session.address.uprn = address.uprn
-  session.address.addressLine1 = address.organisation
-  session.address.addressLine2 = address.premises
-  session.address.addressLine3 = address.street_address
-  session.address.addressLine4 = address.locality
-  session.address.town = address.city
+
+  const premiseseStreetAddress = address.premises + ' ' + address.street_address
+
+  if (!address.organisation) {
+    session.address.addressLine1 = premiseseStreetAddress.trim()
+    session.address.addressLine2 = null
+  } else {
+    session.address.addressLine1 = address.organisation
+    session.address.addressLine2 = premiseseStreetAddress.trim()
+  }
+
+  session.address.addressLine3 = address.locality ?? null
+  session.address.addressLine4 = address.city
   session.address.postcode = address.postcode
-  session.address.country = address.country
 
   return session.$update()
 }

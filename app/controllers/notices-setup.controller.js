@@ -203,9 +203,12 @@ async function viewReturnsForPaperForms(request, h) {
 }
 
 async function setup(request, h) {
-  const { journey, monitoringStationId } = request.query
+  const {
+    params: { journey },
+    query: { noticeType, monitoringStationId }
+  } = request
 
-  const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
+  const { sessionId, path } = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
