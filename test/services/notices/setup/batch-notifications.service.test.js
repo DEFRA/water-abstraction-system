@@ -353,7 +353,7 @@ describe('Notices - Setup - Batch notifications service', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alert"', () => {
+  describe('when the journey is "alerts"', () => {
     let licenceMonitoringStations
 
     beforeEach(async () => {
@@ -387,7 +387,7 @@ describe('Notices - Setup - Batch notifications service', () => {
         ...abstractionAlertSessionData,
         alertEmailAddress: 'luke.skywalker@rebelmail.test',
         alertType: 'reduce',
-        journey: 'abstraction-alert',
+        journey: 'alerts',
         name: 'Water abstraction alert',
         referenceCode: 'WAA-123',
         relevantLicenceMonitoringStations,

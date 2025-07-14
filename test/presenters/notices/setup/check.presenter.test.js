@@ -369,10 +369,10 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('when the journey is for "abstraction-alert"', () => {
+    describe('when the journey is for "alerts"', () => {
       beforeEach(() => {
-        session.journey = 'abstraction-alert'
-        session.noticeType = 'abstraction-alert'
+        session.journey = 'alerts'
+        session.noticeType = 'abstractionAlerts'
         session.referenceCode = 'WAA-123'
         session.monitoringStationId = '345'
       })
@@ -385,7 +385,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       describe('the "links" property', () => {
-        it('should return the links for "abstraction-alert"', () => {
+        it('should return the links for "alerts"', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
             back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
@@ -455,9 +455,9 @@ describe('Notices - Setup - Check presenter', () => {
         session.journey = 'adhoc'
       })
 
-      describe('and the "noticeType" is "paper-forms"', () => {
+      describe('and the "noticeType" is "returnForms"', () => {
         beforeEach(() => {
-          session.noticeType = 'paper-forms'
+          session.noticeType = 'returnForms'
         })
 
         describe('the "displayPreviewLink" property', () => {

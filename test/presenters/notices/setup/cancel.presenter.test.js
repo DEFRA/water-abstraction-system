@@ -53,11 +53,11 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alerts"', () => {
+  describe('when the journey is "alerts"', () => {
     beforeEach(() => {
       session = {
         alertType: 'stop',
-        journey: 'abstraction-alert',
+        journey: 'alerts',
         monitoringStationId: '123',
         referenceCode: 'WAA-1234'
       }
@@ -73,58 +73,8 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
   })
 
-  describe('and the journey is "invitations"', () => {
-    beforeEach(() => {
-      session = {
-        determinedReturnsPeriod: {
-          name: 'quarterOne',
-          dueDate: '2025-07-28',
-          endDate: '2025-06-30',
-          summer: 'false',
-          startDate: '2025-04-01'
-        },
-        journey: 'invitations',
-        referenceCode
-      }
-    })
-
-    it('correctly formats the summary list', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.summaryList).to.equal({
-        text: 'Returns period',
-        value: 'Quarterly 1 April 2025 to 30 June 2025'
-      })
-    })
-  })
-
-  describe('and the journey is "reminders"', () => {
-    beforeEach(() => {
-      session = {
-        determinedReturnsPeriod: {
-          name: 'quarterOne',
-          dueDate: '2025-07-28',
-          endDate: '2025-06-30',
-          summer: 'false',
-          startDate: '2025-04-01'
-        },
-        journey: 'reminders',
-        referenceCode
-      }
-    })
-
-    it('correctly formats the summary list', () => {
-      const result = CancelPresenter.go(session)
-
-      expect(result.summaryList).to.equal({
-        text: 'Returns period',
-        value: 'Quarterly 1 April 2025 to 30 June 2025'
-      })
-    })
-  })
-
-  describe('when the journey has a "returnsPeriod"', () => {
-    describe('and the "returnsPeriod" is for a "quarter"', () => {
+  describe('when the journey is "standard"', () => {
+    describe('and the "noticeType" is "invitations"', () => {
       beforeEach(() => {
         session = {
           determinedReturnsPeriod: {
@@ -149,17 +99,17 @@ describe('Notices - Setup - Cancel presenter', () => {
       })
     })
 
-    describe('and the "returnsPeriod" is "summer"', () => {
+    describe('and the "noticeType" is "reminders"', () => {
       beforeEach(() => {
         session = {
           determinedReturnsPeriod: {
-            name: 'summer',
-            dueDate: '2025-11-28',
-            endDate: '2025-10-31',
-            summer: true,
-            startDate: '2024-11-01'
+            name: 'quarterOne',
+            dueDate: '2025-07-28',
+            endDate: '2025-06-30',
+            summer: 'false',
+            startDate: '2025-04-01'
           },
-          journey: 'invitations',
+          journey: 'reminders',
           referenceCode
         }
       })
@@ -169,32 +119,84 @@ describe('Notices - Setup - Cancel presenter', () => {
 
         expect(result.summaryList).to.equal({
           text: 'Returns period',
-          value: 'Summer annual 1 November 2024 to 31 October 2025'
+          value: 'Quarterly 1 April 2025 to 30 June 2025'
         })
       })
     })
 
-    describe('and the "returnsPeriod" is "allYear"', () => {
-      beforeEach(() => {
-        session = {
-          determinedReturnsPeriod: {
-            name: 'allYear',
-            dueDate: '2025-04-28',
-            endDate: '2025-03-31',
-            summer: true,
-            startDate: '2024-04-01'
-          },
-          journey: 'invitations',
-          referenceCode
-        }
+    describe('when the journey has a "returnsPeriod"', () => {
+      describe('and the "returnsPeriod" is for a "quarter"', () => {
+        beforeEach(() => {
+          session = {
+            determinedReturnsPeriod: {
+              name: 'quarterOne',
+              dueDate: '2025-07-28',
+              endDate: '2025-06-30',
+              summer: 'false',
+              startDate: '2025-04-01'
+            },
+            journey: 'invitations',
+            referenceCode
+          }
+        })
+
+        it('correctly formats the summary list', () => {
+          const result = CancelPresenter.go(session)
+
+          expect(result.summaryList).to.equal({
+            text: 'Returns period',
+            value: 'Quarterly 1 April 2025 to 30 June 2025'
+          })
+        })
       })
 
-      it('correctly formats the summary list', () => {
-        const result = CancelPresenter.go(session)
+      describe('and the "returnsPeriod" is "summer"', () => {
+        beforeEach(() => {
+          session = {
+            determinedReturnsPeriod: {
+              name: 'summer',
+              dueDate: '2025-11-28',
+              endDate: '2025-10-31',
+              summer: true,
+              startDate: '2024-11-01'
+            },
+            journey: 'invitations',
+            referenceCode
+          }
+        })
 
-        expect(result.summaryList).to.equal({
-          text: 'Returns period',
-          value: 'Winter and all year annual 1 April 2024 to 31 March 2025'
+        it('correctly formats the summary list', () => {
+          const result = CancelPresenter.go(session)
+
+          expect(result.summaryList).to.equal({
+            text: 'Returns period',
+            value: 'Summer annual 1 November 2024 to 31 October 2025'
+          })
+        })
+      })
+
+      describe('and the "returnsPeriod" is "allYear"', () => {
+        beforeEach(() => {
+          session = {
+            determinedReturnsPeriod: {
+              name: 'allYear',
+              dueDate: '2025-04-28',
+              endDate: '2025-03-31',
+              summer: true,
+              startDate: '2024-04-01'
+            },
+            journey: 'invitations',
+            referenceCode
+          }
+        })
+
+        it('correctly formats the summary list', () => {
+          const result = CancelPresenter.go(session)
+
+          expect(result.summaryList).to.equal({
+            text: 'Returns period',
+            value: 'Winter and all year annual 1 April 2024 to 31 March 2025'
+          })
         })
       })
     })

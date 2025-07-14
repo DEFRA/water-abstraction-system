@@ -82,12 +82,12 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
     })
 
-    describe('when the "notificationType" is "abstraction-alert"', () => {
+    describe('when the journey is "alerts"', () => {
       let monitoringStationData
 
       beforeEach(() => {
-        journey = 'abstraction-alert'
-        noticeType = 'abstraction-alert'
+        journey = 'alerts'
+        noticeType = 'abstractionAlerts'
         monitoringStationId = '1234'
 
         monitoringStationData = AbstractionAlertSessionData.get()
@@ -101,9 +101,9 @@ describe('Notices - Setup - Initiate Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
         expect(matchingSession.data).to.equal({
-          journey: 'abstraction-alert',
+          journey: 'alerts',
           name: 'Water abstraction alert',
-          noticeType: 'abstraction-alert',
+          noticeType: 'abstractionAlerts',
           notificationType: 'Abstraction alert',
           referenceCode: matchingSession.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts',

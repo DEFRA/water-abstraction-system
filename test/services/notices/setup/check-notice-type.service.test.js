@@ -39,6 +39,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       const result = await CheckNoticeTypeService.go(session.id, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         continueButton: {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Continue to check recipients'

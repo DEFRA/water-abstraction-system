@@ -546,4 +546,203 @@ describe('Notices - Setup - Notifications Presenter', () => {
       })
     })
   })
+
+  describe('when the journey is for "adhoc"', () => {
+    describe('when the "noticeType" is for "invitations"', () => {
+      beforeEach(() => {
+        session.journey = 'adhoc'
+        session.noticeType = 'invitations'
+      })
+
+      describe('when the notifications is an email', () => {
+        describe('and the "contact_type" is for a "Primary user"', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.primaryUser]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.primaryUser.licence_refs}"]`,
+                messageRef: 'returns_invitation_primary_user_email',
+                messageType: 'email',
+                personalisation: {
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                recipient: 'primary.user@important.com',
+                reference: 'TEST-123',
+                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
+              }
+            ])
+          })
+        })
+
+        describe('and the "contact_type" is for a "Returns Agent"', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.returnsAgent]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.returnsAgent.licence_refs}"]`,
+                messageRef: 'returns_invitation_returns_agent_email',
+                messageType: 'email',
+                personalisation: {
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                recipient: 'returns.agent@important.com',
+                reference: 'TEST-123',
+                templateId: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94'
+              }
+            ])
+          })
+        })
+
+        describe('and the "contact_type" is for "both"', () => {
+          beforeEach(() => {
+            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.primaryUser.licence_refs}"]`,
+                messageRef: 'returns_invitation_primary_user_email',
+                messageType: 'email',
+                personalisation: {
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                recipient: 'primary.user@important.com',
+                reference: 'TEST-123',
+                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
+              }
+            ])
+          })
+        })
+      })
+
+      describe('when the notifications is a letter', () => {
+        describe('and the "contact_type" is for a "Licence Holder"', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.licenceHolder]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.licenceHolder.licence_refs}"]`,
+                messageRef: 'returns_invitation_licence_holder_letter',
+                messageType: 'letter',
+                personalisation: {
+                  address_line_1: 'Mr H J Licence holder',
+                  address_line_2: '1',
+                  address_line_3: 'Privet Drive',
+                  address_line_4: 'Little Whinging',
+                  address_line_5: 'Surrey',
+                  address_line_6: 'WD25 7LR',
+                  name: 'Mr H J Licence holder',
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                reference: 'TEST-123',
+                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+              }
+            ])
+          })
+        })
+
+        describe('and the "contact_type" is for a "Returns To"', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.returnsTo]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.returnsTo.licence_refs}"]`,
+                messageRef: 'returns_invitation_returns_to_letter',
+                messageType: 'letter',
+                personalisation: {
+                  address_line_1: 'Mr H J Returns to',
+                  address_line_2: '2',
+                  address_line_3: 'Privet Drive',
+                  address_line_4: 'Little Whinging',
+                  address_line_5: 'Surrey',
+                  address_line_6: 'WD25 7LR',
+                  name: 'Mr H J Returns to',
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                reference: 'TEST-123',
+                templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
+              }
+            ])
+          })
+        })
+
+        describe('and the "contact_type" is for "both"', () => {
+          beforeEach(() => {
+            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+          })
+
+          it('correctly transforms the recipient to a notification', () => {
+            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result).to.equal([
+              {
+                createdAt: '2025-01-01T00:00:00.000Z',
+                eventId,
+                licences: `["${recipients.licenceHolder.licence_refs}"]`,
+                messageRef: 'returns_invitation_licence_holder_letter',
+                messageType: 'letter',
+                personalisation: {
+                  address_line_1: 'Mr H J Licence holder',
+                  address_line_2: '1',
+                  address_line_3: 'Privet Drive',
+                  address_line_4: 'Little Whinging',
+                  address_line_5: 'Surrey',
+                  address_line_6: 'WD25 7LR',
+                  name: 'Mr H J Licence holder',
+                  periodEndDate: '31 March 2025',
+                  periodStartDate: '1 January 2025',
+                  returnDueDate: '28 April 2025'
+                },
+                reference: 'TEST-123',
+                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+              }
+            ])
+          })
+        })
+      })
+    })
+  })
 })

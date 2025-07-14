@@ -3,7 +3,7 @@
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
- * @module FullConditionService
+ * @module FetchFullConditionService
  */
 
 const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
@@ -30,7 +30,11 @@ async function go(licenceId) {
         'licenceVersionPurposeConditions.param1',
         'licenceVersionPurposeConditions.param2',
         'licenceVersionPurposeConditions.createdAt',
-        'licenceVersionPurposeConditionType.displayTitle'
+        'licenceVersionPurposeConditionType.displayTitle',
+        'licenceVersionPurpose.abstractionPeriodStartDay',
+        'licenceVersionPurpose.abstractionPeriodStartMonth',
+        'licenceVersionPurpose.abstractionPeriodEndDay',
+        'licenceVersionPurpose.abstractionPeriodEndMonth'
       )
       .joinRelated('[licenceVersionPurposeConditionType, licenceVersionPurpose.licenceVersion.licence]')
       .where('licenceVersionPurpose:licenceVersion.licenceId', licenceId)
