@@ -10,7 +10,7 @@ const AlertThresholdsService = require('../services/notices/setup/abstraction-al
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
-const CheckAlertService = require('../services/notices/setup/check-alert.service.js')
+const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -44,7 +44,7 @@ async function checkAlert(request, h) {
 
   const pageData = await CheckAlertService.go(contactHashId, sessionId)
 
-  return h.view('notices/setup/check-alert.njk', pageData)
+  return h.view('notices/setup/preview/check-alert.njk', pageData)
 }
 
 async function downloadRecipients(request, h) {

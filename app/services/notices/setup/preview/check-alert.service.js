@@ -6,10 +6,10 @@
  * @module CheckAlertService
  */
 
-const CheckAlertPresenter = require('../../../presenters/notices/setup/check-alert.presenter.js')
-const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const CheckAlertPresenter = require('../../../../presenters/notices/setup/preview/check-alert.presenter.js')
+const DetermineRecipientsService = require('../determine-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../fetch-abstraction-alert-recipients.service.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
