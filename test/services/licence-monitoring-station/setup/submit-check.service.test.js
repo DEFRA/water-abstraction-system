@@ -76,7 +76,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Success', text: `Tag for licence ${session.data.licenceRef} added` })
+      expect(notification).to.equal({ title: 'Success', text: `Tag for licence ${session.licenceRef} added` })
     })
 
     describe('and the session unit is a flow unit', () => {
@@ -182,7 +182,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.licenceVersionPurposeConditionId).to.equal(session.data.conditionId)
+        expect(result.licenceVersionPurposeConditionId).to.equal(session.conditionId)
       })
 
       it('does not persist abstraction period', async () => {
