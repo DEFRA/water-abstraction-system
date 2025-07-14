@@ -27,7 +27,7 @@ const NoticeTypeService = require('../../app/services/notices/setup/notice-type.
 const PreviewService = require('../../app/services/notices/setup/preview.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsForPaperFormsService = require('../../app/services/notices/setup/returns-for-paper-forms.service.js')
+const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -39,7 +39,7 @@ const SubmitCheckService = require('../../app/services/notices/setup/submit-chec
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsForPaperFormsService = require('../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
+const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 
 // For running our service
@@ -942,12 +942,12 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/returns-for-paper-forms', () => {
+  describe('notices/setup/return-forms', () => {
     describe('GET', () => {
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/returns-for-paper-forms`,
+          url: basePath + `/${session.id}/return-forms`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -958,7 +958,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnsForPaperFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          Sinon.stub(ReturnFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
         })
 
         it('returns the page successfully', async () => {
@@ -975,10 +975,10 @@ describe('Notices Setup controller', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+            Sinon.stub(SubmitReturnFormsService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -991,10 +991,10 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+            Sinon.stub(SubmitReturnFormsService, 'go').returns({
               pageTile: 'Select the returns for the paper forms'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
           })
 
           it('redirects the to the next page', async () => {
