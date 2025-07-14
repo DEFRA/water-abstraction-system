@@ -455,9 +455,9 @@ describe('Notices - Setup - Check presenter', () => {
         session.journey = 'adhoc'
       })
 
-      describe('and the "noticeType" is "paper-forms"', () => {
+      describe('and the "noticeType" is "returnForms"', () => {
         beforeEach(() => {
-          session.noticeType = 'paper-forms'
+          session.noticeType = 'returnForms'
         })
 
         describe('the "displayPreviewLink" property', () => {
