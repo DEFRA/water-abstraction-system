@@ -16,6 +16,7 @@ const AlertThresholdsService = require('../../app/services/notices/setup/abstrac
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
+const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
@@ -24,7 +25,7 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
-const PreviewService = require('../../app/services/notices/setup/preview.service.js')
+const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
@@ -713,7 +714,7 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/{sessionId}/preview', () => {
+  describe('notices/setup/{sessionId}/preview/{contactHashId}', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
@@ -738,6 +739,67 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Preview notice')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+      const licenceMonitoringStationId = '551087bc-68b4-42a8-9e04-ac173eaec3f8'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(PreviewService, 'go').resolves({
+          pageTitle: 'Preview notice'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Preview notice')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/check-alert', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(CheckAlert, 'go').resolves({
+          pageTitle: 'Check the recipient previews'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check the recipient previews')
         })
       })
     })
