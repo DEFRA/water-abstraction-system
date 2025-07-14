@@ -81,7 +81,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
+      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -134,7 +134,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
+      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -187,7 +187,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
+      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
     })
@@ -287,7 +287,7 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
+        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
@@ -318,7 +318,7 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.htmlToPdf)
+        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
