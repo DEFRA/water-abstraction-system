@@ -40,7 +40,7 @@ describe('Session model', () => {
       it('adds nothing to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(Object.keys(result)).to.equal(['id', 'data', 'createdAt', 'updatedAt'])
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt'])
       })
     })
 
@@ -61,7 +61,7 @@ describe('Session model', () => {
       it('adds its properties to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(Object.keys(result)).to.equal(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
 
         expect(result.licence).to.equal({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
         expect(result.purposes).to.equal(['foo', 'bar'])
