@@ -31,7 +31,7 @@ async function go(contactHashId, licenceMonitoringStationId, sessionId) {
 
   const formattedData = await PreviewPresenter.go(
     contactHashId,
-    session.journey,
+    session.noticeType,
     licenceMonitoringStationId,
     notification,
     sessionId
@@ -46,7 +46,7 @@ async function go(contactHashId, licenceMonitoringStationId, sessionId) {
 function _notification(licenceMonitoringStationId, recipient, session) {
   let notification
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.noticeType === 'abstractionAlerts') {
     const unfilteredNotifications = AbstractionAlertsNotificationsPresenter.go(recipient, session)
 
     notification = unfilteredNotifications.filter((unfilteredNotification) => {
@@ -63,7 +63,7 @@ function _notification(licenceMonitoringStationId, recipient, session) {
 async function _recipient(contactHashId, session) {
   let recipientsData
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.noticeType === 'abstractionAlerts') {
     recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
   } else {
     recipientsData = await FetchRecipientsService.go(session)

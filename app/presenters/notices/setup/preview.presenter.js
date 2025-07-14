@@ -12,24 +12,24 @@ const { sentenceCase } = require('../../base.presenter.js')
  * Formats notification data ready for presenting in the preview notification page
  *
  * @param {string} contactHashId - The recipients unique identifier
- * @param {string} journey - The type of alert being sent
+ * @param {string} noticeType - The type of alert being sent
  * @param {string} licenceMonitoringStationId - The UUID of the licence monitoring station record. This is only
  * @param {object} notification - The data relating to the recipients notification
  * @param {string} sessionId - The UUID for returns notices session record
  *
  * @returns {Promise<object>} The data formatted for the preview template
  */
-async function go(contactHashId, journey, licenceMonitoringStationId, notification, sessionId) {
+async function go(contactHashId, noticeType, licenceMonitoringStationId, notification, sessionId) {
   const { messageRef, messageType, personalisation, reference, templateId } = notification
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : null,
-    backLink: _backLink(contactHashId, journey, sessionId),
+    backLink: _backLink(contactHashId, noticeType, sessionId),
     caption: `Notice ${reference}`,
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
     pageTitle: sentenceCase(messageRef.replace(/_/g, ' ')),
-    refreshPageLink: _refreshPageLink(contactHashId, journey, licenceMonitoringStationId, sessionId)
+    refreshPageLink: _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId)
   }
 }
 
@@ -48,8 +48,8 @@ function _address(personalisation) {
   })
 }
 
-function _backLink(contactHashId, journey, sessionId) {
-  if (journey === 'abstraction-alert') {
+function _backLink(contactHashId, noticeType, sessionId) {
+  if (noticeType === 'abstractionAlerts') {
     return `/system/notices/setup/${sessionId}/preview/${contactHashId}/select-alert`
   }
 
@@ -66,10 +66,10 @@ async function _notifyPreview(personalisation, templateId) {
   }
 }
 
-function _refreshPageLink(contactHashId, journey, licenceMonitoringStationId, sessionId) {
+function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId) {
   const baseRefreshPageLink = `/system/notices/setup/${sessionId}/preview/${contactHashId}`
 
-  if (journey === 'abstraction-alert') {
+  if (noticeType === 'abstractionAlerts') {
     return `${baseRefreshPageLink}/alert/${licenceMonitoringStationId}`
   }
 
