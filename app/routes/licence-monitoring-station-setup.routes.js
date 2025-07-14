@@ -134,6 +134,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/licence-monitoring-station/setup/{sessionId}/check',
+    options: {
+      handler: LicenceMonitoringStationSetupController.check,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licence-monitoring-station/setup/{sessionId}/check',
+    options: {
+      handler: LicenceMonitoringStationSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['manage_gauging_station_licence_links']
+        }
+      }
+    }
   }
 ]
 
