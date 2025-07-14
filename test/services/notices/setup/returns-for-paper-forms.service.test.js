@@ -42,6 +42,7 @@ describe('Notices - Setup - Returns For Paper Forms service', () => {
       const result = await ReturnFormsService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/notice-type`,
         pageTitle: 'Select the returns for the paper forms',
         returns: [
