@@ -5,7 +5,7 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 const routes = [
   {
     method: 'GET',
-    path: '/notices/setup',
+    path: '/notices/setup/{journey}',
     options: {
       handler: NoticesSetupController.setup,
       auth: {
@@ -365,9 +365,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/return-forms',
     options: {
-      handler: NoticesSetupController.viewReturnsForPaperForms,
+      handler: NoticesSetupController.viewReturnForms,
       auth: {
         access: {
           scope: ['returns']
@@ -377,9 +377,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/return-forms',
     options: {
-      handler: NoticesSetupController.submitReturnsForPaperForms,
+      handler: NoticesSetupController.submitReturnForms,
       auth: {
         access: {
           scope: ['returns']

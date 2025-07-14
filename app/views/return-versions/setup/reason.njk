@@ -4,8 +4,9 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{ govukBackLink({
       text: 'Back',
       href: backLink
@@ -25,90 +26,90 @@
       }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: "reason",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
-          }
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "reason",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          text: 'Change to requirements for returns',
+          value: 'change-to-return-requirements',
+          checked: 'change-to-return-requirements' === reason
         },
-        items: [
-          {
-            text: 'Change to requirements for returns',
-            value: 'change-to-return-requirements',
-            checked: 'change-to-return-requirements' === reason
-          },
-          {
-            text: 'Change to special agreement',
-            value: 'change-to-special-agreement',
-            checked: 'change-to-special-agreement' === reason
-          },
-          {
-            text: 'Error correction',
-            value: 'error-correction',
-            checked: 'error-correction' === reason
-          },
-          {
-            text: 'Licence holder name or address change',
-            value: 'name-or-address-change',
-            checked: 'name-or-address-change' === reason
-          },
-          {
-            text: 'Licence transferred and now chargeable',
-            value: 'transfer-and-now-chargeable',
-            checked: 'transfer-and-now-chargeable' === reason
-          },
-          {
-            text: 'Limited extension of licence validity (LEV)',
-            value: 'extension-of-licence-validity',
-            checked: 'extension-of-licence-validity' === reason
-          },
-          {
-            text: 'Major change',
-            value: 'major-change',
-            checked: 'major-change' === reason
-          },
-          {
-            text: 'Minor change',
-            value: 'minor-change',
-            checked: 'minor-change' === reason
-          },
-          {
-            text: 'New licence in part succession or licence apportionment',
-            value: 'new-licence-in-part-succession-or-licence-apportionment',
-            checked: 'new-licence-in-part-succession-or-licence-apportionment' === reason
-          },
-          {
-            text: 'New licence',
-            value: 'new-licence',
-            checked: 'new-licence' === reason
-          },
-          {
-            text: 'New special agreement',
-            value: 'new-special-agreement',
-            checked: 'new-special-agreement' === reason
-          },
-          {
-            text: 'Succession or transfer of licence',
-            value: 'succession-or-transfer-of-licence',
-            checked: 'succession-or-transfer-of-licence' === reason
-          },
-          {
-            text: 'Succession to remainder licence or licence apportionment',
-            value: 'succession-to-remainder-licence-or-licence-apportionment',
-            checked: 'succession-to-remainder-licence-or-licence-apportionment' === reason
-          }
-        ]
-      }) }}
+        {
+          text: 'Change to special agreement',
+          value: 'change-to-special-agreement',
+          checked: 'change-to-special-agreement' === reason
+        },
+        {
+          text: 'Error correction',
+          value: 'error-correction',
+          checked: 'error-correction' === reason
+        },
+        {
+          text: 'Licence holder name or address change',
+          value: 'name-or-address-change',
+          checked: 'name-or-address-change' === reason
+        },
+        {
+          text: 'Licence transferred and now chargeable',
+          value: 'transfer-and-now-chargeable',
+          checked: 'transfer-and-now-chargeable' === reason
+        },
+        {
+          text: 'Limited extension of licence validity (LEV)',
+          value: 'extension-of-licence-validity',
+          checked: 'extension-of-licence-validity' === reason
+        },
+        {
+          text: 'Major change',
+          value: 'major-change',
+          checked: 'major-change' === reason
+        },
+        {
+          text: 'Minor change',
+          value: 'minor-change',
+          checked: 'minor-change' === reason
+        },
+        {
+          text: 'New licence in part succession or licence apportionment',
+          value: 'new-licence-in-part-succession-or-licence-apportionment',
+          checked: 'new-licence-in-part-succession-or-licence-apportionment' === reason
+        },
+        {
+          text: 'New licence',
+          value: 'new-licence',
+          checked: 'new-licence' === reason
+        },
+        {
+          text: 'New special agreement',
+          value: 'new-special-agreement',
+          checked: 'new-special-agreement' === reason
+        },
+        {
+          text: 'Succession or transfer of licence',
+          value: 'succession-or-transfer-of-licence',
+          checked: 'succession-or-transfer-of-licence' === reason
+        },
+        {
+          text: 'Succession to remainder licence or licence apportionment',
+          value: 'succession-to-remainder-licence-or-licence-apportionment',
+          checked: 'succession-to-remainder-licence-or-licence-apportionment' === reason
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

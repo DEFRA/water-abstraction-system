@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/return-forms` page
  *
- * @module ReturnsForPaperFormsValidator
+ * @module ReturnFormsValidator
  */
 
 const Joi = require('joi')
@@ -11,7 +11,7 @@ const Joi = require('joi')
 const errorMessage = 'Select the returns for the paper forms'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/return-forms` page
  *
  * @param {object} payload - The payload from the request to be validated
  *

@@ -5,6 +5,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block content %}
   {% if notification %}
     {{ govukNotificationBanner({
@@ -13,66 +15,63 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
-      {{ pageTitle }}
-    </h1>
-  </div>
+  {{ pageHeading(licenceRef, pageTitle) }}
 
-  <div class="govuk-!-margin-bottom-9">
-    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-    {{ govukSummaryList({
-      classes: 'govuk-!-margin-bottom-2',
-      rows: [
-        {
-          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-          key: {
-            text: "Start date"
-          },
-          value: {
-            html: '<span data-test="start-date">' + startDate + '</span>'
-          },
-          actions: {
-            items: [
-              {
-                html: '<span data-test="change-start-date">' + 'Change' + '</span>',
-                href: "/system/return-versions/setup/" + sessionId + "/start-date",
-                visuallyHiddenText: "the start date for the return requirement"
-              }
-            ]
-          }
+  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
+
+  {{ govukSummaryList({
+    classes: 'govuk-!-margin-bottom-2',
+    rows: [
+      {
+        classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+        key: {
+          text: "Start date"
         },
-        {
-          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-          key: {
-            text: "Reason"
-          },
-          value: {
-            html: '<span data-test="reason">' + reason + '</span>'
-          },
-          actions: {
-            items: [
-              {
-                html: '<span data-test="change-reason">' + 'Change' + '</span>',
-                href: reasonLink,
-                visuallyHiddenText: "the reason for the return requirement"
-              }
-            ]
-          }
+        value: {
+          html: '<span data-test="start-date">' + startDate + '</span>'
+        },
+        actions: {
+          items: [
+            {
+              attributes: { 'data-test': 'change-start-date' },
+              text: 'Change',
+              href: "/system/return-versions/setup/" + sessionId + "/start-date",
+              visuallyHiddenText: "the start date for the return requirement"
+            }
+          ]
         }
-      ]
-    }) }}
-    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-  </div>
+      },
+      {
+        classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+        key: {
+          text: "Reason"
+        },
+        value: {
+          html: '<span data-test="reason">' + reason + '</span>'
+        },
+        actions: {
+          items: [
+            {
+              attributes: { 'data-test': 'change-reason' },
+              text: 'Change',
+              href: reasonLink,
+              visuallyHiddenText: "the reason for the return requirement"
+            }
+          ]
+        }
+      }
+    ]
+  }) }}
 
-  <div class="govuk-!-margin-bottom-9">
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
-    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-    <div class="govuk-summary-list govuk-!-margin-bottom-1">
-      <p class="govuk-body">{{ note.text | escape | nl2br }}</p>
-      <span class="govuk-summary-list__actions">
+  <hr class="govuk-section-break govuk-!-margin-bottom-9 govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
+
+  <div class="govuk-summary-list govuk-!-margin-bottom-1">
+    <p>{{ note.text | escape | nl2br }}</p>
+    <span class="govuk-summary-list__actions">
       <ul class="govuk-summary-list__actions-list">
         {% for action in note.actions %}
           <li class="govuk-summary-list__actions-list-item">
@@ -83,9 +82,9 @@
         {% endfor %}
       </ul>
     </span>
-    </div>
-    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-9 govuk-section-break--visible">
 
   {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
@@ -137,179 +136,177 @@
         {% endset %}
 
         {% set rowIndex = loop.index0 %}
-        <div>
-            {{ govukSummaryList({
-              card: {
-                title: {
-                  text: requirement.siteDescription
-                },
-                attributes: {
-                  id: 'requirement-' + rowIndex
-                }
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: requirement.siteDescription
+            },
+            attributes: {
+              id: 'requirement-' + rowIndex
+            }
+          },
+          attributes: {
+            'data-test': 'requirement-' + rowIndex
+          },
+          classes: "govuk-summary-list--no-border",
+          rows: [
+            {
+              key: {
+                text: "Purpose"
               },
-              attributes: {
-                'data-test': 'requirement-' + rowIndex
+              value: {
+                html: '<span data-test="purposes-' + rowIndex + '">' + newLineArrayItems(requirement.purposes) + '</span>'
               },
-              classes: "govuk-summary-list--no-border",
-              rows: [
-                {
-                  key: {
-                    text: "Purpose"
-                  },
-                  value: {
-                    html: '<span data-test="purposes-' + rowIndex + '">' + newLineArrayItems(requirement.purposes) + '</span>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-purposes-' + rowIndex },
-                        href: "purpose/" + requirement.index ,
-                        visuallyHiddenText: "Purpose"
-                      }
-                    ]
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-purposes-' + rowIndex },
+                    href: "purpose/" + requirement.index ,
+                    visuallyHiddenText: "Purpose"
                   }
-                },
-                {
-                  key: {
-                    text: "Points"
-                  },
-                  value: {
-                    html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-points-' + rowIndex },
-                        href: "points/" + requirement.index ,
-                        visuallyHiddenText: "Point"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Points"
+              },
+              value: {
+                html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-points-' + rowIndex },
+                    href: "points/" + requirement.index ,
+                    visuallyHiddenText: "Point"
                   }
-                },
-                {
-                  key: {
-                    text: "Abstraction period"
-                  },
-                  value: {
-                    html: '<p data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-abstraction-period-' + rowIndex },
-                        href: "abstraction-period/" + requirement.index ,
-                        visuallyHiddenText: "Abstraction period"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Abstraction period"
+              },
+              value: {
+                html: '<span data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-abstraction-period-' + rowIndex },
+                    href: "abstraction-period/" + requirement.index ,
+                    visuallyHiddenText: "Abstraction period"
                   }
-                },
-                {
-                  key: {
-                    text: "Returns cycle"
-                  },
-                  value: {
-                    html: '<p data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-returns-cycle-' + rowIndex },
-                        href: "returns-cycle/" + requirement.index ,
-                        visuallyHiddenText: "Returns cycle"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Returns cycle"
+              },
+              value: {
+                html: '<span data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-returns-cycle-' + rowIndex },
+                    href: "returns-cycle/" + requirement.index ,
+                    visuallyHiddenText: "Returns cycle"
                   }
-                },
-                {
-                  key: {
-                    text: "Site description"
-                  },
-                  value: {
-                    html: '<p data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-site-description-' + rowIndex },
-                        href: "site-description/" + requirement.index ,
-                        visuallyHiddenText: "Site description"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Site description"
+              },
+              value: {
+                html: '<span data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-site-description-' + rowIndex },
+                    href: "site-description/" + requirement.index ,
+                    visuallyHiddenText: "Site description"
                   }
-                },
-                {
-                  key: {
-                    text: "Collection"
-                  },
-                  value: {
-                    html: '<p data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-frequency-collected-' + rowIndex },
-                        href: "frequency-collected/" + requirement.index ,
-                        visuallyHiddenText: "Collection"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Collection"
+              },
+              value: {
+                html: '<span data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-frequency-collected-' + rowIndex },
+                    href: "frequency-collected/" + requirement.index ,
+                    visuallyHiddenText: "Collection"
                   }
-                },
-                {
-                  key: {
-                    text: "Reporting"
-                  },
-                  value: {
-                    html: '<p data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-frequency-reported-' + rowIndex },
-                        href: "frequency-reported/" + requirement.index ,
-                        visuallyHiddenText: "Reporting"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Reporting"
+              },
+              value: {
+                html: '<span data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-frequency-reported-' + rowIndex },
+                    href: "frequency-reported/" + requirement.index ,
+                    visuallyHiddenText: "Reporting"
                   }
-                },
-                {
-                  key: {
-                    text: "Agreements exceptions"
-                  },
-                  value: {
-                    html: '<p data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</p>'
-                  },
-                  actions: {
-                    items: [
-                      {
-                        text: "Change",
-                        attributes: { 'data-test': 'change-agreements-exceptions-' + rowIndex },
-                        href: "agreements-exceptions/" + requirement.index ,
-                        visuallyHiddenText: "Agreements exception"
-                      }
-                    ]
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Agreements exceptions"
+              },
+              value: {
+                html: '<span data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</span>'
+              },
+              actions: {
+                items: [
+                  {
+                    text: "Change",
+                    attributes: { 'data-test': 'change-agreements-exceptions-' + rowIndex },
+                    href: "agreements-exceptions/" + requirement.index ,
+                    visuallyHiddenText: "Agreements exception"
                   }
-                },
-                {
-                  key: {
-                  html:  govukButton({
-                    text: "Remove requirement",
-                    classes: "govuk-button--secondary" ,
-                    attributes: { 'data-test': 'remove-' + rowIndex },
-                    preventDoubleClick: true,
-                    href: "/system/return-versions/setup/" + sessionId + "/remove/" + requirement.index
-                  }) if requirements.length >= 2
-                }
-                }
-              ]
-            }) }}
-        </div>
+                ]
+              }
+            },
+            {
+              key: {
+              html:  govukButton({
+                text: "Remove requirement",
+                classes: "govuk-button--secondary" ,
+                attributes: { 'data-test': 'remove-' + rowIndex },
+                preventDoubleClick: true,
+                href: "/system/return-versions/setup/" + sessionId + "/remove/" + requirement.index
+              }) if requirements.length >= 2
+            }
+            }
+          ]
+        }) }}
       {% endfor %}
     </div>
   {% endif %}
@@ -317,69 +314,65 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div class="govuk-body">
-      {% if returnsRequired %}
-        {{ govukSummaryList({
-          classes: 'govuk-!-margin-bottom-10',
-          rows: [
-            {
-              classes: 'govuk-summary-list',
-              key: {
-                text: 'Additional submission options',
-                classes: "govuk-heading-m govuk-!-width-one-half"
-              },
-              value: {
-                text: ''
-              },
-              actions: {
-                items: [
-                  {
-                    html: '<span data-test="change-additional-submission-options">' + 'Change' + '</span>',
-                    href: "additional-submission-options"
-                  }
-                ]
-              }
+    {% if returnsRequired %}
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-10',
+        rows: [
+          {
+            classes: 'govuk-summary-list',
+            key: {
+              text: 'Additional submission options',
+              classes: "govuk-heading-m govuk-!-width-one-half"
             },
-            {
-              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-              key: {
-                text: 'Multiple upload',
-                classes: "govuk-body "
-              },
-              value: {
-                text: 'Yes' if multipleUpload else "No"
-              }
+            value: {
+              text: ''
             },
-            {
-              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-              key: {
-              text: 'Quarterly return submissions',
-              classes: "govuk-body "
-            },
-              value: {
-              text: 'Yes' if quarterlyReturns else "No"
+            actions: {
+              items: [
+                {
+                  html: '<span data-test="change-additional-submission-options">' + 'Change' + '</span>',
+                  href: "additional-submission-options"
+                }
+              ]
             }
-            }if quarterlyReturnSubmissions
-          ]
-        }) }}
-        {% else %}
-          <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
-      {% endif %}
-
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-      {{ govukButton({
-        text: "Approve returns requirements",
-        classes: "govuk-!-margin-right-6",
-        preventDoubleClick: true
+          },
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: 'Multiple upload'
+            },
+            value: {
+              text: 'Yes' if multipleUpload else "No"
+            }
+          },
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+            text: 'Quarterly return submissions'
+          },
+            value: {
+            text: 'Yes' if quarterlyReturns else "No"
+          }
+          }if quarterlyReturnSubmissions
+        ]
       }) }}
+      {% else %}
+        <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+    {% endif %}
 
-      {{ govukButton({
-        text: "Cancel return requirements",
-        classes: "govuk-button--secondary",
-        preventDoubleClick: true,
-        href: "/system/return-versions/setup/" + sessionId + "/cancel"
-      }) }}
-    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ govukButton({
+      text: "Approve returns requirements",
+      classes: "govuk-!-margin-right-6",
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Cancel return requirements",
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true,
+      href: "/system/return-versions/setup/" + sessionId + "/cancel"
+    }) }}
   </form>
 {% endblock %}

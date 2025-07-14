@@ -32,7 +32,7 @@ describe('Notice Type Presenter', () => {
           {
             checked: false,
             text: 'Submit using a paper form invitation',
-            value: 'paper-forms'
+            value: 'returnForms'
           }
         ],
         pageTitle: 'Select the notice type'
@@ -57,15 +57,15 @@ describe('Notice Type Presenter', () => {
             {
               checked: false,
               text: 'Submit using a paper form invitation',
-              value: 'paper-forms'
+              value: 'returnForms'
             }
           ])
         })
       })
 
-      describe('and the selected notice type was "paper-forms"', () => {
+      describe('and the selected notice type was "returnForms"', () => {
         beforeEach(() => {
-          session.noticeType = 'paper-forms'
+          session.noticeType = 'returnForms'
         })
 
         it('returns the paper invitation checked', () => {
@@ -80,7 +80,7 @@ describe('Notice Type Presenter', () => {
             {
               checked: true,
               text: 'Submit using a paper form invitation',
-              value: 'paper-forms'
+              value: 'returnForms'
             }
           ])
         })

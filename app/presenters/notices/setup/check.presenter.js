@@ -9,8 +9,8 @@ const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
-  'abstraction-alert': 'Abstraction alerts',
-  'paper-forms': 'Paper invitations',
+  abstractionAlerts: 'Abstraction alerts',
+  returnForms: 'Paper invitations',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
@@ -26,15 +26,15 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { id: sessionId, journey, referenceCode } = session
+  const { noticeType, referenceCode } = session
 
   return {
     defaultPageSize,
-    displayPreviewLink: journey !== 'paper-forms',
+    displayPreviewLink: noticeType !== 'returnForms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
-    readyToSend: `${NOTIFICATION_TYPES[journey]} are ready to send.`,
-    recipients: _recipients(journey, page, recipients, sessionId),
+    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
+    recipients: _recipients(noticeType, page, recipients, session.id),
     recipientsAmount: recipients.length,
     referenceCode
   }
@@ -59,12 +59,12 @@ function _contact(recipient) {
   return [name, ...address]
 }
 
-function _formatRecipients(journey, recipients, sessionId) {
+function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
     const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
 
     // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-    const previewLink = journey === 'abstraction-alert' ? `${basePreviewLink}/select-alert` : basePreviewLink
+    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/select-alert` : basePreviewLink
 
     return {
       contact: _contact(recipient),
@@ -83,7 +83,7 @@ function _links(session) {
 
   if (licenceRef) {
     back = `/system/notices/setup/${id}/check-notice-type`
-  } else if (journey === 'abstraction-alert') {
+  } else if (journey === 'alerts') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
   } else {
     back = `/system/notices/setup/${id}/returns-period`
@@ -130,8 +130,8 @@ function _paginateRecipients(recipients, page) {
  *
  * @private
  */
-function _recipients(journey, page, recipients, sessionId) {
-  const formattedRecipients = _formatRecipients(journey, recipients, sessionId)
+function _recipients(noticeType, page, recipients, sessionId) {
+  const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId)
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)

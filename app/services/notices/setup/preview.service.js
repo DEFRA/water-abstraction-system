@@ -44,8 +44,6 @@ async function go(contactHashId, licenceMonitoringStationId, sessionId) {
 }
 
 function _notification(licenceMonitoringStationId, recipient, session) {
-  const { determinedReturnsPeriod, referenceCode, journey } = session
-
   let notification
 
   if (session.journey === 'abstraction-alert') {
@@ -55,7 +53,7 @@ function _notification(licenceMonitoringStationId, recipient, session) {
       return unfilteredNotification.personalisation.licenceMonitoringStationId === licenceMonitoringStationId
     })
   } else {
-    notification = NotificationsPresenter.go(recipient, determinedReturnsPeriod, referenceCode, journey)
+    notification = NotificationsPresenter.go(recipient, session)
   }
 
   // The `notifications` array will always only contain one record so we return it as an object rather than an array
