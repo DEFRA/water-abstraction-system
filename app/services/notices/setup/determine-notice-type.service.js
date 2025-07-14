@@ -32,7 +32,7 @@ const NOTICE_TYPES = {
     subType: 'returnInvitation',
     notificationType: 'Returns invitation'
   },
-  'paper-forms': {
+  returnForms: {
     name: 'Paper returns',
     prefix: 'PRTF-',
     subType: 'paperReturnForms',

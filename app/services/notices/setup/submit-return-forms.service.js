@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/return-forms` page
  *
- * @module SubmitReturnsForPaperFormsService
+ * @module SubmitReturnFormsService
  */
 
 const GeneralLib = require('../../../lib/general.lib.js')
-const ReturnsForPaperFormsPresenter = require('../../../presenters/notices/setup/returns-for-paper-forms.presenter.js')
-const ReturnsForPaperFormsValidator = require('../../../validators/notices/setup/returns-for-paper-forms.validator.js')
+const ReturnFormsPresenter = require('../../../presenters/notices/setup/return-forms.presenter.js')
+const ReturnFormsValidator = require('../../../validators/notices/setup/return-forms.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/returns-for-paper-forms` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/return-forms` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -39,7 +39,7 @@ async function go(sessionId, payload, yar) {
 
   session.selectedReturns = []
 
-  const pageData = ReturnsForPaperFormsPresenter.go(session)
+  const pageData = ReturnFormsPresenter.go(session)
 
   return {
     error: validationResult,
@@ -93,7 +93,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReturnsForPaperFormsValidator.go(payload)
+  const validation = ReturnFormsValidator.go(payload)
 
   if (!validation.error) {
     return null
