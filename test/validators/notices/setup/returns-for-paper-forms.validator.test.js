@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ReturnsForPaperFormsValidator = require('../../../../app/validators/notices/setup/returns-for-paper-forms.validator.js')
+const ReturnFormsValidator = require('../../../../app/validators/notices/setup/return-forms.validator.js')
 
 describe('Returns For Paper Forms Validator', () => {
   let payload
@@ -19,7 +19,7 @@ describe('Returns For Paper Forms Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ReturnsForPaperFormsValidator.go(payload)
+      const result = ReturnFormsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,7 +32,7 @@ describe('Returns For Paper Forms Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ReturnsForPaperFormsValidator.go(payload)
+      const result = ReturnFormsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
