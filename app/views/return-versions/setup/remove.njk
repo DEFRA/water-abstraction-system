@@ -2,8 +2,9 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -12,24 +13,14 @@
   }}
 {% endblock %}
 
-{# Main heading #}
 {% block content %}
-  <div class="govuk-body">
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-7">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(licenceRef, pageTitle) }}
+
+  <p class="govuk-!-margin-bottom-7 govuk-!-margin-top-7 govuk-!-font-weight-bold govuk-!-font-size-27">{{ returnRequirement }}</p>
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div class="govuk-body">
-      <p class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-27"> {{ returnRequirement }}</p>
-
-      <p class="govuk-!-margin-bottom-7"></p>
-      {{ govukButton({
-        text: "Remove",
-        preventDoubleClick: true
-      }) }}
-    </div>
+    {{ govukButton({ text: "Remove", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
