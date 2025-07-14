@@ -1,0 +1,92 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+  {# Main heading #}
+  <span class="govuk-heading-l govuk-!-margin-bottom-3">
+    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
+  </span>
+
+  {# Summary list #}
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Threshold" },
+          value: { text: threshold },
+          actions: {
+            items: [
+              {
+                href: links.threshold,
+                text: "Change",
+                visuallyHiddenText: "threshold"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Type" },
+          value: { text: type },
+          actions: {
+            items: [
+              {
+                href: links.type,
+                text: "Change",
+                visuallyHiddenText: "type"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Licence number" },
+          value: { text: licenceRef },
+          actions: {
+            items: [
+              {
+                href: links.licenceNumber,
+                text: "Change",
+                visuallyHiddenText: "licence number"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Licence condition" },
+          value: { text: condition },
+          actions: {
+            items: [
+              {
+                href: links.licenceCondition,
+                text: "Change",
+                visuallyHiddenText: "licence condition"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Abstraction period" },
+          value: { text: abstractionPeriod },
+          actions: {
+            items: [
+              {
+                href: links.abstractionPeriod,
+                text: "Change",
+                visuallyHiddenText: "abstraction period"
+              } if abstractionPeriodManuallyEntered
+            ]
+          }
+        }
+      ]
+    }) }}
+  </div>
+
+  <div>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

@@ -20,7 +20,7 @@ const FetchFullConditionService = require('../../../../app/services/licence-moni
 const CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(20)
 const NON_CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(19)
 
-describe('Fetch Full Condition Service', () => {
+describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () => {
   let licence
 
   beforeEach(async () => {

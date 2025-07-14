@@ -100,7 +100,7 @@ describe('Full Condition Presenter', () => {
             divider: 'or'
           },
           {
-            value: 'not_listed',
+            value: 'no_condition',
             text: 'The condition is not listed for this licence',
             checked: false
           }
@@ -121,7 +121,7 @@ describe('Full Condition Presenter', () => {
 
       describe('and the user previously selected the not listed', () => {
         beforeEach(() => {
-          session.conditionId = 'not_listed'
+          session.conditionId = 'no_condition'
         })
 
         it('marks the option as checked', () => {
