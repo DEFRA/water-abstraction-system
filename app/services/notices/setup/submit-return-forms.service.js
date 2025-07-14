@@ -42,6 +42,7 @@ async function go(sessionId, payload, yar) {
   const pageData = ReturnFormsPresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     error: validationResult,
     ...pageData
   }
