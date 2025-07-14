@@ -71,7 +71,7 @@ describe('Session model', () => {
   })
 
   // NOTE: this is also an Objection.js hook and not intended to be called directly
-  describe('$afterQuery', () => {
+  describe('$afterInsert', () => {
     describe('when "data" is empty', () => {
       it('adds nothing to the session instance properties', async () => {
         const result = await SessionHelper.add()
