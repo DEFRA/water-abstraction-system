@@ -50,7 +50,7 @@ function _address(personalisation) {
 
 function _backLink(contactHashId, noticeType, sessionId) {
   if (noticeType === 'abstractionAlerts') {
-    return `/system/notices/setup/${sessionId}/preview/${contactHashId}/select-alert`
+    return `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`
   }
 
   return `/system/notices/setup/${sessionId}/check`

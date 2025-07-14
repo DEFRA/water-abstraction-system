@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/select-alert` page
- * @module PreviewSelectAlertPresenter
+ * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
+ * @module CheckAlertPresenter
  */
 
 const DetermineRelevantLicenceMonitoringStationsService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
 const { determineRestrictionHeading, formatRestrictions } = require('../../monitoring-stations/base.presenter.js')
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/select-alert` page
+ * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
  *
  * @param {string} contactHashId - The recipients unique identifier
  * @param {Array} recipientLicenceRefs - The references of the licences associated with the recipient

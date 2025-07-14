@@ -10,6 +10,7 @@ const AlertThresholdsService = require('../services/notices/setup/abstraction-al
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
+const CheckAlertService = require('../services/notices/setup/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -19,7 +20,6 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PreviewService = require('../services/notices/setup/preview.service.js')
-const PreviewSelectAlertService = require('../services/notices/setup/preview-select-alert.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
@@ -38,6 +38,14 @@ const SubmitReturnFormsService = require('../services/notices/setup/submit-retur
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 
 const basePath = 'notices/setup'
+
+async function checkAlert(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await CheckAlertService.go(contactHashId, sessionId)
+
+  return h.view('notices/setup/check-alert.njk', pageData)
+}
 
 async function downloadRecipients(request, h) {
   const {
@@ -60,14 +68,6 @@ async function preview(request, h) {
   const pageData = await PreviewService.go(contactHashId, licenceMonitoringStationId, sessionId)
 
   return h.view('notices/setup/preview.njk', pageData)
-}
-
-async function previewSelectAlert(request, h) {
-  const { contactHashId, sessionId } = request.params
-
-  const pageData = await PreviewSelectAlertService.go(contactHashId, sessionId)
-
-  return h.view('notices/setup/preview-select-alert.njk', pageData)
 }
 
 async function viewAlertEmailAddress(request, h) {
@@ -385,9 +385,9 @@ async function submitReturnForms(request, h) {
 }
 
 module.exports = {
+  checkAlert,
   downloadRecipients,
   preview,
-  previewSelectAlert,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,

@@ -64,7 +64,7 @@ function _formatRecipients(noticeType, recipients, sessionId) {
     const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
 
     // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/select-alert` : basePreviewLink
+    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
 
     return {
       contact: _contact(recipient),

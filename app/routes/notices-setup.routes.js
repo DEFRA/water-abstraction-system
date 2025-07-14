@@ -305,9 +305,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/select-alert',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
     options: {
-      handler: NoticesSetupController.previewSelectAlert,
+      handler: NoticesSetupController.checkAlert,
       auth: {
         access: {
           scope: ['returns']
