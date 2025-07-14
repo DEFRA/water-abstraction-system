@@ -12,7 +12,7 @@ const { sentenceCase } = require('../../../base.presenter.js')
  * Formats notification data ready for presenting in the preview notification page
  *
  * @param {string} contactHashId - The recipients unique identifier
- * @param {string} noticeType - The type of alert being sent
+ * @param {string} noticeType - The type of notice being sent
  * @param {string} licenceMonitoringStationId - The UUID of the licence monitoring station record. This is only
  * @param {object} notification - The data relating to the recipients notification
  * @param {string} sessionId - The UUID for returns notices session record
