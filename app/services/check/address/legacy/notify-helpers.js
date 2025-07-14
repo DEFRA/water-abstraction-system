@@ -1,5 +1,7 @@
 'use strict'
 
+const MAX_ADDRESS_LINES = 6
+
 /**
  * Creates the notification address in the format expected by existing
  * notifications for the supplied Contact model
@@ -42,7 +44,7 @@ function reduceAddressLines(lines) {
   })
 
   let index = 1
-  while (compacted.length > 6) {
+  while (compacted.length > MAX_ADDRESS_LINES) {
     const newLine = compacted.slice(index, index + 2).join(', ')
     compacted.splice(index, 2, newLine)
     index++

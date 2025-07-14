@@ -10,7 +10,7 @@ const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
  *
  * @param {object} payload - payload from the request containing the address lines to validate
  *
- * @returns {string}
+ * @returns {Promise<object>}
  */
 async function go(payload) {
   const options = {
