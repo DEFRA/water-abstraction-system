@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
@@ -20,9 +21,6 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({
-      text: "Remove",
-      preventDoubleClick: true
-    }) }}
+    {{ govukButton({ text: "Remove", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
