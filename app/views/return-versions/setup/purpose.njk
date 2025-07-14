@@ -6,8 +6,9 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -17,7 +18,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -30,16 +30,10 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-
-    <div class="govuk-hint"> Select all that apply </div>
-  </div>
-
-<div>
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -79,11 +73,18 @@
     {{ govukCheckboxes({
       name: "purposes",
       errorMessage: error,
+      hint: {
+        text: "Select all that apply"
+      },
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
       items: checkBoxItems,
       attributes: { 'data-test': 'purposes' }
     }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
-</div>
 {% endblock %}
