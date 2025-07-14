@@ -5,13 +5,13 @@
  * @module PreviewService
  */
 
-const AbstractionAlertsNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
-const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
-const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const AbstractionAlertsNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
+const DetermineRecipientsService = require('../determine-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../fetch-abstraction-alert-recipients.service.js')
+const FetchRecipientsService = require('../fetch-recipients.service.js')
+const NotificationsPresenter = require('../../../../presenters/notices/setup/notifications.presenter.js')
+const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page

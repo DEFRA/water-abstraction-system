@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const NotifyPreviewRequest = require('../../../../app/requests/notify/notify-preview.request.js')
+const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-preview.request.js')
 
 // Thing under test
-const PreviewPresenter = require('../../../../app/presenters/notices/setup/preview.presenter.js')
+const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
 
 describe('Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'

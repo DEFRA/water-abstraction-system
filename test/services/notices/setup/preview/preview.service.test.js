@@ -9,16 +9,16 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const RecipientsFixture = require('../../../../fixtures/recipients.fixtures.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const NotifyPreviewRequest = require('../../../../app/requests/notify/notify-preview.request.js')
+const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
+const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-preview.request.js')
 
 // Thing under test
-const PreviewService = require('../../../../app/services/notices/setup/preview.service.js')
+const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
 
 describe('Notices - Setup - Preview service', () => {
   let recipients

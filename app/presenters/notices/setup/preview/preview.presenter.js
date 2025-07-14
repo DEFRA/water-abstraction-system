@@ -5,8 +5,8 @@
  * @module PreviewPresenter
  */
 
-const NotifyPreviewRequest = require('../../../requests/notify/notify-preview.request.js')
-const { sentenceCase } = require('../../base.presenter.js')
+const NotifyPreviewRequest = require('../../../../requests/notify/notify-preview.request.js')
+const { sentenceCase } = require('../../../base.presenter.js')
 
 /**
  * Formats notification data ready for presenting in the preview notification page

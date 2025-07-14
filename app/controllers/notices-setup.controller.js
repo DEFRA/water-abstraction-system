@@ -19,7 +19,7 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
-const PreviewService = require('../services/notices/setup/preview.service.js')
+const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
@@ -67,7 +67,7 @@ async function preview(request, h) {
 
   const pageData = await PreviewService.go(contactHashId, licenceMonitoringStationId, sessionId)
 
-  return h.view('notices/setup/preview.njk', pageData)
+  return h.view('notices/setup/preview/preview.njk', pageData)
 }
 
 async function viewAlertEmailAddress(request, h) {
