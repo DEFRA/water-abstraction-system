@@ -144,6 +144,7 @@ describe('Notice Type Service', () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/licence`,
         error: { text: 'Select the notice type' },
         options: [

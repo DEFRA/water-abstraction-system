@@ -28,6 +28,7 @@ describe('Notice Type Service', () => {
       const result = await NoticeTypeService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/licence`,
         options: [
           {
