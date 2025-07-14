@@ -117,13 +117,13 @@ describe('Notices - Setup - Submit Check service', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alert', () => {
+  describe('when the journey is "alerts"', () => {
     beforeEach(async () => {
       referenceCode = `WAA-${Math.floor(1000 + Math.random() * 9000).toString()}`
 
       session = await SessionHelper.add({
         data: {
-          journey: 'abstraction-alert',
+          journey: 'alerts',
           referenceCode
         }
       })
@@ -153,7 +153,7 @@ describe('Notices - Setup - Submit Check service', () => {
           Sinon.match({
             id: session.id,
             data: session.data,
-            journey: 'abstraction-alert',
+            journey: 'alerts',
             referenceCode
           }),
           result

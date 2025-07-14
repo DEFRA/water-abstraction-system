@@ -47,9 +47,9 @@ async function go(sessionId, payload, yar) {
 }
 
 function _redirect(noticeType, checkPageVisited) {
-  if (noticeType === 'paper-forms' && !checkPageVisited) {
+  if (noticeType === 'returnForms' && !checkPageVisited) {
     return {
-      redirectUrl: 'returns-for-paper-forms'
+      redirectUrl: 'return-forms'
     }
   }
 
@@ -63,7 +63,7 @@ function _redirect(noticeType, checkPageVisited) {
  * @private
  */
 async function _save(session, payload) {
-  const { redirectPath, ...noticeTypeData } = DetermineNoticeTypeService.go(payload.noticeType)
+  const noticeTypeData = DetermineNoticeTypeService.go(payload.noticeType)
 
   Object.assign(session, {
     ...noticeTypeData,

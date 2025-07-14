@@ -36,7 +36,7 @@ describe('Notify - Email request', () => {
       reference: 'developer-testing'
     }
 
-    templateId = notifyTemplates.returns.invitations.primaryUserEmail
+    templateId = notifyTemplates.standard.invitations.primaryUserEmail
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub

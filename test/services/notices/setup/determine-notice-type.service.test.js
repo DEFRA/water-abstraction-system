@@ -12,15 +12,14 @@ const DetermineNoticeTypeService = require('../../../../app/services/notices/set
 
 describe('Notices - Setup - Determine Notice Type service', () => {
   describe('when called', () => {
-    describe('and the "notificationType" is "invitations"', () => {
+    describe('and the "noticeType" is "invitations"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('invitations')
 
         expect(result).to.equal({
-          journey: 'invitations',
           name: 'Returns: invitation',
+          noticeType: 'invitations',
           notificationType: 'Returns invitation',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnInvitation'
         })
@@ -36,15 +35,14 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('and the "notificationType" is "paper-forms"', () => {
+    describe('and the "noticeType" is "returnForms"', () => {
       it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('paper-forms')
+        const result = DetermineNoticeTypeService.go('returnForms')
 
         expect(result).to.equal({
-          journey: 'paper-forms',
           name: 'Paper returns',
+          noticeType: 'returnForms',
           notificationType: 'Paper invitation',
-          redirectPath: undefined,
           referenceCode: result.referenceCode, // randomly generated
           subType: 'paperReturnForms'
         })
@@ -52,7 +50,7 @@ describe('Notices - Setup - Determine Notice Type service', () => {
 
       describe('the "referenceCode" property', () => {
         it('returns a reference code for "invitations" notifications', () => {
-          const result = DetermineNoticeTypeService.go('paper-forms')
+          const result = DetermineNoticeTypeService.go('returnForms')
 
           expect(result.referenceCode).to.include('PRTF-')
           expect(result.referenceCode.length).to.equal(11)
@@ -60,15 +58,14 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('and the "notificationType" is "reminders"', () => {
+    describe('and the "noticeType" is "reminders"', () => {
       it('creates a new session record', () => {
         const result = DetermineNoticeTypeService.go('reminders')
 
         expect(result).to.equal({
-          journey: 'reminders',
           name: 'Returns: reminder',
+          noticeType: 'reminders',
           notificationType: 'Returns reminder',
-          redirectPath: 'returns-period',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'returnReminder'
         })
@@ -84,23 +81,22 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('when the "notificationType" is "abstraction-alert"', () => {
+    describe('when the "noticeType" is "abstractionAlerts"', () => {
       it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('abstraction-alert')
+        const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
         expect(result).to.equal({
-          journey: 'abstraction-alert',
           name: 'Water abstraction alert',
+          noticeType: 'abstractionAlerts',
           notificationType: 'Abstraction alert',
-          redirectPath: 'abstraction-alerts/alert-type',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'waterAbstractionAlerts'
         })
       })
 
       describe('the "referenceCode" property', () => {
-        it('returns a reference code for an "abstraction-alert" notification', () => {
-          const result = DetermineNoticeTypeService.go('abstraction-alert')
+        it('returns a reference code for an "abstractionAlerts" notification', () => {
+          const result = DetermineNoticeTypeService.go('abstractionAlerts')
 
           expect(result.referenceCode).to.include('WAA-')
           expect(result.referenceCode.length).to.equal(10)
