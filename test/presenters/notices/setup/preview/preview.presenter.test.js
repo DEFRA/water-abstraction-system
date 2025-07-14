@@ -16,11 +16,14 @@ const PreviewPresenter = require('../../../../../app/presenters/notices/setup/pr
 
 describe('Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
+  const licenceMonitoringStationId = 'a4d15f69-5005-4b6e-ab50-3fbae2deec9c'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
 
+  let noticeType
   let testNotification
 
   beforeEach(() => {
+    noticeType = 'invitations'
     testNotification = _testNotification()
   })
 
@@ -35,7 +38,13 @@ describe('Preview presenter', () => {
       })
 
       it('correctly presents the data', async () => {
-        const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+        const result = await PreviewPresenter.go(
+          contactHashId,
+          noticeType,
+          licenceMonitoringStationId,
+          testNotification,
+          sessionId
+        )
 
         expect(result).to.equal({
           address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
@@ -61,7 +70,13 @@ describe('Preview presenter', () => {
             })
 
             it('correctly formats the address data into an array with the populated values', async () => {
-              const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+              const result = await PreviewPresenter.go(
+                contactHashId,
+                noticeType,
+                licenceMonitoringStationId,
+                testNotification,
+                sessionId
+              )
 
               expect(result.address).to.equal(['Water Lane', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'])
             })
@@ -74,16 +89,66 @@ describe('Preview presenter', () => {
           })
 
           it('returns null', async () => {
-            const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
 
             expect(result.address).to.be.null()
           })
         })
       })
 
+      describe('the "backLink" property', () => {
+        describe('when the "noticeType" is "abstractionAlerts"', () => {
+          beforeEach(() => {
+            noticeType = 'abstractionAlerts'
+          })
+
+          it('returns a link back to the "check-alert" page', async () => {
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
+
+            expect(result.backLink).to.equal(`/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`)
+          })
+        })
+
+        describe('when the "noticeType" is NOT "abstractionAlerts"', () => {
+          beforeEach(() => {
+            noticeType = 'reminders'
+          })
+
+          it('returns a link back to the "check" page', async () => {
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
+
+            expect(result.backLink).to.equal(`/system/notices/setup/${sessionId}/check`)
+          })
+        })
+      })
+
       describe('the "contents" property', () => {
         it('returns the preview data', async () => {
-          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+          const result = await PreviewPresenter.go(
+            contactHashId,
+            noticeType,
+            licenceMonitoringStationId,
+            testNotification,
+            sessionId
+          )
 
           expect(result.contents).to.equal('Preview of the notification contents')
         })
@@ -95,7 +160,13 @@ describe('Preview presenter', () => {
         })
 
         it('correctly formats the notifications "messageRef"', async () => {
-          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+          const result = await PreviewPresenter.go(
+            contactHashId,
+            noticeType,
+            licenceMonitoringStationId,
+            testNotification,
+            sessionId
+          )
 
           expect(result.pageTitle).to.equal('Returns reminder returns to letter')
         })
@@ -115,7 +186,13 @@ describe('Preview presenter', () => {
       })
 
       it('correctly presents the data', async () => {
-        const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+        const result = await PreviewPresenter.go(
+          contactHashId,
+          noticeType,
+          licenceMonitoringStationId,
+          testNotification,
+          sessionId
+        )
 
         expect(result).to.equal({
           address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
@@ -130,9 +207,53 @@ describe('Preview presenter', () => {
 
       describe('the "contents" property', () => {
         it('returns "error"', async () => {
-          const result = await PreviewPresenter.go(contactHashId, testNotification, sessionId)
+          const result = await PreviewPresenter.go(
+            contactHashId,
+            noticeType,
+            licenceMonitoringStationId,
+            testNotification,
+            sessionId
+          )
 
           expect(result.contents).to.equal('error')
+        })
+      })
+
+      describe('the "refreshPageLink" property', () => {
+        describe('when the "noticeType" is "abstractionAlerts"', () => {
+          beforeEach(() => {
+            noticeType = 'abstractionAlerts'
+          })
+
+          it('returns a link to the "alert preview" page', async () => {
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
+
+            expect(result.refreshPageLink).to.equal(`/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`)
+          })
+        })
+
+        describe('when the "noticeType" is NOT "abstractionAlerts"', () => {
+          beforeEach(() => {
+            noticeType = 'reminders'
+          })
+
+          it('returns a link to the "preview" page', async () => {
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
+
+            expect(result.refreshPageLink).to.equal(`/system/notices/setup/${sessionId}/preview/${contactHashId}`)
+          })
         })
       })
     })
