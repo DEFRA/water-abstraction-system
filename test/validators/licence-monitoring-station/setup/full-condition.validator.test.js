@@ -29,10 +29,10 @@ describe('Full Condition Validator', () => {
       })
     })
 
-    describe('the string not_listed', () => {
+    describe('the string no_condition', () => {
       beforeEach(() => {
         payload = {
-          condition: 'not_listed'
+          condition: 'no_condition'
         }
       })
 

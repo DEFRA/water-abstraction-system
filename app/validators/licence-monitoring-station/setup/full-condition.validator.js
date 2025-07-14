@@ -20,7 +20,7 @@ function go(payload) {
   const conditionErrorMessage = 'Select a condition'
 
   const schema = Joi.object({
-    condition: Joi.alternatives().try(Joi.string().valid('not_listed'), Joi.string().uuid()).required().messages({
+    condition: Joi.alternatives().try(Joi.string().valid('no_condition'), Joi.string().uuid()).required().messages({
       'any.required': conditionErrorMessage,
       'any.only': conditionErrorMessage,
       'string.empty': conditionErrorMessage
