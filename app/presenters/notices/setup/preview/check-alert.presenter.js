@@ -18,28 +18,13 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(contactHashId, recipientLicenceRefs, session) {
-  const {
-    alertThresholds,
-    alertType,
-    id: sessionId,
-    licenceMonitoringStations,
-    referenceCode,
-    removedThresholds
-  } = session
+  const { id: sessionId, licenceMonitoringStations, referenceCode} = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
     caption: referenceCode,
     pageTitle: 'Check the recipient previews',
-    restrictions: _restrictions(
-      alertThresholds,
-      alertType,
-      contactHashId,
-      licenceMonitoringStations,
-      recipientLicenceRefs,
-      removedThresholds,
-      sessionId
-    ),
+    restrictions: _restrictions(contactHashId, recipientLicenceRefs, session),
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
   }
 }
@@ -51,27 +36,13 @@ function _action(contactHashId, sessionId, licenceMonitoringStation) {
   }
 }
 
-function _restrictions(
-  alertThresholds,
-  alertType,
-  contactHashId,
-  licenceMonitoringStations,
-  recipientLicenceRefs,
-  removedThresholds,
-  sessionId
-) {
-  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(
-    alertThresholds,
-    alertType,
-    licenceMonitoringStations,
-    recipientLicenceRefs,
-    removedThresholds
-  )
+function _restrictions(contactHashId, recipientLicenceRefs, session) {
+  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
 
   const preparedLicenceMonitoringStations = _preparedLicenceMonitoringStations(
     contactHashId,
     recipientLicenceMonitoringStations,
-    sessionId
+    session.id
   )
 
   return formatRestrictions(preparedLicenceMonitoringStations)
@@ -89,13 +60,9 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
   })
 }
 
-function _recipientLicenceMonitoringStations(
-  alertThresholds,
-  alertType,
-  licenceMonitoringStations,
-  recipientLicenceRefs,
-  removedThresholds
-) {
+function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
+  const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
+
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
