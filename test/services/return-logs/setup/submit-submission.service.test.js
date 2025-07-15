@@ -143,7 +143,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           error: { text: 'Select what you want to do with this return' },
           journey: null,
           pageTitle: 'What do you want to do with this return?',
-          returnReference: session.data.returnReference
+          returnReference: session.returnReference
         })
       })
     })
