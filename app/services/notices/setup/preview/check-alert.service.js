@@ -37,11 +37,11 @@ async function _recipientLicenceRefs(contactHashId, session) {
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 
-  const recipient = recipients.find((recipient) => {
+  const matchedRecipient = recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
 
-  return recipient.licence_refs.split(',')
+  return matchedRecipient.licence_refs.split(',')
 }
 
 module.exports = {
