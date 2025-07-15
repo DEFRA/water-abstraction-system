@@ -51,6 +51,23 @@ class SessionModel extends BaseModel {
   }
 
   /**
+   * Called after a session instance is created. It calls $afterFind() to elevate the properties of `data` to the top
+   * level of the instance
+   *
+   * > We do not expect modules to call this function directly. It is a named hook for use with Objection.js
+   *
+   * Because we usually fetch a session within code rather than create one, this is most likely to be of use within unit
+   * tests; if we create a session with specific data in a unit test and then wish to refer to that data we can directly
+   * refer to it at the top level of `session` instead of within `session.data`, allowing us to be consistent with how
+   * we would refer to the session properties within code.
+   *
+   * @param {object} _queryContext - Objection.js query context which we do not use
+   */
+  $afterInsert(_queryContext) {
+    this.$afterFind()
+  }
+
+  /**
    * Update the session instance's `data` property with the current properties of the instance
    *
    * Added to avoid callers having to repeatedly implement this pattern.
