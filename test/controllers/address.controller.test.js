@@ -11,9 +11,11 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const InternationalAddressService = require('../../app/services/address/international.service.js')
 const ManualAddressService = require('../../app/services/address/manual.service.js')
 const PostcodeService = require('../../app/services/address/postcode.service.js')
 const SelectAddressService = require('../../app/services/address/select.service.js')
+const SubmitInternationalAddressService = require('../../app/services/address/submit-international.service.js')
 const SubmitManualAddressService = require('../../app/services/address/submit-manual.service.js')
 const SubmitPostcodeService = require('../../app/services/address/submit-postcode.service.js')
 const SubmitSelectAddressService = require('../../app/services/address/submit-select.service.js')
@@ -248,6 +250,69 @@ describe('Address controller', () => {
           const pageData = _manualPageData(true)
 
           Sinon.stub(SubmitManualAddressService, 'go').returns(pageData)
+        })
+
+        it('re-renders the page with an error', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(200)
+
+          expect(response.payload).to.contain('There is a problem')
+          expect(response.payload).to.contain('Enter address line 1')
+        })
+      })
+    })
+  })
+
+  describe('/address/{id}/international', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when addresses are found', () => {
+        beforeEach(() => {
+          Sinon.stub(InternationalAddressService, 'go').returns({})
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions('/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international', {})
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitInternationalAddressService, 'go').returns({})
+        })
+
+        it('redirects to the check page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+        })
+      })
+
+      describe('when the request fails due to a validation error', () => {
+        beforeEach(() => {
+          const pageData = _manualPageData(true)
+
+          Sinon.stub(SubmitInternationalAddressService, 'go').returns(pageData)
         })
 
         it('re-renders the page with an error', async () => {

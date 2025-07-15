@@ -172,6 +172,16 @@ const thresholdUnits = {
   MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day' }
 }
 
+const flowUnits = [
+  thresholdUnits.MEGALITRES_PER_DAY.value,
+  thresholdUnits.CUBIC_METRES_PER_SECOND.value,
+  thresholdUnits.CUBIC_METRES_PER_DAY.value,
+  thresholdUnits.LITRES_PER_SECOND.value,
+  thresholdUnits.CUBIC_FOOT_PER_SECOND.value,
+  thresholdUnits.GALLONS_PER_DAY.value,
+  thresholdUnits.MILLION_GALLONS_PER_DAY.value
+]
+
 const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',
   'aggregate-factor': 'Aggregate',
@@ -192,6 +202,7 @@ module.exports = {
   companyTypes,
   contactTypes,
   engineTriggers,
+  flowUnits,
   naldRegions,
   organisationTypes,
   returnCycleDates,

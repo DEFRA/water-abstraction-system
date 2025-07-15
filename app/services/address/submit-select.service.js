@@ -6,8 +6,8 @@
  * @module SubmitSelectService
  */
 
-const LookupPostcodeRequest = require('../../requests/address-lookup/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../requests/address-lookup/lookup-uprn.request.js')
+const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
+const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -26,10 +26,10 @@ async function go(sessionId, payload) {
   let validationResult = _validate(payload)
 
   if (!validationResult) {
-    const address = await LookupUPRNRequest.send(payload.addresses)
+    const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
-    if (address.succeeded) {
-      await _save(session, address.results[0])
+    if (uprnResult.succeeded) {
+      await _save(session, uprnResult.matches[0])
 
       return {}
     }
@@ -39,15 +39,15 @@ async function go(sessionId, payload) {
     }
   }
 
-  const addresses = await LookupPostcodeRequest.send(session.address.postcode)
+  const postcodeResult = await LookupPostcodeRequest.send(session.address.postcode)
 
-  if (addresses.succeeded === false || addresses.results.length === 0) {
+  if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
       redirect: true
     }
   }
 
-  const pageData = SelectPresenter.go(addresses.results)
+  const pageData = SelectPresenter.go(postcodeResult.matches)
 
   return {
     backLink: `/system/address/${session.id}/postcode`,
@@ -59,13 +59,20 @@ async function go(sessionId, payload) {
 
 async function _save(session, address) {
   session.address.uprn = address.uprn
-  session.address.addressLine1 = address.organisation
-  session.address.addressLine2 = address.premises
-  session.address.addressLine3 = address.street_address
-  session.address.addressLine4 = address.locality
-  session.address.town = address.city
+
+  const premiseseStreetAddress = address.premises + ' ' + address.street_address
+
+  if (!address.organisation) {
+    session.address.addressLine1 = premiseseStreetAddress.trim()
+    session.address.addressLine2 = null
+  } else {
+    session.address.addressLine1 = address.organisation
+    session.address.addressLine2 = premiseseStreetAddress.trim()
+  }
+
+  session.address.addressLine3 = address.locality ?? null
+  session.address.addressLine4 = address.city
   session.address.postcode = address.postcode
-  session.address.country = address.country
 
   return session.$update()
 }

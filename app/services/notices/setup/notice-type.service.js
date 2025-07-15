@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = NoticeTypePresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     ...pageData
   }
 }

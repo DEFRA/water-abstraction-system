@@ -61,7 +61,7 @@ async function _processNotifications(session, recipients, notice) {
 async function _recipients(session) {
   let recipientsData
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
   } else {
     recipientsData = await FetchRecipientsService.go(session)

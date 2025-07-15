@@ -67,7 +67,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       })
     })
 
-    describe('and the notice type is "paper-forms"', () => {
+    describe('and the notice type is "returnForms"', () => {
       let dueReturnOne
       let dueReturnTwo
 
@@ -88,7 +88,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           startDate: '2003-04-01'
         }
 
-        session.noticeType = 'paper-forms'
+        session.noticeType = 'returnForms'
 
         session.dueReturns = [dueReturnOne, dueReturnTwo]
 
@@ -104,7 +104,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
             text: 'Continue to check recipients'
           },
           licenceRef,
-          noticeType: 'paper-forms',
+          noticeType: 'returnForms',
           pageTitle: 'Check the notice type',
           returnNoticeType: 'Submit using a paper form invitation',
           selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],

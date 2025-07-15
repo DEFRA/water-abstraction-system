@@ -62,7 +62,7 @@ describe('Return Versions Setup - Submit Check service', () => {
       it('returns a valid licence', async () => {
         const result = await SubmitCheckService.go(session.id)
 
-        expect(result).to.equal(session.data.licence.id)
+        expect(result).to.equal(session.licence.id)
       })
     })
 
@@ -70,7 +70,7 @@ describe('Return Versions Setup - Submit Check service', () => {
       it('returns a valid licence', async () => {
         const result = await SubmitCheckService.go(session.id)
 
-        expect(result).to.equal(session.data.licence.id)
+        expect(result).to.equal(session.licence.id)
       })
     })
   })
@@ -111,7 +111,7 @@ describe('Return Versions Setup - Submit Check service', () => {
       it('returns a valid licence', async () => {
         const result = await SubmitCheckService.go(session.id)
 
-        expect(result).to.equal(session.data.licence.id)
+        expect(result).to.equal(session.licence.id)
       })
     })
   })

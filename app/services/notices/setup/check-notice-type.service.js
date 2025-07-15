@@ -28,6 +28,7 @@ async function go(sessionId, yar) {
 
   return {
     ...pageData,
+    activeNavBar: 'manage',
     notification
   }
 }

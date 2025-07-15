@@ -29,7 +29,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
     }
   })
 
-  describe('when the journey is a return journey', () => {
+  describe('when the journey is not for "alerts"', () => {
     beforeEach(() => {
       recipients = RecipientsFixture.recipients()
       testRecipients = [...Object.values(recipients)]
@@ -181,14 +181,14 @@ describe('Notices - Setup - Create Notice presenter', () => {
     })
   })
 
-  describe('when the journey is "abstraction-alert', () => {
+  describe('when the journey is for "alerts', () => {
     beforeEach(() => {
       recipients = RecipientsFixture.alertsRecipients()
       testRecipients = [...Object.values(recipients)]
 
       session = {
         alertType: 'stop',
-        journey: 'abstraction-alert',
+        journey: 'alerts',
         monitoringStationId: '123',
         name: 'Water abstraction alert',
         referenceCode: 'WAA-123',

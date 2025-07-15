@@ -44,7 +44,8 @@ describe('Notices - Setup - Preview service', () => {
 
       session = await SessionHelper.add({
         data: {
-          journey: 'invitations',
+          journey: 'standard',
+          noticeType: 'invitations',
           returnsPeriod: 'quarterFour',
           determinedReturnsPeriod: {
             name: 'allYear',

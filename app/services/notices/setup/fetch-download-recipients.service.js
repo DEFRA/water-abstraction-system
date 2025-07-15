@@ -6,7 +6,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Fetches the recipients data for the `/notices/setup/download` CSV file
@@ -66,6 +66,7 @@ async function _fetchRecipient(session) {
 
   const where = `
     AND ldh.licence_ref = ?
+    AND rl.end_date <= '${timestampForPostgres()}'
   `
 
   const bindings = [licenceRef, licenceRef]

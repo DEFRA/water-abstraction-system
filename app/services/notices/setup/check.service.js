@@ -25,7 +25,7 @@ async function go(sessionId, page = 1) {
 
   let recipientsData
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
   } else {
     recipientsData = await FetchRecipientsService.go(session)

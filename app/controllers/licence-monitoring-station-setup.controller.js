@@ -6,10 +6,12 @@
  */
 
 const AbstractionPeriodService = require('../services/licence-monitoring-station/setup/abstraction-period.service.js')
+const CheckService = require('../services/licence-monitoring-station/setup/check.service.js')
 const FullConditionService = require('../services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
 const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+const SubmitCheckService = require('../services/licence-monitoring-station/setup/submit-check.service.js')
 const SubmitAbstractionPeriodService = require('../services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
 const SubmitFullConditionService = require('../services/licence-monitoring-station/setup/submit-full-condition.service.js')
 const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
@@ -25,6 +27,16 @@ async function abstractionPeriod(request, h) {
   const pageData = await AbstractionPeriodService.go(sessionId)
 
   return h.view('licence-monitoring-station/setup/abstraction-period.njk', pageData)
+}
+
+async function check(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await CheckService.go(sessionId)
+
+  return h.view(`licence-monitoring-station/setup/check.njk`, pageData)
 }
 
 async function fullCondition(request, h) {
@@ -61,6 +73,17 @@ async function submitAbstractionPeriod(request, h) {
 
   // This is the last step in the journey so we will always move on to the check page
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+}
+
+async function submitCheck(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  const monitoringStationId = await SubmitCheckService.go(sessionId, yar)
+
+  return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
 async function submitFullCondition(request, h) {
@@ -141,11 +164,10 @@ async function submitStopOrReduce(request, h) {
 async function submitThresholdAndUnit(request, h) {
   const {
     params: { sessionId },
-    payload,
-    yar
+    payload
   } = request
 
-  const pageData = await SubmitThresholdAndUnitService.go(sessionId, payload, yar)
+  const pageData = await SubmitThresholdAndUnitService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
@@ -168,10 +190,12 @@ async function thresholdAndUnit(request, h) {
 
 module.exports = {
   abstractionPeriod,
+  check,
   fullCondition,
   licenceNumber,
   stopOrReduce,
   submitAbstractionPeriod,
+  submitCheck,
   submitFullCondition,
   submitLicenceNumber,
   submitSetup,

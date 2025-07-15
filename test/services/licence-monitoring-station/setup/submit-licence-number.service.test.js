@@ -37,42 +37,86 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         payload = { licenceRef: licence.licenceRef }
       })
 
-      it('saves the submitted value', async () => {
-        await SubmitLicenceNumberService.go(session.id, payload)
+      describe("and the submitted licence isn't already stored in the session", () => {
+        it('saves the submitted value', async () => {
+          await SubmitLicenceNumberService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
+          const refreshedSession = await session.$query()
 
-        expect(refreshedSession.licenceRef).to.equal(payload.licenceRef)
-      })
+          expect(refreshedSession.licenceRef).to.equal(payload.licenceRef)
+        })
 
-      it('saves the licence id', async () => {
-        await SubmitLicenceNumberService.go(session.id, payload)
+        it('saves the licence id', async () => {
+          await SubmitLicenceNumberService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
+          const refreshedSession = await session.$query()
 
-        expect(refreshedSession.licenceId).to.equal(licence.id)
-      })
+          expect(refreshedSession.licenceId).to.equal(licence.id)
+        })
 
-      describe('and the page has been not been visited', () => {
-        it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitLicenceNumberService.go(session.id, payload)
+        describe('and the check page has not been visited', () => {
+          it('returns a false value so the controller can redirect to the next page', async () => {
+            const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-          expect(result).to.equal({
-            checkPageVisited: undefined
+            expect(result).to.equal({
+              checkPageVisited: false
+            })
+          })
+        })
+
+        describe('and the check page has been visited', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+          })
+
+          it('still returns a false value so the controller can redirect to the check page', async () => {
+            const result = await SubmitLicenceNumberService.go(session.id, payload)
+
+            expect(result).to.equal({
+              checkPageVisited: false
+            })
           })
         })
       })
 
-      describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+      describe('and the submitted licence is already stored in the session', () => {
+        describe('and the check page has been not been visited', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({
+              data: { ...sessionData.data, licenceRef: licence.licenceRef }
+            })
+          })
+
+          it('returns a falsy value so the controller can redirect to the next page', async () => {
+            const result = await SubmitLicenceNumberService.go(session.id, payload)
+
+            expect(result).to.equal({
+              checkPageVisited: undefined
+            })
+          })
         })
 
-        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitLicenceNumberService.go(session.id, payload)
+        describe('and the check page has been visited', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({
+              data: { ...sessionData.data, licenceRef: licence.licenceRef, checkPageVisited: true }
+            })
+          })
 
-          expect(result).to.equal({
-            checkPageVisited: true
+          it('leaves the checkPageVisited flag in the session as true', async () => {
+            await SubmitLicenceNumberService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.checkPageVisited).to.be.true()
+          })
+
+          it('returns a true value so the controller can redirect to the next page', async () => {
+            const result = await SubmitLicenceNumberService.go(session.id, payload)
+
+            expect(result).to.equal({
+              checkPageVisited: true
+            })
           })
         })
       })

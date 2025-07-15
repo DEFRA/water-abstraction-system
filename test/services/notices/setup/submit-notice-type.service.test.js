@@ -44,14 +44,12 @@ describe('Notice Type Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
-          journey: 'invitations',
           name: 'Returns: invitation',
           noticeType: 'invitations',
           notificationType: 'Returns invitation',
           referenceCode: refreshedSession.referenceCode,
           subType: 'returnInvitation'
         },
-        journey: 'invitations',
         name: 'Returns: invitation',
         noticeType: 'invitations',
         notificationType: 'Returns invitation',
@@ -74,16 +72,16 @@ describe('Notice Type Service', () => {
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
     })
 
-    describe('and the notice types is "paper-forms"', () => {
+    describe('and the notice types is "returnForms"', () => {
       beforeEach(() => {
-        noticeType = 'paper-forms'
+        noticeType = 'returnForms'
         payload = { noticeType }
       })
 
       it('continues the journey', async () => {
         const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({ redirectUrl: 'returns-for-paper-forms' })
+        expect(result).to.equal({ redirectUrl: 'return-forms' })
       })
     })
 
@@ -146,6 +144,7 @@ describe('Notice Type Service', () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/licence`,
         error: { text: 'Select the notice type' },
         options: [
@@ -157,7 +156,7 @@ describe('Notice Type Service', () => {
           {
             checked: false,
             text: 'Submit using a paper form invitation',
-            value: 'paper-forms'
+            value: 'returnForms'
           }
         ],
         pageTitle: 'Select the notice type'

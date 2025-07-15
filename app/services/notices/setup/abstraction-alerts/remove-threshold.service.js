@@ -8,6 +8,7 @@
 
 const GeneralLib = require('../../../../lib/general.lib.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { formatValueUnit } = require('../../../../presenters/base.presenter.js')
 const { formatRestrictionType } = require('../../../../presenters/monitoring-stations/base.presenter.js')
 
 /**
@@ -31,7 +32,7 @@ function _notificationMessage(session, licenceMonitoringStationId) {
     return station.id === licenceMonitoringStationId
   })
 
-  return `Removed ${licenceMonitoringStation.licence.licenceRef} ${formatRestrictionType(licenceMonitoringStation.restrictionType)} ${licenceMonitoringStation.thresholdValue}${licenceMonitoringStation.thresholdUnit}`
+  return `Removed ${licenceMonitoringStation.licence.licenceRef} ${formatRestrictionType(licenceMonitoringStation.restrictionType)} ${formatValueUnit(licenceMonitoringStation.thresholdValue, licenceMonitoringStation.thresholdUnit)}`
 }
 
 async function _save(session, licenceMonitoringStationId) {

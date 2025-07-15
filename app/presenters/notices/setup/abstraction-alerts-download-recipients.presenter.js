@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for 'abstraction-alert'
+ * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
  * @module AbstractionAlertDownloadRecipientsPresenter
  */
 
 const { contactName } = require('../../crm.presenter.js')
-const { formatAbstractionPeriod } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
@@ -29,7 +29,7 @@ const HEADERS = [
 ]
 
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for 'abstraction-alert'
+ * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
  *
  * A licence monitoring station can share the same licence reference as other stations. As a result, recipients may
  * receive multiple notifications for the same licence but from different monitoring stations. This leads to duplicate
@@ -97,7 +97,7 @@ function _row(matchingRecipient, licenceMonitoringStation, notificationType, lic
       licenceMonitoringStation.abstractionPeriodEndMonth
     ),
     licenceMonitoringStation.measureType,
-    `${licenceMonitoringStation.thresholdValue} ${licenceMonitoringStation.thresholdUnit}`,
+    formatValueUnit(licenceMonitoringStation.thresholdValue, licenceMonitoringStation.thresholdUnit),
     notificationType,
     contact ? 'letter' : 'email',
     matchingRecipient.contact_type,

@@ -21,7 +21,7 @@ async function go(sessionId) {
 
   await SessionModel.query().delete().where('id', sessionId)
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     return `/system/monitoring-stations/${session.monitoringStationId}`
   }
 

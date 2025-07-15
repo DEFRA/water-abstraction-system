@@ -34,9 +34,7 @@ async function go(contactHashId, sessionId) {
 }
 
 function _notification(recipient, session) {
-  const { determinedReturnsPeriod, referenceCode, journey } = session
-
-  const notifications = NotificationsPresenter.go(recipient, determinedReturnsPeriod, referenceCode, journey)
+  const notifications = NotificationsPresenter.go(recipient, session)
 
   return notifications[0] // Only one record will be returned as we are looking for a single recipient
 }

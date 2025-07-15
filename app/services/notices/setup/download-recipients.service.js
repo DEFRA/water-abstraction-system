@@ -28,7 +28,7 @@ async function go(sessionId) {
 
   let formattedData
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     const recipients = await FetchAbstractionAlertRecipientsService.go(session)
 
     formattedData = AbstractionAlertDownloadRecipientsPresenter.go(recipients, session)

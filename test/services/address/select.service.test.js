@@ -12,24 +12,31 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things to stub
-const LookupPostcodeRequest = require('../../../app/requests/address-lookup/lookup-postcode.request.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')
 
-describe('Address - Select Service', () => {
+describe('Address - Select service', () => {
+  const match = {
+    uprn: 340116,
+    address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+    organisation: 'ENVIRONMENT AGENCY',
+    premises: 'HORIZON HOUSE',
+    street_address: 'DEANERY ROAD',
+    locality: null,
+    city: 'BRISTOL',
+    postcode: 'BS1 5AH',
+    country: 'United Kingdom'
+  }
+
   let getByPostcodeStub
   let session
-  let sessionData
 
   beforeEach(async () => {
-    sessionData = {
-      address: {
-        postcode: 'SW1A 1AA'
-      }
-    }
+    session = await SessionHelper.add({ data: { address: { postcode: 'BS1 5AH' } } })
 
-    session = await SessionHelper.add({ data: sessionData })
+    getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
   })
 
   afterEach(() => {
@@ -38,17 +45,15 @@ describe('Address - Select Service', () => {
 
   describe('when called with a postcode that returns one result', () => {
     beforeEach(async () => {
-      session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
-        results: [
-          {
-            address: 'address 1',
-            postcode: 'SW1A 1AA',
-            uprn: '123456789'
+        response: {
+          statusCode: 200,
+          body: {
+            results: [match]
           }
-        ]
+        },
+        matches: [match]
       })
     })
 
@@ -64,12 +69,12 @@ describe('Address - Select Service', () => {
             text: `1 address found`
           },
           {
-            text: 'address 1',
-            value: '123456789'
+            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+            value: 340116
           }
         ],
         pageTitle: 'Select the address',
-        postcode: 'SW1A 1AA',
+        postcode: 'BS1 5AH',
         sessionId: session.id
       })
     })
@@ -77,22 +82,15 @@ describe('Address - Select Service', () => {
 
   describe('when called with a postcode that returns multiple results', () => {
     beforeEach(async () => {
-      session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
-        results: [
-          {
-            address: 'address 1',
-            postcode: 'SW1A 1AA',
-            uprn: '123456789'
-          },
-          {
-            address: 'address 2',
-            postcode: 'SW1A 1AA',
-            uprn: '123456780'
+        response: {
+          statusCode: 200,
+          body: {
+            results: [match]
           }
-        ]
+        },
+        matches: [match, { ...match, uprn: 12345, address: 'DEFRA, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH' }]
       })
     })
 
@@ -108,16 +106,16 @@ describe('Address - Select Service', () => {
             text: `2 addresses found`
           },
           {
-            text: 'address 1',
-            value: '123456789'
+            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+            value: 340116
           },
           {
-            text: 'address 2',
-            value: '123456780'
+            text: 'DEFRA, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+            value: 12345
           }
         ],
         pageTitle: 'Select the address',
-        postcode: 'SW1A 1AA',
+        postcode: 'BS1 5AH',
         sessionId: session.id
       })
     })
@@ -125,11 +123,15 @@ describe('Address - Select Service', () => {
 
   describe('when called with a postcode that returns no results', () => {
     beforeEach(async () => {
-      session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
         succeeded: true,
-        results: []
+        response: {
+          statusCode: 200,
+          body: {
+            results: []
+          }
+        },
+        matches: []
       })
     })
 
@@ -144,10 +146,13 @@ describe('Address - Select Service', () => {
 
   describe('when called with a postcode but the request to the look up service fails', () => {
     beforeEach(async () => {
-      session = await SessionHelper.add({ data: sessionData })
-      getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
       getByPostcodeStub.resolves({
-        succeeded: false
+        succeeded: false,
+        response: {
+          statusCode: 404,
+          body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+        },
+        matches: []
       })
     })
 

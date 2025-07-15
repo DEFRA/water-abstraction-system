@@ -26,7 +26,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
   before(async () => {
     dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
 
-    testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
+    testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, endDate)
   })
 
   describe('when the "journey" is for notifications', () => {
@@ -356,6 +356,20 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               start_date: startDate
             }
           ])
+        })
+      })
+
+      describe('when the end date is greater than today', () => {
+        beforeEach(async () => {
+          testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, '3000-01-01')
+
+          session = { licenceRef: testRecipients.primaryUser.licenceRef }
+        })
+
+        it('correctly returns an empty array (no return logs found)', async () => {
+          const result = await FetchDownloadRecipientsService.go(session)
+
+          expect(result).to.equal([])
         })
       })
     })

@@ -4,8 +4,9 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -27,60 +28,55 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
-  {% set pageHeader %}
-    <span class="govuk-heading-l govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Licence {{ licenceRef }}</span> {{ pageTitle }}
-    </span>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
   {% endset %}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div class="govuk-body">
-      {{ govukCheckboxes({
-        name: "additionalSubmissionOptions",
-        fieldset: {
-          legend: {
-            html: pageHeader,
-            isPageHeading: true
+    {{ govukCheckboxes({
+      name: "additionalSubmissionOptions",
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      hint: {
+        text: "Select all that apply"
+      },
+      errorMessage: {
+        text: error.text
+      } if error,
+      items: [
+        {
+          value: "multiple-upload",
+          text: "Multiple upload",
+          checked: multipleUpload,
+          hint: {
+            text: "Allow large abstractors, such as water companies, to submit returns for multiple licences at the same time."
           }
         },
-        hint: {
-          text: "Select all that apply"
-        },
-        errorMessage: {
-          text: error.text
-        } if error,
-        items: [
-          {
-            value: "multiple-upload",
-            text: "Multiple upload",
-            checked: multipleUpload,
-            hint: {
-              text: "Allow large abstractors, such as water companies, to submit returns for multiple licences at the same time."
-            }
-          },
-          {
-            value: "quarterly-returns",
-            text: "Quarterly return submissions",
-            checked: quarterlyReturns,
-            hint: {
-              text: "Allow water companies to submit daliy readings each quarter."
-            }
-          } if quarterlyReturnSubmissions,
-          {
-            divider: "or"
-          },
-          {
-            value: "none",
-            text: "None",
-            checked: noAdditionalOptions,
-            behaviour: "exclusive"
+        {
+          value: "quarterly-returns",
+          text: "Quarterly return submissions",
+          checked: quarterlyReturns,
+          hint: {
+            text: "Allow water companies to submit daliy readings each quarter."
           }
-        ]
-      }) }}
-      {{ govukButton({ text: "Confirm" }) }}
-    </div>
+        } if quarterlyReturnSubmissions,
+        {
+          divider: "or"
+        },
+        {
+          value: "none",
+          text: "None",
+          checked: noAdditionalOptions,
+          behaviour: "exclusive"
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
