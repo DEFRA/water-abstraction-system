@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
-describe('Base presenter', () => {
+describe.only('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
@@ -245,6 +245,14 @@ describe('Base presenter', () => {
           expect(result).to.equal('-£1,149.50')
         })
       })
+    })
+  })
+
+  describe('#formatValueUnit()', () => {
+    it('correctly formats the given value and unit, for example, 100 and Ml/d is formatted as 100Ml/d', () => {
+      const result = BasePresenter.formatValueUnit(100, 'Ml/d')
+
+      expect(result).to.equal('100Ml/d')
     })
   })
 

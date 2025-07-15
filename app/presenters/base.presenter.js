@@ -219,6 +219,19 @@ function formatPounds(valueInPence) {
 }
 
 /**
+ * Correctly formats a value and unit to be displayed without a space, as per the GOV UK style guide; for example, a
+ * value of 100 and a unit of Ml/d will be formatted as '100Ml/d'
+ *
+ * @param {*} value - The value to be formatted
+ * @param {*} unit - The unit to be formatted
+ *
+ * @returns {string} The correctly-formatted value and unit
+ */
+function formatValueUnit(value, unit) {
+  return `${value}${unit}`
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {number} number - The number to be padded
@@ -284,6 +297,7 @@ module.exports = {
   formatNumber,
   formatPounds,
   formatQuantity,
+  formatValueUnit,
   leftPadZeroes,
   sentenceCase,
   titleCase
