@@ -60,7 +60,7 @@ function _restrictions(
   removedThresholds,
   sessionId
 ) {
-  const recipientLicenceMonitoringStations = _recipientRelevantLicenceMonitoringStations(
+  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(
     alertThresholds,
     alertType,
     licenceMonitoringStations,
@@ -78,20 +78,24 @@ function _restrictions(
 }
 
 function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonitoringStations, sessionId) {
-  return recipientLicenceMonitoringStations.map(
-    (licenceMonitoringStation) => {
-      return {
-        ...licenceMonitoringStation,
-        action: _action(contactHashId, sessionId, licenceMonitoringStation),
-        statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
-          ? new Date(licenceMonitoringStation.statusUpdatedAt)
-          : null
-      }
+  return recipientLicenceMonitoringStations.map((licenceMonitoringStation) => {
+    return {
+      ...licenceMonitoringStation,
+      action: _action(contactHashId, sessionId, licenceMonitoringStation),
+      statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
+        ? new Date(licenceMonitoringStation.statusUpdatedAt)
+        : null
     }
-  )
+  })
 }
 
-function _recipientRelevantLicenceMonitoringStations(alertThresholds, alertType, licenceMonitoringStations, recipientLicenceRefs, removedThresholds) {
+function _recipientLicenceMonitoringStations(
+  alertThresholds,
+  alertType,
+  licenceMonitoringStations,
+  recipientLicenceRefs,
+  removedThresholds
+) {
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
@@ -99,11 +103,9 @@ function _recipientRelevantLicenceMonitoringStations(alertThresholds, alertType,
     alertType
   )
 
-  return relevantLicenceMonitoringStations.filter(
-    (relevantLicenceMonitoringStation) => {
-      return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
-    }
-  )
+  return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
+    return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
+  })
 }
 
 module.exports = {
