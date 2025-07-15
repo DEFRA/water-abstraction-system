@@ -6,7 +6,7 @@
  */
 
 const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
-const { titleCase } = require('../../../base.presenter.js')
+const { formatValueUnit, titleCase } = require('../../../base.presenter.js')
 const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
 
 /**
@@ -110,7 +110,7 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
     return {
       checked: alertThresholds.includes(thresholdGroup),
       value: thresholdGroup,
-      text: `${thresholdValue} ${thresholdUnit}`,
+      text: formatValueUnit(thresholdValue, thresholdUnit),
       hint: {
         text: `${titleCase(measureType)} threshold`
       }

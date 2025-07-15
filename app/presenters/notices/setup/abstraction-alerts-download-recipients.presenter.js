@@ -6,7 +6,7 @@
  */
 
 const { contactName } = require('../../crm.presenter.js')
-const { formatAbstractionPeriod } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
@@ -97,7 +97,7 @@ function _row(matchingRecipient, licenceMonitoringStation, notificationType, lic
       licenceMonitoringStation.abstractionPeriodEndMonth
     ),
     licenceMonitoringStation.measureType,
-    `${licenceMonitoringStation.thresholdValue} ${licenceMonitoringStation.thresholdUnit}`,
+    formatValueUnit(licenceMonitoringStation.thresholdValue, licenceMonitoringStation.thresholdUnit),
     notificationType,
     contact ? 'letter' : 'email',
     matchingRecipient.contact_type,
