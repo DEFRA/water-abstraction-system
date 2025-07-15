@@ -234,7 +234,9 @@ describe('Preview presenter', () => {
               sessionId
             )
 
-            expect(result.refreshPageLink).to.equal(`/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`)
+            expect(result.refreshPageLink).to.equal(
+              `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
+            )
           })
         })
 
