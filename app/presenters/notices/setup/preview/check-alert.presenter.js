@@ -18,7 +18,7 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(contactHashId, recipientLicenceRefs, session) {
-  const { id: sessionId, licenceMonitoringStations, referenceCode} = session
+  const { id: sessionId, licenceMonitoringStations, referenceCode } = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
