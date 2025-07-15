@@ -23,11 +23,6 @@ async function post(path, formData) {
   return _parseResult(result)
 }
 
-/**
- * Sends a request to the Charging Module using the provided BaseRequest method
- *
- * @private
- */
 async function _sendRequest(path, method, formData) {
   const options = _requestOptions(formData)
 
@@ -36,19 +31,6 @@ async function _sendRequest(path, method, formData) {
   return result
 }
 
-/**
- * Additional options that will be added to the default options used by BaseRequest
- *
- * We use it to set
- *
- * - the base charging module URL for all requests
- * - the authorization header with the AWS Cognito token on our requests
- * - the body (which is always a JSON object) for our POST requests
- * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
- *   response to a JSON object for us
- *
- * @private
- */
 function _requestOptions(formData) {
   return {
     headers: formData.getHeaders(),
@@ -61,11 +43,6 @@ function _requestOptions(formData) {
   }
 }
 
-/**
- * Parses the charging module response returned from BaseRequest
- *
- * @private
- */
 function _parseResult(result) {
   const { body, statusCode } = result.response
 

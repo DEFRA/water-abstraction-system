@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Generates a template string of html for the return form
+ * Generates a string of html for the return form
  * @module GenerateReturnFormService
  */
 
@@ -9,7 +9,7 @@ const nunjucks = require('nunjucks')
 const path = require('path')
 
 /**
- * Renders a Nunjucks template asynchronously and returns the resulting HTML.
+ * Generates a string of html for the return form
  *
  * THis function adapted from `water-abstraction-service` helper function 'createHtmlFromTemplate'. Which wraps
  * `nunjucksEnv.render` in a Promise to make it easier to use with async/await.

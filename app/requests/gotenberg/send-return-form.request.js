@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates and sends a html string to Gotenberg to convert it into a pdf
+ * Sends multipart/form-data Gotenberg
  * @module SendReturnFormRequest
  */
 
@@ -11,7 +11,7 @@ const GenerateReturnFormService = require('../../services/notices/setup/generate
 const GotenbergRequest = require('../gotenberg.request.js')
 
 /**
- * Creates and sends a html string to Gotenberg to convert it into a pdf
+ * Sends multipart/form-data Gotenberg
  *
  * > Important - 'preferCssPageSize' tells Goetnberg to rely on our styling and to not add any default margin / padding.
  * > This is required in conjunction with setting 'marginTop' etc.
