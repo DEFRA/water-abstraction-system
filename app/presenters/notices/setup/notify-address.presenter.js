@@ -81,7 +81,7 @@ function go(contact) {
 
   let addressParts = _invalidAddressParts(contact)
 
-  if (addressParts) {
+  if (addressParts.length !== 0) {
     return _address(name, addressParts)
   }
 
@@ -268,7 +268,7 @@ function _invalidAddressParts(contact) {
   const noPostcode = !postcode || !postcodeValidator(postcode, 'GB')
 
   if (!noCountry || !noPostcode) {
-    return
+    return []
   }
 
   return [
