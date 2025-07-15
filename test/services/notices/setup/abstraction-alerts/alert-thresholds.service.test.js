@@ -45,7 +45,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
             hint: {
               text: 'Flow threshold'
             },
-            text: '100 m3/s',
+            text: '100m3/s',
             value: licenceMonitoringStations.two.thresholdGroup
           },
           {
@@ -53,7 +53,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
             hint: {
               text: 'Level threshold'
             },
-            text: '100 m',
+            text: '100m',
             value: licenceMonitoringStations.three.thresholdGroup
           }
         ]

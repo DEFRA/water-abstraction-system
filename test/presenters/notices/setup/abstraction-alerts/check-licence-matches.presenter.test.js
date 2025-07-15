@@ -55,7 +55,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '1000 m'
+            threshold: '1000m'
           },
           {
             abstractionPeriod: '1 January to 31 March',
@@ -69,7 +69,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100m3/s'
           },
           {
             abstractionPeriod: '1 January to 31 March',
@@ -83,7 +83,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             licenceRef: licenceMonitoringStations.three.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
-            threshold: '100 m'
+            threshold: '100m'
           }
         ]
       })
@@ -106,7 +106,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '1000 m'
+            threshold: '1000m'
           })
         })
 
@@ -169,7 +169,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                 licenceRef: licenceMonitoringStations.two.licence.licenceRef,
                 restriction: 'Stop',
                 restrictionCount: 1,
-                threshold: '100 m3/s'
+                threshold: '100m3/s'
               },
               {
                 abstractionPeriod: '1 January to 31 March',
@@ -183,7 +183,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                 licenceRef: licenceMonitoringStations.three.licence.licenceRef,
                 restriction: 'Stop',
                 restrictionCount: 1,
-                threshold: '100 m'
+                threshold: '100m'
               }
             ])
           })
@@ -206,7 +206,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                   licenceRef: licenceMonitoringStations.three.licence.licenceRef,
                   restriction: 'Stop',
                   restrictionCount: 1,
-                  threshold: '100 m'
+                  threshold: '100m'
                 }
               ])
             })
