@@ -219,8 +219,9 @@ function formatPounds(valueInPence) {
 }
 
 /**
- * Correctly formats a value and unit to be displayed without a space, as per the GOV UK style guide; for example, a
- * value of 100 and a unit of Ml/d will be formatted as '100Ml/d'
+ * Formats a value and unit to be displayed without a space, as per the GOV UK style guide
+ *
+ * For example, a value of 100 and a unit of Ml/d will be formatted as '100Ml/d'.
  *
  * @param {*} value - The value to be formatted
  * @param {*} unit - The unit to be formatted
