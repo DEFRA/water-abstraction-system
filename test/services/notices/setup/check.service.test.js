@@ -116,7 +116,7 @@ describe('Notices - Setup - Check service', () => {
             contact: ['additional.contact@important.com'],
             licences: [`${testRecipients.additionalContact.licence_refs}`],
             method: 'Email - Additional contact',
-            previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}/select-alert`
+            previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}/check-alert`
           }
         ],
         recipientsAmount: 1,
