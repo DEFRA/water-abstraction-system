@@ -60,20 +60,25 @@ function _restrictions(
   removedThresholds,
   sessionId
 ) {
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
-    licenceMonitoringStations,
+  const recipientLicenceMonitoringStations = _recipientRelevantLicenceMonitoringStations(
     alertThresholds,
-    removedThresholds,
-    alertType
+    alertType,
+    licenceMonitoringStations,
+    recipientLicenceRefs,
+    removedThresholds
   )
 
-  const recipientRelevantLicenceMonitoringStations = relevantLicenceMonitoringStations.filter(
-    (relevantLicenceMonitoringStation) => {
-      return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
-    }
+  const preparedLicenceMonitoringStations = _preparedLicenceMonitoringStations(
+    contactHashId,
+    recipientLicenceMonitoringStations,
+    sessionId
   )
 
-  const preparedLicenceMonitoringStations = recipientRelevantLicenceMonitoringStations.map(
+  return formatRestrictions(preparedLicenceMonitoringStations)
+}
+
+function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonitoringStations, sessionId) {
+  return recipientLicenceMonitoringStations.map(
     (licenceMonitoringStation) => {
       return {
         ...licenceMonitoringStation,
@@ -84,8 +89,21 @@ function _restrictions(
       }
     }
   )
+}
 
-  return formatRestrictions(preparedLicenceMonitoringStations)
+function _recipientRelevantLicenceMonitoringStations(alertThresholds, alertType, licenceMonitoringStations, recipientLicenceRefs, removedThresholds) {
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+    licenceMonitoringStations,
+    alertThresholds,
+    removedThresholds,
+    alertType
+  )
+
+  return relevantLicenceMonitoringStations.filter(
+    (relevantLicenceMonitoringStation) => {
+      return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
+    }
+  )
 }
 
 module.exports = {
