@@ -22,10 +22,10 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
 
   beforeEach(() => {
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
-          recipientLicenceRefs = [
-            licenceMonitoringStations.one.licence.licenceRef,
-            licenceMonitoringStations.two.licence.licenceRef
-          ]
+    recipientLicenceRefs = [
+      licenceMonitoringStations.one.licence.licenceRef,
+      licenceMonitoringStations.two.licence.licenceRef
+    ]
 
     const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
 
