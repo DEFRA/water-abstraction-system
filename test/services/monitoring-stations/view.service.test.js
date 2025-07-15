@@ -101,7 +101,7 @@ describe('Monitoring Stations - View service', () => {
             licenceRef: 'AT/TEST',
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100m3/s'
           }
         ],
         showRemoveTagButton: false,
