@@ -137,6 +137,56 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
+    describe('the "links" property', () => {
+      describe('when the journey is for "adhoc"', () => {
+        beforeEach(() => {
+          session.journey = 'adhoc'
+        })
+
+        it('should return the links for the "adhoc" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.links).to.equal({
+            back: `/system/notices/setup/${session.id}/returns-period`,
+            cancel: `/system/notices/setup/${session.id}/cancel`,
+            download: `/system/notices/setup/${session.id}/download`,
+            removeLicences: `/system/notices/setup/${session.id}/remove-licences`
+          })
+        })
+      })
+
+      describe('when the journey is for "alerts"', () => {
+        beforeEach(() => {
+          session.journey = 'alerts'
+          session.noticeType = 'abstractionAlerts'
+          session.referenceCode = 'WAA-123'
+          session.monitoringStationId = '345'
+        })
+
+        it('should return the links for "alerts" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.links).to.equal({
+            back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
+            cancel: `/system/notices/setup/${session.id}/cancel`,
+            download: `/system/notices/setup/${session.id}/download`,
+            removeLicences: ``
+          })
+        })
+      })
+
+      describe('when the journey is for "standard"', () => {
+        it('should return the links for the "standard" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.links).to.equal({
+            back: `/system/notices/setup/${session.id}/returns-period`,
+            cancel: `/system/notices/setup/${session.id}/cancel`,
+            download: `/system/notices/setup/${session.id}/download`,
+            removeLicences: `/system/notices/setup/${session.id}/remove-licences`
+          })
+        })
+      })
+    })
+
     describe('the "recipients" property', () => {
       describe('the "contact" property', () => {
         describe('when the contact is an email', () => {
@@ -201,6 +251,47 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       describe('the "previewLink" property', () => {
+        describe('when the journey is for "adhoc"', () => {
+          beforeEach(() => {
+            session.journey = 'adhoc'
+          })
+
+          describe('and the "noticeType" is "invitations"', () => {
+            describe('and the method is "letter"', () => {
+              describe('and the address is valid', () => {
+                it('should return a link to the "preview" page', () => {
+                  const result = CheckPresenter.go(testInput, page, pagination, session)
+
+                  expect(result.recipients[0].previewLink).to.equal(
+                    `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateLicenceHolder.contact_hash_id}`
+                  )
+                })
+              })
+
+              describe('and the address is invalid', () => {
+                it('should return null', () => {
+                  const result = CheckPresenter.go(testInput, page, pagination, session)
+
+                  expect(result.recipients[4].previewLink).to.be.null()
+                })
+              })
+            })
+          })
+
+          describe('and the "noticeType" is "returnForms"', () => {
+            beforeEach(() => {
+              session.noticeType = 'returnForms'
+              session.referenceCode = 'PRTF-123'
+            })
+
+            it('should return null', () => {
+              const result = CheckPresenter.go(testInput, page, pagination, session)
+
+              expect(result.recipients[0].previewLink).to.be.null()
+            })
+          })
+        })
+
         describe('when the journey is for "alerts"', () => {
           beforeEach(() => {
             session.journey = 'alerts'
@@ -231,10 +322,6 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         describe('when the journey is for "standard"', () => {
-          beforeEach(() => {
-            session.journey = 'invitations'
-          })
-
           describe('and the "noticeType" is "invitations"', () => {
             describe('and the method is "letter"', () => {
               describe('and the address is valid', () => {
@@ -281,47 +368,6 @@ describe('Notices - Setup - Check presenter', () => {
                   expect(result.recipients[4].previewLink).to.be.null()
                 })
               })
-            })
-          })
-        })
-
-        describe('when the journey is for "adhoc"', () => {
-          beforeEach(() => {
-            session.journey = 'adhoc'
-          })
-
-          describe('and the "noticeType" is "invitations"', () => {
-            describe('and the method is "letter"', () => {
-              describe('and the address is valid', () => {
-                it('should return a link to the "preview" page', () => {
-                  const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                  expect(result.recipients[0].previewLink).to.equal(
-                    `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateLicenceHolder.contact_hash_id}`
-                  )
-                })
-              })
-
-              describe('and the address is invalid', () => {
-                it('should return null', () => {
-                  const result = CheckPresenter.go(testInput, page, pagination, session)
-
-                  expect(result.recipients[4].previewLink).to.be.null()
-                })
-              })
-            })
-          })
-
-          describe('and the "noticeType" is "returnForms"', () => {
-            beforeEach(() => {
-              session.noticeType = 'returnForms'
-              session.referenceCode = 'PRTF-123'
-            })
-
-            it('should return null', () => {
-              const result = CheckPresenter.go(testInput, page, pagination, session)
-
-              expect(result.recipients[0].previewLink).to.be.null()
             })
           })
         })
@@ -378,14 +424,68 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
-    describe('the "links" property', () => {
-      it('should return the links for "invitations"', () => {
-        const result = CheckPresenter.go(testInput, page, pagination, session)
-        expect(result.links).to.equal({
-          back: `/system/notices/setup/${session.id}/returns-period`,
-          cancel: `/system/notices/setup/${session.id}/cancel`,
-          download: `/system/notices/setup/${session.id}/download`,
-          removeLicences: `/system/notices/setup/${session.id}/remove-licences`
+    describe('the "readyToSend" property', () => {
+      describe('when the journey is for "adhoc"', () => {
+        beforeEach(() => {
+          session.journey = 'adhoc'
+        })
+
+        describe('and the "noticeType" is "invitations"', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+
+            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
+          })
+        })
+
+        describe('and the "noticeType" is "returnForms"', () => {
+          beforeEach(() => {
+            session.noticeType = 'returnForms'
+            session.referenceCode = 'PRTF-123'
+          })
+
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+
+            expect(result.readyToSend).to.equal('Return forms are ready to send.')
+          })
+        })
+      })
+
+      describe('when the journey is for "alerts"', () => {
+        beforeEach(() => {
+          session.journey = 'alerts'
+          session.noticeType = 'abstractionAlerts'
+          session.referenceCode = 'WAA-123'
+          session.monitoringStationId = '345'
+        })
+
+        it('should return the correct message', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.readyToSend).to.equal('Abstraction alerts are ready to send.')
+        })
+      })
+
+      describe('when the journey is for "standard"', () => {
+        describe('and the "noticeType" is "invitations"', () => {
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+
+            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
+          })
+        })
+
+        describe('and the "noticeType" is "reminders"', () => {
+          beforeEach(() => {
+            session.noticeType = 'reminders'
+          })
+
+          it('should return the correct message', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+
+            expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
+          })
         })
       })
     })
@@ -413,101 +513,6 @@ describe('Notices - Setup - Check presenter', () => {
           it('should return the correct message', () => {
             const result = CheckPresenter.go(testInput, page, pagination, session)
             expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
-          })
-        })
-      })
-    })
-
-    describe('when the journey is for "alerts"', () => {
-      beforeEach(() => {
-        session.journey = 'alerts'
-        session.noticeType = 'abstractionAlerts'
-        session.referenceCode = 'WAA-123'
-        session.monitoringStationId = '345'
-      })
-
-      describe('the "links" property', () => {
-        it('should return the links for "alerts"', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-
-          expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
-            cancel: `/system/notices/setup/${session.id}/cancel`,
-            download: `/system/notices/setup/${session.id}/download`,
-            removeLicences: ``
-          })
-        })
-      })
-
-      describe('the "readyToSend" property', () => {
-        it('should return the correct message', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-
-          expect(result.readyToSend).to.equal('Abstraction alerts are ready to send.')
-        })
-      })
-    })
-
-    describe('when the journey is for "standard"', () => {
-      beforeEach(() => {
-        session.journey = 'invitations'
-      })
-
-      describe('and the "noticeType" is "invitations"', () => {
-        beforeEach(() => {
-          session.referenceCode = 'RINV-123'
-        })
-
-        describe('the "readyToSend" property', () => {
-          it('should return the correct message', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
-          })
-        })
-      })
-
-      describe('and the "noticeType" is "reminders"', () => {
-        beforeEach(() => {
-          session.noticeType = 'reminders'
-        })
-
-        describe('the "readyToSend" property', () => {
-          it('should return the correct message', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.readyToSend).to.equal('Returns reminders are ready to send.')
-          })
-        })
-      })
-    })
-
-    describe('when the journey is for "adhoc"', () => {
-      beforeEach(() => {
-        session.journey = 'adhoc'
-      })
-
-      describe('and the "noticeType" is "invitations"', () => {
-        describe('the "readyToSend" property', () => {
-          it('should return the correct message', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
-          })
-        })
-      })
-
-      describe('and the "noticeType" is "returnForms"', () => {
-        beforeEach(() => {
-          session.noticeType = 'returnForms'
-          session.referenceCode = 'PRTF-123'
-        })
-
-        describe('the "readyToSend" property', () => {
-          it('should return the correct message', () => {
-            const result = CheckPresenter.go(testInput, page, pagination, session)
-
-            expect(result.readyToSend).to.equal('Return forms are ready to send.')
           })
         })
       })
