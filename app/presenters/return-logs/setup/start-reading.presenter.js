@@ -35,7 +35,6 @@ function _backLink(session) {
 }
 
 function _savedValue(startReading) {
-  console.log(startReading)
   if (startReading === 0) {
     return '0'
   }
