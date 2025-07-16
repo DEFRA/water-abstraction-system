@@ -41,6 +41,18 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
       })
 
+      describe('and the value is 0', () => {
+        beforeEach(() => {
+          payload = { startReading: '0' }
+        })
+
+        it('confirms the payload is valid', () => {
+          const result = StartReadingValidator.go(payload, lines)
+
+          expect(result.error).not.to.exist()
+        })
+      })
+
       describe('and the return lines do have an initial reading', () => {
         beforeEach(() => {
           payload = { startReading: '156000' }
@@ -75,11 +87,11 @@ describe('Return Logs Setup - Start Reading validator', () => {
         payload = { startReading: 'Test' }
       })
 
-      it('fails validation with the message "Start meter reading must be a positive number"', () => {
+      it('fails validation with the message "Start meter reading must 0 or higher"', () => {
         const result = StartReadingValidator.go(payload, lines)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Start meter reading must be a positive number')
+        expect(result.error.details[0].message).to.equal('Start meter reading must 0 or higher')
       })
     })
 
@@ -88,11 +100,11 @@ describe('Return Logs Setup - Start Reading validator', () => {
         payload = { startReading: '-1' }
       })
 
-      it('fails validation with the message "Start meter reading must be a positive number"', () => {
+      it('fails validation with the message "Start meter reading must not be negative"', () => {
         const result = StartReadingValidator.go(payload, lines)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Start meter reading must be a positive number')
+        expect(result.error.details[0].message).to.equal('Start meter reading must not be negative')
       })
     })
 
