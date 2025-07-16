@@ -42,7 +42,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  * - There are 8 possible address fields for a contact but we are limited to 6
  * - Many UK addresses have the country field populated, but postcode needs to be the last line as per Notify
  * - Many non-UK addresses have the postcode field populated, but country needs to be the last line as per Notify
- * - We have lost of addresses where neither postcode nor country are populated
+ * - We have lots of addresses where neither postcode nor country are populated
  * - There are some addresses where `addressLine1` is a duplicate of the contact name, which results in duplicated lines
  * - Most addresses have one or more empty address fields
  * - Lots of addresses have their address information in the wrong fields, for example, county is in country
