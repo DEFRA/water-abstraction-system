@@ -114,14 +114,18 @@ function _paginateRecipients(recipients, page) {
 }
 
 function _previewLink(noticeType, recipient, sessionId, contact) {
+  // We don't currently support previewing return forms
   if (noticeType === 'returnForms') {
     return null
   }
 
+  // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
+  // else it might give a false impression the letter will be sent.
   if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
     return null
   }
 
+  // Returns invitations and reminders can be previewed directly
   const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
 
   // For abstraction alerts we need to go to an intermediate page to select the alert to preview
