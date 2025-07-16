@@ -21,7 +21,7 @@ const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-
 // Thing under test
 const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
 
-describe('Notices - Setup - Preview service', () => {
+describe('Notices Setup - Preview - Preview service', () => {
   let recipients
   let session
   let testRecipient
