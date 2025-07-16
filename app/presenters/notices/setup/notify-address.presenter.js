@@ -30,7 +30,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  *
  * - The address must have at least 3 lines.
  * - The last line needs to be a real UK postcode or the name of a country outside the UK.
- * - An address can have a maximum of 7 lines (not stated but a known limit)
+ * - An address can have a maximum of 7 lines
  *
  * Within a Notify letter template only these 7 lines are used for the address section. So, we reserve `address_line_1`
  * for the contact's name.
