@@ -82,7 +82,7 @@ describe('Notices Setup - Preview - Preview service', () => {
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100m3/s'
           }
         ]
       })

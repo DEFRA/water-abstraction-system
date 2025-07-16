@@ -63,7 +63,7 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '1000 m'
+            threshold: '1000m'
           },
           {
             abstractionPeriod: '1 January to 31 March',
@@ -77,7 +77,7 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100m3/s'
           }
         ]
       })
@@ -105,7 +105,7 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
               licenceRef: licenceMonitoringStations.two.licence.licenceRef,
               restriction: 'Stop',
               restrictionCount: 1,
-              threshold: '100 m3/s'
+              threshold: '100m3/s'
             }
           ])
         })
