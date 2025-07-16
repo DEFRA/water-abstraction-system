@@ -34,18 +34,15 @@ async function go(contactHashId, noticeType, licenceMonitoringStationId, notific
 }
 
 function _address(personalisation) {
-  const addressLines = [
+  return [
     personalisation['address_line_1'],
     personalisation['address_line_2'],
     personalisation['address_line_3'],
     personalisation['address_line_4'],
     personalisation['address_line_5'],
-    personalisation['address_line_6']
-  ]
-
-  return addressLines.filter((addressLine) => {
-    return addressLine
-  })
+    personalisation['address_line_6'],
+    personalisation['address_line_7']
+  ].filter(Boolean)
 }
 
 function _backLink(contactHashId, noticeType, sessionId) {
