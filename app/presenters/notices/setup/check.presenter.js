@@ -30,7 +30,6 @@ function go(recipients, page, pagination, session) {
 
   return {
     defaultPageSize,
-    displayPreviewLink: noticeType !== 'returnForms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
@@ -60,16 +59,13 @@ function _contact(recipient) {
 
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
-    const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
-
-    // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
+    const contact = _contact(recipient)
 
     return {
-      contact: _contact(recipient),
+      contact,
       licences: recipient.licence_refs.split(','),
       method: `${recipient.message_type} - ${recipient.contact_type}`,
-      previewLink
+      previewLink: _previewLink(noticeType, recipient, sessionId, contact)
     }
   })
 }
@@ -115,6 +111,21 @@ function _paginateRecipients(recipients, page) {
   const pageNumber = Number(page) * defaultPageSize
 
   return recipients.slice(pageNumber - defaultPageSize, pageNumber)
+}
+
+function _previewLink(noticeType, recipient, sessionId, contact) {
+  if (noticeType === 'returnForms') {
+    return null
+  }
+
+  if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
+    return null
+  }
+
+  const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+
+  // For abstraction alerts we need to go to an intermediate page to select the alert to preview
+  return noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
 }
 
 /**
