@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { contactName, contactAddress } = require('../../crm.presenter.js')
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
@@ -53,10 +53,9 @@ function _contact(recipient) {
     return [recipient.email]
   }
 
-  const name = contactName(recipient.contact)
-  const address = contactAddress(recipient.contact)
+  const notifyAddress = NotifyAddressPresenter.go(recipient.contact)
 
-  return [name, ...address]
+  return Object.values(notifyAddress)
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
