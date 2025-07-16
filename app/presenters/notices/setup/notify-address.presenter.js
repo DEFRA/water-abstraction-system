@@ -287,11 +287,11 @@ function _invalidAddressParts(contact) {
 /**
  * Determines the address parts for a UK contact
  *
- * UK addresses will have a valid UK postcode. They may also have country specified. If the country is in the UK we
- * do no include it in the address parts. It is superfluous and dropping it increases the changes we can avoid having to
+ * UK addresses will have a valid UK postcode. They may also have country specified. If the country is in the UK we do
+ * not include it in the address parts. It is superfluous and dropping it increases the chances we can avoid having to
  * condense the address.
  *
- * But because there is no validation in NALD, there is a chance that it might be holding a something else entirely
+ * But because there is no validation in NALD, there is a chance that it might be holding something else entirely
  * which does have value, for example the town. Or it could be one of the Crown dependent countries in which users will
  * expect to see this reflected in the address.
  *
