@@ -22,6 +22,9 @@ const ViewLicenceReturnsService = require('../services/licences/view-licence-ret
 const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
 
+const NotifyStatusRequest = require('../requests/notify/notify-status.request.js')
+const NotifyStatusesRequest = require('../requests/notify/notify-statuses.request.js')
+
 const ViewLicencePage = 'licences/view.njk'
 
 async function markedForSupplementaryBilling(request, h) {
@@ -176,6 +179,14 @@ async function viewSetUp(request, h) {
 }
 
 async function viewSummary(request, h) {
+  const result1 = await NotifyStatusRequest.send('2a2f6134-6972-45e9-b794-356dd3371a15')
+  console.log('🚀🚀🚀 ~ result1:')
+  console.dir(result1, { depth: null, colors: true })
+
+  const result2 = await NotifyStatusesRequest.send('2a2f6134-6972-45e9-b794-356dd3371a15', 'WAA-YEFL4M')
+  console.log('🚀🚀🚀 ~ result12:')
+  console.dir(result2, { depth: null, colors: true })
+
   const {
     params: { id },
     auth
