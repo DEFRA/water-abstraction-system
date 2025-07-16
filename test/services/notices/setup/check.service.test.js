@@ -98,7 +98,7 @@ describe('Notices - Setup - Check service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         defaultPageSize: 25,
-        displayPreviewLink: false,
+        displayPreviewLink: true,
         links: {
           back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -116,7 +116,7 @@ describe('Notices - Setup - Check service', () => {
             contact: ['additional.contact@important.com'],
             licences: [`${testRecipients.additionalContact.licence_refs}`],
             method: 'Email - Additional contact',
-            previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}`
+            previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}/check-alert`
           }
         ],
         recipientsAmount: 1,
