@@ -10,7 +10,7 @@ const { postcodeValidator } = require('postcode-validator')
 const { contactName } = require('../../../presenters/crm.presenter.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
-const UK_COUNTRIES = ['england', 'northern ireland', 'scotland', 'wales']
+const UK_COUNTRIES = ['england', 'northern ireland', 'scotland', 'wales', 'united kingdom']
 const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
 
 /**
