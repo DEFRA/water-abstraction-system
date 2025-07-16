@@ -507,7 +507,7 @@ describe('Notices - Setup - Check presenter', () => {
           it('should return the correct message', () => {
             const result = CheckPresenter.go(testInput, page, pagination, session)
 
-            expect(result.readyToSend).to.equal('Paper invitations are ready to send.')
+            expect(result.readyToSend).to.equal('Return forms are ready to send.')
           })
         })
       })

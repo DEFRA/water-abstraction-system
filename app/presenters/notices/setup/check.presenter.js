@@ -10,7 +10,7 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   abstractionAlerts: 'Abstraction alerts',
-  returnForms: 'Paper invitations',
+  returnForms: 'Return forms',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
