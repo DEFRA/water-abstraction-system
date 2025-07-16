@@ -20,7 +20,7 @@ const FetchAbstractionAlertRecipientsService = require('../../../../../app/servi
 // Thing under test
 const CheckAlertService = require('../../../../../app/services/notices/setup/preview/check-alert.service.js')
 
-describe('Notices Setup - Preview - Preview service', () => {
+describe('Notices Setup - Preview - Check Alert service', () => {
   let licenceMonitoringStations
   let recipients
   let session
