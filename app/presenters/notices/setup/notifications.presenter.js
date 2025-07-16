@@ -5,7 +5,7 @@
  * @module NotificationsPresenter
  */
 
-const { contactName, contactAddress } = require('../../crm.presenter.js')
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -67,25 +67,6 @@ function go(recipients, session, eventId) {
   }
 
   return notifications
-}
-
-/**
- * Notify expects address lines to be formatted into: 'address_line_1'
- *
- * @private
- */
-function _addressLines(contact, name) {
-  const address = contactAddress(contact)
-
-  const fullContact = [name, ...address]
-
-  const addressLines = {}
-
-  for (const [index, value] of fullContact.entries()) {
-    addressLines[`address_line_${index + 1}`] = value
-  }
-
-  return addressLines
 }
 
 function _common(referenceCode, templateId, eventId) {
@@ -173,10 +154,9 @@ function _emailTemplate(contactType, journey, noticeType) {
  * @private
  */
 function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noticeType) {
-  const name = contactName(recipient.contact)
   const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
-
   const messageType = 'letter'
+  const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
     ..._common(referenceCode, templateId, eventId),
@@ -184,9 +164,10 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noti
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
-      ..._addressLines(recipient.contact, name),
+      ...address,
       ..._returnsPeriod(returnsPeriod),
-      name
+      // NOTE: Address line 1 is always set to the recipient's name
+      name: address.address_line_1
     }
   }
 }
