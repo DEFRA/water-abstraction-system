@@ -132,7 +132,8 @@ describe('Notices - Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
-        referenceCode: 'RINV-123'
+        referenceCode: 'RINV-123',
+        warning: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
       })
     })
 
@@ -485,6 +486,44 @@ describe('Notices - Setup - Check presenter', () => {
 
             expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
           })
+        })
+      })
+    })
+
+    describe('the "warning" property', () => {
+      describe('when there are no recipients with invalid addresses', () => {
+        beforeEach(() => {
+          testInput[3].contact.postcode = 'WD25 7LR'
+        })
+
+        it('returns null', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.warning).to.be.null()
+        })
+      })
+
+      describe('when there is one recipient with an invalid address', () => {
+        it('returns a warning for that recipient', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.warning).to.equal(
+            'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+          )
+        })
+      })
+
+      describe('when there are multiple recipients with an invalid addresses', () => {
+        beforeEach(() => {
+          testInput[2].contact.postcode = null
+        })
+
+        it('returns a warning that lists the recipients', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+
+          expect(result.warning).to.equal(
+            'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
+          )
         })
       })
     })

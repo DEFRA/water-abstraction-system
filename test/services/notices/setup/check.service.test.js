@@ -71,7 +71,8 @@ describe('Notices - Setup - Check service', () => {
         }
       ],
       recipientsAmount: 1,
-      referenceCode: 'RINV-123'
+      referenceCode: 'RINV-123',
+      warning: null
     })
   })
 
@@ -118,7 +119,8 @@ describe('Notices - Setup - Check service', () => {
           }
         ],
         recipientsAmount: 1,
-        referenceCode: 'WAA-123'
+        referenceCode: 'WAA-123',
+        warning: null
       })
     })
   })

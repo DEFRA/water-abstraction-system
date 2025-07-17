@@ -28,14 +28,17 @@ const NOTIFICATION_TYPES = {
 function go(recipients, page, pagination, session) {
   const { noticeType, referenceCode } = session
 
+  const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+
   return {
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
-    recipients: _recipients(noticeType, page, recipients, session.id),
+    recipients: formattedRecipients,
     recipientsAmount: recipients.length,
-    referenceCode
+    referenceCode,
+    warning: _warning(formattedRecipients)
   }
 }
 
@@ -171,6 +174,28 @@ function _sortRecipients(recipients) {
 
     return 0
   })
+}
+
+function _warning(formattedRecipients) {
+  const invalidRecipients = formattedRecipients.filter((formattedRecipient) => {
+    const { contact } = formattedRecipient
+
+    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
+  })
+
+  if (invalidRecipients.length === 0) {
+    return null
+  }
+
+  if (invalidRecipients.length === 1) {
+    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+  }
+
+  const contactNames = invalidRecipients.map((invalidRecipient) => {
+    return invalidRecipient.contact[0]
+  })
+
+  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
 }
 
 module.exports = {
