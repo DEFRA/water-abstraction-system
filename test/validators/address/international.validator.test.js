@@ -56,7 +56,7 @@ describe('Address - International Validator', () => {
       const result = InternationalValidator.go(payload)
 
       expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 1 cannont start with a special character')
+      expect(result.error.details[0].message).to.equal('Address line 1 cannot start with a special character')
     })
   })
 
@@ -69,7 +69,7 @@ describe('Address - International Validator', () => {
       const result = InternationalValidator.go(payload)
 
       expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 2 cannont start with a special character')
+      expect(result.error.details[0].message).to.equal('Address line 2 cannot start with a special character')
     })
   })
 
@@ -82,7 +82,7 @@ describe('Address - International Validator', () => {
       const result = InternationalValidator.go(payload)
 
       expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 3 cannont start with a special character')
+      expect(result.error.details[0].message).to.equal('Address line 3 cannot start with a special character')
     })
   })
 
@@ -95,7 +95,7 @@ describe('Address - International Validator', () => {
       const result = InternationalValidator.go(payload)
 
       expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 4 cannont start with a special character')
+      expect(result.error.details[0].message).to.equal('Address line 4 cannot start with a special character')
     })
   })
 })
