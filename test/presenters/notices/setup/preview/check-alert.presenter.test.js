@@ -47,7 +47,7 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
 
       expect(result).to.equal({
         backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'WAA-XM0WMH',
+        caption: 'Notice WAA-XM0WMH',
         pageTitle: 'Check the recipient previews',
         restrictionHeading: 'Flow and level restriction type and threshold',
         restrictions: [
