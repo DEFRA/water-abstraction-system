@@ -127,10 +127,16 @@ function _addDuplicateReturnsAgent(licenceRef) {
 }
 
 function _addReturnTo() {
+  // NOTE: By removing the postcode from this one contact, we know we'll get a recipient that when passed to the
+  // presenters will result in the address being flagged as INVALID. This allows us to write tests for this scenario.
+  const contact = _contact('2', 'Returns to', 'Returns to')
+
+  contact.postcode = null
+
   return {
     licence_refs: generateLicenceRef(),
     contact_type: 'Returns to',
-    contact: _contact('2', 'Returns to', 'Returns to'),
+    contact,
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893'
   }
 }

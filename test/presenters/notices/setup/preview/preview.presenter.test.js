@@ -14,7 +14,7 @@ const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-
 // Thing under test
 const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
 
-describe('Notices Setup - Preview - Preview presenter', () => {
+describe('Notices - Setup - Preview - Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const licenceMonitoringStationId = 'a4d15f69-5005-4b6e-ab50-3fbae2deec9c'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
@@ -47,7 +47,15 @@ describe('Notices Setup - Preview - Preview presenter', () => {
         )
 
         expect(result).to.equal({
-          address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
+          address: [
+            'Clean Water Limited',
+            'c/o Bob Bobbles',
+            'Water Lane',
+            'Swampy Heath',
+            'Marshton',
+            'CAMBRIDGESHIRE',
+            'CB23 1ZZ'
+          ],
           backLink: `/system/notices/setup/${sessionId}/check`,
           caption: 'Notice RINV-0Q7AD8',
           contents: 'Preview of the notification contents',
@@ -65,8 +73,8 @@ describe('Notices Setup - Preview - Preview presenter', () => {
 
           describe('and only some of the address values in the "notifications.personalisation" property are filled', () => {
             beforeEach(() => {
-              testNotification.personalisation.address_line_1 = ''
-              testNotification.personalisation.address_line_3 = ''
+              testNotification.personalisation.address_line_6 = ''
+              testNotification.personalisation.address_line_7 = ''
             })
 
             it('correctly formats the address data into an array with the populated values', async () => {
@@ -78,7 +86,13 @@ describe('Notices Setup - Preview - Preview presenter', () => {
                 sessionId
               )
 
-              expect(result.address).to.equal(['Water Lane', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'])
+              expect(result.address).to.equal([
+                'Clean Water Limited',
+                'c/o Bob Bobbles',
+                'Water Lane',
+                'Swampy Heath',
+                'Marshton'
+              ])
             })
           })
         })
@@ -195,7 +209,15 @@ describe('Notices Setup - Preview - Preview presenter', () => {
         )
 
         expect(result).to.equal({
-          address: ['c/o Bob Bobbles', 'Water Lane', 'Swampy Heath', 'Marshton', 'CAMBRIDGESHIRE', 'CB23 1ZZ'],
+          address: [
+            'Clean Water Limited',
+            'c/o Bob Bobbles',
+            'Water Lane',
+            'Swampy Heath',
+            'Marshton',
+            'CAMBRIDGESHIRE',
+            'CB23 1ZZ'
+          ],
           backLink: `/system/notices/setup/${sessionId}/check`,
           caption: 'Notice RINV-0Q7AD8',
           contents: 'error',
@@ -270,12 +292,13 @@ function _testNotification() {
     messageRef: 'returns_invitation_returns_to_letter',
     personalisation: {
       name: 'Clean Water Limited',
-      address_line_1: 'c/o Bob Bobbles',
-      address_line_2: 'Water Lane',
-      address_line_3: 'Swampy Heath',
-      address_line_4: 'Marshton',
-      address_line_5: 'CAMBRIDGESHIRE',
-      address_line_6: 'CB23 1ZZ',
+      address_line_1: 'Clean Water Limited',
+      address_line_2: 'c/o Bob Bobbles',
+      address_line_3: 'Water Lane',
+      address_line_4: 'Swampy Heath',
+      address_line_5: 'Marshton',
+      address_line_6: 'CAMBRIDGESHIRE',
+      address_line_7: 'CB23 1ZZ',
       periodEndDate: '30 June 2025',
       periodStartDate: '1 April 2025',
       returnDueDate: '28 July 2025'
