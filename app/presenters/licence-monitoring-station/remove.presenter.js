@@ -5,6 +5,7 @@
  * @module RemovePresenter
  */
 
+const { formatValueUnit } = require('../base.presenter.js')
 const { formatRestrictionType } = require('../monitoring-stations/base.presenter.js')
 
 /**
@@ -34,7 +35,7 @@ function go(licenceMonitoringStation) {
     monitoringStationId: monitoringStation.id,
     pageTitle: 'You’re about to remove the tag for this licence',
     station: _monitoringStationName(monitoringStation),
-    threshold: `${thresholdValue}${thresholdUnit}`,
+    threshold: formatValueUnit(thresholdValue, thresholdUnit),
     type: formatRestrictionType(restrictionType),
     Watercourse: monitoringStation.catchmentName
   }

@@ -1,8 +1,8 @@
 'use strict'
 
 const CrmContactList = require('./legacy/crm-contact-list.js')
-const DetermineNotifyAddress = require('./determine-notify-address.js')
 const LicenceDocumentHeaderModel = require('../../../models/licence-document-header.model.js')
+const NotifyAddressPresenter = require('../../../presenters/notices/setup/notify-address.presenter.js')
 const NotifyHelpers = require('./legacy/notify-helpers.js')
 
 /**
@@ -18,7 +18,7 @@ async function go(licenceRef) {
 
   return contacts.map((contact) => {
     const legacyResult = _legacyResult(contact)
-    const systemResult = DetermineNotifyAddress.go(contact)
+    const systemResult = NotifyAddressPresenter.go(contact)
 
     return {
       contact,

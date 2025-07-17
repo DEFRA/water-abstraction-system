@@ -293,6 +293,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
+    options: {
+      handler: NoticesSetupController.preview,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
+    options: {
+      handler: NoticesSetupController.checkAlert,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,

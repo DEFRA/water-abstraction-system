@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatLongDate, sentenceCase, formatAbstractionPeriod } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatValueUnit, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Returns the heading for the "restrictions" column of the monitoring station page
@@ -94,7 +94,7 @@ function formatRestrictions(licenceMonitoringStations) {
       licenceRef: licence.licenceRef,
       restriction: formatRestrictionType(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
-      threshold: `${thresholdValue} ${thresholdUnit}`,
+      threshold: formatValueUnit(thresholdValue, thresholdUnit),
       action
     }
   })

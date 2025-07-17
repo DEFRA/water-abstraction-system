@@ -26,15 +26,15 @@ const NOTIFICATION_TYPES = {
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page, pagination, session) {
-  const { referenceCode, noticeType } = session
+  const { noticeType, referenceCode } = session
 
   return {
     defaultPageSize,
-    displayPreviewLink: noticeType !== 'abstractionAlerts' && noticeType !== 'returnForms',
+    displayPreviewLink: noticeType !== 'returnForms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
-    recipients: _recipients(page, recipients, session.id),
+    recipients: _recipients(noticeType, page, recipients, session.id),
     recipientsAmount: recipients.length,
     referenceCode
   }
@@ -59,13 +59,18 @@ function _contact(recipient) {
   return [name, ...address]
 }
 
-function _formatRecipients(recipients, sessionId) {
+function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
+    const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+
+    // For abstraction alerts we need to go to an intermediate page to select the alert to preview
+    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
+
     return {
       contact: _contact(recipient),
       licences: recipient.licence_refs.split(','),
       method: `${recipient.message_type} - ${recipient.contact_type}`,
-      previewLink: `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+      previewLink
     }
   })
 }
@@ -125,8 +130,8 @@ function _paginateRecipients(recipients, page) {
  *
  * @private
  */
-function _recipients(page, recipients, sessionId) {
-  const formattedRecipients = _formatRecipients(recipients, sessionId)
+function _recipients(noticeType, page, recipients, sessionId) {
+  const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId)
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)

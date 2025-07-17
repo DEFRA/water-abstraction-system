@@ -20,7 +20,7 @@ function go(session) {
     pageTitle: 'Enter the start meter reading',
     returnReference,
     sessionId,
-    startReading: startReading ?? null
+    startReading: _savedValue(startReading)
   }
 }
 
@@ -32,6 +32,14 @@ function _backLink(session) {
   }
 
   return `/system/return-logs/setup/${id}/reported`
+}
+
+function _savedValue(startReading) {
+  if (startReading === 0) {
+    return '0'
+  }
+
+  return startReading ?? null
 }
 
 module.exports = {

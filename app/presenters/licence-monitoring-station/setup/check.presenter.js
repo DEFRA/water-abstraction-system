@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { formatAbstractionPeriod } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -43,7 +43,7 @@ function go(session) {
     links: _links(session.id),
     monitoringStationLabel: label,
     pageTitle: 'Check the restriction details',
-    threshold: `${threshold}${unit}`,
+    threshold: formatValueUnit(threshold, unit),
     type: _type(stopOrReduce, reduceAtThreshold)
   }
 }
