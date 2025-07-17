@@ -7,6 +7,7 @@
  */
 
 const { postcodeValidator } = require('postcode-validator')
+const { invalidStartCharacters } = require('../helpers/notify-address-line.validator.js')
 
 const Joi = require('joi')
 
@@ -23,7 +24,7 @@ function go(payload) {
     addressLine1: Joi.string()
       .required()
       .custom((value, helper) => {
-        if (_invalidStartCharacters(value)) {
+        if (invalidStartCharacters(value)) {
           return helper.error('string.custom')
         }
         return value
@@ -35,7 +36,7 @@ function go(payload) {
     addressLine2: Joi.string()
       .optional()
       .custom((value, helper) => {
-        if (_invalidStartCharacters(value)) {
+        if (invalidStartCharacters(value)) {
           return helper.error('string.custom')
         }
         return value
@@ -46,7 +47,7 @@ function go(payload) {
     addressLine3: Joi.string()
       .optional()
       .custom((value, helper) => {
-        if (_invalidStartCharacters(value)) {
+        if (invalidStartCharacters(value)) {
           return helper.error('string.custom')
         }
         return value
@@ -57,7 +58,7 @@ function go(payload) {
     addressLine4: Joi.string()
       .optional()
       .custom((value, helper) => {
-        if (_invalidStartCharacters(value)) {
+        if (invalidStartCharacters(value)) {
           return helper.error('string.custom')
         }
         return value
@@ -80,14 +81,6 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-function _invalidStartCharacters(value) {
-  const startCharacters = ['@', '(', ')', '=', '[', ']', '”', '\\', '/', '<', '>']
-
-  return startCharacters.some((character) => {
-    return value.startsWith(character)
-  })
 }
 
 module.exports = {

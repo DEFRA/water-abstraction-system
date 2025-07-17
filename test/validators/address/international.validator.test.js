@@ -13,11 +13,18 @@ const InternationalValidator = require('../../../app/validators/address/internat
 describe('Address - International Validator', () => {
   let payload
 
-  beforeEach(() => {
-    payload = { addressLine1: '1 Fake street' }
-  })
-
   describe('when called with valid data', () => {
+    beforeEach(() => {
+      payload = {
+        addressLine1: '1 Fake Farm',
+        addressLine2: '1 Fake street',
+        addressLine3: 'Fake Village',
+        addressLine4: 'Fake City',
+        country: 'Ireland',
+        postcode: '12345678'
+      }
+    })
+
     it('returns with no errors', () => {
       const result = InternationalValidator.go(payload)
 
@@ -26,7 +33,7 @@ describe('Address - International Validator', () => {
     })
   })
 
-  describe('when called with invalid data', () => {
+  describe('when called with no data', () => {
     beforeEach(() => {
       payload = {}
     })
@@ -35,8 +42,60 @@ describe('Address - International Validator', () => {
       const result = InternationalValidator.go(payload)
 
       expect(result.value).to.exist()
-      expect(result.error).to.exist()
       expect(result.error.details[0].message).to.equal('Enter address line 1')
+      expect(result.error.details[1].message).to.equal('Select a country')
+    })
+  })
+
+  describe('when called with an invalid addressLine1', () => {
+    beforeEach(() => {
+      payload = { addressLine1: '<', country: 'Ireland' }
+    })
+
+    it('returns with errors', () => {
+      const result = InternationalValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error.details[0].message).to.equal('Address line 1 cannont start with a special character')
+    })
+  })
+
+  describe('when called with an invalid addressLine2', () => {
+    beforeEach(() => {
+      payload = { addressLine1: '1 Fake Farm', addressLine2: '@', country: 'Ireland' }
+    })
+
+    it('returns with errors', () => {
+      const result = InternationalValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error.details[0].message).to.equal('Address line 2 cannont start with a special character')
+    })
+  })
+
+  describe('when called with an invalid addressLine3', () => {
+    beforeEach(() => {
+      payload = { addressLine1: '1 Fake Farm', addressLine3: '(', country: 'Ireland' }
+    })
+
+    it('returns with errors', () => {
+      const result = InternationalValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error.details[0].message).to.equal('Address line 3 cannont start with a special character')
+    })
+  })
+
+  describe('when called with an invalid addressLine4', () => {
+    beforeEach(() => {
+      payload = { addressLine1: '1 Fake Farm', addressLine4: ')', country: 'Ireland' }
+    })
+
+    it('returns with errors', () => {
+      const result = InternationalValidator.go(payload)
+
+      expect(result.value).to.exist()
+      expect(result.error.details[0].message).to.equal('Address line 4 cannont start with a special character')
     })
   })
 })

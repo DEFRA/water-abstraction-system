@@ -7,6 +7,8 @@
  */
 
 const Joi = require('joi')
+const { countries } = require('../../lib/static-lookups.lib.js')
+const { invalidStartCharacters } = require('../helpers/notify-address-line.validator.js')
 
 /**
  * Validates data submitted for the `address/{sessionId}/international` page
@@ -18,9 +20,58 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    addressLine1: Joi.string().required().messages({
-      'any.required': 'Enter address line 1'
-    })
+    addressLine1: Joi.string()
+      .required()
+      .custom((value, helper) => {
+        if (invalidStartCharacters(value)) {
+          return helper.error('string.custom')
+        }
+        return value
+      })
+      .messages({
+        'any.required': 'Enter address line 1',
+        'string.custom': 'Address line 1 cannont start with a special character'
+      }),
+    addressLine2: Joi.string()
+      .optional()
+      .custom((value, helper) => {
+        if (invalidStartCharacters(value)) {
+          return helper.error('string.custom')
+        }
+        return value
+      })
+      .messages({
+        'string.custom': 'Address line 2 cannont start with a special character'
+      }),
+    addressLine3: Joi.string()
+      .optional()
+      .custom((value, helper) => {
+        if (invalidStartCharacters(value)) {
+          return helper.error('string.custom')
+        }
+        return value
+      })
+      .messages({
+        'string.custom': 'Address line 3 cannont start with a special character'
+      }),
+    addressLine4: Joi.string()
+      .optional()
+      .custom((value, helper) => {
+        if (invalidStartCharacters(value)) {
+          return helper.error('string.custom')
+        }
+        return value
+      })
+      .messages({
+        'string.custom': 'Address line 4 cannont start with a special character'
+      }),
+    country: Joi.string()
+      .required()
+      .valid(...countries)
+      .messages({
+        'any.required': 'Select a country'
+      }),
+    postcode: Joi.string().optional()
   })
 
   return schema.validate(payload, { abortEarly: false })
