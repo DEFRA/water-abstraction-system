@@ -7,6 +7,8 @@
  */
 
 const Joi = require('joi')
+const { countries } = require('../../lib/static-lookups.lib.js')
+const { addressLineValidator } = require('./addressLine.validator.js')
 
 /**
  * Validates data submitted for the `address/{sessionId}/international` page
@@ -18,9 +20,14 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    addressLine1: Joi.string().required().messages({
-      'any.required': 'Enter address line 1'
-    })
+    ...addressLineValidator(),
+    country: Joi.string()
+      .required()
+      .valid(...countries)
+      .messages({
+        'any.required': 'Select a country'
+      }),
+    postcode: Joi.string().optional()
   })
 
   return schema.validate(payload, { abortEarly: false })

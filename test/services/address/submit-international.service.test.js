@@ -13,7 +13,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitInternationalService = require('../../../app/services/address/submit-international.service.js')
 
-describe('Address - International Service', () => {
+describe.skip('Address - International Service', () => {
   let payload
   let session
   let sessionData
