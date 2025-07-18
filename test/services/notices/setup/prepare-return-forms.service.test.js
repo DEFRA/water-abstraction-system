@@ -28,7 +28,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     session = await SessionHelper.add({ data: sessionData })
 
     const buffer = new TextEncoder().encode('mock file').buffer
-    Sinon.stub(SendReturnFormRequest, 'go').resolves(buffer)
+    Sinon.stub(SendReturnFormRequest, 'send').resolves(buffer)
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -52,7 +52,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
       await PrepareReturnFormsService.go(session.id)
 
       expect(
-        SendReturnFormRequest.go.calledWith({
+        SendReturnFormRequest.send.calledWith({
           cover: {
             title: 'Water abstraction day return'
           }
