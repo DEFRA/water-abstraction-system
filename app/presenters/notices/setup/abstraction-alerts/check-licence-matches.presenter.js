@@ -36,7 +36,7 @@ function _action(sessionId, licenceMonitoringStation) {
 }
 
 function _relevantLicenceMonitoringStations(session) {
-    const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
+  const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
 
   return DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
