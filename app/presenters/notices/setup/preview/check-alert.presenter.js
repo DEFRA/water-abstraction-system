@@ -22,7 +22,7 @@ function go(contactHashId, recipientLicenceRefs, session) {
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
-    caption: referenceCode,
+    caption: `Notice ${referenceCode}`,
     pageTitle: 'Check the recipient previews',
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
     restrictions: _restrictions(contactHashId, recipientLicenceRefs, session)
