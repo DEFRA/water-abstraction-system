@@ -5,12 +5,12 @@
  * @module CheckPresenter
  */
 
-const { contactName, contactAddress } = require('../../crm.presenter.js')
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   abstractionAlerts: 'Abstraction alerts',
-  returnForms: 'Paper invitations',
+  returnForms: 'Return forms',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
@@ -28,15 +28,17 @@ const NOTIFICATION_TYPES = {
 function go(recipients, page, pagination, session) {
   const { noticeType, referenceCode } = session
 
+  const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+
   return {
     defaultPageSize,
-    displayPreviewLink: noticeType !== 'returnForms',
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
-    recipients: _recipients(noticeType, page, recipients, session.id),
+    recipients: formattedRecipients,
     recipientsAmount: recipients.length,
-    referenceCode
+    referenceCode,
+    warning: _warning(formattedRecipients)
   }
 }
 
@@ -53,35 +55,31 @@ function _contact(recipient) {
     return [recipient.email]
   }
 
-  const name = contactName(recipient.contact)
-  const address = contactAddress(recipient.contact)
+  const notifyAddress = NotifyAddressPresenter.go(recipient.contact)
 
-  return [name, ...address]
+  return Object.values(notifyAddress)
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
-    const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
-
-    // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-    const previewLink = noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
+    const contact = _contact(recipient)
 
     return {
-      contact: _contact(recipient),
+      contact,
       licences: recipient.licence_refs.split(','),
       method: `${recipient.message_type} - ${recipient.contact_type}`,
-      previewLink
+      previewLink: _previewLink(noticeType, recipient, sessionId, contact)
     }
   })
 }
 
 function _links(session) {
-  const { id, journey, licenceRef } = session
+  const { id, journey } = session
 
   let back
   let removeLicences = ''
 
-  if (licenceRef) {
+  if (journey === 'adhoc') {
     back = `/system/notices/setup/${id}/check-notice-type`
   } else if (journey === 'alerts') {
     back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
@@ -116,6 +114,25 @@ function _paginateRecipients(recipients, page) {
   const pageNumber = Number(page) * defaultPageSize
 
   return recipients.slice(pageNumber - defaultPageSize, pageNumber)
+}
+
+function _previewLink(noticeType, recipient, sessionId, contact) {
+  // We don't currently support previewing return forms
+  if (noticeType === 'returnForms') {
+    return null
+  }
+
+  // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
+  // else it might give a false impression the letter will be sent.
+  if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
+    return null
+  }
+
+  // Returns invitations and reminders can be previewed directly
+  const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+
+  // For abstraction alerts we need to go to an intermediate page to select the alert to preview
+  return noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
 }
 
 /**
@@ -157,6 +174,28 @@ function _sortRecipients(recipients) {
 
     return 0
   })
+}
+
+function _warning(formattedRecipients) {
+  const invalidRecipients = formattedRecipients.filter((formattedRecipient) => {
+    const { contact } = formattedRecipient
+
+    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
+  })
+
+  if (invalidRecipients.length === 0) {
+    return null
+  }
+
+  if (invalidRecipients.length === 1) {
+    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+  }
+
+  const contactNames = invalidRecipients.map((invalidRecipient) => {
+    return invalidRecipient.contact[0]
+  })
+
+  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
 }
 
 module.exports = {

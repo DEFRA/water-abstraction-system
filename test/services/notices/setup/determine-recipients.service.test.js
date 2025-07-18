@@ -79,7 +79,7 @@ describe('Notices - Setup - Determine Recipients service', () => {
             forename: 'Harry',
             initials: 'H J',
             name: 'Returns to',
-            postcode: 'WD25 7LR',
+            postcode: null,
             role: 'Returns to',
             salutation: 'Mr',
             town: 'Little Whinging',
