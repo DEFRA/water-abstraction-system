@@ -68,7 +68,7 @@ describe('Notices Setup - Preview - Check Alert service', () => {
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice WAA-XM0WMH',
         pageTitle: 'Check the recipient previews',
-        restrictionHeading: 'Flow and level restriction type and threshold',
+        restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
             abstractionPeriod: '1 January to 31 March',
