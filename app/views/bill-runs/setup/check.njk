@@ -7,7 +7,6 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -17,7 +16,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
     <span class="govuk-caption-l">{{ pageCaption }}</span>{{ pageTitle }}
   </h1>
