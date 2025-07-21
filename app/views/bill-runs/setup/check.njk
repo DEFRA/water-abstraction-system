@@ -113,11 +113,7 @@
   {% if showCreateButton %}
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-      {{ govukButton({
-        text: "Create bill run",
-        classes: "govuk-!-margin-right-6",
-        preventDoubleClick: true
-      }) }}
+      {{ govukButton({ text: "Create bill run", preventDoubleClick: true }) }}
     </form>
     <hr class="govuk-section-break govuk-section-break--s">
   {% endif %}
