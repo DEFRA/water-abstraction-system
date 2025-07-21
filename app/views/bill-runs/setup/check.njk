@@ -70,7 +70,8 @@
           text: "Date created"
         },
         value: {
-          html: '<span data-test="created">' + dateCreated + '</span>'
+          attributes: { 'data-test': 'created' },
+          text: dateCreated
         }
       } if dateCreated,
       {
@@ -78,7 +79,8 @@
           text: "Region"
         },
         value: {
-          html: '<span data-test="region">' + regionName + '</span>'
+          attributes: { 'data-test': 'region' },
+          text: regionName
         }
       },
       {
@@ -86,7 +88,8 @@
           text: "Bill run type"
         },
         value: {
-          html: '<span data-test="type">' + billRunType + '</span>'
+          attributes: { 'data-test': 'type' },
+          text: billRunType
         }
       },
       {
@@ -94,7 +97,8 @@
           text: "Charge scheme"
         },
         value: {
-          html: '<span data-test="new-scheme">' + chargeScheme + '</span>'
+          attributes: { 'data-test': 'new-scheme' },
+          text: chargeScheme
         }
       },
       {
@@ -102,7 +106,8 @@
           text: "Financial year end"
         },
         value: {
-          html: '<span data-test="new-year">' + financialYearEnd + '</span>'
+          attributes: { 'data-test': 'new-year' },
+          text: financialYearEnd
         }
       } if financialYearEnd
     ]
