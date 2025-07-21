@@ -27,38 +27,36 @@
       }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        attributes: {
-          'data-test': 'bill-run-season'
+    {{ govukRadios({
+      attributes: {
+        'data-test': 'bill-run-season'
+      },
+      name: 'season',
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+        }
+      },
+      items: [
+        {
+          text: 'Summer',
+          value: 'summer',
+          checked: 'summer' === selectedSeason
         },
-        name: 'season',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
-          }
-        },
-        items: [
-          {
-            text: 'Summer',
-            value: 'summer',
-            checked: 'summer' === selectedSeason
-          },
-          {
-            text: 'Winter and All year',
-            value: 'winter_all_year',
-            checked: 'winter_all_year' === selectedSeason
-          }
-        ]
-      }) }}
+        {
+          text: 'Winter and All year',
+          value: 'winter_all_year',
+          checked: 'winter_all_year' === selectedSeason
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

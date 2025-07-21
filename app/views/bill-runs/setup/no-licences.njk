@@ -14,16 +14,13 @@
 
 {% block content %}
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
-
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
   {{ govukWarningText({
     text: 'Check there are licences ready to be billed and try again.',
     iconFallbackText: 'Warning'
   }) }}
 
-  <p class="govuk-body">
+  <p>
     <a href="/system/bill-runs" class="govuk-link">Return to bill runs</a>
   </p>
 {% endblock %}
