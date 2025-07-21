@@ -37,7 +37,7 @@ describe('Address - Submit Manual Service', () => {
       }
     })
 
-    it('saves the submitted value', async () => {
+    it('with a full payload it saves the submitted values', async () => {
       await SubmitManualService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
@@ -53,7 +53,7 @@ describe('Address - Submit Manual Service', () => {
       })
     })
 
-    it('saves the submitted value', async () => {
+    it('with a min payload saves the submitted values', async () => {
       const minPayload = {
         addressLine1: '1 Fake Farm',
         postcode: 'SW1A 1AA'
