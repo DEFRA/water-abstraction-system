@@ -7,7 +7,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block content %}
-  {# Notification banner #}
   {% if notification %}
     {{ govukNotificationBanner({
       titleText: notification.title,
@@ -15,7 +14,6 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
   <div>
     <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
     <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
@@ -53,7 +51,6 @@
     }}
   </div>
 
-  {# Notes #}
   <div class="govuk-!-margin-bottom-9">
     <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
     <hr class="govuk-section-break--visible">
@@ -74,7 +71,6 @@
     <hr class="govuk-section-break--visible">
   </div>
 
-  {# Meter details #}
   {% set meterDetails %}
     {% if meterProvided === 'yes' %}
       <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
@@ -86,7 +82,6 @@
     {% endif %}
   {% endset %}
 
-  {# Reporting details #}
   <div class="govuk-!-margin-bottom-9">
     {{ govukSummaryList({
       card: {
@@ -176,17 +171,14 @@
   </div>
 
   {% if nilReturn === "No" %}
-    {# Summary of abstraction volumes #}
     <div class="divider govuk-!-margin-bottom-7"></div>
 
-    {# Create the rows for the summary table #}
     {% set tableRows = [] %}
 
     {% for row in summaryTableData.rows %}
       {# Set an easier to use index #}
       {% set rowIndex = loop.index0 %}
 
-      {# Create the summary row #}
       {% set tableRow = [
         {
           text: row.month,
@@ -214,7 +206,6 @@
         ), tableRow) %}
       {% endif %}
 
-      {# Total cubic metres column #}
       {% set tableRow = (tableRow.push(
         {
           text: row.monthlyTotal,
@@ -223,7 +214,6 @@
         }
       ), tableRow) %}
 
-      {# Action column #}
       {% if row.link %}
         {% set actionLink %}
           <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
@@ -238,11 +228,9 @@
         ), tableRow) %}
       {% endif %}
 
-      {# Push our row into the table rows array #}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
-    {# Create the totals row #}
     {% set tableRow = [
       {
         text: "Total volume of water abstracted",
@@ -268,7 +256,6 @@
       ), tableRow) %}
     {% endif %}
 
-    {# Total cubic metres column #}
     {% set tableRow = (tableRow.push(
       {
         html: "<strong>" + totalCubicMetres + "</strong>",
@@ -277,17 +264,14 @@
       }
     ), tableRow) %}
 
-    {# Action column #}
     {% set tableRow = (tableRow.push(
       {
         text: ""
       }
     ), tableRow) %}
 
-    {# Push our row into the table rows array #}
     {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 
-    {# Display the table using a GOVUK table component #}
     <div class="govuk-grid-row govuk-!-margin-bottom-0">
       <div class="govuk-grid-column-full">
 
@@ -311,7 +295,6 @@
     </div>
   {% endif %}
 
-  {# "Confirm" & "Cancel" buttons #}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     <div class="govuk-button-group">

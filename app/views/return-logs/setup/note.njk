@@ -5,7 +5,6 @@
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -27,7 +26,6 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
   {% set pageHeader %}
     <span class="govuk-heading-l govuk-!-margin-bottom-3">
       <span class="govuk-caption-l">Return reference {{ returnReference }}</span> {{ pageTitle }}

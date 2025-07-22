@@ -5,7 +5,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -15,7 +14,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error message #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -28,13 +26,11 @@
       }) }}
   {% endif %}
 
-  {# Main heading #}
   <div>
     <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
     <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
   </div>
 
-  {# Select what you want to do with this return #}
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({

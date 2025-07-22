@@ -6,7 +6,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,7 +15,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -24,7 +22,6 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
   <div>
     <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
     <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>

@@ -6,7 +6,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,7 +15,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: 'There is a problem',
@@ -24,13 +22,11 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
   <div>
     <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">{{ pageTitle }}</h1>
   </div>
 
-  {# Display the lines to input the abstraction volumes #}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -43,7 +39,6 @@
       }) %}
 
       {% for line in inputLines %}
-        {# Create the input fields #}
         {{ govukInput({
           label: {
             text: line.label
