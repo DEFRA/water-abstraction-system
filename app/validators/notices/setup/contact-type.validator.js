@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/contact-type` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @module ContactTypeValidator
  */
@@ -9,7 +9,7 @@
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/contact-type` page
+ * Validates data submitted for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @param {object} payload - The payload from the request to be validated
  *

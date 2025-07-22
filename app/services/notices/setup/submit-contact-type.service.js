@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/contact-type` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
  *
  * @module SubmitContactTypeService
  */
 
-const ContactTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/contact-type.presenter.js')
-const ContactTypeValidator = require('../../../../validators/notices/setup/abstraction-alerts/contact-type.validator.js')
-const SessionModel = require('../../../../models/session.model.js')
+const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
+const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `` page

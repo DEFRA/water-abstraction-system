@@ -386,6 +386,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.viewContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.submitContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 

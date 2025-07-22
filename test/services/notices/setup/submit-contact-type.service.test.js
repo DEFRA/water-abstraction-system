@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitContactTypeService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-contact-type.service.js')
+const SubmitContactTypeService = require('../../../../app/services/notices/setup/submit-contact-type.service.js')
 
 describe.skip('Contact Type Service', () => {
   let payload

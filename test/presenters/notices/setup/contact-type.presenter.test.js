@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ContactTypePresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/contact-type.presenter.js')
+const ContactTypePresenter = require('../../../../app/presenters/notices/setup/contact-type.presenter.js')
 
 describe('Contact Type Presenter', () => {
   let session

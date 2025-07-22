@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/contact-type` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @module ContactTypeService
  */
 
-const ContactTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/contact-type.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `` page
