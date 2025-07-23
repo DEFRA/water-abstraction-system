@@ -5,6 +5,8 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
   {{
     govukBackLink({
@@ -28,16 +30,12 @@
   {%endif%}
 
   <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    {{ pageHeading(returnReference, pageTitle) }}
+
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {{ govukInput({
-        label: {
-          text: pageTitle,
-          classes: "govuk-label--xl",
-          isPageHeading: true
-        },
         classes: "govuk-input--width-10",
         id: "start-reading",
         name: "startReading",

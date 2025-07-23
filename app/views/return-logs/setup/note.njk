@@ -4,6 +4,8 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
   {{
     govukBackLink({
@@ -27,9 +29,7 @@
   {% endif %}
 
   {% set pageHeader %}
-    <span class="govuk-heading-l govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Return reference {{ returnReference }}</span> {{ pageTitle }}
-    </span>
+    {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
   <form method="post">

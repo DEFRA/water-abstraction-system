@@ -5,6 +5,8 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
   {{
     govukBackLink({
@@ -22,10 +24,7 @@
     }) }}
   {% endif %}
 
-  <div>
-    <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(returnReference, pageTitle) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
