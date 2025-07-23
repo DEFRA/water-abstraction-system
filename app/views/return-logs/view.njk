@@ -9,6 +9,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
@@ -32,13 +33,7 @@
     }) }}
   {% endif %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-        <span class="govuk-caption-l">Licence {{ licenceRef }}</span>{{ pageTitle }}
-      </h1>
-    </div>
-  </div>
+  {{ pageHeading(licenceRef, pageTitle, 'govuk-heading-xl govuk-!-margin-bottom-3') }}
 
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
