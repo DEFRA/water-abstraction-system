@@ -29,6 +29,7 @@ function go(licenceSupplementaryYears, session) {
   }
 
   return {
+    backlink: `/system/bill-runs/setup/${session.id}/region`,
     financialYearsData,
     pageTitle: 'Select the financial year',
     sessionId: session.id,

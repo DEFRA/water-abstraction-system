@@ -107,6 +107,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'bill-runs',
+            backlink: `/system/bill-runs/setup/${session.id}/type`,
             error: {
               text: 'Select the region'
             },

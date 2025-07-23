@@ -29,6 +29,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: [
             {
               text: '2023 to 2024',
@@ -57,6 +58,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: [
             {
               text: '2023 to 2024',
@@ -91,6 +93,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: _financialYearsData(null),
           pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
@@ -108,6 +111,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: _financialYearsData('2022'),
           pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
