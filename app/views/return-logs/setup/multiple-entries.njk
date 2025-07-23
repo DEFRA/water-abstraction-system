@@ -37,7 +37,7 @@
         <div class="govuk-hint">
           <p>Enter {{lineCount}} {{frequency}} {{measurementType}} starting with {{ startDate }} and ending with {{ endDate }}.</p>
           <p>Copy and paste the values into the empty box.</p>
-          <p class="govuk-body">
+          <p>
             <a href="/system/return-logs/setup/guidance" class="govuk-link" rel="noreferrer noopener" target="_blank">Help to enter multiple values (opens in a new tab)</a>
           </p>
         </div>
@@ -46,7 +46,7 @@
       <form method="post">
         <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-        <div class="govuk-body">
+        <div>
           {{ govukTextarea({
             name: "multipleEntries",
             id: "multiple-entries",
