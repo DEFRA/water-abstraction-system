@@ -37,12 +37,6 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {% set dateInputHTML %}
-        {% if error %}
-          {% set errorClass = 'govuk-input--error' %}
-        {% else %}
-          {% set errorClass = '' %}
-        {% endif %}
-
         {{ govukDateInput({
           id: 'date',
           namePrefix: 'received-date',
@@ -54,17 +48,17 @@
           },
           items: [
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'day',
               value: receivedDateDay
             },
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'month',
               value: receivedDateMonth
             },
             {
-              classes: 'govuk-input--width-4 ' + errorClass,
+              classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
               name: 'year',
               value: receivedDateYear
             }
