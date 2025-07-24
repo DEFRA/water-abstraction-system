@@ -9,6 +9,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
@@ -19,14 +20,12 @@
 {% endblock %}
 
 {% block content %}
-  {# Notification banner #}
   {% if underQuery %}
     {{ govukNotificationBanner({
       text: 'This return has been marked under query'
     }) }}
   {%endif%}
 
-  {# Version warning #}
   {% if warning %}
     {{ govukWarningText({
       text: warning,
@@ -34,20 +33,12 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-        <span class="govuk-caption-l">Licence {{ licenceRef }}</span>{{ pageTitle }}
-      </h1>
-    </div>
-  </div>
+  {{ pageHeading(licenceRef, pageTitle, 'govuk-heading-xl govuk-!-margin-bottom-3') }}
 
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
 
-      {# Status tag #}
-      <p class="govuk-body">
+      <p>
         {{ statusTag(status, false) }}
       </p>
 
@@ -92,20 +83,19 @@
     </div>
   </div>
 
-  {# Return log total #}
   {% if displayTotal %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
         {% if nilReturn %}
           <h2>
-            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
+            <span class="govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
           </h2>
         {% else %}
           <h2>
-            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
-            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
+            <span class="govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
+            <span class="govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
             <br>
-            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
+            <span class="govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
           </h2>
         {% endif %}
       </div>
@@ -117,7 +107,6 @@
         {% if actionButton %}
           {# The button group div goes inside the if because we only need a group when there's two buttons #}
           <div class="govuk-button-group">
-            {# Submit/Edit return button #}
             <form method="post" action="/system/return-logs/setup">
               <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
               {{
@@ -131,7 +120,6 @@
             </form>
         {% endif %}
 
-        {# Mark as under query / Resolve query button #}
         {% if showUnderQuery %}
           {% if underQuery %}
             {% set queryButtonText = 'Resolve query' %}
@@ -160,10 +148,8 @@
       </div>
     </div>
 
-  {# Selected return submission details #}
   {% if displayTable %}
     <div class="divider govuk-!-margin-bottom-7"></div>
-    {# Meter details #}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
         <h3 class="govuk-heading-l">{{ tableTitle }}</h3>
@@ -236,7 +222,6 @@
       </div>
     </div>
 
-    {# Display the table using a GOVUK table component #}
     <div class="govuk-grid-row govuk-!-margin-bottom-0">
       <div class="govuk-grid-column-full">
         {% set tableRows = [] %}
@@ -245,7 +230,6 @@
           {# Set an easier to use index #}
           {% set rowIndex = loop.index0 %}
 
-          {# Create the summary row #}
           {% set tableRow = [
             {
               text: row.month,
@@ -273,7 +257,6 @@
             ), tableRow) %}
           {% endif %}
 
-          {# Total cubic metres column #}
           {% set tableRow = (tableRow.push(
             {
               text: row.monthlyTotal,
@@ -282,7 +265,6 @@
             }
           ), tableRow) %}
 
-          {# Action column but only for weekly and monthly returns #}
           {% if row.link %}
             {% set actionLink %}
               <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
@@ -297,7 +279,6 @@
             ), tableRow) %}
           {% endif %}
 
-          {# Push our row into the table rows array #}
           {% set tableRows = (tableRows.push(tableRow), tableRows) %}
         {% endfor %}
 

@@ -6,8 +6,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from 'govuk/components/date-input/macro.njk' import govukDateInput %}
 
+
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -17,7 +18,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -25,17 +25,13 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(returnReference, pageTitle) }}
+
   <div>
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {% set dateInputHTML %}
-        {# From #}
         {{ govukDateInput({
           id: 'period-used-from',
           namePrefix: 'period-used-from',
@@ -67,7 +63,6 @@
           ]
         }) }}
 
-        {# To #}
         {{ govukDateInput({
           id: 'period-used-To',
           namePrefix: 'period-used-to',

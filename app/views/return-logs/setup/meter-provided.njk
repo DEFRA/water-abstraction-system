@@ -5,8 +5,9 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,7 +17,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -29,11 +29,8 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(returnReference, pageTitle) }}
+
   <div>
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
