@@ -10,7 +10,7 @@ const ContactTypePresenter = require('../../../presenters/notices/setup/contact-
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @param {string} sessionId
  *
@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = ContactTypePresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     ...pageData
   }
 }
