@@ -25,7 +25,8 @@ function go(payload) {
       .required()
       .valid(...countries)
       .messages({
-        'any.required': 'Select a country'
+        'any.required': 'Select a country',
+        'any.only': 'Select a country'
       }),
     postcode: Joi.string().optional()
   })

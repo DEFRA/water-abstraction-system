@@ -16,22 +16,15 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const {
-    alertThresholds,
-    id: sessionId,
-    licenceMonitoringStations,
-    monitoringStationName,
-    removedThresholds,
-    alertType
-  } = session
+  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`,
-    cancelLink: `/system/notices/setup/${sessionId}/abstraction-alerts/cancel`,
-    caption: monitoringStationName,
+    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+    cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+    caption: session.monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
-    restrictions: _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType),
-    restrictionHeading: determineRestrictionHeading(licenceMonitoringStations)
+    restrictions: _restrictions(relevantLicenceMonitoringStations, session.id),
+    restrictionHeading: determineRestrictionHeading(relevantLicenceMonitoringStations)
   }
 }
 
@@ -42,14 +35,18 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _restrictions(licenceMonitoringStations, alertThresholds, removedThresholds, sessionId, alertType) {
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+function _relevantLicenceMonitoringStations(session) {
+  const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
+
+  return DetermineRelevantLicenceMonitoringStationsService.go(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,
     alertType
   )
+}
 
+function _restrictions(relevantLicenceMonitoringStations, sessionId) {
   const multipleRestrictions = relevantLicenceMonitoringStations.length > 1
 
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {

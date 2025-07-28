@@ -21,6 +21,7 @@ const CheckLicenceMatchesService = require('../../app/services/notices/setup/abs
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
+const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
@@ -37,6 +38,7 @@ const SubmitCancelAlertsService = require('../../app/services/notices/setup/abst
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
+const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
@@ -1064,6 +1066,90 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/contact-type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/contact-type`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(ContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select how to contact the recipient')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(session)
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds and they chose the post option', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              contactType: 'post',
+              pageTile: 'Select the returns for the paper forms'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/address/${session.id}/postcode`)
+          })
+        })
+
+        describe('and the validation succeeds and they chose the email option', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              contactType: 'email',
+              pageTile: 'Select the returns for the paper forms'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/select-recipients`)
           })
         })
       })
