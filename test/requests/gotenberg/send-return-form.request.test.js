@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const FormData = require('form-data')
-
 // Things we need to stub
 const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
 const GenerateReturnFormService = require('../../../app/services/notices/setup/generate-return-form.service.js')
@@ -77,7 +74,7 @@ describe('Gotenberg - Send return form request', () => {
       // Check all append calls
       expect(
         // stub this
-        FormData.prototype.append.calledWithMatch('index.html', '<p>test</p>', { filename: 'index.html' })
+        FormData.prototype.append.calledWithMatch('index.html', new Blob([Buffer.from('<p>test</p>')]), 'index.html')
       ).to.be.true()
       expect(FormData.prototype.append.calledWith('marginTop', '0')).to.be.true()
       expect(FormData.prototype.append.calledWith('marginBottom', '0')).to.be.true()

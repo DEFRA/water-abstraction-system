@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const FormData = require('form-data')
-
 // Things we need to stub
 const BaseRequest = require('../../app/requests/base.request.js')
 const requestConfig = require('../../config/request.config.js')
@@ -32,7 +29,7 @@ describe('Gotenberg Request', () => {
     Sinon.replace(requestConfig, 'timeout', 1000)
 
     formData = new FormData()
-    formData.append('index.html', '<p>Test</p>', { filename: 'index.html' })
+    formData.append('index.html', new Blob([Buffer.from('<p>Test</p>')]), 'index.html')
 
     pdfBytes = new TextEncoder().encode('%PDF-1.4\n%âãÏÓ\n').buffer
   })
@@ -60,9 +57,6 @@ describe('Gotenberg Request', () => {
         const requestArgs = BaseRequest.post.firstCall.args
 
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers['content-type']).to.include(
-          'multipart/form-data; boundary=--------------------------'
-        )
         expect(requestArgs[1].responseType).to.equal('buffer')
         expect(requestArgs[1].body).to.equal(formData)
       })
