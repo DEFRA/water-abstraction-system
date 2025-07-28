@@ -11,7 +11,7 @@ const ContactTypeValidator = require('../../../validators/notices/setup/contact-
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
