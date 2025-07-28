@@ -1,0 +1,88 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {{
+  govukBackLink({
+    text: 'Back',
+    href: backLink
+  })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: error.errorList
+    }) }}
+  {%endif%}
+
+  {% set emailHtml %}
+    {{ govukInput({
+      id: "email",
+      name: "email",
+      type: "email",
+      autocomplete: "email",
+      spellcheck: false,
+      errorMessage: error.email,
+      classes: 'govuk-!-width-two-thirds',
+      label: {
+        classes: 'govuk-!-font-weight-bold govuk-!-width-two-thirds',
+        text: "Email address"
+      }
+    }) }}
+  {% endset -%}
+
+  {% set nameHtml %}
+    {{ govukInput({
+      id: "name",
+      name: "name",
+      type: "name",
+      classes: 'govuk-!-width-two-thirds',
+      errorMessage: error.name,
+      label: {
+        classes: 'govuk-!-font-weight-bold',
+        text: "Recipients name"
+      }
+    }) }}
+  {% endset -%}
+
+  <h1 class="govuk-form-group govuk-heading-l">
+    {{ pageTitle }}
+  </h1>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      id: 'type',
+      name: 'type',
+      items: [
+        {
+          id: 'email',
+          value: 'email',
+          text: 'Email',
+          conditional: {
+            html: emailHtml
+          }
+        },{
+          id: 'post',
+          value: 'post',
+          text: 'Post',
+          conditional: {
+            html: nameHtml
+          }
+        }
+      ],
+      errorMessage: error.type
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
