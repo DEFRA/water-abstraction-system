@@ -33,7 +33,6 @@ async function _sendRequest(path, method, formData) {
 
 function _requestOptions(formData) {
   return {
-    headers: formData.getHeaders(),
     prefixUrl: servicesConfig.gotenberg.url,
     responseType: 'buffer',
     timeout: {
@@ -55,6 +54,7 @@ function _parseResult(result) {
       }
     }
   }
+
   return result
 }
 

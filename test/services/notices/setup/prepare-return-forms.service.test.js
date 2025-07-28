@@ -28,7 +28,12 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     session = await SessionHelper.add({ data: sessionData })
 
     const buffer = new TextEncoder().encode('mock file').buffer
-    Sinon.stub(SendReturnFormRequest, 'send').resolves(buffer)
+
+    Sinon.stub(SendReturnFormRequest, 'send').resolves({
+      response: {
+        body: buffer
+      }
+    })
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub

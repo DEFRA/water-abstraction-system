@@ -60,9 +60,6 @@ describe('Gotenberg Request', () => {
         const requestArgs = BaseRequest.post.firstCall.args
 
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers['content-type']).to.include(
-          'multipart/form-data; boundary=--------------------------'
-        )
         expect(requestArgs[1].responseType).to.equal('buffer')
         expect(requestArgs[1].body).to.equal(formData)
       })

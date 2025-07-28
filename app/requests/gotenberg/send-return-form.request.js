@@ -5,8 +5,6 @@
  * @module SendReturnFormRequest
  */
 
-const FormData = require('form-data')
-
 const GenerateReturnFormService = require('../../services/notices/setup/generate-return-form.service.js')
 const GotenbergRequest = require('../gotenberg.request.js')
 
@@ -18,14 +16,14 @@ const GotenbergRequest = require('../gotenberg.request.js')
  *
  * @param {object} pageData
  *
- * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
+ * @returns {Promise<object>} An object representing the result of the request, including an ArrayBuffer as the 'body'
  */
 async function send(pageData) {
   try {
     const htmlContent = await GenerateReturnFormService.go(pageData)
 
     const form = new FormData()
-    form.append('index.html', htmlContent, { filename: 'index.html' })
+    form.append('index.html', new Blob([Buffer.from(htmlContent)]), 'index.html')
 
     form.append('marginTop', '0')
     form.append('marginBottom', '0')

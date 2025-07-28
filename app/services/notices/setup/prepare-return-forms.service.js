@@ -22,7 +22,9 @@ async function go(sessionId) {
 
   const pageData = PreviewReturnFormsPresenter.go(session)
 
-  return await SendReturnFormRequest.send(pageData)
+  const requestData = await SendReturnFormRequest.send(pageData)
+
+  return requestData.response.body
 }
 
 module.exports = {
