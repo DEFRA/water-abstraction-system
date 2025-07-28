@@ -73,6 +73,7 @@ describe('Gotenberg - Send return form request', () => {
 
       // Check all append calls
       expect(
+        // stub this
         FormData.prototype.append.calledWithMatch('index.html', new Blob([Buffer.from('<p>test</p>')]), 'index.html')
       ).to.be.true()
 

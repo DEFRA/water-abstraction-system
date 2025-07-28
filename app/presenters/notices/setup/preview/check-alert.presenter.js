@@ -18,14 +18,14 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  * @returns {object} - The data formatted for the view template
  */
 function go(contactHashId, recipientLicenceRefs, session) {
-  const { id: sessionId, licenceMonitoringStations, referenceCode } = session
+  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/check`,
-    caption: `Notice ${referenceCode}`,
+    backLink: `/system/notices/setup/${session.id}/check`,
+    caption: `Notice ${session.referenceCode}`,
     pageTitle: 'Check the recipient previews',
-    restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(contactHashId, recipientLicenceRefs, session)
+    restrictionHeading: determineRestrictionHeading(recipientLicenceMonitoringStations),
+    restrictions: _restrictions(contactHashId, recipientLicenceMonitoringStations, session.id)
   }
 }
 
@@ -36,13 +36,11 @@ function _action(contactHashId, sessionId, licenceMonitoringStation) {
   }
 }
 
-function _restrictions(contactHashId, recipientLicenceRefs, session) {
-  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
-
+function _restrictions(contactHashId, recipientLicenceMonitoringStations, sessionId) {
   const preparedLicenceMonitoringStations = _preparedLicenceMonitoringStations(
     contactHashId,
     recipientLicenceMonitoringStations,
-    session.id
+    sessionId
   )
 
   return formatRestrictions(preparedLicenceMonitoringStations)
