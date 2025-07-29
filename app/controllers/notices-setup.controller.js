@@ -24,6 +24,7 @@ const PreviewService = require('../services/notices/setup/preview/preview.servic
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
+const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
@@ -38,6 +39,7 @@ const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnFormsService = require('../services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 
 async function checkAlert(request, h) {
   const { contactHashId, sessionId } = request.params
@@ -230,6 +232,14 @@ async function setup(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
 
+async function viewSelectRecipients(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SelectRecipientsService.go(sessionId)
+
+  return h.view(`notices/setup/select-recipients.njk`, pageData)
+}
+
 async function submitAlertEmailAddress(request, h) {
   const {
     auth,
@@ -411,6 +421,21 @@ async function submitReturnForms(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
 }
 
+async function submitSelectRecipients(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitSelectRecipientsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/select-recipients.njk`, pageData)
+  }
+
+  return h.redirect(`/system/notices/setup/${sessionId}/address`)
+}
+
 module.exports = {
   checkAlert,
   downloadRecipients,
@@ -431,6 +456,7 @@ module.exports = {
   viewRemoveThreshold,
   viewReturnForms,
   viewReturnsPeriod,
+  viewSelectRecipients,
   setup,
   submitAlertEmailAddress,
   submitAlertThresholds,
@@ -444,5 +470,6 @@ module.exports = {
   submitNoticeType,
   submitRemoveLicences,
   submitReturnForms,
-  submitReturnsPeriod
+  submitReturnsPeriod,
+  submitSelectRecipients
 }
