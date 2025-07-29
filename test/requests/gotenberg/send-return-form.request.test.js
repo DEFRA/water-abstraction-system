@@ -76,6 +76,7 @@ describe('Gotenberg - Send return form request', () => {
         // stub this
         FormData.prototype.append.calledWithMatch('index.html', new Blob([Buffer.from('<p>test</p>')]), 'index.html')
       ).to.be.true()
+
       expect(FormData.prototype.append.calledWith('marginTop', '0')).to.be.true()
       expect(FormData.prototype.append.calledWith('marginBottom', '0')).to.be.true()
       expect(FormData.prototype.append.calledWith('marginLeft', '0')).to.be.true()
