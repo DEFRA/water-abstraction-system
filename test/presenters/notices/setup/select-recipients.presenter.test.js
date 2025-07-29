@@ -14,14 +14,17 @@ describe('Select Recipients Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = { id: 123 }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = SelectRecipientsPresenter.go(session)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/check`,
+        pageTitle: 'Select Recipients'
+      })
     })
   })
 })

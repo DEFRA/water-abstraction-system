@@ -27,7 +27,10 @@ describe('Select Recipients Service', () => {
     it('returns page data for the view', async () => {
       const result = await SelectRecipientsService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/check`,
+        pageTitle: 'Select Recipients'
+      })
     })
   })
 })

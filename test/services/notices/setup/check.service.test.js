@@ -101,8 +101,7 @@ describe('Notices - Setup - Check service', () => {
         links: {
           back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
-          download: `/system/notices/setup/${session.id}/download`,
-          removeLicences: ``
+          download: `/system/notices/setup/${session.id}/download`
         },
         page: 1,
         pagination: {
