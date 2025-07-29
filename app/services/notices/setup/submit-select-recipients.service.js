@@ -37,7 +37,7 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
+async function _save(session, _payload) {
   return session.$update()
 }
 
