@@ -31,6 +31,7 @@ const RemoveLicencesService = require('../../app/services/notices/setup/remove-l
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
+const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
@@ -44,6 +45,7 @@ const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -1066,6 +1068,70 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/select-recipients', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/select-recipients`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SelectRecipientsService, 'go').returns({ pageTitle: 'Select recipients' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select recipients')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+              pageTile: 'Select recipients'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/address`)
           })
         })
       })
