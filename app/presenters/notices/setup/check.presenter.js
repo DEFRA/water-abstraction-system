@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const ContactPresenter = require('./contact.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
@@ -42,27 +42,9 @@ function go(recipients, page, pagination, session) {
   }
 }
 
-/**
- * Contact can be an email or an address (letter)
- *
- * If it is an address then we convert the contact CSV string to an array. If it is an email we return the email in
- * array for the UI to have consistent formatting.
- *
- * @private
- */
-function _contact(recipient) {
-  if (recipient.email) {
-    return [recipient.email]
-  }
-
-  const notifyAddress = NotifyAddressPresenter.go(recipient.contact)
-
-  return Object.values(notifyAddress)
-}
-
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
-    const contact = _contact(recipient)
+    const contact = ContactPresenter.go(recipient)
 
     return {
       contact,
