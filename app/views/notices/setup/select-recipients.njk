@@ -19,12 +19,17 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: "#recipients"
+        }
+      ]
     }) }}
   {%endif%}
 
   {{ govukCheckboxes({
-    name: "waste",
+    name: "recipients",
     fieldset: {
       legend: {
         text: pageTitle,
