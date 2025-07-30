@@ -433,7 +433,7 @@ async function submitSelectRecipients(request, h) {
     return h.view(`notices/setup/select-recipients.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/address`)
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
 module.exports = {
