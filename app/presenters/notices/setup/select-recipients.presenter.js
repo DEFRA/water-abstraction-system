@@ -10,8 +10,9 @@ const ContactPresenter = require('./contact.presenter.js')
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
  *
- * @param session
- * @param recipients
+ * @param {module:SessionModel} session - The session instance
+ * @param {object[]} recipients
+ *
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients) {
