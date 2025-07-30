@@ -7,6 +7,8 @@
 
 const NotifyClientRequest = require('./notify-client.request.js')
 
+const NotifyRequest = require('../notify.request.js')
+
 /**
  * Get the statuses of notifications by unique reference from GOV.UK Notify
  *
@@ -19,9 +21,13 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(olderThanNotificationId, referenceCode) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = `v2/notifications?reference=${referenceCode}&older_than=${olderThanNotificationId}`
 
-  return _statuses(notifyClient, olderThanNotificationId, referenceCode)
+  return NotifyRequest.get(path)
+
+  // const notifyClient = NotifyClientRequest.go()
+
+  // return _statuses(notifyClient, olderThanNotificationId, referenceCode)
 }
 
 async function _statuses(notifyClient, olderThanNotificationId, referenceCode) {

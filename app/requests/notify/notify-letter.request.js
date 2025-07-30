@@ -7,6 +7,8 @@
 
 const NotifyClientRequest = require('./notify-client.request.js')
 
+const NotifyRequest = require('../notify.request.js')
+
 /**
  * Send a letter using GOV.UK Notify
  *
@@ -39,6 +41,17 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(templateId, options) {
+  // console.log('🚀🚀🚀 ~ options:')
+  // console.dir(options, { depth: null, colors: true })
+  // const path = 'v2/notifications/letter'
+
+  // const body = {
+  //   template_id: templateId,
+  //   ...options
+  // }
+
+  // return NotifyRequest.post(path, body)
+
   const notifyClient = NotifyClientRequest.go()
 
   return _sendLetter(notifyClient, templateId, options)
@@ -47,6 +60,8 @@ async function send(templateId, options) {
 async function _sendLetter(notifyClient, templateId, options) {
   try {
     const response = await notifyClient.sendLetter(templateId, options)
+    console.log('🚀🚀🚀 ~ response:')
+    console.dir(response, { depth: null, colors: true })
 
     return {
       id: response.data.id,

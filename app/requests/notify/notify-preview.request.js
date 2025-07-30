@@ -7,20 +7,28 @@
 
 const NotifyClientRequest = require('./notify-client.request.js')
 
+const NotifyRequest = require('../notify.request.js')
+
 /**
  * Generate a preview template using GOV.UK Notify
  *
  * https://docs.notifications.service.gov.uk/node.html#generate-a-preview-template
  *
  * @param {string} templateId
- * @param {object} personalisation - Optional personalisation data to be used in the template
+ * @param {object} placeholderFields - Optional personalisation data to be used in the template
  *
  * @returns {Promise<object>}
  */
-async function send(templateId, personalisation = {}) {
-  const notifyClient = NotifyClientRequest.go()
+async function send(templateId, placeholderFields = {}) {
+  const path = `v2/template/${templateId}/preview`
 
-  return _generatePreview(notifyClient, templateId, personalisation)
+  const body = { personalisation: { ...placeholderFields } }
+
+  return NotifyRequest.post(path, body)
+
+  // const notifyClient = NotifyClientRequest.go()
+
+  // return _generatePreview(notifyClient, templateId, personalisation)
 }
 
 async function _generatePreview(notifyClient, templateId, personalisation) {
