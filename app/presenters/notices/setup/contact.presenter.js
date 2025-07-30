@@ -14,7 +14,8 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
  *
  * If it is an address then we convert the contact CSV string to an array. If it is an email we return the email in
  * array for the UI to have consistent formatting.
- * @param recipient
+ *
+ * @param {object} recipient
  *
  * @returns {object} - a contact
  */

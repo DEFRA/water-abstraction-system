@@ -14,7 +14,7 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
  *
  * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
  *
- * @param session
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} - recipients
  */
