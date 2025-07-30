@@ -18,7 +18,7 @@ const RecipientsService = require('../../../../app/services/notices/setup/recipi
 // Thing under test
 const SelectRecipientsService = require('../../../../app/services/notices/setup/select-recipients.service.js')
 
-describe('Select Recipients Service', () => {
+describe('Notices - Setup - Select Recipients Service', () => {
   let session
   let sessionData
   let recipients

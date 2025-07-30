@@ -19,8 +19,8 @@ function go(session, recipients) {
   const { id: sessionId } = session
 
   return {
-    pageTitle: 'Select Recipients',
     backLink: `/system/notices/setup/${sessionId}/check`,
+    pageTitle: 'Select Recipients',
     recipients: _recipients(recipients)
   }
 }

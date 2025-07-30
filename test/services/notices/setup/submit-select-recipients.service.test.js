@@ -18,7 +18,7 @@ const RecipientsService = require('../../../../app/services/notices/setup/recipi
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
 const Sinon = require('sinon')
 
-describe('Select Recipients Service', () => {
+describe('Notices - Setup - Select Recipients Service', () => {
   let payload
   let recipients
   let session
