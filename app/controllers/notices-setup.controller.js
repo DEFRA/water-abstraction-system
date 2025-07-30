@@ -317,10 +317,11 @@ async function submitCheckLicenceMatches(request, h) {
 
 async function submitContactType(request, h) {
   const {
+    payload,
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitContactTypeService.go(sessionId)
+  const pageData = await SubmitContactTypeService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
