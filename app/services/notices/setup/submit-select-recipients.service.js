@@ -6,6 +6,7 @@
  * @module SubmitSelectRecipientsService
  */
 
+const RecipientsService = require('./recipients.service.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -29,7 +30,9 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = SelectRecipientsPresenter.go(session)
+  const recipients = await RecipientsService.go(session)
+
+  const pageData = SelectRecipientsPresenter.go(session, recipients)
 
   return {
     error: validationResult,

@@ -6,6 +6,7 @@
  * @module SelectRecipientsService
  */
 
+const RecipientsService = require('./recipients.service.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -19,7 +20,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = SelectRecipientsPresenter.go(session)
+  const recipients = await RecipientsService.go(session)
+
+  const pageData = SelectRecipientsPresenter.go(session, recipients)
 
   return {
     ...pageData
