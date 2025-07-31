@@ -341,7 +341,6 @@ async function submitContactType(request, h) {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 
-  // TODO - update to url once confirmed
   return h.redirect(`/system/notices/setup/${sessionId}/select-recipients`)
 }
 
@@ -434,7 +433,7 @@ async function submitSelectRecipients(request, h) {
     return h.view(`notices/setup/select-recipients.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/address`)
+  return h.redirect(`/system/notices/setup/${sessionId}/contact-type`)
 }
 
 module.exports = {
