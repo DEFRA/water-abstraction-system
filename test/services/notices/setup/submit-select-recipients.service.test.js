@@ -50,9 +50,11 @@ describe('Select Recipients Service', () => {
       const result = await SubmitSelectRecipientsService.go(session.id, payload)
 
       expect(result).to.equal({
+        backLink: `/system/notices/setup/${session.id}/check`,
         error: {
           text: 'Select at least one recipient'
-        }
+        },
+        pageTitle: 'Select Recipients'
       })
     })
   })

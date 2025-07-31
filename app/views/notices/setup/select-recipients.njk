@@ -2,7 +2,9 @@
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
 
 {% block breadcrumbs %}
   {{
@@ -17,9 +19,29 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: error.errorList
+      errorList: [
+        {
+          text: error.text,
+          href: "#recipients"
+        }
+      ]
     }) }}
   {%endif%}
+
+  {{ govukCheckboxes({
+    name: "recipients",
+    fieldset: {
+      legend: {
+        text: pageTitle,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: "Select all that apply"
+    },
+    items: []
+  }) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
