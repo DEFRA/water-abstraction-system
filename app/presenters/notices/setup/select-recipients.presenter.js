@@ -33,11 +33,7 @@ function go(session, recipients) {
  *
  * @private
  */
-function _checked(selectedRecipients = false, recipient) {
-  if (selectedRecipients === false) {
-    return true
-  }
-
+function _checked(selectedRecipients, recipient) {
   if (selectedRecipients === undefined) {
     return true
   }

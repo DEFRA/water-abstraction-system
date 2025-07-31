@@ -32,7 +32,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  session.selectedRecipients = payload.recipients
+  session.selectedRecipients = payload.recipients || []
 
   const recipients = await RecipientsService.go(session)
 
