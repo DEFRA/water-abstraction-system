@@ -22,6 +22,8 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
+  _handleOneOptionSelected(payload)
+
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -29,6 +31,8 @@ async function go(sessionId, payload) {
 
     return {}
   }
+
+  session.selectedRecipients = payload.recipients
 
   const recipients = await RecipientsService.go(session)
 
@@ -40,7 +44,15 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, _payload) {
+function _handleOneOptionSelected(payload) {
+  if (payload.recipients && !Array.isArray(payload?.recipients)) {
+    payload.recipients = [payload?.recipients]
+  }
+}
+
+async function _save(session, payload) {
+  session.selectedRecipients = payload.recipients
+
   return session.$update()
 }
 

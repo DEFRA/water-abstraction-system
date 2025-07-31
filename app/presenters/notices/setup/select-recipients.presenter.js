@@ -16,23 +16,23 @@ const ContactPresenter = require('./contact.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients) {
-  const { id: sessionId } = session
+  const { id: sessionId, selectedRecipients } = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients)
+    recipients: _recipients(recipients, selectedRecipients)
   }
 }
 
-function _recipients(recipients) {
+function _recipients(recipients, selectedRecipients = []) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
 
     return {
+      checked: selectedRecipients.includes(recipient.contact_hash_id),
       contact,
-      contact_hash_id: recipient.contact_hash_id,
-      checked: true
+      contact_hash_id: recipient.contact_hash_id
     }
   })
 }
