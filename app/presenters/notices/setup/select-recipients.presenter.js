@@ -25,12 +25,32 @@ function go(session, recipients) {
   }
 }
 
-function _recipients(recipients, selectedRecipients = []) {
+/**
+ * Determines if a contact should be marked as checked.
+ *
+ * If no `selectedRecipients` are provided (i.e., it's falsy), then all contacts should be marked as checked (`true`).
+ * Otherwise, only contacts whose `contact_hash_id` appears in `selectedRecipients` should be marked as checked.
+ *
+ * @private
+ */
+function _checked(selectedRecipients = false, recipient) {
+  if (selectedRecipients === false) {
+    return true
+  }
+
+  if (selectedRecipients === undefined) {
+    return true
+  }
+
+  return selectedRecipients.includes(recipient.contact_hash_id)
+}
+
+function _recipients(recipients, selectedRecipients) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
 
     return {
-      checked: selectedRecipients.includes(recipient.contact_hash_id),
+      checked: _checked(selectedRecipients, recipient),
       contact,
       contact_hash_id: recipient.contact_hash_id
     }
