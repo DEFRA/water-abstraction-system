@@ -16,23 +16,39 @@ const ContactPresenter = require('./contact.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients) {
-  const { id: sessionId } = session
+  const { id: sessionId, selectedRecipients } = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients)
+    recipients: _recipients(recipients, selectedRecipients)
   }
 }
 
-function _recipients(recipients) {
+/**
+ * Determines if a contact should be marked as checked.
+ *
+ * If no `selectedRecipients` are provided (i.e., it's falsy), then all contacts should be marked as checked (`true`).
+ * Otherwise, only contacts whose `contact_hash_id` appears in `selectedRecipients` should be marked as checked.
+ *
+ * @private
+ */
+function _checked(selectedRecipients, recipient) {
+  if (selectedRecipients === undefined) {
+    return true
+  }
+
+  return selectedRecipients.includes(recipient.contact_hash_id)
+}
+
+function _recipients(recipients, selectedRecipients) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
 
     return {
+      checked: _checked(selectedRecipients, recipient),
       contact,
-      contact_hash_id: recipient.contact_hash_id,
-      checked: true
+      contact_hash_id: recipient.contact_hash_id
     }
   })
 }
