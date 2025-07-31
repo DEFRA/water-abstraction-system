@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const crypto = require('crypto')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -13,12 +14,12 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitContactTypeService = require('../../../../app/services/notices/setup/submit-contact-type.service.js')
 
-describe('Contact Type Service', () => {
+describe('Notices - Setup - Submit Contact Type Service', () => {
   let payload
   let session
   let sessionData
 
-  describe('when called with a valid email payload', () => {
+  describe('when called with a valid email payload with no existing additionalRecipients', () => {
     beforeEach(async () => {
       payload = {
         type: 'email',
@@ -34,8 +35,88 @@ describe('Contact Type Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.contactType.type).to.equal(payload.type)
-      expect(refreshedSession.contactType.email).to.equal(payload.email)
+      expect(refreshedSession.contactType).to.equal(undefined)
+      expect(refreshedSession.additionalRecipients).to.equal([
+        {
+          contact_hash_id: _createMD5Hash(payload.email),
+          email: payload.email
+        }
+      ])
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitContactTypeService.go(session.id, payload)
+
+      expect(result).to.equal({})
+    })
+  })
+
+  describe('when called with a valid email payload with no existing additionalRecipients with the address capitalised', () => {
+    beforeEach(async () => {
+      payload = {
+        type: 'email',
+        email: 'TEST@TEST.GOV.UK'
+      }
+      sessionData = {}
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('saves the submitted value with the email address in lowercase', async () => {
+      await SubmitContactTypeService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.contactType).to.equal(undefined)
+      expect(refreshedSession.additionalRecipients).to.equal([
+        {
+          contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+          email: 'test@test.gov.uk'
+        }
+      ])
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitContactTypeService.go(session.id, payload)
+
+      expect(result).to.equal({})
+    })
+  })
+
+  describe('when called with a valid email payload with an existing additionalRecipients', () => {
+    beforeEach(async () => {
+      payload = {
+        type: 'email',
+        email: 'other.test@test.gov.uk'
+      }
+      sessionData = {
+        additionalRecipients: [
+          {
+            contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+            email: 'test@test.gov.uk'
+          }
+        ]
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitContactTypeService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.contactType).to.equal(undefined)
+      expect(refreshedSession.additionalRecipients).to.equal([
+        {
+          contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+          email: 'test@test.gov.uk'
+        },
+        {
+          contact_hash_id: _createMD5Hash(payload.email),
+          email: payload.email
+        }
+      ])
     })
 
     it('continues the journey', async () => {
@@ -169,3 +250,7 @@ describe('Contact Type Service', () => {
     })
   })
 })
+
+function _createMD5Hash(email) {
+  return crypto.createHash('md5').update(email).digest('hex')
+}
