@@ -18,6 +18,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
   let payload
   let session
   let sessionData
+  const testEmailHash = _createMD5Hash('test@test.gov.uk')
 
   describe('when called with a valid email payload with no existing additionalRecipients', () => {
     beforeEach(async () => {
@@ -70,7 +71,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       expect(refreshedSession.contactType).to.equal(undefined)
       expect(refreshedSession.additionalRecipients).to.equal([
         {
-          contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+          contact_hash_id: testEmailHash,
           email: 'test@test.gov.uk'
         }
       ])
@@ -92,7 +93,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       sessionData = {
         additionalRecipients: [
           {
-            contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+            contact_hash_id: testEmailHash,
             email: 'test@test.gov.uk'
           }
         ]
@@ -109,7 +110,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       expect(refreshedSession.contactType).to.equal(undefined)
       expect(refreshedSession.additionalRecipients).to.equal([
         {
-          contact_hash_id: _createMD5Hash('test@test.gov.uk'),
+          contact_hash_id: testEmailHash,
           email: 'test@test.gov.uk'
         },
         {
