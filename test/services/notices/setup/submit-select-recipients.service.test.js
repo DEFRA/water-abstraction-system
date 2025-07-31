@@ -45,7 +45,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession.selectedRecipients).to.equal(['123'])
     })
 
     it('continues the journey', async () => {
@@ -56,26 +56,28 @@ describe('Notices - Setup - Select Recipients Service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = { recipients: [] }
-    })
+    describe('because there are no recipients', () => {
+      beforeEach(async () => {
+        payload = {}
+      })
 
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectRecipientsService.go(session.id, payload)
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitSelectRecipientsService.go(session.id, payload)
 
-      expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/check`,
-        error: {
-          text: 'Select at least one recipient'
-        },
-        pageTitle: 'Select Recipients',
-        recipients: [
-          {
-            checked: true,
-            contact: [recipients.primaryUser.email],
-            contact_hash_id: recipients.primaryUser.contact_hash_id
-          }
-        ]
+        expect(result).to.equal({
+          backLink: `/system/notices/setup/${session.id}/check`,
+          error: {
+            text: 'Select at least one recipient'
+          },
+          pageTitle: 'Select Recipients',
+          recipients: [
+            {
+              checked: false,
+              contact: [recipients.primaryUser.email],
+              contact_hash_id: recipients.primaryUser.contact_hash_id
+            }
+          ]
+        })
       })
     })
   })
