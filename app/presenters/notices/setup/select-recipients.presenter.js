@@ -26,10 +26,10 @@ function go(session, recipients) {
 }
 
 /**
- * Determines if a contact should be marked as checked.
+ * Determines if a recipient should be marked as checked.
  *
  * If no `selectedRecipients` are provided (i.e., it's falsy), then all contacts should be marked as checked (`true`).
- * Otherwise, only contacts whose `contact_hash_id` appears in `selectedRecipients` should be marked as checked.
+ * Otherwise, only recipient whose `contact_hash_id` appears in `selectedRecipients` should be marked as checked.
  *
  * @private
  */
