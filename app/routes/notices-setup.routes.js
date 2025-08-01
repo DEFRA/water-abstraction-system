@@ -410,6 +410,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.viewSelectRecipients,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.submitSelectRecipients,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 

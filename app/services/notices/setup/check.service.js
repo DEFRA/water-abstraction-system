@@ -6,10 +6,8 @@
  */
 
 const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
-const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
+const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -23,15 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  let recipientsData
-
-  if (session.journey === 'alerts') {
-    recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
-  } else {
-    recipientsData = await FetchRecipientsService.go(session)
-  }
-
-  const recipients = DetermineRecipientsService.go(recipientsData)
+  const recipients = await RecipientsService.go(session)
 
   const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
 
