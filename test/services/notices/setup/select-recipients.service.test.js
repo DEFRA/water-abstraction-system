@@ -43,6 +43,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
 
       expect(result).to.equal({
         backLink: `/system/notices/setup/${session.id}/check`,
+        contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Select Recipients',
         recipients: [
           {
@@ -50,8 +51,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
             contact: [recipients.primaryUser.email],
             contact_hash_id: recipients.primaryUser.contact_hash_id
           }
-        ],
-        sessionId: session.id
+        ]
       })
     })
   })

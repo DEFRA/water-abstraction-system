@@ -30,6 +30,7 @@ describe('Select Recipients Presenter', () => {
 
     expect(result).to.equal({
       backLink: `/system/notices/setup/${session.id}/check`,
+      contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
       pageTitle: 'Select Recipients',
       recipients: [
         {
@@ -71,8 +72,7 @@ describe('Select Recipients Presenter', () => {
           ],
           contact_hash_id: recipients.licenceHolderWithMultipleLicences.contact_hash_id
         }
-      ],
-      sessionId: session.id
+      ]
     })
   })
 

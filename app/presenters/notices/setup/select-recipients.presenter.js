@@ -20,9 +20,9 @@ function go(session, recipients) {
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
+    contactTypeLink: `/system/notices/setup/${sessionId}/contact-type`,
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients, selectedRecipients),
-    sessionId
+    recipients: _recipients(recipients, selectedRecipients)
   }
 }
 
