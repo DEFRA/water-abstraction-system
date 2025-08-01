@@ -31,7 +31,7 @@ async function _fetchLicence(licenceId) {
 async function _fetchNotification(notificationId) {
   return ScheduledNotificationsModel.query()
     .findById(notificationId)
-    .select(['messageType', 'personalisation', 'plaintext', 'sendAfter'])
+    .select(['messageType', 'personalisation', 'plaintext', 'sendAfter', 'createdAt'])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select(['metadata'])
