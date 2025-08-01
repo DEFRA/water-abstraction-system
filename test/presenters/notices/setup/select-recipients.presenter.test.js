@@ -71,7 +71,8 @@ describe('Select Recipients Presenter', () => {
           ],
           contact_hash_id: recipients.licenceHolderWithMultipleLicences.contact_hash_id
         }
-      ]
+      ],
+      sessionId: session.id
     })
   })
 

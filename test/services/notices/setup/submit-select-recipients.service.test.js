@@ -76,7 +76,8 @@ describe('Notices - Setup - Select Recipients Service', () => {
               contact: [recipients.primaryUser.email],
               contact_hash_id: recipients.primaryUser.contact_hash_id
             }
-          ]
+          ],
+          sessionId: session.id
         })
       })
     })

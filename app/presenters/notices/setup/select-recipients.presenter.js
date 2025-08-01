@@ -21,7 +21,8 @@ function go(session, recipients) {
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients, selectedRecipients)
+    recipients: _recipients(recipients, selectedRecipients),
+    sessionId
   }
 }
 
