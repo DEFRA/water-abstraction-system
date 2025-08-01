@@ -3,8 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -14,11 +15,7 @@
 {% endblock %}
 
 {% block content %}
-{# Main heading #}
-  <div class="govuk-body">
-    <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
+  {{ pageHeading(returnReference, pageTitle) }}
 
   <div class="govuk-!-margin-bottom-9">
     {{ govukSummaryList({
