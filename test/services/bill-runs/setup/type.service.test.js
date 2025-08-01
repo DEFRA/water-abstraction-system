@@ -37,6 +37,7 @@ describe('Bill Runs - Setup - Type service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
+        backlink: '/system/bill-runs',
         enableTwoPartTariffSupplementary: false,
         pageTitle: 'Select the bill run type',
         sessionId: session.id,
