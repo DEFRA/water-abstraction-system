@@ -50,8 +50,8 @@ describe('Fetch Communications service', () => {
 
       expect(result.communications).to.equal([
         {
+          createdAt: scheduledNotification.createdAt,
           event: {
-            createdAt: new Date('2024-06-01'),
             issuer: 'test.user@defra.gov.uk',
             metadata: null,
             status: 'sent',
@@ -60,7 +60,8 @@ describe('Fetch Communications service', () => {
           },
           id: scheduledNotification.id,
           messageRef: 'returns_invitation_licence_holder_letter',
-          messageType: 'letter'
+          messageType: 'letter',
+          sendAfter: null
         }
       ])
     })

@@ -43,6 +43,7 @@ describe('Fetch Notification service', () => {
           licenceRef: licence.licenceRef
         },
         notification: {
+          createdAt: notification.createdAt,
           messageType: 'letter',
           personalisation: {
             postcode: 'ME15 0NE',
