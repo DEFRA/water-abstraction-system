@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/hint/macro.njk" import govukHint %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
@@ -41,6 +42,16 @@
     }) }}
   {%endif%}
 
+  {% set innerHintHtml %}
+    {{ govukHint({
+      id: "recipients",
+      classes: 'govuk-checkboxes__hint govuk-!-padding-left-0 govuk-!-margin-bottom-5',
+      text: "Select all that apply"
+      })
+    }}
+    <a class="govuk-link" href="{{contactTypeLink}}">Set up a single use address or email address</a>
+  {% endset %}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -55,7 +66,8 @@
         }
       },
       hint: {
-        text: "Select all that apply"
+        classes: 'govuk-!-margin-bottom-7',
+        html: innerHintHtml
       },
       items: rows
     }) }}

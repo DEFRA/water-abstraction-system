@@ -66,6 +66,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
 
         expect(result).to.equal({
           backLink: `/system/notices/setup/${session.id}/check`,
+          contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
           error: {
             text: 'Select at least one recipient'
           },
