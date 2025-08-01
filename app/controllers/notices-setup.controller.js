@@ -332,12 +332,12 @@ async function submitContactType(request, h) {
   } = request
 
   const pageData = await SubmitContactTypeService.go(sessionId, payload)
-
+console.log(pageData)
   if (pageData.error) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
   }
 
-  if (pageData.contactType === 'post') {
+  if (pageData.type === 'post') {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 

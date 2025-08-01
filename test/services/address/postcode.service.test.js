@@ -19,9 +19,7 @@ describe('Address - Postcode Service', () => {
 
   describe('when called and there is no session data', () => {
     beforeEach(async () => {
-      sessionData = {
-        address: {}
-      }
+      sessionData = {}
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -30,9 +28,10 @@ describe('Address - Postcode Service', () => {
       const result = await PostcodeService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeNavBar: 'manage',
+        backLink: `/system/address/${session.id}/postcode`,
         pageTitle: 'Enter a UK postcode',
-        sessionId: session.id
+        postcode: null
       })
     })
   })
@@ -40,6 +39,9 @@ describe('Address - Postcode Service', () => {
   describe('when called and there is session data', () => {
     beforeEach(async () => {
       sessionData = {
+        contactType: {
+          type: 'post'
+        },
         address: {
           postcode: 'SW1A 1AA'
         }
@@ -52,10 +54,10 @@ describe('Address - Postcode Service', () => {
       const result = await PostcodeService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeNavBar: 'manage',
+        backLink: `/system/notices/setup/${session.id}/select-recipients`,
         pageTitle: 'Enter a UK postcode',
-        postcode: 'SW1A 1AA',
-        sessionId: session.id
+        postcode: 'SW1A 1AA'
       })
     })
   })
