@@ -248,6 +248,74 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatPurposes()', () => {
+    let purposes
+
+    describe('when there is a single purpose', () => {
+      beforeEach(() => {
+        purposes = [{ tertiary: { description: 'Spray Irrigation - Direct' } }]
+      })
+
+      it('returns the purpose description', () => {
+        const result = BasePresenter.formatPurposes(purposes)
+
+        expect(result).to.equal(['Spray Irrigation - Direct'])
+      })
+    })
+
+    describe('when there is a single purpose with an alias', () => {
+      beforeEach(() => {
+        purposes = [{ alias: 'This is an alias', tertiary: { description: 'Spray Irrigation - Direct' } }]
+      })
+
+      it('returns the purpose description', () => {
+        const result = BasePresenter.formatPurposes(purposes)
+
+        expect(result).to.equal(['Spray Irrigation - Direct (This is an alias)'])
+      })
+    })
+
+    describe('when there is more than one purpose', () => {
+      beforeEach(() => {
+        purposes = [
+          { tertiary: { description: 'Spray Irrigation - Direct' } },
+          { tertiary: { description: 'Spray Irrigation - Anti Frost' } },
+          { tertiary: { description: 'Spray Irrigation - Storage' } }
+        ]
+      })
+
+      it('returns the purpose descriptions as a comma separated string', () => {
+        const result = BasePresenter.formatPurposes(purposes)
+
+        expect(result).to.equal([
+          'Spray Irrigation - Direct',
+          'Spray Irrigation - Anti Frost',
+          'Spray Irrigation - Storage'
+        ])
+      })
+    })
+
+    describe('when there is more than one purpose with some having aliases', () => {
+      beforeEach(() => {
+        purposes = [
+          { alias: 'This is an alias', tertiary: { description: 'Spray Irrigation - Direct' } },
+          { tertiary: { description: 'Spray Irrigation - Anti Frost' } },
+          { tertiary: { description: 'Spray Irrigation - Storage' } }
+        ]
+      })
+
+      it('returns the purpose descriptions as a comma separated string', () => {
+        const result = BasePresenter.formatPurposes(purposes)
+
+        expect(result).to.equal([
+          'Spray Irrigation - Direct (This is an alias)',
+          'Spray Irrigation - Anti Frost',
+          'Spray Irrigation - Storage'
+        ])
+      })
+    })
+  })
+
   describe('#formatValueUnit()', () => {
     it('correctly formats the given value and unit, for example, 100 and Ml/d is formatted as 100Ml/d', () => {
       const result = BasePresenter.formatValueUnit(100, 'Ml/d')

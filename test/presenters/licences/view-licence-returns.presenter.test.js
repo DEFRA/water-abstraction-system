@@ -53,7 +53,7 @@ describe('Licences - View Licence Returns presenter', () => {
             description: 'empty description',
             dueDate: '28 November 2012',
             link: '/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01',
-            purpose: 'SPRAY IRRIGATION',
+            purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046821',
             returnLogId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
             status: 'complete'
@@ -63,7 +63,7 @@ describe('Licences - View Licence Returns presenter', () => {
             description: 'empty description',
             dueDate: '28 November 2012',
             link: '/system/return-logs?id=v1:1:01/123:10046820:2020-01-02:2020-02-01',
-            purpose: 'SPRAY IRRIGATION',
+            purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046820',
             returnLogId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
             status: 'overdue'

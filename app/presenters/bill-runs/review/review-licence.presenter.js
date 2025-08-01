@@ -5,7 +5,12 @@
  * @module ReviewLicencePresenter
  */
 
-const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatFinancialYear,
+  formatLongDate,
+  formatPurposes
+} = require('../../base.presenter.js')
 const { generateBillRunTitle } = require('../../billing.presenter.js')
 const {
   calculateTotalBillableReturns,
@@ -13,7 +18,6 @@ const {
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
-  formatPurposes,
   formatReturnStatus,
   formatReturnTotals
 } = require('./base-review.presenter.js')
@@ -182,7 +186,7 @@ function _formatReviewReturns(reviewReturns) {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       description,
       issues: formatIssues(issues),
-      purpose: formatPurposes(purposes),
+      purpose: formatPurposes(purposes).join(', '),
       reference: returnReference,
       returnId,
       returnLink: determineReturnLink(reviewReturn),

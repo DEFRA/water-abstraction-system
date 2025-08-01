@@ -219,6 +219,43 @@ function formatPounds(valueInPence) {
 }
 
 /**
+ * Format the purposes for display on screen
+ *
+ * This function assumes that when provided the purposes are in the format:
+ *
+ * ```javascript
+ * [{
+ *  alias: 'manual description',
+ *  primary: { code: 'A', description: 'Agriculture' },
+ *  tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+ *  secondary: { code: 'AGR', description: 'General Agriculture' }
+ * }]
+ * ```
+ *
+ * It is possible that a return log has zero or more purposes associated it. If this is the case we need the description
+ * of each purpose from the array of purposes to be concatenated into a single comma separated string ready to present.
+ *
+ * @param {Array} purposes - the purposes taken from the return logs metadata
+ *
+ * @returns {string} the purpose descriptions as a string, separated by commas if more than one description exists
+ */
+function formatPurposes(purposes) {
+  if (!purposes || purposes.length === 0) {
+    return ''
+  }
+
+  const purposeDescriptionArray = purposes.map((purpose) => {
+    if (purpose.alias) {
+      return `${purpose.tertiary.description} (${purpose.alias})`
+    }
+
+    return purpose.tertiary.description
+  })
+
+  return purposeDescriptionArray
+}
+
+/**
  * Formats a value and unit to be displayed without a space, as per the GOV UK style guide
  *
  * For example, a value of 100 and a unit of Ml/d will be formatted as '100Ml/d'.
@@ -297,6 +334,7 @@ module.exports = {
   formatMoney,
   formatNumber,
   formatPounds,
+  formatPurposes,
   formatQuantity,
   formatValueUnit,
   leftPadZeroes,
