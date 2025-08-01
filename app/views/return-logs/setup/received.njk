@@ -30,7 +30,9 @@
     }) }}
   {%endif%}
 
-  {{ pageHeading(returnReference, pageTitle) }}
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
   <div>
     <form method="post">
@@ -71,7 +73,7 @@
         errorMessage: error.radioFormElement,
         fieldset: {
           legend: {
-            classes: "govuk-fieldset__legend--l"
+            html: pageHeading
           }
         },
         items: [
