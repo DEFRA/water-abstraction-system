@@ -27,7 +27,7 @@
     {{ govukInput({
       id: "email",
       name: "email",
-      type: "email",
+      value: email,
       autocomplete: "email",
       spellcheck: false,
       errorMessage: error.email,
@@ -44,6 +44,7 @@
       id: "name",
       name: "name",
       type: "name",
+      value: name,
       classes: 'govuk-!-width-two-thirds',
       errorMessage: error.name,
       label: {
@@ -63,6 +64,7 @@
     {{ govukRadios({
       id: 'type',
       name: 'type',
+      value: type,
       items: [
         {
           id: 'email',
