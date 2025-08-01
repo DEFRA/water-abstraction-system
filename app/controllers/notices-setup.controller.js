@@ -337,7 +337,7 @@ async function submitContactType(request, h) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
   }
 
-  if (pageData.contactType === 'post') {
+  if (pageData.type === 'post') {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 

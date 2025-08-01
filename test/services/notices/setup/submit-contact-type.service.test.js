@@ -48,7 +48,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -80,7 +82,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -123,7 +127,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -150,7 +156,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'post'
+      })
     })
   })
 

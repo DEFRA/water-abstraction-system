@@ -6,6 +6,7 @@
  * @module SubmitPostcodeService
  */
 
+const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
 const PostcodeValidator = require('../../validators/address/postcode.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -28,12 +29,19 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  const _submittedData = {
+    ...session,
+    address: {
+      ...payload
+    }
+  }
+
+  const pageData = PostcodePresenter.go(_submittedData)
+
   return {
-    activeNavBar: 'search',
+    activeNavBar: 'manage',
     error: validationResult,
-    pageTitle: 'Enter a UK postcode',
-    ...(payload.postcode && { postcode: payload.postcode }),
-    sessionId: session.id
+    ...pageData
   }
 }
 
