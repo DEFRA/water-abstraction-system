@@ -31,7 +31,7 @@ function _communications(communications, documentId, licenceId) {
       link: _link(communication.id, documentId, licenceId),
       type: _type(communication),
       sender: communication.event.issuer,
-      sent: formatLongDate(new Date(communication.event.createdAt)),
+      sent: _sent(communication),
       method: sentenceCase(communication.messageType)
     }
   })
@@ -45,10 +45,16 @@ function _link(communicationId, documentId, licenceId) {
   return `/licences/${documentId}/communications/${communicationId}`
 }
 
+function _sent(communication) {
+  return communication.sendAfter
+    ? formatLongDate(new Date(communication.sendAfter))
+    : formatLongDate(new Date(communication.createdAt))
+}
+
 function _type(communication) {
   return {
     label: _typeLabel(communication),
-    sentVia: `sent ${formatLongDate(new Date(communication.event.createdAt))} via ${communication.messageType}`,
+    sentVia: `sent ${_sent(communication)} via ${communication.messageType}`,
     pdf: communication.messageRef.includes('pdf')
   }
 }

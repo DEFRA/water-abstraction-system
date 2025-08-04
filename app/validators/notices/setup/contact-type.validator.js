@@ -18,8 +18,23 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    contactType: Joi.string().required().messages({
+    type: Joi.string().required().messages({
       'any.required': 'Select how to contact the recipient'
+    }),
+    email: Joi.alternatives().conditional('type', {
+      is: 'email',
+      then: Joi.string().email().required().messages({
+        'string.email': 'Enter an email address in the correct format, like name@example.com',
+        'any.required': 'Enter an email address'
+      }),
+      otherwise: Joi.string().optional()
+    }),
+    name: Joi.alternatives().conditional('type', {
+      is: 'post',
+      then: Joi.string().required().messages({
+        'any.required': 'Enter the recipients name'
+      }),
+      otherwise: Joi.string().optional()
     })
   })
 

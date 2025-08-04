@@ -82,6 +82,15 @@
         preventDoubleClick: true
       }) }}
       {% endif %}
+
+      {% if links.manage %}
+        {{ govukButton({
+          text: "Manage recipients",
+          classes: "govuk-button--secondary",
+          href: links.manage,
+          preventDoubleClick: true
+        }) }}
+      {% endif %}
     </div>
 
     {% if pagination.numberOfPages > 1 %}
