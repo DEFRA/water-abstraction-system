@@ -7,6 +7,8 @@
 
 const NotifyClientRequest = require('./notify-client.request.js')
 
+const NotifyRequest = require('../notify.request.js')
+
 /**
  * Send an email using GOV.UK Notify
  *
@@ -35,9 +37,19 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(templateId, emailAddress, options) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = 'v2/notifications/email'
 
-  return _sendEmail(notifyClient, templateId, emailAddress, options)
+  const body = {
+    email_address: emailAddress,
+    template_id: templateId,
+    ...options
+  }
+
+  return NotifyRequest.post(path, body)
+
+  // const notifyClient = NotifyClientRequest.go()
+
+  // return _sendEmail(notifyClient, templateId, emailAddress, options)
 }
 
 async function _sendEmail(notifyClient, templateId, emailAddress, options) {
