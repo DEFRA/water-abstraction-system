@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -16,7 +17,6 @@ const RecipientsService = require('../../../../app/services/notices/setup/recipi
 
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
-const Sinon = require('sinon')
 
 describe('Notices - Setup - Select Recipients Service', () => {
   let payload
@@ -56,11 +56,11 @@ describe('Notices - Setup - Select Recipients Service', () => {
   })
 
   describe('when validation fails', () => {
-    describe('because there are no recipients', () => {
-      beforeEach(async () => {
-        payload = {}
-      })
+    beforeEach(async () => {
+      payload = {}
+    })
 
+    describe('because there are no recipients', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitSelectRecipientsService.go(session.id, payload)
 
@@ -78,6 +78,15 @@ describe('Notices - Setup - Select Recipients Service', () => {
               contact_hash_id: recipients.primaryUser.contact_hash_id
             }
           ]
+        })
+      })
+
+      describe('when calling "RecipientsService"', () => {
+        it('should set the "allRecipients" arg to true', async () => {
+          await SubmitSelectRecipientsService.go(session.id, payload)
+
+          expect(RecipientsService.go.called).to.be.true()
+          expect(RecipientsService.go.calledWith(Sinon.match.has('id', session.id), true)).to.be.true()
         })
       })
     })

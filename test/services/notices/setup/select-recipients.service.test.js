@@ -55,4 +55,12 @@ describe('Notices - Setup - Select Recipients Service', () => {
       })
     })
   })
+
+  describe('when calling "RecipientsService"', () => {
+    it('should set the "allRecipients" arg to true', async () => {
+      await SelectRecipientsService.go(session.id)
+
+      expect(RecipientsService.go.calledWith(session, true)).to.be.true()
+    })
+  })
 })
