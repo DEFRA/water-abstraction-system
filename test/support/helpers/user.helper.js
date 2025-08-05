@@ -9,6 +9,11 @@ const { generateRandomInteger, generateUUID } = require('../../../app/lib/genera
 const UserModel = require('../../../app/models/user.model.js')
 const { data: users } = require('../../../db/seeds/data/users.js')
 
+/**
+ * List of attributes to skip when comparing user records in tests
+ */
+const skipCompareList = ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+
 const DEFAULT_INDEX = 4
 
 /**
@@ -100,5 +105,6 @@ module.exports = {
   DEFAULT_INDEX,
   defaults,
   generateUserId,
-  select
+  select,
+  skipCompareList
 }

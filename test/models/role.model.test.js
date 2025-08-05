@@ -26,6 +26,8 @@ const GROUP_SUPER_INDEX = 5
 const ROLE_AR_USER_INDEX = 6
 const USER_SUPER_INDEX = 1
 
+const { skipCompareList: skip } = UserHelper
+
 describe('Role model', () => {
   let testGroup
   let testGroupRole
@@ -128,9 +130,7 @@ describe('Role model', () => {
         expect(result.users).to.be.an.array()
         expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser, {
-          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
-        })
+        expect(result.users[0]).to.equal(testUser, { skip })
       })
     })
   })

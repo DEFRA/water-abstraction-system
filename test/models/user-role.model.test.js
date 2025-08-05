@@ -20,6 +20,8 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 const ROLE_RENEWAL_NOTIFICATIONS_INDEX = 5
 const USER_NPS_INDEX = 6
 
+const { skipCompareList: skip } = UserHelper
+
 describe('User Role model', () => {
   let testRecord
   let testRole
@@ -73,9 +75,7 @@ describe('User Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, {
-          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
-        })
+        expect(result.user).to.equal(testUser, { skip })
       })
     })
   })
