@@ -59,6 +59,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     billRunQueryStub = {
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
+      whereIn: Sinon.stub().returnsThis(),
       whereNotIn: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis(),
@@ -119,7 +120,8 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
 
   describe('when there is a matching SROC and PRESROC bill run', () => {
     beforeEach(() => {
-      // NOTE: We change the batch types to highlight that for supplementary we are checking for _any_ live bill run
+      // NOTE: We change the batch types to highlight for supplementary we are checking live SROC annual and
+      // supplementary bill runs and for PRESROC _any_ live bill run
       srocMatch.batchType = 'annual'
       preSrocMatch.batchType = 'two_part_tariff'
 

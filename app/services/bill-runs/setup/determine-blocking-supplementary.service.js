@@ -85,6 +85,7 @@ async function _fetchSrocMatch(regionId, toFinancialYearEnding) {
     .where('scheme', 'sroc')
     .where('regionId', regionId)
     .where('toFinancialYearEnding', toFinancialYearEnding)
+    .whereIn('batchType', ['annual', 'supplementary'])
     .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .withGraphFetched('region')
