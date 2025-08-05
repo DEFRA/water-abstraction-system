@@ -44,7 +44,9 @@ describe('Fetch User Roles And Groups service', () => {
     it('returns the user', async () => {
       const result = await FetchUserRolesAndGroupsService.go(user.id)
 
-      expect(result.user).to.equal(user, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'] })
+      expect(result.user).to.equal(user, {
+        skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+      })
     })
 
     it("returns the user's roles", async () => {
