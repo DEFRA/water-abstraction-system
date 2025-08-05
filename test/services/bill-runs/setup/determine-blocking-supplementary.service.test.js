@@ -60,7 +60,6 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
       whereIn: Sinon.stub().returnsThis(),
-      whereNotIn: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis(),
       modifyGraph: Sinon.stub().returnsThis(),

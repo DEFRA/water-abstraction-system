@@ -86,7 +86,7 @@ async function _fetchSrocMatch(regionId, toFinancialYearEnding) {
     .where('regionId', regionId)
     .where('toFinancialYearEnding', toFinancialYearEnding)
     .whereIn('batchType', ['annual', 'supplementary'])
-    .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
@@ -102,7 +102,7 @@ async function _fetchPresrocMatch(regionId) {
     .where('scheme', 'alcs')
     .where('regionId', regionId)
     .where('toFinancialYearEnding', '<=', LAST_PRESROC_YEAR)
-    .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
