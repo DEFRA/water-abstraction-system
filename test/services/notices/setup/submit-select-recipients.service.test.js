@@ -80,15 +80,6 @@ describe('Notices - Setup - Select Recipients Service', () => {
           ]
         })
       })
-
-      describe('when calling "RecipientsService"', () => {
-        it('should set the "allRecipients" arg to true', async () => {
-          await SubmitSelectRecipientsService.go(session.id, payload)
-
-          expect(RecipientsService.go.called).to.be.true()
-          expect(RecipientsService.go.calledWith(Sinon.match.has('id', session.id), true)).to.be.true()
-        })
-      })
     })
   })
 })

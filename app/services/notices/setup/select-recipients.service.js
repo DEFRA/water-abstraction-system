@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await RecipientsService.go(session, true)
+  const recipients = await RecipientsService.go(session)
 
   const pageData = SelectRecipientsPresenter.go(session, recipients)
 
