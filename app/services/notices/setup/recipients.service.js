@@ -14,7 +14,7 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
  *
  * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
  *
- * Most upstream services require only fetching and
+ * All upstream services require all the recipients, apart from the 'adhoc' journey.
  *
  * @param {module:SessionModel} session - The session instance
  * @param {boolean} allRecipients - flag to decide if all recipients are required
