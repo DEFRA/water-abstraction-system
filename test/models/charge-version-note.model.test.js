@@ -70,7 +70,7 @@ describe('Charge Version Note model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'] })
       })
     })
   })
