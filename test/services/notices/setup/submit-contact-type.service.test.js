@@ -149,8 +149,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.contactType.type).to.equal(payload.type)
-      expect(refreshedSession.contactType.name).to.equal(payload.name)
+      expect(refreshedSession.contactType).to.equal(payload.type)
+      expect(refreshedSession.name).to.equal(payload.name)
     })
 
     it('continues the journey', async () => {

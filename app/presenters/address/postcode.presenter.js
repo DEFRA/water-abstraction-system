@@ -21,8 +21,8 @@ function go(session) {
 }
 
 function _backLink(session) {
-  if (session.contactType) {
-    return `/system/notices/setup/${session.id}/select-recipients`
+  if (session.name) {
+    return `/system/notices/setup/${session.id}/contact-type`
   }
 
   return `/system/address/${session.id}/postcode`

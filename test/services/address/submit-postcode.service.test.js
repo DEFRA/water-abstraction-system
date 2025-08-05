@@ -48,9 +48,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = {}
         sessionData = {
-          contactType: {
-            type: 'post'
-          }
+          name: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -61,7 +59,7 @@ describe('Address - Submit Postcode Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
           pageTitle: 'Enter a UK postcode',
           postcode: null,
           error: { text: 'Enter a UK postcode' }
@@ -73,9 +71,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
-          contactType: {
-            type: 'post'
-          }
+          name: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -86,7 +82,7 @@ describe('Address - Submit Postcode Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
           pageTitle: 'Enter a UK postcode',
           postcode: 'notapostcode',
           error: { text: 'Enter a valid UK postcode' }

@@ -31,13 +31,11 @@ describe('Address - Postcode Presenter', () => {
     })
   })
 
-  describe('when called with an contactType object', () => {
+  describe('when called with a name saved in the session', () => {
     beforeEach(async () => {
       session = {
         id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
-        contactType: {
-          type: 'post'
-        }
+        name: 'Fake Person'
       }
     })
 
@@ -45,7 +43,7 @@ describe('Address - Postcode Presenter', () => {
       const result = PostcodePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Enter a UK postcode',
         postcode: null
       })
@@ -59,16 +57,15 @@ describe('Address - Postcode Presenter', () => {
         address: {
           postcode: 'SW1A 1AA'
         },
-        contactType: {
-          type: 'post'
-        }
+        name: 'Fake Person'
       }
     })
+
     it('returns page data for the view', () => {
       const result = PostcodePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Enter a UK postcode',
         postcode: 'SW1A 1AA'
       })

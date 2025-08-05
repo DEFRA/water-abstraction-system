@@ -35,9 +35,7 @@ async function go(sessionId, payload) {
 
   const _submittedData = {
     id: session.id,
-    contactType: {
-      ...payload
-    }
+    contactType: payload?.type ?? null
   }
 
   const pageData = ContactTypePresenter.go(_submittedData)
@@ -68,16 +66,15 @@ async function _save(session, payload) {
       session.additionalRecipients = [recipient]
     }
 
+    delete session.name
     delete session.contactType
+
     return session.$update()
   }
 
-  const _contactType = {
-    name: payload.name,
-    type: payload.type
-  }
+  session.name = payload.name
+  session.contactType = payload.type
 
-  session.contactType = _contactType
   return session.$update()
 }
 
