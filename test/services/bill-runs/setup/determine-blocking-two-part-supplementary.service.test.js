@@ -13,7 +13,6 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
 
 // Thing under test
 const DetermineBlockingTwoPartSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js')
