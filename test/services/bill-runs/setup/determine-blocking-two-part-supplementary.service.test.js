@@ -21,7 +21,6 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let billRunQueryStub
-  let fetchLiveBillRunStub
   let lastAnnualMatch
   let match
   let year
@@ -54,8 +53,6 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
       modifyGraph: Sinon.stub().returnsThis(),
       limit: Sinon.stub().returnsThis()
     }
-
-    fetchLiveBillRunStub = Sinon.stub(FetchLiveBillRunService, 'go')
   })
 
   afterEach(async () => {
