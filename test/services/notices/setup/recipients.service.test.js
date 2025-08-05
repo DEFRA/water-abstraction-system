@@ -84,7 +84,7 @@ describe('Notices - Setup - Recipients service', () => {
           Sinon.restore()
         })
 
-        it('correctly presents the data', async () => {
+        it('returns only the selected recipients formatted for display', async () => {
           const result = await RecipientsService.go(session, false)
 
           expect(result).to.equal([
