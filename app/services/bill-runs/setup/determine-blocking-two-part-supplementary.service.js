@@ -26,8 +26,8 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * Even better, unlike normal supplementary, we are only looking at the year selected by the user, and only have to deal
  * with one charge scheme.
  *
- * This means our match check is purely for any 'live' bill runs in the same region and financial year, because of the
- * rule that disallows more than one live bill run at a time.
+ * This means our match check is purely for any 'live' two-part tariff bill runs in the same region and financial year,
+ * because of the rule that disallows more than one live bill run at a time.
  *
  * > We return an array because the same checks for standard supplementary might return multiple matches. So, we keep
  * > the results consistent for the orchestrating service
