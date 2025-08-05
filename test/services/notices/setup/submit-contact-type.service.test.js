@@ -48,7 +48,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -80,7 +82,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -123,7 +127,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'email'
+      })
     })
   })
 
@@ -143,14 +149,16 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.contactType.type).to.equal(payload.type)
-      expect(refreshedSession.contactType.name).to.equal(payload.name)
+      expect(refreshedSession.contactType).to.equal(payload.type)
+      expect(refreshedSession.name).to.equal(payload.name)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitContactTypeService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        type: 'post'
+      })
     })
   })
 

@@ -34,10 +34,8 @@ describe('Contact Type Presenter', () => {
   describe('when called with an email address', () => {
     beforeEach(() => {
       session = {
-        contactType: {
-          email: 'test@test.gov.uk',
-          type: 'email'
-        }
+        email: 'test@test.gov.uk',
+        contactType: 'email'
       }
     })
 
@@ -57,10 +55,8 @@ describe('Contact Type Presenter', () => {
   describe('when called with a name', () => {
     beforeEach(() => {
       session = {
-        contactType: {
-          name: 'Fake Person',
-          type: 'post'
-        }
+        name: 'Fake Person',
+        contactType: 'post'
       }
     })
 
