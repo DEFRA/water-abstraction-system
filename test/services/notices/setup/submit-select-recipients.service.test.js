@@ -56,11 +56,11 @@ describe('Notices - Setup - Select Recipients Service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = {}
-    })
-
     describe('because there are no recipients', () => {
+      beforeEach(async () => {
+        payload = {}
+      })
+
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitSelectRecipientsService.go(session.id, payload)
 
