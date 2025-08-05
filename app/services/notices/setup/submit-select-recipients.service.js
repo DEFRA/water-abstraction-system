@@ -34,7 +34,7 @@ async function go(sessionId, payload) {
 
   session.selectedRecipients = payload.recipients || []
 
-  const recipients = await RecipientsService.go(session, true)
+  const recipients = await RecipientsService.go(session)
 
   const pageData = SelectRecipientsPresenter.go(session, recipients)
 
