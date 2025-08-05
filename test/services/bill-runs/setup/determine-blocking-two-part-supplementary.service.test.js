@@ -37,7 +37,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
 
     match = {
       id: 'aadb1af8-16d5-46c3-9b80-00a6201b8196',
-      batchType: 'supplementary',
+      batchType: 'two_part_tariff',
       billRunNumber: 1045,
       createdAt: new Date('2024-04-11'),
       scheme: 'sroc',
@@ -49,7 +49,10 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     billRunQueryStub = {
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
+      whereIn: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
+      withGraphFetched: Sinon.stub().returnsThis(),
+      modifyGraph: Sinon.stub().returnsThis(),
       limit: Sinon.stub().returnsThis()
     }
 
@@ -62,10 +65,15 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
 
   describe('when there is a live bill run', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub().resolves(lastAnnualMatch)
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      billRunQueryStub.first = Sinon.stub()
+        // Find last annual bill run
+        .onFirstCall()
+        .resolves(lastAnnualMatch)
+        // Find matching bill run
+        .onSecondCall()
+        .resolves(match)
 
-      fetchLiveBillRunStub.resolves(match)
+      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
@@ -77,10 +85,15 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
 
   describe('when there is no live bill run', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub().resolves(lastAnnualMatch)
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      billRunQueryStub.first = Sinon.stub()
+        // Find last annual bill run
+        .onFirstCall()
+        .resolves(lastAnnualMatch)
+        // Find matching bill run
+        .onSecondCall()
+        .resolves(null)
 
-      fetchLiveBillRunStub.resolves(null)
+      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
     })
 
     it('returns no matches and determines that the "current" engine can be triggered', async () => {
@@ -93,6 +106,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
   describe('when the two-part tariff annual bill run for the region has not been run for the selected year (it is outstanding)', () => {
     beforeEach(() => {
       billRunQueryStub.first = Sinon.stub().resolves(null)
+
       Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
     })
 

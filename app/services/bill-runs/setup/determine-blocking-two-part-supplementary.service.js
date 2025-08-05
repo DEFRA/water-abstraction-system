@@ -45,12 +45,28 @@ async function go(regionId, year) {
     return { matches: [], toFinancialYearEnding, trigger: engineTriggers.neither }
   }
 
-  const match = await FetchLiveBillRunService.go(regionId, toFinancialYearEnding)
+  const match = await _fetchLiveBillRuns(regionId, toFinancialYearEnding)
 
   const matches = match ? [match] : []
   const trigger = match ? engineTriggers.neither : engineTriggers.current
 
   return { matches, toFinancialYearEnding, trigger }
+}
+
+async function _fetchLiveBillRuns(regionId, toFinancialYearEnding) {
+  return BillRunModel.query()
+    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
+    .where('regionId', regionId)
+    .where('toFinancialYearEnding', toFinancialYearEnding)
+    .whereIn('batchType', ['two_part_tariff', 'two_part_supplementary'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
+    .orderBy([{ column: 'createdAt', order: 'desc' }])
+    .withGraphFetched('region')
+    .modifyGraph('region', (builder) => {
+      builder.select(['id', 'displayName'])
+    })
+    .limit(1)
+    .first()
 }
 
 async function _toFinancialYearEnding(regionId, year) {
