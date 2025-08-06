@@ -28,6 +28,10 @@ async function go(session, allRecipients = true) {
     recipientsData = await FetchRecipientsService.go(session)
   }
 
+  if (session.additionalRecipients) {
+    recipientsData = _additionalRecipients(recipientsData, session)
+  }
+
   if (allRecipients || !session.selectedRecipients) {
     return DetermineRecipientsService.go(recipientsData)
   }
@@ -35,6 +39,14 @@ async function go(session, allRecipients = true) {
   const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
 
   return DetermineRecipientsService.go(selectedRecipientsData)
+}
+
+function _additionalRecipients(recipientsData, session) {
+  if (session.additionalRecipients) {
+    return [...recipientsData, ...session.additionalRecipients]
+  }
+
+  return recipientsData
 }
 
 function _selectedRecipients(selectedRecipients, recipientsData) {

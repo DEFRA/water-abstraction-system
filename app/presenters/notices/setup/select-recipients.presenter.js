@@ -35,10 +35,6 @@ function go(session, recipients) {
  * @private
  */
 function _checked(selectedRecipients, recipient) {
-  if (selectedRecipients === undefined) {
-    return true
-  }
-
   return selectedRecipients.includes(recipient.contact_hash_id)
 }
 

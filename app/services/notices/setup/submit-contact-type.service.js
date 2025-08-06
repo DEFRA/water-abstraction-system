@@ -10,6 +10,7 @@ const crypto = require('crypto')
 
 const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
 const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
+const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -17,16 +18,19 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
+
+    GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 
     return {
       type: payload.type
@@ -57,7 +61,8 @@ async function _save(session, payload) {
 
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
-      email
+      email,
+      saved: false
     }
 
     if (Array.isArray(session.additionalRecipients)) {
@@ -65,6 +70,8 @@ async function _save(session, payload) {
     } else {
       session.additionalRecipients = [recipient]
     }
+
+    session.selectedRecipients = [...session.selectedRecipients, recipient.contact_hash_id]
 
     delete session.name
     delete session.contactType
