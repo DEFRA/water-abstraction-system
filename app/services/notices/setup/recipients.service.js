@@ -28,6 +28,14 @@ async function go(session, allRecipients = true) {
     recipientsData = await FetchRecipientsService.go(session)
   }
 
+  if (session.additionalRecipients) {
+    recipientsData = [...recipientsData, ...session.additionalRecipients]
+  }
+
+  if (session.additionalRecipient && session.addressVisited) {
+    recipientsData = [...recipientsData, session.additionalRecipient]
+  }
+
   if (allRecipients || !session.selectedRecipients) {
     return DetermineRecipientsService.go(recipientsData)
   }
@@ -35,6 +43,23 @@ async function go(session, allRecipients = true) {
   const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
 
   return DetermineRecipientsService.go(selectedRecipientsData)
+}
+
+async function _additionalRecipients(recipientsData, session) {
+  let recipients = recipientsData
+
+  // We need any previous additional recipients
+  if (session.additionalRecipients) {
+    recipients = [...recipients, ...session.additionalRecipients]
+  }
+
+  // This is purley for deduping on the select recipient page
+  // If an additional recipient has been selected and the address page has been visisted
+  if (session.additionalRecipient && session.addressVisited) {
+    recipients = [...recipients, session.additionalRecipient]
+  }
+
+  return recipients
 }
 
 function _selectedRecipients(selectedRecipients, recipientsData) {

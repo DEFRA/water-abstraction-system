@@ -22,7 +22,7 @@ function go(session, recipients) {
     backLink: `/system/notices/setup/${sessionId}/check`,
     contactTypeLink: `/system/notices/setup/${sessionId}/contact-type`,
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients, selectedRecipients)
+    recipients: _recipients(recipients, selectedRecipients, session)
   }
 }
 
@@ -34,20 +34,24 @@ function go(session, recipients) {
  *
  * @private
  */
-function _checked(selectedRecipients, recipient) {
+function _checked(selectedRecipients, recipient, addressVisited) {
   if (selectedRecipients === undefined) {
+    return true
+  }
+
+  if (addressVisited) {
     return true
   }
 
   return selectedRecipients.includes(recipient.contact_hash_id)
 }
 
-function _recipients(recipients, selectedRecipients) {
+function _recipients(recipients, selectedRecipients, session) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
 
     return {
-      checked: _checked(selectedRecipients, recipient),
+      checked: _checked(selectedRecipients, recipient, session.addressVisited),
       contact,
       contact_hash_id: recipient.contact_hash_id
     }

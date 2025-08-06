@@ -51,6 +51,14 @@ function _handleOneOptionSelected(payload) {
 }
 
 async function _save(session, payload) {
+  if (session.additionalRecipient && payload.recipients.includes(session.additionalRecipient.contact_hash_id)) {
+    payload.recipients.push(session.additionalRecipient)
+
+    session.additionalRecipients = [...(session.additionalRecipients || []), session.additionalRecipient]
+
+    delete session.additionalRecipient
+  }
+
   session.selectedRecipients = payload.recipients
 
   return session.$update()

@@ -60,11 +60,9 @@ async function _save(session, payload) {
       email
     }
 
-    if (Array.isArray(session.additionalRecipients)) {
-      session.additionalRecipients.push(recipient)
-    } else {
-      session.additionalRecipients = [recipient]
-    }
+    session.additionalRecipient = recipient
+
+    session.addressVisited = true
 
     delete session.name
     delete session.contactType

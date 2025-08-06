@@ -21,6 +21,8 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
+  await _visited(session)
+
   const recipients = await RecipientsService.go(session, false)
 
   const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
@@ -33,6 +35,13 @@ async function go(sessionId, page = 1) {
     pagination,
     page
   }
+}
+
+async function _visited(session) {
+  delete session.additionalRecipient
+  delete session.addressVisitied
+
+  return session.$update()
 }
 
 module.exports = {
