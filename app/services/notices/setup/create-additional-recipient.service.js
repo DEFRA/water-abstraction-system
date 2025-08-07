@@ -46,6 +46,8 @@ async function go(sessionId) {
     session.additionalRecipients = [_additionalRecipient]
   }
 
+  session.selectedRecipients.push(_additionalRecipient.contact_hash_id)
+
   delete session.name
   delete session.contactType
   delete session.address.addressLine1

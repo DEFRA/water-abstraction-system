@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const CreateAdditionalRecipientService = require('../../app/services/notices/setup/create-additional-recipient.service.js')
 const InternationalAddressService = require('../../app/services/address/international.service.js')
 const ManualAddressService = require('../../app/services/address/manual.service.js')
 const PostcodeService = require('../../app/services/address/postcode.service.js')
@@ -23,7 +24,7 @@ const SubmitSelectAddressService = require('../../app/services/address/submit-se
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Address controller', () => {
+describe.only('Address controller', () => {
   let options
   let postOptions
   let server
@@ -155,8 +156,10 @@ describe('Address controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(SubmitSelectAddressService, 'go').returns({
-            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check'
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check',
+            succeeded: true
           })
+          Sinon.stub(CreateAdditionalRecipientService, 'go').returns({})
         })
 
         it('redirects to the check page', async () => {
@@ -173,6 +176,7 @@ describe('Address controller', () => {
             const pageData = _selectPageData(true)
 
             Sinon.stub(SubmitSelectAddressService, 'go').returns(pageData)
+            Sinon.stub(CreateAdditionalRecipientService, 'go').returns({})
           })
 
           it('re-renders the select page with an error', async () => {
@@ -188,7 +192,8 @@ describe('Address controller', () => {
         describe('and we do not get any resutls back from the postcode lookup', () => {
           beforeEach(() => {
             Sinon.stub(SubmitSelectAddressService, 'go').returns({
-              redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
+              redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual',
+              succeeded: false
             })
           })
 

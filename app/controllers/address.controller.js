@@ -5,6 +5,7 @@
  * @module AddressController
  */
 
+const CreateAdditionalRecipientService = require('../services/notices/setup/create-additional-recipient.service.js')
 const InternationalAddressService = require('../services/address/international.service.js')
 const ManualAddressService = require('../services/address/manual.service.js')
 const PostcodeService = require('../services/address/postcode.service.js')
@@ -59,6 +60,10 @@ async function submitSelect(request, h) {
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
+  }
+
+  if (pageData.succeeded) {
+    await CreateAdditionalRecipientService.go(sessionId)
   }
 
   return h.redirect(pageData.redirect)

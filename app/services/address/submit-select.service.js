@@ -29,10 +29,10 @@ async function go(sessionId, payload) {
     const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
     if (uprnResult.succeeded) {
-      console.log(session.address)
       await _save(session, uprnResult.matches[0])
 
       return {
+        succeeded: true,
         redirect: session.address.redirectUrl
       }
     }
@@ -46,6 +46,7 @@ async function go(sessionId, payload) {
 
   if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
+      succeeded: false,
       redirect: `/system/address/${session.id}/manual`
     }
   }

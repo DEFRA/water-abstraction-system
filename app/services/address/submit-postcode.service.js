@@ -30,11 +30,9 @@ async function go(sessionId, payload) {
   }
 
   const _submittedData = {
-    ...session,
-    address: {
-      ...payload
-    }
+    ...session
   }
+  _submittedData.address.postcode = payload.postcode
 
   const pageData = PostcodePresenter.go(_submittedData)
 
