@@ -13,14 +13,24 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const SelectRecipientsPresenter = require('../../../../app/presenters/notices/setup/select-recipients.presenter.js')
 
-describe('Select Recipients Presenter', () => {
+describe('Notices - Setup - Select Recipients Presenter', () => {
   let recipients
   let session
   let testRecipients
 
   beforeEach(() => {
-    session = { id: 123 }
     recipients = RecipientsFixture.recipients()
+
+    session = {
+      id: 123,
+      selectedRecipients: [
+        recipients.primaryUser.contact_hash_id,
+        recipients.returnsAgent.contact_hash_id,
+        recipients.licenceHolder.contact_hash_id,
+        recipients.returnsTo.contact_hash_id,
+        recipients.licenceHolderWithMultipleLicences.contact_hash_id
+      ]
+    }
 
     testRecipients = [...Object.values(recipients)]
   })
@@ -80,21 +90,9 @@ describe('Select Recipients Presenter', () => {
     beforeEach(() => {
       const recipient = Object.values(recipients)
 
+      session.selectedRecipients = [recipient[0].contact_hash_id]
+
       testRecipients = [recipient[0]]
-    })
-
-    describe('and "selectedRecipients" in not present in the session', () => {
-      it('returns page data for the view with all recipients checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients)
-
-        expect(result.recipients).to.equal([
-          {
-            checked: true,
-            contact: [recipients.primaryUser.email],
-            contact_hash_id: recipients.primaryUser.contact_hash_id
-          }
-        ])
-      })
     })
 
     describe('and there are no "selectedRecipients"', () => {

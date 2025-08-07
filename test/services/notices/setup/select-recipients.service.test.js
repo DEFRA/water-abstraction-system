@@ -24,11 +24,13 @@ describe('Notices - Setup - Select Recipients Service', () => {
   let recipients
 
   beforeEach(async () => {
-    sessionData = {}
+    recipients = RecipientsFixture.recipients()
+
+    sessionData = {
+      selectedRecipients: [recipients.primaryUser.contact_hash_id]
+    }
 
     session = await SessionHelper.add({ data: sessionData })
-
-    recipients = RecipientsFixture.recipients()
 
     Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
   })

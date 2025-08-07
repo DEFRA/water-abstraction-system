@@ -186,10 +186,11 @@ async function viewReturnsPeriod(request, h) {
 async function viewCheck(request, h) {
   const {
     params: { sessionId },
-    query: { page }
+    query: { page },
+    yar
   } = request
 
-  const pageData = await CheckService.go(sessionId, page)
+  const pageData = await CheckService.go(sessionId, page, yar)
 
   return h.view(`notices/setup/check.njk`, pageData)
 }
@@ -327,11 +328,12 @@ async function submitCheckLicenceMatches(request, h) {
 
 async function submitContactType(request, h) {
   const {
+    params: { sessionId },
     payload,
-    params: { sessionId }
+    yar
   } = request
 
-  const pageData = await SubmitContactTypeService.go(sessionId, payload)
+  const pageData = await SubmitContactTypeService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
@@ -341,7 +343,7 @@ async function submitContactType(request, h) {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/select-recipients`)
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
 async function submitLicence(request, h) {
