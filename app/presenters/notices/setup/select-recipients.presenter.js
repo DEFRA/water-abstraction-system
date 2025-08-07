@@ -29,16 +29,10 @@ function go(session, recipients) {
 /**
  * Determines if a recipient should be marked as checked.
  *
- * If no `selectedRecipients` are provided (i.e., it's falsy), then all contacts should be marked as checked (`true`).
- * Otherwise, only recipient whose `contact_hash_id` appears in `selectedRecipients` should be marked as checked.
- *
+ * The 'selectedRecipients' are initialised on the check page, it should always exist.
  * @private
  */
 function _checked(selectedRecipients, recipient) {
-  if (selectedRecipients === undefined) {
-    return true
-  }
-
   return selectedRecipients.includes(recipient.contact_hash_id)
 }
 

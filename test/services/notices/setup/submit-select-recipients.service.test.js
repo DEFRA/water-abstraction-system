@@ -18,7 +18,7 @@ const RecipientsService = require('../../../../app/services/notices/setup/recipi
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
 
-describe('Notices - Setup - Select Recipients Service', () => {
+describe('Notices - Setup - Submit Select Recipients Service', () => {
   let payload
   let recipients
   let session

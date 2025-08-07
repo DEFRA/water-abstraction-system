@@ -23,6 +23,7 @@ describe('Notices - Setup - Check service', () => {
   let removeLicences
   let session
   let testRecipients
+  let yarStub
 
   beforeEach(async () => {
     removeLicences = ''
@@ -39,6 +40,8 @@ describe('Notices - Setup - Check service', () => {
 
     testRecipients = RecipientsFixture.recipients()
 
+    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+
     Sinon.stub(FetchRecipientsService, 'go').resolves([testRecipients.primaryUser])
   })
 
@@ -47,7 +50,7 @@ describe('Notices - Setup - Check service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await CheckService.go(session.id)
+    const result = await CheckService.go(session.id, yarStub)
 
     expect(result).to.equal({
       activeNavBar: 'manage',
@@ -57,6 +60,10 @@ describe('Notices - Setup - Check service', () => {
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
         removeLicences: `/system/notices/setup/${session.id}/remove-licences`
+      },
+      notification: {
+        text: 'Notification',
+        title: 'Test'
       },
       page: 1,
       pagination: {
@@ -78,6 +85,46 @@ describe('Notices - Setup - Check service', () => {
     })
   })
 
+  describe('the "selectedRecipients" property', () => {
+    describe('when there are no "selectedRecipients"', () => {
+      it('adds the "selectedRecipients" array to the session', async () => {
+        await CheckService.go(session.id, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession).to.equal({
+          ...session,
+          data: {
+            ...session.data,
+            selectedRecipients: [testRecipients.primaryUser.contact_hash_id]
+          },
+          selectedRecipients: [testRecipients.primaryUser.contact_hash_id]
+        })
+      })
+    })
+
+    describe('when there are "selectedRecipients"', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          data: {
+            returnsPeriod: 'quarterFour',
+            removeLicences,
+            journey: 'standard',
+            noticeType: 'invitations',
+            referenceCode: 'RINV-123',
+            selectedRecipients: [testRecipients.primaryUser.contact_hash_id]
+          }
+        })
+      })
+
+      it('does not affect the "selectedRecipients"', async () => {
+        await CheckService.go(session.id, yarStub)
+
+        const refreshedSession = await session.$query()
+        expect(refreshedSession).to.equal(session)
+      })
+    })
+  })
   describe('when the journey is "alerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
@@ -95,7 +142,7 @@ describe('Notices - Setup - Check service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await CheckService.go(session.id)
+      const result = await CheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -104,6 +151,10 @@ describe('Notices - Setup - Check service', () => {
           back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`
+        },
+        notification: {
+          text: 'Notification',
+          title: 'Test'
         },
         page: 1,
         pagination: {
