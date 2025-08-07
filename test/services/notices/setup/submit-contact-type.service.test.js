@@ -3,9 +3,10 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 const crypto = require('crypto')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,243 +19,300 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
+
   const testEmailHash = _createMD5Hash('test@test.gov.uk')
 
-  describe('when called with a valid email payload with no existing additionalRecipients', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'email',
-        email: 'test@test.gov.uk'
-      }
-      sessionData = {}
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('saves the submitted value', async () => {
-      await SubmitContactTypeService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.contactType).to.equal(undefined)
-      expect(refreshedSession.additionalRecipients).to.equal([
-        {
-          contact_hash_id: _createMD5Hash(payload.email),
-          email: payload.email
-        }
-      ])
-    })
-
-    it('continues the journey', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
-
-      expect(result).to.equal({
-        type: 'email'
-      })
-    })
+  beforeEach(() => {
+    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
 
-  describe('when called with a valid email payload with no existing additionalRecipients with the address capitalised', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'email',
-        email: 'TEST@TEST.GOV.UK'
-      }
-      sessionData = {}
+  afterEach(() => {
+    Sinon.restore()
+  })
 
-      session = await SessionHelper.add({ data: sessionData })
+  describe('when called with a valid', () => {
+    beforeEach(() => {
+      sessionData = {
+        selectedRecipients: ['123']
+      }
     })
 
-    it('saves the submitted value with the email address in lowercase', async () => {
-      await SubmitContactTypeService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.contactType).to.equal(undefined)
-      expect(refreshedSession.additionalRecipients).to.equal([
-        {
-          contact_hash_id: testEmailHash,
+    describe('email payload', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'email',
           email: 'test@test.gov.uk'
         }
-      ])
-    })
 
-    it('continues the journey', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      expect(result).to.equal({
-        type: 'email'
+      it('saves the submitted value', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactType).to.equal(undefined)
+        expect(refreshedSession.additionalRecipients).to.equal([
+          {
+            contact_hash_id: _createMD5Hash(payload.email),
+            email: payload.email
+          }
+        ])
+      })
+
+      it('saves the recipients "contact_hash_id" to the sessions "selectedRecipients" array', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.selectedRecipients).to.equal(['123', _createMD5Hash(payload.email)])
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({
+          type: 'email'
+        })
       })
     })
-  })
 
-  describe('when called with a valid email payload with an existing additionalRecipients', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'email',
-        email: 'other.test@test.gov.uk'
-      }
-      sessionData = {
-        additionalRecipients: [
+    describe('email payload with no existing additionalRecipients', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'email',
+          email: 'test@test.gov.uk'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactType).to.equal(undefined)
+        expect(refreshedSession.additionalRecipients).to.equal([
+          {
+            contact_hash_id: _createMD5Hash(payload.email),
+            email: payload.email
+          }
+        ])
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({
+          type: 'email'
+        })
+      })
+    })
+
+    describe('email payload with no existing additionalRecipients with the address capitalised', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'email',
+          email: 'TEST@TEST.GOV.UK'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value with the email address in lowercase', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactType).to.equal(undefined)
+        expect(refreshedSession.additionalRecipients).to.equal([
+          {
+            contact_hash_id: testEmailHash,
+            email: 'test@test.gov.uk'
+          }
+        ])
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({
+          type: 'email'
+        })
+      })
+    })
+
+    describe('email payload with an existing additionalRecipients', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'email',
+          email: 'other.test@test.gov.uk'
+        }
+
+        sessionData.additionalRecipients = [
           {
             contact_hash_id: testEmailHash,
             email: 'test@test.gov.uk'
           }
         ]
-      }
 
-      session = await SessionHelper.add({ data: sessionData })
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactType).to.equal(undefined)
+        expect(refreshedSession.additionalRecipients).to.equal([
+          {
+            contact_hash_id: testEmailHash,
+            email: 'test@test.gov.uk'
+          },
+          {
+            contact_hash_id: _createMD5Hash(payload.email),
+            email: payload.email
+          }
+        ])
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({
+          type: 'email'
+        })
+      })
     })
 
-    it('saves the submitted value', async () => {
-      await SubmitContactTypeService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.contactType).to.equal(undefined)
-      expect(refreshedSession.additionalRecipients).to.equal([
-        {
-          contact_hash_id: testEmailHash,
-          email: 'test@test.gov.uk'
-        },
-        {
-          contact_hash_id: _createMD5Hash(payload.email),
-          email: payload.email
+    describe('post payload', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'post',
+          name: 'Fake Name'
         }
-      ])
-    })
 
-    it('continues the journey', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      expect(result).to.equal({
-        type: 'email'
+      it('saves the submitted value', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactType).to.equal(payload.type)
+        expect(refreshedSession.name).to.equal(payload.name)
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({
+          type: 'post'
+        })
       })
     })
   })
 
-  describe('when called with a valid post payload', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'post',
-        name: 'Fake Name'
-      }
-      sessionData = {}
+  describe('when validation fails', () => {
+    describe('when validation fails because no type is selected', () => {
+      beforeEach(async () => {
+        payload = {}
+        sessionData = {}
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-    it('saves the submitted value', async () => {
-      await SubmitContactTypeService.go(session.id, payload)
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.contactType).to.equal(payload.type)
-      expect(refreshedSession.name).to.equal(payload.name)
-    })
-
-    it('continues the journey', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
-
-      expect(result).to.equal({
-        type: 'post'
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          email: null,
+          error: {
+            errorList: [
+              {
+                href: '#type',
+                text: 'Select how to contact the recipient'
+              }
+            ],
+            type: 'Select how to contact the recipient'
+          },
+          name: null,
+          pageTitle: 'Select how to contact the recipient',
+          type: null
+        })
       })
     })
-  })
 
-  describe('when validation fails because no type is selected', () => {
-    beforeEach(async () => {
-      payload = {}
-      sessionData = {}
+    describe('when validation fails because type is email but no email is entered', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'email'
+        }
+        sessionData = {}
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
-        email: null,
-        error: {
-          errorList: [
-            {
-              href: '#type',
-              text: 'Select how to contact the recipient'
-            }
-          ],
-          type: 'Select how to contact the recipient'
-        },
-        name: null,
-        pageTitle: 'Select how to contact the recipient',
-        type: null
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          email: null,
+          error: {
+            errorList: [
+              {
+                href: '#email',
+                text: 'Enter an email address'
+              }
+            ],
+            email: 'Enter an email address'
+          },
+          name: null,
+          pageTitle: 'Select how to contact the recipient',
+          type: 'email'
+        })
       })
     })
-  })
 
-  describe('when validation fails because type is email but no email is entered', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'email'
-      }
-      sessionData = {}
+    describe('when validation fails because type is post but no name is entered', () => {
+      beforeEach(async () => {
+        payload = {
+          type: 'post'
+        }
+        sessionData = {}
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
-        email: null,
-        error: {
-          errorList: [
-            {
-              href: '#email',
-              text: 'Enter an email address'
-            }
-          ],
-          email: 'Enter an email address'
-        },
-        name: null,
-        pageTitle: 'Select how to contact the recipient',
-        type: 'email'
+        session = await SessionHelper.add({ data: sessionData })
       })
-    })
-  })
 
-  describe('when validation fails because type is post but no name is entered', () => {
-    beforeEach(async () => {
-      payload = {
-        type: 'post'
-      }
-      sessionData = {}
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactTypeService.go(session.id, payload)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
-        email: null,
-        error: {
-          errorList: [
-            {
-              href: '#name',
-              text: 'Enter the recipients name'
-            }
-          ],
-          name: 'Enter the recipients name'
-        },
-        name: null,
-        pageTitle: 'Select how to contact the recipient',
-        type: 'post'
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          email: null,
+          error: {
+            errorList: [
+              {
+                href: '#name',
+                text: 'Enter the recipients name'
+              }
+            ],
+            name: 'Enter the recipients name'
+          },
+          name: null,
+          pageTitle: 'Select how to contact the recipient',
+          type: 'post'
+        })
       })
     })
   })
