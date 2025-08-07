@@ -27,7 +27,7 @@ const ROLE_RTNS_INDEX = 0
 const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Group model', () => {
   let testGroupRole

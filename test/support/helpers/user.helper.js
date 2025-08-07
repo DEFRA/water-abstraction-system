@@ -12,7 +12,7 @@ const { data: users } = require('../../../db/seeds/data/users.js')
 /**
  * List of attributes to skip when comparing user records in tests
  */
-const skipCompareList = ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+const SKIP_COMPARE_LIST = Object.freeze(['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'])
 
 const DEFAULT_INDEX = 4
 
@@ -106,5 +106,5 @@ module.exports = {
   defaults,
   generateUserId,
   select,
-  skipCompareList
+  SKIP_COMPARE_LIST
 }

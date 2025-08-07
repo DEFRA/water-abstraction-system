@@ -17,7 +17,7 @@ const UserModel = require('../../app/models/user.model.js')
 // Thing under test
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Charge Version Note model', () => {
   let testChargeVersion

@@ -21,7 +21,7 @@ const ROLE_RETURNS_INDEX = 0
 const ROLE_HOF_NOTIFICATIONS_INDEX = 0
 const USER_ENV_OFFICER_INDEX = 2
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Fetch User Roles And Groups service', () => {
   let duplicateRoleForUser

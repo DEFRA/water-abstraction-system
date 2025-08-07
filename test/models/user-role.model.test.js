@@ -20,7 +20,7 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 const ROLE_RENEWAL_NOTIFICATIONS_INDEX = 5
 const USER_NPS_INDEX = 6
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('User Role model', () => {
   let testRecord

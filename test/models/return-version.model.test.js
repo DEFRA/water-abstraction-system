@@ -23,7 +23,7 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Return Version model', () => {
   let returnVersionId

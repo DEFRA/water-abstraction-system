@@ -21,7 +21,7 @@ const GROUP_WIRS_INDEX = 2
 const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('User Group model', () => {
   let testGroup

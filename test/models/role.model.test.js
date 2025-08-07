@@ -26,7 +26,7 @@ const GROUP_SUPER_INDEX = 5
 const ROLE_AR_USER_INDEX = 6
 const USER_SUPER_INDEX = 1
 
-const { skipCompareList: skip } = UserHelper
+const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Role model', () => {
   let testGroup
