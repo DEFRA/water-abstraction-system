@@ -190,7 +190,7 @@ async function viewCheck(request, h) {
     yar
   } = request
 
-  const pageData = await CheckService.go(sessionId, page, yar)
+  const pageData = await CheckService.go(sessionId, yar, page)
 
   return h.view(`notices/setup/check.njk`, pageData)
 }

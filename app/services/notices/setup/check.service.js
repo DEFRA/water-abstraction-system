@@ -14,12 +14,12 @@ const SessionModel = require('../../../models/session.model.js')
  * Orchestrates fetching and presenting the data needed for the notices setup check page
  *
  * @param {string} sessionId - The UUID for returns notices session record
- * @param {number|string} [page=1] - The currently selected page (if paginated)
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {number|string} [page=1] - The currently selected page (if paginated)
  *
- * @returns {object} The view data for the review page
+ * @returns {Promise<object>} The view data for the review page
  */
-async function go(sessionId, page = 1, yar) {
+async function go(sessionId, yar, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipients = await RecipientsService.go(session, false)

@@ -50,7 +50,7 @@ describe('Notices - Setup - Check service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await CheckService.go(session.id, 1, yarStub)
+    const result = await CheckService.go(session.id, yarStub)
 
     expect(result).to.equal({
       activeNavBar: 'manage',
@@ -88,7 +88,7 @@ describe('Notices - Setup - Check service', () => {
   describe('the "selectedRecipients" property', () => {
     describe('when there are no "selectedRecipients"', () => {
       it('adds the "selectedRecipients" array to the session', async () => {
-        await CheckService.go(session.id, 1, yarStub)
+        await CheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -118,7 +118,7 @@ describe('Notices - Setup - Check service', () => {
       })
 
       it('does not affect the "selectedRecipients"', async () => {
-        await CheckService.go(session.id, 1, yarStub)
+        await CheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
         expect(refreshedSession).to.equal(session)
@@ -142,7 +142,7 @@ describe('Notices - Setup - Check service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await CheckService.go(session.id, 1, yarStub)
+      const result = await CheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
