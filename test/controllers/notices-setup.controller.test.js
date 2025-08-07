@@ -26,6 +26,7 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
+const PreviewReturnFormsService = require('../../app/services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -804,6 +805,39 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the recipient previews')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview-return-forms', () => {
+    describe('GET', () => {
+      let buffer
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview-return-forms`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        buffer = Buffer.from('mock file')
+
+        Sinon.stub(PreviewReturnFormsService, 'go').resolves(buffer)
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the PDF successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.headers['content-type']).to.equal('application/pdf')
+          expect(response.headers['content-disposition']).to.contain('inline; filename="example.pdf"')
+
+          // Check that the payload matches the buffer we stubbed
+          expect(response.payload).to.equal(buffer.toString())
         })
       })
     })

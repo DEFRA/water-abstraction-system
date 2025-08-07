@@ -20,6 +20,7 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
+const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -201,6 +202,14 @@ async function viewNoticeType(request, h) {
   const pageData = await NoticeTypeService.go(sessionId)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
+}
+
+async function viewPreviewReturnForms(request, h) {
+  const { sessionId } = request.params
+
+  const fileBuffer = await PreviewReturnFormsService.go(sessionId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
 async function viewRemoveThreshold(request, h) {
@@ -454,6 +463,7 @@ module.exports = {
   viewContactType,
   viewLicence,
   viewNoticeType,
+  viewPreviewReturnForms,
   viewRemoveLicences,
   viewRemoveThreshold,
   viewReturnForms,
