@@ -5,10 +5,9 @@
  * @module ViewReturnLogPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatNumber } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatNumber, formatPurposes } = require('../base.presenter.js')
 const {
   formatMeterDetails,
-  formatPurpose,
   formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
@@ -62,7 +61,7 @@ function go(returnLog, auth) {
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
     pageTitle: 'Abstraction return',
-    purpose: formatPurpose(purposes),
+    purpose: formatPurposes(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
