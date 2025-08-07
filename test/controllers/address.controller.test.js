@@ -154,14 +154,16 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAddressService, 'go').returns({})
+          Sinon.stub(SubmitSelectAddressService, 'go').returns({
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check'
+          })
         })
 
         it('redirects to the check page', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+          expect(response.headers.location).to.equal(`/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
         })
       })
 
@@ -186,7 +188,7 @@ describe('Address controller', () => {
         describe('and we do not get any resutls back from the postcode lookup', () => {
           beforeEach(() => {
             Sinon.stub(SubmitSelectAddressService, 'go').returns({
-              redirect: true
+              redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
             })
           })
 
@@ -194,7 +196,7 @@ describe('Address controller', () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual`)
+            expect(response.headers.location).to.equal('/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual')
           })
         })
       })

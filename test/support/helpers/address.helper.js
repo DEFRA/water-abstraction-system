@@ -4,6 +4,8 @@
  * @module AddressHelper
  */
 
+const crypto = require('crypto')
+
 const AddressModel = require('../../../app/models/address.model.js')
 const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 
@@ -62,6 +64,27 @@ function defaults(data = {}) {
 }
 
 /**
+ * This function creates an MD5 hash of a saved address.
+ *
+ * @param {object} session
+ *
+ * @returns {Promise<string>} - The md5 hash string of the address
+ */
+function generateAdreessMD5Hash(session) {
+  const name = session.name
+  const addressLine1 = session.address.addressLine1
+  const addressLine2 = session.address.addressLine2 ?? ''
+  const addressLine3 = session.address.addressLine3 ?? ''
+  const addressLine4 = session.address.addressLine4
+  const postcode = session.address.postcode ?? ''
+  const country = session.address.country ?? ''
+
+  const _combinedString = `${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
+
+  return crypto.createHash('md5').update(_combinedString).digest('hex')
+}
+
+/**
  * Generate an UPRN for an address
  *
  * @returns {string} - A random UPRN
@@ -87,6 +110,7 @@ function generateExternalId() {
 module.exports = {
   add,
   defaults,
+  generateAdreessMD5Hash,
   generateUprn,
   generateExternalId
 }

@@ -46,7 +46,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.address = { postcode: payload.postcode }
+  session.address.postcode = payload.postcode
 
   return session.$update()
 }

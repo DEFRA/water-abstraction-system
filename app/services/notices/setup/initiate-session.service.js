@@ -41,12 +41,16 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
   const session = await SessionModel.query()
     .insert({
       data: {
+        address: {},
         ...additionalData,
         ...notice,
         journey
       }
     })
     .returning('id')
+
+  session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+  await session.$update()
 
   return {
     sessionId: session.id,
