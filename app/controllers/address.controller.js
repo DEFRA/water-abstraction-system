@@ -60,7 +60,7 @@ async function submitSelect(request, h) {
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
   }
-console.log(pageData.redirect)
+
   return h.redirect(pageData.redirect)
 }
 
