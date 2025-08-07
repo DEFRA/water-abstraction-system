@@ -21,6 +21,8 @@ const ROLE_RETURNS_INDEX = 0
 const ROLE_HOF_NOTIFICATIONS_INDEX = 0
 const USER_ENV_OFFICER_INDEX = 2
 
+const { SKIP_COMPARE_LIST: skip } = UserHelper
+
 describe('Fetch User Roles And Groups service', () => {
   let duplicateRoleForUser
   let groupForUser
@@ -44,7 +46,7 @@ describe('Fetch User Roles And Groups service', () => {
     it('returns the user', async () => {
       const result = await FetchUserRolesAndGroupsService.go(user.id)
 
-      expect(result.user).to.equal(user, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+      expect(result.user).to.equal(user, { skip })
     })
 
     it("returns the user's roles", async () => {
