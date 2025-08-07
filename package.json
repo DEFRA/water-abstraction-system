@@ -42,7 +42,7 @@
     "@hapi/vision": "^7.0.2",
     "@hapi/yar": "^11.0.2",
     "@joi/date": "^2.1.0",
-    "@smithy/node-http-handler": "^2.0.4",
+    "@smithy/node-http-handler": "^4.1.1",
     "bcryptjs": "^2.4.3",
     "big.js": "^6.2.1",
     "dotenv": "^16.3.1",
