@@ -26,6 +26,7 @@ describe('Bill Runs - Setup - Season presenter', () => {
         const result = SeasonPresenter.go(session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,
           pageTitle: 'Select the season',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedSeason: null
@@ -42,6 +43,7 @@ describe('Bill Runs - Setup - Season presenter', () => {
         const result = SeasonPresenter.go(session)
 
         expect(result).to.equal({
+          backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,
           pageTitle: 'Select the season',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedSeason: 'summer'

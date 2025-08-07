@@ -31,8 +31,9 @@ describe('Bill Runs - Setup - No Licences service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
-        sessionId,
-        pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${region.displayName} region`
+        backlink: `/system/bill-runs/setup/${sessionId}/region`,
+        pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${region.displayName} region`,
+        sessionId
       })
     })
   })

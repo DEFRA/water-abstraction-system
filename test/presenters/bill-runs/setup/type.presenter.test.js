@@ -26,6 +26,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
         const result = TypePresenter.go(session)
 
         expect(result).to.equal({
+          backlink: '/system/bill-runs',
           pageTitle: 'Select the bill run type',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedType: null
@@ -42,6 +43,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
         const result = TypePresenter.go(session)
 
         expect(result).to.equal({
+          backlink: '/system/bill-runs',
           pageTitle: 'Select the bill run type',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedType: 'annual'

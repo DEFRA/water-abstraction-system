@@ -5,11 +5,10 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Go back to bill runs',
-      href: '/system/bill-runs'
+      href: backlink
     })
   }}
 {% endblock %}
@@ -27,76 +26,74 @@
       }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% if enableTwoPartTariffSupplementary %}
-        {% set typeItems = [
-          {
-            text: 'Annual',
-            value: 'annual',
-            checked: 'annual' === selectedType
-          },
-          {
-            text: 'Supplementary',
-            value: 'supplementary',
-            checked: 'supplementary' === selectedType
-          },
-          {
-            text: 'Two-part tariff',
-            value: 'two_part_tariff',
-            checked: 'two_part_tariff' === selectedType,
-            hint: {
-              text: 'Second part charges only'
-            }
-          },
-          {
-            text: 'Two-part tariff supplementary',
-            value: 'two_part_supplementary',
-            checked: 'two_part_supplementary' === selectedType,
-            hint: {
-              text: 'Second part charges for the current charge scheme only'
-            }
-          }
-        ] %}
-      {% else %}
-        {% set typeItems = [
-          {
-            text: 'Annual',
-            value: 'annual',
-            checked: 'annual' === selectedType
-          },
-          {
-            text: 'Supplementary',
-            value: 'supplementary',
-            checked: 'supplementary' === selectedType
-          },
-          {
-            text: 'Two-part tariff',
-            value: 'two_part_tariff',
-            checked: 'two_part_tariff' === selectedType
-          }
-        ] %}
-      {% endif %}
-
-      {{ govukRadios({
-        attributes: {
-          'data-test': 'bill-run-type'
+    {% if enableTwoPartTariffSupplementary %}
+      {% set typeItems = [
+        {
+          text: 'Annual',
+          value: 'annual',
+          checked: 'annual' === selectedType
         },
-        name: 'type',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+        {
+          text: 'Supplementary',
+          value: 'supplementary',
+          checked: 'supplementary' === selectedType
+        },
+        {
+          text: 'Two-part tariff',
+          value: 'two_part_tariff',
+          checked: 'two_part_tariff' === selectedType,
+          hint: {
+            text: 'Second part charges only'
           }
         },
-        items: typeItems
-      }) }}
+        {
+          text: 'Two-part tariff supplementary',
+          value: 'two_part_supplementary',
+          checked: 'two_part_supplementary' === selectedType,
+          hint: {
+            text: 'Second part charges for the current charge scheme only'
+          }
+        }
+      ] %}
+    {% else %}
+      {% set typeItems = [
+        {
+          text: 'Annual',
+          value: 'annual',
+          checked: 'annual' === selectedType
+        },
+        {
+          text: 'Supplementary',
+          value: 'supplementary',
+          checked: 'supplementary' === selectedType
+        },
+        {
+          text: 'Two-part tariff',
+          value: 'two_part_tariff',
+          checked: 'two_part_tariff' === selectedType
+        }
+      ] %}
+    {% endif %}
 
-      {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukRadios({
+      attributes: {
+        'data-test': 'bill-run-type'
+      },
+      name: 'type',
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l'
+        }
+      },
+      items: typeItems
+    }) }}
+
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}
