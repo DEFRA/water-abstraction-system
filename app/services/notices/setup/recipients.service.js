@@ -15,10 +15,11 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
  * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
  *
  * @param {module:SessionModel} session - The session instance
+ * @param {boolean} allRecipients - flag to decide if all recipients are required
  *
  * @returns {Promise<object[]>} - recipients
  */
-async function go(session) {
+async function go(session, allRecipients = true) {
   let recipientsData
 
   if (session.journey === 'alerts') {
@@ -27,7 +28,19 @@ async function go(session) {
     recipientsData = await FetchRecipientsService.go(session)
   }
 
-  return DetermineRecipientsService.go(recipientsData)
+  if (allRecipients || !session.selectedRecipients) {
+    return DetermineRecipientsService.go(recipientsData)
+  }
+
+  const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
+
+  return DetermineRecipientsService.go(selectedRecipientsData)
+}
+
+function _selectedRecipients(selectedRecipients, recipientsData) {
+  return recipientsData.filter((recipient) => {
+    return selectedRecipients.includes(recipient.contact_hash_id)
+  })
 }
 
 module.exports = {

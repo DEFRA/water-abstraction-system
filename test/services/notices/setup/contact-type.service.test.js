@@ -38,39 +38,11 @@ describe('Notices - Setup - Contact Type Service', () => {
     })
   })
 
-  describe('when called with a saved email address', () => {
-    beforeEach(async () => {
-      sessionData = {
-        contactType: {
-          email: 'test@test.gov.uk',
-          type: 'email'
-        }
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await ContactTypeService.go(session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
-        email: 'test@test.gov.uk',
-        name: null,
-        pageTitle: 'Select how to contact the recipient',
-        type: 'email'
-      })
-    })
-  })
-
   describe('when called with a saved name', () => {
     beforeEach(async () => {
       sessionData = {
-        contactType: {
-          name: 'Fake Person',
-          type: 'post'
-        }
+        name: 'Fake Person',
+        contactType: 'post'
       }
 
       session = await SessionHelper.add({ data: sessionData })

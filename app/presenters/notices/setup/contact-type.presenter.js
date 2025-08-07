@@ -13,9 +13,9 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const email = session?.contactType?.email ?? null
-  const name = session?.contactType?.name ?? null
-  const type = session?.contactType?.type ?? null
+  const email = session?.email ?? null
+  const name = session?.name ?? null
+  const type = session?.contactType ?? null
 
   return {
     backLink: `/system/notices/setup/${session.id}/select-recipients`,

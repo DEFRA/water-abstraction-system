@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await RecipientsService.go(session)
+  const recipients = await RecipientsService.go(session, false)
 
   const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
 
