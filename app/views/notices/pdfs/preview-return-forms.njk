@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>{{ title }}</title>
-</head>
-<body>
-<h1>{{ cover.title }}</h1>
-<p>This is a Nunjucks-rendered HTML page.</p>
-</body>
+  <head>
+    <style>
+      {% include "includes/reset.css" %}
+      {% include "includes/custom.css" %}
+    </style>
+  </head>
+  <body class="paper">
+  {% include 'pages/cover.njk' %}
+  {% include 'pages/guidance.njk' %}
+  </body>
 </html>

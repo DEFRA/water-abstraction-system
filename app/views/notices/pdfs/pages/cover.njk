@@ -1,0 +1,143 @@
+{% extends "layout/page-layout.njk" %}
+
+{% from "layout/footer.njk" import footer %}
+
+{% block header %}
+  <div class="columns">
+    <div class="column">
+      {% include "layout/logo.html" %}
+    </div>
+    <div class="column meta">
+      <div class="header">
+        <p class="smaller">{{ regionAndArea }}</p>
+      </div>
+      {% if twoPartTariff %}
+        <div class="header">
+          <p class="smaller">Two-part tariff</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+  {# This needs to account for missing lines etc #}
+  <div id="address-container">
+    <div class="address-block">
+      {{ address.addressLine1 }}<br>
+      {{ address.addressLine2 }}<br>
+      {{ address.addressLine3 }}<br>
+      {{ address.addressLine4 }}<br>
+      {{ address.addressLine5 }}
+    </div>
+  </div>
+
+  <div class="address-spacer"></div>
+
+  <div id="title-block">
+    <h1 class="bold">
+      {{ pageTitle }}
+
+    </h1>
+  </div>
+
+  <div id="cover-content">
+    <div class="columns">
+      <div class="column">
+        {# Cover text
+        #}
+        <div class="block">
+          <div class="item">
+            <p>Send us your return by <span class="bold">{{ dueDate }}</span>.</p>
+          </div>
+
+          <div class="item">
+            <p>You must submit a return form even if you have not abstracted any water.</p>
+          </div>
+
+          <div class="item">
+            <p>
+              If your licence has expired or been cancelled complete the return
+              up to the end date of the licence.
+            </p>
+          </div>
+
+          <div class="item">
+            <p>Two-part tariff holders may want to send the form by recorded delivery.</p>
+          </div>
+
+          <div class="item">
+            <p>
+              Before sending it make sure you:
+            <ul>
+              <li>fill in all the relevant sections</li>
+              <li>tick the ‘nil return’ box if no water has been abstracted</li>
+              <li>sign the declaration</li>
+              <li>include this page with your form</li>
+            </ul>
+            </p>
+          </div>
+
+          <div class="item">
+            <p>
+              If you are required to carry out monitoring as a condition of your licence
+              you need to continue sending this information to your local area office.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="column" id="cover-layout">
+        {# Covert details #}
+        <div class="item">
+          <p class="label">Licence number</p>
+          <p class="bold">{{ licenceRef }}</p>
+        </div>
+
+        <div class="item">
+          <p class="label">Return reference</p>
+          <p class="bold">{{ returnRef }}</p>
+        </div>
+
+        <div class="item">
+          <p class="label">Site description</p>
+          <p class="bold">{{ description | title }}</p>
+        </div>
+
+        <div class="item">
+          <p class="label">Purpose</p>
+          <p class="bold">{{ purpose | title }}</p>
+        </div>
+
+        <div class="item">
+          <p class="label">Return period</p>
+          <p>
+            <span class="bold">{{ startDate }}</span> to <span class="bold">{{ endDate }}</span>
+          </p>
+        </div>
+
+        <div class="boxed">
+          <div class="item">
+            <p class="bold">Send this page with your completed form to:</p>
+          </div>
+          <div class="item">
+            <p>
+              Waste and Industry Regulatory Services<br>
+              Environment Agency<br>
+              Quadrant 2, 99 Parkway Avenue<br>
+              Sheffield, S9 4WF
+            </p>
+          </div>
+        </div>
+
+        <div class="item">
+          <p class="bold">If you do not send your return in time<br>we may take enforcement action.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {{ footer(1, 2) }}
+{% endblock %}
