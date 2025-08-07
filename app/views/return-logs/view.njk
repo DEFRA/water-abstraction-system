@@ -9,6 +9,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
@@ -68,7 +69,7 @@
             },
             {
               key: { text: "Purpose", classes: "meta-data__label" },
-              value: { html: '<span data-test="purpose">' + purpose + '</span>', classes: "meta-data__value" }
+              value: { html: '<span data-test="purpose">' + newLineArrayItems(purpose) + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Return period", classes: "meta-data__label" },

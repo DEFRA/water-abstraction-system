@@ -192,6 +192,21 @@ describe('Index Bill Runs presenter', () => {
           })
         })
       })
+
+      describe('when a bill run is two-part tariff supplementary', () => {
+        describe('and has the status "review"', () => {
+          beforeEach(() => {
+            billRuns[0].batchType = 'two_part_supplementary'
+            billRuns[0].status = 'review'
+          })
+
+          it('does not return a pound value', () => {
+            const results = IndexBillRunsPresenter.go(billRuns)
+
+            expect(results[0].total).to.equal('')
+          })
+        })
+      })
     })
   })
 })

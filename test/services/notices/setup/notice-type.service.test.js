@@ -28,6 +28,7 @@ describe('Notice Type Service', () => {
       const result = await NoticeTypeService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/licence`,
         options: [
           {
@@ -38,7 +39,7 @@ describe('Notice Type Service', () => {
           {
             checked: false,
             text: 'Submit using a paper form invitation',
-            value: 'paper-forms'
+            value: 'returnForms'
           }
         ],
         pageTitle: 'Select the notice type'

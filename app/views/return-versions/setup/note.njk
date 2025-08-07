@@ -4,8 +4,9 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -27,35 +28,29 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
-  {% set pageHeader %}
-    <span class="govuk-heading-l govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Licence {{ licenceRef }}</span> {{ pageTitle }}
-    </span>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
   {% endset %}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div class="govuk-body">
-      {{ govukCharacterCount({
-        name: "note",
-        id: "note",
-        maxlength: 500,
-        value: note,
-        label: {
-          html: pageHeader,
-          isPageHeading: true
-        },
-        hint: {
-          text: "Provide a short explanation about the setup of these requirements for returns."
-        },
-        errorMessage: {
-          text: error.text
-        } if error
-      }) }}
+    {{ govukCharacterCount({
+      name: "note",
+      id: "note",
+      maxlength: 500,
+      value: note,
+      label: {
+        html: pageHeading
+      },
+      hint: {
+        text: "Provide a short explanation about the setup of these requirements for returns."
+      },
+      errorMessage: {
+        text: error.text
+      } if error
+    }) }}
 
-      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
-    </div>
+    {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
   </form>
 {% endblock %}

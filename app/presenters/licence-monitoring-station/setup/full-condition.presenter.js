@@ -74,9 +74,9 @@ function _generateRadioButtons(conditions, conditionId) {
       divider: 'or'
     },
     {
-      value: 'not_listed',
+      value: 'no_condition',
       text: 'The condition is not listed for this licence',
-      checked: conditionId === 'not_listed'
+      checked: conditionId === 'no_condition'
     }
   ]
 }

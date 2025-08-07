@@ -6,6 +6,7 @@
  * @module PostcodeService
  */
 
+const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -18,11 +19,11 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
+  const pageData = PostcodePresenter.go(session)
+
   return {
-    activeNavBar: 'search',
-    pageTitle: 'Enter a UK postcode',
-    ...(session.address?.postcode && { postcode: session.address.postcode }),
-    sessionId: session.id
+    activeNavBar: 'manage',
+    ...pageData
   }
 }
 

@@ -27,6 +27,8 @@ const ROLE_RTNS_INDEX = 0
 const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
+const { SKIP_COMPARE_LIST: skip } = UserHelper
+
 describe('Group model', () => {
   let testGroupRole
   let testRecord
@@ -129,7 +131,7 @@ describe('Group model', () => {
         expect(result.users).to.be.an.array()
         expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+        expect(result.users[0]).to.equal(testUser, { skip })
       })
     })
   })

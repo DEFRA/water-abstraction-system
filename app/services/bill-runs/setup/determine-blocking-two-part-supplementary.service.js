@@ -6,7 +6,6 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLiveBillRunService = require('./fetch-live-bill-run.service.js')
 const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -26,8 +25,8 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * Even better, unlike normal supplementary, we are only looking at the year selected by the user, and only have to deal
  * with one charge scheme.
  *
- * This means our match check is purely for any 'live' bill runs in the same region and financial year, because of the
- * rule that disallows more than one live bill run at a time.
+ * This means our match check is purely for any 'live' two-part tariff bill runs in the same region and financial year,
+ * because of the rule that disallows more than one live bill run at a time.
  *
  * > We return an array because the same checks for standard supplementary might return multiple matches. So, we keep
  * > the results consistent for the orchestrating service
@@ -45,12 +44,28 @@ async function go(regionId, year) {
     return { matches: [], toFinancialYearEnding, trigger: engineTriggers.neither }
   }
 
-  const match = await FetchLiveBillRunService.go(regionId, toFinancialYearEnding)
+  const match = await _fetchLiveBillRuns(regionId, toFinancialYearEnding)
 
   const matches = match ? [match] : []
   const trigger = match ? engineTriggers.neither : engineTriggers.current
 
   return { matches, toFinancialYearEnding, trigger }
+}
+
+async function _fetchLiveBillRuns(regionId, toFinancialYearEnding) {
+  return BillRunModel.query()
+    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
+    .where('regionId', regionId)
+    .where('toFinancialYearEnding', toFinancialYearEnding)
+    .whereIn('batchType', ['two_part_tariff', 'two_part_supplementary'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
+    .orderBy([{ column: 'createdAt', order: 'desc' }])
+    .withGraphFetched('region')
+    .modifyGraph('region', (builder) => {
+      builder.select(['id', 'displayName'])
+    })
+    .limit(1)
+    .first()
 }
 
 async function _toFinancialYearEnding(regionId, year) {

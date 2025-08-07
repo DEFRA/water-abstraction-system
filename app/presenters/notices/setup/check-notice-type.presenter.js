@@ -9,7 +9,7 @@ const { formatLongDate } = require('../../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
   invitations: 'Standard returns invitation',
-  'paper-forms': 'Submit using a paper form invitation'
+  returnForms: 'Submit using a paper form invitation'
 }
 
 /**

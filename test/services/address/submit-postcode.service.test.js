@@ -18,27 +18,12 @@ describe('Address - Submit Postcode Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
-    payload = {
-      address: {
-        postcode: 'SW1A 1AA'
-      }
-    }
-    sessionData = {
-      address: {}
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
-  })
-
   describe('when called with a valid payload', () => {
     beforeEach(async () => {
       payload = {
         postcode: 'SW1A 1AA'
       }
-      sessionData = {
-        address: {}
-      }
+      sessionData = {}
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -63,7 +48,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = {}
         sessionData = {
-          address: {}
+          name: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -73,10 +58,11 @@ describe('Address - Submit Postcode Service', () => {
         const result = await SubmitPostcodeService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
           pageTitle: 'Enter a UK postcode',
-          error: { text: 'Enter a UK postcode' },
-          sessionId: session.id
+          postcode: null,
+          error: { text: 'Enter a UK postcode' }
         })
       })
     })
@@ -85,7 +71,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
-          address: {}
+          name: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -95,11 +81,11 @@ describe('Address - Submit Postcode Service', () => {
         const result = await SubmitPostcodeService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
           pageTitle: 'Enter a UK postcode',
           postcode: 'notapostcode',
-          error: { text: 'Enter a valid UK postcode' },
-          sessionId: session.id
+          error: { text: 'Enter a valid UK postcode' }
         })
       })
     })

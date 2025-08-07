@@ -10,11 +10,12 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
+const BaseRequest = require('../../requests/base.request.js')
 const ChargingModuleRequest = require('../../requests/charging-module.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const BaseRequest = require('../../requests/base.request.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
+const { sentenceCase } = require('../../presenters/base.presenter.js')
 
 const servicesConfig = require('../../../config/services.config.js')
 
@@ -32,6 +33,7 @@ const servicesConfig = require('../../../config/services.config.js')
 async function go() {
   const addressFacadeData = await _getAddressFacadeData()
   const chargingModuleData = await _getChargingModuleData()
+  const gotenbergData = await _getGotenbergData()
   const legacyAppData = await _getLegacyAppData()
   const redisConnectivityData = await _getRedisConnectivityData()
   const virusScannerData = await _getVirusScannerData()
@@ -43,6 +45,7 @@ async function go() {
     addressFacadeData,
     appData,
     chargingModuleData,
+    gotenbergData,
     redisConnectivityData,
     virusScannerData
   }
@@ -60,6 +63,18 @@ async function _getAddressFacadeData() {
 
   if (result.succeeded) {
     return result.response.body
+  }
+
+  return _parseFailedRequestResult(result)
+}
+
+async function _getGotenbergData() {
+  const statusUrl = new URL('/health', servicesConfig.gotenberg.url)
+  const result = await BaseRequest.get(statusUrl.href)
+
+  if (result.succeeded) {
+    const response = JSON.parse(result.response.body)
+    return `${sentenceCase(response.status)} - Chromium ${sentenceCase(response.details.chromium.status)}`
   }
 
   return _parseFailedRequestResult(result)

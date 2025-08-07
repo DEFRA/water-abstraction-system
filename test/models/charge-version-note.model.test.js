@@ -17,6 +17,8 @@ const UserModel = require('../../app/models/user.model.js')
 // Thing under test
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 
+const { SKIP_COMPARE_LIST: skip } = UserHelper
+
 describe('Charge Version Note model', () => {
   let testChargeVersion
   let testRecord
@@ -70,7 +72,7 @@ describe('Charge Version Note model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+        expect(result.user).to.equal(testUser, { skip })
       })
     })
   })

@@ -69,7 +69,7 @@ describe('Monitoring Stations - View presenter', () => {
         catchmentName: null,
         enableLicenceMonitoringStationsSetup: true,
         links: {
-          createAlert: `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+          createAlert: `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}`
         },
         gridReference: 'TL2664640047',
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
@@ -90,7 +90,7 @@ describe('Monitoring Stations - View presenter', () => {
             licenceRef: 'AT/TEST',
             restriction: 'Reduce',
             restrictionCount: 1,
-            threshold: '100 m3/s'
+            threshold: '100m3/s'
           }
         ],
         showRemoveTagButton: false,
@@ -130,7 +130,7 @@ describe('Monitoring Stations - View presenter', () => {
           const result = ViewPresenter.go(auth, monitoringStation)
 
           expect(result.links.createAlert).to.equal(
-            `/system/notices/setup?journey=abstraction-alert&monitoringStationId=${monitoringStation.id}`
+            `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}`
           )
         })
       })

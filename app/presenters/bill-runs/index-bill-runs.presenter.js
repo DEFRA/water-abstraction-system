@@ -35,7 +35,7 @@ function go(billRuns) {
 }
 
 function _formatTotal(status, batchType, netTotal) {
-  if (status === 'review' && batchType === 'two_part_tariff') {
+  if (status === 'review' && (batchType === 'two_part_tariff' || batchType === 'two_part_supplementary')) {
     return ''
   }
 

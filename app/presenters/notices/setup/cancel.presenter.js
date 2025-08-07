@@ -26,7 +26,7 @@ function go(session) {
 }
 
 function _summaryList(session) {
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     return {
       text: 'Alert type',
       value: `${sentenceCase(session.alertType)}`

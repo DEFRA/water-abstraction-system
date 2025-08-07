@@ -5,7 +5,7 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 const routes = [
   {
     method: 'GET',
-    path: '/notices/setup',
+    path: '/notices/setup/{journey}',
     options: {
       handler: NoticesSetupController.setup,
       auth: {
@@ -293,6 +293,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
+    options: {
+      handler: NoticesSetupController.preview,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
+    options: {
+      handler: NoticesSetupController.checkAlert,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,
@@ -341,9 +365,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/return-forms',
     options: {
-      handler: NoticesSetupController.viewReturnsForPaperForms,
+      handler: NoticesSetupController.viewReturnForms,
       auth: {
         access: {
           scope: ['returns']
@@ -353,9 +377,57 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/returns-for-paper-forms',
+    path: '/notices/setup/{sessionId}/return-forms',
     options: {
-      handler: NoticesSetupController.submitReturnsForPaperForms,
+      handler: NoticesSetupController.submitReturnForms,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.viewContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.submitContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.viewSelectRecipients,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.submitSelectRecipients,
       auth: {
         access: {
           scope: ['returns']

@@ -4,8 +4,9 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -27,43 +28,43 @@
     }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(licenceRef, pageTitle) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: "method",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
-          }
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "method",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "use-abstraction-data",
+          text: "Start by using abstraction data",
+          checked: "use-abstraction-data" === method
         },
-        items: [
-          {
-            value: "use-abstraction-data",
-            text: "Start by using abstraction data",
-            checked: "use-abstraction-data" === method
-          },
-          {
-            value: "use-existing-requirements",
-            text: "Copy existing requirements",
-            checked: "use-existing-requirements" === method
-          } if displayCopyExisting,
-          {
-            divider: "or"
-          },
-          {
-            value: "set-up-manually",
-            text: "Set up manually",
-            checked: "set-up-manually" === method
-          }
-        ]
-      }) }}
+        {
+          value: "use-existing-requirements",
+          text: "Copy existing requirements",
+          checked: "use-existing-requirements" === method
+        } if displayCopyExisting,
+        {
+          divider: "or"
+        },
+        {
+          value: "set-up-manually",
+          text: "Set up manually",
+          checked: "set-up-manually" === method
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

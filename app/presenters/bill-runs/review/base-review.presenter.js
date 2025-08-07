@@ -202,24 +202,6 @@ function formatIssues(issues) {
 }
 
 /**
- * Format the purposes for a review return
- *
- * It is possible that a return log has more than one purpose associated it. If this is the case we need the description
- * of each purpose from the array of purposes to be concatenated into a single comma separated string ready to present.
- *
- * @param {Array} purposes - the purposes taken from the return logs metadata
- *
- * @returns {string} the purpose descriptions as a string, separated by commas if more than one description exists
- */
-function formatPurposes(purposes) {
-  const purposeDescriptionArray = purposes.map((purpose) => {
-    return purpose.tertiary.description
-  })
-
-  return purposeDescriptionArray.join(', ')
-}
-
-/**
  * Format the status for a review return, for example, 'overdue'
  *
  * We cannot just return the status from the DB for a return because of the disparity between what we show and how the
@@ -278,7 +260,6 @@ module.exports = {
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
-  formatPurposes,
   formatReturnStatus,
   formatReturnTotals
 }

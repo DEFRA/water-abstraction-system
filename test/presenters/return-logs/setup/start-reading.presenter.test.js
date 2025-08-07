@@ -37,13 +37,25 @@ describe('Return Logs Setup - Start Reading presenter', () => {
   describe('the "startReading" property', () => {
     describe('when the user has previously entered a start reading', () => {
       beforeEach(() => {
-        session.startReading = '156000'
+        session.startReading = 156000
       })
 
       it('returns the "startReading" property populated to display the input', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.startReading).to.equal('156000')
+        expect(result.startReading).to.equal(156000)
+      })
+    })
+
+    describe('when the user has previously entered a 0 start reading', () => {
+      beforeEach(() => {
+        session.startReading = 0
+      })
+
+      it('returns the "startReading" property with a string version of 0 to display the input', () => {
+        const result = StartReadingPresenter.go(session)
+
+        expect(result.startReading).to.equal('0')
       })
     })
   })

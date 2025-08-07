@@ -1,0 +1,77 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/hint/macro.njk" import govukHint %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% set rows = [] %}
+
+{%for recipient in recipients %}
+  {% set rows = (rows.push(
+    {
+      value: recipient.contact_hash_id,
+      text: newLineArrayItems(recipient.contact),
+      checked: recipient.checked
+    }
+  ), rows) %}
+{% endfor %}
+
+{% block breadcrumbs %}
+  {{
+  govukBackLink({
+    text: 'Back',
+    href: backLink
+  })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#recipients"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {% set innerHintHtml %}
+    {{ govukHint({
+      id: "recipients",
+      classes: 'govuk-checkboxes__hint govuk-!-padding-left-0 govuk-!-margin-bottom-5',
+      text: "Select all that apply"
+      })
+    }}
+    <a class="govuk-link" href="{{contactTypeLink}}">Set up a single use address or email address</a>
+  {% endset %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukCheckboxes({
+      name: "recipients",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        classes: 'govuk-!-margin-bottom-7',
+        html: innerHintHtml
+      },
+      items: rows
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

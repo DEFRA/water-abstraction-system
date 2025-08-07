@@ -1,0 +1,101 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block breadcrumbs %}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">{{ caption }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  {# Generate table rows #}
+  {% set tableRows = [] %}
+
+  {% for restriction in restrictions %}
+    {# Set an easier to use index #}
+    {% set rowIndex = loop.index0 %}
+
+    {% if rowIndex > 0 %}
+      {% set lastLicenceId = restrictions[rowIndex - 1].licenceId %}
+    {% else %}
+      {% set lastLicenceId = null %}
+    {% endif %}
+
+    {% set tableRow = [] %}
+
+    {% if lastLicenceId !== restriction.licenceId %}
+      {% set licenceCell =
+        {
+          html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + restriction.licenceId + '/summary">' + restriction.licenceRef + '</a>',
+          attributes: { 'data-test': 'licence-ref-' + rowIndex },
+          rowspan: restriction.restrictionCount
+        } %}
+
+      {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
+    {% endif %}
+
+    {% set abstractionPeriodCell =
+      {
+        text: restriction.abstractionPeriod,
+        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(abstractionPeriodCell), tableRow) %}
+
+    {% set restrictionCell =
+      {
+        text: restriction.restriction,
+        attributes: { 'data-test': 'restriction-' + rowIndex }
+      } %}
+
+    {% set tableRow = (tableRow.push(restrictionCell), tableRow) %}
+
+    {% set thresholdCell =
+      {
+        text: restriction.threshold,
+        attributes: { 'data-test': 'threshold-' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(thresholdCell), tableRow) %}
+
+    {% set actionCell =
+      {
+        html: '<a href="'+ restriction.action.link +'" class="govuk-link">' + restriction.action.text + '</a>',
+        attributes: { 'data-test': 'action-' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+  {% endfor %}
+
+  {# Recipient previews table #}
+  {{ govukTable({
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: "Licence"
+      },
+      {
+        text: "Abstraction period"
+      },
+      {
+        text: restrictionHeading,
+        colspan: 2
+      },
+      {
+        text: "Action"
+      }
+    ],
+    rows: tableRows
+  }) }}
+{% endblock %}

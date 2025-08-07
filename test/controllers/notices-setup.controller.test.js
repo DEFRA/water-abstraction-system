@@ -16,19 +16,22 @@ const AlertThresholdsService = require('../../app/services/notices/setup/abstrac
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
+const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
+const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
-const PreviewService = require('../../app/services/notices/setup/preview.service.js')
+const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsForPaperFormsService = require('../../app/services/notices/setup/returns-for-paper-forms.service.js')
+const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
+const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
@@ -36,11 +39,13 @@ const SubmitCancelAlertsService = require('../../app/services/notices/setup/abst
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
+const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsForPaperFormsService = require('../../app/services/notices/setup/submit-returns-for-paper-forms.service.js')
+const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -75,11 +80,11 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       let response
 
-      describe('when the "notification" query string is "invitations" ', () => {
+      describe('when the journey is "standard"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notices/setup?journey=invitations',
+            url: '/notices/setup/standard',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -103,11 +108,11 @@ describe('Notices Setup controller', () => {
         })
       })
 
-      describe('when the "notification" query string is "ad-hoc" ', () => {
+      describe('when the journey is "adhoc"', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notices/setup?journey=ad-hoc',
+            url: '/notices/setup/adhoc',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -713,7 +718,7 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/{sessionId}/preview', () => {
+  describe('notices/setup/{sessionId}/preview/{contactHashId}', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
@@ -738,6 +743,67 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Preview notice')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+      const licenceMonitoringStationId = '551087bc-68b4-42a8-9e04-ac173eaec3f8'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(PreviewService, 'go').resolves({
+          pageTitle: 'Preview notice'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Preview notice')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/check-alert', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(CheckAlert, 'go').resolves({
+          pageTitle: 'Check the recipient previews'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check the recipient previews')
         })
       })
     })
@@ -942,12 +1008,12 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/returns-for-paper-forms', () => {
+  describe('notices/setup/return-forms', () => {
     describe('GET', () => {
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/returns-for-paper-forms`,
+          url: basePath + `/${session.id}/return-forms`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -958,7 +1024,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnsForPaperFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          Sinon.stub(ReturnFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
         })
 
         it('returns the page successfully', async () => {
@@ -975,10 +1041,10 @@ describe('Notices Setup controller', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+            Sinon.stub(SubmitReturnFormsService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -991,10 +1057,10 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsForPaperFormsService, 'go').returns({
+            Sinon.stub(SubmitReturnFormsService, 'go').returns({
               pageTile: 'Select the returns for the paper forms'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-for-paper-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
           })
 
           it('redirects the to the next page', async () => {
@@ -1002,6 +1068,154 @@ describe('Notices Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/select-recipients', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/select-recipients`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SelectRecipientsService, 'go').returns({ pageTitle: 'Select recipients' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select recipients')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+              pageTile: 'Select recipients'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/contact-type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/contact-type`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(ContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select how to contact the recipient')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(session)
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds and they chose the post option', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              type: 'post',
+              pageTile: 'Select how to contact the recipient'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/address/${session.id}/postcode`)
+          })
+        })
+
+        describe('and the validation succeeds and they chose the email option', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitContactTypeService, 'go').returns({
+              type: 'email',
+              pageTile: 'Select how to contact the recipient'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
           })
         })
       })

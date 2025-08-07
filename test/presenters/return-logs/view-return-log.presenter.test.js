@@ -64,7 +64,7 @@ describe('Return Logs - View Return Log presenter', () => {
       method: 'abstractionVolumes',
       nilReturn: false,
       pageTitle: 'Abstraction return',
-      purpose: 'Mineral Washing alias',
+      purpose: ['Mineral Washing (Mineral Washing alias)'],
       receivedDate: '12 April 2023',
       returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',

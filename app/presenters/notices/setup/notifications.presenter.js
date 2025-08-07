@@ -5,10 +5,37 @@
  * @module NotificationsPresenter
  */
 
-const { contactName, contactAddress } = require('../../crm.presenter.js')
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
+
+const MESSAGE_REFS = {
+  invitations: {
+    email: {
+      'Primary user': 'returns_invitation_primary_user_email',
+      both: 'returns_invitation_primary_user_email',
+      'Returns agent': 'returns_invitation_returns_agent_email'
+    },
+    letter: {
+      'Licence holder': 'returns_invitation_licence_holder_letter',
+      both: 'returns_invitation_licence_holder_letter',
+      'Returns to': 'returns_invitation_returns_to_letter'
+    }
+  },
+  reminders: {
+    email: {
+      'Primary user': 'returns_reminder_primary_user_email',
+      both: 'returns_reminder_primary_user_email',
+      'Returns agent': 'returns_reminder_returns_agent_email'
+    },
+    letter: {
+      'Licence holder': 'returns_reminder_licence_holder_letter',
+      both: 'returns_reminder_licence_holder_letter',
+      'Returns to': 'returns_reminder_returns_to_letter'
+    }
+  }
+}
 
 /**
  * Formats recipients into notifications for a returns invitation or reminder
@@ -21,44 +48,25 @@ const { transformStringOfLicencesToArray, timestampForPostgres } = require('../.
  * The output of this function is designed to be used directly for both notification delivery and persistent storage.
  *
  * @param {object[]} recipients
- * @param {object} returnsPeriod - the return period including the endDate, startDate and dueDate
- * @param {string} referenceCode - the unique code used to group the notifications in notify
- * @param {string} journey - the journey should be one of "reminders", "invitations"
+ * @param {object} session - The session instance
  * @param {string} eventId - the event id to link all the notifications to an event
  *
  * @returns {object[]} - the recipients transformed into notifications
  */
-function go(recipients, returnsPeriod, referenceCode, journey, eventId) {
+function go(recipients, session, eventId) {
   const notifications = []
+
+  const { determinedReturnsPeriod, referenceCode, journey, noticeType } = session
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      notifications.push(_email(recipient, returnsPeriod, referenceCode, journey, eventId))
+      notifications.push(_email(recipient, determinedReturnsPeriod, referenceCode, journey, eventId, noticeType))
     } else {
-      notifications.push(_letter(recipient, returnsPeriod, referenceCode, journey, eventId))
+      notifications.push(_letter(recipient, determinedReturnsPeriod, referenceCode, journey, eventId, noticeType))
     }
   }
 
   return notifications
-}
-
-/**
- * Notify expects address lines to be formatted into: 'address_line_1'
- *
- * @private
- */
-function _addressLines(contact, name) {
-  const address = contactAddress(contact)
-
-  const fullContact = [name, ...address]
-
-  const addressLines = {}
-
-  for (const [index, value] of fullContact.entries()) {
-    addressLines[`address_line_${index + 1}`] = value
-  }
-
-  return addressLines
 }
 
 function _common(referenceCode, templateId, eventId) {
@@ -92,8 +100,8 @@ function _common(referenceCode, templateId, eventId) {
  *
  * @private
  */
-function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
-  const templateId = _emailTemplate(recipient.contact_type, journey)
+function _email(recipient, returnsPeriod, referenceCode, journey, eventId, noticeType) {
+  const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
 
   const messageType = 'email'
 
@@ -101,7 +109,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
     ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(journey, messageType, recipient.contact_type),
+    messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriod(returnsPeriod)
     },
@@ -114,12 +122,12 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId) {
  *
  * @private
  */
-function _emailTemplate(contactType, journey) {
+function _emailTemplate(contactType, journey, noticeType) {
   if (contactType === 'Returns agent') {
-    return notifyTemplates.returns[journey].returnsAgentEmail
+    return notifyTemplates[journey][noticeType].returnsAgentEmail
   }
 
-  return notifyTemplates.returns[journey].primaryUserEmail
+  return notifyTemplates[journey][noticeType].primaryUserEmail
 }
 
 /**
@@ -145,21 +153,21 @@ function _emailTemplate(contactType, journey) {
  *
  * @private
  */
-function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
-  const name = contactName(recipient.contact)
-  const templateId = _letterTemplate(recipient.contact_type, journey)
-
+function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noticeType) {
+  const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const messageType = 'letter'
+  const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
     ..._common(referenceCode, templateId, eventId),
     licences: _licences(recipient.licence_refs),
     messageType,
-    messageRef: _messageRef(journey, messageType, recipient.contact_type),
+    messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
-      ..._addressLines(recipient.contact, name),
+      ...address,
       ..._returnsPeriod(returnsPeriod),
-      name
+      // NOTE: Address line 1 is always set to the recipient's name
+      name: address.address_line_1
     }
   }
 }
@@ -169,12 +177,12 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId) {
  *
  * @private
  */
-function _letterTemplate(contactType, journey) {
+function _letterTemplate(contactType, journey, noticeType) {
   if (contactType === 'Returns to') {
-    return notifyTemplates.returns[journey].returnsToLetter
+    return notifyTemplates[journey][noticeType].returnsToLetter
   }
 
-  return notifyTemplates.returns[journey].licenceHolderLetter
+  return notifyTemplates[journey][noticeType].licenceHolderLetter
 }
 
 function _returnsPeriod(returnsPeriod) {
@@ -208,35 +216,8 @@ function _licences(licenceRefs) {
  *
  * @private
  */
-function _messageRef(journey, messageType, contactType) {
-  const MESSAGE_REFS = {
-    invitations: {
-      email: {
-        'Primary user': 'returns_invitation_primary_user_email',
-        both: 'returns_invitation_primary_user_email',
-        'Returns agent': 'returns_invitation_returns_agent_email'
-      },
-      letter: {
-        'Licence holder': 'returns_invitation_licence_holder_letter',
-        both: 'returns_invitation_licence_holder_letter',
-        'Returns to': 'returns_invitation_returns_to_letter'
-      }
-    },
-    reminders: {
-      email: {
-        'Primary user': 'returns_reminder_primary_user_email',
-        both: 'returns_reminder_primary_user_email',
-        'Returns agent': 'returns_reminder_returns_agent_email'
-      },
-      letter: {
-        'Licence holder': 'returns_reminder_licence_holder_letter',
-        both: 'returns_reminder_licence_holder_letter',
-        'Returns to': 'returns_reminder_returns_to_letter'
-      }
-    }
-  }
-
-  return MESSAGE_REFS[journey][messageType][contactType]
+function _messageRef(noticeType, messageType, contactType) {
+  return MESSAGE_REFS[noticeType][messageType][contactType]
 }
 
 module.exports = {

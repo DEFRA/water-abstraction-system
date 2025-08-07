@@ -40,7 +40,7 @@ describe('Session model', () => {
       it('adds nothing to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(Object.keys(result)).to.equal(['id', 'data', 'createdAt', 'updatedAt'])
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt'])
       })
     })
 
@@ -61,7 +61,45 @@ describe('Session model', () => {
       it('adds its properties to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(Object.keys(result)).to.equal(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
+
+        expect(result.licence).to.equal({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
+        expect(result.purposes).to.equal(['foo', 'bar'])
+        expect(result.reason).to.equal('major-change')
+      })
+    })
+  })
+
+  // NOTE: this is also an Objection.js hook and not intended to be called directly
+  describe('$afterInsert', () => {
+    describe('when "data" is empty', () => {
+      it('adds nothing to the session instance properties', async () => {
+        const result = await SessionHelper.add()
+
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt'])
+      })
+    })
+
+    describe('when "data" is populated', () => {
+      let testData
+
+      beforeEach(async () => {
+        testData = {
+          data: {
+            licence: {
+              licenceRef: '01/123/01',
+              startDate: new Date('2017-05-07')
+            },
+            purposes: ['foo', 'bar'],
+            reason: 'major-change'
+          }
+        }
+      })
+
+      it('adds its properties to the session instance properties', async () => {
+        const result = await SessionHelper.add(testData)
+
+        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
 
         expect(result.licence).to.equal({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
         expect(result.purposes).to.equal(['foo', 'bar'])

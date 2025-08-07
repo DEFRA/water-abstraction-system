@@ -54,14 +54,12 @@ async function go(recipients, session, eventId) {
 }
 
 async function _batch(recipients, session, eventId) {
-  const { determinedReturnsPeriod, referenceCode, journey } = session
-
   let notifications
 
-  if (session.journey === 'abstraction-alert') {
+  if (session.journey === 'alerts') {
     notifications = AbstractionAlertsNotificationsPresenter.go(recipients, session, eventId)
   } else {
-    notifications = NotificationsPresenter.go(recipients, determinedReturnsPeriod, referenceCode, journey, eventId)
+    notifications = NotificationsPresenter.go(recipients, session, eventId)
   }
 
   const toSendNotifications = _toSendNotifications(notifications)

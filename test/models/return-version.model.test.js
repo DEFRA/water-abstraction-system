@@ -23,6 +23,8 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
+const { SKIP_COMPARE_LIST: skip } = UserHelper
+
 describe('Return Version model', () => {
   let returnVersionId
   let testRecord
@@ -162,7 +164,7 @@ describe('Return Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+        expect(result.user).to.equal(testUser, { skip })
       })
     })
   })

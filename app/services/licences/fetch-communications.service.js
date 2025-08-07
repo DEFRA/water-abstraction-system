@@ -27,16 +27,21 @@ async function go(licenceRef, page) {
 
 async function _fetch(licenceRef, page) {
   return ScheduledNotificationModel.query()
-    .select(['id', 'messageType', 'messageRef'])
+    .select(['id', 'messageType', 'messageRef', 'createdAt', 'sendAfter'])
     .where('licences', '@>', `["${licenceRef}"]`)
     .andWhere('notifyStatus', 'in', ['delivered', 'received'])
     .andWhere('eventId', 'is not', null)
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
-      builder.select(['createdAt', 'issuer', 'metadata', 'status', 'subtype', 'type'])
+      builder.select(['issuer', 'metadata', 'status', 'subtype', 'type'])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
-    .orderBy('sendAfter', 'desc')
+    .orderByRaw(
+      `
+      scheduled_notifications."created_at" DESC NULLS LAST,
+      scheduled_notifications."send_after" DESC NULLS LAST
+    `
+    )
 }
 
 module.exports = {

@@ -5,7 +5,7 @@
  * @module LicencePresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../base.presenter.js')
+const { formatLongDate, formatValueUnit, sentenceCase } = require('../base.presenter.js')
 const { formatRestrictionType } = require('./base.presenter.js')
 
 /**
@@ -75,7 +75,7 @@ function _licenceTags(licenceMonitoringStations) {
       licenceVersionStatus,
       linkedCondition,
       tag: `${formatRestrictionType(restrictionType)} tag`,
-      threshold: `${thresholdValue}${thresholdUnit}`,
+      threshold: formatValueUnit(thresholdValue, thresholdUnit),
       type: formatRestrictionType(restrictionType)
     }
   })

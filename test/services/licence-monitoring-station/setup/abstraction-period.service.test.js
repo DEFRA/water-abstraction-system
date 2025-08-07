@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const AbstractionPeriodService = require('../../../../app/services/licence-monitoring-station/setup/abstraction-period.service.js')
 
-describe('Abstraction Period Service', () => {
+describe('Licence Monitoring Station Setup - Abstraction Period Service', () => {
   let session
   let sessionData
 
