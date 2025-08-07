@@ -69,7 +69,8 @@ async function _save(session, payload) {
 
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
-      email
+      email,
+      saved: false
     }
 
     if (Array.isArray(session.additionalRecipients)) {
