@@ -55,22 +55,13 @@ function _createMD5Hash(email) {
   return crypto.createHash('md5').update(email).digest('hex')
 }
 
-/**
- * We need to add the recipient to the 'selectedRecipients' array. This is created by the check service and should
- * always exist.
- *
- * This is necessary to simplify the flow of handling 'recipients', 'selectedRecipients' and 'additionalRecipients'
- *
- * @private
- */
 async function _save(session, payload) {
   if (payload.type === 'email') {
     const email = payload.email.toLowerCase()
 
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
-      email,
-      saved: false
+      email
     }
 
     if (Array.isArray(session.additionalRecipients)) {

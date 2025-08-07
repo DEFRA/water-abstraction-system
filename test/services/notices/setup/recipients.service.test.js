@@ -163,7 +163,7 @@ describe('Notices - Setup - Recipients service', () => {
         Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
       })
 
-      it('returns all the recipients formatted for display with the "additionalRecipients"', async () => {
+      it('returns all the recipients (including "additionalRecipients") formatted for display', async () => {
         const result = await RecipientsService.go(session)
 
         expect(result).to.equal([
