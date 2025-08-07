@@ -330,38 +330,6 @@ describe('Bill Runs Review - Base Review presenter', () => {
     })
   })
 
-  describe('#formatPurposes()', () => {
-    let purposes
-
-    describe('when there is a single purpose', () => {
-      beforeEach(() => {
-        purposes = [{ tertiary: { description: 'Spray Irrigation - Direct' } }]
-      })
-
-      it('returns the purpose description', () => {
-        const result = BaseReviewPresenter.formatPurposes(purposes)
-
-        expect(result).to.equal('Spray Irrigation - Direct')
-      })
-    })
-
-    describe('when there is more than one purpose', () => {
-      beforeEach(() => {
-        purposes = [
-          { tertiary: { description: 'Spray Irrigation - Direct' } },
-          { tertiary: { description: 'Spray Irrigation - Anti Frost' } },
-          { tertiary: { description: 'Spray Irrigation - Storage' } }
-        ]
-      })
-
-      it('returns the purpose descriptions as a comma separated string', () => {
-        const result = BaseReviewPresenter.formatPurposes(purposes)
-
-        expect(result).to.equal('Spray Irrigation - Direct, Spray Irrigation - Anti Frost, Spray Irrigation - Storage')
-      })
-    })
-  })
-
   describe('#formatReturnStatus()', () => {
     let reviewReturn
 

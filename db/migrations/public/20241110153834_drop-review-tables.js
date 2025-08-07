@@ -150,7 +150,7 @@ exports.down = async function (knex) {
       table.text('issues')
       table.string('status').notNullable()
       table.timestamps(false, true)
-      table.decimal('amended_allocated', null, null).defaultTo(0).alter()
+      table.decimal('amended_allocated', null, null).defaultTo(0)
     })
     .then(() => {
       knex.raw(`

@@ -25,7 +25,7 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
 async function go(sessionId, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await RecipientsService.go(session)
+  const recipients = await RecipientsService.go(session, false)
 
   const notice = await _notice(session, recipients, auth)
 
