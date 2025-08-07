@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -16,9 +17,8 @@ const RecipientsService = require('../../../../app/services/notices/setup/recipi
 
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
-const Sinon = require('sinon')
 
-describe('Notices - Setup - Select Recipients Service', () => {
+describe('Notices - Setup - Submit Select Recipients Service', () => {
   let payload
   let recipients
   let session

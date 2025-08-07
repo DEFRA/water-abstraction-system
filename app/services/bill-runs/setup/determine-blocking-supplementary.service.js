@@ -44,9 +44,9 @@ const LAST_PRESROC_YEAR = 2022
  * blocked. For example, if we find an SROC bill run in progress, but no match for PRESROC, we'll allow the user to
  * proceed and we'll just trigger the old engine.
  *
- * We don't match against batch type for supplementary because you are allowed multiple supplementaries. So, we are just
- * checking for any bill run with a status of 'queued', 'processing', 'ready', or 'review' in the matching region and
- * year because the rule of just one 'live' bill run still applies.
+ * We don't match against batch type two-part tariff because these do not impact supplementary. So, we are just checking
+ * for any annual or supplementary bill runs with a status of 'queued', 'processing', 'ready', or 'review' in the
+ * matching region and year because the rule of just one 'live' bill run applies.
  *
  * @param {string} regionId - UUID of the region a bill run is being created for
  *
@@ -85,7 +85,8 @@ async function _fetchSrocMatch(regionId, toFinancialYearEnding) {
     .where('scheme', 'sroc')
     .where('regionId', regionId)
     .where('toFinancialYearEnding', toFinancialYearEnding)
-    .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
+    .whereIn('batchType', ['annual', 'supplementary'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
@@ -101,7 +102,7 @@ async function _fetchPresrocMatch(regionId) {
     .where('scheme', 'alcs')
     .where('regionId', regionId)
     .where('toFinancialYearEnding', '<=', LAST_PRESROC_YEAR)
-    .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
+    .whereIn('status', ['queued', 'processing', 'ready', 'review'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
