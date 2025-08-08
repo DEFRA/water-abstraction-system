@@ -25,7 +25,7 @@ async function go(id, page) {
   if (!notices) {
     return {
       activeNavBar: 'manage',
-      pageTitle: _pageTitle()
+      pageTitle: 'Notifications'
     }
   }
 
@@ -44,29 +44,8 @@ async function go(id, page) {
     numberOfRecipients: results.length,
     numberShowing,
     pagination,
-    pageNumbers: _numberOfNotifications(pagination.numberOfPages, selectedPageNumber),
-    pageTitle: _pageTitle(notices.event.subtype)
+    pageNumbers: _numberOfNotifications(pagination.numberOfPages, selectedPageNumber)
   }
-}
-
-function _pageTitle(subtype) {
-  if (subtype === 'returnInvitation') {
-    return 'Returns invitations'
-  }
-
-  if (subtype === 'returnReminder') {
-    return 'Returns reminders'
-  }
-
-  if (subtype === 'adHocReminder') {
-    return 'Ad-hoc notice'
-  }
-
-  if (subtype === 'waterAbstractionAlerts') {
-    return 'Water abstraction alert'
-  }
-
-  return 'Notifications'
 }
 
 function _numberOfNotifications(numberOfPages, selectedPageNumber) {
