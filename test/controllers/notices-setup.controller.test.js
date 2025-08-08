@@ -813,7 +813,8 @@ describe('Notices Setup controller', () => {
   describe('notices/setup/{sessionId}/preview-return-forms', () => {
     describe('GET', () => {
       let buffer
-      beforeEach(async () => {
+
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/preview-return-forms`,
