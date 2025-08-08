@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const _recipient = {
+  const _additionalRecipient = {
     contact: {
       name: session.contactName,
       addressLine1: session.address.addressLine1,
@@ -30,14 +30,10 @@ async function go(sessionId) {
       addressLine3: session.address.addressLine3,
       addressLine4: session.address.addressLine4,
       country: session.address.country,
-      postcode: session.address.postcode,
-      type: 'post'
-    }
-  }
-
-  const _additionalRecipient = {
-    contact: ContactPresenter.go(_recipient),
-    contact_hash_id: _createMD5Hash(session)
+      postcode: session.address.postcode
+    },
+    contact_hash_id: _createMD5Hash(session),
+    licence_ref: session.licenceRef
   }
 
   if (Array.isArray(session.additionalRecipients)) {

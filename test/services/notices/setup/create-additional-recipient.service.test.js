@@ -30,6 +30,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
           addressLine4: 'Fake City',
           postcode: 'SW1A 1AA'
         },
+        licenceRef: '12345',
         selectedRecipients: []
       }
 
@@ -44,8 +45,16 @@ describe('Notices - Setup - Create additional recipient service', () => {
 
       expect(refreshedSession.additionalRecipients).equal([
         {
-          contact: ['Fake Person', '1 Fake Farm', '1 Fake street', 'Fake Village', 'Fake City', 'SW1A 1AA'],
-          contact_hash_id: addressHash
+          contact: {
+            name: session.contactName,
+            addressLine1: session.address.addressLine1,
+            addressLine2: session.address.addressLine2,
+            addressLine3: session.address.addressLine3,
+            addressLine4: session.address.addressLine4,
+            postcode: session.address.postcode
+          },
+          contact_hash_id: addressHash,
+          licence_ref: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
@@ -61,6 +70,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
           addressLine4: 'Fake City',
           country: 'Ireland'
         },
+        licenceRef: '12345',
         selectedRecipients: []
       }
 
@@ -75,8 +85,14 @@ describe('Notices - Setup - Create additional recipient service', () => {
 
       expect(refreshedSession.additionalRecipients).equal([
         {
-          contact: ['Fake Person', '1 Fake Farm', 'Fake City', 'Ireland'],
-          contact_hash_id: addressHash
+          contact: {
+            name: session.contactName,
+            addressLine1: session.address.addressLine1,
+            addressLine4: session.address.addressLine4,
+            country: session.address.country
+          },
+          contact_hash_id: addressHash,
+          licence_ref: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
@@ -96,10 +112,19 @@ describe('Notices - Setup - Create additional recipient service', () => {
         },
         additionalRecipients: [
           {
-            contact: ['Fake Person', '1 Fake Farm', '1 Fake street', 'Fake Village', 'Fake City', 'SW1A 1AA'],
-            contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392'
+            contact: {
+              name: 'Fake Person',
+              addressLine1: '1 Fake Farm',
+              addressLine2: '1 Fake street',
+              addressLine3: 'Fake Village',
+              addressLine4: 'Fake City',
+              postcode: 'SW1A 1AA'
+            },
+            contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+            licence_ref: '12345'
           }
         ],
+        licenceRef: '12345',
         selectedRecipients: []
       }
 
@@ -114,12 +139,28 @@ describe('Notices - Setup - Create additional recipient service', () => {
 
       expect(refreshedSession.additionalRecipients).equal([
         {
-          contact: ['Fake Person', '1 Fake Farm', '1 Fake street', 'Fake Village', 'Fake City', 'SW1A 1AA'],
-          contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392'
+          contact: {
+            name: 'Fake Person',
+            addressLine1: '1 Fake Farm',
+            addressLine2: '1 Fake street',
+            addressLine3: 'Fake Village',
+            addressLine4: 'Fake City',
+            postcode: 'SW1A 1AA'
+          },
+          contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+          licence_ref: '12345'
         },
         {
-          contact: ['Fake Person', '2 Fake Farm', '2 Fake street', 'Fake Village', 'Fake City', 'SW1A 1AA'],
-          contact_hash_id: addressHash
+          contact: {
+            name: session.contactName,
+            addressLine1: session.address.addressLine1,
+            addressLine2: session.address.addressLine2,
+            addressLine3: session.address.addressLine3,
+            addressLine4: session.address.addressLine4,
+            postcode: session.address.postcode
+          },
+          contact_hash_id: addressHash,
+          licence_ref: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
