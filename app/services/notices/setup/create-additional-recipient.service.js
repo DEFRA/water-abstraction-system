@@ -24,7 +24,7 @@ async function go(sessionId) {
 
   const _recipient = {
     contact: {
-      name: session.name,
+      name: session.contactName,
       addressLine1: session.address.addressLine1,
       addressLine2: session.address.addressLine2,
       addressLine3: session.address.addressLine3,
@@ -48,7 +48,7 @@ async function go(sessionId) {
 
   session.selectedRecipients.push(_additionalRecipient.contact_hash_id)
 
-  delete session.name
+  delete session.contactName
   delete session.contactType
   delete session.address.addressLine1
   delete session.address.addressLine2
@@ -72,7 +72,7 @@ async function go(sessionId) {
  * @returns {Promise<string>} - The md5 hash string of the address
  */
 function _createMD5Hash(session) {
-  const name = session.name
+  const name = session.contactName
   const addressLine1 = session.address.addressLine1
   const addressLine2 = session.address.addressLine2 ?? ''
   const addressLine3 = session.address.addressLine3 ?? ''

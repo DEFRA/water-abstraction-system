@@ -71,7 +71,7 @@ function defaults(data = {}) {
  * @returns {Promise<string>} - The md5 hash string of the address
  */
 function generateAdreessMD5Hash(session) {
-  const name = session.name
+  const name = session.contactName
   const addressLine1 = session.address.addressLine1
   const addressLine2 = session.address.addressLine2 ?? ''
   const addressLine3 = session.address.addressLine3 ?? ''

@@ -22,7 +22,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
   describe('when there is a UK address saved in session', () => {
     beforeEach(async () => {
       sessionData = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         address: {
           addressLine1: '1 Fake Farm',
           addressLine2: '1 Fake street',
@@ -55,7 +55,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
   describe('when there is an international address saved in session', () => {
     beforeEach(async () => {
       sessionData = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         address: {
           addressLine1: '1 Fake Farm',
           addressLine4: 'Fake City',
@@ -86,7 +86,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
   describe('when there is a UK address saved in session and there already is an additionalRecipient in the array', () => {
     beforeEach(async () => {
       sessionData = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         address: {
           addressLine1: '2 Fake Farm',
           addressLine2: '2 Fake street',
