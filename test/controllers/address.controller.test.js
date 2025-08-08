@@ -24,7 +24,7 @@ const SubmitSelectAddressService = require('../../app/services/address/submit-se
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Address controller', () => {
+describe('Address controller', () => {
   let options
   let postOptions
   let server

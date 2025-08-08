@@ -104,7 +104,8 @@ describe('Address - Submit Select Service', () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
+        succeeded: true
       })
     })
   })
@@ -147,7 +148,8 @@ describe('Address - Submit Select Service', () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
+        succeeded: true
       })
     })
   })
@@ -276,7 +278,10 @@ describe('Address - Submit Select Service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
-        expect(result).to.equal({ redirect: `/system/address/${session.id}/manual` })
+        expect(result).to.equal({
+          redirect: `/system/address/${session.id}/manual`,
+          succeeded: false
+        })
       })
     })
 
@@ -295,7 +300,10 @@ describe('Address - Submit Select Service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
-        expect(result).to.equal({ redirect: `/system/address/${session.id}/manual` })
+        expect(result).to.equal({
+          redirect: `/system/address/${session.id}/manual`,
+          succeeded: false
+        })
       })
     })
   })
