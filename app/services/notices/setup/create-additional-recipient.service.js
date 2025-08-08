@@ -7,7 +7,6 @@
 
 const crypto = require('crypto')
 
-const ContactPresenter = require('../../../presenters/notices/setup/contact.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
