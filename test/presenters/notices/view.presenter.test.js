@@ -20,7 +20,7 @@ describe('Notices - View Notice presenter', () => {
       issuer: 'test@wrls.gov.uk',
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       status: 'completed',
-      subtype: 'return reminder'
+      subtype: 'paperReturnForms'
     }),
     results: [
       {
@@ -71,6 +71,7 @@ describe('Notices - View Notice presenter', () => {
         createdBy: 'test@wrls.gov.uk',
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',
+        pageTitle: 'Returns invitations',
         notices: [
           {
             recipient: [
@@ -105,7 +106,7 @@ describe('Notices - View Notice presenter', () => {
             status: 'completed'
           }
         ],
-        status: 'completed'
+        status: 'sent'
       })
     })
   })
@@ -125,6 +126,7 @@ describe('Notices - View Notice presenter', () => {
         createdBy: 'test@wrls.gov.uk',
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',
+        pageTitle: 'Returns invitations',
         notices: [
           {
             recipient: [
@@ -159,7 +161,7 @@ describe('Notices - View Notice presenter', () => {
             status: 'completed'
           }
         ],
-        status: 'completed'
+        status: 'sent'
       })
     })
   })

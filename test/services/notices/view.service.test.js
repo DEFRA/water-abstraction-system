@@ -81,7 +81,7 @@ describe('Notices - View Notice service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
-      expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Returns invitations' })
+      expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Notifications' })
     })
   })
 

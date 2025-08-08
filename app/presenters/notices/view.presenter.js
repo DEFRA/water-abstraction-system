@@ -18,13 +18,14 @@ const DatabaseConfig = require('../../../config/database.config.js')
  */
 function go(notices, page = 1) {
   const tableRows = _formatTableData(notices.results, page)
-
+  console.log(notices)
   return {
     createdBy: notices.event.issuer,
     dateCreated: formatLongDate(notices.event.createdAt),
     reference: notices.event.referenceCode,
     notices: tableRows,
-    status: notices.event.status
+    pageTitle: _pageTitle(notices.event.subtype),
+    status: _status(tableRows)
   }
 }
 
@@ -41,6 +42,26 @@ function _formatTableData(data, page) {
       status: notice.status
     }
   })
+}
+
+function _pageTitle(subtype) {
+  if (subtype === 'paperReturnForms') {
+    return 'Returns invitations'
+  }
+
+  if (subtype === 'returnReminder') {
+    return 'Returns reminders'
+  }
+
+  if (subtype === 'adHocReminder') {
+    return 'Ad-hoc notice'
+  }
+
+  if (subtype === 'waterAbstractionAlerts') {
+    return 'Water abstraction alert'
+  }
+
+  return 'Notifications'
 }
 
 function _recipient(notice) {
@@ -65,6 +86,26 @@ function _recipient(notice) {
   })
 
   return filteredAddressLines
+}
+
+function _status(notices) {
+  if (
+    notices.some((notice) => {
+      return notice.status === 'error'
+    })
+  ) {
+    return 'error'
+  }
+
+  if (
+    notices.some((notice) => {
+      return notice.status === 'pending'
+    })
+  ) {
+    return 'pending'
+  }
+
+  return 'sent'
 }
 
 module.exports = {
