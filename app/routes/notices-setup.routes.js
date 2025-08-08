@@ -281,6 +281,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview-return-forms',
+    options: {
+      handler: NoticesSetupController.viewPreviewReturnForms,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
       handler: NoticesSetupController.preview,
