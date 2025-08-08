@@ -41,7 +41,7 @@ describe('Notices - Setup - Contact Type Service', () => {
   describe('when called with a saved name', () => {
     beforeEach(async () => {
       sessionData = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         contactType: 'post'
       }
 

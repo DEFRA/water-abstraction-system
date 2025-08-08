@@ -31,7 +31,10 @@ async function go(sessionId, payload) {
     if (uprnResult.succeeded) {
       await _save(session, uprnResult.matches[0])
 
-      return {}
+      return {
+        succeeded: true,
+        redirect: session.address.redirectUrl
+      }
     }
 
     validationResult = {
@@ -43,7 +46,8 @@ async function go(sessionId, payload) {
 
   if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
-      redirect: true
+      succeeded: false,
+      redirect: `/system/address/${session.id}/manual`
     }
   }
 

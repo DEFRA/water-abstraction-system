@@ -23,7 +23,7 @@ describe('Address - Submit Postcode Service', () => {
       payload = {
         postcode: 'SW1A 1AA'
       }
-      sessionData = {}
+      sessionData = { address: {} }
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -48,6 +48,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = {}
         sessionData = {
+          address: {},
           name: 'Fake Person'
         }
 
@@ -71,6 +72,7 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
+          address: {},
           name: 'Fake Person'
         }
 

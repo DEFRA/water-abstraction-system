@@ -55,7 +55,7 @@ describe('Contact Type Presenter', () => {
   describe('when called with a name', () => {
     beforeEach(() => {
       session = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         contactType: 'post'
       }
     })
