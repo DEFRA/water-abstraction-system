@@ -15,7 +15,9 @@
 {% endblock %}
 
 {% block content %}
-  {{ pageHeading(returnReference, pageTitle) }}
+  {% set pageHeading %}
+    {{ pageHeading(returnReference, pageTitle) }}
+  {% endset %}
 
   <div class="govuk-!-margin-bottom-9">
     {{ govukSummaryList({

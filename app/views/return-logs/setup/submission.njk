@@ -28,13 +28,20 @@
       }) }}
   {% endif %}
 
-  {{ pageHeading(returnReference, pageTitle) }}
+  {% set pageHeading %}
+    {{ pageHeading(returnReference, pageTitle) }}
+  {% endset %}
 
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
       name: "journey",
       errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
       items: [
         {
           value: "enter-return",

@@ -28,7 +28,7 @@
     }) }}
   {% endif %}
 
-  {% set pageHeader %}
+  {% set pageHeading %}
     {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
@@ -42,7 +42,7 @@
         maxlength: 500,
         value: note,
         label: {
-          html: pageHeader,
+          html: pageHeading,
           isPageHeading: true
         },
         hint: {
