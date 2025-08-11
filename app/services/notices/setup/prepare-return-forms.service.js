@@ -7,7 +7,7 @@
  */
 
 const GenerateReturnFormRequest = require('../../../requests/gotenberg/generate-return-form.request.js')
-const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/preview-return-forms.presenter.js')
+const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/prepare-return-forms.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
