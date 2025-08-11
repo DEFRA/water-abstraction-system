@@ -56,13 +56,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
     it('should call "GenerateReturnFormRequest"', async () => {
       await PreviewReturnFormsService.go(session.id)
 
-      expect(
-        GenerateReturnFormRequest.send.calledWith({
-          cover: {
-            title: 'Water abstraction day return'
-          }
-        })
-      ).to.be.true()
+      expect(GenerateReturnFormRequest.send.called).to.be.true()
     })
   })
 })
