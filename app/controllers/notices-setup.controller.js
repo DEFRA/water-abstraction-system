@@ -20,6 +20,7 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
+const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -186,10 +187,11 @@ async function viewReturnsPeriod(request, h) {
 async function viewCheck(request, h) {
   const {
     params: { sessionId },
-    query: { page }
+    query: { page },
+    yar
   } = request
 
-  const pageData = await CheckService.go(sessionId, page)
+  const pageData = await CheckService.go(sessionId, yar, page)
 
   return h.view(`notices/setup/check.njk`, pageData)
 }
@@ -200,6 +202,14 @@ async function viewNoticeType(request, h) {
   const pageData = await NoticeTypeService.go(sessionId)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
+}
+
+async function viewPreviewReturnForms(request, h) {
+  const { sessionId } = request.params
+
+  const fileBuffer = await PreviewReturnFormsService.go(sessionId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
 async function viewRemoveThreshold(request, h) {
@@ -327,11 +337,12 @@ async function submitCheckLicenceMatches(request, h) {
 
 async function submitContactType(request, h) {
   const {
+    params: { sessionId },
     payload,
-    params: { sessionId }
+    yar
   } = request
 
-  const pageData = await SubmitContactTypeService.go(sessionId, payload)
+  const pageData = await SubmitContactTypeService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
@@ -341,7 +352,7 @@ async function submitContactType(request, h) {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 
-  return h.redirect(`/system/notices/setup/${sessionId}/select-recipients`)
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
 async function submitLicence(request, h) {
@@ -452,6 +463,7 @@ module.exports = {
   viewContactType,
   viewLicence,
   viewNoticeType,
+  viewPreviewReturnForms,
   viewRemoveLicences,
   viewRemoveThreshold,
   viewReturnForms,

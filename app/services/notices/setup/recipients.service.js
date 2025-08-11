@@ -20,13 +20,9 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
  * @returns {Promise<object[]>} - recipients
  */
 async function go(session, allRecipients = true) {
-  let recipientsData
+  let recipientsData = await _recipientsData(session)
 
-  if (session.journey === 'alerts') {
-    recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
-  } else {
-    recipientsData = await FetchRecipientsService.go(session)
-  }
+  recipientsData = _additionalRecipients(recipientsData, session)
 
   if (allRecipients || !session.selectedRecipients) {
     return DetermineRecipientsService.go(recipientsData)
@@ -35,6 +31,22 @@ async function go(session, allRecipients = true) {
   const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
 
   return DetermineRecipientsService.go(selectedRecipientsData)
+}
+
+function _additionalRecipients(recipientsData, session) {
+  if (session.additionalRecipients) {
+    return [...recipientsData, ...session.additionalRecipients]
+  }
+
+  return recipientsData
+}
+
+async function _recipientsData(session) {
+  if (session.journey === 'alerts') {
+    return FetchAbstractionAlertRecipientsService.go(session)
+  } else {
+    return FetchRecipientsService.go(session)
+  }
 }
 
 function _selectedRecipients(selectedRecipients, recipientsData) {

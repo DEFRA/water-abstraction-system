@@ -125,61 +125,6 @@ describe('Base Return Logs presenter', () => {
     })
   })
 
-  describe('#formatPurpose()', () => {
-    let purposes
-
-    beforeEach(() => {
-      purposes = [
-        { alias: null, tertiary: { description: 'Mineral Washing' } },
-        { alias: null, tertiary: { description: 'Spray irrigation' } }
-      ]
-    })
-
-    describe('when the first purpose has an alias', () => {
-      beforeEach(() => {
-        purposes[0].alias = 'Mineral Washing alias'
-      })
-
-      it('returns the alias', () => {
-        const result = BaseReturnLogsPresenter.formatPurpose(purposes)
-
-        expect(result).to.equal('Mineral Washing alias')
-      })
-    })
-
-    describe('when the first purpose has no alias', () => {
-      it('returns the tertiary description', () => {
-        const result = BaseReturnLogsPresenter.formatPurpose(purposes)
-
-        expect(result).to.equal('Mineral Washing')
-      })
-    })
-
-    describe('when there are no purposes', () => {
-      beforeEach(() => {
-        purposes = []
-      })
-
-      it('returns an empty string', () => {
-        const result = BaseReturnLogsPresenter.formatPurpose(purposes)
-
-        expect(result).to.equal('')
-      })
-    })
-
-    describe('when purposes is undefined', () => {
-      beforeEach(() => {
-        purposes = undefined
-      })
-
-      it('returns an empty string', () => {
-        const result = BaseReturnLogsPresenter.formatPurpose(purposes)
-
-        expect(result).to.equal('')
-      })
-    })
-  })
-
   describe('#formatStatus()', () => {
     const testReturnLog = { dueDate: new Date() }
 
