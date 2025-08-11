@@ -15,6 +15,7 @@
  */
 function go(session, regions) {
   return {
+    backlink: `/system/bill-runs/setup/${session.id}/type`,
     pageTitle: 'Select the region',
     regions,
     sessionId: session.id,

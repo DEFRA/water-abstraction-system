@@ -5,11 +5,10 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: '/system/bill-runs/setup/' + sessionId + '/type'
+      href: backlink
     })
   }}
 {% endblock %}
@@ -27,35 +26,32 @@
       }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% set regionItems = [] %}
-      {% for region in regions %}
-        {% set regionItem = { text: region.displayName, value: region.id, checked: region.id === selectedRegion } %}
+    {% set regionItems = [] %}
+    {% for region in regions %}
+      {% set regionItem = { text: region.displayName, value: region.id, checked: region.id === selectedRegion } %}
 
-        {# Push our item into the region items array #}
-        {% set regionItems = (regionItems.push(regionItem), regionItems) %}
-      {% endfor %}
+      {% set regionItems = (regionItems.push(regionItem), regionItems) %}
+    {% endfor %}
 
-      {{ govukRadios({
-        attributes: {
-          'data-test': 'bill-run-region'
-        },
-        name: 'region',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
-          }
-        },
-        items: regionItems
-      }) }}
+    {{ govukRadios({
+      attributes: {
+        'data-test': 'bill-run-region'
+      },
+      name: 'region',
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l'
+        }
+      },
+      items: regionItems
+    }) }}
 
-      {{govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

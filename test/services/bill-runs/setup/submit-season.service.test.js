@@ -55,6 +55,7 @@ describe('Bill Runs - Setup - Submit Season service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'bill-runs',
+            backlink: `/system/bill-runs/setup/${session.id}/year`,
             error: {
               text: 'Select the season'
             },

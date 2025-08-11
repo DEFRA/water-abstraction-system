@@ -55,6 +55,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'bill-runs',
+            backlink: '/system/bill-runs',
             error: {
               text: 'Select the bill run type'
             },

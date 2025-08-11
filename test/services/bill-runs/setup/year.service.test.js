@@ -37,6 +37,7 @@ describe('Bill Runs - Setup - Year service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
+        backlink: `/system/bill-runs/setup/${session.id}/region`,
         financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: true }],
         pageTitle: 'Select the financial year',
         sessionId: session.id,
