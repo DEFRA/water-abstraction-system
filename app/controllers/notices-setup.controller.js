@@ -435,10 +435,11 @@ async function submitReturnForms(request, h) {
 async function submitSelectRecipients(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitSelectRecipientsService.go(sessionId, payload)
+  const pageData = await SubmitSelectRecipientsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/select-recipients.njk`, pageData)
