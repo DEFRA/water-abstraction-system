@@ -22,10 +22,10 @@
 
   {% if status === 'received' %}
     <div>
-      <a href="/system/licences/{{ licenceId }}/returns">View returns for {{ licenceRef }}</a>
+      <a href="{{ viewReturnsLink }}">View returns for {{ licenceRef }}</a>
     </div>
   {% else %}
-    <p><a href="/system/return-logs?id={{ returnLogId }}" + returnLogId class="govuk-link">View this return</a></p>
+    <p><a href="{{ viewThisReturnLink }}" class="govuk-link">View this return</a></p>
     <p>or</p>
 
     <form method="post">

@@ -64,7 +64,9 @@ describe('Return Logs - Setup - Confirmed service', () => {
           value: 'Spray Irrigation - Direct'
         },
         siteDescription: 'Addington Sandpits',
-        status: 'received'
+        status: 'received',
+        viewReturnsLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
+        viewThisReturnLink: '/system/return-logs?id=v1:6:01/117:10032788:2019-04-01:2019-05-12'
       })
     })
   })
