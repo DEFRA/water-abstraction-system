@@ -28,23 +28,23 @@
         rows: [
           {
             key: { text: "Site description", classes: "meta-data__label" },
-            value: { html: '<span data-test="site-description">' + siteDescription + '</span>', classes: "meta-data__value" }
+            value: { text: siteDescription, classes: "meta-data__value", attributes: { 'data-test': 'site-description' } }
           },
           {
             key: { text: "Purpose", classes: "meta-data__label" },
-            value: { html: '<span data-test="purpose">' + purposes + '</span>', classes: "meta-data__value" }
+            value: { text: purposes, classes: "meta-data__value", attributes: { 'data-test': 'purpose' } }
           },
           {
             key: { text: "Return period", classes: "meta-data__label" },
-            value: { html: '<span data-test="returns-period">' + returnPeriod + '</span>', classes: "meta-data__value" }
+            value: { text: returnPeriod, classes: "meta-data__value", attributes: { 'data-test': 'returns-period' } }
           },
           {
             key: { text: "Abstraction period", classes: "meta-data__label" },
-            value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
+            value: { text: abstractionPeriod, classes: "meta-data__value", attributes: { 'data-test': 'abstraction-period' } }
           },
           {
             key: { text: "Tariff", classes: "meta-data__label" },
-            value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
+            value: { text: tariff, classes: "meta-data__value", attributes: { 'data-test': 'tariff' } }
           }
         ]
       })

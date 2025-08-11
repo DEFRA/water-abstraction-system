@@ -51,31 +51,31 @@
           rows: [
             {
               key: { text: "Return reference", classes: "meta-data__label" },
-              value: { html: '<span data-test="return-reference">' + returnReference + '</span>', classes: "meta-data__value" }
+              value: { text: returnReference, classes: "meta-data__value", attributes: { 'data-test': 'return-reference' } }
             },
             {
               key: { text: "Site description", classes: "meta-data__label" },
-              value: { html: '<span data-test="site-description">' + siteDescription + '</span>', classes: "meta-data__value" }
+              value: { text: siteDescription, classes: "meta-data__value", attributes: { 'data-test': 'site-description' } }
             },
             {
               key: { text: "Purpose", classes: "meta-data__label" },
-              value: { html: '<span data-test="purpose">' + purpose + '</span>', classes: "meta-data__value" }
+              value: { text: purpose, classes: "meta-data__value", attributes: { 'data-test': 'purpose' } }
             },
             {
               key: { text: "Return period", classes: "meta-data__label" },
-              value: { html: '<span data-test="returns-period">' + returnPeriod + '</span>', classes: "meta-data__value" }
+              value: { text: returnPeriod, classes: "meta-data__value", attributes: { 'data-test': 'returns-period' } }
             },
             {
               key: { text: "Abstraction period", classes: "meta-data__label" },
-              value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
+              value: { text: abstractionPeriod, classes: "meta-data__value", attributes: { 'data-test': 'abstraction-period' } }
             },
             {
               key: { text: "Received date", classes: "meta-data__label" },
-              value: { html: '<span data-test="received-date">' + receivedDate + '</span>', classes: "meta-data__value" }
+              value: { text: receivedDate, classes: "meta-data__value", attributes: { 'data-test': 'received-date' } }
             } if receivedDate,
             {
               key: { text: "Tariff", classes: "meta-data__label" },
-              value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
+              value: { text: tariff, classes: "meta-data__value", attributes: { 'data-test': 'tariff' } }
             }
           ]
         })
@@ -174,15 +174,15 @@
                 rows: [
                   {
                     key: { text: "Make", classes: "meta-data__label" },
-                    value: { html: '<span data-test="make">' + meterDetails.make + '</span>', classes: "meta-data__value" }
+                    value: { text: meterDetails.make, classes: "meta-data__value", attributes: { 'data-test': 'make' } }
                   },
                   {
                     key: { text: "Serial number", classes: "meta-data__label" },
-                    value: { html: '<span data-test="site-description">' + meterDetails.serialNumber + '</span>', classes: "meta-data__value" }
+                    value: { text: meterDetails.serialNumber, classes: "meta-data__value", attributes: { 'data-test': 'serial-number' } }
                   },
                   {
                     key: { html: "&times;10 display", classes: "meta-data__label" },
-                    value: { html: '<span data-test="site-description">' + meterDetails.xDisplay + '</span>', classes: "meta-data__value" }
+                    value: { text: meterDetails.xDisplay, classes: "meta-data__value", attributes: { 'data-test': 'x10-display' } }
                   }
                 ]
               })
