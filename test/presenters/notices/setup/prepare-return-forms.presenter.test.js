@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
-describe('Notices - Setup - Preview Return Forms Presenter', () => {
+describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   let session
 
   beforeEach(() => {
