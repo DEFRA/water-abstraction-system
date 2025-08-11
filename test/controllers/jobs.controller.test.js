@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
-const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
+const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationsStatusUpdatesServiceService = require('../../app/services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
