@@ -61,9 +61,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/time-limited',
+    path: '/jobs/return-logs/{cycle}',
     options: {
-      handler: JobsController.timeLimited,
+      handler: JobsController.returnLogs,
       app: {
         plainOutput: true
       },
@@ -75,9 +75,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/return-logs/{cycle}',
+    path: '/jobs/time-limited',
     options: {
-      handler: JobsController.returnLogs,
+      handler: JobsController.timeLimited,
       app: {
         plainOutput: true
       },

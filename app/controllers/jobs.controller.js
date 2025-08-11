@@ -48,12 +48,6 @@ async function notificationsStatusUpdates(_request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
-async function timeLimited(_request, h) {
-  ProcessTimeLimitedLicencesService.go()
-
-  return h.response().code(NO_CONTENT_STATUS_CODE)
-}
-
 async function returnLogs(request, h) {
   const { cycle } = request.params
 
@@ -62,6 +56,12 @@ async function returnLogs(request, h) {
   }
 
   ProcessReturnLogsService.go(cycle)
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
+async function timeLimited(_request, h) {
+  ProcessTimeLimitedLicencesService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
