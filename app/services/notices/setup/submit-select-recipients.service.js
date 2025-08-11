@@ -6,6 +6,7 @@
  * @module SubmitSelectRecipientsService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const RecipientsService = require('./recipients.service.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
@@ -16,10 +17,11 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -28,6 +30,12 @@ async function go(sessionId, payload) {
 
   if (!validationResult) {
     await _save(session, payload)
+
+    GeneralLib.flashNotification(
+      yar,
+      'Updated',
+      'The recipients have been changed. Check details before sending invitations.'
+    )
 
     return {}
   }
