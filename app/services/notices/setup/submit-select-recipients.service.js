@@ -6,11 +6,11 @@
  * @module SubmitSelectRecipientsService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const RecipientsService = require('./recipients.service.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const GeneralLib = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
