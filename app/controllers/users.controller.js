@@ -9,13 +9,10 @@ const SubmitProfileDetailsService = require('../services/users/submit-profile-de
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
 
 async function submitProfileDetails(request, h) {
-  const {
-    payload,
-    yar
-  } = request
-  const { id } = request.auth.credentials.user
+  const { payload, yar } = request
+  const { id: userId } = request.auth.credentials.user
 
-  const pageData = await SubmitProfileDetailsService.go(payload, yar)
+  const pageData = await SubmitProfileDetailsService.go(userId, payload, yar)
 
   if (pageData.error) {
     return h.view('users/profile-details.njk', pageData)
@@ -25,9 +22,9 @@ async function submitProfileDetails(request, h) {
 }
 
 async function viewProfileDetails(request, h) {
-  const { id } = request.auth.credentials.user
+  const { id: userId } = request.auth.credentials.user
 
-  const pageData = await ViewProfileDetailsService.go(id)
+  const pageData = await ViewProfileDetailsService.go(userId, request.yar)
 
   return h.view('users/profile-details.njk', pageData)
 }

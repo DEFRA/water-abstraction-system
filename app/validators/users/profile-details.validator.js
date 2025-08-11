@@ -19,11 +19,21 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object().keys({
-    name: Joi.string().allow(''),
-    jobTitle: Joi.string().allow(''),
-    email: Joi.string().email().allow(''),
-    tel: Joi.string().allow(''),
-    address: Joi.string().allow('')
+    name: Joi.string().max(100).allow('').messages({
+      'string.max': 'Name must be 100 characters or less'
+    }),
+    jobTitle: Joi.string().max(100).allow('').messages({
+      'string.max': 'Job title must be 100 characters or less'
+    }),
+    email: Joi.string().email().allow('').messages({
+      'string.email': 'Enter a valid email'
+    }),
+    tel: Joi.string().max(100).allow('').messages({
+      'string.max': 'Telephone number must be 100 characters or less'
+    }),
+    address: Joi.string().max(100).allow('').messages({
+      'string.max': 'Address must be 100 characters or less'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

@@ -5,9 +5,14 @@
  * @module SubmitProfileDetailsService
  */
 
-const GeneralLib = require('../../lib/general.lib.js')
 const UserModel = require('../../models/user.model.js')
 const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
+
+const navigationLinks = [
+  { active: true, href: '/contact-information', text: 'Contact information' },
+  { href: '/account/update-password', text: 'Change password' },
+  { href: '/signout', text: 'Sign out' }
+]
 
 /**
  * Orchestrates validating the data for `/users/me/profile-details` page
@@ -18,7 +23,7 @@ const ProfileDetailsValidator = require('../../validators/users/profile-details.
  * validation error the controller will re-render the page. If all is well the controller will redirect to the next page
  * in the journey.
  *
- * @param {string} userId - The ID of the user
+ * @param {number} userId - The ID of the user
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
@@ -30,11 +35,15 @@ async function go(userId, payload, yar) {
   if (!validationResult) {
     await _save(userId, payload)
 
-    GeneralLib.flashNotification(yar, 'Updated', 'Profile details saved')
+    yar.flash('notification', {
+      title: 'Updated',
+      text: 'Profile details saved'
+    })
   }
 
   return {
-    activeNavBar: 'search',
+    navigationLinks,
+    pageTitle: 'Profile details',
     error: validationResult,
     ...payload
   }
@@ -53,17 +62,25 @@ async function _save(userId, payload) {
 }
 
 function _validate(payload) {
-  const validation = ProfileDetailsValidator.go(payload)
+  const { error } = ProfileDetailsValidator.go(payload)
 
-  if (!validation.error) {
+  if (!error) {
     return null
   }
 
-  const { message } = validation.error.details[0]
+  const formattedError = error.details.reduce((acc, detail) => {
+    acc[detail.context.key] = detail.message
+    return acc
+  }, {})
 
-  return {
-    text: message
-  }
+  formattedError.errorList = error.details.map((detail) => {
+    return {
+      href: `#${detail.context.key}`,
+      text: detail.message
+    }
+  })
+
+  return formattedError
 }
 
 module.exports = {
