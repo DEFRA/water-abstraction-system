@@ -32,7 +32,7 @@ async function go(sessionId) {
       postcode: session.address.postcode
     },
     contact_hash_id: _createMD5Hash(session),
-    licence_ref: session.licenceRef
+    licence_refs: session.licenceRef
   }
 
   if (Array.isArray(session.additionalRecipients)) {

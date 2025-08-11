@@ -54,7 +54,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
             postcode: session.address.postcode
           },
           contact_hash_id: addressHash,
-          licence_ref: session.licenceRef
+          licence_refs: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
@@ -92,7 +92,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
             country: session.address.country
           },
           contact_hash_id: addressHash,
-          licence_ref: session.licenceRef
+          licence_refs: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
@@ -121,7 +121,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
               postcode: 'SW1A 1AA'
             },
             contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
-            licence_ref: '12345'
+            licence_refs: '12345'
           }
         ],
         licenceRef: '12345',
@@ -148,7 +148,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
             postcode: 'SW1A 1AA'
           },
           contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
-          licence_ref: '12345'
+          licence_refs: '12345'
         },
         {
           contact: {
@@ -160,7 +160,7 @@ describe('Notices - Setup - Create additional recipient service', () => {
             postcode: session.address.postcode
           },
           contact_hash_id: addressHash,
-          licence_ref: session.licenceRef
+          licence_refs: session.licenceRef
         }
       ])
       expect(refreshedSession.selectedRecipients).equal([addressHash])
