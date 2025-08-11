@@ -7,7 +7,7 @@
  */
 
 const GenerateReturnFormRequest = require('../../../requests/gotenberg/generate-return-form.request.js')
-const PreviewReturnFormsPresenter = require('../../../presenters/notices/setup/preview-return-forms.presenter.js')
+const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/preview-return-forms.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = PreviewReturnFormsPresenter.go(session)
+  const pageData = PrepareReturnFormsPresenter.go(session)
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 

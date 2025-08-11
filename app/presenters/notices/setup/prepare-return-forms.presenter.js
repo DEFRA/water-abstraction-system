@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the return form
- * @module PreviewReturnFormsPresenter
+ * @module PrepareReturnFormsPresenter
  */
 
 /**
