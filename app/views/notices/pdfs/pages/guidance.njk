@@ -1,0 +1,106 @@
+{% extends "layout/page-layout.njk" %}
+
+{% from "layout/footer.njk" import footer %}
+
+{% block header %}
+ {% include 'layout/header.njk' %}
+{% endblock %}
+
+{% block content %}
+  <div class="columns">
+    <div class="column">
+      <div class="item">
+        <h2>Refer to this guidance when filling in the form</h2>
+      </div>
+
+      <div class="item">
+        <h3>Return details</h3>
+        <p>
+          If you need to modify the site description shown overleaf call us on
+          <span class="bold">03708 506 506</span>.
+        </p>
+      </div>
+
+      <div class="item">
+        <h3>1. Who is the contact for this return?</h3>
+        <p>
+          Enter the details for the person who should be contacted if we have
+          any queries about this return.
+        </p>
+      </div>
+
+      <div class="item">
+        <h3>2. Did you abstract water?</h3>
+        <p>
+          Even if you did not abstract any water you must still report that to
+          us. This is known as submitting a nil return.
+        </p>
+      </div>
+
+      <div class="item">
+        <h3>6. Meter details</h3>
+        <p>If you have used more than one meter tell us about the current one.</p>
+      </div>
+
+      <div class="item">
+        <h3>7. and 8. Start and end meter readings</h3>
+        <p>
+          The <span class="bold">start reading</span> is what your meter read
+          before you began abstracting in this period.
+        </p>
+        <p>
+          The <span class="bold">end reading</span> is taken at the end of the abstraction
+          period. We treat all readings in between the start and end dates as if they were
+          taken at the end of each {{notification.personalisation.returns_frequency}}.
+        </p>
+      </div>
+
+      <div class="item">
+        <p>
+          If you used more than one meter you need to enter volumes not
+          meter readings.
+        </p>
+      </div>
+
+      <div class="item">
+        <p>
+          A decimal point should only be used<br>
+          to indicate a fraction of a whole unit.<br>
+          For example, 0.5 will be taken to mean<br>
+          half a gallon.
+        </p>
+      </div>
+
+      <div class="item">
+        <h3>9. Meter readings or abstraction volumes</h3>
+        <p>
+          In every numbered line on the form, you should enter a meter reading or
+          the actual quantity on the dates you abstracted water and ‘0’ when you
+          did not.
+        </p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="item buffed">
+        <h3>11. Reporting without a meter</h3>
+        <p>
+          Complete this section if you are not required to use a water meter to
+          measure your abstracted quantities.
+        </p>
+      </div>
+
+      <div class="item">
+        <h3>13. Declaration</h3>
+        <p>
+          You must sign the declaration before sending your return to us, even
+          if it is a<br> nil return.
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {{ footer(2, 2) }}
+{% endblock %}
