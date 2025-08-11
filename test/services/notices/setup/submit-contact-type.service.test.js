@@ -34,6 +34,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
   describe('when called with a valid', () => {
     beforeEach(() => {
       sessionData = {
+        licenceRef: '12345',
         selectedRecipients: ['123']
       }
     })
@@ -57,7 +58,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
-            email: payload.email
+            email: payload.email,
+            licence_refs: session.licenceRef
           }
         ])
       })
@@ -98,7 +100,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
-            email: payload.email
+            email: payload.email,
+            licence_refs: session.licenceRef
           }
         ])
       })
@@ -131,7 +134,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
-            email: 'test@test.gov.uk'
+            email: 'test@test.gov.uk',
+            licence_refs: session.licenceRef
           }
         ])
       })
@@ -155,7 +159,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         sessionData.additionalRecipients = [
           {
             contact_hash_id: testEmailHash,
-            email: 'test@test.gov.uk'
+            email: 'test@test.gov.uk',
+            licence_refs: session.licenceRef
           }
         ]
 
@@ -171,11 +176,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
-            email: 'test@test.gov.uk'
+            email: 'test@test.gov.uk',
+            licence_refs: session.licenceRef
           },
           {
             contact_hash_id: _createMD5Hash(payload.email),
-            email: payload.email
+            email: payload.email,
+            licence_refs: session.licenceRef
           }
         ])
       })
