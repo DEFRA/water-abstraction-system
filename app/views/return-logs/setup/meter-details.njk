@@ -26,65 +26,63 @@
 
   {{ pageHeading(returnReference, pageTitle) }}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukInput({
-        label: {
-          text: "Make"
-        },
-        classes: "govuk-input--width-10",
-        id: "meter-make",
-        name: "meterMake",
-        value: meterMake,
-        errorMessage: {
-          text: error.meterMake.message
-        } if error.meterMake
-      }) }}
+    {{ govukInput({
+      label: {
+        text: "Make"
+      },
+      classes: "govuk-input--width-10",
+      id: "meter-make",
+      name: "meterMake",
+      value: meterMake,
+      errorMessage: {
+        text: error.meterMake.message
+      } if error.meterMake
+    }) }}
 
-      {{ govukInput({
-        label: {
-          text: "Serial number"
-        },
-        classes: "govuk-input--width-10",
-        id: "meter-serial-number",
-        name: "meterSerialNumber",
-        value: meterSerialNumber,
-        errorMessage: {
-          text: error.meterSerialNumber.message
-        } if error.meterSerialNumber
-      }) }}
+    {{ govukInput({
+      label: {
+        text: "Serial number"
+      },
+      classes: "govuk-input--width-10",
+      id: "meter-serial-number",
+      name: "meterSerialNumber",
+      value: meterSerialNumber,
+      errorMessage: {
+        text: error.meterSerialNumber.message
+      } if error.meterSerialNumber
+    }) }}
 
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        name: "meter10TimesDisplay",
-        errorMessage: {
-          text: error.meter10TimesDisplay.message
-        } if error.meter10TimesDisplay,
-        fieldset: {
-          legend: {
-            text: "Does this meter have a ×10 display"
-          }
+    {{ govukRadios({
+      classes: "govuk-radios--inline",
+      name: "meter10TimesDisplay",
+      errorMessage: {
+        text: error.meter10TimesDisplay.message
+      } if error.meter10TimesDisplay,
+      fieldset: {
+        legend: {
+          text: "Does this meter have a ×10 display"
+        }
+      },
+      hint: {
+        text: "This will not recalculate any of the volumes provided"
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: "yes" === meter10TimesDisplay
         },
-        hint: {
-          text: "This will not recalculate any of the volumes provided"
-        },
-        items: [
-          {
-            value: "yes",
-            text: "Yes",
-            checked: "yes" === meter10TimesDisplay
-          },
-          {
-            value: "no",
-            text: "No",
-            checked: "no" === meter10TimesDisplay
-          }
-        ]
-      }) }}
+        {
+          value: "no",
+          text: "No",
+          checked: "no" === meter10TimesDisplay
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

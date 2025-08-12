@@ -33,43 +33,41 @@
     {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        name: "units",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: pageHeading
-          }
+    {{ govukRadios({
+      name: "units",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "cubic-metres",
+          text: "Cubic Metres",
+          checked: "cubic-metres" === units
         },
-        items: [
-          {
-            value: "cubic-metres",
-            text: "Cubic Metres",
-            checked: "cubic-metres" === units
-          },
-          {
-            value: "litres",
-            text: "Litres",
-            checked: "litres" === units
-          },
-          {
-            value: "megalitres",
-            text: "Megalitres",
-            checked: "megalitres" === units
-          },
-          {
-            value: "gallons",
-            text: "Gallons",
-            checked: "gallons" === units
-          }
-        ]
-      }) }}
+        {
+          value: "litres",
+          text: "Litres",
+          checked: "litres" === units
+        },
+        {
+          value: "megalitres",
+          text: "Megalitres",
+          checked: "megalitres" === units
+        },
+        {
+          value: "gallons",
+          text: "Gallons",
+          checked: "gallons" === units
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

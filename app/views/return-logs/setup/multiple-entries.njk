@@ -43,21 +43,19 @@
       </div>
 
       <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-        <div>
-          {{ govukTextarea({
-            name: "multipleEntries",
-            id: "multiple-entries",
-            value: multipleEntries,
-            rows: "5",
-            errorMessage: {
-              text: error.text
-            } if error
-          }) }}
+        {{ govukTextarea({
+          name: "multipleEntries",
+          id: "multiple-entries",
+          value: multipleEntries,
+          rows: "5",
+          errorMessage: {
+            text: error.text
+          } if error
+        }) }}
 
-          {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
-        </div>
+        {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
       </form>
   </div>
 </div>

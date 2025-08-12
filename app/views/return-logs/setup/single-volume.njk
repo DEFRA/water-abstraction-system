@@ -34,53 +34,51 @@
     {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% set quantityInputHTML %}
-        {{ govukInput({
-          label: {
-            text: "Enter the total amount"
-          },
-          id: "single-volume-quantity",
-          name: "singleVolumeQuantity",
-          classes: "govuk-input--width-10",
-          value: singleVolumeQuantity,
-          suffix: {
-            text: units
-          },
-          errorMessage: error.volumeInputFormElement
-        }) }}
-      {% endset %}
+    {% set quantityInputHTML %}
+      {{ govukInput({
+        label: {
+          text: "Enter the total amount"
+        },
+        id: "single-volume-quantity",
+        name: "singleVolumeQuantity",
+        classes: "govuk-input--width-10",
+        value: singleVolumeQuantity,
+        suffix: {
+          text: units
+        },
+        errorMessage: error.volumeInputFormElement
+      }) }}
+    {% endset %}
 
-      {{ govukRadios({
-        id: "single-volume",
-        name: "singleVolume",
-        errorMessage: error.radioFormElement,
-        fieldset: {
-          legend: {
-            html: pageHeading
+    {{ govukRadios({
+      id: "single-volume",
+      name: "singleVolume",
+      errorMessage: error.radioFormElement,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: singleVolume === 'yes',
+          conditional: {
+            html: quantityInputHTML
           }
         },
-        items: [
-          {
-            value: "yes",
-            text: "Yes",
-            checked: singleVolume === 'yes',
-            conditional: {
-              html: quantityInputHTML
-            }
-          },
-          {
-            value: "no",
-            text: "No",
-            checked: singleVolume === 'no'
-          }
-        ]
-      }) }}
+        {
+          value: "no",
+          text: "No",
+          checked: singleVolume === 'no'
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

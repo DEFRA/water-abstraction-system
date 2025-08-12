@@ -29,103 +29,101 @@
     {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {% set dateInputHTML %}
-        {{ govukDateInput({
-          id: 'period-used-from',
-          namePrefix: 'period-used-from',
-          errorMessage: {
-            text: error.fromFullDate.message
-          } if error.fromFullDate,
-          fieldset: {
-            legend: {
-              text: "From",
-              classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
-            }
-          },
-          items: [
-            {
-              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-              name: 'day',
-              value: periodUsedFromDay
-            },
-            {
-              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-              name: 'month',
-              value: receivedDateMonth
-            },
-            {
-              classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
-              name: 'year',
-              value: periodUsedFromYear
-            }
-          ]
-        }) }}
-
-        {{ govukDateInput({
-          id: 'period-used-To',
-          namePrefix: 'period-used-to',
-          errorMessage: {
-            text: error.toFullDate.message
-          } if error.toFullDate,
-          fieldset: {
-            legend: {
-              text: "To",
-              classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
-            }
-          },
-          items: [
-            {
-              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-              name: 'day',
-              value: periodUsedToDay
-            },
-            {
-              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-              name: 'month',
-              value: periodUsedToMonth
-            },
-            {
-              classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
-              name: 'year',
-              value: periodUsedToYear
-            }
-          ]
-        }) }}
-      {% endset %}
-
-      {{ govukRadios({
-        name: "periodDateUsedOptions",
+    {% set dateInputHTML %}
+      {{ govukDateInput({
+        id: 'period-used-from',
+        namePrefix: 'period-used-from',
         errorMessage: {
-          text: error.periodDateUsedOptions.message
-          } if error.periodDateUsedOptions,
+          text: error.fromFullDate.message
+        } if error.fromFullDate,
         fieldset: {
           legend: {
-            html: pageHeading
+            text: "From",
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
           }
         },
         items: [
           {
-            value: "default",
-            text: "Default abstraction period",
-            hint: { text: abstractionPeriod },
-            checked: periodDateUsedOptions === 'default'
+            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
+            name: 'day',
+            value: periodUsedFromDay
           },
           {
-            value: "custom-dates",
-            text: "Custom dates",
-            checked: periodDateUsedOptions === 'custom-dates',
-            conditional: {
-              html: dateInputHTML
-            }
+            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
+            name: 'month',
+            value: receivedDateMonth
+          },
+          {
+            classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
+            name: 'year',
+            value: periodUsedFromYear
           }
         ]
       }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+      {{ govukDateInput({
+        id: 'period-used-To',
+        namePrefix: 'period-used-to',
+        errorMessage: {
+          text: error.toFullDate.message
+        } if error.toFullDate,
+        fieldset: {
+          legend: {
+            text: "To",
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+          }
+        },
+        items: [
+          {
+            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
+            name: 'day',
+            value: periodUsedToDay
+          },
+          {
+            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
+            name: 'month',
+            value: periodUsedToMonth
+          },
+          {
+            classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
+            name: 'year',
+            value: periodUsedToYear
+          }
+        ]
+      }) }}
+    {% endset %}
+
+    {{ govukRadios({
+      name: "periodDateUsedOptions",
+      errorMessage: {
+        text: error.periodDateUsedOptions.message
+        } if error.periodDateUsedOptions,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "default",
+          text: "Default abstraction period",
+          hint: { text: abstractionPeriod },
+          checked: periodDateUsedOptions === 'default'
+        },
+        {
+          value: "custom-dates",
+          text: "Custom dates",
+          checked: periodDateUsedOptions === 'custom-dates',
+          conditional: {
+            html: dateInputHTML
+          }
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

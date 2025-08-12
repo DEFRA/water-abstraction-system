@@ -33,33 +33,31 @@
     {{ pageHeading(returnReference, pageTitle) }}
   {% endset %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        name: "meterProvided",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            html: pageHeading
-          }
+    {{ govukRadios({
+      name: "meterProvided",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: "yes" === meterProvided
         },
-        items: [
-          {
-            value: "yes",
-            text: "Yes",
-            checked: "yes" === meterProvided
-          },
-          {
-            value: "no",
-            text: "No",
-            checked: "no" === meterProvided
-          }
-        ]
-      }) }}
+        {
+          value: "no",
+          text: "No",
+          checked: "no" === meterProvided
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

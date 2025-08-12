@@ -35,25 +35,23 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <div>
-      {{ govukCharacterCount({
-        name: "note",
-        id: "note",
-        maxlength: 500,
-        value: note,
-        label: {
-          html: pageHeading,
-          isPageHeading: true
-        },
-        hint: {
-          text: "Provide a short explanation about the editing of this return."
-        },
-        errorMessage: {
-          text: error.text
-        } if error
-      }) }}
+    {{ govukCharacterCount({
+      name: "note",
+      id: "note",
+      maxlength: 500,
+      value: note,
+      label: {
+        html: pageHeading,
+        isPageHeading: true
+      },
+      hint: {
+        text: "Provide a short explanation about the editing of this return."
+      },
+      errorMessage: {
+        text: error.text
+      } if error
+    }) }}
 
-      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
-    </div>
+    {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
