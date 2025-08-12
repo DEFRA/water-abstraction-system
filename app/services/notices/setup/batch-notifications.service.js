@@ -7,7 +7,7 @@
 
 const { setTimeout } = require('node:timers/promises')
 
-const AbstractionAlertsNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
+const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
@@ -57,7 +57,7 @@ async function _batch(recipients, session, eventId) {
   let notifications
 
   if (session.journey === 'alerts') {
-    notifications = AbstractionAlertsNotificationsPresenter.go(recipients, session, eventId)
+    notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
   } else {
     notifications = NotificationsPresenter.go(recipients, session, eventId)
   }

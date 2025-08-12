@@ -2,7 +2,7 @@
 
 /**
  * Formats recipients into notifications for an abstraction alert
- * @module AbstractionAlertsNotificationsPresenter
+ * @module AbstractionAlertNotificationsPresenter
  */
 
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
