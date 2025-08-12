@@ -19,6 +19,20 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/customer-files/{days}',
+    options: {
+      handler: JobsController.customerFiles,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/export',
     options: {
       handler: JobsController.exportDb,
