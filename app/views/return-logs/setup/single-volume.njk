@@ -39,26 +39,19 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {% set quantityInputHTML %}
-        {% if error %}
-          {% set errorClass = 'govuk-input--error' %}
-        {% else %}
-          {% set errorClass = '' %}
-        {% endif %}
-
-
-      {{ govukInput({
-        label: {
-          text: "Enter the total amount"
-        },
-        id: "single-volume-quantity",
-        name: "singleVolumeQuantity",
-        classes: "govuk-input--width-10",
-        value: singleVolumeQuantity,
-        suffix: {
-          text: units
-        },
-        errorMessage: error.volumeInputFormElement
-      }) }}
+        {{ govukInput({
+          label: {
+            text: "Enter the total amount"
+          },
+          id: "single-volume-quantity",
+          name: "singleVolumeQuantity",
+          classes: "govuk-input--width-10",
+          value: singleVolumeQuantity,
+          suffix: {
+            text: units
+          },
+          errorMessage: error.volumeInputFormElement
+        }) }}
       {% endset %}
 
       {{ govukRadios({
