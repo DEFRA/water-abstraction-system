@@ -88,20 +88,20 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
       expect(row).to.equal(
         `"${recipients.additionalContact.licence_refs}",` + // Licence
-          '"1 January to 31 March",' + // 'Abstraction periods'
-          '"level",' + // 'Measure type'
-          '"100m",' + // 'Threshold'
-          '"Abstraction alert",' + // 'Notification type'
-          '"email",' + // 'Message type'
-          '"Additional contact",' + // 'Contact type'
+          '"1 January to 31 March",' + // Abstraction periods
+          '"level",' + // Measure type
+          '"100m",' + // Threshold
+          '"Abstraction alert",' + // Notification type
+          '"email",' + // Message type
+          '"Additional contact",' + // Contact type
           '"additional.contact@important.com",' + // Email
-          ',' + // 'Address line 1'
-          ',' + // 'Address line 2'
-          ',' + // 'Address line 3'
-          ',' + // 'Address line 4'
-          ',' + // 'Address line 5'
-          ',' + // 'Address line 6'
-          '\n' // 'Address line 7' and End of CSV line
+          ',' + // Address line 1
+          ',' + // Address line 2
+          ',' + // Address line 3
+          ',' + // Address line 4
+          ',' + // Address line 5
+          ',' + // Address line 6
+          '\n' // Address line 7 and End of CSV line
       )
     })
   })
@@ -116,20 +116,20 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
       expect(row).to.equal(
         `"${recipients.primaryUser.licence_refs}",` + // Licence
-          '"1 February to 1 January",' + // 'Abstraction periods'
-          '"level",' + // 'Measure type'
-          '"1000m",' + // 'Threshold'
-          '"Abstraction alert",' + // 'Notification type'
-          '"email",' + // 'Message type'
-          '"Primary user",' + // 'Contact type'
+          '"1 February to 1 January",' + // Abstraction periods
+          '"level",' + // Measure type
+          '"1000m",' + // Threshold
+          '"Abstraction alert",' + // Notification type
+          '"email",' + // Message type
+          '"Primary user",' + // Contact type
           '"primary.user@important.com",' + // Email
-          ',' + // 'Address line 1'
-          ',' + // 'Address line 2'
-          ',' + // 'Address line 3'
-          ',' + // 'Address line 4'
-          ',' + // 'Address line 5'
-          ',' + // 'Address line 6'
-          '\n' // 'Address line 7' and End of CSV line
+          ',' + // Address line 1
+          ',' + // Address line 2
+          ',' + // Address line 3
+          ',' + // Address line 4
+          ',' + // Address line 5
+          ',' + // Address line 6
+          '\n' // Address line 7 and End of CSV line
       )
     })
   })
@@ -145,12 +145,12 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
         expect(row).to.equal(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
-            '"1 January to 31 March",' + // 'Abstraction periods'
-            '"flow",' + // 'Measure type'
-            '"100m3/s",' + // 'Threshold'
-            '"Abstraction alert",' + // 'Notification type'
-            '"letter",' + // 'Message type'
-            '"Licence holder",' + // 'Contact type'
+            '"1 January to 31 March",' + // Abstraction periods
+            '"flow",' + // Measure type
+            '"100m3/s",' + // Threshold
+            '"Abstraction alert",' + // Notification type
+            '"letter",' + // Message type
+            '"Licence holder",' + // Contact type
             ',' + // Email
             '"Mr H J Licence holder",' + // Address line 1
             '"1",' + // Address line 2
@@ -185,12 +185,12 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
         expect(row).to.equal(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
-            '"1 January to 31 March",' + // 'Abstraction periods'
-            '"flow",' + // 'Measure type'
-            '"100m3/s",' + // 'Threshold'
-            '"Abstraction alert",' + // 'Notification type'
-            '"letter",' + // 'Message type'
-            '"Licence holder",' + // 'Contact type'
+            '"1 January to 31 March",' + // Abstraction periods
+            '"flow",' + // Measure type
+            '"100m3/s",' + // Threshold
+            '"Abstraction alert",' + // Notification type
+            '"letter",' + // Message type
+            '"Licence holder",' + // Contact type
             ',' + // Email
             '"Gringotts",' + // Address line 1
             '"1",' + // Address line 2

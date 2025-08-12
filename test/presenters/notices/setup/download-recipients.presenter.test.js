@@ -78,21 +78,21 @@ describe('Notices - Setup - Download recipients presenter', () => {
 
         expect(row).to.equal(
           '"123/46",' + // Licence
-            '"2434",' + // 'Return reference'
-            '2018-01-01,' + // 'Return period start date'
-            '2019-01-01,' + // 'Return period end date'
-            '2021-01-01,' + // 'Return due date'
-            '"Returns invitation",' + // 'Notification type'
-            '"email",' + // 'Message type'
-            '"Primary user",' + // 'Contact type'
+            '"2434",' + // Return reference
+            '2018-01-01,' + // Return period start date
+            '2019-01-01,' + // Return period end date
+            '2021-01-01,' + // Return due date
+            '"Returns invitation",' + // Notification type
+            '"email",' + // Message type
+            '"Primary user",' + // Contact type
             '"primary.user@important.com",' + // Email
-            ',' + // 'Address line 1'
-            ',' + // 'Address line 2'
-            ',' + // 'Address line 3'
-            ',' + // 'Address line 4'
-            ',' + // 'Address line 5'
-            ',' + // 'Address line 6'
-            '\n' // 'Address line 7' and End of CSV line
+            ',' + // Address line 1
+            ',' + // Address line 2
+            ',' + // Address line 3
+            ',' + // Address line 4
+            ',' + // Address line 5
+            ',' + // Address line 6
+            '\n' // Address line 7 and End of CSV line
         )
       })
     })
@@ -139,13 +139,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
 
             expect(row).to.equal(
               '"1/343/3",' + // Licence
-                '"376439279",' + // 'Return reference'
-                '2018-01-01,' + // 'Return period start date'
-                '2019-01-01,' + // 'Return period end date'
-                '2021-01-01,' + // 'Return due date'
-                '"Returns invitation",' + // 'Notification type'
-                '"letter",' + // 'Message type'
-                '"Returns to",' + // 'Contact type'
+                '"376439279",' + // Return reference
+                '2018-01-01,' + // Return period start date
+                '2019-01-01,' + // Return period end date
+                '2021-01-01,' + // Return due date
+                '"Returns invitation",' + // Notification type
+                '"letter",' + // Message type
+                '"Returns to",' + // Contact type
                 ',' + // Email
                 '"Mr J Returns to (same licence ref as licence holder)",' + // Address line 1
                 '"4",' + // Address line 2
@@ -170,13 +170,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
 
           expect(row).to.equal(
             '"1/343/3",' + // Licence
-              '"376439279",' + // 'Return reference'
-              '2018-01-01,' + // 'Return period start date'
-              '2019-01-01,' + // 'Return period end date'
-              '2021-01-01,' + // 'Return due date'
-              '"Returns invitation",' + // 'Notification type'
-              '"letter",' + // 'Message type'
-              '"Licence holder",' + // 'Contact type'
+              '"376439279",' + // Return reference
+              '2018-01-01,' + // Return period start date
+              '2019-01-01,' + // Return period end date
+              '2021-01-01,' + // Return due date
+              '"Returns invitation",' + // Notification type
+              '"letter",' + // Message type
+              '"Licence holder",' + // Contact type
               ',' + // Email
               '"Gringotts",' + // Address line 1
               '"4",' + // Address line 2
