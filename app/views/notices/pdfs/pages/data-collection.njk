@@ -1,0 +1,30 @@
+{% extends "layout/page-layout.njk" %}
+
+{% macro boxes(count = 12) %}
+  {#
+  Creates a line of boxes for data entry.
+  count: The number of horizontal boxes
+  #}
+  {% for i in range(0, count) -%}
+    <div class="number-input {{ ' last-digit' if loop.last }}"></div>
+  {%- endfor %}
+{% endmacro %}
+
+{% block header %}
+  {% include 'layout/header.njk' %}
+{% endblock %}
+
+{% block content %}
+  <div class="block-head bold">9. Meter readings or abstraction volumes</div>
+
+  <div class="columns">
+    <div class="column">
+      <div class="block">
+        <p class="month-label">
+          6 April 2024
+          {{ boxes(12) }}
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends "layout/page-layout.njk" %}
+
+{% macro boxes(count = 12) %}
+  {#
+  Creates a line of boxes for data entry.
+  count: The number of horizontal boxes
+  #}
+  {% for i in range(0, count) -%}
+    <div class="number-input {{ ' last-digit' if loop.last }}"></div>
+  {%- endfor %}
+{% endmacro %}
+
+{% block header %}
+  {% include 'layout/header.njk' %}
+{% endblock %}
+
+{% block content %}
+  <div class="columns">
+    <div class="column">
+
+      <div class="block">
+        <div class="block-head bold">1. Who is the contact for this return?</div>
+        <p>Write in CAPITAL LETTERS</p>
+        <br>
+        <div class="item">
+          <div class="label">
+            <p>First name</p>
+            <br>
+            <div class="input">
+              <div class="input-mask"></div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="label">
+            <p>Last name</p>
+            <br>
+            <div class="input">
+              <div class="input-mask"></div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="label">
+            <p>Telephone</p>
+            <br>
+            <div class="input">
+              <div class="input-mask"></div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="label">
+            <p>Email</p>
+            <br>
+            <div class="input">
+              <div class="input-mask"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">2. Did you abstract water?</div>
+        <div class="item">
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Yes
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            No (nil return)
+          </p>
+          <p class="guide">If no, go to section 13</p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">3. How are you reporting your return?</div>
+        <div class="item">
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Meter readings
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Abstraction volumes
+          </p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">4. Unit of measurement</div>
+        <div class="item">
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Cubic metres
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Litres
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Megalitres
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Gallons
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+
+      <div class="block">
+        <div class="block-head bold">5. Did you use a meter?</div>
+        <div class="item">
+          <p class="key-data">
+            <span class="checkbox"></span>
+            Yes
+          </p>
+          <p class="key-data">
+            <span class="checkbox"></span>
+            No
+          </p>
+        </div>
+        <p class="guide">If no, go to section 9</p>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">6. Meter details</div>
+        <div class="item">
+          <div class="item">
+            <div class="label">
+              <p>Make</p>
+              <br>
+              <div class="input">
+                <div class="input-mask"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <p class="label">Serial number<br>
+            {{ boxes(12) }}
+          </p>
+        </div>
+        <div class="item">
+          <p>You do not need to multiply meter<br>readings by 10.</p>
+        </div>
+        <div class="checkbox-and-text">
+          <div>
+            <div class="checkbox"></div>
+          </div>
+          <div>
+            <p>Tick this box if your meter</p>
+            <p>has a &times;10 display</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">7. Start meter reading</div>
+        <div class="item">
+          <div class="label">
+            <p>Date</p>
+            <br>
+            <div class="number-group">
+              {{ boxes(2) }}
+            </div>
+            <div class="number-group">
+              {{ boxes(2) }}
+            </div>
+            <div class="number-group">
+              {{ boxes(4) }}
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <p class="label">Reading<br>
+            {{ boxes(12) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">8. End meter reading</div>
+        <div class="item">
+          <div class="label">
+            <p>Date</p>
+            <br>
+            <div class="number-group">
+              {{ boxes(2) }}
+            </div>
+            <div class="number-group">
+              {{ boxes(2) }}
+            </div>
+            <div class="number-group">
+              {{ boxes(4) }}
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <p class="label">
+            Reading<br>
+            {{ boxes(12) }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
