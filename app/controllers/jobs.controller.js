@@ -7,6 +7,7 @@
 
 const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessCleanService = require('../services/jobs/clean/process-clean.service.js')
+const ProcessCustomerFilesService = require('../services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationsStatusUpdatesService = require('../services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
@@ -17,6 +18,14 @@ const NOT_FOUND_STATUS_CODE = 404
 
 async function clean(_request, h) {
   ProcessCleanService.go()
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
+async function customerFiles(request, h) {
+  const { days } = request.params
+
+  ProcessCustomerFilesService.go(days)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -68,6 +77,7 @@ async function timeLimited(_request, h) {
 
 module.exports = {
   clean,
+  customerFiles,
   exportDb,
   licenceUpdates,
   notificationsStatusUpdates,
