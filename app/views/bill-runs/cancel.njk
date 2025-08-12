@@ -63,6 +63,6 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Cancel bill run" }) }}
+    {{ govukButton({ text: "Cancel bill run", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
