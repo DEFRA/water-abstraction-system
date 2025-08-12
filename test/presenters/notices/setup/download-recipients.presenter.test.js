@@ -28,15 +28,15 @@ describe('Notices - Setup - Download recipients presenter', () => {
 
       expect(result).to.equal(
         // Headers
-        'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+        'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - Primary user
-          '"123/46","2434",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","email","Primary user","primary.user@important.com",,,,,,,,\n' +
+          '"123/46","2434",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","email","Primary user","primary.user@important.com",,,,,,,\n' +
           // Row - Licence holder
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n' +
           // Row - Returns to
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","United Kingdom","WD25 7LR"\n' +
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","WD25 7LR"\n' +
           //  Row - Licence holder - organisation
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4","Little Whinging","United Kingdom","WD25 7LR"\n'
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n'
       )
     })
 
@@ -57,14 +57,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
           'Message type,' +
           'Contact type,' +
           'Email,' +
-          'Recipient name,' +
           'Address line 1,' +
           'Address line 2,' +
           'Address line 3,' +
           'Address line 4,' +
           'Address line 5,' +
           'Address line 6,' +
-          'Postcode' +
+          'Address line 7' +
           '\n'
       )
     })
@@ -87,14 +86,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
             '"email",' + // 'Message type'
             '"Primary user",' + // 'Contact type'
             '"primary.user@important.com",' + // Email
-            ',' + // 'Recipient name''
             ',' + // 'Address line 1'
             ',' + // 'Address line 2'
             ',' + // 'Address line 3'
             ',' + // 'Address line 4'
             ',' + // 'Address line 5'
             ',' + // 'Address line 6'
-            '\n' // Postcode and End of CSV line
+            '\n' // 'Address line 7' and End of CSV line
         )
       })
     })
@@ -111,22 +109,21 @@ describe('Notices - Setup - Download recipients presenter', () => {
 
             expect(row).to.equal(
               '"1/343/3",' + // Licence
-                '"376439279",' + // 'Return reference'
-                '2018-01-01,' + // 'Return period start date'
-                '2019-01-01,' + // 'Return period end date'
-                '2021-01-01,' + // 'Return due date'
-                '"Returns invitation",' + // 'Notification type'
-                '"letter",' + // 'Message type'
-                '"Licence holder",' + // 'Contact type'
+                '"376439279",' + // Return reference
+                '2018-01-01,' + // Return period start date
+                '2019-01-01,' + // Return period end date
+                '2021-01-01,' + // Return due date
+                '"Returns invitation",' + // Notification type
+                '"letter",' + // Message type
+                '"Licence holder",' + // Contact type
                 ',' + // Email
-                '"Mr J Licence holder only",' + // 'Recipient name''
-                '"4",' + // 'Address line 1'
-                '"Privet Drive",' + // 'Address line 2'
-                '"Line 3",' + // 'Address line 3'
-                '"Line 4",' + // 'Address line 4'
-                '"Little Whinging",' + // 'Address line 5' - town
-                '"United Kingdom",' + // 'Address line 6' - country
-                '"WD25 7LR"' + // Postcode
+                '"Mr J Licence holder only",' + // Address line 1
+                '"4",' + // Address line 2
+                '"Privet Drive",' + // Address line 3
+                '"Line 3",' + // Address line 4
+                '"Line 4, Little Whinging",' + // Address line 5
+                '"Surrey",' + // Address line 6
+                '"WD25 7LR"' + // Address line 7
                 '\n' // End of CSV line
             )
           })
@@ -150,14 +147,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
                 '"letter",' + // 'Message type'
                 '"Returns to",' + // 'Contact type'
                 ',' + // Email
-                '"Mr J Returns to (same licence ref as licence holder)",' + // 'Recipient name''
-                '"4",' + // 'Address line 1'
-                '"Privet Drive",' + // 'Address line 2'
-                '"Line 3",' + // 'Address line 3'
-                '"Line 4",' + // 'Address line 4'
-                '"Surrey",' + // 'Address line 5' - town / county
-                '"United Kingdom",' + // 'Address line 6' - country
-                '"WD25 7LR"' + // Postcode
+                '"Mr J Returns to (same licence ref as licence holder)",' + // Address line 1
+                '"4",' + // Address line 2
+                '"Privet Drive",' + // Address line 3
+                '"Line 3",' + // Address line 4
+                '"Line 4",' + // Address line 5
+                '"Surrey",' + // Address line 6
+                '"WD25 7LR"' + // Address line 7
                 '\n' // End of CSV line
             )
           })
@@ -182,14 +178,13 @@ describe('Notices - Setup - Download recipients presenter', () => {
               '"letter",' + // 'Message type'
               '"Licence holder",' + // 'Contact type'
               ',' + // Email
-              '"Gringotts",' + // 'Recipient name'' - organisation
-              '"4",' + // 'Address line 1'
-              '"Privet Drive",' + // 'Address line 2'
-              '"Line 3",' + // 'Address line 3'
-              '"Line 4",' + // 'Address line 4'
-              '"Little Whinging",' + // 'Address line 5' - town
-              '"United Kingdom",' + // 'Address line 6' - country
-              '"WD25 7LR"' + // Postcode
+              '"Gringotts",' + // Address line 1
+              '"4",' + // Address line 2
+              '"Privet Drive",' + // Address line 3
+              '"Line 3",' + // Address line 4
+              '"Line 4, Little Whinging",' + // Address line 5
+              '"Surrey",' + // Address line 6
+              '"WD25 7LR"' + // Address line 7
               '\n' // End of CSV line
           )
         })
