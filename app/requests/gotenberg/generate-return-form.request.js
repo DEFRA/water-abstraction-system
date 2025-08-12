@@ -21,17 +21,25 @@ const GotenbergRequest = require('../gotenberg.request.js')
  * @returns {Promise<object>} An object representing the result of the request, including an ArrayBuffer as the 'body'
  */
 async function send(pageData) {
-  const htmlContent = await _generateHtmlContent(pageData)
+  const htmlContent = await _generateHtmlContent('preview-return-forms.njk', pageData)
+  const footerContent = await _generateHtmlContent('layout/footer.html', pageData)
 
-  const formData = _generateFormData(htmlContent)
+  const formData = _generateFormData(htmlContent, footerContent)
 
   return GotenbergRequest.post('forms/chromium/convert/html', formData)
 }
 
-function _generateFormData(htmlContent) {
+function _generateFormData(htmlContent, footerHtml) {
   const formData = new FormData()
 
   formData.append('index.html', new Blob([Buffer.from(htmlContent)]), 'index.html')
+
+  formData.append(
+    'files',
+    new Blob([Buffer.from(footerHtml, 'utf8')], { type: 'text/html; charset=utf-8' }),
+    'footer.html'
+  )
+
   formData.append('marginTop', '0')
   formData.append('marginBottom', '0')
   formData.append('marginLeft', '0')
@@ -41,9 +49,7 @@ function _generateFormData(htmlContent) {
   return formData
 }
 
-function _generateHtmlContent(data) {
-  const view = 'preview-return-forms.njk'
-
+function _generateHtmlContent(view, data) {
   const nunjucksEnv = nunjucks.configure(path.resolve(__dirname, '../../views/notices/pdfs/'), { autoescape: true })
 
   return new Promise((resolve, reject) => {
