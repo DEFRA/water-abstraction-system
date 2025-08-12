@@ -69,11 +69,9 @@
 
 {% if notes %}
   <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
-  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
-  <p>
-    {{ newLineArrayItems(notes) }}
-  </p>
-  <hr class="govuk-section-break govuk-!-margin-bottom-9 govuk-section-break--visible">
+  <hr class="govuk-section-break govuk-!-margin-bottom-4 govuk-section-break--visible">
+  {{ newLineArrayItems(notes) }}
+  <hr class="govuk-section-break govuk-!-margin-top-4 govuk-!-margin-bottom-9 govuk-section-break--visible">
 {% endif %}
 
 {% if requirements.length > 0 %}
