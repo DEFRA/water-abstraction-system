@@ -12,9 +12,9 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const AbstractionAlertDownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alerts-download-recipients.presenter.js')
+const AbstractionAlertDownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
 
-describe('Notices - Setup - Abstraction alert download recipients presenter', () => {
+describe('Notices - Setup - Abstraction Alert Download Recipients presenter', () => {
   let session
   let recipients
   let testRecipients
