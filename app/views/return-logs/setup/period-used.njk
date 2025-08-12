@@ -48,17 +48,17 @@
           },
           items: [
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'day',
               value: periodUsedFromDay
             },
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'month',
-              value: periodUsedFromMonth
+              value: receivedDateMonth
             },
             {
-              classes: 'govuk-input--width-4 ' + errorClass,
+              classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
               name: 'year',
               value: periodUsedFromYear
             }
@@ -79,17 +79,17 @@
           },
           items: [
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'day',
               value: periodUsedToDay
             },
             {
-              classes: 'govuk-input--width-2 ' + errorClass,
+              classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
               name: 'month',
               value: periodUsedToMonth
             },
             {
-              classes: 'govuk-input--width-4 ' + errorClass,
+              classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
               name: 'year',
               value: periodUsedToYear
             }
