@@ -12,7 +12,7 @@ const AddressHelper = require('../../../support/helpers/address.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CreateAdditionalRecipientService = require('../../../../app/services/notices/setup/create-additional-recipient.service.js')
+const AddAdditionalRecipientService = require('../../../../app/services/notices/setup/add-additional-recipient.service.js')
 
 describe('Notices - Setup - Create additional recipient service', () => {
   let session
@@ -35,11 +35,11 @@ describe('Notices - Setup - Create additional recipient service', () => {
       }
 
       session = await SessionHelper.add({ data: sessionData })
-      addressHash = AddressHelper.generateAdreessMD5Hash(sessionData)
+      addressHash = AddressHelper.generateAdressContactHashId(sessionData)
     })
 
     it('should add the address to the additional recipients array with a hashed contact id', async () => {
-      await CreateAdditionalRecipientService.go(session.id)
+      await AddAdditionalRecipientService.go(session.id)
 
       const refreshedSession = await session.$query()
 
@@ -75,11 +75,11 @@ describe('Notices - Setup - Create additional recipient service', () => {
       }
 
       session = await SessionHelper.add({ data: sessionData })
-      addressHash = AddressHelper.generateAdreessMD5Hash(sessionData)
+      addressHash = AddressHelper.generateAdressContactHashId(sessionData)
     })
 
     it('should add the address to the additional recipients array with a hashed contact id', async () => {
-      await CreateAdditionalRecipientService.go(session.id)
+      await AddAdditionalRecipientService.go(session.id)
 
       const refreshedSession = await session.$query()
 
@@ -129,11 +129,11 @@ describe('Notices - Setup - Create additional recipient service', () => {
       }
 
       session = await SessionHelper.add({ data: sessionData })
-      addressHash = AddressHelper.generateAdreessMD5Hash(sessionData)
+      addressHash = AddressHelper.generateAdressContactHashId(sessionData)
     })
 
     it('should add the address to the additional recipients array with a hashed contact id', async () => {
-      await CreateAdditionalRecipientService.go(session.id)
+      await AddAdditionalRecipientService.go(session.id)
 
       const refreshedSession = await session.$query()
 

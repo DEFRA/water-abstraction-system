@@ -2,7 +2,7 @@
 
 /**
  * Create an additional recipient from an address stored in session
- * @module CreateAdditionalRecipientService
+ * @module AddAdditionalRecipientService
  */
 
 const crypto = require('crypto')
@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const _additionalRecipient = {
+  const additionalRecipient = {
     contact: {
       name: session.contactName,
       addressLine1: session.address.addressLine1,
@@ -31,28 +31,25 @@ async function go(sessionId) {
       country: session.address.country,
       postcode: session.address.postcode
     },
-    contact_hash_id: _createMD5Hash(session),
+    contact_hash_id: _contactHashId(session),
     licence_refs: session.licenceRef
   }
 
-  if (Array.isArray(session.additionalRecipients)) {
-    session.additionalRecipients.push(_additionalRecipient)
-  } else {
-    session.additionalRecipients = [_additionalRecipient]
+  _addAdditionalRecipient(session, additionalRecipient)
+
+  session.selectedRecipients.push(additionalRecipient.contact_hash_id)
+
+  await _resetGenericAddressSupport(session)
+}
+
+function _addAdditionalRecipient(session, additionalRecipient) {
+  if (session.additionalRecipients) {
+    session.additionalRecipients.push(additionalRecipient)
+
+    return
   }
 
-  session.selectedRecipients.push(_additionalRecipient.contact_hash_id)
-
-  delete session.contactName
-  delete session.contactType
-  delete session.address.addressLine1
-  delete session.address.addressLine2
-  delete session.address.addressLine3
-  delete session.address.addressLine4
-  delete session.address.postcode
-  delete session.address.country
-
-  await session.$update()
+  session.additionalRecipients = [additionalRecipient]
 }
 
 /**
@@ -62,11 +59,9 @@ async function go(sessionId) {
  * As there is only one name field in this journey we don't have the salutation or title so this may result in duplicates
  * but they will be noticable on the screen to the user and they can adjust as needed.
  *
- * @param {object} session
- *
- * @returns {Promise<string>} - The md5 hash string of the address
+ * @private
  */
-function _createMD5Hash(session) {
+function _contactHashId(session) {
   const name = session.contactName
   const addressLine1 = session.address.addressLine1
   const addressLine2 = session.address.addressLine2 ?? ''
@@ -78,6 +73,21 @@ function _createMD5Hash(session) {
   const _combinedString = `${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
 
   return crypto.createHash('md5').update(_combinedString).digest('hex')
+}
+
+/**
+ * Because a user can add multiple additional recipients to a notice, the generic address journey will be reused. We
+ * don't want the values from one journey to appear when adding another, so we need to reset the session.
+ *
+ * @private
+ */
+async function _resetGenericAddressSupport(session) {
+  delete session.contactName
+  delete session.contactType
+
+  session.address = { redirectUrl: `/system/notices/setup/${session.id}/check` }
+
+  await session.$update()
 }
 
 module.exports = {

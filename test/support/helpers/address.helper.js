@@ -70,7 +70,7 @@ function defaults(data = {}) {
  *
  * @returns {Promise<string>} - The md5 hash string of the address
  */
-function generateAdreessMD5Hash(session) {
+function generateAdressContactHashId(session) {
   const name = session.contactName
   const addressLine1 = session.address.addressLine1
   const addressLine2 = session.address.addressLine2 ?? ''
@@ -110,7 +110,7 @@ function generateExternalId() {
 module.exports = {
   add,
   defaults,
-  generateAdreessMD5Hash,
+  generateAdressContactHashId,
   generateUprn,
   generateExternalId
 }
