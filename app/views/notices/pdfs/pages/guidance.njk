@@ -1,7 +1,5 @@
 {% extends "layout/page-layout.njk" %}
 
-{% from "layout/footer.njk" import footer %}
-
 {% block header %}
   {% include 'layout/header.njk' %}
 {% endblock %}
@@ -99,8 +97,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block footer %}
-  {{ footer(2, 2) }}
 {% endblock %}
