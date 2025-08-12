@@ -10,10 +10,11 @@ const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
-const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
+const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
+const ProcessCustomerFilesService = require('../../app/services/jobs/customer-files/process-customer-files.service.js')
+const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationsStatusUpdatesServiceService = require('../../app/services/jobs/notifications/notifications-status-updates.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
-const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
@@ -50,6 +51,26 @@ describe('Jobs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ProcessCleanService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/customer-files/{days}', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/customer-files/7' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessCustomerFilesService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {

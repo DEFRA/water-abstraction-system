@@ -9,12 +9,13 @@
  */
 function checkPageBackLink(session) {
   const { id, type, year } = session
+  const srocStartYear = 2023
 
   if (!type.startsWith('two_part')) {
     return `/system/bill-runs/setup/${id}/region`
   }
 
-  if (type === 'two_part_supplementary' || ['2024', '2023'].includes(year)) {
+  if (type === 'two_part_supplementary' || year >= srocStartYear) {
     return `/system/bill-runs/setup/${id}/year`
   }
 
