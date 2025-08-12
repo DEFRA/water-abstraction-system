@@ -13,9 +13,9 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const AbstractionAlertsNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
+const AbstractionAlertNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 
-describe('Notices - Setup - Abstraction alert notifications presenter', () => {
+describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
   const referenceCode = 'TEST-123'
 
@@ -60,7 +60,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
   })
 
   it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
-    const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+    const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
     expect(result).to.equal([
       {
@@ -148,7 +148,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
-      const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result).to.equal([
         {
@@ -207,7 +207,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
-      const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result).to.equal([
         {
@@ -247,7 +247,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
-      const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result).to.equal([
         {
@@ -287,7 +287,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
-      const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result).to.equal([
         {
@@ -325,7 +325,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
-      const result = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result).to.equal([
         {
@@ -367,7 +367,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     })
 
     it('correctly sets the "personalisation" object', () => {
-      const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+      const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result.personalisation).to.equal({
         alertType: 'warning',
@@ -386,7 +386,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     describe('when the "notes"', () => {
       describe('has a value', () => {
         it('correctly sets "condition_text"', () => {
-          const [, result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+          const [, result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.condition_text).to.equal(
             'Effect of restriction: I have a bad feeling about this'
@@ -396,7 +396,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
 
       describe('is null', () => {
         it('correctly defaults the "condition_text"', () => {
-          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+          const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.condition_text).to.equal('')
         })
@@ -406,7 +406,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
     describe('when the "source"', () => {
       describe('has a value', () => {
         it('correctly sets "source"', () => {
-          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+          const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.source).to.equal('* Source of supply: Meridian Trench')
         })
@@ -418,7 +418,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         })
 
         it('correctly defaults the "source"', () => {
-          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+          const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.source).to.equal('')
         })
@@ -430,7 +430,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
         })
 
         it('correctly defaults the "source"', () => {
-          const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+          const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
           expect(result.personalisation.source).to.equal('')
         })
@@ -449,7 +449,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           })
 
           it('correctly sets the default message ref', () => {
-            const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+            const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
             expect(result.messageRef).to.equal('water_abstraction_alert')
           })
@@ -467,7 +467,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             })
 
             it('correctly sets the message ref', () => {
-              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+              const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
               expect(result.messageRef).to.equal('water_abstraction_alert_resume_email')
             })
@@ -478,7 +478,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_resume')
               })
@@ -500,7 +500,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_email')
               })
@@ -511,7 +511,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop')
                 })
@@ -528,7 +528,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_reduce_email')
               })
@@ -539,7 +539,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.messageRef).to.equal('water_abstraction_alert_reduce')
                 })
@@ -561,7 +561,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             })
 
             it('correctly sets the message ref', () => {
-              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+              const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
               expect(result.messageRef).to.equal('water_abstraction_alert_stop_email')
             })
@@ -572,7 +572,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_stop')
               })
@@ -594,7 +594,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning_email')
               })
@@ -605,7 +605,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning')
                 })
@@ -622,7 +622,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning_email')
               })
@@ -633,7 +633,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning')
                 })
@@ -650,7 +650,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning_email')
               })
@@ -661,7 +661,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning')
                 })
@@ -684,7 +684,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
           })
 
           it('correctly sets the default message ref', () => {
-            const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+            const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
             expect(result.templateId).to.equal(null)
           })
@@ -702,7 +702,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             })
 
             it('correctly sets the message ref', () => {
-              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+              const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
               expect(result.templateId).to.equal('5eae5e5b-4f9a-4e2e-8d1e-c8d083533fbf')
             })
@@ -713,7 +713,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('ba6b11ad-41fc-4054-87eb-7e9a168ceec2')
               })
@@ -735,7 +735,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('4ebf29e1-f819-4d88-b7e4-ee47df302b9a')
               })
@@ -746,7 +746,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.templateId).to.equal('2d81eaa7-0c34-463b-8ac2-5ff37d5bd800')
                 })
@@ -763,7 +763,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('d94bf110-b173-4f77-8e9a-cf7b4f95dc00')
               })
@@ -774,7 +774,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.templateId).to.equal('fafe7d77-7710-46c8-b870-3b5c1e3816d2')
                 })
@@ -796,7 +796,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
             })
 
             it('correctly sets the message ref', () => {
-              const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+              const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
               expect(result.templateId).to.equal('d7468ba1-ac65-42c4-9785-8998f9c34e01')
             })
@@ -807,7 +807,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('c2635893-0dd7-4fff-a152-774707e2175e')
               })
@@ -829,7 +829,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('6ec7265d-8ebb-4217-a62b-9bf0216f8c9f')
               })
@@ -840,7 +840,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.templateId).to.equal('27499bbd-e854-4f13-884e-30e0894526b6')
                 })
@@ -857,7 +857,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('bf32327a-f170-4854-8abb-3068aee9cdec')
               })
@@ -868,7 +868,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.templateId).to.equal('8c77274f-6a61-46a5-82d8-66863320d608')
                 })
@@ -885,7 +885,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
               })
 
               it('correctly sets the message ref', () => {
-                const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                 expect(result.templateId).to.equal('a51ace39-3224-4c18-bbb8-c803a6da9a21')
               })
@@ -896,7 +896,7 @@ describe('Notices - Setup - Abstraction alert notifications presenter', () => {
                 })
 
                 it('correctly sets the message ref', () => {
-                  const [result] = AbstractionAlertsNotificationsPresenter.go(testRecipients, session, eventId)
+                  const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
                   expect(result.templateId).to.equal('7ab10c86-2c23-4376-8c72-9419e7f982bb')
                 })
