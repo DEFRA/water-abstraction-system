@@ -1,0 +1,150 @@
+{% extends "layout/page-layout.njk" %}
+
+{% macro boxes(count = 12) %}
+  {#
+  Creates a line of boxes for data entry.
+  count: The number of horizontal boxes
+  #}
+  {% for i in range(0, count) -%}
+    <div class="number-input {{ ' last-digit' if loop.last }}"></div>
+  {%- endfor %}
+{% endmacro %}
+
+{% block header %}
+  {% include 'layout/header.njk' %}
+{% endblock %}
+
+{% block content %}
+  <div class="columns">
+    <div class="column">
+
+      <div class="block">
+        <div class="block-head bold">10. Total volume of water abstracted</div>
+        <p class="label">
+          Amount abstracted in the return period
+          {{ boxes() }}
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">11. Reporting without a meter</div>
+        <div class="label">
+          <p>What are the abstraction volumes based on? For example, pump capacity multiplied by hours run.</p>
+          <div class="input">
+            <div class="input-mask"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">12. Further information</div>
+        <div class="item">
+          <p class="label">
+            If you need to explain an entry or give more information send this on a
+            separate sheet. Write the return reference
+            <span class="bold">{{ formatId }}</span>
+            and licence number
+            <span class="bold">{{ licenceRef }}</span>
+            on each sheet.
+          </p>
+        </div>
+        <div class="checkbox-and-text">
+          <div>
+            <div class="checkbox"></div>
+          </div>
+          <div>
+            <p>Tick this box if you are sending<br>further information</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head bold">13. Declaration</div>
+        <p>I confirm that the details in this return are correct to the best of my knowledge.</p>
+        <br>
+        <p class="label">Signed</p>
+        <div class="input">
+          <div class="input-mask"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="block-head bold">Contact us</div>
+
+        <div class="item">
+          <p>
+            If you need any help or to modify any of the information we have for your
+            licence, contact the National Customer Contact Centre on
+            <span class="bold">03708 506 506</span> or email us on
+            <span class="bold">enquiries@environment-agency.gov.uk</span>.
+          </p>
+        </div>
+
+        <div class="item">
+          <p>
+            To claim commercial in confidence for<br>
+            this return contact us on <span class="bold">abstractions.returns@environment-agency.gov.uk</span>.
+          </p>
+        </div>
+        <div class="item">
+          <p>Lines are open Monday to Friday,<br>8am to 6pm.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="text-block">
+
+        <h2>The Data Protection Act 1998</h2>
+
+        <p>
+          We, the Environment Agency, will process the information you provide so that we can deal with your abstraction
+          return, make sure you keep to the conditions of the licence, permit or registration, and process renewals.
+        </p>
+
+        <br>
+
+        <p>We may also process or release the information to:</p>
+
+        <br>
+
+        <ul>
+          <li>
+            offer you documents or services relating<br>
+            to environmental matters
+          </li>
+          <li>
+            consult the public, public organisations and other organisations (for example,<br>
+            the Health &amp; Safety Executive, local authorities, the emergency services, the Department for
+            Environment, Food and Rural Affairs) on environmental issues
+          </li>
+          <li>
+            carry out research and development work on environmental issues, or allow others to do so
+          </li>
+          <li>
+            manage and assess present and likely future demand for water, or allow others<br>
+            to do so
+          </li>
+          <li>
+            prevent anyone from breaking environmental law, investigate cases where environmental law may have been
+            broken and take any action that is needed
+          </li>
+          <li>
+            assess whether customers are satisfied with our service and improve our service
+          </li>
+          <li>
+            respond to requests for Information under the Freedom of Information Act 2000 and the Environmental
+            Information Regulations 2004 (if the Data Protection Act allows).
+          </li>
+        </ul>
+
+        <br>
+        <p>
+          We may pass the information on to our agents or representatives to do these things for us.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
