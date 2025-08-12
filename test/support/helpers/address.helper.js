@@ -64,24 +64,24 @@ function defaults(data = {}) {
 }
 
 /**
- * This function creates an MD5 hash of a saved address.
+ * Creates an MD5 hash of contact name and address to be used for comparing 'contacts'
  *
- * @param {object} session
+ * @param {string} contactName - The contact name to be used with the address
+ * @param {object} address - The address (lines 1 to 4 plus postcode and country) to be converted to a hash
  *
- * @returns {Promise<string>} - The md5 hash string of the address
+ * @returns {string} - The md5 'hash ID' of the contact name and address
  */
-function generateAdressContactHashId(session) {
-  const name = session.contactName
-  const addressLine1 = session.address.addressLine1
-  const addressLine2 = session.address.addressLine2 ?? ''
-  const addressLine3 = session.address.addressLine3 ?? ''
-  const addressLine4 = session.address.addressLine4
-  const postcode = session.address.postcode ?? ''
-  const country = session.address.country ?? ''
+function generateContactHashId(contactName, address) {
+  const addressLine1 = address.addressLine1
+  const addressLine2 = address.addressLine2 ?? ''
+  const addressLine3 = address.addressLine3 ?? ''
+  const addressLine4 = address.addressLine4
+  const postcode = address.postcode ?? ''
+  const country = address.country ?? ''
 
-  const _combinedString = `${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
+  const combinedString = `${contactName}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
 
-  return crypto.createHash('md5').update(_combinedString).digest('hex')
+  return crypto.createHash('md5').update(combinedString).digest('hex')
 }
 
 /**
@@ -110,7 +110,7 @@ function generateExternalId() {
 module.exports = {
   add,
   defaults,
-  generateAdressContactHashId,
+  generateContactHashId,
   generateUprn,
   generateExternalId
 }
