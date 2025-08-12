@@ -86,67 +86,65 @@
   {% if displayTotal %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
-        {% if nilReturn %}
-          <h2>
-            <span class="govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
-          </h2>
-        {% else %}
-          <h2>
-            <span class="govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
-            <span class="govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
+        <h2 class="govuk-body govuk-!-font-weight-bold">
+          {% if nilReturn %}
+            <span class="govuk-!-font-size-80" data-test="total">Nil return</span>
+          {% else %}
+            <span class="govuk-!-font-size-80" data-test="total">{{ total }}</span>
+            <span class="govuk-!-font-size-24">cubic metres</span>
             <br>
-            <span class="govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
-          </h2>
-        {% endif %}
+            <span class="govuk-!-font-size-24">Total amount of water abstracted</span>
+          {% endif %}
+        </h2>
       </div>
     </div>
   {% endif %}
 
-    <div class="govuk-grid-row govuk-!-margin-bottom-3">
-      <div class="govuk-grid-column-full">
-        {% if actionButton %}
-          {# The button group div goes inside the if because we only need a group when there's two buttons #}
-          <div class="govuk-button-group">
-            <form method="post" action="/system/return-logs/setup">
-              <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-              {{
-                govukButton({
-                  text: actionButton.text,
-                  name: "returnLogId",
-                  value: actionButton.value,
-                  preventDoubleClick: true
-                })
-              }}
-            </form>
-        {% endif %}
-
-        {% if showUnderQuery %}
-          {% if underQuery %}
-            {% set queryButtonText = 'Resolve query' %}
-            {% set queryButtonValue = 'resolve' %}
-          {% else %}
-            {% set queryButtonText = 'Mark as under query' %}
-            {% set queryButtonValue = 'mark' %}
-          {% endif %}
-          <form method="post">
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      {% if actionButton %}
+        {# The button group div goes inside the if because we only need a group when there's two buttons #}
+        <div class="govuk-button-group">
+          <form method="post" action="/system/return-logs/setup">
             <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
             {{
               govukButton({
-                text: queryButtonText,
-                classes: "govuk-button--secondary",
-                name: "mark-query",
-                value: queryButtonValue,
+                text: actionButton.text,
+                name: "returnLogId",
+                value: actionButton.value,
                 preventDoubleClick: true
               })
             }}
           </form>
-        {% endif %}
+      {% endif %}
 
-        {% if actionButton %}
-          </div>
+      {% if showUnderQuery %}
+        {% if underQuery %}
+          {% set queryButtonText = 'Resolve query' %}
+          {% set queryButtonValue = 'resolve' %}
+        {% else %}
+          {% set queryButtonText = 'Mark as under query' %}
+          {% set queryButtonValue = 'mark' %}
         {% endif %}
-      </div>
+        <form method="post">
+          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+          {{
+            govukButton({
+              text: queryButtonText,
+              classes: "govuk-button--secondary",
+              name: "mark-query",
+              value: queryButtonValue,
+              preventDoubleClick: true
+            })
+          }}
+        </form>
+      {% endif %}
+
+      {% if actionButton %}
+        </div>
+      {% endif %}
     </div>
+  </div>
 
   {% if displayTable %}
     <div class="divider govuk-!-margin-bottom-7"></div>
