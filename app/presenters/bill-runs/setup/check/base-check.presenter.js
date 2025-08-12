@@ -14,7 +14,8 @@ function checkPageBackLink(session) {
     return `/system/bill-runs/setup/${id}/region`
   }
 
-  if (type === 'two_part_supplementary' || ['2024', '2023'].includes(year)) {
+  // 2023 is the first year of SROC. No season is selected for SROC two-part tariff bill runs.
+  if (type === 'two_part_supplementary' || year >= 2023) {
     return `/system/bill-runs/setup/${id}/year`
   }
 
