@@ -14,10 +14,7 @@ exports.up = function (knex) {
     table.date('end_date')
     table.boolean('is_test').notNullable().defaultTo(false)
     table.string('last_transaction_file_reference')
-    table
-      .timestamp('date_last_transaction_file_reference_updated', { useTz: false })
-      .notNullable()
-      .defaultTo(knex.fn.now())
+    table.timestamp('date_last_transaction_file_reference_updated', { useTz: false })
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
