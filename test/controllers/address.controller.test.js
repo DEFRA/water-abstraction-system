@@ -159,7 +159,7 @@ describe('Address controller', () => {
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check',
             succeeded: true
           })
-          Sinon.stub(AddAdditionalRecipientService, 'go').returns({})
+          Sinon.stub(AddAdditionalRecipientService, 'go')
         })
 
         it('redirects to the check page', async () => {
@@ -176,7 +176,7 @@ describe('Address controller', () => {
             const pageData = _selectPageData(true)
 
             Sinon.stub(SubmitSelectAddressService, 'go').returns(pageData)
-            Sinon.stub(AddAdditionalRecipientService, 'go').returns({})
+            Sinon.stub(AddAdditionalRecipientService, 'go')
           })
 
           it('re-renders the select page with an error', async () => {

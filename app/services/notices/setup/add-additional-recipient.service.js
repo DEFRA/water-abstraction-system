@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Create an additional recipient from an address stored in session
+ * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
  * @module AddAdditionalRecipientService
  */
 
@@ -10,13 +10,13 @@ const crypto = require('crypto')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Create an additional recipient from an address stored in session
+ * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
  *
  * When adding an additional recipient to a notice we need it to be in the same format as those returned from the databse.
  * This service takes an address stored in the session from the address journey and creates an additional recipient object,
  * then adds it to the additional recipients array if it exists or creates it if it doesn't.
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)

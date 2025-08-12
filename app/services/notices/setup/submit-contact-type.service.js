@@ -37,13 +37,13 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const _submittedData = {
+  const submittedData = {
     id: session.id,
     contactType: payload?.type ?? null,
     name: payload?.name ?? null
   }
 
-  const pageData = ContactTypePresenter.go(_submittedData)
+  const pageData = ContactTypePresenter.go(submittedData)
 
   return {
     activeNavBar: 'manage',

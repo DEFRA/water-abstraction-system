@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const AddAdditionalRecipientService = require('../../../../app/services/notices/setup/add-additional-recipient.service.js')
 
-describe('Notices - Setup - Create additional recipient service', () => {
+describe('Notices - Setup - Add Additional Recipient service', () => {
   let session
   let sessionData
   let addressHash

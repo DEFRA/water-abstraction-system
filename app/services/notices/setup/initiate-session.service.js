@@ -41,7 +41,6 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
   const session = await SessionModel.query()
     .insert({
       data: {
-        address: {},
         ...additionalData,
         ...notice,
         journey
@@ -58,7 +57,6 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
 }
 
 /**
- * The 'adhoc' journey does not have a noticeType set. This is set later in the journey.
  * Some notice setup journeys rely on using our 'shared' address setup journey. To support this, we have to add an
  * `address` property to the session data, configured with the path it should redirect to once an address has been
  * selected or entered.
