@@ -19,37 +19,35 @@
 
   {{ pageHeading(returnReference, pageTitle) }}
 
-  <div class="govuk-!-margin-bottom-9">
-    {{ govukSummaryList({
-        classes: 'govuk-summary-list--no-border',
-        attributes: {
-          'data-test': 'meta-data'
+  {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border govuk-!-margin-bottom-9',
+      attributes: {
+        'data-test': 'meta-data'
+      },
+      rows: [
+        {
+          key: { text: "Site description", classes: "meta-data__label" },
+          value: { text: siteDescription, classes: "meta-data__value", attributes: { 'data-test': 'site-description' } }
         },
-        rows: [
-          {
-            key: { text: "Site description", classes: "meta-data__label" },
-            value: { text: siteDescription, classes: "meta-data__value", attributes: { 'data-test': 'site-description' } }
-          },
-          {
-            key: { text: "Purpose", classes: "meta-data__label" },
-            value: { text: purposes, classes: "meta-data__value", attributes: { 'data-test': 'purpose' } }
-          },
-          {
-            key: { text: "Return period", classes: "meta-data__label" },
-            value: { text: returnPeriod, classes: "meta-data__value", attributes: { 'data-test': 'returns-period' } }
-          },
-          {
-            key: { text: "Abstraction period", classes: "meta-data__label" },
-            value: { text: abstractionPeriod, classes: "meta-data__value", attributes: { 'data-test': 'abstraction-period' } }
-          },
-          {
-            key: { text: "Tariff", classes: "meta-data__label" },
-            value: { text: tariff, classes: "meta-data__value", attributes: { 'data-test': 'tariff' } }
-          }
-        ]
-      })
-    }}
-  </div>
+        {
+          key: { text: "Purpose", classes: "meta-data__label" },
+          value: { text: purposes, classes: "meta-data__value", attributes: { 'data-test': 'purpose' } }
+        },
+        {
+          key: { text: "Return period", classes: "meta-data__label" },
+          value: { text: returnPeriod, classes: "meta-data__value", attributes: { 'data-test': 'returns-period' } }
+        },
+        {
+          key: { text: "Abstraction period", classes: "meta-data__label" },
+          value: { text: abstractionPeriod, classes: "meta-data__value", attributes: { 'data-test': 'abstraction-period' } }
+        },
+        {
+          key: { text: "Tariff", classes: "meta-data__label" },
+          value: { text: tariff, classes: "meta-data__value", attributes: { 'data-test': 'tariff' } }
+        }
+      ]
+    })
+  }}
 
   <div class="govuk-!-margin-bottom-9">
     <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
@@ -73,12 +71,13 @@
 
   {% set meterDetails %}
     {% if meterProvided === 'yes' %}
-      <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
-      {% if meter10TimesDisplay === 'yes' %}
-        <div>Has &times;10 display</div>
-      {% endif %}
-    {% else %}
-      <div>Not provided</div>
+      <ul class="govuk-list">
+        <li class="govuk-!-margin-bottom-0">{{ meterMake }}</li>
+        <li class="govuk-!-margin-bottom-0">{{ meterSerialNumber }}</li>
+        {% if meter10TimesDisplay === 'yes' %}
+          <li class="govuk-!-margin-bottom-0">Has &times;10 display</li>
+        {% endif %}
+      </ul>
     {% endif %}
   {% endset %}
 
