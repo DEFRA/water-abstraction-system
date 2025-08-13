@@ -14,7 +14,7 @@ const SessionModel = require('../../../models/session.model.js')
  * Orchestrates fetching and presenting the data for the return form
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {string} returnId - The UUID of the return id
+ * @param {string} returnId - The UUID of the return log
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
