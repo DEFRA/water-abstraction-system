@@ -5,6 +5,8 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/return-version-status-tag.njk" import statusTag %}
 
+{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({
     text: 'Go back to summary',
@@ -14,10 +16,7 @@
 
 {% block content %}
   <div class="govuk-!-margin-bottom-6">
-    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      {{ pageTitle }}
-    </h1>
+    {{ pageHeading(licenceRef, pageTitle) }}
     {{ statusTag(status) }}
   </div>
 
