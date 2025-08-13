@@ -24,6 +24,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
     returnLog = await ReturnLogHelper.add({
       licenceRef,
       metadata: {
+        description: 'Water park',
         purposes: [
           {
             tertiary: { description: 'Potable Water Supply - Direct' }
@@ -51,11 +52,15 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
 
       expect(result).to.equal([
         {
-          description: 'Potable Water Supply - Direct',
+          dueDate: new Date('2023-04-28'),
           endDate: new Date('2023-03-31'),
+          purpose: 'Potable Water Supply - Direct',
           returnId: returnLog.returnId,
           returnReference: returnLog.returnReference,
-          startDate: new Date('2022-04-01')
+          returnsFrequency: 'month',
+          siteDescription: 'Water park',
+          startDate: new Date('2022-04-01'),
+          twoPartTariff: null
         }
       ])
     })
