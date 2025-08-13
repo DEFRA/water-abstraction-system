@@ -17,7 +17,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   beforeEach(() => {
     session = { licenceRef: '123' }
 
-    dueReturn = {
+    dueReturnLog = {
       dueDate: '2025-07-06',
       endDate: '2025-06-06',
       purpose: 'A purpose',
@@ -31,7 +31,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+      const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
       expect(result).to.equal({
         address: {
@@ -57,11 +57,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "pageTitle" property', () => {
       describe('when the "returnsFrequency" is "day"', () => {
         beforeEach(() => {
-          dueReturn.returnsFrequency = 'day'
+          dueReturnLog.returnsFrequency = 'day'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
@@ -69,11 +69,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "month"', () => {
         beforeEach(() => {
-          dueReturn.returnsFrequency = 'month'
+          dueReturnLog.returnsFrequency = 'month'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
           expect(result.pageTitle).to.equal('Water abstraction monthly return')
         })
@@ -81,11 +81,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "quarter"', () => {
         beforeEach(() => {
-          dueReturn.returnsFrequency = 'quarter'
+          dueReturnLog.returnsFrequency = 'quarter'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
           expect(result.pageTitle).to.equal('Water abstraction quarterly return')
         })
@@ -93,11 +93,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "week"', () => {
         beforeEach(() => {
-          dueReturn.returnsFrequency = 'week'
+          dueReturnLog.returnsFrequency = 'week'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
           expect(result.pageTitle).to.equal('Water abstraction weekly return')
         })
@@ -105,11 +105,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "year"', () => {
         beforeEach(() => {
-          dueReturn.returnsFrequency = 'year'
+          dueReturnLog.returnsFrequency = 'year'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturn)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
           expect(result.pageTitle).to.equal('Water abstraction yearly return')
         })
