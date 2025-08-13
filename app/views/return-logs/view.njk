@@ -86,16 +86,17 @@
   {% if displayTotal %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
-        <h2 class="govuk-body govuk-!-font-weight-bold">
-          {% if nilReturn %}
-            <span class="govuk-!-font-size-80" data-test="total">Nil return</span>
-          {% else %}
+        {% if nilReturn %}
+          <p class="govuk-!-font-weight-bold">
+            <span class="govuk-!-font-size-80"data-test="total">Nil return</span>
+          </p>
+        {% else %}
+          <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">
             <span class="govuk-!-font-size-80" data-test="total">{{ total }}</span>
             <span class="govuk-!-font-size-24">cubic metres</span>
-            <br>
-            <span class="govuk-!-font-size-24">Total amount of water abstracted</span>
-          {% endif %}
-        </h2>
+          </p>
+          <p class="govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</p>
+        {% endif %}
       </div>
     </div>
   {% endif %}
