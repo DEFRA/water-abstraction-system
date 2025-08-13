@@ -6,7 +6,6 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -16,15 +15,11 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-    <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>{{ pageTitle }}
-  </h1>
+  <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-  {# Status tag #}
   <p>{{ statusTag(billRunStatus) }}</p>
 
-  {# Bill run meta-data #}
   {#
     GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
     can't assign our data-test attribute using the component. Our solution is to use the html option for each row
