@@ -23,11 +23,15 @@ async function go(licenceRef) {
 async function _fetch(licenceRef) {
   return ReturnLogModel.query()
     .select([
-      'returnId',
-      'startDate',
+      'dueDate',
       'endDate',
+      'returnId',
       'returnReference',
-      db.raw(`metadata->'purposes'->0->'tertiary'->>'description' as description`)
+      'returnsFrequency',
+      'startDate',
+      db.raw(`metadata->'purposes'->0->'tertiary'->>'description' as purpose`),
+      db.raw(`metadata->'isTwoPartTariff' as two_part_tariff`),
+      db.raw(`metadata->'description' as site_description`)
     ])
     .where('licenceRef', licenceRef)
     .where('endDate', '<=', timestampForPostgres())

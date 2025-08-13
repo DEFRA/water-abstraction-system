@@ -19,11 +19,29 @@ const PreviewReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Preview Return Forms Service', () => {
   let notifierStub
+  let returnId
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    returnId = '1234'
+
+    sessionData = {
+      licenceRef: '123',
+      dueReturns: [
+        {
+          returnId,
+          dueDate: '2025-07-06',
+          endDate: '2025-06-06',
+          purpose: 'A purpose',
+          returnsFrequency: 'day',
+          returnReference: '123456',
+          siteDescription: 'Water park',
+          startDate: '2025-01-01',
+          twoPartTariff: false
+        }
+      ]
+    }
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -46,7 +64,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PreviewReturnFormsService.go(session.id)
+      const result = await PreviewReturnFormsService.go(session.id, returnId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -54,7 +72,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest"', async () => {
-      await PreviewReturnFormsService.go(session.id)
+      await PreviewReturnFormsService.go(session.id, returnId)
 
       expect(GenerateReturnFormRequest.send.called).to.be.true()
     })
