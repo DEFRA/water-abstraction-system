@@ -39,7 +39,7 @@ function _returns(returns, selectedReturns = []) {
       hint: {
         text: `${formatLongDate(new Date(returnItem.startDate))} to ${formatLongDate(new Date(returnItem.endDate))}`
       },
-      text: `${returnItem.returnReference} ${returnItem.description}`,
+      text: `${returnItem.returnReference} ${returnItem.siteDescription}`,
       value: returnItem.returnId
     }
   })
