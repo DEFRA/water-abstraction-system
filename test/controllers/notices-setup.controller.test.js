@@ -817,7 +817,7 @@ describe('Notices Setup controller', () => {
       beforeEach(() => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/preview-return-forms/1234`,
+          url: basePath + `/${session.id}/preview-return-forms/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
