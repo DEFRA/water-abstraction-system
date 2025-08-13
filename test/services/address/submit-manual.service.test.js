@@ -24,6 +24,10 @@ describe('Address - Submit Manual Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+
+    await session.$update()
   })
 
   describe('when called', () => {
@@ -44,11 +48,12 @@ describe('Address - Submit Manual Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          addressLine1: '1 Fake Farm',
-          addressLine2: '1 Fake street',
-          addressLine3: 'Fake Village',
-          addressLine4: 'Fake City',
-          postcode: 'SW1A 1AA'
+          addressLine1: payload.addressLine1,
+          addressLine2: payload.addressLine2,
+          addressLine3: payload.addressLine3,
+          addressLine4: payload.addressLine4,
+          postcode: payload.postcode,
+          redirectUrl: session.address.redirectUrl
         }
       })
     })
@@ -65,11 +70,12 @@ describe('Address - Submit Manual Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          addressLine1: '1 Fake Farm',
+          addressLine1: payload.addressLine1,
           addressLine2: null,
           addressLine3: null,
           addressLine4: null,
-          postcode: 'SW1A 1AA'
+          postcode: payload.postcode,
+          redirectUrl: session.address.redirectUrl
         }
       })
     })
@@ -77,7 +83,9 @@ describe('Address - Submit Manual Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitManualService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        redirect: `/system/notices/setup/${session.id}/check`
+      })
     })
   })
 

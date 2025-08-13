@@ -37,8 +37,9 @@ async function submitManual(request, h) {
     return h.view('address/manual.njk', pageData)
   }
 
-  // TODO: return to calling service
-  return h.redirect(`/system/address/${sessionId}/check`)
+  await AddAdditionalRecipientService.go(sessionId)
+
+  return h.redirect(pageData.redirect)
 }
 
 async function submitPostcode(request, h) {
