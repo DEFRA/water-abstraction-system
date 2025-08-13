@@ -12,7 +12,7 @@ const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/
 
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   let session
-  let dueReturn
+  let dueReturnLog
 
   beforeEach(() => {
     session = { licenceRef: '123' }
