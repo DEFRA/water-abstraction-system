@@ -26,17 +26,19 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirect: session.address.redirectUrl
+    }
   }
 
-  const _submittedData = {
+  const submittedData = {
     id: session.id,
     address: {
       ...payload
     }
   }
 
-  const pageData = ManualAddressPresenter.go(_submittedData)
+  const pageData = ManualAddressPresenter.go(submittedData)
 
   return {
     error: validationResult,
