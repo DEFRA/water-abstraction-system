@@ -36,7 +36,7 @@ async function _fetch(licenceRef) {
       rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
       r.display_name AS "regionName"
     FROM return_logs as rl
-       INNER JOIN regions as r
+        INNER JOIN regions as r
                   ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
     WHERE rl.licence_ref = ?
     AND rl.status = 'due'
