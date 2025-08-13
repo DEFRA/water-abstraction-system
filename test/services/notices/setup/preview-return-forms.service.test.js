@@ -30,12 +30,14 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
       licenceRef: '123',
       dueReturns: [
         {
-          returnId,
           dueDate: '2025-07-06',
           endDate: '2025-06-06',
+          naldAreaCode: 'MIDLT',
           purpose: 'A purpose',
-          returnsFrequency: 'day',
+          regionName: 'North West',
+          returnId,
           returnReference: '123456',
+          returnsFrequency: 'day',
           siteDescription: 'Water park',
           startDate: '2025-01-01',
           twoPartTariff: false
@@ -74,7 +76,28 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
     it('should call "GenerateReturnFormRequest"', async () => {
       await PreviewReturnFormsService.go(session.id, returnId)
 
-      expect(GenerateReturnFormRequest.send.called).to.be.true()
+      expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
+
+      const actualCallArgs = GenerateReturnFormRequest.send.getCall(0).args[0]
+      expect(actualCallArgs).to.equal({
+        address: {
+          addressLine1: 'Sherlock Holmes',
+          addressLine2: '221B Baker Street',
+          addressLine3: 'London',
+          addressLine4: 'NW1 6XE',
+          addressLine5: 'United Kingdom'
+        },
+        dueDate: '6 July 2025',
+        endDate: '6 June 2025',
+        licenceRef: '123',
+        pageTitle: 'Water abstraction daily return',
+        purpose: 'A purpose',
+        regionAndArea: 'North West / Lower Trent',
+        returnReference: '123456',
+        siteDescription: 'Water park',
+        startDate: '1 January 2025',
+        twoPartTariff: false
+      })
     })
   })
 })

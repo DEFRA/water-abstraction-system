@@ -6,7 +6,7 @@
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the return form
@@ -24,8 +24,18 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 function go(session, dueReturnLog) {
   const { licenceRef } = session
 
-  const { dueDate, endDate, purpose, returnsFrequency, returnReference, siteDescription, startDate, twoPartTariff } =
-    dueReturnLog
+  const {
+    dueDate,
+    endDate,
+    naldAreaCode,
+    purpose,
+    regionName,
+    returnsFrequency,
+    returnReference,
+    siteDescription,
+    startDate,
+    twoPartTariff
+  } = dueReturnLog
 
   return {
     address: _address(),
@@ -34,7 +44,7 @@ function go(session, dueReturnLog) {
     endDate: formatLongDate(new Date(endDate)),
     licenceRef,
     purpose,
-    regionAndArea: 'A place / in the sun',
+    regionAndArea: _regionAndArea(regionName, naldAreaCode),
     returnReference,
     startDate: formatLongDate(new Date(startDate)),
     pageTitle: _pageTitle(returnsFrequency),
@@ -50,6 +60,20 @@ function _address() {
     addressLine4: 'NW1 6XE',
     addressLine5: 'United Kingdom'
   }
+}
+
+/**
+ * The legacy code accounts for the 'nald.areaCode' not being set in the metadata. This logic replicates the legacy
+ * logic.
+ *
+ * @private
+ */
+function _regionAndArea(regionName, naldAreaCode) {
+  if (naldAreaCode) {
+    return `${regionName} / ${naldAreaCodes[naldAreaCode]}`
+  }
+
+  return regionName
 }
 
 function _pageTitle(returnsFrequency) {

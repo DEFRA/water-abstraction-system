@@ -30,12 +30,14 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
       licenceRef: '123',
       dueReturns: [
         {
-          returnId,
           dueDate: '2025-07-06',
           endDate: '2025-06-06',
+          naldAreaCode: 'MIDLT',
           purpose: 'A purpose',
-          returnsFrequency: 'day',
+          regionName: 'North West',
+          returnId,
           returnReference: '123456',
+          returnsFrequency: 'day',
           siteDescription: 'Water park',
           startDate: '2025-01-01',
           twoPartTariff: false
@@ -85,15 +87,15 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
           addressLine4: 'NW1 6XE',
           addressLine5: 'United Kingdom'
         },
-        siteDescription: 'Water park',
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
         licenceRef: '123',
-        purpose: 'A purpose',
-        regionAndArea: 'A place / in the sun',
-        returnReference: '123456',
-        startDate: '1 January 2025',
         pageTitle: 'Water abstraction daily return',
+        purpose: 'A purpose',
+        regionAndArea: 'North West / Lower Trent',
+        returnReference: '123456',
+        siteDescription: 'Water park',
+        startDate: '1 January 2025',
         twoPartTariff: false
       })
     })

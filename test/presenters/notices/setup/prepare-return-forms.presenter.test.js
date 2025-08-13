@@ -20,9 +20,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     dueReturnLog = {
       dueDate: '2025-07-06',
       endDate: '2025-06-06',
+      naldAreaCode: 'MIDLT',
       purpose: 'A purpose',
-      returnsFrequency: 'day',
+      regionName: 'North West',
       returnReference: '123456',
+      returnsFrequency: 'day',
       siteDescription: 'Water park',
       startDate: '2025-01-01',
       twoPartTariff: false
@@ -46,11 +48,37 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         endDate: '6 June 2025',
         licenceRef: '123',
         purpose: 'A purpose',
-        regionAndArea: 'A place / in the sun',
+        regionAndArea: 'North West / Lower Trent',
         returnReference: '123456',
         startDate: '1 January 2025',
         pageTitle: 'Water abstraction daily return',
         twoPartTariff: false
+      })
+    })
+
+    describe('the "regionAndArea" property', () => {
+      describe('when there is a "naldAreaCode"', () => {
+        beforeEach(() => {
+          dueReturnLog.naldAreaCode = 'MIDLT'
+        })
+
+        it('should return the "regionName" and "naldAreaCode" in the text ', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.regionAndArea).to.equal('North West / Lower Trent')
+        })
+      })
+
+      describe('when there is no "naldAreaCode"', () => {
+        beforeEach(() => {
+          dueReturnLog.naldAreaCode = null
+        })
+
+        it('should return the "regionName" in the text', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.regionAndArea).to.equal('North West')
+        })
       })
     })
 

@@ -218,6 +218,44 @@ const countries = [
 
 const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
 
+const naldAreaCodes = {
+  ARCA: 'Central',
+  AREA: 'Eastern',
+  ARNA: 'Northern',
+
+  DALES: 'Dales',
+  NAREA: 'Northumbria',
+  RIDIN: 'Ridings',
+
+  NWCEN: 'Central',
+  NWNTH: 'North',
+  NWSTH: 'South',
+
+  AGY2N: 'West',
+  AGY2S: 'West',
+  AGY3N: 'North East',
+  AGY3S: 'North East',
+  AGY4N: 'South East',
+  AGY4S: 'South East',
+
+  MIDLS: 'Lower Severn',
+  MIDLT: 'Lower Trent',
+  MIDUS: 'Upper Severn',
+  MIDUT: 'Upper Trent',
+
+  HAAR: 'Hampshire & Isle of Wight',
+  KAEA: 'Kent',
+  SAAR: 'Sussex',
+
+  AACOR: 'Cornwall',
+  AADEV: 'Devon',
+  AANWX: 'North Wessex',
+  AASWX: 'South Wessex',
+
+  N: 'Northern',
+  SE: 'South East'
+}
+
 /**
  * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
  *
@@ -414,6 +452,7 @@ module.exports = {
   countries,
   engineTriggers,
   flowUnits,
+  naldAreaCodes,
   naldRegions,
   organisationTypes,
   returnCycleDates,

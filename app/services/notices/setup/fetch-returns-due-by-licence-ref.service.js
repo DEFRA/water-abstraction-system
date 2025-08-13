@@ -5,7 +5,6 @@
  * @module FetchReturnsDueByLicenceRefService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
 const { db } = require('../../../../db/db.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
@@ -17,29 +16,35 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * @returns {Promise<module:ReturnLogModel[]>}
  */
 async function go(licenceRef) {
-  return _fetch(licenceRef)
+  const { rows } = await _fetch(licenceRef)
+
+  return rows
 }
 
 async function _fetch(licenceRef) {
-  return ReturnLogModel.query()
-    .select([
-      'dueDate',
-      'endDate',
-      'returnId',
-      'returnReference',
-      'returnsFrequency',
-      'startDate',
-      db.raw(`metadata->'purposes'->0->'tertiary'->>'description' as purpose`),
-      db.raw(`metadata->'isTwoPartTariff' as two_part_tariff`),
-      db.raw(`metadata->'description' as site_description`)
-    ])
-    .where('licenceRef', licenceRef)
-    .where('endDate', '<=', timestampForPostgres())
-    .where('status', 'due')
-    .orderBy([
-      { column: 'startDate', order: 'desc' },
-      { column: 'returnReference', order: 'asc' }
-    ])
+  const query = `
+    SELECT
+      rl.due_date AS "dueDate",
+      rl.end_date AS "endDate",
+      rl.return_id AS "returnId",
+      rl.return_reference AS "returnReference",
+      rl.returns_frequency AS "returnsFrequency",
+      rl.start_date AS "startDate",
+      rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
+      rl.metadata->'isTwoPartTariff' AS "twoPartTariff",
+      rl.metadata->'description' AS "siteDescription",
+      rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
+      r.display_name AS "regionName"
+    FROM return_logs as rl
+       INNER JOIN regions as r
+                  ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
+    WHERE rl.licence_ref = ?
+    AND rl.status = 'due'
+    AND rl.end_date <= ?
+    ORDER BY rl.start_date DESC, rl.return_reference ASC;
+  `
+
+  return db.raw(query, [licenceRef, timestampForPostgres()])
 }
 
 module.exports = {
