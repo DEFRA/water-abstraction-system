@@ -63,6 +63,7 @@ describe('Fetch Notification service', () => {
             '\n' +
             '# Why you are receiving this notification\n' +
             '\n',
+          recipient: null,
           sendAfter: new Date('2024-07-02T16:52:17.000Z'),
           event: {
             metadata: {

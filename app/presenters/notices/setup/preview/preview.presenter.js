@@ -20,10 +20,10 @@ const { sentenceCase } = require('../../../base.presenter.js')
  * @returns {Promise<object>} The data formatted for the preview template
  */
 async function go(contactHashId, noticeType, licenceMonitoringStationId, notification, sessionId) {
-  const { messageRef, messageType, personalisation, reference, templateId } = notification
+  const { messageRef, messageType, personalisation, recipient, reference, templateId } = notification
 
   return {
-    address: messageType === 'letter' ? _address(personalisation) : null,
+    address: messageType === 'letter' ? _address(personalisation) : recipient,
     backLink: _backLink(contactHashId, noticeType, sessionId),
     caption: `Notice ${reference}`,
     contents: await _notifyPreview(personalisation, templateId),
