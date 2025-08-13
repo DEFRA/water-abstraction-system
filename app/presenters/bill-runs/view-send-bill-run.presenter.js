@@ -19,7 +19,7 @@ function go(billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
-    billRunId: id,
+    backLink: '/system/bill-runs/' + id,
     billRunNumber,
     billRunStatus: status,
     billRunType: formatBillRunType(batchType, scheme, summer),
