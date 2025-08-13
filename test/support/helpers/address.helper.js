@@ -4,6 +4,8 @@
  * @module AddressHelper
  */
 
+const crypto = require('crypto')
+
 const AddressModel = require('../../../app/models/address.model.js')
 const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 
@@ -62,6 +64,27 @@ function defaults(data = {}) {
 }
 
 /**
+ * Creates an MD5 hash of contact name and address to be used for comparing 'contacts'
+ *
+ * @param {string} contactName - The contact name to be used with the address
+ * @param {object} address - The address (lines 1 to 4 plus postcode and country) to be converted to a hash
+ *
+ * @returns {string} - The md5 'hash ID' of the contact name and address
+ */
+function generateContactHashId(contactName, address) {
+  const addressLine1 = address.addressLine1
+  const addressLine2 = address.addressLine2 ?? ''
+  const addressLine3 = address.addressLine3 ?? ''
+  const addressLine4 = address.addressLine4
+  const postcode = address.postcode ?? ''
+  const country = address.country ?? ''
+
+  const combinedString = `${contactName}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
+
+  return crypto.createHash('md5').update(combinedString).digest('hex')
+}
+
+/**
  * Generate an UPRN for an address
  *
  * @returns {string} - A random UPRN
@@ -87,6 +110,7 @@ function generateExternalId() {
 module.exports = {
   add,
   defaults,
+  generateContactHashId,
   generateUprn,
   generateExternalId
 }

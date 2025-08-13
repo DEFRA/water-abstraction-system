@@ -49,7 +49,14 @@ describe('Address - Submit Select Service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { address: { postcode: 'BS1 5AH' } } })
+    session = await SessionHelper.add({
+      data: {
+        address: {
+          postcode: 'BS1 5AH',
+          redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+        }
+      }
+    })
 
     getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
     getByUPRNStub = Sinon.stub(LookupUPRNRequest, 'send')
@@ -88,14 +95,18 @@ describe('Address - Submit Select Service', () => {
         addressLine2: 'HORIZON HOUSE DEANERY ROAD',
         addressLine3: null,
         addressLine4: 'BRISTOL',
-        postcode: 'BS1 5AH'
+        postcode: 'BS1 5AH',
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
       })
     })
 
     it('continues on the journey', async () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
+        succeeded: true
+      })
     })
   })
 
@@ -128,14 +139,18 @@ describe('Address - Submit Select Service', () => {
         addressLine2: null,
         addressLine3: 'VILLAGE GREEN',
         addressLine4: 'BRISTOL',
-        postcode: 'BS1 5AH'
+        postcode: 'BS1 5AH',
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
       })
     })
 
     it('continues on the journey', async () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
+        succeeded: true
+      })
     })
   })
 
@@ -263,7 +278,10 @@ describe('Address - Submit Select Service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
-        expect(result).to.equal({ redirect: true })
+        expect(result).to.equal({
+          redirect: `/system/address/${session.id}/manual`,
+          succeeded: false
+        })
       })
     })
 
@@ -282,7 +300,10 @@ describe('Address - Submit Select Service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
-        expect(result).to.equal({ redirect: true })
+        expect(result).to.equal({
+          redirect: `/system/address/${session.id}/manual`,
+          succeeded: false
+        })
       })
     })
   })
