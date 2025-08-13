@@ -30,6 +30,7 @@ describe('Address - Postcode Service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: `/system/address/${session.id}/postcode`,
+        internationalLink: `/system/address/${session.id}/international`,
         pageTitle: 'Enter a UK postcode',
         postcode: null
       })
@@ -39,7 +40,7 @@ describe('Address - Postcode Service', () => {
   describe('when called and there is session data', () => {
     beforeEach(async () => {
       sessionData = {
-        name: 'Fake Person',
+        contactName: 'Fake Person',
         address: {
           postcode: 'SW1A 1AA'
         }
@@ -54,6 +55,7 @@ describe('Address - Postcode Service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/contact-type`,
+        internationalLink: `/system/address/${session.id}/international`,
         pageTitle: 'Enter a UK postcode',
         postcode: 'SW1A 1AA'
       })
