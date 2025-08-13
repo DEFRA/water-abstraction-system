@@ -12,9 +12,9 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const AbstractionAlertDownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alerts-download-recipients.presenter.js')
+const AbstractionAlertDownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
 
-describe('Notices - Setup - Abstraction alert download recipients presenter', () => {
+describe('Notices - Setup - Abstraction Alert Download Recipients presenter', () => {
   let session
   let recipients
   let testRecipients
@@ -41,13 +41,13 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
     expect(result).to.equal(
       // Headers
-      'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+      'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         // Row - Primary user
-        `"${recipients.primaryUser.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,,\n` +
+        `"${recipients.primaryUser.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,\n` +
         // Row - Licence holder
-        `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive",,,"Little Whinging",,"WD25 7LR"\n` +
+        `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
         // Row - Additional contact
-        `"${recipients.additionalContact.licence_refs}","1 January to 31 March","level","100m","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,,\n`
+        `"${recipients.additionalContact.licence_refs}","1 January to 31 March","level","100m","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n`
     )
   })
 
@@ -67,14 +67,13 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
         'Message type,' +
         'Contact type,' +
         'Email,' +
-        'Recipient name,' +
         'Address line 1,' +
         'Address line 2,' +
         'Address line 3,' +
         'Address line 4,' +
         'Address line 5,' +
         'Address line 6,' +
-        'Postcode' +
+        'Address line 7' +
         '\n'
     )
   })
@@ -89,21 +88,20 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
       expect(row).to.equal(
         `"${recipients.additionalContact.licence_refs}",` + // Licence
-          '"1 January to 31 March",' + // 'Abstraction periods'
-          '"level",' + // 'Measure type'
-          '"100m",' + // 'Threshold'
-          '"Abstraction alert",' + // 'Notification type'
-          '"email",' + // 'Message type'
-          '"Additional contact",' + // 'Contact type'
+          '"1 January to 31 March",' + // Abstraction periods
+          '"level",' + // Measure type
+          '"100m",' + // Threshold
+          '"Abstraction alert",' + // Notification type
+          '"email",' + // Message type
+          '"Additional contact",' + // Contact type
           '"additional.contact@important.com",' + // Email
-          ',' + // 'Recipient name''
-          ',' + // 'Address line 1'
-          ',' + // 'Address line 2'
-          ',' + // 'Address line 3'
-          ',' + // 'Address line 4'
-          ',' + // 'Address line 5'
-          ',' + // 'Address line 6'
-          '\n' // Postcode and End of CSV line
+          ',' + // Address line 1
+          ',' + // Address line 2
+          ',' + // Address line 3
+          ',' + // Address line 4
+          ',' + // Address line 5
+          ',' + // Address line 6
+          '\n' // Address line 7 and End of CSV line
       )
     })
   })
@@ -118,21 +116,20 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
       expect(row).to.equal(
         `"${recipients.primaryUser.licence_refs}",` + // Licence
-          '"1 February to 1 January",' + // 'Abstraction periods'
-          '"level",' + // 'Measure type'
-          '"1000m",' + // 'Threshold'
-          '"Abstraction alert",' + // 'Notification type'
-          '"email",' + // 'Message type'
-          '"Primary user",' + // 'Contact type'
+          '"1 February to 1 January",' + // Abstraction periods
+          '"level",' + // Measure type
+          '"1000m",' + // Threshold
+          '"Abstraction alert",' + // Notification type
+          '"email",' + // Message type
+          '"Primary user",' + // Contact type
           '"primary.user@important.com",' + // Email
-          ',' + // 'Recipient name''
-          ',' + // 'Address line 1'
-          ',' + // 'Address line 2'
-          ',' + // 'Address line 3'
-          ',' + // 'Address line 4'
-          ',' + // 'Address line 5'
-          ',' + // 'Address line 6'
-          '\n' // Postcode and End of CSV line
+          ',' + // Address line 1
+          ',' + // Address line 2
+          ',' + // Address line 3
+          ',' + // Address line 4
+          ',' + // Address line 5
+          ',' + // Address line 6
+          '\n' // Address line 7 and End of CSV line
       )
     })
   })
@@ -148,22 +145,20 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
         expect(row).to.equal(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
-            '"1 January to 31 March",' + // 'Abstraction periods'
-            '"flow",' + // 'Measure type'
-            '"100m3/s",' + // 'Threshold'
-            '"Abstraction alert",' + // 'Notification type'
-            '"letter",' + // 'Message type'
-            '"Licence holder",' + // 'Contact type'
+            '"1 January to 31 March",' + // Abstraction periods
+            '"flow",' + // Measure type
+            '"100m3/s",' + // Threshold
+            '"Abstraction alert",' + // Notification type
+            '"letter",' + // Message type
+            '"Licence holder",' + // Contact type
             ',' + // Email
-            '"Mr H J Licence holder",' + // 'Recipient name''
-            '"1",' + // 'Address line 1'
-            '"Privet Drive",' + // 'Address line 2'
-            ',' + // 'Address line 3'
-            ',' + // 'Address line 4'
-            '"Little Whinging",' + // 'Address line 5' - town
-            ',' + // 'Address line 6' - country
-            '"WD25 7LR"' + // Postcode
-            '\n' // End of CSV line
+            '"Mr H J Licence holder",' + // Address line 1
+            '"1",' + // Address line 2
+            '"Privet Drive",' + // Address line 3
+            '"Little Whinging",' + // Address line 4
+            '"Surrey",' + // Address line 5
+            '"WD25 7LR",' + // Address line 6
+            '\n' // Address line 7 and End of CSV line
         )
       })
     })
@@ -190,22 +185,20 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
         expect(row).to.equal(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
-            '"1 January to 31 March",' + // 'Abstraction periods'
-            '"flow",' + // 'Measure type'
-            '"100m3/s",' + // 'Threshold'
-            '"Abstraction alert",' + // 'Notification type'
-            '"letter",' + // 'Message type'
-            '"Licence holder",' + // 'Contact type'
+            '"1 January to 31 March",' + // Abstraction periods
+            '"flow",' + // Measure type
+            '"100m3/s",' + // Threshold
+            '"Abstraction alert",' + // Notification type
+            '"letter",' + // Message type
+            '"Licence holder",' + // Contact type
             ',' + // Email
-            '"Gringotts",' + // 'Recipient name''
-            '"1",' + // 'Address line 1'
-            '"Privet Drive",' + // 'Address line 2'
-            ',' + // 'Address line 3'
-            ',' + // 'Address line 4'
-            '"Little Whinging",' + // 'Address line 5' - town
-            ',' + // 'Address line 6' - country
-            '"WD25 7LR"' + // Postcode
-            '\n' // End of CSV line
+            '"Gringotts",' + // Address line 1
+            '"1",' + // Address line 2
+            '"Privet Drive",' + // Address line 3
+            '"Little Whinging",' + // Address line 4
+            '"Surrey",' + // Address line 5
+            '"WD25 7LR",' + // Address line 6
+            '\n' // Address line 7 and End of CSV line
         )
       })
     })
@@ -256,15 +249,15 @@ describe('Notices - Setup - Abstraction alert download recipients presenter', ()
 
       expect(result).to.equal(
         // Headers
-        'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Recipient name,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Postcode\n' +
+        'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder
-          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive",,,"Little Whinging",,"WD25 7LR"\n` +
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
           // Row - additional contact for same recipient - with unique licence ref
-          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,,\n` +
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n` +
           // Row - Primary user
-          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,,\n` +
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,\n` +
           // Row - additional contact for same recipient - with unique licence ref
-          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,,\n`
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n`
       )
     })
   })

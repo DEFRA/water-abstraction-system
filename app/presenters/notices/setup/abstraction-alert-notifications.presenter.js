@@ -2,12 +2,12 @@
 
 /**
  * Formats recipients into notifications for an abstraction alert
- * @module AbstractionAlertsNotificationsPresenter
+ * @module AbstractionAlertNotificationsPresenter
  */
 
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
-const { contactName, contactAddress } = require('../../crm.presenter.js')
 
 /**
  * Formats recipients into notifications for an abstraction alert
@@ -70,25 +70,6 @@ function go(recipients, session, eventId) {
   }
 
   return notifications
-}
-
-/**
- * Notify expects address lines to be formatted into: 'address_line_1'
- *
- * @private
- */
-function _addressLines(contact, name) {
-  const address = contactAddress(contact)
-
-  const fullContact = [name, ...address]
-
-  const addressLines = {}
-
-  for (const [index, value] of fullContact.entries()) {
-    addressLines[`address_line_${index + 1}`] = value
-  }
-
-  return addressLines
 }
 
 /**
@@ -215,10 +196,8 @@ function _emailMessageRef(alertType, restrictionType) {
  */
 function _letter(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
-
-  const name = contactName(recipient.contact)
-
   const messageType = 'letter'
+  const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
     createdAt,
@@ -227,9 +206,10 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
-      ..._addressLines(recipient.contact, name),
+      ...address,
       ...commonPersonalisation,
-      name
+      // NOTE: Address line 1 is always set to the recipient's name
+      name: address.address_line_1
     },
     reference: referenceCode,
     templateId: _templateId(alertType, restrictionType, 'letter')

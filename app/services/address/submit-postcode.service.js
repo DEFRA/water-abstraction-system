@@ -30,11 +30,9 @@ async function go(sessionId, payload) {
   }
 
   const _submittedData = {
-    ...session,
-    address: {
-      ...payload
-    }
+    ...session
   }
+  _submittedData.address.postcode = payload.postcode
 
   const pageData = PostcodePresenter.go(_submittedData)
 
@@ -46,7 +44,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.address = { postcode: payload.postcode }
+  session.address.postcode = payload.postcode
 
   return session.$update()
 }
