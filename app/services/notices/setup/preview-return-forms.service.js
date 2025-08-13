@@ -14,7 +14,7 @@ const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
  * This service returns the file to be display in the browser. This will likely be the built-in pdf viewer.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {string} returnId - The UUID of the return id
+ * @param {string} returnId - The UUID of the return log
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
