@@ -164,6 +164,29 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         ])
       })
     })
+
+    describe('when there is a company against the billing account address (send bills to)', () => {
+      beforeEach(() => {
+        billingAccountData.billingAccount.billingAccountAddresses[0].company = {
+          id: 'baef8037-ecde-49dc-b763-9ac75df7121d',
+          name: 'Andy Dufresne Accountants'
+        }
+      })
+
+      it('returns an array of populated address lines title cased, the postcode capitalised, and the "sent to" company name instead of the primary', () => {
+        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+
+        expect(result.address).to.equal([
+          'Andy Dufresne Accountants',
+          'FAO Test Testingson',
+          'Tutsham Farm',
+          'West Farleigh',
+          'Maidstone',
+          'Kent',
+          'ME15 0NE'
+        ])
+      })
+    })
   })
 
   describe('the "backLink" property', () => {
