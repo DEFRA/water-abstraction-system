@@ -61,6 +61,10 @@ async function _fetchBillingAccount(id) {
             'postcode'
           ])
         })
+        .withGraphFetched('company')
+        .modifyGraph('company', (companyBuilder) => {
+          companyBuilder.select(['id', 'name'])
+        })
         .withGraphFetched('contact')
         .modifyGraph('contact', (contactBuilder) => {
           contactBuilder.select(['id', 'contactType', 'department', 'firstName', 'lastName'])
