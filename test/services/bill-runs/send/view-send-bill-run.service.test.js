@@ -57,7 +57,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
-        billRunId,
+        backLink: `/system/bill-runs/${billRunId}`,
         billRunNumber: 10101,
         billRunStatus: 'ready',
         billRunType: 'Annual',
