@@ -16,9 +16,8 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-    <span class="govuk-caption-l">{{ pageCaption }}</span>{{ pageTitle }}
-  </h1>
+  <span class="govuk-caption-l">{{ pageCaption }}</span>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
   {% if warningMessage %}
     {{ govukWarningText({
