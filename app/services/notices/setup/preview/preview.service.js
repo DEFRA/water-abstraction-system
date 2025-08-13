@@ -5,7 +5,7 @@
  * @module PreviewService
  */
 
-const AbstractionAlertsNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts-notifications.presenter.js')
+const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const DetermineRecipientsService = require('../determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../fetch-abstraction-alert-recipients.service.js')
 const FetchRecipientsService = require('../fetch-recipients.service.js')
@@ -47,7 +47,7 @@ function _notification(licenceMonitoringStationId, recipient, session) {
   let notification
 
   if (session.noticeType === 'abstractionAlerts') {
-    const unfilteredNotifications = AbstractionAlertsNotificationsPresenter.go(recipient, session)
+    const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(recipient, session)
 
     notification = unfilteredNotifications.filter((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceMonitoringStationId === licenceMonitoringStationId

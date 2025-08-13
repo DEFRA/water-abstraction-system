@@ -5,7 +5,7 @@
  * @module DownloadRecipientsPresenter
  */
 
-const { contactName } = require('../../crm.presenter.js')
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
@@ -18,14 +18,13 @@ const HEADERS = [
   'Message type',
   'Contact type',
   'Email',
-  'Recipient name',
   'Address line 1',
   'Address line 2',
   'Address line 3',
   'Address line 4',
   'Address line 5',
   'Address line 6',
-  'Postcode'
+  'Address line 7'
 ]
 
 /**
@@ -53,14 +52,16 @@ function _address(contact) {
     return ['', '', '', '', '', '', '']
   }
 
+  const notifyAddress = NotifyAddressPresenter.go(contact)
+
   return [
-    contact.addressLine1,
-    contact.addressLine2,
-    contact.addressLine3,
-    contact.addressLine4,
-    contact.town || contact.county,
-    contact.country,
-    contact.postcode
+    notifyAddress.address_line_1,
+    notifyAddress.address_line_2 || '',
+    notifyAddress.address_line_3 || '',
+    notifyAddress.address_line_4 || '',
+    notifyAddress.address_line_5 || '',
+    notifyAddress.address_line_6 || '',
+    notifyAddress.address_line_7 || ''
   ]
 }
 
@@ -85,7 +86,6 @@ function _transformToCsv(recipients, notificationType) {
       contact ? 'letter' : 'email',
       recipient.contact_type,
       recipient.email || '',
-      contact ? contactName(recipient.contact) : '',
       ..._address(contact)
     ]
 
