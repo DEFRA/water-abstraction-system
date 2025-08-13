@@ -61,6 +61,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           contents: 'Preview of the notification contents',
           messageType: 'letter',
           pageTitle: 'Returns invitation returns to letter',
+          recipientEmail: undefined,
           refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
         })
       })
@@ -100,9 +101,10 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         describe('when the "messageType" is "email"', () => {
           beforeEach(() => {
             testNotification.messageType = 'email'
+            testNotification.recipient = 'bob@bobbins.co.uk'
           })
 
-          it('returns null', async () => {
+          it('returns a null address', async () => {
             const result = await PreviewPresenter.go(
               contactHashId,
               noticeType,
@@ -112,6 +114,18 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             )
 
             expect(result.address).to.be.null()
+          })
+
+          it('returns the recipients email address', async () => {
+            const result = await PreviewPresenter.go(
+              contactHashId,
+              noticeType,
+              licenceMonitoringStationId,
+              testNotification,
+              sessionId
+            )
+
+            expect(result.recipientEmail).to.equal('bob@bobbins.co.uk')
           })
         })
       })
@@ -223,6 +237,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           contents: 'error',
           messageType: 'letter',
           pageTitle: 'Returns invitation returns to letter',
+          recipientEmail: undefined,
           refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
         })
       })

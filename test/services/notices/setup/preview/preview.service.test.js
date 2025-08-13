@@ -76,6 +76,7 @@ describe('Notices Setup - Preview - Preview service', () => {
         contents: 'Preview of the notification contents',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
+        recipientEmail: 'primary.user@important.com',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}`
       })
     })
@@ -141,6 +142,7 @@ describe('Notices Setup - Preview - Preview service', () => {
         contents: 'Preview of the notification contents',
         messageType: 'email',
         pageTitle: 'Water abstraction alert reduce warning email',
+        recipientEmail: 'primary.user@important.com',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/alert/${licenceMonitoringStationId}`
       })
     })
