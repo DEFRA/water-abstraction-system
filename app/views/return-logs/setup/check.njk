@@ -8,13 +8,9 @@
 
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
-
 {% block content %}
   {% if notification %}
-    {{ govukNotificationBanner({
-      titleText: notification.title,
-      text: notification.text
-    }) }}
+    {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
   {% endif %}
 
   {{ pageHeading(returnReference, pageTitle) }}
@@ -55,15 +51,15 @@
     <div class="govuk-summary-list govuk-!-margin-bottom-1">
       <p>{{ note.text | escape | nl2br }}</p>
       <span class="govuk-summary-list__actions">
-      <ul class="govuk-summary-list__actions-list">
-        {% for action in note.actions %}
-          <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href }}">
-              {{ action.text }} <span class="govuk-visually-hidden">the note</span>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+        <ul class="govuk-summary-list__actions-list">
+          {% for action in note.actions %}
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link" href="{{ action.href }}" data-test="{{ action.href }}">
+                {{ action.text }} <span class="govuk-visually-hidden">the note</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
       </span>
     </div>
     <hr class="govuk-section-break--visible">
@@ -273,20 +269,17 @@
 
     <div class="govuk-grid-row govuk-!-margin-bottom-0">
       <div class="govuk-grid-column-full">
-
         <h2 class="govuk-heading-l">{{tableTitle}}</h2>
         <p class="govuk-!-margin-bottom-3">
           <strong><a class="govuk-link" href="{{links.multipleEntries}}">{{enterMultipleLinkText}}</a></strong> – paste in values for an entire return period
         </p>
 
-        {{
-          govukTable({
-            firstCellIsHeader: false,
-            attributes: { 'data-test': 'monthly-summaries'},
-            head: summaryTableData.headers,
-            rows: tableRows
-          })
-        }}
+        {{ govukTable({
+          firstCellIsHeader: false,
+          attributes: { 'data-test': 'monthly-summaries'},
+          head: summaryTableData.headers,
+          rows: tableRows
+        }) }}
       </div>
     </div>
   {% endif %}

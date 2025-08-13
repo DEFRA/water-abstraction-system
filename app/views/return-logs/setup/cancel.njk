@@ -6,12 +6,7 @@
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink })}}
 {% endblock %}
 
 {% block content %}
@@ -53,7 +48,7 @@
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-      <input type="hidden" id="return-log-id" name="returnLogId" value="{{ returnLogId }}"/>
+    <input type="hidden" id="return-log-id" name="returnLogId" value="{{ returnLogId }}"/>
 
     {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
   </form>

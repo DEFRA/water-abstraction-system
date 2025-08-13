@@ -8,20 +8,12 @@
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: error
-    }) }}
+    {{ govukErrorSummary({ titleText: 'There is a problem', errorList: error }) }}
   {% endif %}
 
   {{ pageHeading(returnReference, pageTitle) }}
@@ -35,7 +27,7 @@
         isPageHeading: false,
         classes: "govuk-fieldset__legend--m"
       }
-      }) %}
+    }) %}
 
       {% for line in inputLines %}
         {{ govukInput({
@@ -48,8 +40,8 @@
           value: line.reading,
           inputmode: 'numeric',
           errorMessage: {
-              text: line.error
-            } if line.error
+            text: line.error
+          } if line.error
         }) }}
       {% endfor %}
     {% endcall %}

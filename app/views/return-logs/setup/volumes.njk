@@ -8,12 +8,7 @@
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
@@ -35,7 +30,7 @@
         isPageHeading: false,
         classes: "govuk-fieldset__legend--m"
       }
-      }) %}
+    }) %}
 
       {% for line in inputLines %}
         {{ govukInput({
@@ -52,7 +47,7 @@
           },
           errorMessage: {
               text: line.error
-            } if line.error
+          } if line.error
         }) }}
       {% endfor %}
     {% endcall %}

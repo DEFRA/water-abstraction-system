@@ -15,15 +15,10 @@
 {% endset %}
 
 {% block content %}
-  {{ govukPanel({
-    titleText: pageTitle,
-    html: panelContent
-  }) }}
+  {{ govukPanel({ titleText: pageTitle, html: panelContent }) }}
 
   {% if status === 'received' %}
-    <p>
-      <a href="{{ viewReturnsLink }}">View returns for {{ licenceRef }}</a>
-    </p>
+    <p><a href="{{ viewReturnsLink }}">View returns for {{ licenceRef }}</a></p>
   {% else %}
     <p><a href="{{ viewThisReturnLink }}" class="govuk-link">View this return</a></p>
     <p>or</p>
@@ -31,11 +26,11 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({
-      classes: "govuk-button--secondary",
-      text: "Mark for supplementary bill run",
-      preventDoubleClick: true
-    }) }}
+      {{ govukButton({
+        classes: "govuk-button--secondary",
+        text: "Mark for supplementary bill run",
+        preventDoubleClick: true
+      }) }}
     </form>
   {% endif %}
 {% endblock %}

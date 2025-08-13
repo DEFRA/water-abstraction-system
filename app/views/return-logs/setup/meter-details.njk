@@ -8,21 +8,13 @@
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
+  {% endif %}
 
   {{ pageHeading(returnReference, pageTitle) }}
 

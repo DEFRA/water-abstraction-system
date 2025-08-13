@@ -7,12 +7,7 @@
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}

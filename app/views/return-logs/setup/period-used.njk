@@ -9,21 +9,13 @@
 
 {% from "macros/return-reference-page-heading.njk" import pageHeading %}
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
+  {% endif %}
 
   {% set pageHeading %}
     {{ pageHeading(returnReference, pageTitle) }}
@@ -47,8 +39,7 @@
         },
         items: [
           {
-            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-            name: 'day',
+            classes: 'govuk-input--width-2' + (' govuk-input--error' if error), name: 'day',
             value: periodUsedFromDay
           },
           {
@@ -100,7 +91,7 @@
       name: "periodDateUsedOptions",
       errorMessage: {
         text: error.periodDateUsedOptions.message
-        } if error.periodDateUsedOptions,
+      } if error.periodDateUsedOptions,
       fieldset: {
         legend: {
           html: pageHeading
@@ -110,7 +101,9 @@
         {
           value: "default",
           text: "Default abstraction period",
-          hint: { text: abstractionPeriod },
+          hint: {
+            text: abstractionPeriod
+          },
           checked: periodDateUsedOptions === 'default'
         },
         {
