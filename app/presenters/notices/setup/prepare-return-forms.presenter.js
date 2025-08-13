@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the return form
@@ -52,15 +53,7 @@ function _address() {
 }
 
 function _pageTitle(returnsFrequency) {
-  const mapper = {
-    day: 'daily',
-    month: 'monthly',
-    quarter: 'quarterly',
-    week: 'weekly',
-    year: 'yearly'
-  }
-
-  return `Water abstraction ${mapper[returnsFrequency]} return`
+  return `Water abstraction ${returnRequirementFrequencies[returnsFrequency]} return`
 }
 
 module.exports = {

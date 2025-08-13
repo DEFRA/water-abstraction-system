@@ -21,16 +21,16 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, returnId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const dueReturn = _dueReturn(session.dueReturns, returnId)
+  const dueReturnLog = _dueReturnLog(session.dueReturns, returnId)
 
-  const pageData = PrepareReturnFormsPresenter.go(session, dueReturn)
+  const pageData = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 
   return requestData.response.body
 }
 
-function _dueReturn(dueReturns, returnId) {
+function _dueReturnLog(dueReturns, returnId) {
   return dueReturns.find((dueReturn) => {
     return dueReturn.returnId === returnId
   })
