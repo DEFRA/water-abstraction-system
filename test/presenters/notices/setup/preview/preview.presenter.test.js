@@ -100,9 +100,10 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         describe('when the "messageType" is "email"', () => {
           beforeEach(() => {
             testNotification.messageType = 'email'
+            testNotification.recipient = 'bob@bobbins.co.uk'
           })
 
-          it('returns null', async () => {
+          it('returns the recipients email address', async () => {
             const result = await PreviewPresenter.go(
               contactHashId,
               noticeType,
@@ -111,7 +112,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               sessionId
             )
 
-            expect(result.address).to.be.null()
+            expect(result.address).to.equal('bob@bobbins.co.uk')
           })
         })
       })
