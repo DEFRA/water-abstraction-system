@@ -6,74 +6,60 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: '/system/bill-runs/' + billRunId
+      href: backLink
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>{{ pageTitle }}
-    </h1>
-  </div>
+  <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-0">
-    <div class="govuk-grid-column-full">
+  <p>{{ statusTag(billRunStatus) }}</p>
 
-      {# Status tag #}
-      <p class="govuk-body">
-        {{ statusTag(billRunStatus) }}
-      </p>
+  {#
+    GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
+    can't assign our data-test attribute using the component. Our solution is to use the html option for each row
+    instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
+    span.
+  #}
+  {{
+    govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'meta-data'
+      },
+      rows: [
+        {
+          key: { text: "Date created", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Region", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Bill run type", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-type">' + billRunType + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Charge scheme", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Financial year", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    })
+  }}
 
-      {# Bill run meta-data #}
-      {#
-        GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
-        can't assign our data-test attribute using the component. Our solution is to use the html option for each row
-        instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
-        span.
-      #}
-      {{
-        govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          attributes: {
-            'data-test': 'meta-data'
-          },
-          rows: [
-            {
-              key: { text: "Date created", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Region", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Bill run type", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-type">' + billRunType + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Charge scheme", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Financial year", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
-            }
-          ]
-        })
-      }}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-        {{ govukButton({ text: "Send bill run" }) }}
-      </form>
-    </div>
-  </div>
+    {{ govukButton({ text: "Send bill run", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

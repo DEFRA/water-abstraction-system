@@ -22,7 +22,7 @@ describe('Bill Runs - View Send Bill Run presenter', () => {
       const result = ViewSendBillRunPresenter.go(billRun)
 
       expect(result).to.equal({
-        billRunId: '420e948f-1992-437e-8a47-74c0066cb017',
+        backLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017',
         billRunNumber: 10010,
         billRunStatus: 'ready',
         billRunType: 'Supplementary',
