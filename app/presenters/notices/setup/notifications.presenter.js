@@ -79,6 +79,7 @@ function _common(referenceCode, templateId, eventId) {
     templateId
   }
 }
+
 /**
  * An email notification requires an email address alongside the expected payload:
  *
