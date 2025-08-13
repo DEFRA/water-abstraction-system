@@ -23,13 +23,12 @@ async function go(contactHashId, noticeType, licenceMonitoringStationId, notific
   const { messageRef, messageType, personalisation, recipient, reference, templateId } = notification
 
   return {
-    address: messageType === 'letter' ? _address(personalisation) : null,
+    address: messageType === 'letter' ? _address(personalisation) : recipient,
     backLink: _backLink(contactHashId, noticeType, sessionId),
     caption: `Notice ${reference}`,
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
     pageTitle: sentenceCase(messageRef.replace(/_/g, ' ')),
-    recipientEmail: recipient,
     refreshPageLink: _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId)
   }
 }

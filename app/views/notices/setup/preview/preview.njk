@@ -22,7 +22,7 @@
       {% if messageType === 'letter' %}
         <p>{{ newLineArrayItems(address) }}</p>
       {% else %}
-        <p>Sent to: {{ recipientEmail }}</p>
+        <p>Sent to: {{ address }}</p>
       {% endif %}
 
       {{ contents | markdown | safe }}

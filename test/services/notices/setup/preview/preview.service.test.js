@@ -70,13 +70,12 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        address: null,
+        address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice RINV-0Q7AD8',
         contents: 'Preview of the notification contents',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
-        recipientEmail: 'primary.user@important.com',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}`
       })
     })
@@ -136,13 +135,12 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        address: null,
+        address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
         caption: 'Notice WAA-6KN0KF',
         contents: 'Preview of the notification contents',
         messageType: 'email',
         pageTitle: 'Water abstraction alert reduce warning email',
-        recipientEmail: 'primary.user@important.com',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/alert/${licenceMonitoringStationId}`
       })
     })
