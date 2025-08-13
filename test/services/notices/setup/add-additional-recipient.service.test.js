@@ -1,0 +1,167 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const AddressHelper = require('../../../support/helpers/address.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Thing under test
+const AddAdditionalRecipientService = require('../../../../app/services/notices/setup/add-additional-recipient.service.js')
+
+describe('Notices - Setup - Add Additional Recipient service', () => {
+  let contactHashId
+  let session
+  let sessionData
+
+  beforeEach(async () => {
+    sessionData = {
+      contactName: 'Fake Person',
+      licenceRef: '12345',
+      selectedRecipients: []
+    }
+  })
+
+  describe('when there is an address saved in the session', () => {
+    describe('and it is a UK address', () => {
+      beforeEach(() => {
+        sessionData.address = {
+          addressLine1: '1 Fake Farm',
+          addressLine2: '1 Fake street',
+          addressLine3: 'Fake Village',
+          addressLine4: 'Fake City',
+          postcode: 'SW1A 1AA'
+        }
+
+        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.address)
+      })
+
+      describe('and this is the first additional contact to be added', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
+          await AddAdditionalRecipientService.go(session.id)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.additionalRecipients).equal([
+            {
+              contact: {
+                name: session.contactName,
+                addressLine1: session.address.addressLine1,
+                addressLine2: session.address.addressLine2,
+                addressLine3: session.address.addressLine3,
+                addressLine4: session.address.addressLine4,
+                postcode: session.address.postcode
+              },
+              contact_hash_id: contactHashId,
+              licence_refs: session.licenceRef
+            }
+          ])
+          expect(refreshedSession.selectedRecipients).equal([contactHashId])
+        })
+      })
+
+      describe('and there are existing additional contacts stored in the session', () => {
+        beforeEach(async () => {
+          sessionData.additionalRecipients = [
+            {
+              contact: {
+                name: 'Fake Other',
+                addressLine1: '2 Fake Farm',
+                addressLine2: '2 Fake street',
+                addressLine3: 'Fake Village',
+                addressLine4: 'Fake City',
+                postcode: 'SW2A 2AA'
+              },
+              contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+              licence_refs: '01/123'
+            }
+          ]
+          sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
+          await AddAdditionalRecipientService.go(session.id)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.additionalRecipients).equal([
+            {
+              contact: {
+                name: 'Fake Other',
+                addressLine1: '2 Fake Farm',
+                addressLine2: '2 Fake street',
+                addressLine3: 'Fake Village',
+                addressLine4: 'Fake City',
+                postcode: 'SW2A 2AA'
+              },
+              contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+              licence_refs: '01/123'
+            },
+            {
+              contact: {
+                name: session.contactName,
+                addressLine1: session.address.addressLine1,
+                addressLine2: session.address.addressLine2,
+                addressLine3: session.address.addressLine3,
+                addressLine4: session.address.addressLine4,
+                postcode: session.address.postcode
+              },
+              contact_hash_id: contactHashId,
+              licence_refs: session.licenceRef
+            }
+          ])
+          expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
+        })
+      })
+    })
+
+    describe('and it is an International address', () => {
+      beforeEach(() => {
+        sessionData.address = {
+          addressLine1: '1 Faux Ferme',
+          addressLine4: 'Faux Ville',
+          country: 'France'
+        }
+
+        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.address)
+      })
+
+      describe('and this is the first additional contact to be added', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
+          await AddAdditionalRecipientService.go(session.id)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.additionalRecipients).equal([
+            {
+              contact: {
+                name: session.contactName,
+                addressLine1: session.address.addressLine1,
+                addressLine4: session.address.addressLine4,
+                country: session.address.country
+              },
+              contact_hash_id: contactHashId,
+              licence_refs: session.licenceRef
+            }
+          ])
+          expect(refreshedSession.selectedRecipients).equal([contactHashId])
+        })
+      })
+    })
+  })
+})

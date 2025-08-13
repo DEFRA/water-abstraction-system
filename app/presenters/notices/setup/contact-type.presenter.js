@@ -14,7 +14,7 @@
  */
 function go(session) {
   const email = session?.email ?? null
-  const name = session?.name ?? null
+  const name = session?.contactName ?? null
   const type = session?.contactType ?? null
 
   return {

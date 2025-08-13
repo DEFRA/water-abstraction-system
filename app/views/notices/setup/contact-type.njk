@@ -30,7 +30,9 @@
       value: email,
       autocomplete: "email",
       spellcheck: false,
-      errorMessage: error.email,
+      errorMessage: {
+        text: error.email
+      } if error.email,
       classes: 'govuk-!-width-two-thirds',
       label: {
         classes: 'govuk-!-font-weight-bold govuk-!-width-two-thirds',
@@ -46,7 +48,9 @@
       type: "name",
       value: name,
       classes: 'govuk-!-width-two-thirds',
-      errorMessage: error.name,
+      errorMessage: {
+        text: error.name
+      } if error.name,
       label: {
         classes: 'govuk-!-font-weight-bold',
         text: "Recipients name"

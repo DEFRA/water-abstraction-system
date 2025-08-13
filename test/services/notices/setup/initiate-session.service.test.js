@@ -40,6 +40,9 @@ describe('Notices - Setup - Initiate Session service', () => {
       const matchingSession = await SessionModel.query().findById(result.sessionId)
 
       expect(matchingSession.data).to.equal({
+        address: {
+          redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+        },
         journey: 'standard',
         name: 'Returns: invitation',
         noticeType: 'invitations',
@@ -69,7 +72,12 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data).to.equal({ journey: 'adhoc' })
+        expect(matchingSession.data).to.equal({
+          address: {
+            redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+          },
+          journey: 'adhoc'
+        })
       })
 
       it('correctly returns the redirect path and session id', async () => {
@@ -101,6 +109,9 @@ describe('Notices - Setup - Initiate Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
         expect(matchingSession.data).to.equal({
+          address: {
+            redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+          },
           journey: 'alerts',
           name: 'Water abstraction alert',
           noticeType: 'abstractionAlerts',
