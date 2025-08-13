@@ -16,7 +16,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  * - The "cover" page, this is the first page. The address is on this page.
  *
  * @param {SessionModel} session - The session instance
- * @param {object} dueReturn
+ * @param {object} dueReturnLog
  *
  * @returns {object} - The data formatted for the return form
  */
