@@ -20,11 +20,11 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {object} - The data formatted for the return form
  */
-function go(session, dueReturn) {
+function go(session, dueReturnLog) {
   const { licenceRef } = session
 
   const { dueDate, endDate, purpose, returnsFrequency, returnReference, siteDescription, startDate, twoPartTariff } =
-    dueReturn
+    dueReturnLog
 
   return {
     address: _address(),
