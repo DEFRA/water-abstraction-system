@@ -64,10 +64,11 @@ describe('View Bill Run service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',
-          billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+          backLink: '/system/bill-runs',
           billRunNumber: 10003,
           billRunStatus: 'error',
           billRunType: 'Annual',
+          buttonLink: '/system/bill-runs/2c80bd22-a005-4cf4-a2a2-73812a9861de/cancel',
           chargeScheme: 'Current',
           dateCreated: '7 March 2023',
           errorMessage: 'No error code was assigned. We have no further information at this time.',
