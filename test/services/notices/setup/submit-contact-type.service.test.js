@@ -242,7 +242,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
-         expect(yarStub.flash.called).to.be.false()
+        expect(yarStub.flash.called).to.be.false()
         expect(result).to.equal({
           type: 'post'
         })
