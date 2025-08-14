@@ -810,14 +810,16 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/{sessionId}/preview-return-forms', () => {
+  describe('/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}', () => {
     describe('GET', () => {
       let buffer
 
       beforeEach(() => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/preview-return-forms/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
+          url:
+            basePath +
+            `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/return-forms/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }

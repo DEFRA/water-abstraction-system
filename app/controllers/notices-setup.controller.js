@@ -205,9 +205,9 @@ async function viewNoticeType(request, h) {
 }
 
 async function viewPreviewReturnForms(request, h) {
-  const { sessionId, returnId } = request.params
+  const { contactHashId, sessionId, returnId } = request.params
 
-  const fileBuffer = await PreviewReturnFormsService.go(sessionId, returnId)
+  const fileBuffer = await PreviewReturnFormsService.go(sessionId, contactHashId, returnId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
