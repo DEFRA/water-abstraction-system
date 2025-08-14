@@ -281,7 +281,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview-return-forms/{returnId}',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}',
     options: {
       handler: NoticesSetupController.viewPreviewReturnForms,
       auth: {
