@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run-presenter.js')
+const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run.presenter.js')
 
 describe('Errored Bill Run presenter', () => {
   let billRun
