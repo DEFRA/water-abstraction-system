@@ -3,7 +3,6 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
@@ -13,25 +12,20 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <span class="govuk-caption-l">{{ caption }}</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  <span class="govuk-caption-l">{{ caption }}</span>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-  <div class="govuk-body">
-    {% if contents === 'error' %}
-      <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
-    {% else %}
-      <div class="message-preview">
-        {% if messageType === 'letter' %}
-          <div class="govuk-!-margin-bottom-5">
-            {{ newLineArrayItems(address) }}
-          </div>
-        {% endif %}
+  {% if contents === 'error' %}
+    <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
+  {% else %}
+    <div class="govuk-body message-preview">
+      {% if messageType === 'letter' %}
+        <p>{{ newLineArrayItems(address) }}</p>
+      {% else %}
+        <p>Sent to: {{ address }}</p>
+      {% endif %}
 
-        {{ contents | markdown | safe }}
-      </div>
-    {% endif %}
-  </div>
+      {{ contents | markdown | safe }}
+    </div>
+  {% endif %}
 {% endblock %}

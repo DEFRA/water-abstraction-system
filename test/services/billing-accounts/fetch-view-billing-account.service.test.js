@@ -19,7 +19,7 @@ const CompanyHelper = require('../../support/helpers/company.helper.js')
 // Thing under test
 const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
 
-describe('Fetch Billing Account service', () => {
+describe('Billing Accounts - Fetch View Billing Account service', () => {
   let address
   let bill1
   let billingAccount
@@ -28,21 +28,24 @@ describe('Fetch Billing Account service', () => {
   let billRun1
   let billRun2
   let billRun3
-  let company
   let contact
+  let sendToCompany
+  let primaryCompany
 
   describe('when a matching billing account exists', () => {
     beforeEach(async () => {
       address = await AddressHelper.add()
       contact = await ContactHelper.add()
-      company = await CompanyHelper.add()
+      primaryCompany = await CompanyHelper.add()
+      sendToCompany = await CompanyHelper.add({ name: 'Send It Here' })
 
-      billingAccount = await BillingAccountHelper.add({ companyId: company.id })
+      billingAccount = await BillingAccountHelper.add({ companyId: primaryCompany.id })
       billingAccountId = billingAccount.id
 
       billingAccountAddress = await BillingAccountAddressHelper.add({
         addressId: address.id,
         billingAccountId,
+        companyId: sendToCompany.id,
         contactId: contact.id
       })
 
@@ -97,6 +100,10 @@ describe('Fetch Billing Account service', () => {
                 address6: null,
                 postcode: 'BS1 5AH'
               },
+              company: {
+                id: sendToCompany.id,
+                name: 'Send It Here'
+              },
               contact: {
                 id: contact.id,
                 contactType: contact.contactType,
@@ -107,7 +114,7 @@ describe('Fetch Billing Account service', () => {
             }
           ],
           company: {
-            id: company.id,
+            id: primaryCompany.id,
             name: 'Example Trading Ltd'
           }
         },

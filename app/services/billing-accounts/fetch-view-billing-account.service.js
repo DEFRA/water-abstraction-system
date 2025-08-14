@@ -38,21 +38,37 @@ async function _fetchBillingAccount(id) {
   return BillingAccountModel.query()
     .findById(id)
     .select(['id', 'accountNumber', 'createdAt', 'lastTransactionFile', 'lastTransactionFileCreatedAt'])
-    .withGraphFetched('billingAccountAddresses')
-    .modifyGraph('billingAccountAddresses', (builder) => {
-      builder.select('id').orderBy('createdAt', 'desc').limit(1)
-    })
     .withGraphFetched('company')
-    .modifyGraph('company', (builder) => {
-      builder.select(['id', 'name'])
+    .modifyGraph('company', (companyBuilder) => {
+      companyBuilder.select(['id', 'name'])
     })
-    .withGraphFetched('billingAccountAddresses.address')
-    .modifyGraph('billingAccountAddresses.address', (builder) => {
-      builder.select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
-    })
-    .withGraphFetched('billingAccountAddresses.contact')
-    .modifyGraph('billingAccountAddresses.contact', (builder) => {
-      builder.select(['id', 'contactType', 'department', 'firstName', 'lastName'])
+    .withGraphFetched('billingAccountAddresses')
+    .modifyGraph('billingAccountAddresses', (billingAccountAddressesBuilder) => {
+      billingAccountAddressesBuilder
+        .select('id')
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .withGraphFetched('address')
+        .modifyGraph('address', (addressBuilder) => {
+          addressBuilder.select([
+            'id',
+            'address1',
+            'address2',
+            'address3',
+            'address4',
+            'address5',
+            'address6',
+            'postcode'
+          ])
+        })
+        .withGraphFetched('company')
+        .modifyGraph('company', (companyBuilder) => {
+          companyBuilder.select(['id', 'name'])
+        })
+        .withGraphFetched('contact')
+        .modifyGraph('contact', (contactBuilder) => {
+          contactBuilder.select(['id', 'contactType', 'department', 'firstName', 'lastName'])
+        })
     })
 }
 
