@@ -63,7 +63,6 @@ async function _recipient(contactHashId, session) {
 
   // Using `filter` rather than `find` ensures we return an array which makes it simpler to reuse existing logic
   return recipients.filter((recipient) => {
-    k
     return recipient.contact_hash_id === contactHashId
   })
 }
