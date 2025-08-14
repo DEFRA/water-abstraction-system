@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
@@ -17,14 +18,21 @@ const FetchReturnsDueByLicenceRefService = require('../../../../app/services/not
 describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
   let licenceRef
   let returnLog
+  let region
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
+
+    region = RegionHelper.select()
 
     returnLog = await ReturnLogHelper.add({
       licenceRef,
       metadata: {
         description: 'Water park',
+        nald: {
+          areaCode: 'SE',
+          regionCode: `${region.naldRegionId}`
+        },
         purposes: [
           {
             tertiary: { description: 'Potable Water Supply - Direct' }
@@ -54,7 +62,9 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
         {
           dueDate: new Date('2023-04-28'),
           endDate: new Date('2023-03-31'),
+          naldAreaCode: 'SE',
           purpose: 'Potable Water Supply - Direct',
+          regionName: region.displayName,
           returnId: returnLog.returnId,
           returnReference: returnLog.returnReference,
           returnsFrequency: 'month',
