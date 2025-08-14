@@ -13,7 +13,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @param {string} licenceRef - The licence reference to fetch 'due' return logs for
  *
- * @returns {Promise<module:ReturnLogModel[]>}
+ * @returns {Promise<object[]>}
  */
 async function go(licenceRef) {
   const { rows } = await _fetch(licenceRef)
