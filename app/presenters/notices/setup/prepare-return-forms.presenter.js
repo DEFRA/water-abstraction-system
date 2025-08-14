@@ -8,6 +8,8 @@
 const { formatLongDate } = require('../../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
+
 /**
  * Formats data for the return form
  *
@@ -19,9 +21,10 @@ const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/st
  * @param {SessionModel} session - The session instance
  * @param {object} dueReturnLog
  *
+ * @param recipient
  * @returns {object} - The data formatted for the return form
  */
-function go(session, dueReturnLog) {
+function go(session, dueReturnLog, recipient) {
   const { licenceRef } = session
 
   const {
@@ -38,7 +41,7 @@ function go(session, dueReturnLog) {
   } = dueReturnLog
 
   return {
-    address: _address(),
+    address: _address(recipient),
     siteDescription,
     dueDate: formatLongDate(new Date(dueDate)),
     endDate: formatLongDate(new Date(endDate)),
@@ -52,14 +55,8 @@ function go(session, dueReturnLog) {
   }
 }
 
-function _address() {
-  return {
-    addressLine1: 'Sherlock Holmes',
-    addressLine2: '221B Baker Street',
-    addressLine3: 'London',
-    addressLine4: 'NW1 6XE',
-    addressLine5: 'United Kingdom'
-  }
+function _address(recipient) {
+  return NotifyAddressPresenter.go(recipient.contact)
 }
 
 /**

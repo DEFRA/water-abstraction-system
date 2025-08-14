@@ -28,7 +28,7 @@ const NOTIFICATION_TYPES = {
 function go(recipients, page, pagination, session) {
   const { noticeType, referenceCode } = session
 
-  const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+  const formattedRecipients = _recipients(noticeType, page, recipients, session.id, session)
 
   return {
     defaultPageSize,
@@ -42,7 +42,7 @@ function go(recipients, page, pagination, session) {
   }
 }
 
-function _formatRecipients(noticeType, recipients, sessionId) {
+function _formatRecipients(noticeType, recipients, sessionId, session) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
 
@@ -50,7 +50,7 @@ function _formatRecipients(noticeType, recipients, sessionId) {
       contact,
       licences: recipient.licence_refs.split(','),
       method: `${recipient.message_type} - ${recipient.contact_type}`,
-      previewLink: _previewLink(noticeType, recipient, sessionId, contact)
+      previewLink: _previewLink(noticeType, recipient, sessionId, contact, session)
     }
   })
 }
@@ -103,16 +103,17 @@ function _paginateRecipients(recipients, page) {
   return recipients.slice(pageNumber - defaultPageSize, pageNumber)
 }
 
-function _previewLink(noticeType, recipient, sessionId, contact) {
-  // We don't currently support previewing return forms
-  if (noticeType === 'returnForms') {
-    return null
-  }
-
+function _previewLink(noticeType, recipient, sessionId, contact, session) {
   // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
   // else it might give a false impression the letter will be sent.
   if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
     return null
+  }
+
+  // We partially support return forms - we have hard
+  if (noticeType === 'returnForms') {
+    const [returnId] = session.selectedReturns
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/return-forms/${returnId}`
   }
 
   // Returns invitations and reminders can be previewed directly
@@ -134,8 +135,8 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
  *
  * @private
  */
-function _recipients(noticeType, page, recipients, sessionId) {
-  const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId)
+function _recipients(noticeType, page, recipients, sessionId, session) {
+  const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId, session)
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)
