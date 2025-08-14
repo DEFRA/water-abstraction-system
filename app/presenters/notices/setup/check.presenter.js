@@ -104,15 +104,16 @@ function _paginateRecipients(recipients, page) {
 }
 
 function _previewLink(noticeType, recipient, sessionId, contact) {
-  // We don't currently support previewing return forms
-  if (noticeType === 'returnForms') {
-    return null
-  }
-
   // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
   // else it might give a false impression the letter will be sent.
   if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
     return null
+  }
+
+  if (noticeType === 'returnForms') {
+    // We need to implement an intermediary page to allow the user to select which return id they want to 'preview'.
+    // For now, we add the 'placeHolder' to highlight this is a temporary measure and needs to change.
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/return-forms/placeHolder`
   }
 
   // Returns invitations and reminders can be previewed directly

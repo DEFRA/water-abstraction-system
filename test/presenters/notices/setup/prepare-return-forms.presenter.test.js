@@ -7,15 +7,21 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+
 // Thing under test
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
-  let session
   let dueReturnLog
+  let recipient
+  let session
 
   beforeEach(() => {
     session = { licenceRef: '123' }
+
+    recipient = RecipientsFixture.recipients().licenceHolder
 
     dueReturnLog = {
       dueDate: '2025-07-06',
@@ -33,15 +39,16 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+      const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
       expect(result).to.equal({
         address: {
-          addressLine1: 'Sherlock Holmes',
-          addressLine2: '221B Baker Street',
-          addressLine3: 'London',
-          addressLine4: 'NW1 6XE',
-          addressLine5: 'United Kingdom'
+          address_line_1: 'Mr H J Licence holder',
+          address_line_2: '1',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR'
         },
         siteDescription: 'Water park',
         dueDate: '6 July 2025',
@@ -63,7 +70,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" and "naldAreaCode" in the text ', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.regionAndArea).to.equal('North West / Lower Trent')
         })
@@ -75,7 +82,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" in the text', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.regionAndArea).to.equal('North West')
         })
@@ -89,7 +96,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
@@ -101,7 +108,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction monthly return')
         })
@@ -113,7 +120,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction quarterly return')
         })
@@ -125,7 +132,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction weekly return')
         })
@@ -137,7 +144,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction yearly return')
         })
