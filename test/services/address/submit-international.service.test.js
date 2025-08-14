@@ -15,7 +15,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitInternationalService = require('../../../app/services/address/submit-international.service.js')
 
-describe.only('Address - International Service', () => {
+describe('Address - International Service', () => {
   let payload
   let session
   let sessionData
@@ -52,12 +52,13 @@ describe.only('Address - International Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          addressLine1: '1 Fake Farm',
-          addressLine2: '1 Fake street',
-          addressLine3: 'Fake Village',
-          addressLine4: 'Fake City',
-          country: 'Ireland',
-          postcode: 'SW1A 1AA'
+          addressLine1: payload.addressLine1,
+          addressLine2: payload.addressLine2,
+          addressLine3: payload.addressLine3,
+          addressLine4: payload.addressLine4,
+          country: payload.country,
+          postcode: payload.postcode,
+          redirectUrl: session.address.redirectUrl
         }
       })
     })
@@ -74,12 +75,13 @@ describe.only('Address - International Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          addressLine1: '1 Fake Farm',
+          addressLine1: payload.addressLine1,
           addressLine2: null,
           addressLine3: null,
           addressLine4: null,
-          country: 'Ireland',
-          postcode: null
+          country: payload.country,
+          postcode: null,
+          redirectUrl: session.address.redirectUrl
         }
       })
     })
