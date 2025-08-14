@@ -43,6 +43,48 @@ describe('Address - Submit Postcode Service', () => {
     })
   })
 
+  describe('when called with a previously saved address', () => {
+    describe('and with a valid payload', () => {
+      beforeEach(async () => {
+        payload = {
+          postcode: 'SW1A 1AA'
+        }
+        sessionData = {
+          address: {
+            addressLine1: '1 Fake Farm',
+            addressLine2: '1 Fake street',
+            addressLine3: 'Fake Village',
+            addressLine4: 'Fake City',
+            postcode: 'SW1A 1AA'
+          }
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+
+        session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+
+        await session.$update()
+      })
+
+      it('resets the address object to postcode plus redirectUrl', async () => {
+        await SubmitPostcodeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.address).to.equal({
+          postcode: payload.postcode,
+          redirectUrl: session.address.redirectUrl
+        })
+      })
+
+      it('continues on the journey', async () => {
+        const result = await SubmitPostcodeService.go(session.id, payload)
+
+        expect(result).to.equal({})
+      })
+    })
+  })
+
   describe('when called with a invalid payload', () => {
     describe('when there is no value provided', () => {
       beforeEach(async () => {
