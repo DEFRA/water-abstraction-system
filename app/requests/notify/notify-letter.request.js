@@ -5,7 +5,7 @@
  * @module NotifyLetterRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Send a letter using GOV.UK Notify
@@ -39,32 +39,14 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(templateId, options) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = 'v2/notifications/letter'
 
-  return _sendLetter(notifyClient, templateId, options)
-}
-
-async function _sendLetter(notifyClient, templateId, options) {
-  try {
-    const response = await notifyClient.sendLetter(templateId, options)
-
-    return {
-      id: response.data.id,
-      plaintext: response.data.content.body,
-      status: response.status,
-      statusText: response.statusText.toLowerCase()
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify send letter failed', errorDetails)
-
-    return errorDetails
+  const body = {
+    template_id: templateId,
+    ...options
   }
+
+  return NotifyRequest.post(path, body)
 }
 
 module.exports = {

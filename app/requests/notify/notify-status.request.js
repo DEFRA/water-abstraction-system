@@ -5,7 +5,7 @@
  * @module NotifyStatusRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Get the status of a notification from GOV.UK Notify
@@ -29,29 +29,9 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(notificationId) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = `v2/notifications/${notificationId}`
 
-  return _statusById(notifyClient, notificationId)
-}
-
-async function _statusById(notifyClient, notificationId) {
-  try {
-    const response = await notifyClient.getNotificationById(notificationId)
-
-    return {
-      status: response.data.status
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify status update failed', errorDetails)
-
-    return errorDetails
-  }
+  return NotifyRequest.get(path)
 }
 
 module.exports = {
