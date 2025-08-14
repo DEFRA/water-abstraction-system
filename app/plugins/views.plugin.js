@@ -172,7 +172,7 @@ function _navigationLinks(auth) {
   const { scope } = auth.credentials
 
   if (scope.includes('hof_notifications') || scope.includes('renewal_notifications')) {
-    links.unshift({ href: '/contact-information', text: 'Contact information' })
+    links.unshift({ href: '/system/users/me/profile-details', text: 'Profile details' })
   }
 
   return links

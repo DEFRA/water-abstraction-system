@@ -10,7 +10,7 @@ const { ref } = require('objection')
 const UserModel = require('../../models/user.model.js')
 
 const navigationLinks = [
-  { active: true, href: '/contact-information', text: 'Contact information' },
+  { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
   { href: '/account/update-password', text: 'Change password' },
   { href: '/signout', text: 'Sign out' }
 ]
