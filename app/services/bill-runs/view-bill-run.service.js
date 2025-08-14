@@ -6,7 +6,7 @@
  */
 
 const EmptyBillRunPresenter = require('../../presenters/bill-runs/empty-bill-run.presenter.js')
-const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run-presenter.js')
+const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run.presenter.js')
 const ViewBillRunPresenter = require('../../presenters/bill-runs/view-bill-run.presenter.js')
 const ViewBillSummariesPresenter = require('../../presenters/bill-runs/view-bill-summaries.presenter.js')
 const FetchBillRunService = require('./fetch-bill-run.service.js')

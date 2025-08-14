@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run-presenter.js')
+const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run.presenter.js')
 
 describe('Errored Bill Run presenter', () => {
   let billRun
@@ -22,10 +22,11 @@ describe('Errored Bill Run presenter', () => {
       const result = ErroredBillRunPresenter.go(billRun)
 
       expect(result).to.equal({
-        billRunId: '420e948f-1992-437e-8a47-74c0066cb017',
+        backLink: '/system/bill-runs',
         billRunNumber: 10010,
         billRunStatus: 'error',
         billRunType: 'Supplementary',
+        buttonLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/cancel',
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         errorMessage: 'Error when preparing the transactions.',

@@ -20,10 +20,11 @@ function go(billRun) {
     billRun
 
   return {
-    billRunId: id,
+    backLink: '/system/bill-runs',
     billRunNumber,
     billRunStatus: status,
     billRunType: formatBillRunType(batchType, scheme, summer),
+    buttonLink: `/system/bill-runs/${id}/cancel`,
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     errorMessage: _errorMessage(errorCode),
