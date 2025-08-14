@@ -22,10 +22,11 @@ describe('Empty Bill Run presenter', () => {
       const result = EmptyBillRunPresenter.go(billRun)
 
       expect(result).to.equal({
-        billRunId: '420e948f-1992-437e-8a47-74c0066cb017',
+        backLink: '/system/bill-runs',
         billRunNumber: 10010,
         billRunStatus: 'empty',
         billRunType: 'Supplementary',
+        buttonLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/cancel',
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         financialYear: '2023 to 2024',
