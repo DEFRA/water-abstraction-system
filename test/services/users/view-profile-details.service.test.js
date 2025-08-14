@@ -54,8 +54,8 @@ describe('ViewProfileDetailsService', () => {
     expect(result.navigationLinks).to.include([
       {
         active: true,
-        href: '/contact-information',
-        text: 'Contact information'
+        href: '/system/users/me/profile-details',
+        text: 'Profile details'
       }
     ])
   })
