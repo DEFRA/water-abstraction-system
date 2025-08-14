@@ -18,6 +18,8 @@ const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/ge
 const PreviewReturnFormsService = require('../../../../app/services/notices/setup/preview-return-forms.service.js')
 
 describe('Notices - Setup - Preview Return Forms Service', () => {
+  const contactHashId = '938c2cc0dcc05f2b68c4287040cfcf71'
+
   let notifierStub
   let returnId
   let session
@@ -66,7 +68,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PreviewReturnFormsService.go(session.id, returnId)
+      const result = await PreviewReturnFormsService.go(session.id, contactHashId, returnId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -74,7 +76,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest"', async () => {
-      await PreviewReturnFormsService.go(session.id, returnId)
+      await PreviewReturnFormsService.go(session.id, contactHashId, returnId)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 

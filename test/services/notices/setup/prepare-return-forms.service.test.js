@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-
 // Things we need to stub
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
 
@@ -21,12 +18,11 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
   let notifierStub
   let returnId
   let session
-  let sessionData
 
   beforeEach(async () => {
     returnId = '1234'
 
-    sessionData = {
+    session = {
       licenceRef: '123',
       dueReturns: [
         {
@@ -44,8 +40,6 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
         }
       ]
     }
-
-    session = await SessionHelper.add({ data: sessionData })
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
@@ -66,7 +60,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PrepareReturnFormsService.go(session.id, returnId)
+      const result = await PrepareReturnFormsService.go(session, returnId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -74,7 +68,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
-      await PrepareReturnFormsService.go(session.id, returnId)
+      await PrepareReturnFormsService.go(session, returnId)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 
