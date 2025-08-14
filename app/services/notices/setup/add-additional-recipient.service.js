@@ -43,7 +43,7 @@ async function go(sessionId, yar) {
 
   await _resetGenericAddressSupport(session)
 
-  // GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
+  GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 }
 
 function _addAdditionalRecipient(session, additionalRecipient) {
