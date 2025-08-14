@@ -16,28 +16,37 @@ const SubmitPostcodeService = require('../services/address/submit-postcode.servi
 const SubmitSelectAddressService = require('../services/address/submit-select.service.js')
 
 async function submitInternational(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
 
-  const pageData = await SubmitInternationalAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitInternationalAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/international.njk', pageData)
   }
 
-  // TODO: return to calling service
-  return h.redirect(`/system/address/${sessionId}/check`)
+  await AddAdditionalRecipientService.go(sessionId, yar)
+
+  return h.redirect(pageData.redirect)
 }
 
 async function submitManual(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
 
-  const pageData = await SubmitManualAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitManualAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/manual.njk', pageData)
   }
 
-  await AddAdditionalRecipientService.go(sessionId)
+  await AddAdditionalRecipientService.go(sessionId, yar)
 
   return h.redirect(pageData.redirect)
 }
@@ -55,16 +64,20 @@ async function submitPostcode(request, h) {
 }
 
 async function submitSelect(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
 
-  const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitSelectAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
   }
 
   if (pageData.succeeded) {
-    await AddAdditionalRecipientService.go(sessionId)
+    await AddAdditionalRecipientService.go(sessionId, yar)
   }
 
   return h.redirect(pageData.redirect)

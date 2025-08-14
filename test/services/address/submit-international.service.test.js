@@ -15,7 +15,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitInternationalService = require('../../../app/services/address/submit-international.service.js')
 
-describe('Address - International Service', () => {
+describe.only('Address - International Service', () => {
   let payload
   let session
   let sessionData
@@ -27,6 +27,10 @@ describe('Address - International Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+
+    await session.$update()
   })
 
   describe('when called', () => {
@@ -48,14 +52,12 @@ describe('Address - International Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          international: {
-            addressLine1: '1 Fake Farm',
-            addressLine2: '1 Fake street',
-            addressLine3: 'Fake Village',
-            addressLine4: 'Fake City',
-            country: 'Ireland',
-            postcode: 'SW1A 1AA'
-          }
+          addressLine1: '1 Fake Farm',
+          addressLine2: '1 Fake street',
+          addressLine3: 'Fake Village',
+          addressLine4: 'Fake City',
+          country: 'Ireland',
+          postcode: 'SW1A 1AA'
         }
       })
     })
@@ -72,14 +74,12 @@ describe('Address - International Service', () => {
 
       expect(refreshedSession.data).to.equal({
         address: {
-          international: {
-            addressLine1: '1 Fake Farm',
-            addressLine2: null,
-            addressLine3: null,
-            addressLine4: null,
-            country: 'Ireland',
-            postcode: null
-          }
+          addressLine1: '1 Fake Farm',
+          addressLine2: null,
+          addressLine3: null,
+          addressLine4: null,
+          country: 'Ireland',
+          postcode: null
         }
       })
     })
@@ -87,7 +87,9 @@ describe('Address - International Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitInternationalService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        redirect: `/system/notices/setup/${session.id}/check`
+      })
     })
   })
 

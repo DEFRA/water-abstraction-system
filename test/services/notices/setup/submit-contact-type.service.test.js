@@ -24,7 +24,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
   const testEmailHash = _createMD5Hash('test@test.gov.uk')
 
   beforeEach(() => {
-    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+    yarStub = { flash: Sinon.stub() }
   })
 
   afterEach(() => {
@@ -47,6 +47,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
+        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
       })
 
       it('saves the submitted value', async () => {
@@ -75,6 +76,11 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+
         expect(result).to.equal({
           type: 'email'
         })
@@ -89,6 +95,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
+        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
       })
 
       it('saves the submitted value', async () => {
@@ -109,6 +116,11 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+
         expect(result).to.equal({
           type: 'email'
         })
@@ -123,6 +135,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
+        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
       })
 
       it('saves the submitted value with the email address in lowercase', async () => {
@@ -142,6 +155,11 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -165,6 +183,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         ]
 
         session = await SessionHelper.add({ data: sessionData })
+        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
       })
 
       it('saves the submitted value', async () => {
@@ -189,6 +208,11 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -218,6 +242,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 
+         expect(yarStub.flash.called).to.be.false()
         expect(result).to.equal({
           type: 'post'
         })
