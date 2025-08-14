@@ -15,13 +15,20 @@
 function go(session) {
   return {
     backLink: _backLink(session),
+    internationalLink: `/system/address/${session.id}/international`,
     pageTitle: 'Enter a UK postcode',
     postcode: session?.address?.postcode ?? null
   }
 }
 
+/**
+ * The address lookup journey currently only supports ad-hoc notice journey so we return to the contact-type page for
+ * that journey. The default return to the postcode page is a placeholder until the address lookup journey is expanded.
+ *
+ * @private
+ */
 function _backLink(session) {
-  if (session.name) {
+  if (session.contactName) {
     return `/system/notices/setup/${session.id}/contact-type`
   }
 

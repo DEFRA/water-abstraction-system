@@ -26,6 +26,7 @@ describe('View Notification presenter', () => {
 
       expect(result).to.equal({
         address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
+        backLink: '/system/licences/136bfed6-7e14-4144-a06f-35a21ceb4aa2/communications',
         contents:
           'Water Resources Act 1991\n' +
           'Our reference: HOF-UPMJ7G\n' +
@@ -36,7 +37,6 @@ describe('View Notification presenter', () => {
           '\n' +
           '# Why you are receiving this notification\n' +
           '\n',
-        licenceId: '136bfed6-7e14-4144-a06f-35a21ceb4aa2',
         licenceRef: '01/117',
         messageType: 'letter',
         pageTitle: 'Hands off flow: levels warning',
@@ -63,12 +63,13 @@ describe('View Notification presenter', () => {
       describe('when the "messageType" is "email"', () => {
         before(() => {
           testNotification.notification.messageType = 'email'
+          testNotification.notification.recipient = 'bob@bobbins.co.uk'
         })
 
-        it('returns null', () => {
+        it('returns the recipients email address', () => {
           const result = ViewNotificationPresenter.go(testNotification)
 
-          expect(result.address).to.be.null()
+          expect(result.address).to.equal('bob@bobbins.co.uk')
         })
       })
     })

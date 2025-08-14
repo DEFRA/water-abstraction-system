@@ -25,7 +25,7 @@ describe('Notices - Setup - Returns For Paper Forms service', () => {
     licenceRef = generateLicenceRef()
 
     dueReturn = {
-      description: 'Potable Water Supply - Direct',
+      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnId: generateUUID(),
       returnReference: '3135',

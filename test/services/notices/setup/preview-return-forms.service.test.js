@@ -19,11 +19,31 @@ const PreviewReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Preview Return Forms Service', () => {
   let notifierStub
+  let returnId
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    returnId = '1234'
+
+    sessionData = {
+      licenceRef: '123',
+      dueReturns: [
+        {
+          dueDate: '2025-07-06',
+          endDate: '2025-06-06',
+          naldAreaCode: 'MIDLT',
+          purpose: 'A purpose',
+          regionName: 'North West',
+          returnId,
+          returnReference: '123456',
+          returnsFrequency: 'day',
+          siteDescription: 'Water park',
+          startDate: '2025-01-01',
+          twoPartTariff: false
+        }
+      ]
+    }
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -46,7 +66,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PreviewReturnFormsService.go(session.id)
+      const result = await PreviewReturnFormsService.go(session.id, returnId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -54,9 +74,31 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest"', async () => {
-      await PreviewReturnFormsService.go(session.id)
+      await PreviewReturnFormsService.go(session.id, returnId)
 
-      expect(GenerateReturnFormRequest.send.called).to.be.true()
+      expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
+
+      const actualCallArgs = GenerateReturnFormRequest.send.getCall(0).args[0]
+
+      expect(actualCallArgs).to.equal({
+        address: {
+          addressLine1: 'Sherlock Holmes',
+          addressLine2: '221B Baker Street',
+          addressLine3: 'London',
+          addressLine4: 'NW1 6XE',
+          addressLine5: 'United Kingdom'
+        },
+        dueDate: '6 July 2025',
+        endDate: '6 June 2025',
+        licenceRef: '123',
+        pageTitle: 'Water abstraction daily return',
+        purpose: 'A purpose',
+        regionAndArea: 'North West / Lower Trent',
+        returnReference: '123456',
+        siteDescription: 'Water park',
+        startDate: '1 January 2025',
+        twoPartTariff: false
+      })
     })
   })
 })

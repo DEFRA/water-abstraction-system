@@ -28,7 +28,7 @@ function go(billingAccountData, licenceId, chargeVersionId, companyId) {
 
   return {
     accountNumber: billingAccount.accountNumber,
-    address: _address(billingAccountAddresses[0].address, billingAccountAddresses[0].contact, company),
+    address: _address(billingAccountAddresses[0], company),
     backLink: _backLink(licenceId, chargeVersionId, companyId),
     billingAccountId: id,
     bills: _bills(bills),
@@ -41,20 +41,24 @@ function go(billingAccountData, licenceId, chargeVersionId, companyId) {
 }
 
 /**
- * Formats a company's address for display on the view billing account page.
+ * Formats a billing account's address for display on the view billing account page.
  *
- * Some companies may have fewer populated address lines than others, resulting in `null` values. This function filters
- * out any empty address lines, applies title casing to each one, and appends the postcode in uppercase.
+ * Some billing accounts will have a different company linked to them via the billing account address, then the primary
+ * company against the billing account itself. This happens if a user opts to set a different company that the bills
+ * should be sent to. So we have to handle this when determining the 'company name'.
  *
- * @param {module:AddressModel} address - The address associated with the billing account.
- * @param {module:ContactModel} contact - The contact associated with the billing account.
- * @param {module:CompanyModel} company - The company associated with the billing account.
+ * Also, some billing accounts may have fewer populated address lines than others, resulting in `null` values. This
+ * function filters out any empty address lines, applies title casing to each one, and appends the postcode in
+ * uppercase.
  *
- * @returns {string[]} An array of formatted address lines for display.
+ * @private
  */
-function _address(address, contact, company) {
+function _address(billingAccountAddress, primaryCompany) {
+  const { address, company, contact } = billingAccountAddress
   const contactName = contact ? `FAO ${contact.$name()}` : null
-  const companyName = titleCase(company.name)
+  const addressCompanyName = company ? company.name : primaryCompany.name
+
+  const companyName = titleCase(addressCompanyName)
 
   const addressLines = [
     address['address1'],

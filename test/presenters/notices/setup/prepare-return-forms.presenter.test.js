@@ -12,14 +12,28 @@ const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/
 
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   let session
+  let dueReturnLog
 
   beforeEach(() => {
-    session = {}
+    session = { licenceRef: '123' }
+
+    dueReturnLog = {
+      dueDate: '2025-07-06',
+      endDate: '2025-06-06',
+      naldAreaCode: 'MIDLT',
+      purpose: 'A purpose',
+      regionName: 'North West',
+      returnReference: '123456',
+      returnsFrequency: 'day',
+      siteDescription: 'Water park',
+      startDate: '2025-01-01',
+      twoPartTariff: false
+    }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(session)
+      const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
 
       expect(result).to.equal({
         address: {
@@ -29,17 +43,104 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           addressLine4: 'NW1 6XE',
           addressLine5: 'United Kingdom'
         },
-        description: 'mock site',
-        dueDate: '1 October 2023',
-        endDate: '30 September 2023',
-        formatId: 'format id 123',
+        siteDescription: 'Water park',
+        dueDate: '6 July 2025',
+        endDate: '6 June 2025',
         licenceRef: '123',
-        purpose: 'a purpose',
-        regionAndArea: 'A place / in the sun',
-        returnRef: '7646',
-        startDate: '1 September 2023',
-        title: 'Water abstraction daily return',
-        twoPartTariff: true
+        purpose: 'A purpose',
+        regionAndArea: 'North West / Lower Trent',
+        returnReference: '123456',
+        startDate: '1 January 2025',
+        pageTitle: 'Water abstraction daily return',
+        twoPartTariff: false
+      })
+    })
+
+    describe('the "regionAndArea" property', () => {
+      describe('when there is a "naldAreaCode"', () => {
+        beforeEach(() => {
+          dueReturnLog.naldAreaCode = 'MIDLT'
+        })
+
+        it('should return the "regionName" and "naldAreaCode" in the text ', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.regionAndArea).to.equal('North West / Lower Trent')
+        })
+      })
+
+      describe('when there is no "naldAreaCode"', () => {
+        beforeEach(() => {
+          dueReturnLog.naldAreaCode = null
+        })
+
+        it('should return the "regionName" in the text', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.regionAndArea).to.equal('North West')
+        })
+      })
+    })
+
+    describe('the "pageTitle" property', () => {
+      describe('when the "returnsFrequency" is "day"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'day'
+        })
+
+        it('should return the relevant title', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.pageTitle).to.equal('Water abstraction daily return')
+        })
+      })
+
+      describe('when the "returnsFrequency" is "month"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'month'
+        })
+
+        it('should return the relevant title', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.pageTitle).to.equal('Water abstraction monthly return')
+        })
+      })
+
+      describe('when the "returnsFrequency" is "quarter"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'quarter'
+        })
+
+        it('should return the relevant title', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.pageTitle).to.equal('Water abstraction quarterly return')
+        })
+      })
+
+      describe('when the "returnsFrequency" is "week"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'week'
+        })
+
+        it('should return the relevant title', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.pageTitle).to.equal('Water abstraction weekly return')
+        })
+      })
+
+      describe('when the "returnsFrequency" is "year"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'year'
+        })
+
+        it('should return the relevant title', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+
+          expect(result.pageTitle).to.equal('Water abstraction yearly return')
+        })
       })
     })
   })

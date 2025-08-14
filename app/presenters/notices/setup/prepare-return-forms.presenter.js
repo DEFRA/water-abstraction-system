@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
+const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the return form
@@ -15,22 +16,39 @@ const { formatLongDate } = require('../../base.presenter.js')
  * Each page will be assigned a corresponding object to isolate the data to each page where possible. Those pages are:
  * - The "cover" page, this is the first page. The address is on this page.
  *
+ * @param {SessionModel} session - The session instance
+ * @param {object} dueReturnLog
+ *
  * @returns {object} - The data formatted for the return form
  */
-function go() {
+function go(session, dueReturnLog) {
+  const { licenceRef } = session
+
+  const {
+    dueDate,
+    endDate,
+    naldAreaCode,
+    purpose,
+    regionName,
+    returnsFrequency,
+    returnReference,
+    siteDescription,
+    startDate,
+    twoPartTariff
+  } = dueReturnLog
+
   return {
     address: _address(),
-    description: 'mock site',
-    dueDate: formatLongDate(new Date('2023-10-01')),
-    endDate: formatLongDate(new Date('2023-09-30')),
-    licenceRef: '123',
-    purpose: 'a purpose',
-    regionAndArea: 'A place / in the sun',
-    returnRef: '7646',
-    startDate: formatLongDate(new Date('2023-09-01')),
-    title: _title(),
-    twoPartTariff: true,
-    formatId: 'format id 123'
+    siteDescription,
+    dueDate: formatLongDate(new Date(dueDate)),
+    endDate: formatLongDate(new Date(endDate)),
+    licenceRef,
+    purpose,
+    regionAndArea: _regionAndArea(regionName, naldAreaCode),
+    returnReference,
+    startDate: formatLongDate(new Date(startDate)),
+    pageTitle: _pageTitle(returnsFrequency),
+    twoPartTariff
   }
 }
 
@@ -43,15 +61,23 @@ function _address() {
     addressLine5: 'United Kingdom'
   }
 }
-/*
- * {{ 'Water abstraction daily return ' if frequency === 'day' }}
- * {{ 'Water abstraction weekly return ' if frequency === 'week' }}
- * {{ 'Water abstraction monthly return ' if frequency === 'month' }}
- * {{ 'Water abstraction quarterly return ' if frequency === 'quarter' }}
- * {{ 'Water abstraction yearly return ' if frequency === 'year' }}
+
+/**
+ * The legacy code accounts for the 'nald.areaCode' not being set in the metadata. This logic replicates the legacy
+ * logic.
+ *
+ * @private
  */
-function _title() {
-  return 'Water abstraction daily return'
+function _regionAndArea(regionName, naldAreaCode) {
+  if (naldAreaCode) {
+    return `${regionName} / ${naldAreaCodes[naldAreaCode]}`
+  }
+
+  return regionName
+}
+
+function _pageTitle(returnsFrequency) {
+  return `Water abstraction ${returnRequirementFrequencies[returnsFrequency]} return`
 }
 
 module.exports = {

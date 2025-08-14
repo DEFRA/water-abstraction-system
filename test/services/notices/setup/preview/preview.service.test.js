@@ -70,7 +70,7 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        address: null,
+        address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice RINV-0Q7AD8',
         contents: 'Preview of the notification contents',
@@ -135,7 +135,7 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        address: null,
+        address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
         caption: 'Notice WAA-6KN0KF',
         contents: 'Preview of the notification contents',
