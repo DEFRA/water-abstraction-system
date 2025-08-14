@@ -79,6 +79,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 
       const actualCallArgs = GenerateReturnFormRequest.send.getCall(0).args[0]
+
       expect(actualCallArgs).to.equal({
         address: {
           addressLine1: 'Sherlock Holmes',
