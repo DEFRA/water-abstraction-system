@@ -5,9 +5,10 @@
  * @module RecipientsService
  */
 
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
+const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 
 /**
  * Orchestrates fetching and determining recipients
@@ -44,6 +45,8 @@ function _additionalRecipients(recipientsData, session) {
 async function _recipientsData(session) {
   if (session.journey === 'alerts') {
     return FetchAbstractionAlertRecipientsService.go(session)
+  } else if (session.noticeType === 'returnForms') {
+    return FetchLetterRecipientsService.go(session)
   } else {
     return FetchRecipientsService.go(session)
   }

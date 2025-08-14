@@ -14,6 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
@@ -235,6 +236,50 @@ describe('Notices - Setup - Recipients service', () => {
           email: recipients.additionalContact.email,
           licence_refs: recipients.additionalContact.licence_refs,
           message_type: 'Email'
+        }
+      ])
+    })
+  })
+
+  describe('and the "noticeType" is "returnForms"', () => {
+    beforeEach(async () => {
+      recipients = RecipientsFixture.recipients()
+
+      session = await SessionHelper.add({
+        data: {
+          noticeType: 'returnForms'
+        }
+      })
+
+      Sinon.stub(FetchLetterRecipientsService, 'go').resolves([recipients.licenceHolder])
+    })
+
+    it('returns only letter recipients', async () => {
+      const result = await RecipientsService.go(session)
+
+      expect(result).to.equal([
+        {
+          contact: {
+            addressLine1: '1',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'H J',
+            name: 'Licence holder',
+            postcode: 'WD25 7LR',
+            role: 'Licence holder',
+            salutation: 'Mr',
+            town: 'Little Whinging',
+            type: 'Person'
+          },
+          contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+          contact_type: 'Licence holder',
+          email: null,
+          licence_refs: recipients.licenceHolder.licence_refs,
+          message_type: 'Letter'
         }
       ])
     })

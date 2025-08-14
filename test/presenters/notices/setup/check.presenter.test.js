@@ -352,7 +352,9 @@ describe('Notices - Setup - Check presenter', () => {
             it('should return null', () => {
               const result = CheckPresenter.go(testInput, page, pagination, session)
 
-              expect(result.recipients[0].previewLink).to.be.null()
+              expect(result.recipients[0].previewLink).to.equal(
+                `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateLicenceHolder.contact_hash_id}/return-forms/placeHolder`
+              )
             })
           })
         })
