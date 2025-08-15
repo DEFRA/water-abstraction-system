@@ -7,6 +7,27 @@
 
 const Joi = require('joi')
 
+const MAX_ADDRESS_LENGTH = 300
+const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
+const MESSAGES = {
+  name: {
+    'string.max': 'Name must be 100 characters or less'
+  },
+  jobTitle: {
+    'string.max': 'Job title must be 100 characters or less'
+  },
+  email: {
+    'string.email': 'Enter a valid email',
+    'string.pattern.name': 'Email must be @environment-agency.gov.uk'
+  },
+  tel: {
+    'string.max': 'Telephone number must be 100 characters or less'
+  },
+  address: {
+    'string.max': 'Address must be 300 characters or less'
+  }
+}
+
 /**
  * Validates data submitted for the `/users/me/profile-details` page
  *
@@ -19,26 +40,11 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object().keys({
-    name: Joi.string().max(100).allow('').messages({
-      'string.max': 'Name must be 100 characters or less'
-    }),
-    jobTitle: Joi.string().max(100).allow('').messages({
-      'string.max': 'Job title must be 100 characters or less'
-    }),
-    email: Joi.string()
-      .email()
-      .allow('')
-      .pattern(/^.+@environment-agency.gov.uk$/, 'domain')
-      .messages({
-        'string.email': 'Enter a valid email',
-        'string.pattern.name': 'Email must be @environment-agency.gov.uk'
-      }),
-    tel: Joi.string().max(100).allow('').messages({
-      'string.max': 'Telephone number must be 100 characters or less'
-    }),
-    address: Joi.string().max(300).allow('').messages({
-      'string.max': 'Address must be 300 characters or less'
-    })
+    name: Joi.string().max(100).allow('').messages(MESSAGES.name),
+    jobTitle: Joi.string().max(100).allow('').messages(MESSAGES.jobTitle),
+    email: Joi.string().email().allow('').pattern(EMAIL_DOMAIN_PATTERN, 'domain').messages(MESSAGES.email),
+    tel: Joi.string().max(100).allow('').messages(MESSAGES.tel),
+    address: Joi.string().max(MAX_ADDRESS_LENGTH).allow('').messages(MESSAGES.address)
   })
 
   return schema.validate(payload, { abortEarly: false })
