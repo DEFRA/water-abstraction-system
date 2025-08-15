@@ -308,14 +308,17 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternationalAddressService, 'go').returns({})
+          Sinon.stub(SubmitInternationalAddressService, 'go').returns({
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check'
+          })
+          Sinon.stub(AddAdditionalRecipientService, 'go')
         })
 
-        it('redirects to the check page', async () => {
+        it('redirects to the redirectUrl page', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+          expect(response.headers.location).to.equal(`/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
         })
       })
 

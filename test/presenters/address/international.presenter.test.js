@@ -44,14 +44,12 @@ describe('Address - International Presenter', () => {
       session = {
         id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
         address: {
-          international: {
-            addressLine1: '1 Fake Farm',
-            addressLine2: '1 Fake street',
-            addressLine3: 'Fake Village',
-            addressLine4: 'Fake City',
-            country: 'England',
-            postcode: 'SW1A 1AA'
-          }
+          addressLine1: '1 Fake Farm',
+          addressLine2: '1 Fake street',
+          addressLine3: 'Fake Village',
+          addressLine4: 'Fake City',
+          country: 'England',
+          postcode: 'SW1A 1AA'
         }
       }
     })
@@ -72,18 +70,18 @@ describe('Address - International Presenter', () => {
   })
 })
 
-function _countries(savedCountry) {
+function _countries(value = 'select') {
   const displayCountries = countries.map((country) => {
     return {
       value: country,
-      selected: savedCountry === country,
+      selected: value === country,
       text: country
     }
   })
 
   displayCountries.unshift({
     value: 'select',
-    selected: savedCountry !== 'select',
+    selected: value === 'select',
     text: 'Select a country'
   })
 
