@@ -116,6 +116,7 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
           {
             activeNavBar: 'search',
             pageTitle: 'Select how often readings or volumes are reported',
+            pageTitleCaption: 'Licence 01/ABC',
             backLink: `/system/return-versions/setup/${session.id}/frequency-collected/0`,
             frequencyReported: null,
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
