@@ -23,6 +23,7 @@ function go(session, requirementIndex) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select agreements and exceptions for the requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }
