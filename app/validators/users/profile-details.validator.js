@@ -25,14 +25,19 @@ function go(payload) {
     jobTitle: Joi.string().max(100).allow('').messages({
       'string.max': 'Job title must be 100 characters or less'
     }),
-    email: Joi.string().email().allow('').messages({
-      'string.email': 'Enter a valid email'
-    }),
+    email: Joi.string()
+      .email()
+      .allow('')
+      .pattern(/^.+@environment-agency.gov.uk$/, 'domain')
+      .messages({
+        'string.email': 'Enter a valid email',
+        'string.pattern.name': 'Email must be @environment-agency.gov.uk'
+      }),
     tel: Joi.string().max(100).allow('').messages({
       'string.max': 'Telephone number must be 100 characters or less'
     }),
-    address: Joi.string().max(100).allow('').messages({
-      'string.max': 'Address must be 100 characters or less'
+    address: Joi.string().max(300).allow('').messages({
+      'string.max': 'Address must be 300 characters or less'
     })
   })
 
