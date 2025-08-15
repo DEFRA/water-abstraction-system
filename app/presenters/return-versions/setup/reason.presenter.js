@@ -19,6 +19,7 @@ function go(session) {
     backLink: _backLink(session),
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the reason for the requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     reason: reason ?? null,
     sessionId
   }
