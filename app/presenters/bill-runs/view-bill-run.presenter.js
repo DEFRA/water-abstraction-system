@@ -44,7 +44,6 @@ function go(billRun, billSummaries) {
 
   return {
     billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
-    billRunId: id,
     billRunNumber,
     billRunStatus: status,
     billRunTotal: _billRunTotal(netTotal),
@@ -57,6 +56,12 @@ function go(billRun, billSummaries) {
     debitsTotal: formatMoney(invoiceValue),
     displayCreditDebitTotals: displayCreditDebitTotals(billRun.batchType),
     financialYear: formatFinancialYear(toFinancialYearEnding),
+    links: {
+      backLink: '/system/bill-runs',
+      cancelBillRunLink: `/system/bill-runs/${id}/cancel`,
+      downloadBillRunLink: `/billing/batch/${id}/transactions-csv`,
+      sendBillRunLink: `/system/bill-runs/${id}/send`
+    },
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: titleCase(region.displayName),
     transactionFile: transactionFileReference

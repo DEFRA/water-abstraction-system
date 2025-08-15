@@ -25,7 +25,6 @@ describe('View Bill Run presenter', () => {
 
       expect(result).to.equal({
         billsCount: '8 Supplementary bills',
-        billRunId: '420e948f-1992-437e-8a47-74c0066cb017',
         billRunNumber: 10010,
         billRunStatus: 'sent',
         billRunTotal: '£707.00',
@@ -38,6 +37,12 @@ describe('View Bill Run presenter', () => {
         debitsTotal: '£2,699.78',
         displayCreditDebitTotals: true,
         financialYear: '2023 to 2024',
+        links: {
+          backLink: '/system/bill-runs',
+          cancelBillRunLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/cancel',
+          downloadBillRunLink: '/billing/batch/420e948f-1992-437e-8a47-74c0066cb017/transactions-csv',
+          sendBillRunLink: `/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/send`
+        },
         pageTitle: 'Wales supplementary',
         region: 'Wales',
         transactionFile: 'nalwi50002t'

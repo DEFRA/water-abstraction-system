@@ -93,7 +93,6 @@ describe('View Bill Run service', () => {
           expect(result).to.equal({
             activeNavBar: 'bill-runs',
             billsCount: '2 Annual bills',
-            billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
             billRunNumber: 10003,
             billRunStatus: 'sent',
             billRunTotal: '£213,275.00',
@@ -106,6 +105,12 @@ describe('View Bill Run service', () => {
             debitsTotal: '£213,275.00',
             displayCreditDebitTotals: false,
             financialYear: '2022 to 2023',
+            links: {
+              backLink: '/system/bill-runs',
+              cancelBillRunLink: '/system/bill-runs/2c80bd22-a005-4cf4-a2a2-73812a9861de/cancel',
+              downloadBillRunLink: '/billing/batch/2c80bd22-a005-4cf4-a2a2-73812a9861de/transactions-csv',
+              sendBillRunLink: `/system/bill-runs/2c80bd22-a005-4cf4-a2a2-73812a9861de/send`
+            },
             pageTitle: 'South West annual',
             region: 'South West',
             transactionFile: 'nalei90002t',
@@ -159,7 +164,6 @@ describe('View Bill Run service', () => {
           expect(result).to.equal({
             activeNavBar: 'bill-runs',
             billsCount: '1 Annual bill',
-            billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
             billRunNumber: 10003,
             billRunStatus: 'sent',
             billRunTotal: '£97.00',
@@ -172,6 +176,12 @@ describe('View Bill Run service', () => {
             debitsTotal: '£97.00',
             displayCreditDebitTotals: false,
             financialYear: '2022 to 2023',
+            links: {
+              backLink: '/system/bill-runs',
+              cancelBillRunLink: '/system/bill-runs/2c80bd22-a005-4cf4-a2a2-73812a9861de/cancel',
+              downloadBillRunLink: '/billing/batch/2c80bd22-a005-4cf4-a2a2-73812a9861de/transactions-csv',
+              sendBillRunLink: `/system/bill-runs/2c80bd22-a005-4cf4-a2a2-73812a9861de/send`
+            },
             pageTitle: 'South West annual',
             region: 'South West',
             transactionFile: 'nalei90002t',
