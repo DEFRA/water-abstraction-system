@@ -75,6 +75,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Select the purpose for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         purposes: [
           { alias: '', checked: false, description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
           {
