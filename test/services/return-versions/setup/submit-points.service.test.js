@@ -145,6 +145,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
         {
           activeNavBar: 'search',
           pageTitle: 'Select the points for the requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
           backLink: `/system/return-versions/setup/${session.id}/purpose/0`,
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licencePoints: [
