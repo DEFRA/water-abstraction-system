@@ -47,6 +47,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',
         pageTitle: 'Select the start date for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDateOption: null
       })

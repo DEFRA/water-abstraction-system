@@ -60,6 +60,7 @@ describe('Return Versions Setup - Start Date service', () => {
         {
           activeNavBar: 'search',
           pageTitle: 'Select the start date for the requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
           anotherStartDateDay: null,
           anotherStartDateMonth: null,
           anotherStartDateYear: null,
