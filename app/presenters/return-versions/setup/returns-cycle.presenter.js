@@ -22,6 +22,7 @@ function go(session, requirementIndex) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the returns cycle for the requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     returnsCycle: requirement?.returnsCycle ? requirement.returnsCycle : null,
     sessionId
   }
