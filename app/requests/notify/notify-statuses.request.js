@@ -5,7 +5,7 @@
  * @module NotifyStatusesRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Get the statuses of notifications by unique reference from GOV.UK Notify
@@ -19,28 +19,9 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(olderThanNotificationId, referenceCode) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = `v2/notifications?reference=${referenceCode}&older_than=${olderThanNotificationId}`
 
-  return _statuses(notifyClient, olderThanNotificationId, referenceCode)
-}
-
-async function _statuses(notifyClient, olderThanNotificationId, referenceCode) {
-  try {
-    const templateType = null
-    const status = null
-
-    const response = await notifyClient.getNotifications(templateType, status, referenceCode, olderThanNotificationId)
-
-    return {
-      data: response.data.notifications
-    }
-  } catch (error) {
-    return {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-  }
+  return NotifyRequest.get(path)
 }
 
 module.exports = {

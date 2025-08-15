@@ -104,13 +104,13 @@ async function _delay(delay) {
   return setTimeout(delay)
 }
 
-function _notification(notification, notifyResponse) {
+function _notification(notification, notifyResult) {
   delete notification.reference
   delete notification.templateId
 
   return {
     ...notification,
-    ...NotifyUpdatePresenter.go(notifyResponse)
+    ...NotifyUpdatePresenter.go(notifyResult)
   }
 }
 
@@ -124,12 +124,12 @@ async function _sendLetter(notification) {
 }
 
 async function _sendEmail(notification) {
-  const notifyResponse = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
+  const notifyResult = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
     reference: notification.reference
   })
 
-  return _notification(notification, notifyResponse)
+  return _notification(notification, notifyResult)
 }
 
 async function _sentNotifications(toSendNotifications) {

@@ -64,18 +64,20 @@ async function _delay(delay) {
 }
 
 async function _notificationStatus(notification) {
-  const notifyResponse = await NotifyStatusRequest.send(notification.notifyId)
+  const notifyResult = await NotifyStatusRequest.send(notification.notifyId)
 
-  if (notifyResponse.errors) {
-    return notification
-  } else {
-    const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, notification)
+  const { response, succeeded } = notifyResult
+
+  if (succeeded) {
+    const notifyStatus = NotifyStatusPresenter.go(response.body.status, notification)
 
     return {
       ...notification,
       ...notifyStatus
     }
   }
+
+  return notification
 }
 
 /**

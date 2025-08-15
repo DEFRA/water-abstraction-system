@@ -5,7 +5,7 @@
  * @module NotifyEmailRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Send an email using GOV.UK Notify
@@ -35,32 +35,15 @@ const NotifyClientRequest = require('./notify-client.request.js')
  * @returns {Promise<object>}
  */
 async function send(templateId, emailAddress, options) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = 'v2/notifications/email'
 
-  return _sendEmail(notifyClient, templateId, emailAddress, options)
-}
-
-async function _sendEmail(notifyClient, templateId, emailAddress, options) {
-  try {
-    const response = await notifyClient.sendEmail(templateId, emailAddress, options)
-
-    return {
-      id: response.data.id,
-      plaintext: response.data.content.body,
-      status: response.status,
-      statusText: response.statusText.toLowerCase()
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify send email failed', errorDetails)
-
-    return errorDetails
+  const body = {
+    email_address: emailAddress,
+    template_id: templateId,
+    ...options
   }
+
+  return NotifyRequest.post(path, body)
 }
 
 module.exports = {
