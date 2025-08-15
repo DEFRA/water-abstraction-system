@@ -10,7 +10,13 @@
   {% include 'pages/cover.njk' %}
   {% include 'pages/guidance.njk' %}
   {% include 'pages/initial-questions.njk' %}
-  {% include 'pages/data-collection.njk' %}
+
+  {% for meterReading in meterReadings %}
+    {% set showHeading = loop.first %}
+    {% include 'pages/data-collection.njk' %}
+  {% endfor %}
+
+
   {% include 'pages/declaration.njk' %}
   </body>
 </html>
