@@ -23,6 +23,7 @@ function go(session) {
     existingOptions: _existingOptions(licenceVersion.copyableReturnVersions),
     licenceRef: licence.licenceRef,
     pageTitle: 'Use previous requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }

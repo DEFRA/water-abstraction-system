@@ -23,6 +23,7 @@ function go(session, requirementIndex) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select how often readings or volumes are collected',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }
