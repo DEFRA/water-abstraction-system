@@ -63,6 +63,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
         existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
         licenceRef: '01/ABC',
         pageTitle: 'Use previous requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

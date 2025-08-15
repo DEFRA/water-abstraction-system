@@ -43,6 +43,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Select the returns cycle for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         returnsCycle: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
