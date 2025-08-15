@@ -74,6 +74,7 @@ describe('Return Versions - Setup - Method service', () => {
         {
           activeNavBar: 'search',
           pageTitle: 'How do you want to set up the requirements for returns?',
+          pageTitleCaption: 'Licence 01/ABC',
           backLink: `/system/return-versions/setup/${session.id}/reason`,
           displayCopyExisting: true,
           licenceRef: '01/ABC',

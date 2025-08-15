@@ -46,6 +46,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         quarterlyReturnSubmissions: false,
         quarterlyReturns: undefined,
         pageTitle: 'Select any additional submission options for the return requirements',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: session.id
       })
     })

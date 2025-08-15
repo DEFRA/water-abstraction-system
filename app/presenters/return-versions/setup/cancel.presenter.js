@@ -23,6 +23,7 @@ function go(session) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'You are about to cancel these requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     reason: returnRequirementReasons[reason],
     returnRequirements: _returnRequirements(journey, requirements),
     startDate: _startDate(session),
