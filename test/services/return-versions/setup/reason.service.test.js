@@ -57,6 +57,7 @@ describe('Return Versions Setup - Reason service', () => {
         {
           activeNavBar: 'search',
           pageTitle: 'Select the reason for the requirements for returns',
+          pageTitleCaption: `Licence ${session.licence.licenceRef}`,
           backLink: `/system/return-versions/setup/${session.id}/start-date`,
           licenceRef: '01/ABC',
           reason: null
