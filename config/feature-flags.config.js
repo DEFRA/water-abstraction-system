@@ -29,7 +29,11 @@ const config = {
   enableLicenceMonitoringStationsSetup:
     String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_SETUP) === 'true' || false,
   enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
-  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false
+  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,
+  enableSystemNotices: String(process.env.ENABLE_SYSTEM_NOTICES_VIEW) === 'true' || false,
+  enableSystemNotifications: String(process.env.ENABLE_SYSTEM_NOTIFICATIONS) === 'true' || false,
+  enableAdHocNotifications: String(process.env.ENABLE_AD_HOC_NOTIFICATIONS) === 'true' || false,
+  allowChargeVersionUploads: String(process.env.ALLOW_CHARGE_VERSION_UPLOADS) === 'true' || false
 }
 
 module.exports = config
