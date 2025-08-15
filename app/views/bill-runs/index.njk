@@ -7,132 +7,118 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {# Bill runs busy banner #}
-      {% if busy === 'both' %}
-        {{ govukNotificationBanner({
-            html: '<p class="govuk-notification-banner__heading">Bill runs are currently busy building and cancelling.</p>
-              <p class="govuk-body">Please wait for these bill runs to finish before creating another one.</p>'
-        }) }}
-      {% elif busy === 'building' %}
-        {{ govukNotificationBanner({
-            html: '<p class="govuk-notification-banner__heading">A bill run is currently building.</p>
-              <p class="govuk-body">Please wait for this bill run to finish building before creating another one.</p>'
-        }) }}
-      {% elif busy === 'cancelling' %}
-        {{ govukNotificationBanner({
-            html: '<p class="govuk-notification-banner__heading">A bill run is currently cancelling.</p>
-              <p class="govuk-body">Please wait for this bill run to finish cancelling before creating another one.</p>'
-        }) }}
-      {% endif %}
+  {# Bill runs busy banner #}
+  {% if busy === 'both' %}
+    {{ govukNotificationBanner({
+        html: '<p class="govuk-notification-banner__heading">Bill runs are currently busy building and cancelling.</p>
+          <p>Please wait for these bill runs to finish before creating another one.</p>'
+    }) }}
+  {% elif busy === 'building' %}
+    {{ govukNotificationBanner({
+        html: '<p class="govuk-notification-banner__heading">A bill run is currently building.</p>
+          <p>Please wait for this bill run to finish building before creating another one.</p>'
+    }) }}
+  {% elif busy === 'cancelling' %}
+    {{ govukNotificationBanner({
+        html: '<p class="govuk-notification-banner__heading">A bill run is currently cancelling.</p>
+          <p>Please wait for this bill run to finish cancelling before creating another one.</p>'
+    }) }}
+  {% endif %}
 
-      <h1 class="govuk-heading-xl">Bill runs</h1>
+  <h1 class="govuk-heading-l">Bill runs</h1>
 
-      <p class="govuk-body">Create a supplementary, annual or two-part tariff bill run.</p>
+  <p>Create a supplementary, annual or two-part tariff bill run.</p>
 
-      {{ govukButton({
-        text: "Create a bill run",
-        href: "/system/bill-runs/setup"
-      }) }}
+  {{ govukButton({ text: "Create a bill run", href: "/system/bill-runs/setup", preventDoubleClick: true }) }}
 
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    </div>
-  </div>
+  {# Results #}
+  {% if billRuns|length === 0 %}
+    <p>No bill runs found.</p>
+  {% else %}
+    <h2 class="govuk-heading-l">View a bill run</h2>
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-9">
-    <div class="govuk-grid-column-full">
-      {# Results #}
-      {% if billRuns|length === 0 %}
-        <p>No bill runs found.</p>
-      {% else %}
-        <h2 class="govuk-heading-l govuk-!-margin-top-6">View a bill run</h2>
+    <p>Select date to see the details of a bill run.</p>
 
-        <p class="govuk-body">Select date to see the details of a bill run.</p>
+    {% set tableRows = [] %}
+    {% for billRun in billRuns %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
 
-        {% set tableRows = [] %}
-        {% for billRun in billRuns %}
-          {# Set an easier to use index #}
-          {% set rowIndex = loop.index0 %}
-
-
-          {# Link to view the bill run #}
-          {% set viewLink %}
-            {# If the link is null it is because the bill run is cancelling so we do not want to display a link #}
-            {% if billRun.link %}
-              <a class="govuk-link" href="{{ billRun.link }}">{{ billRun.createdAt }} <span class="govuk-visually-hidden">View bill run {{ billRun.number }}</span></a>
-            {% else %}
-              {{ billRun.createdAt }}
-            {% endif %}
-
-            {% if billRun.scheme === 'alcs' %}
-              <div class="govuk-body-s govuk-!-margin-0">Old charge scheme</div>
-            {% endif %}
-          {% endset %}
-
-          {% set billRunStatusTag %}
-            {{ statusTag(billRun.status, true) }}
-          {% endset %}
-
-          {% set tableRow = [
-            {
-              html: viewLink,
-              attributes: { 'data-test': 'date-created-' + rowIndex }
-            },
-            {
-              text: billRun.region,
-              attributes: { 'data-test': 'region-' + rowIndex }
-            },
-            {
-              text: billRun.type,
-              attributes: { 'data-test': 'bill-run-type-' + rowIndex }
-            },
-            {
-              text: billRun.number,
-              attributes: { 'data-test': 'bill-run-number-' + rowIndex },
-              format: 'numeric'
-            },
-            {
-              text: billRun.numberOfBills,
-              attributes: { 'data-test': 'number-of-bills-' + rowIndex },
-              format: 'numeric'
-            },
-            {
-              text: billRun.total,
-              attributes: { 'data-test': 'bill-run-total-' + rowIndex },
-              format: 'numeric'
-            },
-            {
-              html: billRunStatusTag,
-              attributes: { 'data-test': 'bill-run-status-' + rowIndex },
-              format: 'numeric'
-            }
-          ] %}
-
-          {# Push our row into the table rows array #}
-          {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-        {% endfor %}
-
-        {{ govukTable({
-            firstCellIsHeader: false,
-            attributes: { 'data-test': 'bill-runs'},
-            head: [
-              { text: 'Date' },
-              { text: 'Region' },
-              { text: 'Run type' },
-              { text: 'Number', format: 'numeric' },
-              { text: 'Bills', format: 'numeric' },
-              { text: 'Values', format: 'numeric' },
-              { text: 'Status', format: 'numeric' }
-            ],
-            rows: tableRows
-        }) }}
-
-        {% if pagination.numberOfPages > 1  %}
-          {{ govukPagination(pagination.component) }}
+      {# Link to view the bill run #}
+      {% set viewLink %}
+        {# If the link is null it is because the bill run is cancelling so we do not want to display a link #}
+        {% if billRun.link %}
+          <a class="govuk-link" href="{{ billRun.link }}">
+            {{ billRun.createdAt }}<span class="govuk-visually-hidden">View bill run {{ billRun.number }}</span>
+          </a>
+        {% else %}
+          {{ billRun.createdAt }}
         {% endif %}
-      {% endif %}
-    </div>
-  </div>
+
+        {% if billRun.scheme === 'alcs' %}
+          <p class="govuk-body-s govuk-!-margin-0">Old charge scheme</p>
+        {% endif %}
+      {% endset %}
+
+      {% set billRunStatusTag %}
+        {{ statusTag(billRun.status, true) }}
+      {% endset %}
+
+      {% set tableRow = [
+        {
+          html: viewLink,
+          attributes: { 'data-test': 'date-created-' + rowIndex }
+        },
+        {
+          text: billRun.region,
+          attributes: { 'data-test': 'region-' + rowIndex }
+        },
+        {
+          text: billRun.type,
+          attributes: { 'data-test': 'bill-run-type-' + rowIndex }
+        },
+        {
+          text: billRun.number,
+          attributes: { 'data-test': 'bill-run-number-' + rowIndex },
+          format: 'numeric'
+        },
+        {
+          text: billRun.numberOfBills,
+          attributes: { 'data-test': 'number-of-bills-' + rowIndex },
+          format: 'numeric'
+        },
+        {
+          text: billRun.total,
+          attributes: { 'data-test': 'bill-run-total-' + rowIndex },
+          format: 'numeric'
+        },
+        {
+          html: billRunStatusTag,
+          attributes: { 'data-test': 'bill-run-status-' + rowIndex },
+          format: 'numeric'
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+        firstCellIsHeader: false,
+        attributes: { 'data-test': 'bill-runs'},
+        head: [
+          { text: 'Date' },
+          { text: 'Region' },
+          { text: 'Run type' },
+          { text: 'Number', format: 'numeric' },
+          { text: 'Bills', format: 'numeric' },
+          { text: 'Values', format: 'numeric' },
+          { text: 'Status', format: 'numeric' }
+        ],
+        rows: tableRows
+    }) }}
+
+    {{ govukPagination(pagination.component) if pagination.numberOfPages > 1 }}
+  {% endif %}
 {% endblock %}

@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Things we need to stub
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
@@ -19,14 +19,16 @@ const PrepareReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Prepare Return Forms Service', () => {
   let notifierStub
+  let recipient
   let returnId
   let session
-  let sessionData
 
   beforeEach(async () => {
     returnId = '1234'
 
-    sessionData = {
+    recipient = RecipientsFixture.recipients().licenceHolder
+
+    session = {
       licenceRef: '123',
       dueReturns: [
         {
@@ -44,8 +46,6 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
         }
       ]
     }
-
-    session = await SessionHelper.add({ data: sessionData })
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
@@ -66,7 +66,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PrepareReturnFormsService.go(session.id, returnId)
+      const result = await PrepareReturnFormsService.go(session, returnId, recipient)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -74,18 +74,19 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
-      await PrepareReturnFormsService.go(session.id, returnId)
+      await PrepareReturnFormsService.go(session, returnId, recipient)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 
       const actualCallArgs = GenerateReturnFormRequest.send.getCall(0).args[0]
       expect(actualCallArgs).to.equal({
         address: {
-          addressLine1: 'Sherlock Holmes',
-          addressLine2: '221B Baker Street',
-          addressLine3: 'London',
-          addressLine4: 'NW1 6XE',
-          addressLine5: 'United Kingdom'
+          address_line_1: 'Mr H J Licence holder',
+          address_line_2: '1',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR'
         },
         dueDate: '6 July 2025',
         endDate: '6 June 2025',

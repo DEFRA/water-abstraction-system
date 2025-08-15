@@ -1,5 +1,11 @@
 {% extends "layout/page-layout.njk" %}
 
+{% macro addressLine(value) %}
+  {% if value %}
+    {{ value }}<br>
+  {% endif %}
+{% endmacro %}
+
 {% block header %}
   <div class="columns">
     <div class="column">
@@ -23,11 +29,13 @@
   {# This needs to account for missing lines etc #}
   <div id="address-container">
     <div class="address-block">
-      {{ address.addressLine1 }}<br>
-      {{ address.addressLine2 }}<br>
-      {{ address.addressLine3 }}<br>
-      {{ address.addressLine4 }}<br>
-      {{ address.addressLine5 }}
+      {{ addressLine(address.address_line_1) }}
+      {{ addressLine(address.address_line_2) }}
+      {{ addressLine(address.address_line_3) }}
+      {{ addressLine(address.address_line_4) }}
+      {{ addressLine(address.address_line_5) }}
+      {{ addressLine(address.address_line_6) }}
+      {{ addressLine(address.address_line_7) }}
     </div>
   </div>
 
