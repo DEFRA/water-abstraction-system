@@ -44,6 +44,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Enter the abstraction period for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

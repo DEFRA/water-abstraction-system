@@ -43,6 +43,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Enter a site description for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         siteDescription: null
       })
