@@ -39,6 +39,7 @@ describe('Return Versions Setup - Reason presenter', () => {
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
         licenceRef: '01/ABC',
         pageTitle: 'Select the reason for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         reason: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })

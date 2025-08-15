@@ -4,7 +4,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{
@@ -32,7 +32,7 @@
     }) }}
   {%endif%}
 
-  {{ pageHeading(licenceRef, pageTitle) }}
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
