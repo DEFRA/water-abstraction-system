@@ -21,6 +21,7 @@ function go(session) {
     licenceRef: licence.licenceRef,
     method: method ?? null,
     pageTitle: 'How do you want to set up the requirements for returns?',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }
