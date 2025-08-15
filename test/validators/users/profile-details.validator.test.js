@@ -15,7 +15,7 @@ describe('ProfileDetailsValidator', () => {
     const payload = {
       name: 'John Doe',
       jobTitle: 'Developer',
-      email: 'john.doe@example.com',
+      email: 'john.doe@environment-agency.gov.uk',
       tel: '1234567890',
       address: '123 Main St'
     }
@@ -76,17 +76,17 @@ describe('ProfileDetailsValidator', () => {
     expect(result.error.details[0].message).to.equal('Telephone number must be 100 characters or less')
   })
 
-  it('should fail if address exceeds 100 characters', () => {
+  it('should fail if address exceeds 300 characters', () => {
     const payload = {
       name: '',
       jobTitle: '',
       email: '',
       tel: '',
-      address: 'x'.repeat(101)
+      address: 'x'.repeat(301)
     }
     const result = ProfileDetailsValidator.go(payload)
     expect(result.error).to.not.be.undefined()
-    expect(result.error.details[0].message).to.equal('Address must be 100 characters or less')
+    expect(result.error.details[0].message).to.equal('Address must be 300 characters or less')
   })
 
   it('should fail if email is invalid', () => {
@@ -100,6 +100,19 @@ describe('ProfileDetailsValidator', () => {
     const result = ProfileDetailsValidator.go(payload)
     expect(result.error).to.not.be.undefined()
     expect(result.error.details[0].message).to.equal('Enter a valid email')
+  })
+
+  it('should fail if email does not match the required domain', () => {
+    const payload = {
+      name: '',
+      jobTitle: '',
+      email: 'someone@wrongdomain.com',
+      tel: '',
+      address: ''
+    }
+    const result = ProfileDetailsValidator.go(payload)
+    expect(result.error).to.not.be.undefined()
+    expect(result.error.details[0].message).to.equal('Email must be @environment-agency.gov.uk')
   })
 
   it('should allow missing fields (they will be undefined)', () => {

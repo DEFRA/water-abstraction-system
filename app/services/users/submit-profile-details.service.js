@@ -52,13 +52,15 @@ async function go(userId, payload, yar) {
 async function _save(userId, payload) {
   const { address, email, jobTitle, name, tel } = payload
 
-  return UserModel.query().findById(userId).patch({
-    'userData:contactDetails.address': address,
-    'userData:contactDetails.email': email,
-    'userData:contactDetails.jobTitle': jobTitle,
-    'userData:contactDetails.name': name,
-    'userData:contactDetails.tel': tel
-  })
+  return UserModel.query()
+    .findById(userId)
+    .patch({
+      'userData:contactDetails.address': address || '',
+      'userData:contactDetails.email': email || '',
+      'userData:contactDetails.jobTitle': jobTitle || '',
+      'userData:contactDetails.name': name || '',
+      'userData:contactDetails.tel': tel || ''
+    })
 }
 
 function _validate(payload) {

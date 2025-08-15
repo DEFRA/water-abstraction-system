@@ -68,6 +68,20 @@ describe('SubmitProfileDetailsService', () => {
     expect(result.navigationLinks).to.be.an.array()
   })
 
+  it('saves missing values as empty strings', async () => {
+    await SubmitProfileDetailsService.go(fakeUserId, {}, yarStub)
+
+    expect(
+      patchStub.calledOnceWith({
+        'userData:contactDetails.address': '',
+        'userData:contactDetails.email': '',
+        'userData:contactDetails.jobTitle': '',
+        'userData:contactDetails.name': '',
+        'userData:contactDetails.tel': ''
+      })
+    ).to.be.true()
+  })
+
   it('returns validation errors and does not save if invalid', async () => {
     validatorStub.returns({ error: { details: fakeErrorDetails } })
 
