@@ -86,28 +86,24 @@
 
   {# Confirm and cancel buttons #}
   {% if billRunStatus === 'ready' %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-3">
-      <div class="govuk-grid-column-two-thirds">
-        <section class="govuk-!-margin-bottom-6">
-          {{
-            govukButton({
-              classes: 'govuk-!-margin-right-1',
-              text: "Send bill run",
-              href: links.sendBillRunLink,
-              preventDoubleClick: true
-            })
-          }}
-          {{
-            govukButton({
-              classes: "govuk-button--secondary",
-              text: "Cancel bill run",
-              href: links.cancelBillRunLink,
-              preventDoubleClick: true
-            })
-          }}
-        </section>
-      </div>
-    </div>
+    <section class="govuk-button-group">
+      {{
+        govukButton({
+          classes: 'govuk-!-margin-right-1',
+          text: "Send bill run",
+          href: links.sendBillRunLink,
+          preventDoubleClick: true
+        })
+      }}
+      {{
+        govukButton({
+          classes: "govuk-button--secondary",
+          text: "Cancel bill run",
+          href: links.cancelBillRunLink,
+          preventDoubleClick: true
+        })
+      }}
+    </section>
   {% endif %}
 
   <div class="divider govuk-!-margin-bottom-7"></div>
