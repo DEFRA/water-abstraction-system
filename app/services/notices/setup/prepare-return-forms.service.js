@@ -14,13 +14,14 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
  *
  * @param {module:SessionModel} session - The session instance
  * @param {string} returnId - The UUID of the return log
+ * @param {object} recipient
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
-async function go(session, returnId) {
+async function go(session, returnId, recipient) {
   const dueReturnLog = _dueReturnLog(session.dueReturns, returnId)
 
-  const pageData = PrepareReturnFormsPresenter.go(session, dueReturnLog)
+  const pageData = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 

@@ -7,6 +7,7 @@
  */
 
 const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
+const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -23,7 +24,23 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, contactHashId, returnId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return PrepareReturnFormsService.go(session, returnId)
+  const [recipient] = await _recipient(session, contactHashId)
+
+  // We need to implement an intermediary page to allow the user to select which return id they want to 'preview'.
+  // For now, we add the 'placeHolder' to highlight this is a temporary measure and needs to change.
+  if (returnId === 'placeHolder') {
+    returnId = session.selectedReturns[0]
+  }
+
+  return PrepareReturnFormsService.go(session, returnId, recipient)
+}
+
+async function _recipient(session, contactHashId) {
+  const recipients = await RecipientsService.go(session)
+
+  return recipients.filter((recipient) => {
+    return recipient.contact_hash_id === contactHashId
+  })
 }
 
 module.exports = {
