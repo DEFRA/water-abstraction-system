@@ -97,6 +97,7 @@ describe('Return Versions - Setup - Check service', () => {
           },
           notification: undefined,
           pageTitle: 'Check the requirements for returns for Turbo Kid',
+          pageTitleCaption: 'Licence 01/ABC',
           quarterlyReturnSubmissions: false,
           quarterlyReturns: undefined,
           reason: 'Major change',

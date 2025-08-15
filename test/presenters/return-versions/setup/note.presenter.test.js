@@ -41,6 +41,7 @@ describe('Return Versions Setup - Note presenter', () => {
         licenceRef: '01/ABC',
         note: null,
         pageTitle: 'Add a note',
+        pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

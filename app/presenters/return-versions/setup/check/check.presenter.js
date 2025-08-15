@@ -35,6 +35,7 @@ function go(session) {
     multipleUpload,
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     quarterlyReturns,
     reason: returnRequirementReasons[reason],

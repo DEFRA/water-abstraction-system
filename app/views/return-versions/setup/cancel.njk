@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-  {{ pageHeading(licenceRef, pageTitle) }}
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
 
   <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--m govuk-section-break--visible ">
 
