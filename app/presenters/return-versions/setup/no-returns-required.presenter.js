@@ -20,6 +20,7 @@ function go(session) {
     licenceRef: licence.licenceRef,
     reason: reason || null,
     pageTitle: 'Why are no returns required?',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }
