@@ -20,6 +20,7 @@ function go(session) {
     licenceRef: licence.licenceRef,
     note: note ? note.content : null,
     pageTitle: 'Add a note',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
 }

@@ -22,6 +22,7 @@ function go(session, requirementIndex) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Enter a site description for the requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId,
     siteDescription: requirement?.siteDescription ? requirement.siteDescription : null
   }
