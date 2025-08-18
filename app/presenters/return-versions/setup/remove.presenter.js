@@ -25,6 +25,7 @@ function go(session, requirementIndex) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'You are about to remove these requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     returnRequirement: _formattedReturnRequirement(requirement),
     sessionId,
     startDate: _startDate(session)
