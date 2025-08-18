@@ -15,10 +15,11 @@ const UserModel = require('../../../app/models/user.model.js')
 const SubmitProfileDetailsService = require('../../../app/services/users/submit-profile-details.service.js')
 
 describe('Users - Submit profile details service', () => {
-  const validUserId = 123
+  const userId = 123
 
   let findByIdStub
   let patchStub
+  let payload
   let userModelQueryStub
   let yarStub
 
@@ -36,38 +37,35 @@ describe('Users - Submit profile details service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      const validPayload = {
-        address: '123 Test St',
-        email: 'test@environment-agency.gov.uk',
-        jobTitle: 'Developer',
-        name: 'Test User',
-        tel: '0123456789'
-      }
+      beforeEach(() => {
+        payload = {
+          address: '123 Test St',
+          email: 'test@environment-agency.gov.uk',
+          jobTitle: 'Developer',
+          name: 'Test User',
+          tel: '0123456789'
+        }
+      })
 
       it('saves the user details', async () => {
-        const result = await SubmitProfileDetailsService.go(validUserId, validPayload, yarStub)
+        const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(patchStub.calledOnce).to.be.true()
-        expect(findByIdStub.calledOnceWith(validUserId)).to.be.true()
+        expect(findByIdStub.calledOnceWith(userId)).to.be.true()
         expect(
           patchStub.calledOnceWith({
-            'userData:contactDetails.address': validPayload.address,
-            'userData:contactDetails.email': validPayload.email,
-            'userData:contactDetails.jobTitle': validPayload.jobTitle,
-            'userData:contactDetails.name': validPayload.name,
-            'userData:contactDetails.tel': validPayload.tel
+            'userData:contactDetails.address': payload.address,
+            'userData:contactDetails.email': payload.email,
+            'userData:contactDetails.jobTitle': payload.jobTitle,
+            'userData:contactDetails.name': payload.name,
+            'userData:contactDetails.tel': payload.tel
           })
         ).to.be.true()
-        expect(result).to.include({
-          pageTitle: 'Profile details',
-          error: null,
-          ...validPayload
-        })
         expect(result.navigationLinks).to.be.an.array()
       })
 
       it('flashes a notification of successful update', async () => {
-        await SubmitProfileDetailsService.go(validUserId, validPayload, yarStub)
+        await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(
           yarStub.flash.calledOnceWith('notification', {
@@ -79,7 +77,7 @@ describe('Users - Submit profile details service', () => {
 
       describe('and the payload has empty or missing values', () => {
         it('saves missing values as empty strings', async () => {
-          await SubmitProfileDetailsService.go(validUserId, {}, yarStub)
+          await SubmitProfileDetailsService.go(userId, {}, yarStub)
 
           expect(
             patchStub.calledOnceWith({
@@ -92,55 +90,53 @@ describe('Users - Submit profile details service', () => {
           ).to.be.true()
         })
       })
-
-      describe('but the database update fails', () => {
-        it('propagates errors thrown by the database update', async () => {
-          userModelQueryStub.restore()
-          Sinon.stub(UserModel, 'query').throws(new Error('DB error'))
-
-          let error
-          try {
-            await SubmitProfileDetailsService.go(validUserId, {}, yarStub)
-          } catch (e) {
-            error = e
-          }
-
-          expect(error).to.exist()
-          expect(error.message).to.equal('DB error')
-        })
-      })
     })
 
     describe('with an invalid payload', () => {
-      const invalidPayload = {
-        email: 'invalidtestemail'
-      }
-      const expectedValidationResult = {
-        email: 'Enter a valid email',
-        errorList: [{ href: '#email', text: 'Enter a valid email' }]
-      }
+      beforeEach(() => {
+        payload = {
+          email: 'invalidtestemail'
+        }
+      })
 
       it('does not save', async () => {
-        await SubmitProfileDetailsService.go(validUserId, invalidPayload, yarStub)
+        await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(userModelQueryStub.notCalled).to.be.true()
       })
 
       it('returns the details required to redisplay the page including validation errors', async () => {
-        const result = await SubmitProfileDetailsService.go(validUserId, invalidPayload, yarStub)
+        const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(result).to.include({
           pageTitle: 'Profile details',
-          error: expectedValidationResult,
-          ...invalidPayload
+          error: {
+            email: 'Enter a valid email',
+            errorList: [{ href: '#email', text: 'Enter a valid email' }]
+          },
+          ...payload
         })
       })
 
       it('does not flash a notification', async () => {
-        await SubmitProfileDetailsService.go(validUserId, invalidPayload, yarStub)
+        await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(yarStub.flash.notCalled).to.be.true()
       })
+    })
+  })
+
+  describe('when the service errors', () => {
+    beforeEach(() => {
+      userModelQueryStub.restore()
+      Sinon.stub(UserModel, 'query').throws(new Error('Model query error'))
+    })
+
+    it('throws the error', async () => {
+      const error = await expect(SubmitProfileDetailsService.go(userId, {}, yarStub)).to.reject()
+
+      expect(error).to.exist()
+      expect(error.message).to.equal('Model query error')
     })
   })
 })

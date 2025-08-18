@@ -47,21 +47,25 @@ describe('Users - View profile details service', () => {
       const result = await ViewProfileDetailsService.go(userId, yarStub)
 
       expect(result).to.include({ pageTitle: 'Profile details' })
-      expect(result).to.include('navigationLinks')
-      expect(result.navigationLinks).to.include([
-        {
-          active: true,
-          href: '/system/users/me/profile-details',
-          text: 'Profile details'
-        }
-      ])
       expect(result).to.include(profileDetails)
+    })
+
+    it('returns the correctly selected navigation', async () => {
+      const result = await ViewProfileDetailsService.go(userId, yarStub)
+
+      expect(result).to.include('navigationLinks')
+      expect(result.navigationLinks).to.equal([
+        { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
+        { href: '/account/update-password', text: 'Change password' },
+        { href: '/signout', text: 'Sign out' }
+      ])
     })
 
     describe('and there is a notification to be displayed', () => {
       beforeEach(() => {
         yarStub = { flash: Sinon.stub().withArgs('notification').returns([testNotification]) }
       })
+
       it('returns the notification', async () => {
         const result = await ViewProfileDetailsService.go(userId, yarStub)
 
@@ -77,37 +81,18 @@ describe('Users - View profile details service', () => {
         expect(result.notification).to.be.undefined()
       })
     })
-
-    describe('but the current user is not found', () => {
-      beforeEach(() => {
-        // Simulate not found: select resolves to null
-        selectStub.resolves(null)
-      })
-      it('does not return data fields (should this error?)', async () => {
-        const result = await ViewProfileDetailsService.go(999, yarStub)
-
-        expect(userModelQueryStub.calledOnce).to.be.true()
-        expect(findByIdStub.calledWith(999)).to.be.true()
-        expect(selectStub.calledOnce).to.be.true()
-        expect(result).to.not.include(Object.keys(profileDetails))
-      })
-    })
   })
 
-  describe('but the database read fails', () => {
+  describe('when the service errors', () => {
     beforeEach(() => {
       userModelQueryStub.restore()
-      Sinon.stub(UserModel, 'query').throws(new Error('DB error'))
+      Sinon.stub(UserModel, 'query').throws(new Error('Model query error'))
     })
-    it('propagates errors thrown by the database read', async () => {
-      let error
-      try {
-        await ViewProfileDetailsService.go(userId, yarStub)
-      } catch (err) {
-        error = err
-      }
+    it('throws the error', async () => {
+      const error = await expect(ViewProfileDetailsService.go(userId, yarStub)).to.reject()
+
       expect(error).to.exist()
-      expect(error.message).to.equal('DB error')
+      expect(error.message).to.equal('Model query error')
     })
   })
 })

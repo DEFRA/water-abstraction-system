@@ -1,15 +1,14 @@
 'use strict'
 
-const { ref } = require('objection')
-
 /**
  * Orchestrates fetching and presenting the data for `/profiles/me/details` page
  * @module ViewProfileDetailsService
  */
 
 const UserModel = require('../../models/user.model.js')
+const { ref } = require('objection')
 
-const navigationLinks = [
+const NAVIGATION_LINKS = [
   { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
   { href: '/account/update-password', text: 'Change password' },
   { href: '/signout', text: 'Sign out' }
@@ -41,7 +40,7 @@ async function go(userId, yar) {
   const notification = yar.flash('notification')[0]
 
   return {
-    navigationLinks,
+    navigationLinks: NAVIGATION_LINKS,
     notification,
     pageTitle: 'Profile details',
     ...profileDetails
