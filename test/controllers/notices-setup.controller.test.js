@@ -81,6 +81,36 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       let response
 
+      describe('when the journey is "alerts"', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: '/notices/setup/alerts?monitoringStationId=24d8ed70-e474-45bc-83db-90e34d5c34cf',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['hof_notifications'] }
+            }
+          }
+
+          response = { path: 'abstraction-alerts/alert-type', sessionId: session.id }
+        })
+
+        describe('and a request is valid', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+          })
+
+          it('redirects successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`
+            )
+          })
+        })
+      })
+
       describe('when the journey is "standard"', () => {
         beforeEach(async () => {
           getOptions = {
@@ -95,7 +125,7 @@ describe('Notices Setup controller', () => {
           response = { path: 'returns-period', sessionId: session.id }
         })
 
-        describe('when a request is valid', () => {
+        describe('and a request is valid', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(response)
           })
@@ -123,7 +153,7 @@ describe('Notices Setup controller', () => {
           response = { path: 'licence', sessionId: session.id }
         })
 
-        describe('when a request is valid', () => {
+        describe('and a request is valid', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(response)
           })
@@ -342,7 +372,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -364,7 +394,9 @@ describe('Notices Setup controller', () => {
       describe('POST', () => {
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({})
           })
@@ -379,7 +411,9 @@ describe('Notices Setup controller', () => {
 
         describe('when a request is invalid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({
               error: { text: 'Select an option' },
@@ -406,7 +440,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/alert-thresholds`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -428,7 +462,9 @@ describe('Notices Setup controller', () => {
       describe('POST', () => {
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-thresholds`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-thresholds`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertThresholdsService, 'go').resolves({})
           })
@@ -445,7 +481,9 @@ describe('Notices Setup controller', () => {
 
         describe('when a request is invalid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertTypeService, 'go').resolves({
               error: { text: 'Select an option' },
@@ -472,7 +510,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/alert-type`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -494,7 +532,9 @@ describe('Notices Setup controller', () => {
       describe('POST', () => {
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertTypeService, 'go').resolves({})
           })
@@ -511,7 +551,9 @@ describe('Notices Setup controller', () => {
 
         describe('when a request is invalid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitAlertTypeService, 'go').resolves({
               error: { text: 'Select an option' },
@@ -538,7 +580,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/cancel`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -562,7 +604,9 @@ describe('Notices Setup controller', () => {
           const monitoringStationId = '123'
 
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitCancelAlertsService, 'go').resolves({ monitoringStationId })
           })
@@ -585,7 +629,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/check-licence-matches`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -607,7 +651,9 @@ describe('Notices Setup controller', () => {
       describe('POST', () => {
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/check-licence-matches`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/check-licence-matches`, {}, [
+              'hof_notifications'
+            ])
 
             Sinon.stub(SubmitCheckLicenceMatchesService, 'go').resolves()
           })
@@ -634,7 +680,7 @@ describe('Notices Setup controller', () => {
             url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['hof_notifications'] }
             }
           }
 
@@ -760,7 +806,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['hof_notifications'] }
           }
         }
 
@@ -790,7 +836,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['hof_notifications'] }
           }
         }
 
