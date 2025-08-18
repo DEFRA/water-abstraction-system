@@ -8,131 +8,104 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Go back to bill runs',
-      href: '/system/bill-runs'
-    })
-  }}
+  {{ govukBackLink({ text: 'Go back to bill runs', href: links.backLink }) }}
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>{{ pageTitle }}
-    </h1>
-  </div>
+  <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-0">
-    <div class="govuk-grid-column-full">
+  <p>{{ statusTag(billRunStatus) }}</p>
 
-      {# Status tag #}
-      <p class="govuk-body">
-        {{ statusTag(billRunStatus) }}
-      </p>
+  {#
+    GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
+    can't assign our data-test attribute using the component. Our solution is to use the html option for each row
+    instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
+    span.
+  #}
+  {{
+    govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: { 'data-test': 'meta-data' },
+      rows: [
+        {
+          key: { text: "Date created", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Region", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Bill run type", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-type">' + billRunType + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Charge scheme", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Financial year", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Transaction file", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-file">' + transactionFile + '</span>', classes: "meta-data__value" }
+        } if transactionFile,
+        {
+          key: { text: "Bill number", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-number">' + billNumber + '</span>', classes: "meta-data__value" }
+        } if billNumber
+      ]
+    })
+  }}
 
-      {# Bill run meta-data #}
-      {#
-        GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
-        can't assign our data-test attribute using the component. Our solution is to use the html option for each row
-        instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
-        span.
-      #}
-      {{
-        govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          attributes: {
-            'data-test': 'meta-data'
-          },
-          rows: [
-            {
-              key: { text: "Date created", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Region", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Bill run type", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-type">' + billRunType + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Charge scheme", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Financial year", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
-            },
-            {
-              key: { text: "Transaction file", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-file">' + transactionFile + '</span>', classes: "meta-data__value" }
-            } if transactionFile,
-            {
-              key: { text: "Bill number", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-number">' + billNumber + '</span>', classes: "meta-data__value" }
-            } if billNumber
-          ]
-        })
-      }}
-    </div>
-  </div>
+  <div class="govuk-body govuk-!-font-weight-bold">
+    {# Bill run total #}
+    <h2>
+      <span class="govuk-!-display-block govuk-!-font-size-80" data-test="bill-total">{{ billRunTotal }}</span>
+      <span class="govuk-!-font-size-24">Total</span>
+    </h2>
 
-  {# Bill run total #}
-  <div class="govuk-grid-row govuk-!-margin-bottom-3">
-    <div class="govuk-grid-column-two-thirds">
-      <h2>
-        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="bill-total">{{ billRunTotal }}</span><br>
-        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total</span>
-      </h2>
-    </div>
-  </div>
-
-  {# Credit and Debit totals #}
-  {% if displayCreditDebitTotals %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-6">
-      <div class="govuk-grid-column-one-half">
-        <h2>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="credits-total">{{ creditsTotal }}</span><br>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24" data-test="credits-count">{{ creditsCount }}</span>
-        </h2>
+    {# Credit and Debit totals #}
+    {% if displayCreditDebitTotals %}
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-one-half">
+          <h2>
+            <span class="govuk-!-display-block govuk-!-font-size-48" data-test="credits-total">{{ creditsTotal }}</span>
+            <span class="govuk-!-font-size-24" data-test="credits-count">{{ creditsCount }}</span>
+          </h2>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <h2>
+            <span class="govuk-!-display-block govuk-!-font-size-48" data-test="debits-total">{{ debitsTotal }}</span>
+            <span class="govuk-!-font-size-24" data-test="debits-count">{{ debitsCount }}</span>
+          </h2>
+        </div>
       </div>
-      <div class="govuk-grid-column-one-half">
-        <h2>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="debits-total">{{ debitsTotal }}</span><br>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24" data-test="debits-count">{{ debitsCount }}</span>
-        </h2>
-      </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 
   {# Confirm and cancel buttons #}
   {% if billRunStatus === 'ready' %}
-    {% set cancelBillRunLink = '/system/bill-runs/' + billRunId + '/cancel' %}
-    {% set sendBillRunLink = '/system/bill-runs/' + billRunId + '/send' %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-3">
-      <div class="govuk-grid-column-two-thirds">
-        <section class="govuk-!-margin-bottom-6">
-          {{
-            govukButton({
-              classes: 'govuk-!-margin-right-1',
-              text: "Send bill run",
-              href: sendBillRunLink
-            })
-          }}
-          {{
-            govukButton({
-              classes: "govuk-button--secondary",
-              text: "Cancel bill run",
-              href: cancelBillRunLink
-            })
-          }}
-        </section>
-      </div>
-    </div>
+    <section class="govuk-button-group">
+      {{
+        govukButton({
+          classes: 'govuk-!-margin-right-1',
+          text: "Send bill run",
+          href: links.sendBillRunLink,
+          preventDoubleClick: true
+        })
+      }}
+      {{
+        govukButton({
+          classes: "govuk-button--secondary",
+          text: "Cancel bill run",
+          href: links.cancelBillRunLink,
+          preventDoubleClick: true
+        })
+      }}
+    </section>
   {% endif %}
 
   <div class="divider govuk-!-margin-bottom-7"></div>
@@ -141,12 +114,12 @@
   <h2 class="govuk-heading-l" data-test="bills-count">{{ billsCount }}</h2>
 
   {# Download the bill run as CSV button #}
-  {% set downloadBillRunLink = '/billing/batch/' + billRunId + '/transactions-csv' %}
   {{
     govukButton({
       classes: "govuk-button--secondary",
       text: "Download this bill run",
-      href: downloadBillRunLink
+      href: links.downloadBillRunLink,
+      preventDoubleClick: true
     })
   }}
 
@@ -171,7 +144,7 @@
   {% endif %}
 
   {# Add the bill tables #}
-  {# If the bill run contains both water companies and normal abstractors we show a seperate table for each group. #}
+  {# If the bill run contains both water companies and normal abstractors we show a separate table for each group. #}
   {# Each table will also display a caption, for example, '3 water companies'. #}
   {# If there is only one group type in the bill run we just show the one table without a caption. #}
   {% for billGroup in billGroups %}
@@ -191,7 +164,9 @@
 
       {# Generate the link to view the bill #}
       {% set actionLink %}
-        <a class="govuk-link" href="/system/bills/{{ bill.id }}">View<span class="govuk-visually-hidden"> bill for billing account {{ bill.accountNumber }}</span></a>
+        <a class="govuk-link" href="/system/bills/{{ bill.id }}">
+          View<span class="govuk-visually-hidden"> bill for billing account {{ bill.accountNumber }}</span>
+        </a>
       {% endset %}
 
       {# Generate the licence cell #}
@@ -276,20 +251,16 @@
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
-    {# Display the table using a GOVUK table component #}
-    <div class="govuk-grid-row govuk-!-margin-bottom-0">
-      <div class="govuk-grid-column-full">
-        {{
-          govukTable({
-            caption: caption,
-            captionClasses: "govuk-table__caption--m",
-            firstCellIsHeader: true,
-            attributes: { 'data-test': billGroup.type},
-            head: tableHeaders,
-            rows: tableRows
-          })
-        }}
-      </div>
-    </div>
+    {# Display the table #}
+    {{
+      govukTable({
+        caption: caption,
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: true,
+        attributes: { 'data-test': billGroup.type},
+        head: tableHeaders,
+        rows: tableRows
+      })
+    }}
   {% endfor %}
 {% endblock %}
