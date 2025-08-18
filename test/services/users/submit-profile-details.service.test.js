@@ -17,9 +17,9 @@ const SubmitProfileDetailsService = require('../../../app/services/users/submit-
 describe('Users - Submit profile details service', () => {
   const validUserId = 123
 
-  let userModelQueryStub
   let findByIdStub
   let patchStub
+  let userModelQueryStub
   let yarStub
 
   beforeEach(() => {
