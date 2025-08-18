@@ -94,7 +94,7 @@ function _getOptions() {
     url: '/users/me/profile-details',
     auth: {
       strategy: 'session',
-      credentials: { scope: ['hof_notifications'] }
+      credentials: { scope: ['hof_notifications'], user: { id: 1000 } }
     }
   }
 }
