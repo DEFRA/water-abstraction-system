@@ -120,5 +120,20 @@ describe('Notices Setup - Abstraction Alerts - Submit Check Licence Matches Serv
         expect(refreshedSession.relevantLicenceMonitoringStations).to.equal([licenceMonitoringStations.three])
       })
     })
+
+    describe('and "selectedRecipients" is present in the session (the user has gone back in the journey from the check page)', () => {
+      beforeEach(async () => {
+        sessionData.selectedRecipients = ['fc5748c8-ce0e-4d17-bd23-d230cdba7b72']
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('deletes "selectedRecipients" from the session', async () => {
+        await SubmitCheckLicenceMatchesService.go(session.id)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.selectedRecipients).not.to.exist()
+      })
+    })
   })
 })

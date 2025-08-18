@@ -5,6 +5,7 @@
  * @module AddressController
  */
 
+const AddAdditionalRecipientService = require('../services/notices/setup/add-additional-recipient.service.js')
 const InternationalAddressService = require('../services/address/international.service.js')
 const ManualAddressService = require('../services/address/manual.service.js')
 const PostcodeService = require('../services/address/postcode.service.js')
@@ -36,8 +37,9 @@ async function submitManual(request, h) {
     return h.view('address/manual.njk', pageData)
   }
 
-  // TODO: return to calling service
-  return h.redirect(`/system/address/${sessionId}/check`)
+  await AddAdditionalRecipientService.go(sessionId)
+
+  return h.redirect(pageData.redirect)
 }
 
 async function submitPostcode(request, h) {
@@ -57,16 +59,15 @@ async function submitSelect(request, h) {
 
   const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
 
-  if (pageData.redirect) {
-    return h.redirect(`/system/address/${sessionId}/manual`)
-  }
-
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
   }
 
-  // TODO: Update to return to which ever journey is using the address lookup service
-  return h.redirect(`/system/address/${sessionId}/check`)
+  if (pageData.succeeded) {
+    await AddAdditionalRecipientService.go(sessionId)
+  }
+
+  return h.redirect(pageData.redirect)
 }
 
 async function viewInternational(request, h) {

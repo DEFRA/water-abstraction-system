@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const ContactPresenter = require('./contact.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
@@ -42,27 +42,9 @@ function go(recipients, page, pagination, session) {
   }
 }
 
-/**
- * Contact can be an email or an address (letter)
- *
- * If it is an address then we convert the contact CSV string to an array. If it is an email we return the email in
- * array for the UI to have consistent formatting.
- *
- * @private
- */
-function _contact(recipient) {
-  if (recipient.email) {
-    return [recipient.email]
-  }
-
-  const notifyAddress = NotifyAddressPresenter.go(recipient.contact)
-
-  return Object.values(notifyAddress)
-}
-
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
-    const contact = _contact(recipient)
+    const contact = ContactPresenter.go(recipient)
 
     return {
       contact,
@@ -76,23 +58,28 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 function _links(session) {
   const { id, journey } = session
 
-  let back
-  let removeLicences = ''
-
-  if (journey === 'adhoc') {
-    back = `/system/notices/setup/${id}/check-notice-type`
-  } else if (journey === 'alerts') {
-    back = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
-  } else {
-    back = `/system/notices/setup/${id}/returns-period`
-    removeLicences = `/system/notices/setup/${id}/remove-licences`
+  const links = {
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`
   }
 
-  return {
-    back,
-    cancel: `/system/notices/setup/${id}/cancel`,
-    download: `/system/notices/setup/${id}/download`,
-    removeLicences
+  if (journey === 'adhoc') {
+    return {
+      ...links,
+      back: `/system/notices/setup/${id}/check-notice-type`,
+      manage: `/system/notices/setup/${id}/select-recipients`
+    }
+  } else if (journey === 'alerts') {
+    return {
+      ...links,
+      back: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
+    }
+  } else {
+    return {
+      ...links,
+      back: `/system/notices/setup/${id}/returns-period`,
+      removeLicences: `/system/notices/setup/${id}/remove-licences`
+    }
   }
 }
 
@@ -117,15 +104,16 @@ function _paginateRecipients(recipients, page) {
 }
 
 function _previewLink(noticeType, recipient, sessionId, contact) {
-  // We don't currently support previewing return forms
-  if (noticeType === 'returnForms') {
-    return null
-  }
-
   // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
   // else it might give a false impression the letter will be sent.
   if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
     return null
+  }
+
+  if (noticeType === 'returnForms') {
+    // We need to implement an intermediary page to allow the user to select which return id they want to 'preview'.
+    // For now, we add the 'placeHolder' to highlight this is a temporary measure and needs to change.
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/return-forms/placeHolder`
   }
 
   // Returns invitations and reminders can be previewed directly

@@ -24,6 +24,7 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'bill-runs',
+    backlink: `/system/bill-runs/setup/${sessionId}/region`,
     pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
     sessionId
   }

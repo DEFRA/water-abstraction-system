@@ -1,0 +1,8 @@
+{% macro pageHeading(pageTitle, caption, classes='govuk-heading-l') -%}
+  {% if caption %}
+    <span class="govuk-caption-l">{{ caption }}</span>
+  {% endif %}
+  <h1 class="{{ classes }}">
+    {{ pageTitle }}
+  </h1>
+{%- endmacro %}

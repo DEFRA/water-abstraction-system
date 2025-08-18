@@ -15,17 +15,17 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(notificationData) {
-  const { messageType, plaintext, personalisation, sendAfter } = notificationData.notification
+  const { createdAt, messageType, personalisation, plaintext, recipient, sendAfter } = notificationData.notification
   const { id: licenceId, licenceRef } = notificationData.licence
 
   return {
-    address: messageType === 'letter' ? _address(personalisation) : null,
+    address: messageType === 'letter' ? _address(personalisation) : recipient,
+    backLink: `/system/licences/${licenceId}/communications`,
     contents: plaintext,
-    licenceId,
     licenceRef,
     messageType,
     pageTitle: _pageTitle(notificationData.notification),
-    sentDate: formatLongDate(sendAfter)
+    sentDate: sendAfter ? formatLongDate(sendAfter) : formatLongDate(createdAt)
   }
 }
 

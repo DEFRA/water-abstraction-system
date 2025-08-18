@@ -18,27 +18,12 @@ describe('Address - Submit Postcode Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
-    payload = {
-      address: {
-        postcode: 'SW1A 1AA'
-      }
-    }
-    sessionData = {
-      address: {}
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
-  })
-
   describe('when called with a valid payload', () => {
     beforeEach(async () => {
       payload = {
         postcode: 'SW1A 1AA'
       }
-      sessionData = {
-        address: {}
-      }
+      sessionData = { address: {} }
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -63,7 +48,8 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = {}
         sessionData = {
-          address: {}
+          address: {},
+          contactName: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -73,10 +59,12 @@ describe('Address - Submit Postcode Service', () => {
         const result = await SubmitPostcodeService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Enter a UK postcode',
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
+          internationalLink: `/system/address/${session.id}/international`,
           error: { text: 'Enter a UK postcode' },
-          sessionId: session.id
+          pageTitle: 'Enter a UK postcode',
+          postcode: null
         })
       })
     })
@@ -85,7 +73,8 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
-          address: {}
+          address: {},
+          contactName: 'Fake Person'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -95,11 +84,12 @@ describe('Address - Submit Postcode Service', () => {
         const result = await SubmitPostcodeService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Enter a UK postcode',
-          postcode: 'notapostcode',
+          activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/contact-type`,
           error: { text: 'Enter a valid UK postcode' },
-          sessionId: session.id
+          internationalLink: `/system/address/${session.id}/international`,
+          pageTitle: 'Enter a UK postcode',
+          postcode: 'notapostcode'
         })
       })
     })

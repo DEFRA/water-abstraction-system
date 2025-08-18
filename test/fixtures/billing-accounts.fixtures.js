@@ -36,6 +36,7 @@ function billingAccount() {
             address6: 'Kent',
             postcode: 'ME15 0NE'
           },
+          company: null,
           contact
         }
       ],

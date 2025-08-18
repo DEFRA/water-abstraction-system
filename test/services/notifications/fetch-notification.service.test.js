@@ -43,6 +43,7 @@ describe('Fetch Notification service', () => {
           licenceRef: licence.licenceRef
         },
         notification: {
+          createdAt: notification.createdAt,
           messageType: 'letter',
           personalisation: {
             postcode: 'ME15 0NE',
@@ -62,6 +63,7 @@ describe('Fetch Notification service', () => {
             '\n' +
             '# Why you are receiving this notification\n' +
             '\n',
+          recipient: null,
           sendAfter: new Date('2024-07-02T16:52:17.000Z'),
           event: {
             metadata: {

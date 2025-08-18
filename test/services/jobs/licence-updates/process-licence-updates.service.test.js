@@ -16,9 +16,9 @@ const WorkflowModel = require('../../../../app/models/workflow.model.js')
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
 
 // Thing under test
-const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.js')
+const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.service.js')
 
-describe('Process Licence Updates service', () => {
+describe('Jobs - Licence Updates - Process Licence Updates service', () => {
   let fetchResults
   let notifierStub
 

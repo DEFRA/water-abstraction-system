@@ -1,0 +1,27 @@
+<div class="columns">
+  <div class="column">
+      <div class="licence-details">
+{#          <div class="qr">{{ qrCode(qr_url, 42) | safe }}</div>#}
+        <div class="licence">
+          <p class="smaller">
+            Return reference&nbsp;
+            <span class="bold">{{ returnReference }}</span>
+          </p>
+          <p class="smaller">
+            Licence number&nbsp;
+            <span class="bold">{{ licenceRef }}</span>
+          </p>
+        </div>
+      </div>
+  </div>
+  <div class="column meta">
+    <div class="header">
+      <p class="smaller">{{ regionAndArea }}</p>
+    </div>
+    {% if twoPartTariff %}
+      <div class="header">
+        <p class="smaller">Two-part tariff</p>
+      </div>
+    {% endif %}
+  </div>
+</div>

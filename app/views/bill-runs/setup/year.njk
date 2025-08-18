@@ -5,11 +5,10 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: '/system/bill-runs/setup/' + sessionId + '/region'
+      href: backlink
     })
   }}
 {% endblock %}
@@ -27,27 +26,25 @@
       }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        attributes: {
-          'data-test': 'bill-run-year'
-        },
-        name: 'year',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
-          }
-        },
-        items: financialYearsData
-      }) }}
+    {{ govukRadios({
+      attributes: {
+        'data-test': 'bill-run-year'
+      },
+      name: 'year',
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l'
+        }
+      },
+      items: financialYearsData
+    }) }}
 
-      {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

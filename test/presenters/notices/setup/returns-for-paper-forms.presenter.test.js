@@ -19,7 +19,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
 
   beforeEach(() => {
     dueReturn = {
-      description: 'Potable Water Supply - Direct',
+      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnId: generateUUID(),
       returnReference: '3135',

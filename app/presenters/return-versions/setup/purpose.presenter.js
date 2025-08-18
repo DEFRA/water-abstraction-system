@@ -23,6 +23,7 @@ function go(session, requirementIndex, licencePurposes) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the purpose for the requirements for returns',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     purposes: _purposes(licencePurposes, requirement.purposes),
     sessionId
   }

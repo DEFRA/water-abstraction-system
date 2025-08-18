@@ -24,7 +24,10 @@ describe('View Return Log service', () => {
   beforeEach(() => {
     const mockReturnLog = ReturnLogModel.fromJson({
       ...ReturnLogHelper.defaults({
-        purposes: [{ alias: 'PURPOSE_ALIAS' }]
+        metadata: {
+          ...ReturnLogHelper.defaults().metadata,
+          purposes: [{ alias: 'PURPOSE_ALIAS', description: 'PURPOSE_DESCRIPTION' }]
+        }
       }),
       licence: LicenceModel.fromJson(LicenceHelper.defaults())
     })

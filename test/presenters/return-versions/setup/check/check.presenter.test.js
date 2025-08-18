@@ -50,6 +50,7 @@ describe('Return Versions Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        pageTitleCaption: 'Licence 01/ABC',
         quarterlyReturnSubmissions: false,
         quarterlyReturns: undefined,
         reason: 'Major change',
@@ -191,6 +192,7 @@ describe('Return Versions Setup - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result.pageTitle).to.equal('Check the requirements for returns for Turbo Kid')
+      expect(result.pageTitleCaption).to.equal('Licence 01/ABC')
     })
   })
 

@@ -281,6 +281,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}',
+    options: {
+      handler: NoticesSetupController.viewPreviewReturnForms,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
       handler: NoticesSetupController.preview,
@@ -404,6 +416,30 @@ const routes = [
     path: '/notices/setup/{sessionId}/contact-type',
     options: {
       handler: NoticesSetupController.submitContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.viewSelectRecipients,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/select-recipients',
+    options: {
+      handler: NoticesSetupController.submitSelectRecipients,
       auth: {
         access: {
           scope: ['returns']
