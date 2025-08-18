@@ -8,7 +8,6 @@ const routes = [
     path: '/users/me/profile-details',
     options: {
       handler: UsersController.viewProfileDetails,
-      //app: { excludeFromProd: true },
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']
@@ -21,7 +20,6 @@ const routes = [
     path: '/users/me/profile-details',
     options: {
       handler: UsersController.submitProfileDetails,
-      //app: { excludeFromProd: true },
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']

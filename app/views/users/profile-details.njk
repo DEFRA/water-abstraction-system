@@ -5,6 +5,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{
@@ -23,7 +24,6 @@
     }) }}
   {%endif%}
 
-  {# Notification banner #}
   {% if notification %}
     {{ govukNotificationBanner({
       titleText: notification.title,
@@ -31,10 +31,9 @@
     }) }}
   {% endif %}
 
-  {# Main heading #}
-  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  {{ pageHeading(pageTitle) }}
 
-  <p class="govuk-body">This will be visible to your public contacts</p>
+  <p>This will be visible to your public contacts</p>
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>

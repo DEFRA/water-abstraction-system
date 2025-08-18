@@ -1,33 +1,29 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/users/me/profile-details` page
+ * Orchestrates validating and storing the data for `/users/me/profile-details` page
  * @module SubmitProfileDetailsService
  */
 
-const UserModel = require('../../models/user.model.js')
 const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
+const UserModel = require('../../models/user.model.js')
 
-const navigationLinks = [
+const NAVIGATION_LINKS = [
   { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
   { href: '/account/update-password', text: 'Change password' },
   { href: '/signout', text: 'Sign out' }
 ]
 
 /**
- * Orchestrates validating the data for `/users/me/profile-details` page
+ * Orchestrates validating and storing the data for `/users/me/profile-details` page
  *
- * It first retrieves the session instance for the returns requirements journey in progress.
- *
- * The user input is then validated and the site description in the payload is saved in the session. If there is a
- * validation error the controller will re-render the page. If all is well the controller will redirect to the next page
- * in the journey.
+ * If the details are successfully saved, it will additionally flash a notification.
  *
  * @param {number} userId - The ID of the user
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} The page data for the site description page including any validation error details
+ * @returns {Promise<object>} The page data for the profile details page including any validation error details
  */
 async function go(userId, payload, yar) {
   const validationResult = _validate(payload)
@@ -42,7 +38,7 @@ async function go(userId, payload, yar) {
   }
 
   return {
-    navigationLinks,
+    navigationLinks: NAVIGATION_LINKS,
     pageTitle: 'Profile details',
     error: validationResult,
     ...payload
@@ -70,15 +66,19 @@ function _validate(payload) {
     return null
   }
 
-  const formattedError = error.details.reduce((acc, detail) => {
-    acc[detail.context.key] = detail.message
-    return acc
-  }, {})
+  const formattedError = { errorList: [] }
 
-  formattedError.errorList = error.details.map((detail) => {
-    return {
-      href: `#${detail.context.key}`,
-      text: detail.message
+  error.details.forEach((detail) => {
+    // We validate that the email field is both a valid email and it is @environment-agency.gov.uk. If both fail Joi
+    // will return both errors. In this case, there is no value in displaying the 'Email must be @envi...' if it is also
+    // invalid. So, this ensures we get one email error displayed (invalid will always come first in the joi result)
+    if (!formattedError[detail.context.key]) {
+      formattedError.errorList.push({
+        href: `#${detail.context.key}`,
+        text: detail.message
+      })
+
+      formattedError[detail.context.key] = detail.message
     }
   })
 

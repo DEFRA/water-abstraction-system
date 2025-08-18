@@ -7,8 +7,8 @@
 
 const Joi = require('joi')
 
-const MAX_ADDRESS_LENGTH = 300
 const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
+const MAX_ADDRESS_LENGTH = 300
 const MESSAGES = {
   name: {
     'string.max': 'Name must be 100 characters or less'

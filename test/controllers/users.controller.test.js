@@ -5,68 +5,100 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things to stub
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
+// Things we need to stub
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 
-// Thing under test
-const UsersController = require('../../app/controllers/users.controller.js')
+// For running our service
+const { init } = require('../../app/server.js')
 
-describe('UsersController', () => {
-  let request, h
+describe('Users controller', () => {
+  let server
 
-  beforeEach(() => {
-    request = {
-      payload: { some: 'data' },
-      yar: { session: 'data' },
-      auth: { credentials: { user: { id: 123 } } }
-    }
-    h = {
-      view: Sinon.stub(),
-      redirect: Sinon.stub()
-    }
+  // Create server before running the tests
+  before(async () => {
+    server = await init()
+  })
+
+  beforeEach(async () => {
+    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
+    // possible
+    Sinon.stub(server.logger, 'error')
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('submitProfileDetails', () => {
-    it('should redirect to /system/users/me/profile-details if no error', async () => {
-      const pageData = { some: 'data' }
-      Sinon.stub(SubmitProfileDetailsService, 'go').resolves(pageData)
+  describe('/users/me/profile-details', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewProfileDetailsService, 'go').resolves({
+          pageTitle: 'Profile details'
+        })
+      })
 
-      await UsersController.submitProfileDetails(request, h)
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions())
 
-      expect(SubmitProfileDetailsService.go.calledWith(123, request.payload, request.yar)).to.be.true()
-      expect(h.redirect.calledOnceWith('/system/users/me/profile-details')).to.be.true()
-      expect(h.view.notCalled).to.be.true()
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Profile details')
+        })
+      })
     })
 
-    it('should render the profile details view if there is an error', async () => {
-      const pageData = { error: 'Some error', other: 'data' }
-      Sinon.stub(SubmitProfileDetailsService, 'go').resolves(pageData)
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and is valid', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitProfileDetailsService, 'go').resolves({})
+          })
+          it('redirects to itself', async () => {
+            const response = await server.inject(_postOptions())
 
-      await UsersController.submitProfileDetails(request, h)
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/users/me/profile-details')
+          })
+        })
 
-      expect(SubmitProfileDetailsService.go.calledWith(123, request.payload, request.yar)).to.be.true()
-      expect(h.view.calledOnceWith('users/profile-details.njk', pageData)).to.be.true()
-      expect(h.redirect.notCalled).to.be.true()
-    })
-  })
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitProfileDetailsService, 'go').resolves({ error: { details: [] } })
+          })
 
-  describe('viewProfileDetails', () => {
-    it('should render the profile details view with page data', async () => {
-      const pageData = { name: 'Test User' }
-      Sinon.stub(ViewProfileDetailsService, 'go').resolves(pageData)
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions())
 
-      await UsersController.viewProfileDetails(request, h)
-
-      expect(ViewProfileDetailsService.go.calledWith(123, request.yar)).to.be.true()
-      expect(h.view.calledOnceWith('users/profile-details.njk', pageData)).to.be.true()
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
     })
   })
 })
+
+function _getOptions() {
+  return {
+    method: 'GET',
+    url: '/users/me/profile-details',
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['hof_notifications'] }
+    }
+  }
+}
+
+function _postOptions() {
+  return postRequestOptions('/users/me/profile-details', {}, ['hof_notifications'])
+}
