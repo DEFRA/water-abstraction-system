@@ -79,6 +79,7 @@ describe('Return Versions Setup - Remove service', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'You are about to remove these requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         returnRequirement: 'Winter and all year monthly requirements for returns, Bore hole in rear field.',
         sessionId: session.id,
         startDate: '1 January 2023'
