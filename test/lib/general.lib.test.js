@@ -328,15 +328,15 @@ describe('GeneralLib', () => {
   })
 
   describe('#splitArrayIntoGroups', () => {
-    describe('when the data is a simple array', () => {
-      let testArray
-      let testGroupSize
+    let testArray
+    let testGroupSize
 
-      beforeEach(() => {
-        testArray = [1, 2, 3, 4, 5, 6, 7]
-        testGroupSize = 2
-      })
+    beforeEach(() => {
+      testArray = [1, 2, 3, 4, 5, 6, 7]
+      testGroupSize = 2
+    })
 
+    describe('when the provided array contains simple values', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
@@ -351,10 +351,7 @@ describe('GeneralLib', () => {
       })
     })
 
-    describe('when the data is an array of objects', () => {
-      let testArray
-      let testGroupSize
-
+    describe('when the provided array contains objects', () => {
       beforeEach(() => {
         testArray = [
           { number: 1 },
@@ -378,6 +375,52 @@ describe('GeneralLib', () => {
           [{ number: 4 }, { number: 5 }, { number: 6 }], // Group two
           [{ number: 7 }] // Group three
         ])
+      })
+    })
+
+    describe('when the provided array is empty', () => {
+      beforeEach(() => {
+        testArray = []
+        testGroupSize = 2
+      })
+
+      it('returns an empty array', () => {
+        const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
+
+        expect(result.length).to.equal(0)
+
+        expect(result).to.equal([])
+      })
+    })
+
+    describe('when the group size is 0', () => {
+      beforeEach(() => {
+        testArray = [1, 2, 3, 4, 5, 6, 7]
+        testGroupSize = 0
+      })
+
+      it('returns an empty array', () => {
+        const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
+
+        expect(result.length).to.equal(7)
+
+        expect(result).to.equal([1, 2, 3, 4, 5, 6, 7])
+      })
+    })
+
+    describe('when the group size is > than the array', () => {
+      beforeEach(() => {
+        testArray = [1, 2]
+        testGroupSize = 5
+      })
+
+      it('returns an empty array', () => {
+        const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
+
+        console.log('res = ', result)
+        expect(result.length).to.equal(1)
+
+        expect(result).to.equal([[1, 2]])
       })
     })
   })

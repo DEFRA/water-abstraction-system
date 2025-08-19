@@ -218,6 +218,10 @@ function periodsOverlap(referencePeriods, checkPeriods) {
 function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
   const result = []
 
+  if (maxGroupSize <= 0) {
+    return arrayToBeSplit
+  }
+
   for (let i = 0; i < arrayToBeSplit.length; i += maxGroupSize) {
     result.push(arrayToBeSplit.slice(i, i + maxGroupSize))
   }
