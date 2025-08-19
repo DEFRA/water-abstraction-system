@@ -2,7 +2,7 @@
 
 /**
  * Config values used to connect to the Address Facade - An Environment Agency built wrapper API for OS Places
- * @module GotenbergConfig
+ * @module AddressFacadeConfig
  */
 
 // We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
