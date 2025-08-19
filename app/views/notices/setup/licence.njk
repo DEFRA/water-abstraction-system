@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-{# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -22,7 +21,6 @@
     }) }}
   {%endif%}
 
-  {# Main heading #}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
       <div class="govuk-grid-row">
