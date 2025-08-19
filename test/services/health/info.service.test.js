@@ -10,8 +10,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const addressFacadeConfig = require('../../../config/address-facade.config.js')
 const gotenbergConfig = require('../../../config/gotenberg.config.js')
-const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
@@ -80,7 +80,7 @@ describe('Health - Info service', () => {
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       baseRequestStub
-        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
       baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
@@ -133,7 +133,7 @@ describe('Health - Info service', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       baseRequestStub
-        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
       baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
@@ -186,7 +186,7 @@ describe('Health - Info service', () => {
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       baseRequestStub
-        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
       baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
@@ -287,7 +287,7 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
-        baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
+        baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
         baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
@@ -318,7 +318,7 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
-        baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
+        baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
         baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)

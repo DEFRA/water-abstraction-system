@@ -7,8 +7,8 @@
 
 const BaseRequest = require('./base.request.js')
 
+const addressFacadeConfig = require('../../config/address-facade.config.js')
 const requestConfig = require('../../config/request.config.js')
-const servicesConfig = require('../../config/services.config.js')
 
 /**
  * Sends a GET request to the Address Facade
@@ -71,7 +71,7 @@ function _parseResult(result) {
  */
 function _requestOptions() {
   return {
-    prefixUrl: servicesConfig.addressFacade.url,
+    prefixUrl: addressFacadeConfig.url,
     responseType: 'json',
     timeout: {
       request: requestConfig.timeout
