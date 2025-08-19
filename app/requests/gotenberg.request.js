@@ -8,7 +8,6 @@
 const BaseRequest = require('./base.request.js')
 
 const gotenbergConfig = require('../../config/gotenberg.config.js')
-const requestConfig = require('../../config/request.config.js')
 
 /**
  * Make a http requests to Gotenberg to convert HTML into a PDF
@@ -37,7 +36,7 @@ function _requestOptions(formData) {
     prefixUrl: gotenbergConfig.url,
     responseType: 'buffer',
     timeout: {
-      request: requestConfig.gotenbergTimeout
+      request: gotenbergConfig.timeout
     },
     body: formData
   }
