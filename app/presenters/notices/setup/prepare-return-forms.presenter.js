@@ -99,7 +99,7 @@ function _columns(pageItems, columnSize) {
   return [firstColumn || [], secondColumn || []]
 }
 
-function _formatPeriodToLongDate(periods) {
+function _formatPeriodsToLongDate(periods) {
   return periods.map((period) => {
     return formatLongDate(new Date(period.endDate))
   })
@@ -122,7 +122,7 @@ function _regionAndArea(regionName, naldAreaCode) {
 function _meterReadings(startDate, endDate, returnsFrequency) {
   const { columns, columnSize } = RETURN_TYPE[returnsFrequency]
 
-  const dates = _generateFormattedDates(startDate, endDate, returnsFrequency)
+  const dates = _generateDates(startDate, endDate, returnsFrequency)
 
   const totalItemsPerPage = columnSize * columns
 
@@ -145,13 +145,13 @@ function _meterReadings(startDate, endDate, returnsFrequency) {
  *
  * Total = 65 dates.
  *
- * Once the page count has been established, we need to format the dates into columns. The 'week' example of 2 columns
- * with 14 'cells' per column would result in two columns with 14 'cells' in each column.
+ * Once the page count has been established, we need to format the dates into columns per page. This 'week' example of 2
+ * columns and 14 'cells' would result in two columns with 14 'cells' in each column.
  *
- * When the column does not reach the maximum row count, it will be the remaining dates.
+ * When the column does not reach the maximum row count, it will fill the cells with the remaining dates (if any).
  *
- * This is driven from the UI where the columns are fixed. So it is expected to only have one column with 12 cells (when
- * the 'returnFrequency' is for months and the date range is a year).
+ * This is driven from the UI where the columns are determined by the layout. It is expected to only have one column in
+ * cases where the 'returnsFrequency' is months.
  *
  * @private
  */
@@ -167,7 +167,7 @@ function _pageTitle(returnsFrequency) {
   return `Water abstraction ${returnRequirementFrequencies[returnsFrequency]} return`
 }
 
-function _generateFormattedDates(startDate, endDate, returnsFrequency) {
+function _generateDates(startDate, endDate, returnsFrequency) {
   const periodStartDate = new Date(startDate)
   const periodEndDate = new Date(endDate)
 
@@ -179,7 +179,7 @@ function _generateFormattedDates(startDate, endDate, returnsFrequency) {
     dates = monthsFromPeriod(periodStartDate, periodEndDate)
   }
 
-  return _formatPeriodToLongDate(dates)
+  return _formatPeriodsToLongDate(dates)
 }
 
 module.exports = {

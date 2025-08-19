@@ -192,7 +192,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       })
 
       describe('the "meterReadings" property', () => {
-        describe('and the date fits onto one page', () => {
+        describe('and the period fits onto one page', () => {
           it('should return meter readings', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
