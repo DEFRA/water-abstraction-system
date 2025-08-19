@@ -22,16 +22,10 @@
 
   <div>
     {% set textHtml %}
-      {% if error.emailAddressInputFormError %}
-        {% set errorClass = 'govuk-input--error' %}
-      {% else %}
-        {% set errorClass = '' %}
-      {% endif %}
-
       {{ govukInput({
         id: "other-user",
         name: "otherUser",
-        classes: "govuk-!-width-one-third " + errorClass,
+        classes: "govuk-!-width-one-third {{ 'govuk-input--error' if error.emailAddressInputFormError }}",
         errorMessage: error.emailAddressInputFormError,
         label: {
           text: "Email address"
