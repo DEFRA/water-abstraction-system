@@ -8,7 +8,6 @@
 const BaseRequest = require('./base.request.js')
 
 const chargingModuleConfig = require('../../config/charging-module.config.js')
-const requestConfig = require('../../config/request.config.js')
 
 /**
  * Sends a DELETE request to the Charging Module for the provided path
@@ -100,7 +99,7 @@ function _requestOptions(accessToken, body) {
     },
     responseType: 'json',
     timeout: {
-      request: requestConfig.chargingModuleTimeout
+      request: chargingModuleConfig.timeout
     },
     json: body
   }

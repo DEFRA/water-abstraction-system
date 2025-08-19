@@ -9,8 +9,9 @@ const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = La
 const { expect } = Code
 
 // Things we need to stub
-const requestConfig = require('../../config/request.config.js')
 const BaseRequest = require('../../app/requests/base.request.js')
+const chargingModuleConfig = require('../../config/charging-module.config.js')
+const requestConfig = require('../../config/request.config.js')
 
 // Thing under test
 const ChargingModuleRequest = require('../../app/requests/charging-module.request.js')
@@ -36,7 +37,7 @@ describe('Charging Module Request', () => {
   beforeEach(() => {
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    Sinon.replace(requestConfig, 'chargingModuleTimeout', 1234)
+    Sinon.replace(chargingModuleConfig, 'timeout', 1234)
     Sinon.replace(requestConfig, 'timeout', 1000)
   })
 
