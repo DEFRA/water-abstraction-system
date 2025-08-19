@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Config values used to connect to our other services
- * @module ServicesConfig
+ * Config values used to connect to our other legacy services
+ * @module LegacyConfig
  */
 
 // We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
