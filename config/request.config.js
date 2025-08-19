@@ -17,8 +17,7 @@ const config = {
   chargingModuleTimeout: parseInt(process.env.CHA_REQUEST_TIMEOUT) || 20000,
   // Note - Why lowercase? It's just the convention for http_proxy, https_proxy
   // and no_proxy. ¯\_(ツ)_/¯ https://unix.stackexchange.com/a/212972
-  httpProxy: process.env.http_proxy,
-  gotenbergTimeout: parseInt(process.env.GOTENBERG_TIMEOUT) || 20000
+  httpProxy: process.env.http_proxy
 }
 
 module.exports = config

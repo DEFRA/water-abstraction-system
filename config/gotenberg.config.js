@@ -10,6 +10,7 @@
 require('dotenv').config()
 
 const config = {
+  timeout: parseInt(process.env.GOTENBERG_TIMEOUT) || 20000,
   url: process.env.GOTENBERG_URL
 }
 
