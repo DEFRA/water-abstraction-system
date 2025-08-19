@@ -10,14 +10,6 @@
 require('dotenv').config()
 
 const config = {
-  chargingModule: {
-    url: process.env.CHARGING_MODULE_URL,
-    token: {
-      url: process.env.CHARGING_MODULE_TOKEN_URL,
-      username: process.env.CHARGING_MODULE_TOKEN_USERNAME,
-      password: process.env.CHARGING_MODULE_TOKEN_PASSWORD
-    }
-  },
   legacyAuthToken: process.env.LEGACY_AUTH_TOKEN,
   serviceForeground: {
     url: process.env.SERVICE_FOREGROUND_URL
