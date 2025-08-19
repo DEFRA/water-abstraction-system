@@ -78,18 +78,17 @@ function _address(recipient) {
 }
 
 /**
- * Splits a list of page items into up to columns.
+ * Splits a list of page items into up to columns
  *
- * If the number of items exceeds the specified `columnSize`, the overflow
- * is placed in the second column. If there are fewer items than `columnSize`,
- * the second column will be empty.
+ * If the number of items exceeds the specified `columnSize`, the overflow is placed in the second column. If there are
+ * fewer items than `columnSize`, the second column will be empty.
  *
  * The page layout will roughly be:
  *
  * | Column 1 | Column 2 |
  * | -------- | -------- |
- * | item 1 | item 3 |
- * | item 2 | item 4 |
+ * | item 1   | item 3   |
+ * | item 2   | item 4   |
  *
  * @private
  */
