@@ -174,7 +174,9 @@ function _generateDates(startDate, endDate, returnsFrequency) {
 
   if (returnsFrequency === 'week') {
     dates = weeksFromPeriod(periodStartDate, periodEndDate)
-  } else if (returnsFrequency === 'month') {
+  }
+  
+  if (returnsFrequency === 'month') {
     dates = monthsFromPeriod(periodStartDate, periodEndDate)
   }
 
