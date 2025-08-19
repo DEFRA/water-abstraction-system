@@ -195,31 +195,31 @@ function periodsOverlap(referencePeriods, checkPeriods) {
 }
 
 /**
- * Splits an array into groups of a specified size.
+ * Splits an array of 'things' into groups (arrays) of a maximum size
  *
- * For example,
- * ```
- * const array = [1, 2, 3, 4, 5]
- * splitArrayIntoGroups(array, 2)
- * Output = [
- *  //Group One
- *  [1, 2],
- *  // Group Two
- *  [3, 4],
- *  Group Three
- *  [5]
- * ]
+ * For example
+ *
+ * ```javascript
+ * const myArray = [1, 2, 3, 4, 5]
+ *
+ * const groups = splitArrayIntoGroups(myArray, 2)
+ *
+ * // groups = [[1, 2], [3, 4], [5]]
  * ```
  *
- * @param array
- * @param groupSize
+ * If the array to be split cannot be divided equally by the group size, the last group will contain the remaining
+ * items.
+ *
+ * @param arrayToBeSplit - The array of 'things' to be split (their type does not matter)
+ * @param maxGroupSize - The maximum size to group them by
  *
  * @returns {object[]} - An array of sub-arrays, each containing up to `groupSize` elements.
  */
-function splitArrayIntoGroups(array, groupSize) {
+function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
   const result = []
-  for (let i = 0; i < array.length; i += groupSize) {
-    result.push(array.slice(i, i + groupSize))
+
+  for (let i = 0; i < arrayToBeSplit.length; i += maxGroupSize) {
+    result.push(arrayToBeSplit.slice(i, i + maxGroupSize))
   }
 
   return result
