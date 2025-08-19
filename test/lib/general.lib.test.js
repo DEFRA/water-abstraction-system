@@ -399,7 +399,7 @@ describe('GeneralLib', () => {
         testGroupSize = 0
       })
 
-      it('returns an empty array', () => {
+      it('returns the provided array (not grouped)', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
         expect(result.length).to.equal(7)
@@ -414,7 +414,7 @@ describe('GeneralLib', () => {
         testGroupSize = 5
       })
 
-      it('returns an empty array', () => {
+      it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
         expect(result.length).to.equal(1)
