@@ -30,7 +30,7 @@
     {% if lastLicenceId !== restriction.licenceId %}
       {% set licenceCell =
         {
-          html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + restriction.licenceId + '/summary">' + restriction.licenceRef + '</a>',
+          html: '<a class="govuk-link" href="/system/licences/' + restriction.licenceId + '/summary">' + restriction.licenceRef + '</a>',
           attributes: { 'data-test': 'licence-ref-' + rowIndex },
           rowspan: restriction.restrictionCount
         }

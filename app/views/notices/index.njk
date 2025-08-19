@@ -222,7 +222,7 @@
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
       {% if notices|length === 0 %}
-        <p class="govuk-body">No notices found.</p>
+        <p>No notices found.</p>
       {% else %}
         {% set tableRows = [] %}
         {% for notice in notices %}
