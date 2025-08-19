@@ -63,6 +63,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitProfileDetailsService, 'go').resolves({})
           })
+
           it('redirects to itself', async () => {
             const response = await server.inject(_postOptions())
 
