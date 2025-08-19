@@ -10,6 +10,10 @@
 require('dotenv').config()
 
 const config = {
+  // Generating a bill run can require us to fire 1000's of requests at the charging module in a burst. Obviously, this
+  // can put the API under pressure so requests can take longer to complete. To avoid a slow request causing the whole
+  // bill run to error we give the CHA a little more wiggle-room to handle things
+  timeout: parseInt(process.env.CHA_REQUEST_TIMEOUT) || 20000,
   // These values are used as part of requesting a JSON web token from the Charging Modules's AWS Cognito service.
   // This token is then used to authenticate with the Charging Module itself.
   token: {
