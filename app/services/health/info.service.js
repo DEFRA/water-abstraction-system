@@ -17,6 +17,7 @@ const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
+const gotenbergConfig = require('../../../config/gotenberg.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
@@ -69,7 +70,7 @@ async function _getAddressFacadeData() {
 }
 
 async function _getGotenbergData() {
-  const statusUrl = new URL('/health', servicesConfig.gotenberg.url)
+  const statusUrl = new URL('/health', gotenbergConfig.url)
   const result = await BaseRequest.get(statusUrl.href)
 
   if (result.succeeded) {

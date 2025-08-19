@@ -10,6 +10,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const gotenbergConfig = require('../../../config/gotenberg.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
@@ -23,7 +24,7 @@ const BaseRequest = require('../../../app/requests/base.request.js')
 // `child_process.exec()` behaves in the service, after it's been promisified we have to use proxyquire.
 let InfoService // = require('../../app/services/health/info.service')
 
-describe('Info service', () => {
+describe('Health - Info service', () => {
   const goodRequestResults = {
     addressFacade: { succeeded: true, response: { statusCode: 200, body: 'hey there' } },
     chargingModule: {
@@ -81,7 +82,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
+      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -134,7 +135,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
+      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -187,7 +188,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
+      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
     })
@@ -287,7 +288,7 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
+        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
@@ -318,7 +319,7 @@ describe('Info service', () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
         baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${servicesConfig.gotenberg.url}/health`).resolves(goodRequestResults.gotenberg)
+        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
