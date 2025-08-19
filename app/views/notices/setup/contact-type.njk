@@ -12,10 +12,7 @@
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
   {%endif%}
 
   {% set emailHtml %}
@@ -53,9 +50,7 @@
     }) }}
   {% endset -%}
 
-  <h1 class="govuk-form-group govuk-heading-l">
-    {{ pageTitle }}
-  </h1>
+  <h1 class="govuk-form-group govuk-heading-l">{{ pageTitle }}</h1>
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>

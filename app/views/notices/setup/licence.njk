@@ -30,15 +30,15 @@
           <div class="govuk-grid-column-two-thirds">
 
             {{ govukInput({
-            label: {
-              text: pageTitle,
-              classes: "govuk-label--l",
-              isPageHeading: true
-            },
-            value: licenceRef,
-            id: "licence-ref",
-            name: "licenceRef",
-            errorMessage: error
+              label: {
+                text: pageTitle,
+                classes: "govuk-label--l",
+                isPageHeading: true
+              },
+              value: licenceRef,
+              id: "licence-ref",
+              name: "licenceRef",
+              errorMessage: error
             }) }}
 
             {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

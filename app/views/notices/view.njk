@@ -10,11 +10,8 @@
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
+  {% endif %}
 
   <div>
     <form method="post">

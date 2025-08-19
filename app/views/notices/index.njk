@@ -12,13 +12,9 @@
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
   {% endif %}
 
-  {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
@@ -27,7 +23,6 @@
     </div>
   </div>
 
-  {# Filters #}
   <div class="govuk-grid-row govuk-!-margin-bottom-2">
     <div class="govuk-grid-column-full">
       {% set filtersForm %}
@@ -35,107 +30,103 @@
         <form  method="post">
           <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-          {# Filter by licence issues #}
-            {{ govukCheckboxes({
-              classes: "govuk-checkboxes--small",
-              name: "noticeTypes",
-              fieldset: {
-                legend: {
-                  text: "Notice type",
-                  isPageHeading: false,
-                  classes: "govuk-fieldset__legend--s"
-                }
+          {{ govukCheckboxes({
+            classes: "govuk-checkboxes--small",
+            name: "noticeTypes",
+            fieldset: {
+              legend: {
+                text: "Notice type",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "legacyNotifications",
+                text: "Legacy (Hands off flows and expiry notifications)",
+                checked: filters.noticeTypes.includes('legacyNotifications'),
+                attributes: { 'data-test': 'legacy-notifications' }
               },
-              items: [
-                {
-                  value: "legacyNotifications",
-                  text: "Legacy (Hands off flows and expiry notifications)",
-                  checked: filters.noticeTypes.includes('legacyNotifications'),
-                  attributes: { 'data-test': 'legacy-notifications' }
-                },
-                {
-                  value: "paperReturnForms",
-                  text: "Paper return",
-                  checked: filters.noticeTypes.includes('paperReturnForms'),
-                  attributes: { 'data-test': 'returns-paper-form' }
-                },
-                {
-                  value: "returnReminder",
-                  text: "Returns reminder",
-                  checked: filters.noticeTypes.includes('returnReminder'),
-                  attributes: { 'data-test': 'returns-reminders' }
-                },
-                {
-                  value: "returnInvitation",
-                  text: "Returns invitation",
-                  checked: filters.noticeTypes.includes('returnInvitation'),
-                  attributes: { 'data-test': 'returns-invitation' }
-                },
-                {
-                  value: "resume",
-                  text: "Resume alert",
-                  checked: filters.noticeTypes.includes('resume'),
-                  attributes: { 'data-test': 'water-abstraction-alert-resume' }
-                },
-                {
-                  value: "stop",
-                  text: "Stop alert",
-                  checked: filters.noticeTypes.includes('stop'),
-                  attributes: { 'data-test': 'water-abstraction-alert-stop' }
-                },
-                {
-                  value: "reduce",
-                  text: "Reduce alert",
-                  checked: filters.noticeTypes.includes('reduce'),
-                  attributes: { 'data-test': 'water-abstraction-alert-reduce' }
-                },
-                {
-                  value: "warning",
-                  text: "Warning alert",
-                  checked: filters.noticeTypes.includes('warning'),
-                  attributes: { 'data-test': 'water-abstraction-alert-warning' }
-                }
-              ]
-            }) }}
+              {
+                value: "paperReturnForms",
+                text: "Paper return",
+                checked: filters.noticeTypes.includes('paperReturnForms'),
+                attributes: { 'data-test': 'returns-paper-form' }
+              },
+              {
+                value: "returnReminder",
+                text: "Returns reminder",
+                checked: filters.noticeTypes.includes('returnReminder'),
+                attributes: { 'data-test': 'returns-reminders' }
+              },
+              {
+                value: "returnInvitation",
+                text: "Returns invitation",
+                checked: filters.noticeTypes.includes('returnInvitation'),
+                attributes: { 'data-test': 'returns-invitation' }
+              },
+              {
+                value: "resume",
+                text: "Resume alert",
+                checked: filters.noticeTypes.includes('resume'),
+                attributes: { 'data-test': 'water-abstraction-alert-resume' }
+              },
+              {
+                value: "stop",
+                text: "Stop alert",
+                checked: filters.noticeTypes.includes('stop'),
+                attributes: { 'data-test': 'water-abstraction-alert-stop' }
+              },
+              {
+                value: "reduce",
+                text: "Reduce alert",
+                checked: filters.noticeTypes.includes('reduce'),
+                attributes: { 'data-test': 'water-abstraction-alert-reduce' }
+              },
+              {
+                value: "warning",
+                text: "Warning alert",
+                checked: filters.noticeTypes.includes('warning'),
+                attributes: { 'data-test': 'water-abstraction-alert-warning' }
+              }
+            ]
+          }) }}
 
-            {# Filter by sent by #}
-            {{ govukInput({
-              label: {
-                text: "Sent by",
-                classes: "govuk-label--s",
-                isPageHeading: false
-              },
-              classes: "govuk-input--width-20",
-              hint: {
-                text: 'You can use partial matches, for example, "rachel" or "defra.gov.uk"'
-              },
-              id: "sentBy",
-              name: "sentBy",
-              value: filters.sentBy,
-              errorMessage: {
-                text: error.sentBy.message
-              } if error.sentBy
-            }) }}
+          {{ govukInput({
+            label: {
+              text: "Sent by",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            classes: "govuk-input--width-20",
+            hint: {
+              text: 'You can use partial matches, for example, "rachel" or "defra.gov.uk"'
+            },
+            id: "sentBy",
+            name: "sentBy",
+            value: filters.sentBy,
+            errorMessage: {
+              text: error.sentBy.message
+            } if error.sentBy
+          }) }}
 
-            {# Filter by reference #}
-            {{ govukInput({
-              label: {
-                text: "Reference",
-                classes: "govuk-label--s",
-                isPageHeading: false
-              },
-              classes: "govuk-input--width-10",
-              id: "reference",
-              name: "reference",
-              value: filters.reference,
-              errorMessage: {
-                text: error.reference.message
-              } if error.reference
-            }) }}
+          {{ govukInput({
+            label: {
+              text: "Reference",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            classes: "govuk-input--width-10",
+            id: "reference",
+            name: "reference",
+            value: filters.reference,
+            errorMessage: {
+              text: error.reference.message
+            } if error.reference
+          }) }}
 
           <p class="govuk-!-font-weight-bold">Sent Dates</p>
 
-          {# Filter by from date #}
           {{ govukDateInput({
             id: 'fromDate',
             errorMessage: {
@@ -169,7 +160,6 @@
             ]
           }) }}
 
-          {# Filter by to date #}
           {{ govukDateInput({
             id: 'toDate',
             errorMessage: {
@@ -229,20 +219,16 @@
     </div>
   </div>
 
-  {# Results #}
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
-      {# Results #}
       {% if notices|length === 0 %}
         <p class="govuk-body">No notices found.</p>
       {% else %}
-        {# Generate the row data for the table #}
         {% set tableRows = [] %}
         {% for notice in notices %}
           {# Set an easier to use index #}
           {% set rowIndex = loop.index0 %}
 
-          {# Link to view the notice #}
           {% set viewLink %}
             <a class="govuk-link" href="{{ notice.link }}">{{ notice.createdDate }}</a>
           {% endset %}
@@ -280,11 +266,9 @@
             }
           ] %}
 
-          {# Push our row into the table rows array #}
           {% set tableRows = (tableRows.push(tableRow), tableRows) %}
         {% endfor %}
 
-        {# Sets the caption to be used in the table below #}
         {% if numberOfNotices > numberOfNoticesDisplayed %}
           {% set caption = "Showing " + numberOfNoticesDisplayed + " of " + totalNumberOfNotices + " notices" %}
         {% else %}

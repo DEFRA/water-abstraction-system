@@ -9,12 +9,11 @@
 
 {% block content %}
   <div class="govuk-body">
-    <span class="govuk-caption-l">Notice {{ referenceCode }} </span>
+    <span class="govuk-caption-l">Notice {{ referenceCode }}</span>
 
     <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
     {{ govukSummaryList({
-
       rows: [
         {},
         {
@@ -30,7 +29,7 @@
 
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
-        {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
+      {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}

@@ -13,14 +13,12 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: '#alert-thresholds'
-        }
-      ]
+      errorList: [{
+        text: error.text,
+        href: '#alert-thresholds'
+      }]
     }) }}
-  {%endif%}
+  {% endif %}
 
   <div>
     <form method="post">

@@ -20,13 +20,11 @@
 {%for recipient in recipients %}
   {% set licenceNumbers %}
     {% if recipient.licences.length > 5 %}
-      {{
-      govukDetails({
+      {{ govukDetails({
         classes: 'govuk-!-margin-bottom-0',
         summaryText: recipient.licences.length + ' licences',
         html: newLineArrayItems(recipient.licences)
-      })
-      }}
+      }) }}
     {% else %}
       {{ newLineArrayItems(recipient.licences)  }}
     {% endif %}
@@ -51,27 +49,20 @@
 {% block content %}
   <div class="govuk-body">
     {% if notification %}
-      {{ govukNotificationBanner({
-        titleText: notification.title,
-        text: notification.text
-      }) }}
+      {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
     {% endif %}
 
     {% if warning %}
-      {{ govukWarningText({
-        text: warning,
-        iconFallbackText: "Warning"
-      }) }}
+      {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
     {% endif %}
 
-    <span class="govuk-caption-l">Notice {{referenceCode}} </span>
+    <span class="govuk-caption-l">Notice {{referenceCode}}</span>
 
-    <h1 class="govuk-heading-l"> {{ pageTitle }} </h1>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-    <p> {{ readyToSend }}</p>
+    <p>{{ readyToSend }}</p>
 
     <div class="govuk-button-group">
-
       {{ govukButton({
         text: "Download recipients",
         classes: "govuk-button--secondary",
@@ -80,12 +71,12 @@
       }) }}
 
       {% if links.removeLicences %}
-      {{ govukButton({
-        text: "Remove licences",
-        classes: "govuk-button--secondary",
-        href: links.removeLicences,
-        preventDoubleClick: true
-      }) }}
+        {{ govukButton({
+          text: "Remove licences",
+          classes: "govuk-button--secondary",
+          href: links.removeLicences,
+          preventDoubleClick: true
+        }) }}
       {% endif %}
 
       {% if links.manage %}
@@ -99,9 +90,9 @@
     </div>
 
     {% if pagination.numberOfPages > 1 %}
-      <p> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients </p>
+      <p> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients</p>
     {% else %}
-      <p> Showing all {{ recipientsAmount }} recipients </p>
+      <p> Showing all {{ recipientsAmount }} recipients</p>
     {% endif %}
 
     {{ govukTable({
@@ -131,7 +122,6 @@
     <div class="govuk-button-group">
       <form method="post">
         <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
-
 
         {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
 
