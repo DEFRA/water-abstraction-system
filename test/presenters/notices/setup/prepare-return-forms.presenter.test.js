@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
-describe('Notices - Setup - Prepare Return Forms Presenter', () => {
+describe.only('Notices - Setup - Prepare Return Forms Presenter', () => {
   let dueReturnLog
   let recipient
   let session
@@ -91,34 +91,54 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       })
     })
 
-    describe('when the "returnsFrequency" is "day"', () => {
-      beforeEach(() => {
-        dueReturnLog.returnsFrequency = 'day'
-      })
+    describe('the "pageTitle" property', () => {
+      describe('when the "returnsFrequency" is "day"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'day'
+        })
 
-      describe('the "pageTitle" property', () => {
         it('should return the relevant title', () => {
           const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
       })
-    })
 
-    describe('when the "returnsFrequency" is "month"', () => {
-      beforeEach(() => {
-        dueReturnLog.returnsFrequency = 'month'
-      })
+      describe('when the "returnsFrequency" is "month"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'month'
+        })
 
-      describe('the "pageTitle" property', () => {
-        it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+        describe('the "pageTitle" property', () => {
+          it('should return the relevant title', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-          expect(result.pageTitle).to.equal('Water abstraction monthly return')
+            expect(result.pageTitle).to.equal('Water abstraction monthly return')
+          })
         })
       })
 
-      describe('the "meterReadings" property', () => {
+      describe('when the "returnsFrequency" is "week"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'week'
+        })
+
+        describe('the "pageTitle" property', () => {
+          it('should return the relevant title', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+
+            expect(result.pageTitle).to.equal('Water abstraction weekly return')
+          })
+        })
+      })
+    })
+
+    describe('the "meterReadings" property', () => {
+      describe('when the "returnsFrequency" is "month"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'month'
+        })
+
         describe('and the start and end are 6 months apart', () => {
           it('should return meter readings', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
@@ -176,22 +196,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           })
         })
       })
-    })
 
-    describe('when the "returnsFrequency" is "week"', () => {
-      beforeEach(() => {
-        dueReturnLog.returnsFrequency = 'week'
-      })
-
-      describe('the "pageTitle" property', () => {
-        it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
-
-          expect(result.pageTitle).to.equal('Water abstraction weekly return')
+      describe('when the "returnsFrequency" is "week"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'week'
         })
-      })
 
-      describe('the "meterReadings" property', () => {
         describe('and the period fits onto one page', () => {
           it('should return meter readings', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
