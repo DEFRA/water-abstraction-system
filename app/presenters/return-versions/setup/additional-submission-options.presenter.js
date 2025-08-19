@@ -33,6 +33,7 @@ function go(session) {
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     quarterlyReturns,
     pageTitle: 'Select any additional submission options for the return requirements',
+    pageTitleCaption: `Licence ${licenceRef}`,
     sessionId
   }
 }
