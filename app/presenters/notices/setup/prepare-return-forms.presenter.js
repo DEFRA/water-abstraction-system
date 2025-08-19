@@ -8,6 +8,7 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
 const { weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 
 const RETURN_TYPE = {
@@ -77,7 +78,7 @@ function _address(recipient) {
 }
 
 /**
- * Splits a list of page items into up to two columns.
+ * Splits a list of page items into up to columns.
  *
  * If the number of items exceeds the specified `columnSize`, the overflow
  * is placed in the second column. If there are fewer items than `columnSize`,
@@ -93,27 +94,10 @@ function _address(recipient) {
  * @private
  */
 function _columns(pageItems, columnSize) {
-  const [firstColumn, secondColumn] = _formatArrayIntoGroups(pageItems, columnSize)
+  const [firstColumn, secondColumn] = splitArrayIntoGroups(pageItems, columnSize)
 
   return [firstColumn || [], secondColumn || []]
 }
-
-/**
- * Splits an array into smaller subarrays (groups) of a specified size.
- *
- * Used when calculating the number of dates can be displayed per page.
- *
- * Used to calculate the columns, it will split the grouped dates into linear arrays
- *
- * @private
- */
-function _formatArrayIntoGroups(dates, columnSize) {
-  const result = []
-  for (let i = 0; i < dates.length; i += columnSize) {
-    result.push(dates.slice(i, i + columnSize))
-  }
-  return result
-} // lift this out - remove term of rows to cells
 
 function _formatPeriodToLongDate(periods) {
   return periods.map((period) => {
@@ -172,7 +156,7 @@ function _meterReadings(startDate, endDate, returnsFrequency) {
  * @private
  */
 function _paginate(dates, perPage, columnSize) {
-  const pageChunks = _formatArrayIntoGroups(dates, perPage)
+  const pageChunks = splitArrayIntoGroups(dates, perPage)
 
   return pageChunks.map((pageItems) => {
     return _columns(pageItems, columnSize)

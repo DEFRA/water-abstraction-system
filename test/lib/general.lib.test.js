@@ -327,6 +327,61 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#splitArrayIntoGroups', () => {
+    describe('when the data is a simple array', () => {
+      let testArray
+      let testGroupSize
+
+      beforeEach(() => {
+        testArray = [1, 2, 3, 4, 5, 6, 7]
+        testGroupSize = 2
+      })
+
+      it('returns the provided array grouped by the given group size', () => {
+        const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
+
+        expect(result.length).to.equal(4)
+
+        expect(result).to.equal([
+          [1, 2], // Group One
+          [3, 4], // Group two
+          [5, 6], // Group three
+          [7] // Group four
+        ])
+      })
+    })
+
+    describe('when the data is an array of objects', () => {
+      let testArray
+      let testGroupSize
+
+      beforeEach(() => {
+        testArray = [
+          { number: 1 },
+          { number: 2 },
+          { number: 3 },
+          { number: 4 },
+          { number: 5 },
+          { number: 6 },
+          { number: 7 }
+        ]
+        testGroupSize = 3
+      })
+
+      it('returns the provided array grouped by the given group size', () => {
+        const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
+
+        expect(result.length).to.equal(3)
+
+        expect(result).to.equal([
+          [{ number: 1 }, { number: 2 }, { number: 3 }], // Group One
+          [{ number: 4 }, { number: 5 }, { number: 6 }], // Group two
+          [{ number: 7 }] // Group three
+        ])
+      })
+    })
+  })
+
   describe('#transactionsMatch', () => {
     let leftTransaction
     let rightTransaction
