@@ -21,8 +21,8 @@
 const { Notifier } = require('@airbrake/node')
 const Request = require('request')
 
-const AirbrakeConfig = require('../../config/airbrake.config.js')
-const RequestConfig = require('../../config/request.config.js')
+const airbrakeConfig = require('../../config/airbrake.config.js')
+const serverConfig = require('../../config/server.config.js')
 
 const AirbrakePlugin = {
   name: 'airbrake',
@@ -57,17 +57,17 @@ const AirbrakePlugin = {
 
 function _notifierArgs() {
   const args = {
-    host: AirbrakeConfig.host,
-    projectId: AirbrakeConfig.projectId,
-    projectKey: AirbrakeConfig.projectKey,
-    environment: AirbrakeConfig.environment,
+    host: airbrakeConfig.host,
+    projectId: airbrakeConfig.projectId,
+    projectKey: airbrakeConfig.projectKey,
+    environment: airbrakeConfig.environment,
     errorNotifications: true,
     performanceStats: false,
     remoteConfig: false
   }
 
-  if (RequestConfig.httpProxy) {
-    args.request = Request.defaults({ proxy: RequestConfig.httpProxy })
+  if (serverConfig.httpProxy) {
+    args.request = Request.defaults({ proxy: serverConfig.httpProxy })
   }
 
   return args
