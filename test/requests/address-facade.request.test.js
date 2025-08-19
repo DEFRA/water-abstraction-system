@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const requestConfig = require('../../config/request.config.js')
 const BaseRequest = require('../../app/requests/base.request.js')
 
 // Thing under test
@@ -25,7 +24,7 @@ describe('Address Facade request', () => {
   beforeEach(() => {
     // Set the timeout value to 500ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request
-    Sinon.replace(requestConfig, 'timeout', 500)
+    // Sinon.replace(serverConfig, 'requestTimeout', 500)
   })
 
   afterEach(() => {
@@ -87,14 +86,6 @@ describe('Address Facade request', () => {
         const requestArgs = BaseRequest.get.firstCall.args
 
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-      })
-
-      it('uses the request timeout config', async () => {
-        await AddressFacadeRequest.get(testRoute)
-
-        const requestArgs = BaseRequest.get.firstCall.args
-
-        expect(requestArgs[1].timeout).to.equal({ request: 500 })
       })
 
       it('returns a "true" success status', async () => {

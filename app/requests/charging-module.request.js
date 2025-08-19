@@ -7,8 +7,7 @@
 
 const BaseRequest = require('./base.request.js')
 
-const requestConfig = require('../../config/request.config.js')
-const servicesConfig = require('../../config/services.config.js')
+const chargingModuleConfig = require('../../config/charging-module.config.js')
 
 /**
  * Sends a DELETE request to the Charging Module for the provided path
@@ -94,13 +93,13 @@ async function _sendRequest(path, method, body) {
  */
 function _requestOptions(accessToken, body) {
   return {
-    prefixUrl: servicesConfig.chargingModule.url,
+    prefixUrl: chargingModuleConfig.url,
     headers: {
       authorization: `Bearer ${accessToken}`
     },
     responseType: 'json',
     timeout: {
-      request: requestConfig.chargingModuleTimeout
+      request: chargingModuleConfig.timeout
     },
     json: body
   }
