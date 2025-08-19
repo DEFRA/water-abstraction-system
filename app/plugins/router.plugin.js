@@ -38,6 +38,7 @@ const ReturnSubmissionsRoutes = require('../routes/return-submissions.routes.js'
 const ReturnVersionsSetupRoutes = require('../routes/return-versions-setup.routes.js')
 const ReturnVersionsRoutes = require('../routes/return-versions.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
+const UsersRoutes = require('../routes/users.routes.js')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
@@ -67,7 +68,8 @@ const routes = [
   ...ReturnVersionsSetupRoutes,
   ...NoticesRoutes,
   ...NoticesSetupRoutes,
-  ...DataRoutes
+  ...DataRoutes,
+  ...UsersRoutes
 ]
 
 const RouterPlugin = {

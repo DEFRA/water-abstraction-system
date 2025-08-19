@@ -17,7 +17,7 @@ const Vision = require('@hapi/vision')
 const { markdown } = require('../views/filters/markdown.filter.js')
 
 const ServerConfig = require('../../config/server.config.js')
-const { enableSystemLicenceView } = require('../../config/feature-flags.config.js')
+const { enableSystemLicenceView, enableSystemProfiles } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -172,7 +172,11 @@ function _navigationLinks(auth) {
   const { scope } = auth.credentials
 
   if (scope.includes('hof_notifications') || scope.includes('renewal_notifications')) {
-    links.unshift({ href: '/contact-information', text: 'Contact information' })
+    if (enableSystemProfiles) {
+      links.unshift({ href: '/system/users/me/profile-details', text: 'Profile details' })
+    } else {
+      links.unshift({ href: '/contact-information', text: 'Contact information' })
+    }
   }
 
   return links
