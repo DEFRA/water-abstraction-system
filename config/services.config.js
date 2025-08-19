@@ -10,9 +10,6 @@
 require('dotenv').config()
 
 const config = {
-  addressFacade: {
-    url: process.env.EA_ADDRESS_FACADE_URL
-  },
   chargingModule: {
     url: process.env.CHARGING_MODULE_URL,
     token: {
