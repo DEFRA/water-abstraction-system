@@ -149,19 +149,19 @@
             },
             items: [
               {
-                classes: 'govuk-input--width-2 ' + errorClass,
+                classes: 'govuk-input--width-2' + (' govuk-input--error' if error.fromDate),
                 name: 'sentFromDay',
                 label: 'Day',
                 value: filters.sentFromDay
               },
               {
-                classes: 'govuk-input--width-2 ' + errorClass,
+                classes: 'govuk-input--width-2' + (' govuk-input--error' if error.fromDate),
                 name: 'sentFromMonth',
                 label: 'Month',
                 value: filters.sentFromMonth
               },
               {
-                classes: 'govuk-input--width-4 ' + errorClass,
+                classes: 'govuk-input--width-4' + (' govuk-input--error' if error.fromDate),
                 name: 'sentFromYear',
                 label: 'Year',
                 value:filters.sentFromYear
@@ -183,19 +183,19 @@
             },
             items: [
               {
-                classes: 'govuk-input--width-2 ' + errorClass,
+                classes: 'govuk-input--width-2' + (' govuk-input--error' if error.toDate),
                 name: 'sentToDay',
                 label: 'Day',
                 value: filters.sentToDay
               },
               {
-                classes: 'govuk-input--width-2 ' + errorClass,
+                classes: 'govuk-input--width-2' + (' govuk-input--error' if error.toDate),
                 name: 'sentToMonth',
                 label: 'Month',
                 value: filters.sentToMonth
               },
               {
-                classes: 'govuk-input--width-4 ' + errorClass,
+                classes: 'govuk-input--width-4' + (' govuk-input--error' if error.toDate),
                 name: 'sentToYear',
                 label: 'Year',
                 value: filters.sentToYear
