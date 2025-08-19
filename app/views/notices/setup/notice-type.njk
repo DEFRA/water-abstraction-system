@@ -6,12 +6,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}

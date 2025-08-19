@@ -5,10 +5,7 @@
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Back',
-    href: "/manage"
-  }) }}
+  {{ govukBackLink({ text: 'Back', href: '/manage' }) }}
 {% endblock %}
 
 {% block content %}

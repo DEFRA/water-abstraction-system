@@ -8,12 +8,7 @@
 {% from "macros/licence-monitoring-station-restrictions-table.njk" import licenceMonitoringStationRestrictionsTable %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
