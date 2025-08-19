@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
-describe.only('Notices - Setup - Prepare Return Forms Presenter', () => {
+describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   let dueReturnLog
   let recipient
   let session
