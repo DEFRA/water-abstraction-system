@@ -31,7 +31,8 @@ describe('Users - View profile details service', () => {
   let yarStub
 
   beforeEach(() => {
-    // Stub UserModel.query().findById().select()
+    // NOTE: We stub the UserModel `findById().select()` query to avoid hitting the DB as part of the test. It is
+    // sufficiently simple running it would just be testing Objection.js and not our logic.
     selectStub = Sinon.stub().resolves(profileDetails)
     findByIdStub = Sinon.stub().returns({ select: selectStub })
     userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ findById: findByIdStub })
@@ -46,19 +47,16 @@ describe('Users - View profile details service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewProfileDetailsService.go(userId, yarStub)
 
-      expect(result).to.include({ pageTitle: 'Profile details' })
-      expect(result).to.include(profileDetails)
-    })
-
-    it('returns the correctly selected navigation', async () => {
-      const result = await ViewProfileDetailsService.go(userId, yarStub)
-
-      expect(result).to.include('navigationLinks')
-      expect(result.navigationLinks).to.equal([
-        { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
-        { href: '/account/update-password', text: 'Change password' },
-        { href: '/signout', text: 'Sign out' }
-      ])
+      expect(result).to.equal({
+        navigationLinks: [
+          { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
+          { href: '/account/update-password', text: 'Change password' },
+          { href: '/signout', text: 'Sign out' }
+        ],
+        notification: undefined,
+        pageTitle: 'Profile details',
+        ...profileDetails
+      })
     })
 
     describe('and there is a notification to be displayed', () => {
@@ -73,14 +71,6 @@ describe('Users - View profile details service', () => {
         expect(result.notification).to.equal(testNotification)
       })
     })
-
-    describe('and there is no notification to be displayed', () => {
-      it('does not return a notification', async () => {
-        const result = await ViewProfileDetailsService.go(userId, yarStub)
-
-        expect(result.notification).to.be.undefined()
-      })
-    })
   })
 
   describe('when the service errors', () => {
@@ -88,6 +78,7 @@ describe('Users - View profile details service', () => {
       userModelQueryStub.restore()
       Sinon.stub(UserModel, 'query').throws(new Error('Model query error'))
     })
+
     it('throws the error', async () => {
       const error = await expect(ViewProfileDetailsService.go(userId, yarStub)).to.reject()
 

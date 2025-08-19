@@ -24,7 +24,8 @@ describe('Users - Submit profile details service', () => {
   let yarStub
 
   beforeEach(() => {
-    // Stub UserModel.query().findById().patch()
+    // NOTE: We stub the UserModel `findById().patch()` query to avoid hitting the DB as part of the test. It is
+    // sufficiently simple running it would just be testing Objection.js and not our logic.
     patchStub = Sinon.stub().resolves()
     findByIdStub = Sinon.stub().returns({ patch: patchStub })
     userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ findById: findByIdStub })

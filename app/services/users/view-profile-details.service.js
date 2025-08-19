@@ -5,8 +5,9 @@
  * @module ViewProfileDetailsService
  */
 
-const UserModel = require('../../models/user.model.js')
 const { ref } = require('objection')
+
+const UserModel = require('../../models/user.model.js')
 
 const NAVIGATION_LINKS = [
   { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
