@@ -119,88 +119,61 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       })
 
       describe('the "meterReadings" property', () => {
-        it('should return meter readings', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+        describe('and the start and end are 6 months apart', () => {
+          it('should return meter readings', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-          expect(result.meterReadings).to.equal([
-            [
+            expect(result.meterReadings).to.equal([
+              // Page
               [
-                '1 January 2021',
-                '2 January 2021',
-                '3 January 2021',
-                '4 January 2021',
-                '5 January 2021',
-                '6 January 2021',
-                '7 January 2021',
-                '8 January 2021',
-                '9 January 2021',
-                '10 January 2021',
-                '11 January 2021',
-                '12 January 2021'
-              ],
-              [
-                '13 January 2021',
-                '14 January 2021',
-                '15 January 2021',
-                '16 January 2021',
-                '17 January 2021',
-                '18 January 2021',
-                '19 January 2021',
-                '20 January 2021',
-                '21 January 2021',
-                '22 January 2021',
-                '23 January 2021',
-                '24 January 2021'
+                // Column
+                [
+                  '31 January 2025',
+                  '28 February 2025',
+                  '31 March 2025',
+                  '30 April 2025',
+                  '31 May 2025',
+                  '30 June 2025'
+                ],
+                // Column
+                []
               ]
-            ],
-            [
+            ])
+          })
+        })
+
+        describe('and the start and end are 1 year apart', () => {
+          beforeEach(() => {
+            dueReturnLog.startDate = '2021-01-01'
+            dueReturnLog.endDate = '2021-12-31'
+          })
+
+          it('should return meter readings', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+
+            expect(result.meterReadings).to.equal([
+              // Page
               [
-                '25 January 2021',
-                '26 January 2021',
-                '27 January 2021',
-                '28 January 2021',
-                '29 January 2021',
-                '30 January 2021',
-                '31 January 2021',
-                '1 February 2021',
-                '2 February 2021',
-                '3 February 2021',
-                '4 February 2021',
-                '5 February 2021'
-              ],
-              [
-                '6 February 2021',
-                '7 February 2021',
-                '8 February 2021',
-                '9 February 2021',
-                '10 February 2021',
-                '11 February 2021',
-                '12 February 2021',
-                '13 February 2021',
-                '14 February 2021',
-                '15 February 2021',
-                '16 February 2021',
-                '17 February 2021'
+                // Column
+                [
+                  '31 January 2021',
+                  '28 February 2021',
+                  '31 March 2021',
+                  '30 April 2021',
+                  '31 May 2021',
+                  '30 June 2021',
+                  '31 July 2021',
+                  '31 August 2021',
+                  '30 September 2021',
+                  '31 October 2021',
+                  '30 November 2021',
+                  '31 December 2021'
+                ],
+                // Column
+                []
               ]
-            ],
-            [
-              [
-                '18 February 2021',
-                '19 February 2021',
-                '20 February 2021',
-                '21 February 2021',
-                '22 February 2021',
-                '23 February 2021',
-                '24 February 2021',
-                '25 February 2021',
-                '26 February 2021',
-                '27 February 2021',
-                '28 February 2021',
-                '1 March 2021'
-              ],
-              ['2 March 2021', '3 March 2021', '4 March 2021', '5 March 2021']
-            ]
-          ])
+            ])
+          })
         })
       })
     })
@@ -219,92 +192,130 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       })
 
       describe('the "meterReadings" property', () => {
-        it('should return meter readings', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+        describe('and the date fits onto one page', () => {
+          it('should return meter readings', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-          expect(result.meterReadings).to.equal([
-            [
+            expect(result.meterReadings.length).to.equal(1)
+            expect(result.meterReadings).to.equal([
+              // Page
               [
-                '1 January 2021',
-                '2 January 2021',
-                '3 January 2021',
-                '4 January 2021',
-                '5 January 2021',
-                '6 January 2021',
-                '7 January 2021',
-                '8 January 2021',
-                '9 January 2021',
-                '10 January 2021',
-                '11 January 2021',
-                '12 January 2021',
-                '13 January 2021',
-                '14 January 2021'
-              ],
-              [
-                '15 January 2021',
-                '16 January 2021',
-                '17 January 2021',
-                '18 January 2021',
-                '19 January 2021',
-                '20 January 2021',
-                '21 January 2021',
-                '22 January 2021',
-                '23 January 2021',
-                '24 January 2021',
-                '25 January 2021',
-                '26 January 2021',
-                '27 January 2021',
-                '28 January 2021'
+                // Column
+                [
+                  '4 January 2025',
+                  '11 January 2025',
+                  '18 January 2025',
+                  '25 January 2025',
+                  '1 February 2025',
+                  '8 February 2025',
+                  '15 February 2025',
+                  '22 February 2025',
+                  '1 March 2025',
+                  '8 March 2025',
+                  '15 March 2025',
+                  '22 March 2025',
+                  '29 March 2025',
+                  '5 April 2025'
+                ],
+                // Column
+                [
+                  '12 April 2025',
+                  '19 April 2025',
+                  '26 April 2025',
+                  '3 May 2025',
+                  '10 May 2025',
+                  '17 May 2025',
+                  '24 May 2025',
+                  '31 May 2025'
+                ]
               ]
-            ],
-            [
+            ])
+          })
+        })
+
+        describe('and the period spans multiple pages', () => {
+          beforeEach(() => {
+            dueReturnLog.startDate = '2021-01-01'
+            dueReturnLog.endDate = '2021-12-31'
+          })
+
+          it('should return meter readings', () => {
+            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+
+            expect(result.meterReadings.length).to.equal(2)
+            expect(result.meterReadings).to.equal([
+              // Page 1
               [
-                '29 January 2021',
-                '30 January 2021',
-                '31 January 2021',
-                '1 February 2021',
-                '2 February 2021',
-                '3 February 2021',
-                '4 February 2021',
-                '5 February 2021',
-                '6 February 2021',
-                '7 February 2021',
-                '8 February 2021',
-                '9 February 2021',
-                '10 February 2021',
-                '11 February 2021'
+                // Column
+                [
+                  '2 January 2021',
+                  '9 January 2021',
+                  '16 January 2021',
+                  '23 January 2021',
+                  '30 January 2021',
+                  '6 February 2021',
+                  '13 February 2021',
+                  '20 February 2021',
+                  '27 February 2021',
+                  '6 March 2021',
+                  '13 March 2021',
+                  '20 March 2021',
+                  '27 March 2021',
+                  '3 April 2021'
+                ],
+                // Column
+                [
+                  '10 April 2021',
+                  '17 April 2021',
+                  '24 April 2021',
+                  '1 May 2021',
+                  '8 May 2021',
+                  '15 May 2021',
+                  '22 May 2021',
+                  '29 May 2021',
+                  '5 June 2021',
+                  '12 June 2021',
+                  '19 June 2021',
+                  '26 June 2021',
+                  '3 July 2021',
+                  '10 July 2021'
+                ]
               ],
+              // Page 2
               [
-                '12 February 2021',
-                '13 February 2021',
-                '14 February 2021',
-                '15 February 2021',
-                '16 February 2021',
-                '17 February 2021',
-                '18 February 2021',
-                '19 February 2021',
-                '20 February 2021',
-                '21 February 2021',
-                '22 February 2021',
-                '23 February 2021',
-                '24 February 2021',
-                '25 February 2021'
+                // Column
+                [
+                  '17 July 2021',
+                  '24 July 2021',
+                  '31 July 2021',
+                  '7 August 2021',
+                  '14 August 2021',
+                  '21 August 2021',
+                  '28 August 2021',
+                  '4 September 2021',
+                  '11 September 2021',
+                  '18 September 2021',
+                  '25 September 2021',
+                  '2 October 2021',
+                  '9 October 2021',
+                  '16 October 2021'
+                ],
+                // Column
+                [
+                  '23 October 2021',
+                  '30 October 2021',
+                  '6 November 2021',
+                  '13 November 2021',
+                  '20 November 2021',
+                  '27 November 2021',
+                  '4 December 2021',
+                  '11 December 2021',
+                  '18 December 2021',
+                  '25 December 2021'
+                ]
               ]
-            ],
-            [
-              [
-                '26 February 2021',
-                '27 February 2021',
-                '28 February 2021',
-                '1 March 2021',
-                '2 March 2021',
-                '3 March 2021',
-                '4 March 2021',
-                '5 March 2021'
-              ],
-              []
-            ]
-          ])
+            ])
+          })
         })
       })
     })

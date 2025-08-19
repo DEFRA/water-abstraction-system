@@ -8,6 +8,7 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+const { weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 
 const RETURN_TYPE = {
   week: {
@@ -59,7 +60,7 @@ function go(session, dueReturnLog, recipient) {
     dueDate: formatLongDate(new Date(dueDate)),
     endDate: formatLongDate(new Date(endDate)),
     licenceRef,
-    meterReadings: _meterReadings(returnsFrequency),
+    meterReadings: _meterReadings(startDate, endDate, returnsFrequency),
     pageTitle: _pageTitle(returnsFrequency),
     purpose,
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
@@ -112,6 +113,12 @@ function _formatArrayIntoGroups(dates, columnSize) {
     result.push(dates.slice(i, i + columnSize))
   }
   return result
+} // lift this out - remove term of rows to cells
+
+function _formatPeriodToLongDate(periods) {
+  return periods.map((period) => {
+    return formatLongDate(new Date(period.endDate))
+  })
 }
 
 /**
@@ -128,10 +135,10 @@ function _regionAndArea(regionName, naldAreaCode) {
   return regionName
 }
 
-function _meterReadings(returnsFrequency) {
+function _meterReadings(startDate, endDate, returnsFrequency) {
   const { columns, columnSize } = RETURN_TYPE[returnsFrequency]
 
-  const dates = _generateFormattedDates(new Date('2021-01-01'), 64)
+  const dates = _generateFormattedDates(startDate, endDate, returnsFrequency)
 
   const totalItemsPerPage = columnSize * columns
 
@@ -145,7 +152,7 @@ function _meterReadings(returnsFrequency) {
  *
  * We first format the array of dates into groups suitable to render on the page.
  *
- * In the case of a 'week' we want to have 2 columns with 14 'rows' per column. This means 28 total dates on the page.
+ * In the case of a 'week' we want to have 2 columns with 14 'cells' per column. This means 28 total dates on the page.
  * When this limit is exceeded, we continue onto the next page. Therefore, given 65 dates, we would get 3 groups in our
  * array:
  * - The first page would be an array of 28
@@ -155,11 +162,11 @@ function _meterReadings(returnsFrequency) {
  * Total = 65 dates.
  *
  * Once the page count has been established, we need to format the dates into columns. The 'week' example of 2 columns
- * with 14 'rows' per column would result in two columns with 14 'rows' in each column.
+ * with 14 'cells' per column would result in two columns with 14 'cells' in each column.
  *
  * When the column does not reach the maximum row count, it will be the remaining dates.
  *
- * This is driven from the UI where the columns are fixed. So it is expected to only have one column with 12 rows (when
+ * This is driven from the UI where the columns are fixed. So it is expected to only have one column with 12 cells (when
  * the 'returnFrequency' is for months and the date range is a year).
  *
  * @private
@@ -176,20 +183,19 @@ function _pageTitle(returnsFrequency) {
   return `Water abstraction ${returnRequirementFrequencies[returnsFrequency]} return`
 }
 
-/**
- * Temp date range - will be replaced by start date to end date calculations
- * @private
- */
-function _generateFormattedDates(startDate, count) {
-  const dates = []
+function _generateFormattedDates(startDate, endDate, returnsFrequency) {
+  const periodStartDate = new Date(startDate)
+  const periodEndDate = new Date(endDate)
 
-  for (let i = 0; i < count; i++) {
-    const date = new Date(startDate)
-    date.setDate(startDate.getDate() + i)
-    dates.push(formatLongDate(date))
+  let dates = []
+
+  if (returnsFrequency === 'week') {
+    dates = weeksFromPeriod(periodStartDate, periodEndDate)
+  } else if (returnsFrequency === 'month') {
+    dates = monthsFromPeriod(periodStartDate, periodEndDate)
   }
 
-  return dates
+  return _formatPeriodToLongDate(dates)
 }
 
 module.exports = {
