@@ -49,14 +49,12 @@ describe('Address - International Service', () => {
     beforeEach(async () => {
       sessionData = {
         address: {
-          international: {
-            addressLine1: '1 Fake Farm',
-            addressLine2: '1 Fake street',
-            addressLine3: 'Fake Village',
-            addressLine4: 'Fake City',
-            country: 'England',
-            postcode: 'SW1A 1AA'
-          }
+          addressLine1: '1 Fake Farm',
+          addressLine2: '1 Fake street',
+          addressLine3: 'Fake Village',
+          addressLine4: 'Fake City',
+          country: 'England',
+          postcode: 'SW1A 1AA'
         }
       }
 
@@ -81,18 +79,18 @@ describe('Address - International Service', () => {
   })
 })
 
-function _countries(savedCountry) {
+function _countries(value = 'select') {
   const displayCountries = countries.map((country) => {
     return {
       value: country,
-      selected: savedCountry === country,
+      selected: value === country,
       text: country
     }
   })
 
   displayCountries.unshift({
     value: 'select',
-    selected: savedCountry !== 'select',
+    selected: value === 'select',
     text: 'Select a country'
   })
 

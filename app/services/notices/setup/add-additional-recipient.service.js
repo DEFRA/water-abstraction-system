@@ -7,6 +7,7 @@
 
 const crypto = require('crypto')
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -17,8 +18,9 @@ const SessionModel = require('../../../models/session.model.js')
  * then adds it to the additional recipients array if it exists or creates it if it doesn't.
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const additionalRecipient = {
@@ -40,6 +42,8 @@ async function go(sessionId) {
   session.selectedRecipients.push(additionalRecipient.contact_hash_id)
 
   await _resetGenericAddressSupport(session)
+
+  GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 }
 
 function _addAdditionalRecipient(session, additionalRecipient) {

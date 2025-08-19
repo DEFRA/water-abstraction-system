@@ -28,9 +28,7 @@ async function go(sessionId, payload, yar) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
-
-    GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
+    await _save(session, payload, yar)
 
     return {
       type: payload.type
@@ -56,7 +54,7 @@ function _createMD5Hash(email) {
   return crypto.createHash('md5').update(email).digest('hex')
 }
 
-async function _save(session, payload) {
+async function _save(session, payload, yar) {
   if (payload.type === 'email') {
     const email = payload.email.toLowerCase()
 
@@ -76,6 +74,8 @@ async function _save(session, payload) {
 
     delete session.contactName
     delete session.contactType
+
+    GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 
     return session.$update()
   }
