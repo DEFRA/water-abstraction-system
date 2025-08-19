@@ -17,7 +17,8 @@ const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
-const servicesConfig = require('../../../config/services.config.js')
+const addressFacadeConfig = require('../../../config/address-facade.config.js')
+const gotenbergConfig = require('../../../config/gotenberg.config.js')
 
 /**
  * Checks status and gathers info for each of the services which make up WRLS
@@ -58,7 +59,7 @@ async function _addSystemInfoToLegacyAppData(appData) {
 }
 
 async function _getAddressFacadeData() {
-  const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
+  const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
   const result = await BaseRequest.get(statusUrl.href)
 
   if (result.succeeded) {
@@ -69,7 +70,7 @@ async function _getAddressFacadeData() {
 }
 
 async function _getGotenbergData() {
-  const statusUrl = new URL('/health', servicesConfig.gotenberg.url)
+  const statusUrl = new URL('/health', gotenbergConfig.url)
   const result = await BaseRequest.get(statusUrl.href)
 
   if (result.succeeded) {
