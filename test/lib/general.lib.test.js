@@ -417,7 +417,6 @@ describe('GeneralLib', () => {
       it('returns an empty array', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        console.log('res = ', result)
         expect(result.length).to.equal(1)
 
         expect(result).to.equal([[1, 2]])
