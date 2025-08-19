@@ -9,29 +9,27 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    <span class="govuk-caption-l">{{ caption }}</span>
+  <span class="govuk-caption-l">{{ caption }}</span>
 
-    <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+  <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
-    {{ govukSummaryList({
-      rows: [
-        {},
-        {
-          key: {
-          text: summaryList.text
-        },
-          value: {
-          text: summaryList.value
-        }
-        }
-      ]
-    }) }}
+  {{ govukSummaryList({
+    rows: [
+      {},
+      {
+        key: {
+        text: summaryList.text
+      },
+        value: {
+        text: summaryList.value
+      }
+      }
+    ]
+  }) }}
 
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

@@ -20,29 +20,27 @@
         }
       ]
     }) }}
-  {%endif%}
+  {% endif %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukCheckboxes({
-        name: "returns",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        hint: {
-          text: "Select all that apply"
-        },
-        items: returns
-      }) }}
+    {{ govukCheckboxes({
+      name: "returns",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        text: "Select all that apply"
+      },
+      items: returns
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

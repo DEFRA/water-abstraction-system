@@ -23,27 +23,25 @@
   {%endif%}
 
   {# Main heading #}
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds">
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-            {{ govukInput({
-              label: {
-                text: pageTitle,
-                classes: "govuk-label--l",
-                isPageHeading: true
-              },
-              value: licenceRef,
-              id: "licence-ref",
-              name: "licenceRef",
-              errorMessage: error
-            }) }}
+          {{ govukInput({
+            label: {
+              text: pageTitle,
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            value: licenceRef,
+            id: "licence-ref",
+            name: "licenceRef",
+            errorMessage: error
+          }) }}
 
-            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-          </div>
+          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
         </div>
-    </form>
-  </div>
+      </div>
+  </form>
 {% endblock %}

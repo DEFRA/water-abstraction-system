@@ -2,22 +2,20 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
 {% block content %}
-  <div class="govuk-body">
-    {{ govukPanel({
-      titleText: pageTitle,
-      html: "Your reference number is <br><strong>" + referenceCode + "</strong>"
-    }) }}
+  {{ govukPanel({
+    titleText: pageTitle,
+    html: "Your reference number is <br><strong>" + referenceCode + "</strong>"
+  }) }}
+
+  <p class="govuk-body">
+    <a class="govuk-link" href="{{ forwardLink }}">View notifications report</a>
+  </p>
+
+  {% if monitoringStationLink %}
+    <p class="govuk-body">or</p>
 
     <p class="govuk-body">
-      <a class="govuk-link" href="{{ forwardLink }}">View notifications report</a>
+      <a class="govuk-link" href="{{ monitoringStationLink }}">Return to monitoring station</a>
     </p>
-
-    {% if monitoringStationLink %}
-      <p class="govuk-body">or</p>
-
-      <p class="govuk-body">
-        <a class="govuk-link" href="{{ monitoringStationLink }}">Return to monitoring station</a>
-      </p>
-    {% endif %}
-  </div>
+  {% endif %}
 {% endblock %}

@@ -12,33 +12,31 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    {% if notification %}
-      {{ govukNotificationBanner({
-        titleText: notification.title,
-        text: notification.text
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
+
+  <span class="govuk-caption-l">{{caption}}</span>
+
+  <h2 class="govuk-heading-l">{{ pageTitle }}</h2>
+
+  {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    <div class="govuk-button-group">
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        href: cancelLink,
+        preventDoubleClick: true
       }) }}
-    {% endif %}
-
-    <span class="govuk-caption-l">{{caption}}</span>
-
-    <h2 class="govuk-heading-l">{{ pageTitle }}</h2>
-
-    {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) }}
-
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-      <div class="govuk-button-group">
-        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-
-        {{ govukButton({
-          text: "Cancel",
-          classes: "govuk-button--secondary",
-          href: cancelLink,
-          preventDoubleClick: true
-        }) }}
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
 {% endblock %}

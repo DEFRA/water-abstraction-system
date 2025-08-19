@@ -20,58 +20,56 @@
     }) }}
   {% endif %}
 
-  <div>
-    {% set textHtml %}
-      {{ govukInput({
-        id: "other-user",
-        name: "otherUser",
-        classes: "govuk-!-width-one-third",
-        errorMessage: error.emailAddressInputFormError,
-        label: {
-          text: "Email address"
-        },
-        hint: {
-          text: "This is usually your area’s team email address"
-        },
-        value: alertEmailAddressOptions.otherUserEmailAddressInput
-      }) }}
-    {% endset %}
+  {% set textHtml %}
+    {{ govukInput({
+      id: "other-user",
+      name: "otherUser",
+      classes: "govuk-!-width-one-third",
+      errorMessage: error.emailAddressInputFormError,
+      label: {
+        text: "Email address"
+      },
+      hint: {
+        text: "This is usually your area’s team email address"
+      },
+      value: alertEmailAddressOptions.otherUserEmailAddressInput
+    }) }}
+  {% endset %}
 
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-      <span class="govuk-caption-l">{{caption}}</span>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <span class="govuk-caption-l">{{caption}}</span>
 
-      {{ govukRadios({
-        name: 'alertEmailAddressType',
-        errorMessage: error.radioFormError,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+    {{ govukRadios({
+      name: 'alertEmailAddressType',
+      errorMessage: error.radioFormError,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+        }
+      },
+      items: [
+        {
+          value: 'username',
+          text: username,
+          checked: alertEmailAddressOptions.usernameChecked
+        },
+        {
+          divider: 'or'
+        },
+        {
+          value: 'other',
+          text: 'Use another email address',
+          checked: alertEmailAddressOptions.otherUserChecked,
+          conditional: {
+            html: textHtml
           }
-        },
-        items: [
-          {
-            value: 'username',
-            text: username,
-            checked: alertEmailAddressOptions.usernameChecked
-          },
-          {
-            divider: 'or'
-          },
-          {
-            value: 'other',
-            text: 'Use another email address',
-            checked: alertEmailAddressOptions.otherUserChecked,
-            conditional: {
-              html: textHtml
-            }
-          }
-        ]
-      }) }}
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

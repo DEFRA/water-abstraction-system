@@ -19,26 +19,24 @@
     }) }}
   {% endif %}
 
-  <div class="govuk-body">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      <span class="govuk-caption-l">{{caption}}</span>
+    <span class="govuk-caption-l">{{caption}}</span>
 
-      {{ govukRadios({
-        name: 'alert-type',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
-          }
-        },
-        items: alertTypeOptions
-      }) }}
+    {{ govukRadios({
+      name: 'alert-type',
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          text: pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+        }
+      },
+      items: alertTypeOptions
+    }) }}
 
-      {{govukButton({ text: 'Continue', preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

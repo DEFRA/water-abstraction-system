@@ -47,91 +47,89 @@
 {% endfor %}
 
 {% block content %}
-  <div class="govuk-body">
-    {% if notification %}
-      {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
-    {% endif %}
+  {% if notification %}
+    {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
+  {% endif %}
 
-    {% if warning %}
-      {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
-    {% endif %}
+  {% if warning %}
+    {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
+  {% endif %}
 
-    <span class="govuk-caption-l">Notice {{referenceCode}}</span>
+  <span class="govuk-caption-l">Notice {{referenceCode}}</span>
 
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
 
-    <p>{{ readyToSend }}</p>
+  <p>{{ readyToSend }}</p>
 
-    <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Download recipients",
-        classes: "govuk-button--secondary",
-        href: links.download,
-        preventDoubleClick: true
-      }) }}
-
-      {% if links.removeLicences %}
-        {{ govukButton({
-          text: "Remove licences",
-          classes: "govuk-button--secondary",
-          href: links.removeLicences,
-          preventDoubleClick: true
-        }) }}
-      {% endif %}
-
-      {% if links.manage %}
-        {{ govukButton({
-          text: "Manage recipients",
-          classes: "govuk-button--secondary",
-          href: links.manage,
-          preventDoubleClick: true
-        }) }}
-      {% endif %}
-    </div>
-
-    {% if pagination.numberOfPages > 1 %}
-      <p> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients</p>
-    {% else %}
-      <p> Showing all {{ recipientsAmount }} recipients</p>
-    {% endif %}
-
-    {{ govukTable({
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: false,
-      head: [
-        {
-          text: "Recipient"
-        },
-        {
-          text: "Licence number"
-        },
-        {
-          text: "Method"
-        },
-        {
-          text: "Action"
-        } if displayPreviewLink
-      ],
-      rows: rows
+  <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Download recipients",
+      classes: "govuk-button--secondary",
+      href: links.download,
+      preventDoubleClick: true
     }) }}
 
-    {% if pagination.numberOfPages > 1 %}
-      {{ govukPagination(pagination.component) }}
+    {% if links.removeLicences %}
+      {{ govukButton({
+        text: "Remove licences",
+        classes: "govuk-button--secondary",
+        href: links.removeLicences,
+        preventDoubleClick: true
+      }) }}
     {% endif %}
 
-    <div class="govuk-button-group">
-      <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
+    {% if links.manage %}
+      {{ govukButton({
+        text: "Manage recipients",
+        classes: "govuk-button--secondary",
+        href: links.manage,
+        preventDoubleClick: true
+      }) }}
+    {% endif %}
+  </div>
 
-        {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
+  {% if pagination.numberOfPages > 1 %}
+    <p> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients</p>
+  {% else %}
+    <p> Showing all {{ recipientsAmount }} recipients</p>
+  {% endif %}
 
-        {{ govukButton({
-          text: "Cancel",
-          classes: "govuk-button--secondary",
-          href: links.cancel,
-          preventDoubleClick: true
-        }) }}
-      </form>
-    </div>
+  {{ govukTable({
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: "Recipient"
+      },
+      {
+        text: "Licence number"
+      },
+      {
+        text: "Method"
+      },
+      {
+        text: "Action"
+      } if displayPreviewLink
+    ],
+    rows: rows
+  }) }}
+
+  {% if pagination.numberOfPages > 1 %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
+
+  <div class="govuk-button-group">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
+
+      {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
+
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        href: links.cancel,
+        preventDoubleClick: true
+      }) }}
+    </form>
   </div>
 {% endblock %}
