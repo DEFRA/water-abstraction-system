@@ -10,21 +10,53 @@
   {%- endfor %}
 {% endmacro %}
 
+{% macro rowItem(item) %}
+
+  {% if returnsFrequency === 'month' %}
+    <p class="month-label">
+      {{ item }}
+      {{ boxes(12) }}
+    </p>
+  {% endif %}
+
+  {% if returnsFrequency === 'week' %}
+    <p class="week-label">
+      {{ item }}
+      {{ boxes(12) }}
+    </p>
+  {% endif %}
+{% endmacro %}
+
+{% set firstColumn = 0 %}
+{% set secondColumn = 1 %}
+
 {% block header %}
   {% include 'layout/header.njk' %}
 {% endblock %}
 
 {% block content %}
-  <div class="block-head bold">9. Meter readings or abstraction volumes</div>
+  {% if showHeading %}
+    <div class="block-head bold">9. Meter readings or abstraction volumes</div>
+  {% endif %}
 
   <div class="columns">
     <div class="column">
       <div class="block">
-        <p class="month-label">
-          6 April 2024
-          {{ boxes(12) }}
-        </p>
+      {% for reading in meterReading[firstColumn] %}
+            {{ rowItem(reading) }}
+      {% endfor %}
       </div>
     </div>
+
+    {% if meterReading[secondColumn] %}
+    <div class="column">
+      <div class="block">
+      {% for reading in meterReading[secondColumn] %}
+          {{ rowItem(reading) }}
+      {% endfor %}
+      </div>
+    </div>
+    {% endif %}
   </div>
 {% endblock %}
+
