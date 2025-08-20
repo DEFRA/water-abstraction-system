@@ -134,6 +134,69 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     })
 
     describe('the "meterReadings" property', () => {
+      describe('when the "returnsFrequency" is "day"', () => {
+        beforeEach(() => {
+          dueReturnLog.returnsFrequency = 'day'
+        })
+
+        it('should return meter readings', () => {
+          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+
+          expect(result.meterReadings).to.equal([
+            // Page
+            [
+              // Column
+              {
+                days: [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                  29, 30, 31
+                ],
+                period: 'January 2025'
+              },
+              // Column
+              {
+                days: [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+                ],
+                period: 'February 2025'
+              },
+              // Column
+              {
+                days: [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                  29, 30, 31
+                ],
+                period: 'March 2025'
+              }
+            ],
+            // Page
+            [
+              // Column
+              {
+                days: [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                  29, 30
+                ],
+                period: 'April 2025'
+              },
+              // Column
+              {
+                days: [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                  29, 30, 31
+                ],
+                period: 'May 2025'
+              },
+              // Column
+              {
+                days: [1, 2, 3, 4, 5, 6],
+                period: 'June 2025'
+              }
+            ]
+          ])
+        })
+      })
+
       describe('when the "returnsFrequency" is "month"', () => {
         beforeEach(() => {
           dueReturnLog.returnsFrequency = 'month'

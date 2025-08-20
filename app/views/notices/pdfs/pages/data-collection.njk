@@ -1,34 +1,18 @@
 {% extends "layout/page-layout.njk" %}
 
-{% macro boxes(count = 12) %}
+{% macro boxes(count = 12, isSmall = false) %}
   {#
   Creates a line of boxes for data entry.
   count: The number of horizontal boxes
   #}
   {% for i in range(0, count) -%}
-    <div class="number-input {{ ' last-digit' if loop.last }}"></div>
+    <div class="{{ 'small-number-input' if isSmall else 'number-input'}}{{ ' last-digit' if loop.last }}"></div>
   {%- endfor %}
-{% endmacro %}
-
-{% macro rowItem(item) %}
-
-  {% if returnsFrequency === 'month' %}
-    <p class="month-label">
-      {{ item }}
-      {{ boxes(12) }}
-    </p>
-  {% endif %}
-
-  {% if returnsFrequency === 'week' %}
-    <p class="week-label">
-      {{ item }}
-      {{ boxes(12) }}
-    </p>
-  {% endif %}
 {% endmacro %}
 
 {% set firstColumn = 0 %}
 {% set secondColumn = 1 %}
+{% set thirdColumn = 2 %}
 
 {% block header %}
   {% include 'layout/header.njk' %}
@@ -39,24 +23,74 @@
     <div class="block-head bold">9. Meter readings or abstraction volumes</div>
   {% endif %}
 
+  {% if returnsFrequency === 'day' %}
   <div class="columns">
     <div class="column">
       <div class="block">
-      {% for reading in meterReading[firstColumn] %}
-            {{ rowItem(reading) }}
-      {% endfor %}
+          <div class="block-head">{{ meterReading[firstColumn].period }}</div>
+          {% for day in meterReading[firstColumn].days %}
+            <div class="daily-input">
+              <div class="day-label">{{ day }}</div>
+              {{ boxes(12, isSmall = true) }}
+            </div>
+        {% endfor %}
       </div>
     </div>
-
-    {% if meterReading[secondColumn] %}
     <div class="column">
       <div class="block">
-      {% for reading in meterReading[secondColumn] %}
-          {{ rowItem(reading) }}
-      {% endfor %}
+        {% if meterReading[secondColumn] %}
+          <div class="block-head">{{ meterReading[secondColumn].period }}</div>
+          {% for day in meterReading[secondColumn].days %}
+            <div class="daily-input">
+              <div class="day-label">{{ day }}</div>
+              {{ boxes(12, isSmall = true) }}
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
-    {% endif %}
+    <div class="column">
+      <div class="block">
+        {% if meterReading[thirdColumn] %}
+          <div class="block-head">{{ meterReading[thirdColumn].period }}</div>
+          {% for day in meterReading[thirdColumn].days %}
+            <div class="daily-input">
+              <div class="day-label">{{ day }}</div>
+              {{ boxes(12, isSmall = true) }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
   </div>
+
+    {% else %}
+      <div class="columns">
+        <div class="column">
+          <div class="block">
+            {% for reading in meterReading[firstColumn] %}
+              <p>
+                {{ reading }}
+                {{ boxes(12) }}
+              </p>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if meterReading[secondColumn] %}
+          <div class="column">
+            <div class="block">
+              {% for reading in meterReading[secondColumn] %}
+                <p>
+                  {{ reading }}
+                  {{ boxes(12) }}
+                </p>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+  {% endif %}
+
 {% endblock %}
 
