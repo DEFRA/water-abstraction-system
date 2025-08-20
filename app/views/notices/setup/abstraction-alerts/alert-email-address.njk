@@ -5,11 +5,17 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle, caption) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -38,16 +44,13 @@
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-    <span class="govuk-caption-l">{{caption}}</span>
 
     {{ govukRadios({
       name: 'alertEmailAddressType',
       errorMessage: error.radioFormError,
       fieldset: {
         legend: {
-          text: pageTitle,
-          isPageHeading: true,
-          classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+          html: pageHeading
         }
       },
       items: [
