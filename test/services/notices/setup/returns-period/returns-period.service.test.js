@@ -37,8 +37,8 @@ describe('Notices - Setup - Returns Period service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: '/manage',
+        caption: 'Notice RINV-123',
         pageTitle: 'Select the returns periods for the invitations',
-        referenceCode: 'RINV-123',
         returnsPeriod: [
           {
             checked: false,
