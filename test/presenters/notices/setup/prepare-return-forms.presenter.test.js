@@ -54,7 +54,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
         licenceRef: '123',
-        meterReadings: result.meterReadings,
+        pageEntries: result.pageEntries,
         purpose: 'A purpose',
         regionAndArea: 'North West / Lower Trent',
         returnReference: '123456',
@@ -133,16 +133,16 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       })
     })
 
-    describe('the "meterReadings" property', () => {
+    describe('the "pageEntries" property', () => {
       describe('when the "returnsFrequency" is "day"', () => {
         beforeEach(() => {
           dueReturnLog.returnsFrequency = 'day'
         })
 
-        it('should return meter readings', () => {
+        it('should return entries', () => {
           const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-          expect(result.meterReadings).to.equal([
+          expect(result.pageEntries).to.equal([
             // Page
             [
               // Column
@@ -203,10 +203,10 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         describe('and the start and end are 6 months apart', () => {
-          it('should return meter readings', () => {
+          it('should return entries', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-            expect(result.meterReadings).to.equal([
+            expect(result.pageEntries).to.equal([
               // Page
               [
                 // Column
@@ -231,10 +231,10 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
             dueReturnLog.endDate = '2021-12-31'
           })
 
-          it('should return meter readings', () => {
+          it('should return entries', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-            expect(result.meterReadings).to.equal([
+            expect(result.pageEntries).to.equal([
               // Page
               [
                 // Column
@@ -266,11 +266,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         describe('and the period fits onto one page', () => {
-          it('should return meter readings', () => {
+          it('should return entries', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-            expect(result.meterReadings.length).to.equal(1)
-            expect(result.meterReadings).to.equal([
+            expect(result.pageEntries.length).to.equal(1)
+            expect(result.pageEntries).to.equal([
               // Page
               [
                 // Column
@@ -312,11 +312,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
             dueReturnLog.endDate = '2021-12-31'
           })
 
-          it('should return meter readings', () => {
+          it('should return entries', () => {
             const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
 
-            expect(result.meterReadings.length).to.equal(2)
-            expect(result.meterReadings).to.equal([
+            expect(result.pageEntries.length).to.equal(2)
+            expect(result.pageEntries.length).to.equal(2)
+            expect(result.pageEntries).to.equal([
               // Page 1
               [
                 // Column

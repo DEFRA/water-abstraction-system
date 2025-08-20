@@ -109,7 +109,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
         licenceRef: '123',
-        meterReadings: actualCallArgs.meterReadings,
+        pageEntries: actualCallArgs.pageEntries,
         pageTitle: 'Water abstraction daily return',
         purpose: 'A purpose',
         regionAndArea: 'North West / Lower Trent',

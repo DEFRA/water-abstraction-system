@@ -60,7 +60,7 @@ function go(session, dueReturnLog, recipient) {
     dueDate: formatLongDate(new Date(dueDate)),
     endDate: formatLongDate(new Date(endDate)),
     licenceRef,
-    meterReadings: _meterReadings(startDate, endDate, returnsFrequency),
+    pageEntries: _entries(startDate, endDate, returnsFrequency),
     pageTitle: _pageTitle(returnsFrequency),
     purpose,
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
@@ -77,7 +77,7 @@ function _address(recipient) {
 }
 
 /**
- * Day meter readings are structured differently to 'month' and 'week'
+ * Day entries are structured differently to 'month' and 'week'
  *
  * The 'days' will take up three columns per page, with the month and year at the top of each column - 'June 2024'
  * and with the day next to the checkbox. It will look something like this:
@@ -92,7 +92,7 @@ function _address(recipient) {
  *
  * @private
  */
-function _dayMeterReadings(startDate, endDate) {
+function _dayEntries(startDate, endDate) {
   const periodStartDate = new Date(startDate)
   const periodEndDate = new Date(endDate)
 
@@ -179,9 +179,9 @@ function _regionAndArea(regionName, naldAreaCode) {
   return regionName
 }
 
-function _meterReadings(startDate, endDate, returnsFrequency) {
+function _entries(startDate, endDate, returnsFrequency) {
   if (returnsFrequency === 'day') {
-    return _dayMeterReadings(startDate, endDate)
+    return _dayEntries(startDate, endDate)
   }
 
   const { columns, columnSize } = RETURN_TYPE[returnsFrequency]
@@ -194,7 +194,7 @@ function _meterReadings(startDate, endDate, returnsFrequency) {
 }
 
 /**
- * The meter readings use boxes to allow the user to fill in the reading.
+ * The entries use boxes to allow the user to fill in the number.
  *
  * These boxes can span multiple pages, we need to handle this use case.
  *

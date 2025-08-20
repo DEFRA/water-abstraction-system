@@ -27,8 +27,8 @@
   <div class="columns">
     <div class="column">
       <div class="block">
-          <div class="block-head">{{ meterReading[firstColumn].period }}</div>
-          {% for day in meterReading[firstColumn].days %}
+          <div class="block-head">{{ entries[firstColumn].period }}</div>
+          {% for day in entries[firstColumn].days %}
             <div class="daily-input">
               <div class="day-label">{{ day }}</div>
               {{ boxes(12, isSmall = true) }}
@@ -38,9 +38,9 @@
     </div>
     <div class="column">
       <div class="block">
-        {% if meterReading[secondColumn] %}
-          <div class="block-head">{{ meterReading[secondColumn].period }}</div>
-          {% for day in meterReading[secondColumn].days %}
+        {% if entries[secondColumn] %}
+          <div class="block-head">{{ entries[secondColumn].period }}</div>
+          {% for day in entries[secondColumn].days %}
             <div class="daily-input">
               <div class="day-label">{{ day }}</div>
               {{ boxes(12, isSmall = true) }}
@@ -51,9 +51,9 @@
     </div>
     <div class="column">
       <div class="block">
-        {% if meterReading[thirdColumn] %}
-          <div class="block-head">{{ meterReading[thirdColumn].period }}</div>
-          {% for day in meterReading[thirdColumn].days %}
+        {% if entries[thirdColumn] %}
+          <div class="block-head">{{ entries[thirdColumn].period }}</div>
+          {% for day in entries[thirdColumn].days %}
             <div class="daily-input">
               <div class="day-label">{{ day }}</div>
               {{ boxes(12, isSmall = true) }}
@@ -68,21 +68,21 @@
       <div class="columns">
         <div class="column">
           <div class="block">
-            {% for reading in meterReading[firstColumn] %}
+            {% for entry in entries[firstColumn] %}
               <p>
-                {{ reading }}
+                {{ entry }}
                 {{ boxes(12) }}
               </p>
             {% endfor %}
           </div>
         </div>
 
-        {% if meterReading[secondColumn] %}
+        {% if entries[secondColumn] %}
           <div class="column">
             <div class="block">
-              {% for reading in meterReading[secondColumn] %}
+              {% for entry in entries[secondColumn] %}
                 <p>
-                  {{ reading }}
+                  {{ entry }}
                   {{ boxes(12) }}
                 </p>
               {% endfor %}
