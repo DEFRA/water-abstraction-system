@@ -12,7 +12,7 @@ const SessionModel = require('../../../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {string} contactHashId - The recipients unique identifier
  *
  * @returns {Promise<object>} - The data formatted for the view template
