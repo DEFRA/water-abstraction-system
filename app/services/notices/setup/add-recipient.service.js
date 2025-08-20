@@ -2,7 +2,7 @@
 
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
- * @module AddAdditionalRecipientService
+ * @module AddRecipientService
  */
 
 const crypto = require('crypto')
@@ -37,7 +37,7 @@ async function go(sessionId, yar) {
     licence_refs: session.licenceRef
   }
 
-  _addAdditionalRecipient(session, additionalRecipient)
+  _addRecipient(session, additionalRecipient)
 
   session.selectedRecipients.push(additionalRecipient.contact_hash_id)
 
@@ -46,7 +46,7 @@ async function go(sessionId, yar) {
   GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 }
 
-function _addAdditionalRecipient(session, additionalRecipient) {
+function _addRecipient(session, additionalRecipient) {
   if (session.additionalRecipients) {
     session.additionalRecipients.push(additionalRecipient)
 
@@ -89,7 +89,7 @@ async function _resetGenericAddressSupport(session) {
   delete session.contactName
   delete session.contactType
 
-  session.address = { redirectUrl: `/system/notices/setup/${session.id}/check` }
+  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-recipient` }
 
   await session.$update()
 }
