@@ -79,7 +79,7 @@ function _address(recipient) {
 /**
  * Day meter readings are structured differently to 'month' and 'week'
  *
- * The 'days' will take up three columns per page, with the month and year are at the top of each column - 'June 2024'
+ * The 'days' will take up three columns per page, with the month and year at the top of each column - 'June 2024'
  * and with the day next to the checkbox. It will look something like this:
  *
  * ```
