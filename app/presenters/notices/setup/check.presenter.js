@@ -31,13 +31,13 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
+    caption: `Notice ${referenceCode}`,
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
-    referenceCode,
     warning: _warning(formattedRecipients)
   }
 }
