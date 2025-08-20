@@ -32,13 +32,13 @@ function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
 
   return returnLogs.map((dueReturn) => {
     return {
-      returnReference: dueReturn.returnReference,
-      siteDescription: dueReturn.siteDescription,
-      returnPeriod: `${formatLongDate(new Date(dueReturn.startDate))} to ${formatLongDate(new Date(dueReturn.endDate))}`,
       action: {
         link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
         text: 'Preview'
-      }
+      },
+      returnPeriod: `${formatLongDate(new Date(dueReturn.startDate))} to ${formatLongDate(new Date(dueReturn.endDate))}`,
+      returnReference: dueReturn.returnReference,
+      siteDescription: dueReturn.siteDescription
     }
   })
 }
