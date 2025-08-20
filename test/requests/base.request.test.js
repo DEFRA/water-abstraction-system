@@ -10,7 +10,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const requestConfig = require('../../config/request.config.js')
+const serverConfig = require('../../config/server.config.js')
 
 // Thing under test
 const BaseRequest = require('../../app/requests/base.request.js')
@@ -201,7 +201,7 @@ describe('Base Request', () => {
       describe('because request timed out', () => {
         beforeEach(async () => {
           // Set the timeout value to 50ms for these tests
-          Sinon.replace(requestConfig, 'timeout', 50)
+          Sinon.replace(serverConfig, 'requestTimeout', 50)
         })
 
         // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
@@ -481,7 +481,7 @@ describe('Base Request', () => {
       describe('because request timed out', () => {
         beforeEach(async () => {
           // Set the timeout value to 50ms for these tests
-          Sinon.replace(requestConfig, 'timeout', 50)
+          Sinon.replace(serverConfig, 'requestTimeout', 50)
         })
 
         // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
@@ -761,7 +761,7 @@ describe('Base Request', () => {
       describe('because request timed out', () => {
         beforeEach(async () => {
           // Set the timeout value to 50ms for these tests
-          Sinon.replace(requestConfig, 'timeout', 50)
+          Sinon.replace(serverConfig, 'requestTimeout', 50)
         })
 
         // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
@@ -1041,7 +1041,7 @@ describe('Base Request', () => {
       describe('because request timed out', () => {
         beforeEach(async () => {
           // Set the timeout value to 50ms for these tests
-          Sinon.replace(requestConfig, 'timeout', 50)
+          Sinon.replace(serverConfig, 'requestTimeout', 50)
         })
 
         // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
