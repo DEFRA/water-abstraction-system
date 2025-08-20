@@ -159,7 +159,7 @@ describe('Address controller', () => {
           })
         })
 
-        it('redirects to the add additional recipient route', async () => {
+        it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
@@ -243,7 +243,7 @@ describe('Address controller', () => {
           })
         })
 
-        it('redirects to the add additional recipient route', async () => {
+        it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
