@@ -6,10 +6,10 @@
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
-const { weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 
 const RETURN_TYPE = {
   week: {
@@ -21,8 +21,7 @@ const RETURN_TYPE = {
     columnSize: 12
   },
   day: {
-    columns: 3,
-    columnSize: 1
+    columns: 3
   }
 }
 
@@ -78,6 +77,37 @@ function _address(recipient) {
 }
 
 /**
+ * Day meter readings are structured differently to 'month' and 'week'
+ *
+ * The 'days' will take up three columns per page, with the month and year at the top of each column - 'June 2024'
+ * and with the day next to the checkbox. It will look something like this:
+ *
+ * ```
+ * June 2024                July 2024                 August 2024
+ *
+ * 1 [][][][][][][][][][]   1 [][][][][][][][][][]    1 [][][][][][][][][][]
+ * 2 [][][][][][][][][][]   2 [][][][][][][][][][]    2 [][][][][][][][][][]
+ * 3 [][][][][][][][][][]   3 [][][][][][][][][][]    3 [][][][][][][][][][]
+ * ```
+ *
+ * @private
+ */
+function _dayMeterReadings(startDate, endDate) {
+  const periodStartDate = new Date(startDate)
+  const periodEndDate = new Date(endDate)
+
+  const periodDates = daysFromPeriod(periodStartDate, periodEndDate)
+
+  const dates = periodDates.map((date) => {
+    return new Date(date.endDate)
+  })
+
+  const groupedDates = _groupDaysIntoMonths(dates)
+
+  return splitArrayIntoGroups(groupedDates, RETURN_TYPE.day.columns)
+}
+
+/**
  * Splits a list of page items into up to columns
  *
  * If the number of items exceeds the specified `columnSize`, the overflow is placed in the second column. If there are
@@ -105,6 +135,37 @@ function _formatPeriodsToLongDate(periods) {
 }
 
 /**
+ * Group an array of dates by the date's month and year.
+ *
+ * The group key (period) will be the month and the year of the date 'June 2024'.
+ *
+ * The date will be added to the 'days' array for the group as the day only (no leading 0).
+ *
+ * @private
+ */
+function _groupDaysIntoMonths(dates) {
+  return dates.reduce((acc, date) => {
+    const key = date.toLocaleString('default', { month: 'long', year: 'numeric' })
+
+    let group = acc.find((existingGroup) => {
+      return existingGroup.period === key
+    })
+
+    if (!group) {
+      group = {
+        period: key,
+        days: []
+      }
+      acc.push(group)
+    }
+
+    group.days.push(date.getDate())
+
+    return acc
+  }, [])
+}
+
+/**
  * The legacy code accounts for the 'nald.areaCode' not being set in the metadata. This logic replicates the legacy
  * logic.
  *
@@ -119,6 +180,10 @@ function _regionAndArea(regionName, naldAreaCode) {
 }
 
 function _meterReadings(startDate, endDate, returnsFrequency) {
+  if (returnsFrequency === 'day') {
+    return _dayMeterReadings(startDate, endDate)
+  }
+
   const { columns, columnSize } = RETURN_TYPE[returnsFrequency]
 
   const dates = _generateDates(startDate, endDate, returnsFrequency)
