@@ -4,11 +4,17 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: 'check' }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle, caption) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -22,18 +28,12 @@
   {% endif %}
 
   <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
-
-    <span class="govuk-caption-l">Notice {{referenceCode}}</span>
-
     {{ govukTextarea({
       name: "removeLicences",
       id: "remove-licences",
       errorMessage: error,
       label: {
-        text: pageTitle,
-        classes: "govuk-label--l",
-        isPageHeading: true
+        html: pageHeading
       },
       hint: {
         text: hint
