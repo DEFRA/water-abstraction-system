@@ -5,11 +5,17 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle, caption) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -23,16 +29,12 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    <span class="govuk-caption-l">{{caption}}</span>
-
     {{ govukCheckboxes({
       name: "alert-thresholds",
       errorMessage: error,
       fieldset: {
         legend: {
-          text: pageTitle,
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          html: pageHeading
         }
       },
       items: thresholdOptions
