@@ -5,7 +5,7 @@
  * @module NoticesSetupController
  */
 
-const AddAdditionalRecipientService = require('../services/notices/setup/add-additional-recipient.service.js')
+const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
 const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
@@ -43,13 +43,13 @@ const SubmitReturnFormsService = require('../services/notices/setup/submit-retur
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 
-async function addAdditionalRecipient(request, h) {
+async function addRecipient(request, h) {
   const {
     params: { sessionId },
     yar
   } = request
 
-  await AddAdditionalRecipientService.go(sessionId, yar)
+  await AddRecipientService.go(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
@@ -461,7 +461,7 @@ async function submitSelectRecipients(request, h) {
 }
 
 module.exports = {
-  addAdditionalRecipient,
+  addRecipient,
   checkAlert,
   downloadRecipients,
   preview,

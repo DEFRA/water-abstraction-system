@@ -11,7 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AddAdditionalRecipientService = require('../../app/services/notices/setup/add-additional-recipient.service.js')
+const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
 const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
@@ -1306,12 +1306,12 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/add-additional-recipient', () => {
+  describe('notices/setup/add-recipient', () => {
     describe('GET', () => {
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/add-additional-recipient`,
+          url: basePath + `/${session.id}/add-recipient`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -1321,7 +1321,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(AddAdditionalRecipientService, 'go')
+          Sinon.stub(AddRecipientService, 'go')
         })
 
         it('redirects to the check recipient page', async () => {

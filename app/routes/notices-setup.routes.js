@@ -449,9 +449,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/add-additional-recipient',
+    path: '/notices/setup/{sessionId}/add-recipient',
     options: {
-      handler: NoticesSetupController.addAdditionalRecipient,
+      handler: NoticesSetupController.addRecipient,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']

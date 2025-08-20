@@ -64,7 +64,7 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
  * @private
  */
 async function _genericAddressJourneySupport(session) {
-  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-additional-recipient` }
+  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-recipient` }
 
   await session.$update()
 }
