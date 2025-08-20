@@ -9,6 +9,7 @@ const { formatLongDate } = require('../../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms` page
+ *
  * @param {module:SessionModel} session - The session instance
  * @param {string} contactHashId - The recipients unique identifier
  *
