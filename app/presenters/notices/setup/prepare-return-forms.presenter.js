@@ -147,8 +147,8 @@ function _groupDaysIntoMonths(dates) {
   return dates.reduce((acc, date) => {
     const key = date.toLocaleString('default', { month: 'long', year: 'numeric' })
 
-    let group = acc.find((group) => {
-      return group.period === key
+    let group = acc.find((existingGroup) => {
+      return existingGroup.period === key
     })
 
     if (!group) {
