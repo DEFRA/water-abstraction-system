@@ -89,7 +89,7 @@ async function _resetGenericAddressSupport(session) {
   delete session.contactName
   delete session.contactType
 
-  session.address = { redirectUrl: `/system/notices/setup/${session.id}/check` }
+  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-additional-recipient` }
 
   await session.$update()
 }

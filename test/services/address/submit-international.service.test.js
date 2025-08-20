@@ -28,7 +28,7 @@ describe('Address - International Service', () => {
 
     session = await SessionHelper.add({ data: sessionData })
 
-    session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+    session.address.redirectUrl = `/system/notices/setup/${session.id}/add-additional-recipient`
 
     await session.$update()
   })
@@ -90,7 +90,7 @@ describe('Address - International Service', () => {
       const result = await SubmitInternationalService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: `/system/notices/setup/${session.id}/check`
+        redirect: `/system/notices/setup/${session.id}/add-additional-recipient`
       })
     })
   })

@@ -446,6 +446,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/add-additional-recipient',
+    options: {
+      handler: NoticesSetupController.addAdditionalRecipient,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
   }
 ]
 

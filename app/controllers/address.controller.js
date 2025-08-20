@@ -5,7 +5,6 @@
  * @module AddressController
  */
 
-const AddAdditionalRecipientService = require('../services/notices/setup/add-additional-recipient.service.js')
 const InternationalAddressService = require('../services/address/international.service.js')
 const ManualAddressService = require('../services/address/manual.service.js')
 const PostcodeService = require('../services/address/postcode.service.js')
@@ -18,8 +17,7 @@ const SubmitSelectAddressService = require('../services/address/submit-select.se
 async function submitInternational(request, h) {
   const {
     params: { sessionId },
-    payload,
-    yar
+    payload
   } = request
 
   const pageData = await SubmitInternationalAddressService.go(sessionId, payload)
@@ -28,16 +26,13 @@ async function submitInternational(request, h) {
     return h.view('address/international.njk', pageData)
   }
 
-  await AddAdditionalRecipientService.go(sessionId, yar)
-
   return h.redirect(pageData.redirect)
 }
 
 async function submitManual(request, h) {
   const {
     params: { sessionId },
-    payload,
-    yar
+    payload
   } = request
 
   const pageData = await SubmitManualAddressService.go(sessionId, payload)
@@ -45,8 +40,6 @@ async function submitManual(request, h) {
   if (pageData.error) {
     return h.view('address/manual.njk', pageData)
   }
-
-  await AddAdditionalRecipientService.go(sessionId, yar)
 
   return h.redirect(pageData.redirect)
 }
@@ -66,18 +59,13 @@ async function submitPostcode(request, h) {
 async function submitSelect(request, h) {
   const {
     params: { sessionId },
-    payload,
-    yar
+    payload
   } = request
 
   const pageData = await SubmitSelectAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
-  }
-
-  if (pageData.succeeded) {
-    await AddAdditionalRecipientService.go(sessionId, yar)
   }
 
   return h.redirect(pageData.redirect)

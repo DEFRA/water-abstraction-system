@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const AddAdditionalRecipientService = require('../../app/services/notices/setup/add-additional-recipient.service.js')
 const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
@@ -1300,6 +1301,34 @@ describe('Notices Setup controller', () => {
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
           })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/add-additional-recipient', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/add-additional-recipient`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(AddAdditionalRecipientService, 'go')
+        })
+
+        it('redirects to the check recipient page', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
         })
       })
     })

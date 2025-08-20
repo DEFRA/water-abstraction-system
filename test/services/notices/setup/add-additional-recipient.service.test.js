@@ -73,6 +73,9 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(
+            `/system/notices/setup/${session.id}/add-additional-recipient`
+          )
         })
       })
 
@@ -134,6 +137,9 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(
+            `/system/notices/setup/${session.id}/add-additional-recipient`
+          )
         })
       })
     })
@@ -177,6 +183,9 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(
+            `/system/notices/setup/${session.id}/add-additional-recipient`
+          )
         })
       })
     })
