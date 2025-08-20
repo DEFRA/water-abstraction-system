@@ -1,0 +1,81 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">{{ caption }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  {% set tableRows = [] %}
+
+  {% for returnLog in returnLogs %}
+    {# Set an easier to use index #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set tableRow = [] %}
+
+    {% set returnReferenceCell =
+      {
+        text: returnLog.returnReference,
+        attributes: { 'data-test': 'return-reference-' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(returnReferenceCell), tableRow) %}
+
+    {% set siteDescriptionCell =
+      {
+        text: returnLog.siteDescription,
+        attributes: { 'data-test': 'site-description' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(siteDescriptionCell), tableRow) %}
+
+    {% set returnPeriodCell =
+      {
+        text: returnLog.returnPeriod,
+        attributes: { 'data-test': 'return-period' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(returnPeriodCell), tableRow) %}
+
+
+    {% set actionCell =
+      {
+
+        html: '<a href="'+ returnLog.action.link +'" class="govuk-link" rel="noreferrer noopener" target="_blank">'
+          + returnLog.action.text + '</a>',
+        attributes: { 'data-test': 'action-' + rowIndex }
+      } %}
+    {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+  {% endfor %}
+
+  {# Recipient previews table #}
+  {{ govukTable({
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: "Return reference"
+      },
+      {
+        text: "Site Description"
+      },
+      {
+        text: "Return period"
+      },
+      {
+        text: "Action"
+      }
+    ],
+    rows: tableRows
+  }) }}
+{% endblock %}
