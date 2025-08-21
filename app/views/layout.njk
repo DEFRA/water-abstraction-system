@@ -54,10 +54,22 @@
 
 {% block content %}
   {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errorList
-    }) }}
+    {# Example of setting the error list in the page content #}
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% else %}
+      {# Example of offloading the erro summary to the layout #}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{
+          text: error.text,
+          href: '#' + name
+        }]
+      }) }}
+    {% endif %}
   {% endif %}
 
   {% if pageTitleCaption %}

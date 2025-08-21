@@ -3,12 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% if error %}
-  {% set errorList = [{
-    text: error.text,
-    href: "#licence-ref"
-  }] %}
-{% endif %}
+{# Used for the form and the error summary link #}
+{% set name = 'licenceRef' %}
 
 {% block pageContent %}
   <form method="post">
@@ -22,13 +18,12 @@
             isPageHeading: true
           },
           value: licenceRef,
-          id: "licence-ref",
-          name: "licenceRef",
+          name: name,
+          id: name,
           errorMessage: error
         }) }}
         {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
       </div>
     </div>
-
   </form>
 {% endblock %}
