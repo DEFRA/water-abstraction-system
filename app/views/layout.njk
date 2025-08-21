@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% macro pageHeading(pageTitle, caption, classes='govuk-heading-l') -%}
   {% if caption %}
@@ -53,11 +54,10 @@
 
   {# Place holder section for things like back links or breadcrumbs #}
   {% block breadcrumbs %}
-  {% endblock %}
-
-  {% if backLink %}
+    {% if backLink %}
       {{ govukBackLink({ text: 'Back', href: backLink }) }}
-  {% endif %}
+    {% endif %}
+  {% endblock %}
 {% endblock %}
 
 {% block content %}

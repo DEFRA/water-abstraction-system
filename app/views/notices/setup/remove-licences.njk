@@ -2,8 +2,6 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
 {% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
