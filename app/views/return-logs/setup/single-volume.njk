@@ -7,7 +7,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
@@ -27,7 +27,7 @@
   {% endif %}
 
   {% set pageHeading %}
-    {{ pageHeading(returnReference, pageTitle) }}
+    {{ pageHeading(pageTitle, caption) }}
   {% endset %}
 
   <form method="post">

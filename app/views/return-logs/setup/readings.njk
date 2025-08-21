@@ -17,7 +17,7 @@
     {{ govukErrorSummary({ titleText: 'There is a problem', errorList: error }) }}
   {% endif %}
 
-  {{ pageHeading(returnReference, pageTitle) }}
+  {{ pageHeading(pageTitle, caption) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>

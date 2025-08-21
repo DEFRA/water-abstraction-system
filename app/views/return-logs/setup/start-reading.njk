@@ -6,7 +6,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
@@ -25,7 +25,7 @@
     }) }}
   {% endif %}
 
-  {{ pageHeading(returnReference, pageTitle) }}
+  {{ pageHeading(pageTitle, caption) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>

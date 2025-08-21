@@ -7,14 +7,14 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% from "macros/return-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block content %}
   {% if notification %}
     {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
   {% endif %}
 
-  {{ pageHeading(returnReference, pageTitle) }}
+  {{ pageHeading(pageTitle, caption) }}
 
   {{ govukSummaryList({
       classes: 'govuk-summary-list--no-border govuk-!-margin-bottom-9',

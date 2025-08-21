@@ -5,8 +5,8 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
+{% from "macros/page-heading.njk" import pageHeading %}
 
-{% from "macros/return-reference-page-heading.njk" import pageHeading %}
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
@@ -26,7 +26,7 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {{ pageHeading(returnReference, pageTitle) }}
+      {{ pageHeading(pageTitle, caption) }}
       <div class="govuk-hint">
         <p>Enter {{lineCount}} {{frequency}} {{measurementType}} starting with {{ startDate }} and ending with {{ endDate }}.</p>
         <p>Copy and paste the values into the empty box.</p>

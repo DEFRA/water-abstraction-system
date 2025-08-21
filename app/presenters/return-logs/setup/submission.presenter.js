@@ -18,9 +18,9 @@ function go(session) {
   return {
     backLink: _backLink(session),
     beenReceived,
+    caption: `Return reference ${returnReference}`,
     journey: journey ?? null,
-    pageTitle: 'What do you want to do with this return?',
-    returnReference
+    pageTitle: 'What do you want to do with this return?'
   }
 }
 

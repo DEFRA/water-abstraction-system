@@ -17,9 +17,9 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
+    caption: `Return reference ${returnReference}`,
     meterProvided: meterProvided ?? null,
     pageTitle: 'Have meter details been provided?',
-    returnReference,
     sessionId
   }
 }

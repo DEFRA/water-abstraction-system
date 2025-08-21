@@ -26,12 +26,12 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
+    caption: `Return reference ${returnReference}`,
     pageTitle: 'When was the return received?',
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
-    returnReference,
     sessionId,
     todaysDate: formatLongDate(new Date()),
     yesterdaysDate: _yesterdaysDate()
