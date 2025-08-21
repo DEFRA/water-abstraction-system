@@ -8,93 +8,111 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const { NotifyClient } = require('notifications-node-client')
-const { stubNotify } = require('../../../config/notify.config.js')
+// Things we need to stub
+const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
 const NotifyStatusRequest = require('../../../app/requests/notify/notify-status.request.js')
 
-describe('Notify - Status request', () => {
-  let notificationId
-  let notifierStub
-  let notifyStub
+describe('Notify - Notify Status request', () => {
+  const notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
 
-  beforeEach(() => {
-    // If you wish to test live notify replace this with a real notification id
-    notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
-
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-  })
+  let response
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
-  describe('when the call to "notify" is successful', () => {
+  describe('when the request succeeds', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify()
-    })
+      response = {
+        statusCode: 200,
+        body: {
+          body: 'Dear licence holder,\r\n',
+          completed_at: '2025-08-21T17:26:20.737851Z',
+          cost_details: {},
+          cost_in_pounds: 0,
+          created_at: '2025-08-21T17:26:20.620698Z',
+          created_by_name: null,
+          email_address: 'alan.cruikshanks@defra.gov.uk',
+          id: '44bdb4e2-21cb-492c-84f6-90c2348275b4',
+          is_cost_data_ready: true,
+          line_1: null,
+          line_2: null,
+          line_3: null,
+          line_4: null,
+          line_5: null,
+          line_6: null,
+          one_click_unsubscribe_url: null,
+          phone_number: null,
+          postage: null,
+          postcode: null,
+          reference: 'RINV-H1EZR5',
+          scheduled_for: null,
+          sent_at: '2025-08-21T17:26:20.675046Z',
+          status: 'delivered',
+          subject: 'Submit your water abstraction returns by 28th April 2025',
+          template: {
+            id: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
+            uri: 'https://api.notifications.service.gov.uk/v2/template/2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f/version/40',
+            version: 40
+          },
+          type: 'email'
+        }
+      }
 
-    it('should call notify', async () => {
-      const result = await NotifyStatusRequest.send(notificationId)
-
-      expect(result).to.equal({
-        status: 'received'
+      Sinon.stub(NotifyRequest, 'get').resolves({
+        succeeded: true,
+        response
       })
     })
 
-    if (stubNotify) {
-      it('should use the notify client', async () => {
-        await NotifyStatusRequest.send(notificationId)
-
-        expect(notifyStub.calledWith(notificationId)).to.equal(true)
-      })
-    }
-  })
-
-  describe('when the call to "notify" is unsuccessful', () => {
-    beforeEach(() => {
-      // This is a bad uuid and should not exist in notify
-      notificationId = '616d49cf-4a7e-4188-a7e4-682f1a41dd83'
-
-      notifyStub = _stubUnSuccessfulNotify()
-    })
-
-    it('should return an error', async () => {
+    it('returns a "true" success status', async () => {
       const result = await NotifyStatusRequest.send(notificationId)
 
-      expect(result).to.equal({
-        status: 404,
-        message: 'Request failed with status code 404',
-        errors: [{ error: 'NoResultFound', message: 'No result found' }]
+      expect(result.succeeded).to.be.true()
+    })
+
+    it('returns the result from Notify in the "response"', async () => {
+      const result = await NotifyStatusRequest.send(notificationId)
+
+      expect(result.response.body).to.equal(response.body)
+    })
+  })
+
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 404,
+          body: {
+            errors: [
+              {
+                error: 'NoResultFound',
+                message: 'No result found'
+              }
+            ],
+            status_code: 404
+          }
+        }
+
+        Sinon.stub(NotifyRequest, 'get').resolves({
+          succeeded: false,
+          response
+        })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await NotifyStatusRequest.send(notificationId)
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await NotifyStatusRequest.send(notificationId)
+
+        expect(result.response.body).to.equal(response.body)
       })
     })
   })
 })
-
-function _stubSuccessfulNotify() {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'getNotificationById').resolves({
-      data: {
-        status: 'received'
-      }
-    })
-  }
-}
-
-function _stubUnSuccessfulNotify() {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'getNotificationById').rejects({
-      status: 404,
-      message: 'Request failed with status code 404',
-      response: {
-        data: {
-          errors: [{ error: 'NoResultFound', message: 'No result found' }]
-        }
-      }
-    })
-  }
-}
