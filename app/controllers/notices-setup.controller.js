@@ -14,6 +14,7 @@ const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
+const CheckReturnFormsService = require('../services/notices/setup/preview/check-return-forms.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
@@ -60,6 +61,14 @@ async function checkAlert(request, h) {
   const pageData = await CheckAlertService.go(contactHashId, sessionId)
 
   return h.view('notices/setup/preview/check-alert.njk', pageData)
+}
+
+async function viewCheckReturnForms(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await CheckReturnFormsService.go(sessionId, contactHashId)
+
+  return h.view(`notices/setup/preview/check-return-forms.njk`, pageData)
 }
 
 async function downloadRecipients(request, h) {
@@ -473,6 +482,7 @@ module.exports = {
   viewCheck,
   viewCheckLicenceMatches,
   viewCheckNoticeType,
+  viewCheckReturnForms,
   viewConfirmation,
   viewContactType,
   viewLicence,

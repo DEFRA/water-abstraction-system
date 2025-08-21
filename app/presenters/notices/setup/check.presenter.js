@@ -111,9 +111,7 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
   }
 
   if (noticeType === 'returnForms') {
-    // We need to implement an intermediary page to allow the user to select which return id they want to 'preview'.
-    // For now, we add the 'placeHolder' to highlight this is a temporary measure and needs to change.
-    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/return-forms/placeHolder`
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-return-forms`
   }
 
   // Returns invitations and reminders can be previewed directly
