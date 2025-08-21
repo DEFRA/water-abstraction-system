@@ -9,162 +9,115 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { NotifyClient } = require('notifications-node-client')
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
+
+// Things we need to stub
+const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
 const NotifyLetterRequest = require('../../../app/requests/notify/notify-letter.request.js')
 
-describe('Notify - Letter request', () => {
-  let notifierStub
-  let notifyStub
+describe('Notify - Notify Letter request', () => {
   let options
+  let response
   let templateId
 
   beforeEach(() => {
     options = {
       personalisation: {
-        address_line_1: 'Amala Bird', // required string
-        address_line_2: '123 High Street', // required string
-        address_line_3: 'Richmond upon Thames', // required string
+        address_line_1: 'Amala Bird',
+        address_line_2: '123 High Street',
+        address_line_3: 'Richmond upon Thames',
         address_line_4: 'Middlesex',
-        address_line_5: 'SW14 6BF', // last line of address you include must be a postcode or a country name  outside the UK
-        name: 'A Person',
+        address_line_5: 'SW14 6BF',
+        name: 'Amala Bird',
         periodEndDate: '28th January 2025',
         periodStartDate: '1st January 2025',
         returnDueDate: '28th April 2025'
       },
-      reference: 'developer-testing'
+      reference: 'RINV-G2UYT8'
     }
 
     templateId = notifyTemplates.standard.invitations.licenceHolderLetter
-
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
-  describe('when the call to "notify" is successful', () => {
+  describe('when the request succeeds', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify({
-        data: {
-          id: '12345',
+      response = {
+        statusCode: 200,
+        body: {
           content: {
-            body: 'My dearest margery'
-          }
-        },
-        status: 201,
-        statusText: 'CREATED'
+            body: 'Dear Amala Bird,\r\n',
+            subject: 'Submit your water abstraction returns by 28th April 2025'
+          },
+          id: '0f864b1c-eddf-463e-9df6-035e1e83b550',
+          reference: options.reference,
+          scheduled_for: null,
+          template: {
+            id: templateId,
+            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${templateId}`,
+            version: 32
+          },
+          uri: 'https://api.notifications.service.gov.uk/v2/notifications/0f864b1c-eddf-463e-9df6-035e1e83b550'
+        }
+      }
+
+      Sinon.stub(NotifyRequest, 'post').resolves({
+        succeeded: true,
+        response
       })
     })
 
-    it('should call notify', async () => {
+    it('returns a "true" success status', async () => {
       const result = await NotifyLetterRequest.send(templateId, options)
 
-      expect(result).to.equal({
-        id: result.id,
-        plaintext: 'My dearest margery',
-        status: 201,
-        statusText: 'created'
-      })
+      expect(result.succeeded).to.be.true()
     })
 
-    it('should use the notify client', async () => {
-      await NotifyLetterRequest.send(templateId, options)
+    it('returns the result from Notify in the "response"', async () => {
+      const result = await NotifyLetterRequest.send(templateId, options)
 
-      expect(notifyStub.calledWith(templateId, options)).to.equal(true)
+      expect(result.response.body).to.equal(response.body)
     })
   })
 
-  describe('when the call to "notify" is unsuccessful', () => {
-    describe('when notify returns a "client error"', () => {
-      describe('because a "address" has not been provided', () => {
-        beforeEach(() => {
-          delete options.personalisation.address_line_1
-          delete options.personalisation.address_line_2
-          delete options.personalisation.address_line_3
-          delete options.personalisation.address_line_4
-          delete options.personalisation.address_line_5
-
-          notifyStub = _stubUnSuccessfulNotify({
-            status: 400,
-            message: 'Request failed with status code 400',
-            response: {
-              data: {
-                errors: [
-                  {
-                    error: 'ValidationError',
-                    message: 'Address must be at least 3 lines'
-                  }
-                ]
-              }
-            }
-          })
-        })
-
-        it('should return an error', async () => {
-          const result = await NotifyLetterRequest.send(templateId, options)
-
-          expect(result).to.equal({
-            status: 400,
-            message: 'Request failed with status code 400',
-            errors: [
-              {
-                error: 'ValidationError',
-                message: 'Address must be at least 3 lines'
-              }
-            ]
-          })
-        })
-      })
-
-      describe('because a "placeholder" has not been provided through "personalisation', () => {
-        beforeEach(() => {
-          delete options.personalisation.name
-
-          notifyStub = _stubUnSuccessfulNotify({
-            status: 400,
-            message: 'Request failed with status code 400',
-            response: {
-              data: {
-                errors: [
-                  {
-                    error: 'BadRequestError',
-                    message: 'Missing personalisation: name'
-                  }
-                ]
-              }
-            }
-          })
-        })
-
-        it('should return an error', async () => {
-          const result = await NotifyLetterRequest.send(templateId, options)
-
-          expect(result).to.equal({
-            status: 400,
-            message: 'Request failed with status code 400',
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 400,
+          body: {
             errors: [
               {
                 error: 'BadRequestError',
-                message: 'Missing personalisation: name'
+                message: 'Missing personalisation: returnDueDate'
               }
-            ]
-          })
+            ],
+            status_code: 400
+          }
+        }
+
+        Sinon.stub(NotifyRequest, 'post').resolves({
+          succeeded: false,
+          response
         })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await NotifyLetterRequest.send(templateId, options)
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await NotifyLetterRequest.send(templateId, options)
+
+        expect(result.response.body).to.equal(response.body)
       })
     })
   })
 })
-
-function _stubSuccessfulNotify(response) {
-  return Sinon.stub(NotifyClient.prototype, 'sendLetter').resolves(response)
-}
-
-function _stubUnSuccessfulNotify(response) {
-  return Sinon.stub(NotifyClient.prototype, 'sendLetter').rejects(response)
-}
