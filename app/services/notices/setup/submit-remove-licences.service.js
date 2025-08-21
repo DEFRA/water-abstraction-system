@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, validLicences)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode)
+    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode, sessionId)
 
     return {
       activeNavBar: 'manage',

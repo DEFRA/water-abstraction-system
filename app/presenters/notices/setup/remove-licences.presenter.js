@@ -10,13 +10,16 @@
  *
  * @param {string[]} removeLicences - List of licences to remove from the recipients list
  * @param {string} referenceCode - the unique generated reference code
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(removeLicences, referenceCode) {
+function go(removeLicences, referenceCode, sessionId) {
   return {
+    backLink: `/system/notices/setup/${sessionId}/check`,
     hint: 'Separate the licences numbers with a comma or new line.',
     pageTitle: 'Enter the licence numbers to remove from the mailing list',
+    pageTitleCaption: `Notice ${referenceCode}`,
     referenceCode,
     removeLicences
   }

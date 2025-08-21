@@ -84,13 +84,15 @@ describe('Notices - Setup - Submit Remove licences service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
+          backLink: `/system/notices/setup/${session.id}/check`,
           error: {
             text: 'There are no returns due for licence 789'
           },
           hint: 'Separate the licences numbers with a comma or new line.',
           removeLicences: '789',
           referenceCode: 'RINV-123',
-          pageTitle: 'Enter the licence numbers to remove from the mailing list'
+          pageTitle: 'Enter the licence numbers to remove from the mailing list',
+          pageTitleCaption: 'Notice RINV-123'
         })
       })
     })
