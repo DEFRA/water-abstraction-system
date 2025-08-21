@@ -5,62 +5,45 @@
  * @module NotifyEmailRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Send an email using GOV.UK Notify
  *
- * https://docs.notifications.service.gov.uk/node.html#send-an-email
- *
- * Notify has the option to provide an 'options' object. This is the object which populates templates placeholders
- * (known as 'personalisation') and other options such as a 'reference' for identifying single unique message
- * or a batch of messages.
+ * When sending an email the body must include `template_id` and `email_address`. There are other optional properties
+ * you can include, `reference` and `personalisation` being the ones we would normally set.
  *
  * ```javascript
- *   const options = {
- *       personalisation: {
- *         name: 'test', // matches the template placeholder {{ name }}
- *       },
- *       reference: 'ABC-123' // A unique identifier which identifies a single unique message or a batch of messages
- *     }
+ * const options = {
+ *   personalisation: {
+ *     name: 'test', // matches the template placeholder {{ name }}
+ *   },
+ *   reference: 'ABC-123' // A unique identifier which identifies a single unique message or a batch of messages
+ * }
  * ```
  *
- * > If there are any dates types for any placeholder be sure to format the date prior to sending to notify. Otherwise,
- * the output will be formatted like: 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
+ * > See {@link https://docs.notifications.service.gov.uk/rest-api.html#send-an-email | Send an email} for more details.
  *
- * @param {string} templateId
- * @param {string} emailAddress
- * @param {object} options
+ * > Note - When providing a Date for a placeholder be sure to format it prior to sending. Otherwise, the output will be
+ * > formatted, for example, as 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
  *
- * @returns {Promise<object>}
+ * @param {string} templateId - The ID of the template in Notify to use
+ * @param {string} emailAddress - The email address of the recipient
+ * @param {object} options - Any additional options to include in the request, for example, `reference:` and
+ * `personalisation:`
+ *
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send(templateId, emailAddress, options) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = 'v2/notifications/email'
 
-  return _sendEmail(notifyClient, templateId, emailAddress, options)
-}
-
-async function _sendEmail(notifyClient, templateId, emailAddress, options) {
-  try {
-    const response = await notifyClient.sendEmail(templateId, emailAddress, options)
-
-    return {
-      id: response.data.id,
-      plaintext: response.data.content.body,
-      status: response.status,
-      statusText: response.statusText.toLowerCase()
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify send email failed', errorDetails)
-
-    return errorDetails
+  const body = {
+    email_address: emailAddress,
+    template_id: templateId,
+    ...options
   }
+
+  return NotifyRequest.post(path, body)
 }
 
 module.exports = {
