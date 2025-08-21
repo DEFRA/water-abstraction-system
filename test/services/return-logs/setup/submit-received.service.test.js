@@ -155,7 +155,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
             receivedDateYear: null,
             receivedDateOption: null,
             backLink: `/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31`,
-            returnReference: '12345'
+            caption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error', 'todaysDate', 'yesterdaysDate'] }
         )

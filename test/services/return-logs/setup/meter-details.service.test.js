@@ -38,7 +38,7 @@ describe('Return Logs Setup - Meter Details service', () => {
         {
           pageTitle: 'Meter details',
           activeNavBar: 'search',
-          returnReference: '012345',
+          caption: 'Return reference 012345',
           backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
           meterMake: null,
           meterSerialNumber: null,

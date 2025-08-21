@@ -53,7 +53,7 @@ describe('Return Logs Setup - Readings service', () => {
           }
         ],
         pageTitle: 'Water abstracted April 2023',
-        returnReference: '1234'
+        caption: 'Return reference 1234'
       })
     })
   })

@@ -30,7 +30,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
         meterSerialNumber: null,
         meter10TimesDisplay: null,
         pageTitle: 'Meter details',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

@@ -150,7 +150,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
             activeNavBar: 'search',
             backLink: `/system/return-logs/setup/${session.id}/single-volume`,
             pageTitle: 'What period was used for this volume?',
-            returnReference: '12345',
+            caption: 'Return reference 12345',
             periodDateUsedOptions: null,
             periodUsedFromDay: null,
             periodUsedFromMonth: null,

@@ -105,7 +105,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
             meterSerialNumber: null,
             meter10TimesDisplay: null,
             backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
-            returnReference: '12345'
+            caption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error'] }
         )

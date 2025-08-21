@@ -94,7 +94,7 @@ describe('Return Logs Setup - Submit Units service', () => {
             activeNavBar: 'search',
             units: null,
             backLink: `/system/return-logs/setup/${session.id}/reported`,
-            returnReference: '12345'
+            caption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error'] }
         )

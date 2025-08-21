@@ -40,7 +40,7 @@ describe('Return Logs Setup - Single Volume service', () => {
           activeNavBar: 'search',
           backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
           pageTitle: 'Is it a single volume?',
-          returnReference: '012345',
+          caption: 'Return reference 012345',
           singleVolume: null,
           singleVolumeQuantity: null,
           units: 'cubic metres'

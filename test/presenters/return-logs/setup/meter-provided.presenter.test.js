@@ -27,7 +27,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       expect(result).to.equal({
         pageTitle: 'Have meter details been provided?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         meterProvided: null,
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units'
       })

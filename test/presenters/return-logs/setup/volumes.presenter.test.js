@@ -33,7 +33,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
           }
         ],
         pageTitle: 'Water abstracted May 2023',
-        returnReference: '1234',
+        caption: 'Return reference 1234',
         units: 'Cubic metres'
       })
     })

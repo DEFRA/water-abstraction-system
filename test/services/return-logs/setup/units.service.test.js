@@ -38,7 +38,7 @@ describe('Return Logs Setup - Units service', () => {
         {
           pageTitle: 'Which units were used?',
           activeNavBar: 'search',
-          returnReference: '012345',
+          caption: 'Return reference 012345',
           backLink: `/system/return-logs/setup/${session.id}/reported`,
           units: null
         },

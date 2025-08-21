@@ -28,7 +28,7 @@ describe('Return Logs Setup - Note presenter', () => {
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
         note: null,
         pageTitle: 'Add a note',
-        returnReference: '1234',
+        caption: 'Return reference 1234',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

@@ -28,7 +28,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       expect(result).to.equal({
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
         pageTitle: 'Is it a single volume?',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         singleVolume: null,
         singleVolumeQuantity: null,
