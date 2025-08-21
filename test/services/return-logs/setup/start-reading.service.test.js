@@ -39,7 +39,7 @@ describe('Return Logs Setup - Start Reading service', () => {
           activeNavBar: 'search',
           backLink: `/system/return-logs/setup/${session.id}/reported`,
           pageTitle: 'Enter the start meter reading',
-          returnReference: '012345',
+          caption: 'Return reference 012345',
           startReading: null
         },
         { skip: ['sessionId'] }

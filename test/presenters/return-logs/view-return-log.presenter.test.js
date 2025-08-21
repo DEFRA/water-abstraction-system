@@ -59,7 +59,7 @@ describe('Return Logs - View Return Log presenter', () => {
       displayTotal: true,
       displayUnits: false,
       downloadCSVLink: `/system/return-logs/download?id=${returnLog.id}&version=1`,
-      licenceRef: returnLog.licenceRef,
+      caption: `Licence ${returnLog.licenceRef}`,
       meterDetails: null,
       method: 'abstractionVolumes',
       nilReturn: false,

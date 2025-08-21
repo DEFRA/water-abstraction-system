@@ -27,7 +27,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       expect(result).to.equal({
         pageTitle: 'Enter the start meter reading',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         startReading: null,
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported'
       })

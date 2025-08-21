@@ -1,22 +1,18 @@
 {% extends 'layout.njk' %}
+
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from "macros/page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -27,40 +23,37 @@
         }
       ]
     }) }}
-  {%endif%}
+  {% endif %}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle, caption) }}
+  {% endset %}
 
-      {{ govukRadios({
-        name: "reported",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            classes: "govuk-fieldset__legend--l"
-          }
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "reported",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "meter-readings",
+          text: "Meter Readings",
+          checked: "meter-readings" === reported
         },
-        items: [
-          {
-            value: "meter-readings",
-            text: "Meter Readings",
-            checked: "meter-readings" === reported
-          },
-          {
-            value: "abstraction-volumes",
-            text: "Abstraction Volumes",
-            checked: "abstraction-volumes" === reported
-          }
-        ]
-      }) }}
+        {
+          value: "abstraction-volumes",
+          text: "Abstraction Volumes",
+          checked: "abstraction-volumes" === reported
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

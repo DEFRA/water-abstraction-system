@@ -27,7 +27,7 @@ describe('Return Logs Setup - Units presenter', () => {
       expect(result).to.equal({
         pageTitle: 'Which units were used?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         units: null,
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported'
       })

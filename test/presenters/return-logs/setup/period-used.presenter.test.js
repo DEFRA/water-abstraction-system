@@ -32,7 +32,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
         abstractionPeriod: '1 April to 31 March',
         backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/single-volume',
         pageTitle: 'What period was used for this volume?',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         periodDateUsedOptions: null,
         periodUsedFromDay: null,

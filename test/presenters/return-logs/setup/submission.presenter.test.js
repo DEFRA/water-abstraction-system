@@ -30,7 +30,7 @@ describe('Return Logs Setup - Submission presenter', () => {
         beenReceived: false,
         journey: null,
         pageTitle: 'What do you want to do with this return?',
-        returnReference: '1234'
+        caption: 'Return reference 1234'
       })
     })
 
