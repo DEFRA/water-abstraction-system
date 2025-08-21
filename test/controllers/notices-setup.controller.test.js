@@ -20,6 +20,7 @@ const CancelService = require('../../app/services/notices/setup/cancel.service.j
 const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
+const CheckReturnFormsService = require('../../app/services/notices/setup/preview/check-return-forms.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
@@ -852,6 +853,36 @@ describe('Notices Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the recipient previews')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms', () => {
+    describe('GET', () => {
+      const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-return-forms`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+
+        Sinon.stub(CheckReturnFormsService, 'go').resolves({
+          pageTitle: 'Preview notice'
+        })
+      })
+
+      describe('when a request is valid', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Preview notice')
         })
       })
     })
