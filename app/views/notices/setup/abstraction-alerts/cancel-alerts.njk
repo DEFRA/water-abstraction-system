@@ -1,44 +1,35 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from 'govuk/components/back-link/macro.njk' import govukBackLink %}
+{% from 'govuk/components/button/macro.njk' import govukButton %}
+{% from 'govuk/components/summary-list/macro.njk' import govukSummaryList %}
+
+{% from 'macros/page-heading.njk' import pageHeading %}
 
 {% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
-  <div>
+  {{ pageHeading(pageTitle, caption) }}
 
-    <span class="govuk-caption-l"> {{ caption }} </span>
+  {{ govukSummaryList({
+    rows: [
+      {},
+      {
+        key: {
+        text: summaryList.text
+      },
+        value: {
+        text: summaryList.value
+      }
+      }
+    ]
+  }) }}
 
-    <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukSummaryList({
-
-      rows: [
-        {},
-        {
-          key: {
-          text: summaryList.text
-        },
-          value: {
-          text: summaryList.value
-        }
-        }
-      ]
-    }) }}
-
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-      {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

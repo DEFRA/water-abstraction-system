@@ -52,6 +52,7 @@ describe('Notices - Setup - Check presenter', () => {
       const result = CheckPresenter.go(testInput, page, pagination, session)
 
       expect(result).to.equal({
+        caption: 'Notice RINV-123',
         defaultPageSize: 25,
         links: {
           back: `/system/notices/setup/${session.id}/returns-period`,
@@ -132,7 +133,6 @@ describe('Notices - Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
-        referenceCode: 'RINV-123',
         warning: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
       })
     })

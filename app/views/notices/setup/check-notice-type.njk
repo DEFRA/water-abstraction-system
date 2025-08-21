@@ -7,72 +7,70 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block content %}
-    <div class="govuk-body">
-      {% if notification %}
-        {{ govukNotificationBanner({
-          titleText: notification.title,
-          text: notification.text
-        }) }}
-      {% endif %}
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
 
-      <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+  <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: 'Licence number'
-            },
-            value: {
-              text: licenceRef
-            },
-            actions: {
-              items: [
-                {
-                  href: '/system/notices/setup/'+ sessionId + '/licence',
-                  text: 'Change',
-                  visuallyHiddenText: 'licence number'
-                }
-              ]
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+          text: 'Licence number'
+        },
+        value: {
+          text: licenceRef
+        },
+        actions: {
+          items: [
+            {
+              href: '/system/notices/setup/'+ sessionId + '/licence',
+              text: 'Change',
+              visuallyHiddenText: 'licence number'
             }
-          },
-          {
-            key: {
-              text: 'Returns notice type'
-            },
-            value: {
-              text: returnNoticeType
-            },
-            actions: {
-              items: [
-                {
-                  href: '/system/notices/setup/'+ sessionId + '/notice-type',
-                  text: 'Change',
-                  visuallyHiddenText: 'notice type'
-                }
-              ]
+          ]
+        }
+      },
+      {
+        key: {
+          text: 'Returns notice type'
+        },
+        value: {
+          text: returnNoticeType
+        },
+        actions: {
+          items: [
+            {
+              href: '/system/notices/setup/'+ sessionId + '/notice-type',
+              text: 'Change',
+              visuallyHiddenText: 'notice type'
             }
-          },
-          {
-            key: {
-              text: 'Returns'
-            },
-            value: {
-              html: newLineArrayItems(selectedDueReturns)
-            },
-            actions: {
-              items: [
-                {
-                  href: '/system/notices/setup/'+ sessionId + '/return-forms',
-                  text: 'Change',
-                  visuallyHiddenText: 'returns for paper forms'
-                }
-              ]
+          ]
+        }
+      },
+      {
+        key: {
+          text: 'Returns'
+        },
+        value: {
+          html: newLineArrayItems(selectedDueReturns)
+        },
+        actions: {
+          items: [
+            {
+              href: '/system/notices/setup/'+ sessionId + '/return-forms',
+              text: 'Change',
+              visuallyHiddenText: 'returns for paper forms'
             }
-          } if noticeType === 'returnForms'
-        ]
-      }) }}
+          ]
+        }
+      } if noticeType === 'returnForms'
+    ]
+  }) }}
 
-      {{ govukButton(continueButton) }}
-  </div>
+  {{ govukButton(continueButton) }}
 {% endblock %}

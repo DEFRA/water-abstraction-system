@@ -84,12 +84,12 @@ describe('Notices - Setup - Submit Remove licences service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
+          caption: 'Notice RINV-123',
           error: {
             text: 'There are no returns due for licence 789'
           },
           hint: 'Separate the licences numbers with a comma or new line.',
           removeLicences: '789',
-          referenceCode: 'RINV-123',
           pageTitle: 'Enter the licence numbers to remove from the mailing list'
         })
       })
