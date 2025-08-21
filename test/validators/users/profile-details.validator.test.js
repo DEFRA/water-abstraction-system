@@ -116,11 +116,11 @@ describe('Users - Profile Details validator', () => {
         payload = { email: 'not-an-email' }
       })
 
-      it('fails validation with the message "Enter a valid email"', () => {
+      it('fails validation with the message "Enter a valid email address"', () => {
         const result = ProfileDetailsValidator.go(payload)
 
         expect(result.error).to.not.be.undefined()
-        expect(result.error.details[0].message).to.equal('Enter a valid email')
+        expect(result.error.details[0].message).to.equal('Enter a valid email address')
       })
     })
 
@@ -129,11 +129,11 @@ describe('Users - Profile Details validator', () => {
         payload = { email: 'someone@wrongdomain.com' }
       })
 
-      it('fails validation with the message "Email must be @environment-agency.gov.uk"', () => {
+      it('fails validation with the message "Email address must be @environment-agency.gov.uk"', () => {
         const result = ProfileDetailsValidator.go(payload)
 
         expect(result.error).to.not.be.undefined()
-        expect(result.error.details[0].message).to.equal('Email must be @environment-agency.gov.uk')
+        expect(result.error.details[0].message).to.equal('Email address must be @environment-agency.gov.uk')
       })
     })
   })
