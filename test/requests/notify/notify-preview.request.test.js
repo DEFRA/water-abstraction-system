@@ -9,115 +9,100 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { NotifyClient } = require('notifications-node-client')
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
+
+// Things we need to stub
+const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
 const NotifyPreviewRequest = require('../../../app/requests/notify/notify-preview.request.js')
 
-describe('Notify - Letter request', () => {
-  let notifierStub
-  let notifyStub
+describe('Notify - Notify Preview request', () => {
   let personalisation
+  let response
   let templateId
 
   beforeEach(() => {
     personalisation = {
-      address_line_1: 'Amala Bird',
-      address_line_2: '123 High Street',
-      address_line_3: 'Richmond upon Thames',
-      address_line_4: 'Middlesex',
-      address_line_5: 'SW14 6BF',
-      name: 'A Person',
       periodEndDate: '28th January 2025',
       periodStartDate: '1st January 2025',
       returnDueDate: '28th April 2025'
     }
 
-    templateId = notifyTemplates.standard.invitations.licenceHolderLetter
-
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    templateId = notifyTemplates.standard.invitations.primaryUserEmail
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
-  describe('when the call to "notify" is successful', () => {
+  describe('when the request succeeds', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify({
-        data: {
-          id: '12345',
-          body: 'My dearest margery'
-        },
-        status: 200,
-        statusText: 'OK'
+      response = {
+        statusCode: 200,
+        body: {
+          body: 'Dear licence holder,\r\n',
+          html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
+          id: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
+          postage: null,
+          subject: 'Submit your water abstraction returns by 28th April 2025',
+          type: 'email',
+          version: 40
+        }
+      }
+
+      Sinon.stub(NotifyRequest, 'post').resolves({
+        succeeded: true,
+        response
       })
     })
 
-    it('should call notify', async () => {
+    it('returns a "true" success status', async () => {
       const result = await NotifyPreviewRequest.send(templateId, personalisation)
 
-      expect(result).to.equal({
-        id: result.id,
-        plaintext: 'My dearest margery',
-        status: 200,
-        statusText: 'ok'
-      })
+      expect(result.succeeded).to.be.true()
     })
 
-    it('should use the notify client', async () => {
-      await NotifyPreviewRequest.send(templateId, personalisation)
+    it('returns the result from Notify in the "response"', async () => {
+      const result = await NotifyPreviewRequest.send(templateId, personalisation)
 
-      expect(notifyStub.calledWith(templateId, personalisation)).to.equal(true)
+      expect(result.response.body).to.equal(response.body)
     })
   })
 
-  describe('when the call to "notify" is unsuccessful', () => {
-    describe('because the template id is invalid', () => {
-      beforeEach(() => {
-        templateId = 'invalid-template-id'
-
-        notifyStub = _stubUnSuccessfulNotify({
-          status: 400,
-          message: 'Request failed with status code 400',
-          response: {
-            data: {
-              errors: [
-                {
-                  error: 'ValidationError',
-                  message: 'id is not a valid UUID'
-                }
-              ]
-            }
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 400,
+          body: {
+            errors: [
+              {
+                error: 'BadRequestError',
+                message: 'Missing personalisation: returnDueDate'
+              }
+            ],
+            status_code: 400
           }
+        }
+
+        Sinon.stub(NotifyRequest, 'post').resolves({
+          succeeded: false,
+          response
         })
       })
 
-      it('should return an error', async () => {
+      it('returns a "false" success status', async () => {
         const result = await NotifyPreviewRequest.send(templateId, personalisation)
 
-        expect(result).to.equal({
-          status: 400,
-          message: 'Request failed with status code 400',
-          errors: [
-            {
-              error: 'ValidationError',
-              message: 'id is not a valid UUID'
-            }
-          ]
-        })
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await NotifyPreviewRequest.send(templateId, personalisation)
+
+        expect(result.response.body).to.equal(response.body)
       })
     })
   })
 })
-
-function _stubSuccessfulNotify(response) {
-  return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').resolves(response)
-}
-
-function _stubUnSuccessfulNotify(response) {
-  return Sinon.stub(NotifyClient.prototype, 'previewTemplateById').rejects(response)
-}
