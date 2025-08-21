@@ -1,57 +1,31 @@
 'use strict'
 
 /**
- * Get the status of a notification from GOV.UK Notify
+ * Get the message data for a notification from GOV.UK Notify
  * @module NotifyStatusRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
- * Get the status of a notification from GOV.UK Notify
+ * Get the message data for a notification from GOV.UK Notify
  *
- * https://docs.notifications.service.gov.uk/node.html#get-message-status
+ * We use this request as part of determining if a notification has been successfully sent, or if it failed.
  *
- * > GOV.UK Notify has a retention period of 7 days. Whilst out system should not be checking statuses past this date it
- * is technically possible to receive a status update where notification id does not exist:
+ * > See {@link https://docs.notifications.service.gov.uk/rest-api.html#get-message-data | Get message data} for more
+ * > details.
  *
- * ```javascript
- * [{
- *  "error": "ValidationError",
- *  "message": "id is not a valid UUID"
- * }]
- * ```
+ * > Note - You can only get the data for messages sent within the retention period. The default retention period is 7
+ * days. We have it set to 90.
  *
- * https://docs.notifications.service.gov.uk/node.html#get-the-status-of-one-message-error-codes
+ * @param {string} notificationId - The ID of the notification
  *
- * @param {string} notificationId
- *
- * @returns {Promise<object>}
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send(notificationId) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = `v2/notifications/${notificationId}`
 
-  return _statusById(notifyClient, notificationId)
-}
-
-async function _statusById(notifyClient, notificationId) {
-  try {
-    const response = await notifyClient.getNotificationById(notificationId)
-
-    return {
-      status: response.data.status
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify status update failed', errorDetails)
-
-    return errorDetails
-  }
+  return NotifyRequest.get(path)
 }
 
 module.exports = {
