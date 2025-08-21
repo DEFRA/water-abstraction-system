@@ -19,7 +19,6 @@ const config = {
   // In conjunction with the rate limit mentioned above, we have set a delay between requests to notify. This is
   // defaulted to 10 seconds.
   delay: process.env.NOTIFICATIONS_BATCH_DELAY || 10000,
-  stubNotify: process.env.STUB_NOTIFY || true, // Used to perform integration tests with notify
   timeout: parseInt(process.env.GOV_UK_NOTIFY_TIMEOUT) || 10000,
   url: process.env.GOV_UK_NOTIFY_URL
 }
