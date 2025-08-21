@@ -29,6 +29,7 @@ function go(returnVersion) {
     multipleUpload: multipleUpload === true ? 'Yes' : 'No',
     notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
     reason: _reason(returnVersion),

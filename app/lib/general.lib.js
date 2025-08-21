@@ -195,6 +195,41 @@ function periodsOverlap(referencePeriods, checkPeriods) {
 }
 
 /**
+ * Splits an array of 'things' into groups (arrays) of a maximum size
+ *
+ * For example
+ *
+ * ```javascript
+ * const myArray = [1, 2, 3, 4, 5]
+ *
+ * const groups = splitArrayIntoGroups(myArray, 2)
+ *
+ * // groups = [[1, 2], [3, 4], [5]]
+ * ```
+ *
+ * If the array to be split cannot be divided equally by the group size, the last group will contain the remaining
+ * items.
+ *
+ * @param arrayToBeSplit - The array of 'things' to be split (their type does not matter)
+ * @param maxGroupSize - The maximum size to group them by
+ *
+ * @returns {object[]} - An array of sub-arrays, each containing up to `groupSize` elements.
+ */
+function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
+  const result = []
+
+  if (maxGroupSize <= 0) {
+    return arrayToBeSplit
+  }
+
+  for (let i = 0; i < arrayToBeSplit.length; i += maxGroupSize) {
+    result.push(arrayToBeSplit.slice(i, i + maxGroupSize))
+  }
+
+  return result
+}
+
+/**
  * Returns the current date and time as an ISO string
  *
  * We can't use Date.now() because Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL
@@ -317,6 +352,7 @@ module.exports = {
   generateRandomInteger,
   generateUUID,
   periodsOverlap,
+  splitArrayIntoGroups,
   timestampForPostgres,
   transactionsMatch,
   transformStringOfLicencesToArray

@@ -28,7 +28,8 @@ const config = {
   enableLicenceMonitoringStationsView: String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_VIEW) === 'true' || false,
   enableLicenceMonitoringStationsSetup:
     String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_SETUP) === 'true' || false,
-  enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false
+  enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
+  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false
 }
 
 module.exports = config

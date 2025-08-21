@@ -41,7 +41,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
       expect(matchingSession.data).to.equal({
         address: {
-          redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+          redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
         },
         journey: 'standard',
         name: 'Returns: invitation',
@@ -74,7 +74,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           address: {
-            redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+            redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
           },
           journey: 'adhoc'
         })
@@ -110,7 +110,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(matchingSession.data).to.equal({
           address: {
-            redirectUrl: `/system/notices/setup/${matchingSession.id}/check`
+            redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
           },
           journey: 'alerts',
           name: 'Water abstraction alert',

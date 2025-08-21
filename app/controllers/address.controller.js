@@ -5,7 +5,6 @@
  * @module AddressController
  */
 
-const AddAdditionalRecipientService = require('../services/notices/setup/add-additional-recipient.service.js')
 const InternationalAddressService = require('../services/address/international.service.js')
 const ManualAddressService = require('../services/address/manual.service.js')
 const PostcodeService = require('../services/address/postcode.service.js')
@@ -16,28 +15,31 @@ const SubmitPostcodeService = require('../services/address/submit-postcode.servi
 const SubmitSelectAddressService = require('../services/address/submit-select.service.js')
 
 async function submitInternational(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload
+  } = request
 
-  const pageData = await SubmitInternationalAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitInternationalAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/international.njk', pageData)
   }
 
-  // TODO: return to calling service
-  return h.redirect(`/system/address/${sessionId}/check`)
+  return h.redirect(pageData.redirect)
 }
 
 async function submitManual(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload
+  } = request
 
-  const pageData = await SubmitManualAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitManualAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/manual.njk', pageData)
   }
-
-  await AddAdditionalRecipientService.go(sessionId)
 
   return h.redirect(pageData.redirect)
 }
@@ -55,16 +57,15 @@ async function submitPostcode(request, h) {
 }
 
 async function submitSelect(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    payload
+  } = request
 
-  const pageData = await SubmitSelectAddressService.go(sessionId, request.payload)
+  const pageData = await SubmitSelectAddressService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
-  }
-
-  if (pageData.succeeded) {
-    await AddAdditionalRecipientService.go(sessionId)
   }
 
   return h.redirect(pageData.redirect)

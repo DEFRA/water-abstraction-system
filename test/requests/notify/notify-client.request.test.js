@@ -12,8 +12,8 @@ const { expect } = Code
 const { NotifyClient } = require('notifications-node-client')
 
 // Things we need to stub
-const NotifyConfig = require('../../../config/notify.config.js')
-const RequestConfig = require('../../../config/request.config.js')
+const notifyConfig = require('../../../config/notify.config.js')
+const serverConfig = require('../../../config/server.config.js')
 
 // Thing under test
 const NotifyClientRequest = require('../../../app/requests/notify/notify-client.request.js')
@@ -25,19 +25,19 @@ describe('Notify - Client request', () => {
 
   describe('when creating a notify client without a proxy', () => {
     beforeEach(() => {
-      Sinon.stub(RequestConfig, 'httpProxy').value(undefined)
+      Sinon.stub(serverConfig, 'httpProxy').value(undefined)
     })
 
     it('should create a notify client', () => {
       const result = NotifyClientRequest.go()
 
-      expect(result).to.equal(new NotifyClient(NotifyConfig.apiKey))
+      expect(result).to.equal(new NotifyClient(notifyConfig.apiKey))
     })
   })
 
   describe('when creating a notify client with a proxy', () => {
     beforeEach(() => {
-      Sinon.stub(RequestConfig, 'httpProxy').value('https://test.proxy.defra.gov.uk')
+      Sinon.stub(serverConfig, 'httpProxy').value('https://test.proxy.defra.gov.uk')
     })
 
     it('should create a notify client with the provided proxy url', () => {

@@ -34,6 +34,7 @@ describe('Return Versions - View presenter', () => {
       multipleUpload: 'No',
       notes: ['A special note'],
       pageTitle: 'Requirements for returns for Mrs A J Easley',
+      pageTitleCaption: 'Licence 01/123',
       quarterlyReturnSubmissions: false,
       quarterlyReturns: 'No',
       reason: 'New licence',

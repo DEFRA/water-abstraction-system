@@ -1,0 +1,109 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% from "macros/page-heading.njk" import pageHeading %}
+
+{% block breadcrumbs %}
+  {{
+    govukBackLink({
+      text: 'Go back to search',
+      href: '/'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: error.errorList
+    }) }}
+  {%endif%}
+
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
+
+  {{ pageHeading(pageTitle) }}
+
+  <p>This will be visible to your public contacts</p>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      label: {
+        text: "Name"
+      },
+      value: name,
+      id: "name",
+      name: "name",
+      classes: "govuk-!-width-one-half",
+      errorMessage: {
+        text: error.name
+      } if error.name
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Job title"
+      },
+      value: jobTitle,
+      id: "jobTitle",
+      name: "jobTitle",
+      classes: "govuk-!-width-one-half",
+      errorMessage: {
+        text: error.jobTitle
+      } if error.jobTitle
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Email address"
+      },
+      value: email,
+      id: "email",
+      name: "email",
+      classes: "govuk-!-width-one-half",
+      errorMessage: {
+        text: error.email
+      } if error.email
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Phone number"
+      },
+      value: tel,
+      id: "tel",
+      name: "tel",
+      classes: "govuk-!-width-one-half",
+      errorMessage: {
+        text: error.tel
+      } if error.tel
+    }) }}
+
+    {{ govukTextarea({
+      label: {
+        text: "Address"
+      },
+      value: address,
+      id: "address",
+      name: "address",
+      classes: "govuk-!-width-three-quarters",
+      errorMessage: {
+        text: error.address
+      } if error.address
+    }) }}
+
+    {{ govukButton({ text: "Update", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

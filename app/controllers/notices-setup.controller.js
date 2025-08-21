@@ -5,6 +5,7 @@
  * @module NoticesSetupController
  */
 
+const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
 const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
 const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
@@ -13,6 +14,7 @@ const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
+const CheckReturnFormsService = require('../services/notices/setup/preview/check-return-forms.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
@@ -42,12 +44,31 @@ const SubmitReturnFormsService = require('../services/notices/setup/submit-retur
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 
+async function addRecipient(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  await AddRecipientService.go(sessionId, yar)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
 async function checkAlert(request, h) {
   const { contactHashId, sessionId } = request.params
 
   const pageData = await CheckAlertService.go(contactHashId, sessionId)
 
   return h.view('notices/setup/preview/check-alert.njk', pageData)
+}
+
+async function viewCheckReturnForms(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await CheckReturnFormsService.go(sessionId, contactHashId)
+
+  return h.view(`notices/setup/preview/check-return-forms.njk`, pageData)
 }
 
 async function downloadRecipients(request, h) {
@@ -449,6 +470,7 @@ async function submitSelectRecipients(request, h) {
 }
 
 module.exports = {
+  addRecipient,
   checkAlert,
   downloadRecipients,
   preview,
@@ -460,6 +482,7 @@ module.exports = {
   viewCheck,
   viewCheckLicenceMatches,
   viewCheckNoticeType,
+  viewCheckReturnForms,
   viewConfirmation,
   viewContactType,
   viewLicence,
