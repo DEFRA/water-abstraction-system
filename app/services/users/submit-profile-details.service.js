@@ -33,7 +33,7 @@ async function go(userId, payload, yar) {
 
     yar.flash('notification', {
       title: 'Updated',
-      text: 'Profile details saved'
+      text: 'Profile details updated'
     })
   }
 

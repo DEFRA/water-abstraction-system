@@ -17,8 +17,8 @@ const MESSAGES = {
     'string.max': 'Job title must be 100 characters or less'
   },
   email: {
-    'string.email': 'Enter a valid email',
-    'string.pattern.name': 'Email must be @environment-agency.gov.uk'
+    'string.email': 'Enter a valid email address',
+    'string.pattern.name': 'Email address must be @environment-agency.gov.uk'
   },
   tel: {
     'string.max': 'Telephone number must be 100 characters or less'
