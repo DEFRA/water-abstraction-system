@@ -24,6 +24,7 @@ function go(session) {
   return {
     backLink: '/manage',
     pageTitle: `Select the returns periods for the ${journey}`,
+    pageTitleCaption: `Notice ${referenceCode}`,
     referenceCode,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
   }

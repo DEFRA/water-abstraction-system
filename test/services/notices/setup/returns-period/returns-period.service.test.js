@@ -38,6 +38,7 @@ describe('Notices - Setup - Returns Period service', () => {
         activeNavBar: 'manage',
         backLink: '/manage',
         pageTitle: 'Select the returns periods for the invitations',
+        pageTitleCaption: 'Notice RINV-123',
         referenceCode: 'RINV-123',
         returnsPeriod: [
           {

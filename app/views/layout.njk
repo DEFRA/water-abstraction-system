@@ -60,13 +60,8 @@
     }) }}
   {% endif %}
 
-  {% if pageTitle %}
-    {% if caption %}
-      <span class="govuk-caption-l">{{ caption }}</span>
-    {% endif %}
-    <h1 class="govuk-heading-l">
-      {{ pageTitle }}
-    </h1>
+  {% if pageTitleCaption %}
+    <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
   {% endif %}
 
   {% block pageContent %}
