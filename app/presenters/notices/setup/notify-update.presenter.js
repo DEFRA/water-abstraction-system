@@ -1,42 +1,42 @@
 'use strict'
 
 /**
- * Formats the response from Notify
+ * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.scheduled_notifications'
  * @module NotifyUpdatePresenter
  */
 
-const CREATED = 201
-
 /**
- * Formats the response from Notify
+ * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.scheduled_notifications'
  *
  * When the request is made to notify we need to capture the response.
  *
- * When the request is successful we need to store the notify id to make future check on its status.
+ * When the request is successful we need to store the notify ID to make future check on its status.
  *
- * When a request fails we will not receive a notify id and will need to store the error in the same pattern as the
+ * When a request fails we will not receive a notify ID and will need to store the error in the same pattern as the
  * legacy code.
  *
- * @param {object } notify - the response from notify
+ * @param {object } notifyResult - the result of the send email or letter request to GOV.UK Notify
  *
- * @returns {object} - the Notify response formatted to save as part of a 'water.scheduled_notifications'
+ * @returns {object} the data from the result needed to save to 'water.scheduled_notifications'
  */
-function go(notify) {
-  if (notify.status !== CREATED) {
-    return _error(notify)
+function go(notifyResult) {
+  const { response, succeeded } = notifyResult
+
+  if (succeeded) {
+    return {
+      notifyId: response.body.id,
+      notifyStatus: 'created',
+      plaintext: response.body.content.body,
+      status: 'pending'
+    }
   }
 
   return {
-    notifyId: notify.id,
-    notifyStatus: notify.statusText,
-    plaintext: notify.plaintext,
-    status: 'pending'
-  }
-}
-
-function _error(notify) {
-  return {
-    notifyError: JSON.stringify(notify),
+    notifyError: JSON.stringify({
+      status: response.statusCode,
+      message: `Request failed with status code ${response.statusCode}`,
+      errors: response.body.errors
+    }),
     status: 'error'
   }
 }
