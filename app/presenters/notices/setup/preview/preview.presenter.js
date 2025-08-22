@@ -6,6 +6,7 @@
  */
 
 const NotifyPreviewRequest = require('../../../../requests/notify/notify-preview.request.js')
+
 const { sentenceCase } = require('../../../base.presenter.js')
 
 /**
@@ -54,13 +55,13 @@ function _backLink(contactHashId, noticeType, sessionId) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const { errors, plaintext } = await NotifyPreviewRequest.send(templateId, personalisation)
+  const previewResult = await NotifyPreviewRequest.send(templateId, personalisation)
 
-  if (errors) {
-    return 'error'
-  } else {
-    return plaintext
+  if (previewResult.succeeded) {
+    return previewResult.response.body.body
   }
+
+  return 'error'
 }
 
 function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId) {
