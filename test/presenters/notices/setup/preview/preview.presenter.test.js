@@ -53,7 +53,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               returnDueDate: '28th April 2025'
             },
             reference: 'RINV-0Q7AD8',
-            templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019',
+            templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
           }
 
           response = {
