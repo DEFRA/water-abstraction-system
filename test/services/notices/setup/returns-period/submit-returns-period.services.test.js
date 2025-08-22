@@ -83,6 +83,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
             text: 'Select the returns periods for the invitations'
           },
           pageTitle: 'Select the returns periods for the invitations',
+          pageTitleCaption: 'Notice RINV-1234',
           referenceCode: 'RINV-1234',
           returnsPeriod: [
             {

@@ -39,6 +39,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         {
           backLink: '/manage',
           pageTitle: 'Select the returns periods for the invitations',
+          pageTitleCaption: 'Notice RINV-123',
           referenceCode: 'RINV-123'
         },
         { skip: ['returnsPeriod'] }
