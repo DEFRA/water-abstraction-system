@@ -35,7 +35,11 @@ async function go(sessionId) {
   } else {
     const recipients = await FetchDownloadRecipientsService.go(session)
 
-    formattedData = DownloadRecipientsPresenter.go(recipients, session.notificationType)
+    const recipientsData = _additionalRecipients(recipients, session)
+
+    const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
+
+    formattedData = DownloadRecipientsPresenter.go(selectedRecipientsData, session.notificationType)
   }
 
   return {
@@ -43,6 +47,20 @@ async function go(sessionId) {
     type: 'text/csv',
     filename: `${notificationType} - ${referenceCode}.csv`
   }
+}
+
+function _additionalRecipients(recipientsData, session) {
+  if (session.additionalRecipients) {
+    return [...recipientsData, ...session.additionalRecipients]
+  }
+
+  return recipientsData
+}
+
+function _selectedRecipients(selectedRecipients, recipientsData) {
+  return recipientsData.filter((recipient) => {
+    return selectedRecipients.includes(recipient.contact_hash_id)
+  })
 }
 
 module.exports = {
