@@ -65,14 +65,14 @@ async function _save(session, address) {
   const premises = address.premises ?? ''
   const streetAddress = address.street_address ?? ''
 
-  const premisesStreetAddress = premises + ' ' + streetAddress
+  const premisesStreetAddress = `${premises} ${streetAddress}`.trim()
 
   if (!address.organisation) {
-    session.address.addressLine1 = premisesStreetAddress.trim()
+    session.address.addressLine1 = premisesStreetAddress
     session.address.addressLine2 = null
   } else {
     session.address.addressLine1 = address.organisation
-    session.address.addressLine2 = premisesStreetAddress.trim()
+    session.address.addressLine2 = premisesStreetAddress
   }
 
   session.address.addressLine3 = address.locality ?? null
