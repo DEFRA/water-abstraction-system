@@ -1,7 +1,10 @@
 {% extends "govuk/template.njk" %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
 
@@ -72,9 +75,11 @@
     {% endif %}
   {% endif %}
 
-  {% if pageTitleCaption %}
-    <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
-  {% endif %}
+{#  {% if pageTitleCaption %}#}
+{#    <span class="govuk-caption-l">{{ pageTitleCaption }}</span>#}
+{#  {% endif %}#}
+
+  {%  set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
 
   {% block pageContent %}
   {% endblock %}

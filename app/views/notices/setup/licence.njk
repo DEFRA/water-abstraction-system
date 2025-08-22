@@ -13,9 +13,7 @@
       <div class="govuk-grid-column-two-thirds">
         {{ govukInput({
           label: {
-            text: pageTitle,
-            classes: "govuk-label--l",
-            isPageHeading: true
+            html: pageHeadingHtml
           },
           value: licenceRef,
           name: name,
