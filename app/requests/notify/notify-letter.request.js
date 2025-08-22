@@ -5,66 +5,53 @@
  * @module NotifyLetterRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
  * Send a letter using GOV.UK Notify
  *
- * https://docs.notifications.service.gov.uk/node.html#send-a-letter
+ * When sending an email the body must include `template_id` and `personalisation`. There are other optional properties
+ * you can include, for example, `reference`, which we would normally set.
  *
- * Notify has the option to provide an 'options' object. This is the object which populates templates placeholders
- * (known as 'personalisation') and other options such as a 'reference' for identifying single unique message
- * or a batch of messages.
+ * The `personalisation` property must contain the address. The address must have at least 3 lines and the last line
+ * needs to be a real UK postcode or the name of a country outside the UK.
  *
  * ```javascript
- *   const options = {
- *       personalisation: {
- *        //The address must have at least 3 lines.
- *        "address_line_1": "Amala Bird", // required string
- *        "address_line_2": "123 High Street", // required string
- *        "address_line_3": "Richmond upon Thames", // required string
- *        "address_line_4": "Middlesex",
- *        "address_line_5": "SW14 6BF",  // last line of address you include must be a postcode or a country name  outside the UK
- *        name: 'test', // matches the template placeholder {{ name }}
- *       },
- *       reference: 'ABC-123' // A unique identifier which identifies a single unique message or a batch of messages
- *     }
+ * const options = {
+ *   personalisation: {
+ *     address_line_1: 'Amala Bird',
+ *     address_line_2: '123 High Street',
+ *     address_line_3: 'Richmond upon Thames','
+ *     address_line_4: 'Middlesex',
+ *     address_line_5: 'SW14 6BF"
+ *     name: 'Amala Bird',
+ *     periodEndDate: '28th January 2025',
+ *     periodStartDate: '1st January 2025',
+ *     returnDueDate: '28th April 2025'
+ *   },
+ *   reference: 'RINV-G2UYT8'
+ * }
  * ```
- * > If there are any dates types for any placeholder be sure to format the date prior to sending to notify. Otherwise,
- * the output will be formatted like: 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
  *
- * @param {string} templateId
- * @param {object} options
+ * > See {@link https://docs.notifications.service.gov.uk/rest-api.html#send-a-letter | Send a letter} for more details.
  *
- * @returns {Promise<object>}
+ * > Note - When providing a Date for a placeholder be sure to format it prior to sending. Otherwise, the output will be
+ * > formatted, for example, as 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
+ *
+ * @param {string} templateId - The ID of the template in Notify to use
+ * @param {object} options - Any additional options to include in the request, for example, `reference:`
+ *
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send(templateId, options) {
-  const notifyClient = NotifyClientRequest.go()
+  const path = 'v2/notifications/letter'
 
-  return _sendLetter(notifyClient, templateId, options)
-}
-
-async function _sendLetter(notifyClient, templateId, options) {
-  try {
-    const response = await notifyClient.sendLetter(templateId, options)
-
-    return {
-      id: response.data.id,
-      plaintext: response.data.content.body,
-      status: response.status,
-      statusText: response.statusText.toLowerCase()
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify send letter failed', errorDetails)
-
-    return errorDetails
+  const body = {
+    template_id: templateId,
+    ...options
   }
+
+  return NotifyRequest.post(path, body)
 }
 
 module.exports = {

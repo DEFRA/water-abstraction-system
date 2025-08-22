@@ -89,7 +89,7 @@ async function downloadRecipients(request, h) {
 async function preview(request, h) {
   const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
 
-  const pageData = await PreviewService.go(contactHashId, licenceMonitoringStationId, sessionId)
+  const pageData = await PreviewService.go(contactHashId, sessionId, licenceMonitoringStationId)
 
   return h.view('notices/setup/preview/preview.njk', pageData)
 }

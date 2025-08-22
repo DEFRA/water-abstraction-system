@@ -1,49 +1,44 @@
 'use strict'
 
 /**
- * Generate a preview template using GOV.UK Notify
+ * Generate a preview of a notification using GOV.UK Notify
  * @module NotifyPreviewRequest
  */
 
-const NotifyClientRequest = require('./notify-client.request.js')
+const NotifyRequest = require('../notify.request.js')
 
 /**
- * Generate a preview template using GOV.UK Notify
+ * Generate a preview of a notification using GOV.UK Notify
  *
- * https://docs.notifications.service.gov.uk/node.html#generate-a-preview-template
+ * When generating a preview the body must include `personalisation` containing matching placeholders for the template
+ * being previewed.
  *
- * @param {string} templateId
- * @param {object} personalisation - Optional personalisation data to be used in the template
+ * ```javascript
+ * const personalisation: {
+ *   periodEndDate: '28th January 2025',
+ *   periodStartDate: '1st January 2025',
+ *   returnDueDate: '28th April 2025'
+ * }
+ * ```
  *
- * @returns {Promise<object>}
+ * > See
+ * > {@link https://docs.notifications.service.gov.uk/rest-api.html#generate-a-preview-template | Generate a preview template}
+ * > for more details.
+ *
+ * > Note - When providing a Date for a placeholder be sure to format it prior to sending. Otherwise, the output will be
+ * > formatted, for example, as 'Wed Feb 19 2025 09:14:15 GMT+0000 (Greenwich Mean Time)'
+ *
+ * @param {string} templateId - The ID of the template in Notify to generate a preview for
+ * @param {object} personalisation - The placeholders needed for the template
+ *
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, personalisation = {}) {
-  const notifyClient = NotifyClientRequest.go()
+async function send(templateId, personalisation) {
+  const path = `v2/template/${templateId}/preview`
 
-  return _generatePreview(notifyClient, templateId, personalisation)
-}
+  const body = { personalisation }
 
-async function _generatePreview(notifyClient, templateId, personalisation) {
-  try {
-    const response = await notifyClient.previewTemplateById(templateId, personalisation)
-
-    return {
-      id: response.data.id,
-      plaintext: response.data.body,
-      status: response.status,
-      statusText: response.statusText.toLowerCase()
-    }
-  } catch (error) {
-    const errorDetails = {
-      status: error.status,
-      message: error.message,
-      errors: error.response.data.errors
-    }
-
-    global.GlobalNotifier.omfg('Notify generate preview failed', errorDetails)
-
-    return errorDetails
-  }
+  return NotifyRequest.post(path, body)
 }
 
 module.exports = {

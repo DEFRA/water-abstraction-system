@@ -15,24 +15,24 @@ const SessionModel = require('../../../../models/session.model.js')
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
  *
  * @param {string} contactHashId - The recipients unique identifier
- * @param {string} licenceMonitoringStationId - The UUID of the licence monitoring station record. This is only
- * populated for abstraction alerts
  * @param {string} sessionId - The UUID of the returns notices session record
+ * @param {string} [licenceMonitoringStationId=null] - The UUID of the licence monitoring station record (This is only
+ * populated for abstraction alerts)
  *
  * @returns {Promise<object>} The view data for the preview page
  */
-async function go(contactHashId, licenceMonitoringStationId, sessionId) {
+async function go(contactHashId, sessionId, licenceMonitoringStationId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
-  const notification = _notification(licenceMonitoringStationId, recipient, session)
+  const notification = _notification(recipient, session, licenceMonitoringStationId)
 
   const formattedData = await PreviewPresenter.go(
     contactHashId,
     session.noticeType,
-    licenceMonitoringStationId,
     notification,
-    sessionId
+    sessionId,
+    licenceMonitoringStationId
   )
 
   return {
@@ -41,7 +41,7 @@ async function go(contactHashId, licenceMonitoringStationId, sessionId) {
   }
 }
 
-function _notification(licenceMonitoringStationId, recipient, session) {
+function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
   if (session.noticeType === 'abstractionAlerts') {

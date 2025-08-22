@@ -9,22 +9,21 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { NotifyClient } = require('notifications-node-client')
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
-const { stubNotify } = require('../../../config/notify.config.js')
+
+// Things we need to stub
+const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
 const NotifyEmailRequest = require('../../../app/requests/notify/notify-email.request.js')
 
-describe('Notify - Email request', () => {
+describe('Notify - Notify Email request', () => {
   let emailAddress
-  let notifierStub
-  let notifyStub
   let options
+  let response
   let templateId
 
   beforeEach(() => {
-    // To test a real email is delivered replace this with an email on the whitelist (and use the whitelist api key)
     emailAddress = 'hello@example.com'
 
     options = {
@@ -33,139 +32,91 @@ describe('Notify - Email request', () => {
         periodStartDate: '1st January 2025',
         returnDueDate: '28th April 2025'
       },
-      reference: 'developer-testing'
+      reference: 'RINV-H1EZR5'
     }
 
     templateId = notifyTemplates.standard.invitations.primaryUserEmail
-
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
-  describe('when the call to "notify" is successful', () => {
+  describe('when the request succeeds', () => {
     beforeEach(() => {
-      notifyStub = _stubSuccessfulNotify({
-        data: {
-          id: '12345',
+      response = {
+        statusCode: 200,
+        body: {
           content: {
-            body: 'My dearest margery'
-          }
-        },
-        status: 201,
-        statusText: 'CREATED'
+            body: 'Dear licence holder,\r\n',
+            from_email: 'environment.agency.water.resources.licensing.service@notifications.service.gov.uk',
+            one_click_unsubscribe_url: null,
+            subject: 'Submit your water abstraction returns by 28th April 2025'
+          },
+          id: 'a8023182-5cb3-4ee3-b777-2fb82cde7fc5',
+          reference: options.reference,
+          scheduled_for: null,
+          template: {
+            id: templateId,
+            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${templateId}`,
+            version: 40
+          },
+          uri: 'https://api.notifications.service.gov.uk/v2/notifications/a8023182-5cb3-4ee3-b777-2fb82cde7fc5'
+        }
+      }
+
+      Sinon.stub(NotifyRequest, 'post').resolves({
+        succeeded: true,
+        response
       })
     })
 
-    it('should call notify', async () => {
+    it('returns a "true" success status', async () => {
       const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
 
-      expect(result).to.equal({
-        id: result.id,
-        plaintext: 'My dearest margery',
-        status: 201,
-        statusText: 'created'
-      })
+      expect(result.succeeded).to.be.true()
     })
 
-    if (stubNotify) {
-      it('should use the notify client', async () => {
-        await NotifyEmailRequest.send(templateId, emailAddress, options)
+    it('returns the result from Notify in the "response"', async () => {
+      const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
 
-        expect(notifyStub.calledWith(templateId, emailAddress, options)).to.equal(true)
-      })
-    }
+      expect(result.response.body).to.equal(response.body)
+    })
   })
 
-  describe('when the call to "notify" is unsuccessful', () => {
-    describe('when notify returns a "client error"', () => {
-      describe('because there is no "emailAddress"', () => {
-        beforeEach(() => {
-          emailAddress = ''
-
-          notifyStub = _stubUnSuccessfulNotify({
-            status: 400,
-            message: 'Request failed with status code 400',
-            response: {
-              data: {
-                errors: [
-                  {
-                    error: 'ValidationError',
-                    message: 'email_address Not a valid email address'
-                  }
-                ]
-              }
-            }
-          })
-        })
-
-        it('should return an error', async () => {
-          const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
-
-          expect(result).to.equal({
-            status: 400,
-            message: 'Request failed with status code 400',
-            errors: [
-              {
-                error: 'ValidationError',
-                message: 'email_address Not a valid email address'
-              }
-            ]
-          })
-        })
-      })
-
-      describe('because a "placeholder" has not been provided through "personalisation', () => {
-        beforeEach(() => {
-          delete options.personalisation.periodEndDate
-
-          notifyStub = _stubUnSuccessfulNotify({
-            status: 400,
-            message: 'Request failed with status code 400',
-            response: {
-              data: {
-                errors: [
-                  {
-                    error: 'BadRequestError',
-                    message: 'Missing personalisation: periodEndDate'
-                  }
-                ]
-              }
-            }
-          })
-        })
-
-        it('should return an error', async () => {
-          const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
-
-          expect(result).to.equal({
-            status: 400,
-            message: 'Request failed with status code 400',
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 400,
+          body: {
             errors: [
               {
                 error: 'BadRequestError',
-                message: 'Missing personalisation: periodEndDate'
+                message: 'Missing personalisation: returnDueDate'
               }
-            ]
-          })
+            ],
+            status_code: 400
+          }
+        }
+
+        Sinon.stub(NotifyRequest, 'post').resolves({
+          succeeded: false,
+          response
         })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+
+        expect(result.response.body).to.equal(response.body)
       })
     })
   })
 })
-
-function _stubSuccessfulNotify(response) {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'sendEmail').resolves(response)
-  }
-}
-
-function _stubUnSuccessfulNotify(response) {
-  if (stubNotify) {
-    return Sinon.stub(NotifyClient.prototype, 'sendEmail').rejects(response)
-  }
-}
