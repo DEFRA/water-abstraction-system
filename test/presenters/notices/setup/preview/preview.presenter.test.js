@@ -79,9 +79,9 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           const result = await PreviewPresenter.go(
             contactHashId,
             noticeType,
-            licenceMonitoringStationId,
             notification,
-            sessionId
+            sessionId,
+            licenceMonitoringStationId
           )
 
           expect(result).to.equal({
@@ -143,9 +143,9 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           const result = await PreviewPresenter.go(
             contactHashId,
             noticeType,
-            licenceMonitoringStationId,
             notification,
-            sessionId
+            sessionId,
+            licenceMonitoringStationId
           )
 
           expect(result).to.equal({
@@ -218,9 +218,9 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           const result = await PreviewPresenter.go(
             contactHashId,
             noticeType,
-            licenceMonitoringStationId,
             notification,
-            sessionId
+            sessionId,
+            licenceMonitoringStationId
           )
 
           expect(result).to.equal({
@@ -288,9 +288,9 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           const result = await PreviewPresenter.go(
             contactHashId,
             noticeType,
-            licenceMonitoringStationId,
             notification,
-            sessionId
+            sessionId,
+            licenceMonitoringStationId
           )
 
           expect(result).to.equal({
@@ -348,9 +348,9 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
       const result = await PreviewPresenter.go(
         contactHashId,
         noticeType,
-        licenceMonitoringStationId,
         notification,
-        sessionId
+        sessionId,
+        licenceMonitoringStationId
       )
 
       expect(result).to.equal({

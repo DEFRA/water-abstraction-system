@@ -14,13 +14,14 @@ const { sentenceCase } = require('../../../base.presenter.js')
  *
  * @param {string} contactHashId - The recipients unique identifier
  * @param {string} noticeType - The type of notice being sent
- * @param {string} licenceMonitoringStationId - The UUID of the licence monitoring station record. This is only
  * @param {object} notification - The data relating to the recipients notification
  * @param {string} sessionId - The UUID for returns notices session record
+ * @param {string} [licenceMonitoringStationId=null] - The UUID of the licence monitoring station record (This is only
+ * populated for abstraction alerts)
  *
- * @returns {Promise<object>} The data formatted for the preview template
+ * @returns {Promise<object>} The data formatted for the preview page
  */
-async function go(contactHashId, noticeType, licenceMonitoringStationId, notification, sessionId) {
+async function go(contactHashId, noticeType, notification, sessionId, licenceMonitoringStationId) {
   const { messageRef, messageType, personalisation, recipient, reference, templateId } = notification
 
   return {
