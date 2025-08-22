@@ -66,7 +66,7 @@ describe('Notices Setup - Preview - Preview service', () => {
     })
 
     it('returns the page data for the view', async () => {
-      const result = await PreviewService.go(testRecipient.contact_hash_id, licenceMonitoringStationId, session.id)
+      const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -131,7 +131,7 @@ describe('Notices Setup - Preview - Preview service', () => {
     })
 
     it('returns the page data for the view', async () => {
-      const result = await PreviewService.go(testRecipient.contact_hash_id, licenceMonitoringStationId, session.id)
+      const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
