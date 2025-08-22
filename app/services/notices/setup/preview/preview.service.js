@@ -25,14 +25,14 @@ async function go(contactHashId, sessionId, licenceMonitoringStationId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
-  const notification = _notification(licenceMonitoringStationId, recipient, session)
+  const notification = _notification(recipient, session, licenceMonitoringStationId)
 
   const formattedData = await PreviewPresenter.go(
     contactHashId,
     session.noticeType,
-    licenceMonitoringStationId,
     notification,
-    sessionId
+    sessionId,
+    licenceMonitoringStationId
   )
 
   return {
@@ -41,7 +41,7 @@ async function go(contactHashId, sessionId, licenceMonitoringStationId) {
   }
 }
 
-function _notification(licenceMonitoringStationId, recipient, session) {
+function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
   if (session.noticeType === 'abstractionAlerts') {
