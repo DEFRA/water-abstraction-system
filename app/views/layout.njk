@@ -1,5 +1,10 @@
 {% extends "govuk/template.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
 
@@ -46,11 +51,29 @@
 
   {# Place holder section for things like back links or breadcrumbs #}
   {% block breadcrumbs %}
+    {#  The back link should provide an object like this: { text: 'Back', herf: '/link/to/previous/page'  #}
+    {% if backLink %}
+      {{ govukBackLink(backLink) }}
+    {% endif %}
   {% endblock %}
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl">Default page template</h1>
+  {# Pages can provide an 'errorList' to show the error summary. It should look like this:
+    [{ text: 'An error', href: "#link-to-form-item"}]  #}
+  {% if errorList %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errorList
+    }) }}
+  {% endif %}
+
+  {# We set the page heading as a variable in the view to ensure all pages are consistent use this in your form field
+    when setting 'isPageHeading: true' #}
+  {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
+
+  {% block pageContent %}
+  {% endblock %}
 {% endblock %}
 
 {% block footer %}
