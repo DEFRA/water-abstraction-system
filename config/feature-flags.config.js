@@ -29,6 +29,7 @@ const config = {
   enableLicenceMonitoringStationsSetup:
     String(process.env.ENABLE_LICENCE_MONITORING_STATIONS_SETUP) === 'true' || false,
   enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
+  enableSystemManageView: String(process.env.ENABLE_SYSTEM_MANAGE_VIEW) === 'true' || false,
   enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,
   enableSystemNotices: String(process.env.ENABLE_SYSTEM_NOTICES_VIEW) === 'true' || false,
   enableSystemNotifications: String(process.env.ENABLE_SYSTEM_NOTIFICATIONS) === 'true' || false,
