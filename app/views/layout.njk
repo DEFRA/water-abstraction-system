@@ -10,7 +10,7 @@
 
 {% block head %}
   <!--[if !IE 8]><!-->
-    <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
+  <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
   <!--<![endif]-->
 
   {# For Internet Explorer 8, you need to compile specific stylesheet #}
@@ -21,7 +21,7 @@
 
   {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
   <!--[if lt IE 9]>
-    <script src="/html5-shiv/html5shiv.js"></script>
+  <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
 {% endblock %}
 
@@ -37,21 +37,15 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{
-    govukPhaseBanner({
-      tag: {
-        text: "Beta"
-      },
-      html: 'This is a new service - your <a class="govuk-link" href="/feedback">feedback</a> will help us to improve it.'
-    })
-  }}
+  {{ govukPhaseBanner({
+    tag: { text: "Beta" },
+    html: 'This is a new service - your <a class="govuk-link" href="/feedback">feedback</a> will help us to improve it.'
+  }) }}
   {% if auth.authenticated %}
     {% include "includes/nav-bar.njk" %}
   {% endif %}
 
-  {# Place holder section for things like back links or breadcrumbs #}
   {% block breadcrumbs %}
-    {#  The back link should provide an object like this: { text: 'Back', herf: '/link/to/previous/page'  #}
     {% if backLink %}
       {{ govukBackLink(backLink) }}
     {% endif %}
@@ -59,17 +53,10 @@
 {% endblock %}
 
 {% block content %}
-  {# Pages can provide an 'errorList' to show the error summary. It should look like this:
-    [{ text: 'An error', href: "#link-to-form-item"}]  #}
   {% if errorList %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errorList
-    }) }}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
   {% endif %}
 
-  {# We set the page heading as a variable in the view to ensure all pages are consistent use this in your form field
-    when setting 'isPageHeading: true' #}
   {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
 
   {% block pageContent %}
@@ -80,25 +67,15 @@
   {{ govukFooter({
     meta: {
       items: [
-        {
-          href: "/cookies",
-          text: "Cookies"
-        },
-        {
-          href: "/privacy-policy",
-          text: "Privacy"
-        },
-        {
-          href: "/accessibility",
-          text: "Accessibility"
-        }
+        { href: "/cookies", text: "Cookies" },
+        { href: "/privacy-policy", text: "Privacy" },
+        { href: "/accessibility", text: "Accessibility" }
       ]
     }
   }) }}
 {% endblock %}
 
 {% block bodyEnd %}
-  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script src="{{ assetPath }}/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
 {% endblock %}
