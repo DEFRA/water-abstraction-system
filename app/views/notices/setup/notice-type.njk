@@ -5,11 +5,17 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -30,9 +36,7 @@
       errorMessage: error,
       fieldset: {
         legend: {
-          text: pageTitle,
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
+          html: pageHeading
         }
       },
       items: options

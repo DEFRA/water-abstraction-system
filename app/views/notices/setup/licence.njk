@@ -5,11 +5,17 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -28,10 +34,10 @@
       <div class="govuk-grid-column-two-thirds">
 
         {{ govukInput({
-          label: {
-            text: pageTitle,
-            classes: "govuk-label--l",
-            isPageHeading: true
+          fieldset: {
+            legend: {
+              html: pageHeading
+            }
           },
           value: licenceRef,
           id: "licence-ref",

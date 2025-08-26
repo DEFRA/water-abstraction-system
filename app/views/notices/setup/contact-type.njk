@@ -6,6 +6,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
@@ -50,7 +52,7 @@
     }) }}
   {% endset -%}
 
-  <h1 class="govuk-form-group govuk-heading-l">{{ pageTitle }}</h1>
+  {{ pageHeading(pageTitle) }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
