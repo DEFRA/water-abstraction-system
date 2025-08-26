@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-preview.request.js')
+const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
 const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
@@ -69,7 +69,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
             succeeded: true,
             response
           })
@@ -133,7 +133,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
             succeeded: true,
             response
           })
@@ -208,7 +208,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
             succeeded: true,
             response
           })
@@ -278,7 +278,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
             succeeded: true,
             response
           })
@@ -338,7 +338,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         }
       }
 
-      Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
         succeeded: false,
         response
       })

@@ -2,7 +2,7 @@
 
 /**
  * Generate a preview of a notification using GOV.UK Notify
- * @module NotifyPreviewRequest
+ * @module GeneratePreviewRequest
  */
 
 const NotifyRequest = require('../notify.request.js')

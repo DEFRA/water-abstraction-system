@@ -15,9 +15,9 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
-const NotifyPreviewRequest = require('../../../app/requests/notify/notify-preview.request.js')
+const GeneratePreviewRequest = require('../../../app/requests/notify/generate-preview.request.js')
 
-describe('Notify - Notify Preview request', () => {
+describe('Notify - Generate Preview request', () => {
   let personalisation
   let response
   let templateId
@@ -58,13 +58,13 @@ describe('Notify - Notify Preview request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await NotifyPreviewRequest.send(templateId, personalisation)
+      const result = await GeneratePreviewRequest.send(templateId, personalisation)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await NotifyPreviewRequest.send(templateId, personalisation)
+      const result = await GeneratePreviewRequest.send(templateId, personalisation)
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -93,13 +93,13 @@ describe('Notify - Notify Preview request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await NotifyPreviewRequest.send(templateId, personalisation)
+        const result = await GeneratePreviewRequest.send(templateId, personalisation)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await NotifyPreviewRequest.send(templateId, personalisation)
+        const result = await GeneratePreviewRequest.send(templateId, personalisation)
 
         expect(result.response.body).to.equal(response.body)
       })

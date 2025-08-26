@@ -5,7 +5,7 @@
  * @module PreviewPresenter
  */
 
-const NotifyPreviewRequest = require('../../../../requests/notify/notify-preview.request.js')
+const GeneratePreviewRequest = require('../../../../requests/notify/generate-preview.request.js')
 
 const { sentenceCase } = require('../../../base.presenter.js')
 
@@ -56,7 +56,7 @@ function _backLink(contactHashId, noticeType, sessionId) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const previewResult = await NotifyPreviewRequest.send(templateId, personalisation)
+  const previewResult = await GeneratePreviewRequest.send(templateId, personalisation)
 
   if (previewResult.succeeded) {
     return previewResult.response.body.body

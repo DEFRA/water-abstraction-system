@@ -16,7 +16,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-preview.request.js')
+const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
 const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
@@ -59,7 +59,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       Sinon.stub(FetchRecipientsService, 'go').resolves()
 
       // As the services presenter uses Notify to generate the template preview contents, we need to stub the request
-      Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
         succeeded: true,
         response: {
           statusCode: 200,
@@ -139,7 +139,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
       Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
 
-      Sinon.stub(NotifyPreviewRequest, 'send').resolves({
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
         succeeded: true,
         response: {
           statusCode: 200,

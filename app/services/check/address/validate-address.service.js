@@ -1,7 +1,7 @@
 'use strict'
 
-const NotifyPreviewRequest = require('../../../requests/notify/notify-preview.request.js')
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
+const GeneratePreviewRequest = require('../../../requests/notify/generate-preview.request.js')
 
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 
@@ -28,7 +28,7 @@ async function go(payload) {
 }
 
 async function _preview(options) {
-  const { errors } = await NotifyPreviewRequest.send(
+  const { errors } = await GeneratePreviewRequest.send(
     notifyTemplates.adhoc.invitations.licenceHolderLetter,
     options.personalisation
   )
