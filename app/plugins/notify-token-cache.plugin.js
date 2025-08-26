@@ -12,8 +12,8 @@ const jwt = require('jsonwebtoken')
 
 const notifyConfig = require('../../config/notify.config.js')
 
-const FIVE_SECS_IN_MS = 5 * 1000
-const TWENTY_FIVE_SECS_IN_MS = 25 * 1000
+const FIVE_SECS_IN_MS = 5000
+const TWENTY_FIVE_SECS_IN_MS = 25000
 
 const NotifyTokenCachePlugin = {
   name: 'NotifyTokenCache',
@@ -87,6 +87,8 @@ function _credentials() {
   const { apiKey } = notifyConfig
 
   return {
+    // NOTE: Taken from
+    // https://github.com/alphagov/notifications-node-client/blob/79dd16bf3779ff476d33574f4878e7133d232064/client/api_client.js#L18
     secret: apiKey.substring(apiKey.length - 36, apiKey.length),
     serviceId: apiKey.substring(apiKey.length - 73, apiKey.length - 37)
   }
