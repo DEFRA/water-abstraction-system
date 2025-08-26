@@ -26,61 +26,7 @@
  * @module ViewManageService
  */
 
-const config = require('../../../config/feature-flags.config.js')
-
-/**
- * Provides a function that dynamically checks if a feature flag is enabled.
- *
- * These functions are used to ensure that the feature flags are checked at the time that the page is being displayed,
- * which allows them to be checked by our unit tests.
- *
- * @param {string} featureFlag - The name of the feature flag to be checked.
- * @returns {function(): boolean}
- */
-function ifHasFeatureFlag(featureFlag) {
-  return () => {
-    return config[featureFlag]
-  }
-}
-
-/**
- * Provides a function that dynamically checks if a feature flag is not enabled.
- *
- * These functions are used to ensure that the feature flags are checked at the time that the page is being displayed,
- * which allows them to be checked by our unit tests.
- *
- * @param {string} featureFlag - The name of the feature flag to be checked.
- * @returns {function(): boolean}
- */
-function ifDoesNotHaveFeatureFlag(featureFlag) {
-  return () => {
-    return !config[featureFlag]
-  }
-}
-
-/**
- * A default function to use if the link on the page is not dependent on a feature flag.
- *
- * @returns {boolean} Always true
- */
-function irrespectiveOfFeatureFlags() {
-  return true
-}
-
-/**
- * Creates a link object for a specific item on the page.
- *
- * @param {string} name - The name of the link.
- * @param {string} path - The path of the link.
- * @param {string|Array<string>} scopeOrScopes - The scope(s) required to view the link.
- * @param {function(): boolean} featureFlagCheck - A function that checks if the relevant feature flag is enabled.
- * @returns {object} The link object.
- */
-function createLink(name, path, scopeOrScopes, featureFlagCheck = irrespectiveOfFeatureFlags) {
-  const scopes = Array.isArray(scopeOrScopes) ? scopeOrScopes : [scopeOrScopes]
-
-  return { featureFlagCheck, name, path, scopes }
-}
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * The definition of all the links that can possibly be displayed on the page.
@@ -96,115 +42,115 @@ function createLink(name, path, scopeOrScopes, featureFlagCheck = irrespectiveOf
 // prettier-ignore
 const ALL_LINKS = {
   accounts: [
-    createLink(
+    _createLink(
       'Create an internal account',
       '/account/create-user',
-      'manage_accounts'
+      ['manage_accounts']
     )
   ],
   chargeInformationWorkflow: [
-    createLink(
+    _createLink(
       'Check licences in workflow',
       '/charge-information-workflow',
       ['charge_version_workflow_editor', 'charge_version_workflow_reviewer']
     )
   ],
   hofNotifications: [
-    createLink(
+    _createLink(
       'Restriction',
       'notifications/1?start=1',
-      'hof_notifications'
+      ['hof_notifications']
     ),
-    createLink(
+    _createLink(
       'Hands-off flow',
       'notifications/3?start=1',
-      'hof_notifications'
+      ['hof_notifications']
     ),
-    createLink(
+    _createLink(
       'Resume',
       'notifications/4?start=1',
-      'hof_notifications'
+      ['hof_notifications']
     )
   ],
   licenceNotifications: [
-    createLink(
+    _createLink(
       'Renewal',
       'notifications/2?start=1',
-      'renewal_notifications'
+      ['renewal_notifications']
     )
   ],
   reports: [
-    createLink(
+    _createLink(
       'Notices',
       '/notifications/report',
       ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns'],
-      ifDoesNotHaveFeatureFlag('enableSystemNotices')
+      _ifDoesNotHaveFeatureFlag('enableSystemNotices')
     ),
-    createLink(
+    _createLink(
       'Notices',
       '/system/notices',
       ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns'],
-      ifHasFeatureFlag('enableSystemNotices')
+      _ifHasFeatureFlag('enableSystemNotices')
     ),
-    createLink(
+    _createLink(
       'Returns cycles',
       '/returns-reports',
-      'returns'
+      ['returns']
     ),
-    createLink(
+    _createLink(
       'Digitise!',
       '/digitise/report',
-      'ar_approver'
+      ['ar_approver']
     ),
-    createLink(
+    _createLink(
       'Key performance indicators',
       '/reporting/kpi-reporting',
       ['ar_approver', 'billing', 'bulk_return_notifications', 'hof_notifications', 'manage_accounts', 'renewal_notifications', 'returns']
     )
   ],
   returnNotifications: [
-    createLink(
+    _createLink(
       'Invitations',
       '/returns-notifications/invitations',
-      'bulk_return_notifications',
-      ifDoesNotHaveFeatureFlag('enableSystemNotifications')
+      ['bulk_return_notifications'],
+      _ifDoesNotHaveFeatureFlag('enableSystemNotifications')
     ),
-    createLink(
+    _createLink(
       'Invitations',
       '/system/notices/setup/standard?noticeType=invitations',
-      'bulk_return_notifications',
-      ifHasFeatureFlag('enableSystemNotifications')
+      ['bulk_return_notifications'],
+      _ifHasFeatureFlag('enableSystemNotifications')
     ),
-    createLink(
+    _createLink(
       'Paper forms',
       '/returns-notifications/forms',
-      'returns'
+      ['returns']
     ),
-    createLink(
+    _createLink(
       'Reminders',
       '/returns-notifications/reminders',
-      'bulk_return_notifications',
-      ifDoesNotHaveFeatureFlag('enableSystemNotifications')
+      ['bulk_return_notifications'],
+      _ifDoesNotHaveFeatureFlag('enableSystemNotifications')
     ),
-    createLink(
+    _createLink(
       'Reminders',
       '/system/notices/setup/standard?noticeType=reminders',
-      'bulk_return_notifications',
-      ifHasFeatureFlag('enableSystemNotifications')
+      ['bulk_return_notifications'],
+      _ifHasFeatureFlag('enableSystemNotifications')
     ),
-    createLink(
+    _createLink(
       'Ad-hoc',
       '/system/notices/setup/adhoc',
-      'returns',
-      ifHasFeatureFlag('enableAdHocNotifications')
+      ['returns'],
+      _ifHasFeatureFlag('enableAdHocNotifications')
     )
   ],
   uploadChargeInformation: [
-    createLink(
+    _createLink(
       'Upload a file',
       '/charge-information/upload',
-      'charge_version_workflow_reviewer',
-      ifHasFeatureFlag('allowChargeVersionUploads')
+      ['charge_version_workflow_reviewer'],
+      _ifHasFeatureFlag('allowChargeVersionUploads')
     )
   ]
 }
@@ -215,23 +161,17 @@ const ALL_LINKS = {
  * It filters the full list of potential links according to the user's defined scopes and the current feature flag
  * settings and returns just the link name and path for display in the view.
  *
- * @param {Array<string>|string} userScopes - The value of the user's `scope` attribute
+ * @param {object} userAuth - The value of the current user's `auth` attribute
  *
  * @returns {Promise<object>} The view data for the Manage page
  */
-async function go(userScopes) {
-  const userScopesArray = Array.isArray(userScopes) ? userScopes : [userScopes]
-
-  const scopeFilter = (linkScope) => {
-    return userScopesArray.includes(linkScope)
-  }
-
-  const linkFilter = makeLinkFilter(scopeFilter)
+async function go(userAuth) {
+  const linkFilter = _makeLinkFilter(userAuth.credentials.scope)
 
   const filteredLinks = {}
 
   Object.entries(ALL_LINKS).forEach(([key, links]) => {
-    filteredLinks[key] = links.filter(linkFilter).map(linkMapper)
+    filteredLinks[key] = links.filter(linkFilter).map(_linkMapper)
   })
 
   return {
@@ -241,14 +181,85 @@ async function go(userScopes) {
   }
 }
 
-function makeLinkFilter(scopeFilter) {
+/**
+ * Creates a filter function for the links based on the user's scopes
+ *
+ * @param {Array<string>} userScopes - The scopes assigned to the user
+ *
+ * @returns {function(object): boolean} The link filter function
+ */
+function _makeLinkFilter(userScopes) {
   return (link) => {
-    return link.featureFlagCheck() && link.scopes.some(scopeFilter)
+    return link.featureFlagCheck() && link.scopes.some((linkScope) => {
+      return userScopes.includes(linkScope)
+    })
   }
 }
 
-function linkMapper({ name, path }) {
+/**
+ * Maps the link object to a simpler format for the view
+ *
+ * @param {object} link - The link object
+ *
+ * @returns {object} The mapped link object
+ */
+function _linkMapper({ name, path }) {
   return { name, path }
+}
+
+/**
+ * Creates a link object for a specific item on the page
+ *
+ * @param {string} name - The name of the link
+ * @param {string} path - The path of the link
+ * @param {Array<string>} scopes - The scopes required to view the link
+ * @param {function(): boolean} featureFlagCheck - A function that checks if the relevant feature flag is enabled
+ *
+ * @returns {object} The link object
+ */
+function _createLink(name, path, scopes, featureFlagCheck = _irrespectiveOfFeatureFlags) {
+  return { featureFlagCheck, name, path, scopes }
+}
+
+/**
+ * Provides a function that dynamically checks if a feature flag is enabled
+ *
+ * These functions are used to ensure that the feature flags are checked at the time that the page is being displayed,
+ * which allows them to be checked by our unit tests.
+ *
+ * @param {string} featureFlag - The name of the feature flag to be checked
+ *
+ * @returns {function(): boolean}
+ */
+function _ifHasFeatureFlag(featureFlag) {
+  return () => {
+    return FeatureFlagsConfig[featureFlag]
+  }
+}
+
+/**
+ * Provides a function that dynamically checks if a feature flag is not enabled
+ *
+ * These functions are used to ensure that the feature flags are checked at the time that the page is being displayed,
+ * which allows them to be checked by our unit tests.
+ *
+ * @param {string} featureFlag - The name of the feature flag to be checked
+ *
+ * @returns {function(): boolean}
+ */
+function _ifDoesNotHaveFeatureFlag(featureFlag) {
+  return () => {
+    return !FeatureFlagsConfig[featureFlag]
+  }
+}
+
+/**
+ * A default function to use if the link on the page is not dependent on a feature flag
+ *
+ * @returns {boolean} Always true
+ */
+function _irrespectiveOfFeatureFlags() {
+  return true
 }
 
 module.exports = {
