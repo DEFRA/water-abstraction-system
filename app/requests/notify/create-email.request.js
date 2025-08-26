@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Send an email using GOV.UK Notify
- * @module NotifyEmailRequest
+ * Create and send an email using GOV.UK Notify
+ * @module CreateEmailRequest
  */
 
 const NotifyRequest = require('../notify.request.js')
 
 /**
- * Send an email using GOV.UK Notify
+ * Create and send an email using GOV.UK Notify
  *
  * When sending an email the body must include `template_id` and `email_address`. There are other optional properties
  * you can include, `reference` and `personalisation` being the ones we would normally set.

@@ -15,9 +15,9 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
-const NotifyEmailRequest = require('../../../app/requests/notify/notify-email.request.js')
+const CreateEmailRequest = require('../../../app/requests/notify/create-email.request.js')
 
-describe('Notify - Notify Email request', () => {
+describe('Notify - Create Email request', () => {
   let emailAddress
   let options
   let response
@@ -72,13 +72,13 @@ describe('Notify - Notify Email request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+      const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+      const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -107,13 +107,13 @@ describe('Notify - Notify Email request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+        const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await NotifyEmailRequest.send(templateId, emailAddress, options)
+        const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
         expect(result.response.body).to.equal(response.body)
       })

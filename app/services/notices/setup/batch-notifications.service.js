@@ -10,7 +10,7 @@ const { setTimeout } = require('node:timers/promises')
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
-const NotifyEmailRequest = require('../../../requests/notify/notify-email.request.js')
+const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
 const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
@@ -145,7 +145,7 @@ async function _sendLetter(notification) {
 }
 
 async function _sendEmail(notification) {
-  const notifyResult = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
+  const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
     reference: notification.reference
   })

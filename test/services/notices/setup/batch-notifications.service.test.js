@@ -16,7 +16,7 @@ const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js
 
 // Things we need to stub
 const NotifyConfig = require('../../../../config/notify.config.js')
-const NotifyEmailRequest = require('../../../../app/requests/notify/notify-email.request.js')
+const CreateEmailRequest = require('../../../../app/requests/notify/create-email.request.js')
 const NotifyLetterRequest = require('../../../../app/requests/notify/notify-letter.request.js')
 
 // Thing under test
@@ -77,7 +77,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     describe('that contains letters and emails', () => {
       describe('and the requests to Notify in the batch are a mix of successes and failures', () => {
         beforeEach(() => {
-          Sinon.stub(NotifyEmailRequest, 'send')
+          Sinon.stub(CreateEmailRequest, 'send')
             .onCall(0)
             .resolves({
               succeeded: false,
@@ -443,7 +443,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     describe('that contains letters and emails', () => {
       describe('and the requests to Notify in the batch are a mix of successes and failures', () => {
         beforeEach(() => {
-          Sinon.stub(NotifyEmailRequest, 'send')
+          Sinon.stub(CreateEmailRequest, 'send')
             .onCall(0)
             .resolves({
               succeeded: false,
