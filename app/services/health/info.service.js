@@ -15,10 +15,10 @@ const ChargingModuleRequest = require('../../requests/charging-module.request.js
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
+const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
 const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
 
 /**
  * Checks status and gathers info for each of the services which make up WRLS
@@ -70,8 +70,7 @@ async function _getAddressFacadeData() {
 }
 
 async function _getGotenbergData() {
-  const statusUrl = new URL('/health', gotenbergConfig.url)
-  const result = await BaseRequest.get(statusUrl.href)
+  const result = await GotenbergViewHealthRequest.send()
 
   if (result.succeeded) {
     const response = JSON.parse(result.response.body)

@@ -11,13 +11,13 @@ const { expect } = Code
 
 // Test helpers
 const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
 
 // Things we need to stub
+const BaseRequest = require('../../../app/requests/base.request.js')
 const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
 const LegacyRequest = require('../../../app/requests/legacy.request.js')
-const BaseRequest = require('../../../app/requests/base.request.js')
+const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
@@ -44,15 +44,17 @@ describe('Health - Info service', () => {
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
-  let chargingModuleRequestStub
-  let legacyRequestStub
   let baseRequestStub
+  let chargingModuleRequestStub
+  let gotenbergViewHealthRequestStub
+  let legacyRequestStub
   let redisStub
 
   beforeEach(() => {
-    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'get')
-    legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
     baseRequestStub = Sinon.stub(BaseRequest, 'get')
+    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'get')
+    gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
+    legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
@@ -68,6 +70,7 @@ describe('Health - Info service', () => {
     legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
 
     chargingModuleRequestStub.withArgs('status').resolves(goodRequestResults.chargingModule)
+    gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
   })
 
   afterEach(() => {
@@ -82,7 +85,6 @@ describe('Health - Info service', () => {
       baseRequestStub
         .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -135,7 +137,6 @@ describe('Health - Info service', () => {
       baseRequestStub
         .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
@@ -188,7 +189,6 @@ describe('Health - Info service', () => {
       baseRequestStub
         .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
     })
@@ -288,7 +288,6 @@ describe('Health - Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
@@ -311,6 +310,7 @@ describe('Health - Info service', () => {
 
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
       })
     })
 
@@ -319,7 +319,6 @@ describe('Health - Info service', () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
         baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
 
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
@@ -342,6 +341,7 @@ describe('Health - Info service', () => {
 
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
       })
     })
   })
