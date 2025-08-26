@@ -29,6 +29,8 @@
   {% endif %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
     {{ govukTextarea({
       name: "removeLicences",
       id: "remove-licences",
