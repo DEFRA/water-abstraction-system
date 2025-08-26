@@ -2,37 +2,46 @@
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
- * @module ProcessNotificationsStatusUpdatesService
+ * @module NotificationsStatusUpdatesService
  */
 
 const { setTimeout } = require('node:timers/promises')
 
 const FetchNotificationsService = require('./fetch-notifications.service.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
-const NotifyStatusRequest = require('../../../requests/notify/notify-status.request.js')
+const ViewMessageDataRequest = require('../../../requests/notify/view-message-data.request.js')
 const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
+const notifyConfig = require('../../../../config/notify.config.js')
+
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
  *
- * This function retrieves a list of 'notifications' and iterates over them to update their status
- * according to the latest information from Notify.
+ * This function retrieves a list of 'notifications' and iterates over them to update their status according to the
+ * latest information from Notify.
  *
- * The updates are done in batches to comply with rate-limiting constraints imposed by the Notify service.
- * The rate limit is set to 3,000 messages per minute, which the service respects during processing.
+ * The updates are done in batches to comply with rate-limiting constraints imposed by the Notify service. The rate
+ * limit is set to 3,000 messages per minute, which the service respects during processing.
  *
- * If the number of 'notifications' exceeds the internal batch size limit, the notifications are split into
- * smaller batches for processing. This ensures efficient processing while adhering to the rate limit.
+ * If the number of 'notifications' exceeds the internal batch size limit, the notifications are split into smaller
+ * batches for processing. This ensures efficient processing while adhering to the rate limit.
  *
- * After all notifications are updated, any notifications with an event that has failed (Notify error, not a 4xx or 5xx
- * error) will trigger an update to the error count for the corresponding event.
+ * If the request to Notify for the message details is successful, the status of the notification is updated. We always
+ * record the Notify status in `notifyStatus`. We map it to a WRLS recognised value in `status`.
  *
+ * - created or sending = 'pending'
+ * - delivered = 'sent'
+ * - permanent-failure, temporary-failure, technical-failure or error = 'error'
+ *
+ * The event record linked to the notification is then updated with the count of notifications with a status of 'error'.
+ *
+ * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
+ * later.
  */
 async function go() {
-  const { batchSize, delay } = NotifyConfig
+  const { batchSize, delay } = notifyConfig
 
   const notifications = await FetchNotificationsService.go()
 
@@ -64,18 +73,20 @@ async function _delay(delay) {
 }
 
 async function _notificationStatus(notification) {
-  const notifyResponse = await NotifyStatusRequest.send(notification.notifyId)
+  const notifyResult = await ViewMessageDataRequest.send(notification.notifyId)
 
-  if (notifyResponse.errors) {
-    return notification
-  } else {
-    const notifyStatus = NotifyStatusPresenter.go(notifyResponse.status, notification)
+  const { response, succeeded } = notifyResult
+
+  if (succeeded) {
+    const notifyStatus = NotifyStatusPresenter.go(response.body.status, notification)
 
     return {
       ...notification,
       ...notifyStatus
     }
   }
+
+  return notification
 }
 
 /**
