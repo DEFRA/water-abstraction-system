@@ -14,7 +14,7 @@ const NotificationHelper = require('../../../support/helpers/notification.helper
 
 // Things we need to stub
 const NotifyConfig = require('../../../../config/notify.config.js')
-const NotifyStatusRequest = require('../../../../app/requests/notify/notify-status.request.js')
+const ViewMessageDataRequest = require('../../../../app/requests/notify/view-message-data.request.js')
 
 // Thing under test
 const NotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
@@ -48,7 +48,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
           }
         }
 
-        Sinon.stub(NotifyStatusRequest, 'send').resolves({
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
           succeeded: true,
           response
         })
@@ -190,7 +190,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
           }
         }
 
-        Sinon.stub(NotifyStatusRequest, 'send').resolves({
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
           succeeded: true,
           response
         })
@@ -275,7 +275,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
         }
       }
 
-      Sinon.stub(NotifyStatusRequest, 'send').resolves({
+      Sinon.stub(ViewMessageDataRequest, 'send').resolves({
         succeeded: false,
         response
       })

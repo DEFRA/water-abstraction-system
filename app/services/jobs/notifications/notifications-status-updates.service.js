@@ -2,14 +2,14 @@
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
- * @module ProcessNotificationsStatusUpdatesService
+ * @module NotificationsStatusUpdatesService
  */
 
 const { setTimeout } = require('node:timers/promises')
 
 const FetchNotificationsService = require('./fetch-notifications.service.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
-const NotifyStatusRequest = require('../../../requests/notify/notify-status.request.js')
+const ViewMessageDataRequest = require('../../../requests/notify/view-message-data.request.js')
 const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
@@ -73,7 +73,7 @@ async function _delay(delay) {
 }
 
 async function _notificationStatus(notification) {
-  const notifyResult = await NotifyStatusRequest.send(notification.notifyId)
+  const notifyResult = await ViewMessageDataRequest.send(notification.notifyId)
 
   const { response, succeeded } = notifyResult
 

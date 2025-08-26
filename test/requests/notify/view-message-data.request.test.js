@@ -12,9 +12,9 @@ const { expect } = Code
 const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
-const NotifyStatusRequest = require('../../../app/requests/notify/notify-status.request.js')
+const ViewMessageDataRequest = require('../../../app/requests/notify/view-message-data.request.js')
 
-describe('Notify - Notify Status request', () => {
+describe('Notify - View Message Data request', () => {
   const notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
 
   let response
@@ -68,13 +68,13 @@ describe('Notify - Notify Status request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await NotifyStatusRequest.send(notificationId)
+      const result = await ViewMessageDataRequest.send(notificationId)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await NotifyStatusRequest.send(notificationId)
+      const result = await ViewMessageDataRequest.send(notificationId)
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -103,13 +103,13 @@ describe('Notify - Notify Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await NotifyStatusRequest.send(notificationId)
+        const result = await ViewMessageDataRequest.send(notificationId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await NotifyStatusRequest.send(notificationId)
+        const result = await ViewMessageDataRequest.send(notificationId)
 
         expect(result.response.body).to.equal(response.body)
       })
