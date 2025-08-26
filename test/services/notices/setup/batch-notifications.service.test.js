@@ -17,7 +17,7 @@ const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js
 // Things we need to stub
 const NotifyConfig = require('../../../../config/notify.config.js')
 const CreateEmailRequest = require('../../../../app/requests/notify/create-email.request.js')
-const NotifyLetterRequest = require('../../../../app/requests/notify/notify-letter.request.js')
+const NotifyLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')

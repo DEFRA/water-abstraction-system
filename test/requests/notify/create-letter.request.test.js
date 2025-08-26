@@ -15,9 +15,9 @@ const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 const NotifyRequest = require('../../../app/requests/notify.request.js')
 
 // Thing under test
-const NotifyLetterRequest = require('../../../app/requests/notify/notify-letter.request.js')
+const CreateLetterRequest = require('../../../app/requests/notify/create-letter.request.js')
 
-describe('Notify - Notify Letter request', () => {
+describe('Notify - Create Letter request', () => {
   let options
   let response
   let templateId
@@ -73,13 +73,13 @@ describe('Notify - Notify Letter request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await NotifyLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest.send(templateId, options)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await NotifyLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest.send(templateId, options)
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -108,13 +108,13 @@ describe('Notify - Notify Letter request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await NotifyLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest.send(templateId, options)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await NotifyLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest.send(templateId, options)
 
         expect(result.response.body).to.equal(response.body)
       })

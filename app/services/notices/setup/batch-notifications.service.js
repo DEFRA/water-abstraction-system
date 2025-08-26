@@ -11,7 +11,7 @@ const AbstractionAlertNotificationsPresenter = require('../../../presenters/noti
 const CreateNotificationsService = require('./create-notifications.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
-const NotifyLetterRequest = require('../../../requests/notify/notify-letter.request.js')
+const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
@@ -136,7 +136,7 @@ function _notificationsToSend(notifications) {
 }
 
 async function _sendLetter(notification) {
-  const notifyResult = await NotifyLetterRequest.send(notification.templateId, {
+  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
     personalisation: notification.personalisation,
     reference: notification.reference
   })
