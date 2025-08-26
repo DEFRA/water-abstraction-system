@@ -59,7 +59,7 @@ function ifDoesNotHaveFeatureFlag(featureFlag) {
 }
 
 /**
- * A default function to use in if the link on the page is not dependent on a feature flag.
+ * A default function to use if the link on the page is not dependent on a feature flag.
  *
  * @returns {boolean} Always true
  */
@@ -212,28 +212,26 @@ const ALL_LINKS = {
 /**
  * Provides the items for the `/manage` page
  *
- * It simply filters the full list of potential links according to the user's defined scopes and the current
- * feature flag settings.
+ * It filters the full list of potential links according to the user's defined scopes and the current feature flag
+ * settings and returns just the link name and path for display in the view.
  *
  * @param {Array<string>|string} userScopes - The value of the user's `scope` attribute
  *
  * @returns {Promise<object>} The view data for the Manage page
  */
 async function go(userScopes) {
-  const filteredLinks = { ...ALL_LINKS }
   const userScopesArray = Array.isArray(userScopes) ? userScopes : [userScopes]
+
   const scopeFilter = (linkScope) => {
     return userScopesArray.includes(linkScope)
   }
 
-  Object.keys(filteredLinks).forEach((key) => {
-    filteredLinks[key] = filteredLinks[key]
-      .filter((link) => {
-        return link.featureFlagCheck() && link.scopes.some(scopeFilter)
-      })
-      .map(({ name, path }) => {
-        return { name, path }
-      })
+  const linkFilter = makeLinkFilter(scopeFilter)
+
+  const filteredLinks = {}
+
+  Object.entries(ALL_LINKS).forEach(([key, links]) => {
+    filteredLinks[key] = links.filter(linkFilter).map(linkMapper)
   })
 
   return {
@@ -241,6 +239,16 @@ async function go(userScopes) {
     pageTitle: 'Manage reports and notices',
     ...filteredLinks
   }
+}
+
+function makeLinkFilter(scopeFilter) {
+  return (link) => {
+    return link.featureFlagCheck() && link.scopes.some(scopeFilter)
+  }
+}
+
+function linkMapper({ name, path }) {
+  return { name, path }
 }
 
 module.exports = {

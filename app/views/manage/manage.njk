@@ -1,5 +1,7 @@
 {% extends 'layout.njk' %}
 
+{% from "macros/page-heading.njk" import pageHeading %}
+
 {% macro links(title, items) %}
   {% if items.length %}
   <h2 class="govuk-heading-m">{{ title }}</h2>
@@ -14,16 +16,15 @@
 
 {% block content %}
 
-  {# Main heading #}
-  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  {{ pageHeading(pageTitle) }}
 
-  {{ links('View reports', reports )}}
-  {{ links('Send licence notices', licenceNotifications )}}
-  {{ links('Send return notices', returnNotifications )}}
-  {{ links('Send flow notices', hofNotifications )}}
-  {{ links('Manage users', accounts )}}
-  {{ links('Billing', billing )}}
-  {{ links('View workflow', chargeInformationWorkflow )}}
-  {{ links('Upload charge information', uploadChargeInformation )}}
+  {{ links('View reports', reports) }}
+  {{ links('Send licence notices', licenceNotifications) }}
+  {{ links('Send return notices', returnNotifications) }}
+  {{ links('Send flow notices', hofNotifications) }}
+  {{ links('Manage users', accounts) }}
+  {{ links('Billing', billing) }}
+  {{ links('View workflow', chargeInformationWorkflow) }}
+  {{ links('Upload charge information', uploadChargeInformation) }}
 
 {% endblock %}
