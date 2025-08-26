@@ -9,6 +9,7 @@ const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const RecipientsAddService = require('./recipients-add.service.js')
 
 /**
  * Orchestrates fetching and determining recipients
@@ -21,25 +22,11 @@ const FetchRecipientsService = require('./fetch-recipients.service.js')
  * @returns {Promise<object[]>} - recipients
  */
 async function go(session, allRecipients = true) {
-  let recipientsData = await _recipientsData(session)
+  const recipientsData = await _recipientsData(session)
 
-  recipientsData = _additionalRecipients(recipientsData, session)
+  const recipients = RecipientsAddService.go(session, recipientsData, allRecipients)
 
-  if (allRecipients || !session.selectedRecipients) {
-    return DetermineRecipientsService.go(recipientsData)
-  }
-
-  const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
-
-  return DetermineRecipientsService.go(selectedRecipientsData)
-}
-
-function _additionalRecipients(recipientsData, session) {
-  if (session.additionalRecipients) {
-    return [...recipientsData, ...session.additionalRecipients]
-  }
-
-  return recipientsData
+  return DetermineRecipientsService.go(recipients)
 }
 
 async function _recipientsData(session) {
@@ -50,12 +37,6 @@ async function _recipientsData(session) {
   } else {
     return FetchRecipientsService.go(session)
   }
-}
-
-function _selectedRecipients(selectedRecipients, recipientsData) {
-  return recipientsData.filter((recipient) => {
-    return selectedRecipients.includes(recipient.contact_hash_id)
-  })
 }
 
 module.exports = {
