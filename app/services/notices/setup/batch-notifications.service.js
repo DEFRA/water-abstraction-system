@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
  * @module BatchNotificationsService
  */
 
@@ -18,39 +18,45 @@ const UpdateEventService = require('./update-event.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
- * Orchestrates sending notifications to notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
  *
  * This service needs to perform the following actions on a recipient:
+ *
  * - convert the recipients into notifications
  * - send the notifications to Notify
  * - save the notifications to `water.scheduled_notifications`
- * - check the status of the notifications with Notify (sent or otherwise)
- * - update the notifications status in `water.scheduled_notifications` (with the updated Notify status)
+ * - update the linked event record with the count of notifications that failed to send to Notify
  *
- * This will need to be done in batches because Notify has a rate limit (3,000 messages per minute). It also means the persisting of the notifications can use PostgreSQL's ability to batch insert (this is much greater than the Notify
- * rate limit).
+ * This needs to be done in batches because Notify has a rate limit (3,000 messages per minute).
  *
- * @param {object[]} recipients
+ * To ensure compliance, we limit our batch notification requests to 1,500 requests per minute, which is half of the
+ * Notify service's maximum allowed rate of 3,000 requests per minute. We also limit the number of batches sent per
+ * minute to 6, with a 10-second delay between each batch, to stay within this rate limit."
+ *
+ * Batching also means we can batch insert the notifications when saving to PostgreSQL.
+ *
+ * @param {object[]} recipients - The recipients to create notifications for
  * @param {SessionModel} session - The session instance
- * @param {string} eventId - the event id to link all the notifications to an event
- *
+ * @param {string} eventId - the event UUID to link all the notifications to
  */
 async function go(recipients, session, eventId) {
   const { batchSize, delay } = NotifyConfig
 
-  let error = 0
+  let totalErrorCount = 0
 
+  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
+  // to add a delay between each batch.
   for (let i = 0; i < recipients.length; i += batchSize) {
     const batchRecipients = recipients.slice(i, i + batchSize)
 
-    const batch = await _batch(batchRecipients, session, eventId)
+    const errorCount = await _batch(batchRecipients, session, eventId)
 
     await _delay(delay)
 
-    error += batch.error
+    totalErrorCount += errorCount
   }
 
-  await UpdateEventService.go(eventId, error)
+  await UpdateEventService.go(eventId, totalErrorCount)
 }
 
 async function _batch(recipients, session, eventId) {
@@ -62,101 +68,22 @@ async function _batch(recipients, session, eventId) {
     notifications = NotificationsPresenter.go(recipients, session, eventId)
   }
 
-  const toSendNotifications = _toSendNotifications(notifications)
+  const notificationsToSend = _notificationsToSend(notifications)
 
-  const sentNotifications = await _sentNotifications(toSendNotifications)
+  const sentNotifications = await _sendNotifications(notificationsToSend)
 
   await CreateNotificationsService.go(sentNotifications)
 
-  return {
-    error: _errorCount(sentNotifications)
-  }
+  return _errorCount(sentNotifications)
 }
 
 /**
- * The Notify service imposes the following rate limits:
- * 1. A maximum of 3,000 requests per minute.
- * 2. A maximum of 250 statuses returned per API call.
- *
- * To ensure we don't exceed these limits and to allow room for other parts of the system to utilize GOV.UK Notify,
- * we restrict our usage to **half** the rate limit. This means we will limit our bacth notifications requests to 1,500
- * requests per minute (3,000 / 2).
- *
- * Additionally, since the maximum number of statuses returned per API call is 250, we need to adjust our batch
- * processing mechanism to respect both rate limits:
- *
- * 1. **Requests per minute**: We are limiting ourselves to 1,500 requests per minute. Given that each status request
- * returns up to 250 statuses, this translates to a maximum of 6 batches per minute (1,500 requests / 250 statuses per
- * request = 6 batches).
- * 2. **Batch delay**: To ensure we stay within this 6-batch-per-minute constraint, we introduce a **10-second delay**
- * between each batch. This delay is calculated as:
- *    - 60 seconds (1 minute) / 6 batches = 10 seconds per batch.
- *
- * This delay ensures we don’t exceed 1,500 requests per minute, leaving enough room for other parts of the system to
- * make requests to the service.
- *
- * > The call to get the statues will count towards the rate limit. But to keep the explanation simple it has been
- * ignored. In reality the total calls per minute will be 1506 (6 additional calls to get the statues for each batch).
+ * This handles delaying sending the next batch by using a Node timeout.
  *
  * @private
  */
 async function _delay(delay) {
   return setTimeout(delay)
-}
-
-function _notification(notification, notifyResponse) {
-  delete notification.reference
-  delete notification.templateId
-
-  return {
-    ...notification,
-    ...NotifyUpdatePresenter.go(notifyResponse)
-  }
-}
-
-async function _sendLetter(notification) {
-  const notifyResponse = await NotifyLetterRequest.send(notification.templateId, {
-    personalisation: notification.personalisation,
-    reference: notification.reference
-  })
-
-  return _notification(notification, notifyResponse)
-}
-
-async function _sendEmail(notification) {
-  const notifyResponse = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
-    personalisation: notification.personalisation,
-    reference: notification.reference
-  })
-
-  return _notification(notification, notifyResponse)
-}
-
-async function _sentNotifications(toSendNotifications) {
-  const settledPromises = await Promise.allSettled(toSendNotifications)
-
-  return settledPromises.map((settledPromise) => {
-    return settledPromise.value
-  })
-}
-
-/**
- * Creates an array of promises to make requests to the relevant Notify service
- *
- * @private
- */
-function _toSendNotifications(notifications) {
-  const sentNotifications = []
-
-  for (const notification of notifications) {
-    if (notification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(notification))
-    } else {
-      sentNotifications.push(_sendLetter(notification))
-    }
-  }
-
-  return sentNotifications
 }
 
 /**
@@ -187,6 +114,69 @@ function _errorCount(notifications) {
   })
 
   return erroredNotifications.length
+}
+
+/**
+ * Creates an array of promises to make requests to the relevant Notify service
+ *
+ * @private
+ */
+function _notificationsToSend(notifications) {
+  const sentNotifications = []
+
+  for (const notification of notifications) {
+    if (notification.messageType === 'email') {
+      sentNotifications.push(_sendEmail(notification))
+    } else {
+      sentNotifications.push(_sendLetter(notification))
+    }
+  }
+
+  return sentNotifications
+}
+
+async function _sendLetter(notification) {
+  const notifyResult = await NotifyLetterRequest.send(notification.templateId, {
+    personalisation: notification.personalisation,
+    reference: notification.reference
+  })
+
+  return _sentNotification(notification, notifyResult)
+}
+
+async function _sendEmail(notification) {
+  const notifyResult = await NotifyEmailRequest.send(notification.templateId, notification.recipient, {
+    personalisation: notification.personalisation,
+    reference: notification.reference
+  })
+
+  return _sentNotification(notification, notifyResult)
+}
+
+/**
+ * This removes some properties added just for sending the notifications, and then combines the original notification
+ * with the result of the` NotifyUpdatePresenter`.
+ *
+ * The returned combination represents a 'notification' record, which the `CreateNotificationsService` can then insert
+ * 'as is'.
+ * @private
+ */
+function _sentNotification(notification, notifyResult) {
+  delete notification.reference
+  delete notification.templateId
+
+  return {
+    ...notification,
+    ...NotifyUpdatePresenter.go(notifyResult)
+  }
+}
+
+async function _sendNotifications(toSendNotifications) {
+  const settledPromises = await Promise.allSettled(toSendNotifications)
+
+  return settledPromises.map((settledPromise) => {
+    return settledPromise.value
+  })
 }
 
 module.exports = {
