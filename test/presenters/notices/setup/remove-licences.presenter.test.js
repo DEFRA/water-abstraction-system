@@ -18,6 +18,7 @@ describe('Notices - Setup - Remove licences presenter', () => {
     const result = RemoveLicencesPresenter.go(licences, referenceCode)
 
     expect(result).to.equal({
+      backLink: 'check',
       caption: 'Notice RINV-1234',
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',

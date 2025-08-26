@@ -84,6 +84,7 @@ describe('Notices - Setup - Submit Remove licences service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
+          backLink: 'check',
           caption: 'Notice RINV-123',
           error: {
             text: 'There are no returns due for licence 789'

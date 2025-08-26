@@ -8,7 +8,7 @@
 {% from 'macros/page-heading.njk' import pageHeading %}
 
 {% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: '/manage' }) }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
