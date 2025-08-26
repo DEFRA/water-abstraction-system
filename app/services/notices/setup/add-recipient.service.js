@@ -2,11 +2,12 @@
 
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
- * @module AddAdditionalRecipientService
+ * @module AddRecipientService
  */
 
 const crypto = require('crypto')
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -17,8 +18,9 @@ const SessionModel = require('../../../models/session.model.js')
  * then adds it to the additional recipients array if it exists or creates it if it doesn't.
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const additionalRecipient = {
@@ -35,14 +37,16 @@ async function go(sessionId) {
     licence_refs: session.licenceRef
   }
 
-  _addAdditionalRecipient(session, additionalRecipient)
+  _addRecipient(session, additionalRecipient)
 
   session.selectedRecipients.push(additionalRecipient.contact_hash_id)
 
   await _resetGenericAddressSupport(session)
+
+  GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 }
 
-function _addAdditionalRecipient(session, additionalRecipient) {
+function _addRecipient(session, additionalRecipient) {
   if (session.additionalRecipients) {
     session.additionalRecipients.push(additionalRecipient)
 
@@ -85,7 +89,7 @@ async function _resetGenericAddressSupport(session) {
   delete session.contactName
   delete session.contactType
 
-  session.address = { redirectUrl: `/system/notices/setup/${session.id}/check` }
+  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-recipient` }
 
   await session.$update()
 }

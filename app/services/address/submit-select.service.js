@@ -32,7 +32,6 @@ async function go(sessionId, payload) {
       await _save(session, uprnResult.matches[0])
 
       return {
-        succeeded: true,
         redirect: session.address.redirectUrl
       }
     }
@@ -46,7 +45,6 @@ async function go(sessionId, payload) {
 
   if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
-      succeeded: false,
       redirect: `/system/address/${session.id}/manual`
     }
   }
@@ -64,14 +62,17 @@ async function go(sessionId, payload) {
 async function _save(session, address) {
   session.address.uprn = address.uprn
 
-  const premiseseStreetAddress = address.premises + ' ' + address.street_address
+  const premises = address.premises ?? ''
+  const streetAddress = address.street_address ?? ''
+
+  const premisesStreetAddress = `${premises} ${streetAddress}`.trim()
 
   if (!address.organisation) {
-    session.address.addressLine1 = premiseseStreetAddress.trim()
+    session.address.addressLine1 = premisesStreetAddress
     session.address.addressLine2 = null
   } else {
     session.address.addressLine1 = address.organisation
-    session.address.addressLine2 = premiseseStreetAddress.trim()
+    session.address.addressLine2 = premisesStreetAddress
   }
 
   session.address.addressLine3 = address.locality ?? null

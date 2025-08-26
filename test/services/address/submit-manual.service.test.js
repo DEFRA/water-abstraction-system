@@ -25,7 +25,7 @@ describe('Address - Submit Manual Service', () => {
 
     session = await SessionHelper.add({ data: sessionData })
 
-    session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
+    session.address.redirectUrl = `/system/notices/setup/${session.id}/add-recipient`
 
     await session.$update()
   })
@@ -84,7 +84,7 @@ describe('Address - Submit Manual Service', () => {
       const result = await SubmitManualService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: `/system/notices/setup/${session.id}/check`
+        redirect: `/system/notices/setup/${session.id}/add-recipient`
       })
     })
   })

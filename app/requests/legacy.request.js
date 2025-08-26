@@ -7,53 +7,53 @@
 
 const BaseRequest = require('./base.request.js')
 
-const servicesConfig = require('../../config/services.config.js')
+const legacyConfig = require('../../config/legacy.config.js')
 
 const services = {
   // REPO-NAME - PM2 NAME
   // water-abstraction-service - service-background
   background: {
-    base: servicesConfig.serviceBackground.url,
+    base: legacyConfig.serviceBackground.url,
     api: 'water/1.0'
   },
   // water-abstraction-tactical-crm - tactical-crm
   crm: {
-    base: servicesConfig.tacticalCrm.url,
+    base: legacyConfig.tacticalCrm.url,
     api: 'crm/1.0'
   },
   // water-abstraction-ui - ui
   external: {
-    base: servicesConfig.externalUi.url,
+    base: legacyConfig.externalUi.url,
     api: ''
   },
   // water-abstraction-tactical-idm - tactical-idm
   idm: {
-    base: servicesConfig.tacticalIdm.url,
+    base: legacyConfig.tacticalIdm.url,
     api: 'idm/1.0'
   },
   // water-abstraction-import - import
   import: {
-    base: servicesConfig.import.url,
+    base: legacyConfig.import.url,
     api: 'import/1.0'
   },
   // water-abstraction-ui - internal-ui
   internal: {
-    base: servicesConfig.internalUi.url,
+    base: legacyConfig.internalUi.url,
     api: ''
   },
   // water-abstraction-permit-repository - permit-repository
   permits: {
-    base: servicesConfig.permitRepository.url,
+    base: legacyConfig.permitRepository.url,
     api: 'API/1.0/'
   },
   // water-abstraction-returns - returns
   returns: {
-    base: servicesConfig.returns.url,
+    base: legacyConfig.returns.url,
     api: 'returns/1.0'
   },
   // water-abstraction-service - water-api
   water: {
-    base: servicesConfig.serviceForeground.url,
+    base: legacyConfig.serviceForeground.url,
     api: 'water/1.0'
   }
 }
@@ -151,7 +151,7 @@ function _requestOptions(service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
 
   const headers = {
-    authorization: `Bearer ${servicesConfig.legacyAuthToken}`
+    authorization: `Bearer ${legacyConfig.legacyAuthToken}`
   }
 
   // NOTE: Just like in our project and water-abstraction-ui some of the internal legacy services also have an

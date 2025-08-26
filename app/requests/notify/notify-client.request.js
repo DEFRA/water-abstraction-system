@@ -10,8 +10,8 @@ const axios = require('axios')
 
 const { HttpsProxyAgent } = require('hpagent')
 
-const NotifyConfig = require('../../../config/notify.config.js')
-const RequestConfig = require('../../../config/request.config.js')
+const notifyConfig = require('../../../config/notify.config.js')
+const serverConfig = require('../../../config/server.config.js')
 
 /**
  * Creates a Notify Client
@@ -42,8 +42,8 @@ const RequestConfig = require('../../../config/request.config.js')
  * @private
  */
 function go() {
-  const notifyClient = new NotifyClient(NotifyConfig.apiKey)
-  const proxy = RequestConfig.httpProxy
+  const notifyClient = new NotifyClient(notifyConfig.apiKey)
+  const proxy = serverConfig.httpProxy
 
   if (proxy) {
     const agent = new HttpsProxyAgent({ proxy })

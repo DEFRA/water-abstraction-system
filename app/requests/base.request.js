@@ -7,7 +7,7 @@
 
 const { HttpsProxyAgent } = require('hpagent')
 
-const requestConfig = require('../../config/request.config.js')
+const serverConfig = require('../../config/server.config.js')
 
 /**
  * Returns an object containing the default options.
@@ -18,7 +18,7 @@ const requestConfig = require('../../config/request.config.js')
  * `retry` section and add our setting to it before passing it back as `additionalOptions`.
  *
  * Note that we have a function here rather than defining a const as this did not allow us to override settings using
- * Sinon to stub `requestConfig`; the const appeared to have its values fixed when the file was required, whereas a
+ * Sinon to stub `serverConfig`; the const appeared to have its values fixed when the file was required, whereas a
  * function generates its values each time it's called.
  *
  * @returns {object} default options to pass to Got when making a request
@@ -27,10 +27,10 @@ function defaultOptions() {
   return {
     // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
     // bring the result back into the top level of the `defaultOptions` object.
-    ...(requestConfig.httpProxy
+    ...(serverConfig.httpProxy
       ? {
           agent: {
-            https: new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
+            https: new HttpsProxyAgent({ proxy: serverConfig.httpProxy })
           }
         }
       : {}),
@@ -58,7 +58,7 @@ function defaultOptions() {
     //
     // > It is a good practice to set a timeout to prevent hanging requests. By default, there is no timeout set.
     timeout: {
-      request: requestConfig.timeout
+      request: serverConfig.requestTimeout
     },
     hooks: {
       beforeRetry: [_beforeRetryHook]

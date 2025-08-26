@@ -2,7 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% from "macros/licence-reference-page-heading.njk" import pageHeading %}
+{% from "macros/page-heading.njk" import pageHeading %}
 
 {% block breadcrumbs %}
   {{
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content %}
-  {{ pageHeading(licenceRef, pageTitle) }}
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
 
   <p class="govuk-!-margin-bottom-7 govuk-!-margin-top-7 govuk-!-font-weight-bold govuk-!-font-size-27">{{ returnRequirement }}</p>
 

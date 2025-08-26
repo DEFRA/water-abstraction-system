@@ -53,7 +53,7 @@ describe('Address - Submit Select Service', () => {
       data: {
         address: {
           postcode: 'BS1 5AH',
-          redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+          redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
         }
       }
     })
@@ -96,7 +96,7 @@ describe('Address - Submit Select Service', () => {
         addressLine3: null,
         addressLine4: 'BRISTOL',
         postcode: 'BS1 5AH',
-        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
       })
     })
 
@@ -104,8 +104,7 @@ describe('Address - Submit Select Service', () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
-        succeeded: true
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
       })
     })
   })
@@ -140,7 +139,7 @@ describe('Address - Submit Select Service', () => {
         addressLine3: 'VILLAGE GREEN',
         addressLine4: 'BRISTOL',
         postcode: 'BS1 5AH',
-        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check'
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
       })
     })
 
@@ -148,8 +147,103 @@ describe('Address - Submit Select Service', () => {
       const result = await SubmitSelectService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/check',
-        succeeded: true
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
+      })
+    })
+  })
+
+  describe('when an address has been selected without a premises', () => {
+    beforeEach(async () => {
+      payload = {
+        addresses: '340116'
+      }
+
+      const noPremises = {
+        ...matchWithoutOrganisation,
+        premises: null
+      }
+
+      getByUPRNStub.resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            results: [noPremises]
+          }
+        },
+        matches: [noPremises]
+      })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitSelectService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.data.address).to.equal({
+        uprn: 340116,
+        addressLine1: 'DEANERY ROAD',
+        addressLine2: null,
+        addressLine3: 'VILLAGE GREEN',
+        addressLine4: 'BRISTOL',
+        postcode: 'BS1 5AH',
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
+      })
+    })
+
+    it('continues on the journey', async () => {
+      const result = await SubmitSelectService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
+      })
+    })
+  })
+
+  describe('when an address has been selected without a street_address', () => {
+    beforeEach(async () => {
+      payload = {
+        addresses: '340116'
+      }
+
+      const noPremises = {
+        ...matchWithoutOrganisation,
+        street_address: null
+      }
+
+      getByUPRNStub.resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            results: [noPremises]
+          }
+        },
+        matches: [noPremises]
+      })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitSelectService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.data.address).to.equal({
+        uprn: 340116,
+        addressLine1: 'HORIZON HOUSE',
+        addressLine2: null,
+        addressLine3: 'VILLAGE GREEN',
+        addressLine4: 'BRISTOL',
+        postcode: 'BS1 5AH',
+        redirectUrl: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
+      })
+    })
+
+    it('continues on the journey', async () => {
+      const result = await SubmitSelectService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirect: '/system/notices/setup/0793ca8d-9a30-4ce6-92d8-6149b44a1b1d/add-recipient'
       })
     })
   })
@@ -279,8 +373,7 @@ describe('Address - Submit Select Service', () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: `/system/address/${session.id}/manual`,
-          succeeded: false
+          redirect: `/system/address/${session.id}/manual`
         })
       })
     })
@@ -301,8 +394,7 @@ describe('Address - Submit Select Service', () => {
         const result = await SubmitSelectService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: `/system/address/${session.id}/manual`,
-          succeeded: false
+          redirect: `/system/address/${session.id}/manual`
         })
       })
     })

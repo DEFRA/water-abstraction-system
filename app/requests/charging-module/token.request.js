@@ -7,7 +7,7 @@
 
 const BaseRequest = require('../base.request.js')
 
-const servicesConfig = require('../../../config/services.config.js')
+const config = require('../../../config/charging-module.config.js')
 
 /**
  * Connects with the Charging Module API's Cognito service to get a JWT for authentication
@@ -15,7 +15,7 @@ const servicesConfig = require('../../../config/services.config.js')
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future Charging Module requests
  */
 async function send() {
-  const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
+  const url = new URL('/oauth2/token', config.token.url)
 
   const result = await BaseRequest.post(url.href, _options())
 
@@ -35,9 +35,7 @@ function _options() {
 }
 
 function _encodeAuthorisation() {
-  const keys = Buffer.from(
-    `${servicesConfig.chargingModule.token.username}:${servicesConfig.chargingModule.token.password}`
-  )
+  const keys = Buffer.from(`${config.token.username}:${config.token.password}`)
 
   return keys.toString('base64')
 }

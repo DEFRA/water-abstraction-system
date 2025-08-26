@@ -11,7 +11,7 @@ const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
 const { NodeHttpHandler } = require('@smithy/node-http-handler')
 const path = require('path')
 
-const requestConfig = require('../../../../config/request.config.js')
+const serverConfig = require('../../../../config/server.config.js')
 const S3Config = require('../../../../config/s3.config.js')
 
 /**
@@ -45,10 +45,10 @@ function _customConfig() {
     requestHandler: new NodeHttpHandler({
       // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread
       // operator to bring the result back into the top level of the `customConfig` object.
-      ...(requestConfig.httpProxy
+      ...(serverConfig.httpProxy
         ? {
-            httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
-            httpAgent: new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+            httpsAgent: new HttpsProxyAgent({ proxy: serverConfig.httpProxy }),
+            httpAgent: new HttpProxyAgent({ proxy: serverConfig.httpProxy })
           }
         : {}),
       connectionTimeout: 10000

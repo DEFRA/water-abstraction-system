@@ -26,19 +26,19 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
-  }
-
-  const _submittedData = {
-    id: session.id,
-    address: {
-      international: {
-        ...payload
-      }
+    return {
+      redirect: session.address.redirectUrl
     }
   }
 
-  const pageData = InternationalPresenter.go(_submittedData)
+  const submittedData = {
+    id: session.id,
+    address: {
+      ...payload
+    }
+  }
+
+  const pageData = InternationalPresenter.go(submittedData)
 
   return {
     error: validationResult,
@@ -47,13 +47,12 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.address.international = {}
-  session.address.international.addressLine1 = payload.addressLine1
-  session.address.international.addressLine2 = payload.addressLine2 ?? null
-  session.address.international.addressLine3 = payload.addressLine3 ?? null
-  session.address.international.addressLine4 = payload.addressLine4 ?? null
-  session.address.international.country = payload.country
-  session.address.international.postcode = payload.postcode ?? null
+  session.address.addressLine1 = payload.addressLine1
+  session.address.addressLine2 = payload.addressLine2 ?? null
+  session.address.addressLine3 = payload.addressLine3 ?? null
+  session.address.addressLine4 = payload.addressLine4 ?? null
+  session.address.country = payload.country
+  session.address.postcode = payload.postcode ?? null
 
   return session.$update()
 }

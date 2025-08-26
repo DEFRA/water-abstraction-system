@@ -10,7 +10,7 @@ const routes = [
       handler: NoticesSetupController.setup,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -22,7 +22,7 @@ const routes = [
       handler: NoticesSetupController.downloadRecipients,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -34,7 +34,7 @@ const routes = [
       handler: NoticesSetupController.viewAlertEmailAddress,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -46,7 +46,7 @@ const routes = [
       handler: NoticesSetupController.submitAlertEmailAddress,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -58,7 +58,7 @@ const routes = [
       handler: NoticesSetupController.viewAlertType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -70,7 +70,7 @@ const routes = [
       handler: NoticesSetupController.submitAlertType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -82,7 +82,7 @@ const routes = [
       handler: NoticesSetupController.viewAlertThresholds,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -94,7 +94,7 @@ const routes = [
       handler: NoticesSetupController.viewCancelAlerts,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -106,7 +106,7 @@ const routes = [
       handler: NoticesSetupController.submitCancelAlerts,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -118,7 +118,7 @@ const routes = [
       handler: NoticesSetupController.submitAlertThresholds,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -130,7 +130,7 @@ const routes = [
       handler: NoticesSetupController.viewCheckLicenceMatches,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -142,7 +142,7 @@ const routes = [
       handler: NoticesSetupController.submitCheckLicenceMatches,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -154,7 +154,7 @@ const routes = [
       handler: NoticesSetupController.viewRemoveThreshold,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -190,7 +190,7 @@ const routes = [
       handler: NoticesSetupController.viewCancel,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -202,7 +202,7 @@ const routes = [
       handler: NoticesSetupController.submitCancel,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -214,7 +214,7 @@ const routes = [
       handler: NoticesSetupController.viewCheck,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -226,7 +226,7 @@ const routes = [
       handler: NoticesSetupController.submitCheck,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -250,7 +250,7 @@ const routes = [
       handler: NoticesSetupController.viewConfirmation,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -272,6 +272,18 @@ const routes = [
     path: '/notices/setup/{sessionId}/notice-type',
     options: {
       handler: NoticesSetupController.submitNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms',
+    options: {
+      handler: NoticesSetupController.viewCheckReturnForms,
       auth: {
         access: {
           scope: ['returns']
@@ -310,7 +322,7 @@ const routes = [
       handler: NoticesSetupController.preview,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -322,7 +334,7 @@ const routes = [
       handler: NoticesSetupController.checkAlert,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -358,7 +370,7 @@ const routes = [
       handler: NoticesSetupController.viewReturnsPeriod,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -430,7 +442,7 @@ const routes = [
       handler: NoticesSetupController.viewSelectRecipients,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -442,7 +454,19 @@ const routes = [
       handler: NoticesSetupController.submitSelectRecipients,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/add-recipient',
+    options: {
+      handler: NoticesSetupController.addRecipient,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
         }
       }
     }

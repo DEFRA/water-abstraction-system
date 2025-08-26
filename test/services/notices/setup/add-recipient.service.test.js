@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -12,12 +13,13 @@ const AddressHelper = require('../../../support/helpers/address.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const AddAdditionalRecipientService = require('../../../../app/services/notices/setup/add-additional-recipient.service.js')
+const AddRecipientService = require('../../../../app/services/notices/setup/add-recipient.service.js')
 
-describe('Notices - Setup - Add Additional Recipient service', () => {
+describe('Notices - Setup - Add Recipient service', () => {
   let contactHashId
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     sessionData = {
@@ -44,13 +46,18 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: sessionData })
+          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddAdditionalRecipientService.go(session.id)
+          await AddRecipientService.go(session.id, yarStub)
 
           const refreshedSession = await session.$query()
 
+          const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -66,6 +73,7 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
         })
       })
 
@@ -88,13 +96,18 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
 
           session = await SessionHelper.add({ data: sessionData })
+          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddAdditionalRecipientService.go(session.id)
+          await AddRecipientService.go(session.id, yarStub)
 
           const refreshedSession = await session.$query()
 
+          const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -122,6 +135,7 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
         })
       })
     })
@@ -140,13 +154,18 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: sessionData })
+          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddAdditionalRecipientService.go(session.id)
+          await AddRecipientService.go(session.id, yarStub)
 
           const refreshedSession = await session.$query()
 
+          const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -160,6 +179,7 @@ describe('Notices - Setup - Add Additional Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
+          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
         })
       })
     })

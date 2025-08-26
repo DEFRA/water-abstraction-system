@@ -11,7 +11,6 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AddAdditionalRecipientService = require('../../app/services/notices/setup/add-additional-recipient.service.js')
 const InternationalAddressService = require('../../app/services/address/international.service.js')
 const ManualAddressService = require('../../app/services/address/manual.service.js')
 const PostcodeService = require('../../app/services/address/postcode.service.js')
@@ -156,17 +155,17 @@ describe('Address controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(SubmitSelectAddressService, 'go').returns({
-            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check',
-            succeeded: true
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
-          Sinon.stub(AddAdditionalRecipientService, 'go')
         })
 
-        it('redirects to the check page', async () => {
+        it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+          expect(response.headers.location).to.equal(
+            `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
+          )
         })
       })
 
@@ -176,7 +175,6 @@ describe('Address controller', () => {
             const pageData = _selectPageData(true)
 
             Sinon.stub(SubmitSelectAddressService, 'go').returns(pageData)
-            Sinon.stub(AddAdditionalRecipientService, 'go')
           })
 
           it('re-renders the select page with an error', async () => {
@@ -192,8 +190,7 @@ describe('Address controller', () => {
         describe('and we do not get any resutls back from the postcode lookup', () => {
           beforeEach(() => {
             Sinon.stub(SubmitSelectAddressService, 'go').returns({
-              redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual',
-              succeeded: false
+              redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
             })
           })
 
@@ -224,7 +221,6 @@ describe('Address controller', () => {
       describe('when addresses are found', () => {
         beforeEach(() => {
           Sinon.stub(ManualAddressService, 'go').returns({})
-          Sinon.stub(AddAdditionalRecipientService, 'go')
         })
 
         it('returns the page successfully', async () => {
@@ -243,16 +239,17 @@ describe('Address controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(SubmitManualAddressService, 'go').returns({
-            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check'
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
-          Sinon.stub(AddAdditionalRecipientService, 'go')
         })
 
-        it('redirects to the check page', async () => {
+        it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+          expect(response.headers.location).to.equal(
+            `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
+          )
         })
       })
 
@@ -308,14 +305,18 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternationalAddressService, 'go').returns({})
+          Sinon.stub(SubmitInternationalAddressService, 'go').returns({
+            redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
+          })
         })
 
-        it('redirects to the check page', async () => {
+        it('redirects to the redirectUrl page', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/check`)
+          expect(response.headers.location).to.equal(
+            `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
+          )
         })
       })
 

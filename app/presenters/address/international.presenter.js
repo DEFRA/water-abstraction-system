@@ -18,29 +18,29 @@ function go(session) {
   const { address, id } = session
 
   return {
-    addressLine1: address?.international?.addressLine1 ?? null,
-    addressLine2: address?.international?.addressLine2 ?? null,
-    addressLine3: address?.international?.addressLine3 ?? null,
-    addressLine4: address?.international?.addressLine4 ?? null,
+    addressLine1: address?.addressLine1 ?? null,
+    addressLine2: address?.addressLine2 ?? null,
+    addressLine3: address?.addressLine3 ?? null,
+    addressLine4: address?.addressLine4 ?? null,
     backLink: `/system/address/${id}/postcode`,
-    country: _countries(address?.international?.country),
+    country: _countries(address?.country),
     pageTitle: 'Enter the international address',
-    postcode: address?.international?.postcode ?? null
+    postcode: address?.postcode ?? null
   }
 }
 
-function _countries(savedCountry) {
+function _countries(value = 'select') {
   const displayCountries = countries.map((country) => {
     return {
       value: country,
-      selected: savedCountry === country,
+      selected: value === country,
       text: country
     }
   })
 
   displayCountries.unshift({
     value: 'select',
-    selected: savedCountry !== 'select',
+    selected: value === 'select',
     text: 'Select a country'
   })
 
