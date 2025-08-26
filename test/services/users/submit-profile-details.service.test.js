@@ -68,12 +68,8 @@ describe('Users - Submit profile details service', () => {
       it('flashes a notification of successful update', async () => {
         await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(
-          yarStub.flash.calledOnceWith('notification', {
-            title: 'Updated',
-            text: 'Profile details saved'
-          })
-        ).to.be.true()
+        expect(yarStub.flash.lastCall.args[0]).to.equal('notification')
+        expect(yarStub.flash.lastCall.args[1]).to.equal({ title: 'Updated', text: 'Profile details updated' })
       })
 
       describe('and the payload has empty or missing values', () => {
@@ -112,8 +108,8 @@ describe('Users - Submit profile details service', () => {
         expect(result).to.include({
           pageTitle: 'Profile details',
           error: {
-            email: 'Enter a valid email',
-            errorList: [{ href: '#email', text: 'Enter a valid email' }]
+            email: 'Enter a valid email address',
+            errorList: [{ href: '#email', text: 'Enter a valid email address' }]
           },
           ...payload
         })

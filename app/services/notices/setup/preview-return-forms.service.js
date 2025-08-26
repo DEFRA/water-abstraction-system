@@ -26,12 +26,6 @@ async function go(sessionId, contactHashId, returnId) {
 
   const [recipient] = await _recipient(session, contactHashId)
 
-  // We need to implement an intermediary page to allow the user to select which return id they want to 'preview'.
-  // For now, we add the 'placeHolder' to highlight this is a temporary measure and needs to change.
-  if (returnId === 'placeHolder') {
-    returnId = session.selectedReturns[0]
-  }
-
   return PrepareReturnFormsService.go(session, returnId, recipient)
 }
 
