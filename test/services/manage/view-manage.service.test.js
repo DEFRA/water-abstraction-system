@@ -55,7 +55,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns the details for the manage page with no available links', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(result).to.equal({
           accounts: [],
@@ -77,7 +77,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: Digitise! report and KPIs', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Digitise!', path: '/digitise/report' },
@@ -92,7 +92,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: KPIs', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([{ name: 'Key performance indicators', path: '/reporting/kpi-reporting' }])
       })
@@ -104,7 +104,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: notices, KPIs, return invitations and return reminders notifications', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Notices', path: '/notifications/report' },
@@ -121,7 +121,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: check licences', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Check licences in workflow', path: '/charge-information-workflow' }
@@ -135,7 +135,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: upload a file and check licences', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Check licences in workflow', path: '/charge-information-workflow' }
@@ -149,7 +149,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: all HoF notifications, notices and KPIs', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Restriction', path: 'notifications/1?start=1' },
@@ -167,7 +167,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: KPIs and create account', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Create an internal account', path: '/account/create-user' },
@@ -182,7 +182,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: renewals, notices and KPIs', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Renewal', path: 'notifications/2?start=1' },
@@ -198,7 +198,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns: notices, returns cycles, KPIs and paper forms', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.equal([
           { name: 'Notices', path: '/notifications/report' },
@@ -217,7 +217,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns the system notices link instead of the notifications report link', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
         const allReturnedLinks = allLinks(result)
 
         expect(allReturnedLinks).to.not.contain([{ name: 'Notices', path: '/notifications/report' }])
@@ -233,7 +233,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns the system invitation and reminder links instead of the notifications links', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
         const allReturnedLinks = allLinks(result)
 
         expect(allReturnedLinks).to.not.contain([{ name: 'Invitations', path: '/returns-notifications/invitations' }])
@@ -256,7 +256,7 @@ describe('Manage - View service', () => {
       })
 
       it('returns the ad hoc notifications link', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.contain([{ name: 'Ad-hoc', path: '/system/notices/setup/adhoc' }])
       })
@@ -270,24 +270,9 @@ describe('Manage - View service', () => {
       })
 
       it('returns the upload file link', async () => {
-        const result = await ViewManageService.go(userScopes)
+        const result = await ViewManageService.go({ credentials: { scope: userScopes } })
 
         expect(allLinks(result)).to.contain([{ name: 'Upload a file', path: '/charge-information/upload' }])
-      })
-    })
-
-    describe('with only a single scope as a string', () => {
-      beforeEach(() => {
-        userScopes = 'ar_approver' // scope is a string rather than an array
-      })
-
-      it('returns: Digitise! report and KPIs', async () => {
-        const result = await ViewManageService.go(userScopes)
-
-        expect(allLinks(result)).to.equal([
-          { name: 'Digitise!', path: '/digitise/report' },
-          { name: 'Key performance indicators', path: '/reporting/kpi-reporting' }
-        ])
       })
     })
   })
