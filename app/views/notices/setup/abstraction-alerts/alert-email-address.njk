@@ -20,10 +20,12 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [{
-        text: error.text,
-        href: anchor
-      }]
+      errorList: [
+        {
+          text: error.text,
+          href: anchor
+        }
+      ]
     }) }}
   {% endif %}
 

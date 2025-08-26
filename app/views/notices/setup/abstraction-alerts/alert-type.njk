@@ -19,10 +19,12 @@
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [{
-        text: error.text,
-        href: '#alert-type'
-      }]
+      errorList: [
+        {
+          text: error.text,
+          href: '#alert-type'
+        }
+      ]
     }) }}
   {% endif %}
 
