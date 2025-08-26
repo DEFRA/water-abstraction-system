@@ -1,0 +1,84 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Things we need to stub
+const BaseRequest = require('../../../app/requests/base.request.js')
+
+// Thing under test
+const ViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
+
+describe('Address Facade - View Status request', () => {
+  let response
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when the request succeeds', () => {
+    beforeEach(() => {
+      response = {
+        statusCode: 200,
+        body: 'hola'
+      }
+
+      Sinon.stub(BaseRequest, 'get').resolves({
+        succeeded: true,
+        response
+      })
+    })
+
+    it('returns a "true" success status', async () => {
+      const result = await ViewStatusRequest.send()
+
+      expect(result.succeeded).to.be.true()
+    })
+
+    it('returns the result from Gotenberg in the "response"', async () => {
+      const result = await ViewStatusRequest.send()
+
+      expect(result.response.body).to.equal(response.body)
+    })
+  })
+
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 404,
+          body: {
+            facade_status_code: 404,
+            facade_error_message: 'HTTP 404 Not Found',
+            facade_error_code: 'address_service_error_11',
+            supplier_was_called: null,
+            supplier_status_code: null,
+            supplier_response: null
+          }
+        }
+
+        Sinon.stub(BaseRequest, 'get').resolves({
+          succeeded: false,
+          response
+        })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await ViewStatusRequest.send()
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await ViewStatusRequest.send()
+
+        expect(result.response.body).to.equal(response.body)
+      })
+    })
+  })
+})
