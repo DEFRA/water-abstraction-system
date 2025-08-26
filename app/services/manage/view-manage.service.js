@@ -190,9 +190,12 @@ async function go(userAuth) {
  */
 function _makeLinkFilter(userScopes) {
   return (link) => {
-    return link.featureFlagCheck() && link.scopes.some((linkScope) => {
-      return userScopes.includes(linkScope)
-    })
+    return (
+      link.featureFlagCheck() &&
+      link.scopes.some((linkScope) => {
+        return userScopes.includes(linkScope)
+      })
+    )
   }
 }
 
@@ -200,6 +203,8 @@ function _makeLinkFilter(userScopes) {
  * Maps the link object to a simpler format for the view
  *
  * @param {object} link - The link object
+ * @param {object} link.name - The link name
+ * @param {object} link.path - The link path
  *
  * @returns {object} The mapped link object
  */
