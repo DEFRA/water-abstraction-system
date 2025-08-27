@@ -14,6 +14,8 @@ const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.serv
 const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+
 const notifyConfig = require('../../../../config/notify.config.js')
 
 /**
@@ -41,21 +43,29 @@ const notifyConfig = require('../../../../config/notify.config.js')
  * later.
  */
 async function go() {
-  const { batchSize, delay } = notifyConfig
+  try {
+    const startTime = currentTimeInNanoseconds()
 
-  const notifications = await FetchNotificationsService.go()
+    const { batchSize, delay } = notifyConfig
 
-  for (let i = 0; i < notifications.length; i += batchSize) {
-    const batchNotifications = notifications.slice(i, i + batchSize)
+    const notifications = await FetchNotificationsService.go()
 
-    const updatedNotifications = await _batch(batchNotifications)
+    for (let i = 0; i < notifications.length; i += batchSize) {
+      const batchNotifications = notifications.slice(i, i + batchSize)
 
-    await UpdateAbstractionAlertsService.go(updatedNotifications)
+      const updatedNotifications = await _batch(batchNotifications)
 
-    await _delay(delay)
+      await UpdateAbstractionAlertsService.go(updatedNotifications)
+
+      await _delay(delay)
+    }
+
+    await _updateEventErrorCount(notifications)
+
+    calculateAndLogTimeTaken(startTime, 'Notification status job complete', { count: notifications.length })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Notification status job failed', null, error)
   }
-
-  await _updateEventErrorCount(notifications)
 }
 
 async function _batch(notifications) {
