@@ -5,7 +5,9 @@
  * @module ViewHealthRequest
  */
 
-const GotenbergRequest = require('../gotenberg.request.js')
+const BaseRequest = require('../base.request.js')
+
+const gotenbergConfig = require('../../../config/gotenberg.config.js')
 
 /**
  * View the health of Gotenberg service
@@ -13,9 +15,9 @@ const GotenbergRequest = require('../gotenberg.request.js')
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send() {
-  const path = 'health'
+  const statusUrl = new URL('/health', gotenbergConfig.url)
 
-  return GotenbergRequest.get(path)
+  return BaseRequest.get(statusUrl.href, { responseType: 'json' })
 }
 
 module.exports = {

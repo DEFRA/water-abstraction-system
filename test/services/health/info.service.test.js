@@ -38,7 +38,7 @@ describe('Health - Info service', () => {
     },
     gotenberg: {
       succeeded: true,
-      response: { body: JSON.stringify({ status: 'up', details: { chromium: { status: 'up' } } }) }
+      response: { body: { status: 'up', details: { chromium: { status: 'up' } } } }
     },
     notify: {
       succeeded: true,

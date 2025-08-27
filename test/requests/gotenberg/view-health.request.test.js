@@ -9,13 +9,18 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
+const BaseRequest = require('../../../app/requests/base.request.js')
+const gotenbergConfig = require('../../../config/gotenberg.config.js')
 
 // Thing under test
 const ViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
 
 describe('Gotenberg - View Health request', () => {
   let response
+
+  beforeEach(() => {
+    Sinon.stub(gotenbergConfig, 'url').value('http://localhost:8040')
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -40,7 +45,7 @@ describe('Gotenberg - View Health request', () => {
         }
       }
 
-      Sinon.stub(GotenbergRequest, 'get').resolves({
+      Sinon.stub(BaseRequest, 'get').withArgs('http://localhost:8040/health', { responseType: 'json' }).resolves({
         succeeded: true,
         response
       })
@@ -67,7 +72,7 @@ describe('Gotenberg - View Health request', () => {
           body: 'Not Found'
         }
 
-        Sinon.stub(GotenbergRequest, 'get').resolves({
+        Sinon.stub(BaseRequest, 'get').withArgs('http://localhost:8040/health', { responseType: 'json' }).resolves({
           succeeded: false,
           response
         })

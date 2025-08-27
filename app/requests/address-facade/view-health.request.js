@@ -23,7 +23,7 @@ const addressFacadeConfig = require('../../../config/address-facade.config.js')
 async function send() {
   const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
 
-  return BaseRequest.get(statusUrl.href)
+  return BaseRequest.get(statusUrl.href, { responseType: 'text' })
 }
 
 module.exports = {
