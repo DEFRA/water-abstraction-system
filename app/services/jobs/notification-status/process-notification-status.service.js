@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
- * @module NotificationsStatusUpdatesService
+ * @module ProcessNotificationStatusService
  */
 
 const { setTimeout } = require('node:timers/promises')
