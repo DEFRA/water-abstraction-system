@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const addressFacadeConfig = require('../../../config/address-facade.config.js')
 const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
@@ -16,6 +17,10 @@ const ViewHealthRequest = require('../../../app/requests/address-facade/view-hea
 
 describe('Address Facade - View Health request', () => {
   let response
+
+  beforeEach(() => {
+    Sinon.stub(addressFacadeConfig, 'url').value('http://localhost:8009')
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -28,10 +33,12 @@ describe('Address Facade - View Health request', () => {
         body: 'hola'
       }
 
-      Sinon.stub(BaseRequest, 'get').resolves({
-        succeeded: true,
-        response
-      })
+      Sinon.stub(BaseRequest, 'get')
+        .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
+        .resolves({
+          succeeded: true,
+          response
+        })
     })
 
     it('returns a "true" success status', async () => {
@@ -62,10 +69,12 @@ describe('Address Facade - View Health request', () => {
           }
         }
 
-        Sinon.stub(BaseRequest, 'get').resolves({
-          succeeded: false,
-          response
-        })
+        Sinon.stub(BaseRequest, 'get')
+          .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
+          .resolves({
+            succeeded: false,
+            response
+          })
       })
 
       it('returns a "false" success status', async () => {
