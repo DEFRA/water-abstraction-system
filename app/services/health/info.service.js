@@ -11,7 +11,7 @@ const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
 const AddressFacadeViewStatusRequest = require('../../requests/address-facade/view-status.request.js')
-const ChargingModuleRequest = require('../../requests/charging-module.request.js')
+const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
@@ -108,7 +108,7 @@ async function _getLegacyAppData() {
 }
 
 async function _getChargingModuleData() {
-  const result = await ChargingModuleRequest.get('status')
+  const result = await ChargingModuleViewHealthRequest.send()
 
   if (result.succeeded) {
     return result.response.info.dockerTag
