@@ -83,8 +83,8 @@ async function _gotenbergData() {
   const result = await GotenbergViewHealthRequest.send()
 
   if (result.succeeded) {
-    const response = JSON.parse(result.response.body)
-    return `${sentenceCase(response.status)} - Chromium ${sentenceCase(response.details.chromium.status)}`
+    const body = result.response.body
+    return `${sentenceCase(body.status)} - Chromium ${sentenceCase(body.details.chromium.status)}`
   }
 
   return _parseFailedRequestResult(result)
