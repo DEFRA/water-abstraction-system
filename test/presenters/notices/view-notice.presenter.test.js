@@ -7,6 +7,7 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
 const EventModel = require('../../../app/models/event.model.js')
 
 // Thing under test
