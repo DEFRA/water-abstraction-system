@@ -1,57 +1,62 @@
 'use strict'
 
 /**
- * Fetches the notices for the 'notices/{id}' page
- * @module FetchNoticesService
+ * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
+ * @module FetchNoticeService
  */
 
 const { db } = require('../../../db/db.js')
 const EventModel = require('../../models/event.model.js')
 
 /**
- * Fetches the notice for the 'notices/{id}' page
+ * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  *
- * @param {string} id - the id of the scheduled notification to look up
+ * @param {string} noticeId - the UUID of the selected notice
  *
- * @returns {Promise<object[]>} an array of matching notices
+ * @returns {Promise<object>} the notice and its associated notifications
  */
-async function go(id) {
-  const event = await EventModel.query()
-    .findById(id)
-    .select(['id', 'referenceCode', 'issuer', 'createdAt', 'status', 'subtype'])
+async function go(noticeId) {
+  const notice = await EventModel.query()
+    .findById(noticeId)
+    .select(['createdAt', 'id', 'issuer', 'referenceCode', 'status', 'subtype'])
 
-  if (!event) {
-    return undefined
-  }
-
-  const scheduledNotifications = await _query(id)
+  const notifications = await _fetch(noticeId)
 
   return {
-    event,
-    results: scheduledNotifications.rows
+    notice,
+    notifications
   }
 }
 
-function _query(id) {
+async function _fetch(noticeId) {
+  const params = [noticeId]
   const query = `
-  SELECT * FROM (
     SELECT
-      (CASE
-          WHEN sn.message_type = 'email' THEN sn.recipient
-          ELSE sn.personalisation->>'address_line_1'
-      END) AS recipient_name,
-      sn.licences,
-      sn.message_type,
-      sn.personalisation,
-      sn.recipient,
-      sn.status
-    FROM water.scheduled_notification sn
-    where sn.event_id = '${id}'
-  ) notice_notifcations
-  ORDER BY recipient_name ASC;
+      *
+    FROM (
+      SELECT
+        n.id,
+        (CASE
+          WHEN n.message_type = 'email' THEN n.recipient
+          ELSE n.personalisation->>'address_line_1'
+        END) AS "recipientName",
+        n.licences,
+        n.message_type AS "messageType",
+        n.notify_status AS "notifyStatus",
+        n.personalisation,
+        n.status
+      FROM
+        public.notifications n
+      WHERE
+        n.event_id = ?
+    ) notice_notifications
+    ORDER BY
+      notice_notifications."recipientName" ASC;
   `
 
-  return db.raw(query)
+  const result = await db.raw(query, params)
+
+  return result.rows
 }
 
 module.exports = {
