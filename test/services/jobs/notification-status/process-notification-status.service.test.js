@@ -13,27 +13,36 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
+const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const ViewMessageDataRequest = require('../../../../app/requests/notify/view-message-data.request.js')
 
 // Thing under test
-const NotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
+const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
-describe('Job - Notifications - Notifications Status Updates service', () => {
+describe('Job - Notifications - Process Notification Status service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
 
   let event
   let notification
+  let notifierStub
   let response
 
   beforeEach(async () => {
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly. We do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
+
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the request to Notify for the message details is successful', () => {
@@ -78,8 +87,8 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
           })
         })
 
-        it('updates the matching notification record', { timeout: 3000 }, async () => {
-          await NotificationsStatusUpdatesService.go()
+        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
+          await ProcessNotificationStatusService.go()
 
           const refreshedNotification = await notification.$query()
 
@@ -100,6 +109,13 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
             },
             { skip: ['createdAt'] }
           )
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.count).to.exist()
         })
       })
 
@@ -131,8 +147,8 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
           })
         })
 
-        it('updates the matching notification record', { timeout: 3000 }, async () => {
-          await NotificationsStatusUpdatesService.go()
+        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
+          await ProcessNotificationStatusService.go()
 
           const refreshedNotification = await notification.$query()
 
@@ -156,6 +172,13 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
             },
             { skip: ['createdAt'] }
           )
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.count).to.exist()
         })
       })
     })
@@ -197,7 +220,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
       })
 
       it('updates the matching notification record and updates the event error count', { timeout: 3000 }, async () => {
-        await NotificationsStatusUpdatesService.go()
+        await ProcessNotificationStatusService.go()
 
         const refreshedNotification = await notification.$query()
 
@@ -282,7 +305,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
     })
 
     it('does not update the matching notification record or the event error count', async () => {
-      await NotificationsStatusUpdatesService.go()
+      await ProcessNotificationStatusService.go()
 
       const refreshedNotification = await notification.$query()
 
@@ -320,6 +343,22 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
         },
         { skip: ['createdAt', 'updatedAt'] }
       )
+    })
+  })
+
+  describe('when there is an error', () => {
+    beforeEach(() => {
+      Sinon.stub(FetchNotificationsService, 'go').rejects()
+    })
+
+    it('handles the error', async () => {
+      await ProcessNotificationStatusService.go()
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Notification status job failed')
+      expect(args[1]).to.be.null()
+      expect(args[2]).to.be.an.error()
     })
   })
 })

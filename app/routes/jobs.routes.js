@@ -61,9 +61,23 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/notification-status',
+    options: {
+      handler: JobsController.notificationStatus,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/notifications-status-updates',
     options: {
-      handler: JobsController.notificationsStatusUpdates,
+      handler: JobsController.notificationStatus,
       app: {
         plainOutput: true
       },
