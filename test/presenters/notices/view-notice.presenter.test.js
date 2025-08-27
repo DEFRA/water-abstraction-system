@@ -74,6 +74,7 @@ describe('Notices - View Notice presenter', () => {
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',
         pageTitle: 'Returns invitations',
+        pageTitleCaption: 'Notice PRTF-VPV3J9',
         notices: [
           {
             recipient: [
@@ -130,6 +131,7 @@ describe('Notices - View Notice presenter', () => {
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',
         pageTitle: 'Returns invitations',
+        pageTitleCaption: 'Notice PRTF-VPV3J9',
         notices: [
           {
             recipient: [
