@@ -10,15 +10,13 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const BaseRequest = require('../../requests/base.request.js')
+const AddressFacadeViewStatusRequest = require('../../requests/address-facade/view-status.request.js')
 const ChargingModuleRequest = require('../../requests/charging-module.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
 const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
-
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
 
 /**
  * Checks status and gathers info for each of the services which make up WRLS
@@ -59,8 +57,7 @@ async function _addSystemInfoToLegacyAppData(appData) {
 }
 
 async function _getAddressFacadeData() {
-  const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
-  const result = await BaseRequest.get(statusUrl.href)
+  const result = await AddressFacadeViewStatusRequest.send()
 
   if (result.succeeded) {
     return result.response.body

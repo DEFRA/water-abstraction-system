@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
+const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
+const ViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
 
-describe('Gotenberg - View Health request', () => {
+describe('Address Facade - View Status request', () => {
   let response
 
   afterEach(() => {
@@ -25,35 +25,23 @@ describe('Gotenberg - View Health request', () => {
     beforeEach(() => {
       response = {
         statusCode: 200,
-        body: {
-          status: 'up',
-          details: {
-            chromium: {
-              status: 'up',
-              timestamp: '2025-08-26T23:21:08.772604834Z'
-            },
-            libreoffice: {
-              status: 'up',
-              timestamp: '2025-08-26T23:21:08.772586125Z'
-            }
-          }
-        }
+        body: 'hola'
       }
 
-      Sinon.stub(GotenbergRequest, 'get').resolves({
+      Sinon.stub(BaseRequest, 'get').resolves({
         succeeded: true,
         response
       })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewStatusRequest.send()
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Gotenberg in the "response"', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewStatusRequest.send()
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -64,23 +52,30 @@ describe('Gotenberg - View Health request', () => {
       beforeEach(async () => {
         response = {
           statusCode: 404,
-          body: 'Not Found'
+          body: {
+            facade_status_code: 404,
+            facade_error_message: 'HTTP 404 Not Found',
+            facade_error_code: 'address_service_error_11',
+            supplier_was_called: null,
+            supplier_status_code: null,
+            supplier_response: null
+          }
         }
 
-        Sinon.stub(GotenbergRequest, 'get').resolves({
+        Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewStatusRequest.send()
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewStatusRequest.send()
 
         expect(result.response.body).to.equal(response.body)
       })
