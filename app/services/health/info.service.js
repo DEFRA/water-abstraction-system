@@ -66,6 +66,16 @@ async function _addressFacadeData() {
   return _parseFailedRequestResult(result)
 }
 
+async function _chargingModuleData() {
+  const result = await ChargingModuleViewHealthRequest.send()
+
+  if (result.succeeded) {
+    return result.response.info.dockerTag
+  }
+
+  return _parseFailedRequestResult(result)
+}
+
 async function _gotenbergData() {
   const result = await GotenbergViewHealthRequest.send()
 
@@ -105,14 +115,12 @@ async function _legacyAppData() {
   return services
 }
 
-async function _chargingModuleData() {
-  const result = await ChargingModuleViewHealthRequest.send()
-
-  if (result.succeeded) {
-    return result.response.info.dockerTag
+function _parseFailedRequestResult(result) {
+  if (result.response.statusCode) {
+    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
   }
 
-  return _parseFailedRequestResult(result)
+  return `ERROR: ${result.response.name} - ${result.response.message}`
 }
 
 async function _redisConnectivityData() {
@@ -141,14 +149,6 @@ async function _virusScannerData() {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-function _parseFailedRequestResult(result) {
-  if (result.response.statusCode) {
-    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
-  }
-
-  return `ERROR: ${result.response.name} - ${result.response.message}`
 }
 
 module.exports = {
