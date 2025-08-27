@@ -13,7 +13,7 @@ const { expect } = Code
 const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
 const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
 const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
 
 // Thing under test
@@ -45,27 +45,27 @@ describe('Health - Info service', () => {
   let addressFacadeViewStatusRequestStub
   let chargingModuleViewHealthRequestStub
   let gotenbergViewHealthRequestStub
-  let legacyRequestStub
+  let legacyViewHealthRequestStub
   let redisStub
 
   beforeEach(() => {
     addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
     chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
     gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
-    legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
+    legacyViewHealthRequestStub = Sinon.stub(LegacyViewHealthRequest, 'send')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    legacyRequestStub.withArgs('background', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('reporting', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('import', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('crm', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('external', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('internal', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('idm', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('permits', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('background').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('reporting').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('import').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('crm').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('external').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('internal').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('idm').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('permits').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('returns').resolves(goodRequestResults.app)
 
     chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
     gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
@@ -82,7 +82,7 @@ describe('Health - Info service', () => {
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -134,7 +134,7 @@ describe('Health - Info service', () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
       const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
@@ -187,7 +187,7 @@ describe('Health - Info service', () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -292,7 +292,7 @@ describe('Health - Info service', () => {
 
         addressFacadeViewStatusRequestStub.resolves(badResult)
 
-        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
+        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -323,7 +323,7 @@ describe('Health - Info service', () => {
 
         addressFacadeViewStatusRequestStub.resolves(badResult)
 
-        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
+        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {

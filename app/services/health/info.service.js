@@ -14,7 +14,7 @@ const AddressFacadeViewHealthRequest = require('../../requests/address-facade/vi
 const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const LegacyRequest = require('../../requests/legacy.request.js')
+const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
 const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
@@ -78,8 +78,6 @@ async function _getGotenbergData() {
 }
 
 async function _getLegacyAppData() {
-  const healthInfoPath = 'health/info'
-
   const services = [
     { name: 'Import', serviceName: 'import' },
     { name: 'External UI', serviceName: 'external' },
@@ -93,7 +91,7 @@ async function _getLegacyAppData() {
   ]
 
   for (const service of services) {
-    const result = await LegacyRequest.get(service.serviceName, healthInfoPath, null, false)
+    const result = await LegacyViewHealthRequest.send(service.serviceName)
 
     if (result.succeeded) {
       service.version = result.response.body.version
