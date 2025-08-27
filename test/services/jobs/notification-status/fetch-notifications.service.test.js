@@ -12,9 +12,9 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const FetchNotificationsService = require('../../../../app/services/jobs/notifications/fetch-notifications.service.js')
+const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
 
-describe('Job - Notifications - Fetch notifications service', () => {
+describe('Job - Notification Status - Fetch Notifications service', () => {
   let event
   let notification
   let unlikelyEvent
