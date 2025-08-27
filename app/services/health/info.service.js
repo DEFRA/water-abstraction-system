@@ -14,8 +14,9 @@ const AddressFacadeViewHealthRequest = require('../../requests/address-facade/vi
 const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
 const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
+const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
+const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
 /**
@@ -34,6 +35,7 @@ async function go() {
   const chargingModuleData = await _chargingModuleData()
   const gotenbergData = await _gotenbergData()
   const legacyAppData = await _legacyAppData()
+  const notifyData = await _notifyData()
   const redisConnectivityData = await _redisConnectivityData()
   const virusScannerData = await _virusScannerData()
 
@@ -45,6 +47,7 @@ async function go() {
     appData,
     chargingModuleData,
     gotenbergData,
+    notifyData,
     redisConnectivityData,
     virusScannerData
   }
@@ -121,6 +124,16 @@ function _parseFailedRequestResult(result) {
   }
 
   return `ERROR: ${result.response.name} - ${result.response.message}`
+}
+
+async function _notifyData() {
+  const result = await NotifyViewHealthRequest.send()
+
+  if (result.succeeded) {
+    return 'Up and running'
+  }
+
+  return _parseFailedRequestResult(result)
 }
 
 async function _redisConnectivityData() {
