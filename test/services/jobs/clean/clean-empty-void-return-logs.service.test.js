@@ -30,6 +30,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the clean is successful', () => {

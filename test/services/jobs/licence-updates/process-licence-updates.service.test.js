@@ -32,6 +32,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when there are licence updates', () => {

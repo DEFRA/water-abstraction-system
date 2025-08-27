@@ -77,13 +77,13 @@ describe('Schema export service', () => {
     let notifierStub
 
     beforeEach(() => {
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-
       FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go')
       SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go')
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
       DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
+
+      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {

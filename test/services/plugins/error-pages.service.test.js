@@ -47,8 +47,8 @@ describe('Error pages service', () => {
   })
 
   afterEach(() => {
-    delete global.GlobalNotifier
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the response is a boom 500 error', () => {

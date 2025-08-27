@@ -30,6 +30,7 @@ describe('Error Pages plugin', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('When the response is a Boom error', () => {
