@@ -122,10 +122,10 @@ describe('Jobs controller', () => {
     })
   })
 
-  describe('/jobs/notifications-status-updates', () => {
+  describe('/jobs/notification-status', () => {
     describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/notifications-status-updates' }
+        options = { method: 'POST', url: '/jobs/notification-status' }
       })
 
       describe('when the request succeeds', () => {

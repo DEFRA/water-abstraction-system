@@ -51,7 +51,7 @@ async function licenceUpdates(_request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
-async function notificationsStatusUpdates(_request, h) {
+async function notificationStatus(_request, h) {
   ProcessNotificationStatusService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
@@ -80,7 +80,7 @@ module.exports = {
   customerFiles,
   exportDb,
   licenceUpdates,
-  notificationsStatusUpdates,
+  notificationStatus,
   returnLogs,
   timeLimited
 }
