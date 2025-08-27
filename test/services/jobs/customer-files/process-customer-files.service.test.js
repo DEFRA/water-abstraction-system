@@ -37,6 +37,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the Charging Module API response has customer files', () => {
