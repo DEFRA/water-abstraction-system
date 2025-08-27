@@ -30,12 +30,12 @@ const { sentenceCase } = require('../../presenters/base.presenter.js')
  * @returns {object} data about each service formatted for the view
  */
 async function go() {
-  const addressFacadeData = await _getAddressFacadeData()
-  const chargingModuleData = await _getChargingModuleData()
-  const gotenbergData = await _getGotenbergData()
-  const legacyAppData = await _getLegacyAppData()
-  const redisConnectivityData = await _getRedisConnectivityData()
-  const virusScannerData = await _getVirusScannerData()
+  const addressFacadeData = await _addressFacadeData()
+  const chargingModuleData = await _chargingModuleData()
+  const gotenbergData = await _gotenbergData()
+  const legacyAppData = await _legacyAppData()
+  const redisConnectivityData = await _redisConnectivityData()
+  const virusScannerData = await _virusScannerData()
 
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
 
@@ -56,7 +56,7 @@ async function _addSystemInfoToLegacyAppData(appData) {
   return [...appData, systemInfo]
 }
 
-async function _getAddressFacadeData() {
+async function _addressFacadeData() {
   const result = await AddressFacadeViewHealthRequest.send()
 
   if (result.succeeded) {
@@ -66,7 +66,7 @@ async function _getAddressFacadeData() {
   return _parseFailedRequestResult(result)
 }
 
-async function _getGotenbergData() {
+async function _gotenbergData() {
   const result = await GotenbergViewHealthRequest.send()
 
   if (result.succeeded) {
@@ -77,7 +77,7 @@ async function _getGotenbergData() {
   return _parseFailedRequestResult(result)
 }
 
-async function _getLegacyAppData() {
+async function _legacyAppData() {
   const services = [
     { name: 'Import', serviceName: 'import' },
     { name: 'External UI', serviceName: 'external' },
@@ -105,7 +105,7 @@ async function _getLegacyAppData() {
   return services
 }
 
-async function _getChargingModuleData() {
+async function _chargingModuleData() {
   const result = await ChargingModuleViewHealthRequest.send()
 
   if (result.succeeded) {
@@ -115,7 +115,7 @@ async function _getChargingModuleData() {
   return _parseFailedRequestResult(result)
 }
 
-async function _getRedisConnectivityData() {
+async function _redisConnectivityData() {
   let redis
 
   try {
@@ -133,7 +133,7 @@ async function _getRedisConnectivityData() {
   }
 }
 
-async function _getVirusScannerData() {
+async function _virusScannerData() {
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
 
