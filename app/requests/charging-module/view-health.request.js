@@ -2,7 +2,7 @@
 
 /**
  * View the health of Charging Module service
- * @module GenerateReturnFormRequest
+ * @module ViewHealthRequest
  */
 
 const ChargingModuleRequest = require('../charging-module.request.js')
