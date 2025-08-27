@@ -18,7 +18,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  */
 function go(notices, page = 1) {
   const tableRows = _formatTableData(notices.results, page)
-  console.log(notices)
+
   return {
     createdBy: notices.event.issuer,
     dateCreated: formatLongDate(notices.event.createdAt),
