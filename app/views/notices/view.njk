@@ -6,94 +6,90 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "macros/notice-status-tag.njk" import statusTag %}
 
-{% block content %}
-  <div class="govuk-body">
-    <span class="govuk-caption-l">Notice {{reference}} </span>
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
-    {{ statusTag(status, false) }}
+  {{ statusTag(status, false) }}
 
-    {{
-      govukSummaryList({
-        classes: 'govuk-summary-list--no-border',
-        attributes: {
-          'data-test': 'meta-data'
-        },
-        rows: [
-          {
-            key: { text: 'Date created', classes: 'meta-data__label' },
-            value: { text: dateCreated, classes: 'govuk-!-padding-bottom-0' }
-          },
-          {
-            key: { text: 'Created by', classes: 'meta-data__label' },
-            value: { text: createdBy }
-          }
-        ]
-      })
-    }}
-
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{pageNumbers}}</p>
-
-    {% set tableRows = [] %}
-    {% for notice in notices %}
-      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
-      {% set rowIndex = loop.index0 %}
-
-      {% set addressLineSpan %}
-        {% for addressLine in notice.recipient %}
-            <span class="govuk-!-display-block">{{ addressLine }}</span>
-        {% endfor %}
-      {% endset %}
-
-      {% set licenceSpan %}
-        {% for licence in notice.licenceRefs %}
-            <span class="govuk-!-display-block">{{ licence }}</span>
-        {% endfor %}
-      {% endset %}
-
-      {% set noticeStatusTag %}
-        {{ statusTag(notice.status, true) }}
-      {% endset %}
-
-      {% set row = [
+  {{
+    govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'meta-data'
+      },
+      rows: [
         {
-          html: addressLineSpan,
-          attributes: { 'data-test': 'notice-recipient' + rowIndex }
+          key: { text: 'Date created', classes: 'meta-data__label' },
+          value: { text: dateCreated, classes: 'govuk-!-padding-bottom-0' }
         },
         {
-          html: licenceSpan,
-          attributes: { 'data-test': 'notice-licences-' + rowIndex }
-        },
-        {
-          text: notice.messageType | capitalize,
-          attributes: { 'data-test': 'notice-messageType-' + rowIndex }
-        },
-        {
-          html: noticeStatusTag,
-          attributes: { 'data-test': 'notice-status-' + rowIndex }
+          key: { text: 'Created by', classes: 'meta-data__label' },
+          value: { text: createdBy }
         }
-      ] %}
+      ]
+    })
+  }}
 
-      {% set tableRows = (tableRows.push(row), tableRows) %}
-    {% endfor %}
+  <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{pageNumbers}}</p>
 
-    {{
-      govukTable({
-        firstCellIsHeader: false,
-        attributes: { 'data-test': 'notices' },
-        head: [
-          { text: 'Receipient' },
-          { text: 'Licence number' },
-          { text: 'Method' },
-          { text: 'Status' }
-        ],
-        rows: tableRows
-      })
-    }}
+  {% set tableRows = [] %}
+  {% for notice in notices %}
+    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+    {% set rowIndex = loop.index0 %}
 
-    {% if pagination.numberOfPages > 1  %}
-      {{ govukPagination(pagination.component) }}
-    {% endif %}
+    {% set addressLineSpan %}
+      {% for addressLine in notice.recipient %}
+          <span class="govuk-!-display-block">{{ addressLine }}</span>
+      {% endfor %}
+    {% endset %}
 
-  </div>
+    {% set licenceSpan %}
+      {% for licence in notice.licenceRefs %}
+          <span class="govuk-!-display-block">{{ licence }}</span>
+      {% endfor %}
+    {% endset %}
+
+    {% set noticeStatusTag %}
+      {{ statusTag(notice.status, true) }}
+    {% endset %}
+
+    {% set row = [
+      {
+        html: addressLineSpan,
+        attributes: { 'data-test': 'notice-recipient' + rowIndex }
+      },
+      {
+        html: licenceSpan,
+        attributes: { 'data-test': 'notice-licences-' + rowIndex }
+      },
+      {
+        text: notice.messageType | capitalize,
+        attributes: { 'data-test': 'notice-messageType-' + rowIndex }
+      },
+      {
+        html: noticeStatusTag,
+        attributes: { 'data-test': 'notice-status-' + rowIndex }
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(row), tableRows) %}
+  {% endfor %}
+
+  {{
+    govukTable({
+      firstCellIsHeader: false,
+      attributes: { 'data-test': 'notices' },
+      head: [
+        { text: 'Receipient' },
+        { text: 'Licence number' },
+        { text: 'Method' },
+        { text: 'Status' }
+      ],
+      rows: tableRows
+    })
+  }}
+
+  {% if pagination.numberOfPages > 1  %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
 {% endblock %}

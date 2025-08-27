@@ -66,7 +66,8 @@ describe('Notices - View Notice service', () => {
     numberShowing: 1,
     pagination: { numberOfPages: 1 },
     pageNumbers: 'Showing all notifications',
-    pageTitle: 'Returns reminders'
+    pageTitle: 'Returns reminders',
+    pageTitleCaption: 'Notice RREM-RD2KF4'
   }
 
   afterEach(() => {

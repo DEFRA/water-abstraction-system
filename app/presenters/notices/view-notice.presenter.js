@@ -26,6 +26,7 @@ function go(notices, page = 1) {
     reference: notices.event.referenceCode,
     notices: tableRows,
     pageTitle: _pageTitle(notices.event.subtype),
+    pageTitleCaption: `Notice ${notices.event.referenceCode}`,
     status: _status(tableRows)
   }
 }
