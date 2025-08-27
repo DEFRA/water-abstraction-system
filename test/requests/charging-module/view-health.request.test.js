@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const BaseRequest = require('../../../app/requests/base.request.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 
 // Thing under test
-const ViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
+const ViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 
-describe('Address Facade - View Status request', () => {
+describe('Charging Module - View Health request', () => {
   let response
 
   afterEach(() => {
@@ -25,23 +25,23 @@ describe('Address Facade - View Status request', () => {
     beforeEach(() => {
       response = {
         statusCode: 200,
-        body: 'hola'
+        body: { status: 'alive' }
       }
 
-      Sinon.stub(BaseRequest, 'get').resolves({
+      Sinon.stub(ChargingModuleRequest, 'get').resolves({
         succeeded: true,
         response
       })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewStatusRequest.send()
+      const result = await ViewHealthRequest.send()
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the result from Gotenberg in the "response"', async () => {
-      const result = await ViewStatusRequest.send()
+    it('returns the result from the Charging Module in the "response"', async () => {
+      const result = await ViewHealthRequest.send()
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -53,29 +53,26 @@ describe('Address Facade - View Status request', () => {
         response = {
           statusCode: 404,
           body: {
-            facade_status_code: 404,
-            facade_error_message: 'HTTP 404 Not Found',
-            facade_error_code: 'address_service_error_11',
-            supplier_was_called: null,
-            supplier_status_code: null,
-            supplier_response: null
+            statusCode: 404,
+            error: 'Not Found',
+            message: 'Not Found'
           }
         }
 
-        Sinon.stub(BaseRequest, 'get').resolves({
+        Sinon.stub(ChargingModuleRequest, 'get').resolves({
           succeeded: false,
           response
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewStatusRequest.send()
+        const result = await ViewHealthRequest.send()
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewStatusRequest.send()
+        const result = await ViewHealthRequest.send()
 
         expect(result.response.body).to.equal(response.body)
       })

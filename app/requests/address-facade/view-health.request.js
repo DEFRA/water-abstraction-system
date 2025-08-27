@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * View the status of the address facade
- * @module ViewStatusRequest
+ * View the health of the Address Facade
+ * @module ViewHealthRequest
  */
 
 const BaseRequest = require('../base.request.js')
@@ -10,7 +10,7 @@ const BaseRequest = require('../base.request.js')
 const addressFacadeConfig = require('../../../config/address-facade.config.js')
 
 /**
- * View the status of the address facade
+ * View the health of the Address Facade
  *
  * Normally, we would use the relevant service's base request object, for example, `address-facade.request.js`. However,
  * the Address facade for reasons only it knows (!!) returns a plain text response when you hit it's status endpoint.

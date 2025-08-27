@@ -10,8 +10,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const AddressFacadeViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
+const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
 const LegacyRequest = require('../../../app/requests/legacy.request.js')
 const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
@@ -31,7 +31,8 @@ describe('Health - Info service', () => {
         info: {
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'v0.19.1'
-        }
+        },
+        body: { status: 'alive' }
       }
     },
     gotenberg: {
@@ -42,14 +43,14 @@ describe('Health - Info service', () => {
   }
 
   let addressFacadeViewStatusRequestStub
-  let chargingModuleRequestStub
+  let chargingModuleViewHealthRequestStub
   let gotenbergViewHealthRequestStub
   let legacyRequestStub
   let redisStub
 
   beforeEach(() => {
-    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewStatusRequest, 'send')
-    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'get')
+    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
+    chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
     gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
     legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
@@ -66,7 +67,7 @@ describe('Health - Info service', () => {
     legacyRequestStub.withArgs('permits', 'health/info', null, false).resolves(goodRequestResults.app)
     legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
 
-    chargingModuleRequestStub.withArgs('status').resolves(goodRequestResults.chargingModule)
+    chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
     gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
   })
 
