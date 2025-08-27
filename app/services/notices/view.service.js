@@ -9,7 +9,7 @@
 const DatabaseConfig = require('../../../config/database.config.js')
 const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewPresenter = require('../../presenters/notices/view.presenter.js')
+const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for the 'notices/{id}' page
@@ -36,7 +36,7 @@ async function go(id, page) {
 
   const pagination = PaginatorPresenter.go(results.length, selectedPageNumber, `/system/notices/${notices.event.id}`)
 
-  const pageData = ViewPresenter.go(notices, page)
+  const pageData = ViewNoticePresenter.go(notices, page)
 
   return {
     activeNavBar: 'manage',

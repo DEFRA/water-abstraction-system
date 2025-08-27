@@ -10,7 +10,7 @@ const { expect } = Code
 const EventModel = require('../../../app/models/event.model.js')
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/notices/view.presenter.js')
+const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice.presenter.js')
 
 describe('Notices - View Notice presenter', () => {
   const notices = {
@@ -65,7 +65,7 @@ describe('Notices - View Notice presenter', () => {
 
   describe('when a notice exists', () => {
     it('correctly presents the data for display', () => {
-      const result = ViewPresenter.go(notices, 1)
+      const result = ViewNoticePresenter.go(notices, 1)
 
       expect(result).to.equal({
         createdBy: 'test@wrls.gov.uk',
@@ -120,7 +120,7 @@ describe('Notices - View Notice presenter', () => {
     })
 
     it('correctly presents the data for display', () => {
-      const result = ViewPresenter.go(notices, 2)
+      const result = ViewNoticePresenter.go(notices, 2)
 
       expect(result).to.equal({
         createdBy: 'test@wrls.gov.uk',
