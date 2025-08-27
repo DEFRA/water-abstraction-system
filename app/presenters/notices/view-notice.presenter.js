@@ -20,6 +20,7 @@ function go(notices, page = 1) {
   const tableRows = _formatTableData(notices.results, page)
 
   return {
+    backLink: { href: '/system/notices', text: 'Go back to notices' },
     createdBy: notices.event.issuer,
     dateCreated: formatLongDate(notices.event.createdAt),
     reference: notices.event.referenceCode,
