@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the 'notices/{id}' page
- * @module ViewPresenter
+ * @module ViewNoticePresenter
  */
 
 const { formatLongDate } = require('../base.presenter.js')
