@@ -13,7 +13,7 @@ const ExportService = require('../../app/services/jobs/export/export.service.js'
 const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
 const ProcessCustomerFilesService = require('../../app/services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
-const ProcessNotificationsStatusUpdatesServiceService = require('../../app/services/jobs/notifications/notifications-status-updates.service.js')
+const ProcessNotificationStatusService = require('../../app/services/jobs/notification-status/process-notification-status.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
@@ -130,7 +130,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(ProcessNotificationsStatusUpdatesServiceService, 'go').resolves()
+          Sinon.stub(ProcessNotificationStatusService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {

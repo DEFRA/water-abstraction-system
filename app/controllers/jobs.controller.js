@@ -9,7 +9,7 @@ const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessCleanService = require('../services/jobs/clean/process-clean.service.js')
 const ProcessCustomerFilesService = require('../services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../services/jobs/licence-updates/process-licence-updates.service.js')
-const ProcessNotificationsStatusUpdatesService = require('../services/jobs/notifications/notifications-status-updates.service.js')
+const ProcessNotificationStatusService = require('../services/jobs/notification-status/process-notification-status.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
 
@@ -52,7 +52,7 @@ async function licenceUpdates(_request, h) {
 }
 
 async function notificationsStatusUpdates(_request, h) {
-  ProcessNotificationsStatusUpdatesService.go()
+  ProcessNotificationStatusService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }

@@ -17,9 +17,9 @@ const NotifyConfig = require('../../../../config/notify.config.js')
 const ViewMessageDataRequest = require('../../../../app/requests/notify/view-message-data.request.js')
 
 // Thing under test
-const NotificationsStatusUpdatesService = require('../../../../app/services/jobs/notifications/notifications-status-updates.service.js')
+const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
-describe('Job - Notifications - Notifications Status Updates service', () => {
+describe('Job - Notifications - Process Notification Status service', () => {
   const ONE_HUNDRED_MILLISECONDS = 100
 
   let event
@@ -79,7 +79,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
         })
 
         it('updates the matching notification record', { timeout: 3000 }, async () => {
-          await NotificationsStatusUpdatesService.go()
+          await ProcessNotificationStatusService.go()
 
           const refreshedNotification = await notification.$query()
 
@@ -132,7 +132,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
         })
 
         it('updates the matching notification record', { timeout: 3000 }, async () => {
-          await NotificationsStatusUpdatesService.go()
+          await ProcessNotificationStatusService.go()
 
           const refreshedNotification = await notification.$query()
 
@@ -197,7 +197,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
       })
 
       it('updates the matching notification record and updates the event error count', { timeout: 3000 }, async () => {
-        await NotificationsStatusUpdatesService.go()
+        await ProcessNotificationStatusService.go()
 
         const refreshedNotification = await notification.$query()
 
@@ -282,7 +282,7 @@ describe('Job - Notifications - Notifications Status Updates service', () => {
     })
 
     it('does not update the matching notification record or the event error count', async () => {
-      await NotificationsStatusUpdatesService.go()
+      await ProcessNotificationStatusService.go()
 
       const refreshedNotification = await notification.$query()
 
