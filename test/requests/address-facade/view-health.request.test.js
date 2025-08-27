@@ -12,9 +12,9 @@ const { expect } = Code
 const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
-const ViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
+const ViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
 
-describe('Address Facade - View Status request', () => {
+describe('Address Facade - View Health request', () => {
   let response
 
   afterEach(() => {
@@ -35,13 +35,13 @@ describe('Address Facade - View Status request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewStatusRequest.send()
+      const result = await ViewHealthRequest.send()
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the result from Gotenberg in the "response"', async () => {
-      const result = await ViewStatusRequest.send()
+    it('returns the result from the Address Facade in the "response"', async () => {
+      const result = await ViewHealthRequest.send()
 
       expect(result.response.body).to.equal(response.body)
     })
@@ -69,13 +69,13 @@ describe('Address Facade - View Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewStatusRequest.send()
+        const result = await ViewHealthRequest.send()
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewStatusRequest.send()
+        const result = await ViewHealthRequest.send()
 
         expect(result.response.body).to.equal(response.body)
       })

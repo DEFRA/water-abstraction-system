@@ -10,7 +10,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const AddressFacadeViewStatusRequest = require('../../../app/requests/address-facade/view-status.request.js')
+const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
 const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
 const LegacyRequest = require('../../../app/requests/legacy.request.js')
@@ -49,7 +49,7 @@ describe('Health - Info service', () => {
   let redisStub
 
   beforeEach(() => {
-    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewStatusRequest, 'send')
+    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
     chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
     gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
     legacyRequestStub = Sinon.stub(LegacyRequest, 'get')

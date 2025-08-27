@@ -10,7 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const AddressFacadeViewStatusRequest = require('../../requests/address-facade/view-status.request.js')
+const AddressFacadeViewHealthRequest = require('../../requests/address-facade/view-health.request.js')
 const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
@@ -57,7 +57,7 @@ async function _addSystemInfoToLegacyAppData(appData) {
 }
 
 async function _getAddressFacadeData() {
-  const result = await AddressFacadeViewStatusRequest.send()
+  const result = await AddressFacadeViewHealthRequest.send()
 
   if (result.succeeded) {
     return result.response.body
