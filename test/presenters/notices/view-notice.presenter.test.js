@@ -69,6 +69,7 @@ describe('Notices - View Notice presenter', () => {
       const result = ViewNoticePresenter.go(notices, 1)
 
       expect(result).to.equal({
+        backLink: { href: '/system/notices', text: 'Go back to notices' },
         createdBy: 'test@wrls.gov.uk',
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',
@@ -124,6 +125,7 @@ describe('Notices - View Notice presenter', () => {
       const result = ViewNoticePresenter.go(notices, 2)
 
       expect(result).to.equal({
+        backLink: { href: '/system/notices', text: 'Go back to notices' },
         createdBy: 'test@wrls.gov.uk',
         dateCreated: '21 February 2025',
         reference: 'PRTF-VPV3J9',

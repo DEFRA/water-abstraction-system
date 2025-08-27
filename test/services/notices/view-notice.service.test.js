@@ -49,6 +49,7 @@ describe('Notices - View Notice service', () => {
   // The presenter tests cover the different variations of what can be displayed
   const expectedResultCommon = {
     activeNavBar: 'manage',
+    backLink: { href: '/system/notices', text: 'Go back to notices' },
     createdBy: 'test.user@defra.gov.uk',
     reference: 'RREM-RD2KF4',
     dateCreated: '21 February 2025',

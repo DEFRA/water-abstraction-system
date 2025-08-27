@@ -6,15 +6,6 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "macros/notice-status-tag.njk" import statusTag %}
 
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
-
 {% block content %}
   <div class="govuk-body">
     <span class="govuk-caption-l">Notice {{reference}} </span>
