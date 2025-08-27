@@ -58,4 +58,32 @@ describe('Gotenberg - View Health request', () => {
       expect(result.response.body).to.equal(response.body)
     })
   })
+
+  describe('when the request fails', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        response = {
+          statusCode: 404,
+          body: 'Not Found'
+        }
+
+        Sinon.stub(GotenbergRequest, 'get').resolves({
+          succeeded: false,
+          response
+        })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await ViewHealthRequest.send()
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the "response"', async () => {
+        const result = await ViewHealthRequest.send()
+
+        expect(result.response.body).to.equal(response.body)
+      })
+    })
+  })
 })
