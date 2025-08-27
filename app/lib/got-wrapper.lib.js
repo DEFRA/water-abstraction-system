@@ -2,7 +2,7 @@
 
 /**
  * Wraps the `got` HTTP client so that it mimics the interface of the deprecated `request` library.
- * @module RequestWrapperLib
+ * @module GotWrapperLib
  */
 
 const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
