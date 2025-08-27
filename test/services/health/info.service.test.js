@@ -13,8 +13,9 @@ const { expect } = Code
 const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
 const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
-const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
 const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
+const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
+const NotifyViewHealthRequest = require('../../../app/requests/notify/view-health.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
@@ -39,6 +40,18 @@ describe('Health - Info service', () => {
       succeeded: true,
       response: { body: JSON.stringify({ status: 'up', details: { chromium: { status: 'up' } } }) }
     },
+    notify: {
+      succeeded: true,
+      response: {
+        body: {
+          build_time: '2025-08-20:07:53:38',
+          db_version: '0511_process_type_nullable',
+          git_commit: '9a404353ee55a7f7cb3b8348b169ad00cc2d540a',
+          status: 'ok'
+        },
+        statusCode: 200
+      }
+    },
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
@@ -46,6 +59,7 @@ describe('Health - Info service', () => {
   let chargingModuleViewHealthRequestStub
   let gotenbergViewHealthRequestStub
   let legacyViewHealthRequestStub
+  let notifyViewHealthRequestStub
   let redisStub
 
   beforeEach(() => {
@@ -53,6 +67,7 @@ describe('Health - Info service', () => {
     chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
     gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
     legacyViewHealthRequestStub = Sinon.stub(LegacyViewHealthRequest, 'send')
+    notifyViewHealthRequestStub = Sinon.stub(NotifyViewHealthRequest, 'send')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
@@ -69,6 +84,7 @@ describe('Health - Info service', () => {
 
     chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
     gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
+    notifyViewHealthRequestStub.resolves(goodRequestResults.notify)
   })
 
   afterEach(() => {
@@ -111,6 +127,7 @@ describe('Health - Info service', () => {
         'appData',
         'chargingModuleData',
         'gotenbergData',
+        'notifyData',
         'redisConnectivityData',
         'virusScannerData'
       ])
@@ -126,6 +143,7 @@ describe('Health - Info service', () => {
       expect(result.addressFacadeData).to.equal('hola')
       expect(result.chargingModuleData).to.equal('v0.19.1')
       expect(result.gotenbergData).to.equal('Up - Chromium Up')
+      expect(result.notifyData).to.equal('Up and running')
     })
   })
 
@@ -165,6 +183,7 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
           'virusScannerData'
         ])
@@ -176,6 +195,7 @@ describe('Health - Info service', () => {
         expect(result.addressFacadeData).to.equal('hola')
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
       })
     })
   })
@@ -215,6 +235,7 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
           'virusScannerData'
         ])
@@ -226,6 +247,7 @@ describe('Health - Info service', () => {
         expect(result.addressFacadeData).to.equal('hola')
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
       })
     })
 
@@ -253,6 +275,7 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
           'virusScannerData'
         ])
@@ -264,6 +287,7 @@ describe('Health - Info service', () => {
         expect(result.addressFacadeData).to.equal('hola')
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
       })
     })
   })
@@ -303,6 +327,7 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
           'virusScannerData'
         ])
@@ -314,6 +339,7 @@ describe('Health - Info service', () => {
         expect(result.addressFacadeData).to.startWith('ERROR:')
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
       })
     })
 
@@ -334,6 +360,7 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
           'virusScannerData'
         ])
@@ -345,6 +372,7 @@ describe('Health - Info service', () => {
         expect(result.addressFacadeData).to.startWith('ERROR:')
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
       })
     })
   })
