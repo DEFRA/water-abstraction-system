@@ -2,7 +2,7 @@
 
 /**
  * View the health of Gotenberg service
- * @module GenerateReturnFormRequest
+ * @module ViewHealthRequest
  */
 
 const GotenbergRequest = require('../gotenberg.request.js')
