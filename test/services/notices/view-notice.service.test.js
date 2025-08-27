@@ -15,7 +15,7 @@ const EventModel = require('../../../app/models/event.model.js')
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
 // Thing under test
-const ViewService = require('../../../app/services/notices/view.service.js')
+const ViewNoticeService = require('../../../app/services/notices/view-notice.service.js')
 
 describe('Notices - View Notice service', () => {
   const fetchResults = {
@@ -79,7 +79,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
       expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Notifications' })
     })
@@ -92,7 +92,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
       expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Returns reminders' })
     })
@@ -105,7 +105,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
       expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Ad-hoc notice' })
     })
@@ -118,7 +118,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
       expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Water abstraction alert' })
     })
@@ -131,7 +131,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058')
 
       expect(result).to.equal({ ...expectedResultCommon, pageTitle: 'Notifications' })
     })
@@ -148,7 +148,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058', '2')
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2058', '2')
 
       expect(result).to.equal({
         ...expectedResultCommon,
@@ -185,7 +185,7 @@ describe('Notices - View Notice service', () => {
     })
 
     it('returns bare minimum page data for the view', async () => {
-      const result = await ViewService.go('a40dcb94-cb01-4fce-9a46-94b49eca2057', 1)
+      const result = await ViewNoticeService.go('a40dcb94-cb01-4fce-9a46-94b49eca2057', 1)
 
       expect(result).to.equal({
         activeNavBar: 'manage',

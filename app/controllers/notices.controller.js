@@ -6,8 +6,8 @@
  */
 
 const IndexNoticesService = require('../services/notices/index-notices.service.js')
-const NoticesViewService = require('../services/notices/view.service.js')
-const SubmitIndexNoticesService = require('../services/notices/submit-index-notices.service.js')
+const SubmitIndexNoticesService = require('../services/notices/submit-index.service.js')
+const ViewNoticeService = require('../services/notices/view-notice.service.js')
 
 async function index(request, h) {
   const { page } = request.query
@@ -36,7 +36,7 @@ async function view(request, h) {
     query: { page = 1 }
   } = request
 
-  const pageData = await NoticesViewService.go(id, page)
+  const pageData = await ViewNoticeService.go(id, page)
 
   return h.view('notices/view.njk', pageData)
 }

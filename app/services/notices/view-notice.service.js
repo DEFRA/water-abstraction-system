@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the 'notices/{id}' page
  *
- * @module ViewService
+ * @module ViewNoticeService
  */
 
 const DatabaseConfig = require('../../../config/database.config.js')
