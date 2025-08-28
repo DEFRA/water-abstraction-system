@@ -2,29 +2,64 @@
 
 {% from "macros/page-heading.njk" import pageHeading %}
 
-{% macro links(title, items) %}
-  {% if items.length %}
-  <h2 class="govuk-heading-m">{{ title }}</h2>
-
-  <ul class="govuk-list">
-    {% for item in items %}
-    <li><a class="govuk-link" href="{{ item.path }}">{{ item.name }}</a></li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-{% endmacro %}
-
 {% block content %}
 
   {{ pageHeading(pageTitle) }}
 
-  {{ links('View reports', reports) }}
-  {{ links('Send licence notices', licenceNotifications) }}
-  {{ links('Send return notices', returnNotifications) }}
-  {{ links('Send flow notices', hofNotifications) }}
-  {{ links('Manage users', accounts) }}
-  {{ links('Billing', billing) }}
-  {{ links('View workflow', chargeInformationWorkflow) }}
-  {{ links('Upload charge information', uploadChargeInformation) }}
+  {% if showNotices or showReturnsCycles or showDigitise or showKPIs %}
+    <h2 class="govuk-heading-m">View reports</h2>
+
+    <ul class="govuk-list">
+      {% if showNotices %}<li><a class="govuk-link" href="/system/notices">Notices</a></li>{% endif %}
+      {% if showReturnsCycles %}<li><a class="govuk-link" href="/returns-reports">Returns cycles</a></li>{% endif %}
+      {% if showDigitise %}<li><a class="govuk-link" href="/digitise/report'">Digitise!</a></li>{% endif %}
+      {% if showKPIs %}<li><a class="govuk-link" href="/reporting/kpi-reporting">Key performance indicators</a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if showRenewal %}
+    <h2 class="govuk-heading-m">Send licence notices</h2>
+
+    <ul class="govuk-list">
+      {% if showRenewal %}<li><a class="govuk-link" href="notifications/2?start=1">Renewal</a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if showInvitations or showPaperForms or showReminders or showAdHoc %}
+    <h2 class="govuk-heading-m">Send return notices</h2>
+
+    <ul class="govuk-list">
+      {% if showInvitations %}<li><a class="govuk-link" href="/system/notices/setup/standard?noticeType=invitations">Invitations</a></li>{% endif %}
+      {% if showPaperForms %}<li><a class="govuk-link" href="/returns-notifications/forms">Paper forms</a></li>{% endif %}
+      {% if showReminders %}<li><a class="govuk-link" href="/system/notices/setup/standard?noticeType=reminders">Reminders</a></li>{% endif %}
+      {% if showAdHoc %}<li><a class="govuk-link" href="/system/notices/setup/adhoc">Ad-hoc</a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if showRestriction or showHandsOffFlow or showResume %}
+    <h2 class="govuk-heading-m">Send flow notices</h2>
+
+    <ul class="govuk-list">
+      {% if showRestriction %}<li><a class="govuk-link" href="notifications/1?start=1">Restriction</a></li>{% endif %}
+      {% if showHandsOffFlow %}<li><a class="govuk-link" href="notifications/3?start=1">Hands-off flow</a></li>{% endif %}
+      {% if showResume %}<li><a class="govuk-link" href="notifications/4?start=1">Resume</a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if showCreateAccount %}
+    <h2 class="govuk-heading-m">Manage users</h2>
+
+    <ul class="govuk-list">
+      {% if showCreateAccount %}<li><a class="govuk-link" href="/account/create-user">Create an internal account</a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if showCheckLicences %}
+    <h2 class="govuk-heading-m">View workflow</h2>
+
+    <ul class="govuk-list">
+      {% if showCheckLicences %}<li><a class="govuk-link" href="/charge-information-workflow">Check licences in workflow</a></li>{% endif %}
+    </ul>
+  {% endif %}
 
 {% endblock %}
