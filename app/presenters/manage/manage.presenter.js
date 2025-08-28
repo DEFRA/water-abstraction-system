@@ -5,21 +5,7 @@
  * @module ManagePresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
-// There is no direct correlation between user scopes and management items, so we need to map them manually, each scope
-// has a set of associated management items that will be shown when the user has that scope.
-const ITEMS_BY_SCOPE = {
-  ar_approver: new Set(['showDigitise', 'showKPIs']),
-  billing: new Set(['showKPIs']),
-  bulk_return_notifications: new Set(['showInvitations', 'showKPIs', 'showNotices', 'showReminders']),
-  charge_version_workflow_editor: new Set(['showCheckLicences']),
-  charge_version_workflow_reviewer: new Set(['showCheckLicences']),
-  hof_notifications: new Set(['showHandsOffFlow', 'showKPIs', 'showNotices', 'showRestriction', 'showResume']),
-  manage_accounts: new Set(['showCreateAccount', 'showKPIs']),
-  renewal_notifications: new Set(['showKPIs', 'showNotices', 'showRenewal']),
-  returns: new Set(['showAdHoc', 'showKPIs', 'showNotices', 'showPaperForms', 'showReturnsCycles'])
-}
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Formats data for the `/manage` page
@@ -32,40 +18,101 @@ const ITEMS_BY_SCOPE = {
  * @returns {object} - The data formatted for the view template
  */
 function go(userScopes) {
-  const itemsForUserScopes = _determineItemsForUserScopes(userScopes)
+  return {
+    flowNotices: _flowNotices(userScopes),
+    licenceNotices: _licenceNotices(userScopes),
+    manageUsers: _manageUsers(userScopes),
+    pageTitle: 'Manage reports and notices',
+    returnNotices: _returnNotices(userScopes),
+    viewReports: _viewReports(userScopes),
+    viewWorkflow: _viewWorkflow(userScopes)
+  }
+}
 
-  // Ad-hoc is dependent on a feature flag
-  if (!FeatureFlagsConfig.enableAdHocNotifications) {
-    itemsForUserScopes.delete('showAdHoc')
+function _flowNotices(userScopes) {
+  const links = {
+    restriction: _hasPermission(userScopes, ['hof_notifications']),
+    handsOffFlow: _hasPermission(userScopes, ['hof_notifications']),
+    resume: _hasPermission(userScopes, ['hof_notifications'])
   }
 
   return {
-    pageTitle: 'Manage reports and notices',
-    ..._convertItemSetToObject(itemsForUserScopes)
+    show: Object.values(links).includes(true),
+    links
   }
 }
 
-function _determineItemsForUserScopes(userScopes) {
-  let itemsForUserScopes
-
-  itemsForUserScopes = new Set()
-  userScopes.forEach((scope) => {
-    if (ITEMS_BY_SCOPE[scope]) {
-      itemsForUserScopes = itemsForUserScopes.union(ITEMS_BY_SCOPE[scope])
-    }
+/**
+ * Checks if a user has any of the scopes required to view a management link
+ *
+ * @param {string[]} userScopes - The scopes of the current user
+ * @param {string[]} linkScopes - The scopes required to view the link
+ *
+ * @returns {boolean} - true if the user has any of the required scopes, false otherwise
+ */
+function _hasPermission(userScopes, linkScopes) {
+  return linkScopes.some((scope) => {
+    return userScopes.includes(scope)
   })
-
-  return itemsForUserScopes
 }
 
-function _convertItemSetToObject(itemSet) {
-  const itemObject = {}
+function _licenceNotices(userScopes) {
+  const links = {
+    renewal: _hasPermission(userScopes, ['renewal_notifications'])
+  }
 
-  itemSet.forEach((item) => {
-    itemObject[item] = true
-  })
+  return { show: links.renewal, links }
+}
 
-  return itemObject
+function _manageUsers(userScopes) {
+  const links = {
+    createAccount: _hasPermission(userScopes, ['manage_accounts'])
+  }
+
+  return { show: links.createAccount, links }
+}
+
+function _returnNotices(userScopes) {
+  const links = {
+    invitations: _hasPermission(userScopes, ['bulk_return_notifications']),
+    paperForms: _hasPermission(userScopes, ['returns']),
+    reminders: _hasPermission(userScopes, ['bulk_return_notifications']),
+    adHoc: _hasPermission(userScopes, ['returns']) && featureFlagsConfig.enableAdHocNotifications
+  }
+
+  return { show: Object.values(links).includes(true), links }
+}
+
+function _viewReports(userScopes) {
+  const links = {
+    notices: _hasPermission(userScopes, [
+      'bulk_return_notifications',
+      'hof_notifications',
+      'renewal_notifications',
+      'returns'
+    ]),
+    returnsCycles: _hasPermission(userScopes, ['returns']),
+    digitise: _hasPermission(userScopes, ['ar_approver']),
+    kpis: _hasPermission(userScopes, [
+      'ar_approver',
+      'billing',
+      'bulk_return_notifications',
+      'hof_notifications',
+      'manage_accounts',
+      'renewal_notifications',
+      'returns'
+    ])
+  }
+
+  return { show: Object.values(links).includes(true), links }
+}
+
+function _viewWorkflow(userScopes) {
+  const links = {
+    checkLicences: _hasPermission(userScopes, ['charge_version_workflow_editor', 'charge_version_workflow_reviewer'])
+  }
+
+  return { show: links.checkLicences, links }
 }
 
 module.exports = {
