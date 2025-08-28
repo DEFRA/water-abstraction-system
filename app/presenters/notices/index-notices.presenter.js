@@ -7,6 +7,8 @@
 
 const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 const NOTICE_MAPPINGS = {
   'hof-resume': 'HOF resume',
   'hof-stop': 'HOF stop',
@@ -34,13 +36,21 @@ function go(notices, numberOfNotices) {
   }
 }
 
+function _link(noticeId) {
+  if (featureFlagsConfig.enableNotificationsView) {
+    return `/system/notices/${noticeId}`
+  }
+
+  return `/notifications/report/${noticeId}`
+}
+
 function _noticeRowData(notices) {
   return notices.map((notice) => {
     const { createdAt, errorCount, id, issuer, referenceCode, recipientCount } = notice
 
     return {
       createdDate: formatLongDate(createdAt),
-      link: `/notifications/report/${id}`,
+      link: _link(id),
       recipients: recipientCount,
       reference: referenceCode,
       sentBy: issuer,
