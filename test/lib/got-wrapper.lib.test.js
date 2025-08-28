@@ -1,12 +1,15 @@
 'use strict'
 
+// Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Nock = require('nock')
-const { gotWrapper } = require('../../app/lib/got-wrapper.lib.js')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const expect = Code.expect
+
+// Thing under test
+const { gotWrapper } = require('../../app/lib/got-wrapper.lib.js')
 
 describe('GotWrapperLib', () => {
   let request

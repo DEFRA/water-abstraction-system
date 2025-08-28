@@ -9,6 +9,7 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Things we need to stub
 const serverConfig = require('../../config/server.config.js')
 
 // For running our service
