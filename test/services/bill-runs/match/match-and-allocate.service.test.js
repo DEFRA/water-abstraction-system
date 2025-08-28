@@ -31,8 +31,8 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
   })
 
   afterEach(async () => {
-    delete global.GlobalNotifier
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('with a given billRun and billingPeriods', () => {

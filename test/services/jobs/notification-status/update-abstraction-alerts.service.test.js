@@ -12,9 +12,9 @@ const { expect } = Code
 const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 
 // Thing under test
-const UpdateAbstractionAlertsService = require('../../../../app/services/jobs/notifications/update-abstraction-alerts.service.js')
+const UpdateAbstractionAlertsService = require('../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js')
 
-describe('Job - Notifications - Update abstraction alerts service', () => {
+describe('Job - Notification Status - Update Abstraction Alerts service', () => {
   let clock
   let date
   let licenceMonitoringStation
