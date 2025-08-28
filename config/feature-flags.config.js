@@ -31,10 +31,7 @@ const config = {
   enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
   enableSystemManageView: String(process.env.ENABLE_SYSTEM_MANAGE_VIEW) === 'true' || false,
   enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,
-  enableSystemNotices: String(process.env.ENABLE_SYSTEM_NOTICES_VIEW) === 'true' || false,
-  enableSystemNotifications: String(process.env.ENABLE_SYSTEM_NOTIFICATIONS) === 'true' || false,
-  enableAdHocNotifications: String(process.env.ENABLE_AD_HOC_NOTIFICATIONS) === 'true' || false,
-  allowChargeVersionUploads: String(process.env.ALLOW_CHARGE_VERSION_UPLOADS) === 'true' || false
+  enableAdHocNotifications: String(process.env.ENABLE_AD_HOC_NOTIFICATIONS) === 'true' || false
 }
 
 module.exports = config
