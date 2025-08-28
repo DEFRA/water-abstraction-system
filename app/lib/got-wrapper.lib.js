@@ -41,7 +41,6 @@ async function gotWrapper(defaults = {}) {
         http: new HttpProxyAgent({ proxy: defaults.proxy }),
         https: new HttpsProxyAgent({ proxy: defaults.proxy })
       },
-      throwHttpErrors: false,
       responseType: 'text'
     }
 

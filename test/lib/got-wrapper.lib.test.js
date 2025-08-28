@@ -52,7 +52,7 @@ describe('GotWrapperLib', () => {
 
   describe('when an error occurs', () => {
     beforeEach(() => {
-      Nock('http://example.com').get('/fail').reply(404)
+      Nock('http://example.com').get('/fail').reply(500)
     })
 
     it('calls back with error', async () => {
