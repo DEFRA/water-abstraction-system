@@ -34,6 +34,10 @@ describe('GeneralLib', () => {
       global.GlobalNotifier = notifierStub
     })
 
+    afterEach(() => {
+      delete global.GlobalNotifier
+    })
+
     describe('when no additional data is provided', () => {
       it('logs the message and time taken in milliseconds and seconds', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')

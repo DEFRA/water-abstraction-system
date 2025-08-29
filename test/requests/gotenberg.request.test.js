@@ -39,6 +39,84 @@ describe('Gotenberg Request', () => {
     Sinon.restore()
   })
 
+  describe('#get', () => {
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseRequest, 'get').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: { testObject: { test: 'yes' } }
+          }
+        })
+      })
+
+      it('calls Gotenberg with the required options', async () => {
+        await GotenbergRequest.get(testRoute)
+
+        const requestArgs = BaseRequest.get.firstCall.args
+
+        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
+      })
+
+      it('uses the Gotenberg timeout', async () => {
+        await GotenbergRequest.get(testRoute)
+
+        const requestArgs = BaseRequest.get.firstCall.args
+
+        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
+      })
+
+      it('returns a "true" success status', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.succeeded).to.be.true()
+      })
+
+      it('returns the response body as an object', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.response.body.testObject.test).to.equal('yes')
+      })
+
+      it('returns the status code', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.response.statusCode).to.equal(200)
+      })
+    })
+
+    describe('when the request fails', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseRequest, 'get').resolves({
+          succeeded: false,
+          response: {
+            statusCode: 404,
+            body: 'Not Found'
+          }
+        })
+      })
+
+      it('returns a "false" success status', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error response', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.response.body).to.equal('Not Found')
+      })
+
+      it('returns the status code', async () => {
+        const result = await GotenbergRequest.get(testRoute)
+
+        expect(result.response.statusCode).to.equal(404)
+      })
+    })
+  })
+
   describe('#post', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {

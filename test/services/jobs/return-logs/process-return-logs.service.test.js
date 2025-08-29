@@ -29,6 +29,7 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
   beforeEach(() => {
     createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
+
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub

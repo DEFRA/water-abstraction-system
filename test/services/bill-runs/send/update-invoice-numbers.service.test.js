@@ -47,6 +47,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the bill run exists', () => {

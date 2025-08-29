@@ -33,7 +33,7 @@ async function database(_request, h) {
 async function info(_request, h) {
   const pageData = await InfoService.go()
 
-  return h.view('info.njk', pageData)
+  return h.view('health/info.njk', pageData)
 }
 
 module.exports = {

@@ -31,9 +31,6 @@ describe('Notices - Setup - Submit Check service', () => {
   let testRecipients
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-
     auth = {
       credentials: {
         user: {
@@ -43,6 +40,9 @@ describe('Notices - Setup - Submit Check service', () => {
     }
 
     Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {

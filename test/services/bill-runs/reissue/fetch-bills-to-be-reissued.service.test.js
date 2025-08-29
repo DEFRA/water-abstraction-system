@@ -114,8 +114,8 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     afterEach(() => {
-      delete global.GlobalNotifier
       Sinon.restore()
+      delete global.GlobalNotifier
     })
 
     it('logs an error', async () => {
