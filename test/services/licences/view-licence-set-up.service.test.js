@@ -153,6 +153,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [
               {
+                dataTest: 'return-version-0',
                 link: '/system/return-versions/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                 text: 'View'
               }

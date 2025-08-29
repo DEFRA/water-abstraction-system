@@ -218,10 +218,11 @@ function _recalculateBills(agreements, auth, commonData, enableTwoPartSupplement
 }
 
 function _returnVersions(returnVersions = [{}]) {
-  return returnVersions.map((returnVersion) => {
+  return returnVersions.map((returnVersion, index) => {
     return {
       action: [
         {
+          dataTest: `return-version-${index}`,
           text: 'View',
           link: `/system/return-versions/${returnVersion.id}`
         }
