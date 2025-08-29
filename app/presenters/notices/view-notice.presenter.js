@@ -11,37 +11,38 @@ const DatabaseConfig = require('../../../config/database.config.js')
 /**
  * Formats data for the 'notices/{id}' page
  *
- * @param {object[]} notices - The data to be formatted for display
+ * @param {object} notice - The notice object
+ * @param {object[]} notifications - The data to be formatted for display
  * @param {number} page - The current page for the pagination service
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notices, page = 1) {
-  const tableRows = _formatTableData(notices.results, page)
+function go(notice, notifications, page = 1) {
+  const tableRows = _formatTableData(notifications, page)
 
   return {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
-    createdBy: notices.event.issuer,
-    dateCreated: formatLongDate(notices.event.createdAt),
-    reference: notices.event.referenceCode,
+    createdBy: notice.issuer,
+    dateCreated: formatLongDate(notice.createdAt),
+    reference: notice.referenceCode,
     notices: tableRows,
-    pageTitle: _pageTitle(notices.event.subtype),
-    pageTitleCaption: `Notice ${notices.event.referenceCode}`,
-    status: _status(tableRows)
+    pageTitle: _pageTitle(notice.subtype),
+    pageTitleCaption: `Notice ${notice.referenceCode}`,
+    status: _status(notifications)
   }
 }
 
-function _formatTableData(data, page) {
+function _formatTableData(notifications, page) {
   const to = page === 1 ? DatabaseConfig.defaultPageSize : page * DatabaseConfig.defaultPageSize
   const from = page === 1 ? 0 : to - DatabaseConfig.defaultPageSize
-  const rows = data.slice(from, to)
+  const rows = notifications.slice(from, to)
 
-  return rows.map((notice) => {
+  return rows.map((notification) => {
     return {
-      recipient: _recipient(notice),
-      licenceRefs: notice.licences,
-      messageType: notice.message_type,
-      status: notice.status
+      recipient: _recipient(notification),
+      licenceRefs: notification.licences,
+      messageType: notification.messageType,
+      status: notification.status
     }
   })
 }
@@ -66,44 +67,39 @@ function _pageTitle(subtype) {
   return 'Notifications'
 }
 
-function _recipient(notice) {
-  const { personalisation, recipient } = notice
+function _recipient(notification) {
+  const { messageType, personalisation, recipientName } = notification
 
-  if (recipient && recipient !== 'n/a') {
-    return notice.recipient
+  if (messageType === 'email') {
+    return [recipientName]
   }
 
-  const addressLines = [
+  return [
     personalisation['address_line_1'],
     personalisation['address_line_2'],
     personalisation['address_line_3'],
     personalisation['address_line_4'],
     personalisation['address_line_5'],
     personalisation['address_line_6'],
+    personalisation['address_line_7'],
     personalisation['postcode']
-  ]
-
-  const filteredAddressLines = addressLines.filter((addressLine) => {
-    return !!addressLine
-  })
-
-  return filteredAddressLines
+  ].filter(Boolean)
 }
 
-function _status(notices) {
-  if (
-    notices.some((notice) => {
-      return notice.status === 'error'
-    })
-  ) {
+function _status(notifications) {
+  const erroredNotifications = notifications.some((notice) => {
+    return notice.status === 'error'
+  })
+
+  if (erroredNotifications) {
     return 'error'
   }
 
-  if (
-    notices.some((notice) => {
-      return notice.status === 'pending'
-    })
-  ) {
+  const pendingNotifications = notifications.some((notice) => {
+    return notice.status === 'pending'
+  })
+
+  if (pendingNotifications) {
     return 'pending'
   }
 
