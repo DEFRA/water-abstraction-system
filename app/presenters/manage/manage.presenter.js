@@ -56,6 +56,20 @@ function _hasPermission(userScopes, linkScopes) {
   })
 }
 
+// KPIs gets its own function as there are so many scopes that _viewReports breaches the maximum function line length
+// of 20 lines that is defined for this project
+function _kpis(userScopes) {
+  return _hasPermission(userScopes, [
+    'ar_approver',
+    'billing',
+    'bulk_return_notifications',
+    'hof_notifications',
+    'manage_accounts',
+    'renewal_notifications',
+    'returns'
+  ])
+}
+
 function _licenceNotices(userScopes) {
   const links = {
     renewal: _hasPermission(userScopes, ['renewal_notifications'])
@@ -93,15 +107,7 @@ function _viewReports(userScopes) {
     ]),
     returnsCycles: _hasPermission(userScopes, ['returns']),
     digitise: _hasPermission(userScopes, ['ar_approver']),
-    kpis: _hasPermission(userScopes, [
-      'ar_approver',
-      'billing',
-      'bulk_return_notifications',
-      'hof_notifications',
-      'manage_accounts',
-      'renewal_notifications',
-      'returns'
-    ])
+    kpis: _kpis(userScopes) // split off into its own function to avoid breaching the 20-line function limit
   }
 
   return { show: Object.values(links).includes(true), links }
