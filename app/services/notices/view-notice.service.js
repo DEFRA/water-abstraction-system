@@ -14,34 +14,26 @@ const ViewNoticePresenter = require('../../presenters/notices/view-notice.presen
 /**
  * Orchestrates fetching and presenting the data for the 'notices/{id}' page
  *
- * @param {string} id - The uuid of the notice we are viewing
+ * @param {string} noticeId - The UUID of the selected notice
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(id, page) {
-  const notices = await FetchNoticeService.go(id)
+async function go(noticeId, page) {
+  const { notice, notifications } = await FetchNoticeService.go(noticeId)
 
-  if (!notices) {
-    return {
-      activeNavBar: 'manage',
-      pageTitle: 'Notifications'
-    }
-  }
-
-  const { results } = notices
   const selectedPageNumber = page ? Number(page) : 1
   const defaultPageSize = DatabaseConfig.defaultPageSize
-  const numberShowing = results.length < defaultPageSize ? results.length : defaultPageSize
+  const numberShowing = notifications.length < defaultPageSize ? notifications.length : defaultPageSize
 
-  const pagination = PaginatorPresenter.go(results.length, selectedPageNumber, `/system/notices/${notices.event.id}`)
+  const pagination = PaginatorPresenter.go(notifications.length, selectedPageNumber, `/system/notices/${notice.id}`)
 
-  const pageData = ViewNoticePresenter.go(notices, page)
+  const pageData = ViewNoticePresenter.go(notice, notifications, page)
 
   return {
     activeNavBar: 'manage',
     ...pageData,
-    numberOfRecipients: results.length,
+    numberOfRecipients: notifications.length,
     numberShowing,
     pagination,
     pageNumbers: _numberOfNotifications(pagination.numberOfPages, selectedPageNumber)
