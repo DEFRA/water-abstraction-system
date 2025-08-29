@@ -1,34 +1,39 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/notice-status-tag.njk" import statusTag %}
 
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
-  {{ statusTag(status, false) }}
+  <p>{{ statusTag(status, false) }}</p>
 
-  {{
-    govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
-      attributes: {
-        'data-test': 'meta-data'
+  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    attributes: {
+      'data-test': 'meta-data'
+    },
+    rows: [
+      {
+        key: { text: 'Created date' },
+        value: { html: '<span data-test="meta-data-created-date">' + dateCreated + '</span>' }
       },
-      rows: [
-        {
-          key: { text: 'Date created', classes: 'meta-data__label' },
-          value: { text: dateCreated, classes: 'govuk-!-padding-bottom-0' }
-        },
-        {
-          key: { text: 'Created by', classes: 'meta-data__label' },
-          value: { text: createdBy }
-        }
-      ]
-    })
-  }}
+      {
+        key: { text: 'Created by' },
+        value: { html: '<span data-test="meta-data-created-by">' + createdBy + '</span>' }
+      }
+    ]
+  }) }}
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
 
   <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{pageNumbers}}</p>
 
@@ -37,16 +42,18 @@
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
     {% set rowIndex = loop.index0 %}
 
-    {% set addressLineSpan %}
-      {% for addressLine in notice.recipient %}
-          <span class="govuk-!-display-block">{{ addressLine }}</span>
-      {% endfor %}
-    {% endset %}
-
-    {% set licenceSpan %}
-      {% for licence in notice.licenceRefs %}
-          <span class="govuk-!-display-block">{{ licence }}</span>
-      {% endfor %}
+    {% set licenceNumbers %}
+      {% if notice.licenceRefs.length > 5 %}
+        {{
+        govukDetails({
+          classes: 'govuk-!-margin-bottom-0',
+          summaryText: notice.licenceRefs.length + ' licences',
+          html: newLineArrayItems(notice.licenceRefs)
+        })
+        }}
+      {% else %}
+        {{ newLineArrayItems(notice.licenceRefs)  }}
+      {% endif %}
     {% endset %}
 
     {% set noticeStatusTag %}
@@ -55,16 +62,12 @@
 
     {% set row = [
       {
-        html: addressLineSpan,
+        text: newLineArrayItems(notice.recipient),
         attributes: { 'data-test': 'notice-recipient' + rowIndex }
       },
       {
-        html: licenceSpan,
+        html: licenceNumbers,
         attributes: { 'data-test': 'notice-licences-' + rowIndex }
-      },
-      {
-        text: notice.messageType | capitalize,
-        attributes: { 'data-test': 'notice-messageType-' + rowIndex }
       },
       {
         html: noticeStatusTag,
@@ -75,19 +78,16 @@
     {% set tableRows = (tableRows.push(row), tableRows) %}
   {% endfor %}
 
-  {{
-    govukTable({
-      firstCellIsHeader: false,
-      attributes: { 'data-test': 'notices' },
-      head: [
-        { text: 'Receipient' },
-        { text: 'Licence number' },
-        { text: 'Method' },
-        { text: 'Status' }
-      ],
-      rows: tableRows
-    })
-  }}
+  {{ govukTable({
+    firstCellIsHeader: false,
+    attributes: { 'data-test': 'notices' },
+    head: [
+      { text: 'Recipient' },
+      { text: 'Licence number' },
+      { text: 'Status' }
+    ],
+    rows: tableRows
+  }) }}
 
   {% if pagination.numberOfPages > 1  %}
     {{ govukPagination(pagination.component) }}
