@@ -17,8 +17,8 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
+    caption: `Return reference ${returnReference}`,
     pageTitle: 'Enter the start meter reading',
-    returnReference,
     sessionId,
     startReading: _savedValue(startReading)
   }

@@ -17,8 +17,8 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
+    caption: `Return reference ${returnReference}`,
     pageTitle: 'Which units were used?',
-    returnReference,
     sessionId,
     units: units ?? null
   }
