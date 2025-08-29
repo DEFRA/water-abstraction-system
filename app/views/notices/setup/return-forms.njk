@@ -5,16 +5,17 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% from 'macros/page-heading.njk' import pageHeading %}
+
 {% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle) }}
+  {% endset %}
+
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -25,29 +26,25 @@
         }
       ]
     }) }}
-  {%endif%}
+  {% endif %}
 
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukCheckboxes({
-        name: "returns",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        hint: {
-          text: "Select all that apply"
-        },
-        items: returns
-      }) }}
+    {{ govukCheckboxes({
+      name: "returns",
+      errorMessage: error,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      hint: {
+        text: "Select all that apply"
+      },
+      items: returns
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}
