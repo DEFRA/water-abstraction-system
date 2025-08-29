@@ -3,25 +3,15 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
 const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
 
 describe('Manage - View service', () => {
-  let sandbox
   let userAuth
-
-  beforeEach(() => {
-    sandbox = Sinon.createSandbox()
-  })
-
-  afterEach(() => {
-    sandbox.restore()
-  })
 
   describe('when called', () => {
     beforeEach(() => {
@@ -31,11 +21,10 @@ describe('Manage - View service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewManageService.go(userAuth)
 
-      expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
-        activeNavBar: 'manage',
-        showKPIs: true
-      })
+      expect(result.pageTitle).to.equal('Manage reports and notices')
+      expect(result.activeNavBar).to.equal('manage')
+      expect(result.viewReports.show).to.be.true()
+      expect(result.viewReports.links.kpis).to.be.true()
     })
   })
 })
