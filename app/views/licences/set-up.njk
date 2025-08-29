@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% from "macros/charge-version-status-tag.njk" import statusTag as chargeVersionStatusTag %}
+{% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
 {% from "macros/return-version-status-tag.njk" import statusTag as returnVersionStatusTag %}
 
 {% macro createLink(data) %}
@@ -16,31 +17,31 @@
 
 {% block subPageContent %}
 <h2 class="govuk-heading-l">Licence set up</h2>
-  <h3 class="govuk-heading-m"> Requirements for returns </h3>
+  <h3 class="govuk-heading-m">Licence versions</h3>
 
-  {% if returnVersions.length === 0 %}
-    <p class="govuk-body"> No requirements for returns have been set up for this licence.</p>
+  {% if licenceVersions.length === 0 %}
+    <p class="govuk-body"> No licence versions have been set up for this licence.</p>
   {% else %}
-    {% set returnVersionsTableRows = [] %}
+    {% set licenceVersionsTableRows = [] %}
 
-    {% for returnsRequirement in returnVersions %}
-      {% set returnVersionsTableRows = (returnVersionsTableRows.push([
+    {% for licenceVersion in licenceVersions %}
+      {% set licenceVersionsTableRows = (licenceVersionsTableRows.push([
         {
-          text: returnsRequirement.startDate
+          text: licenceVersion.startDate
         },
         {
-          text: returnsRequirement.endDate
+          text: licenceVersion.endDate
         },
         {
-          text: returnsRequirement.reason
+          text: licenceVersion.reason
         },
         {
-          html: returnVersionStatusTag(returnsRequirement.status, true)
+          html: licenceVersionChangeTypeTag(licenceVersion.changeType, true)
         },
         {
-          html: createLink(returnsRequirement)
+          html: createLink(licenceVersion)
         }
-      ]), returnVersionsTableRows) %}
+      ]), licenceVersionsTableRows) %}
     {% endfor %}
 
     {{ govukTable({
@@ -55,66 +56,45 @@
           text: "Reason"
         },
         {
-          text: "Status"
+          text: "Change type"
         },
         {
           text: "Action"
         }
       ],
-        rows: returnVersionsTableRows
+        rows: licenceVersionsTableRows
       }) }}
   {% endif %}
 
-  {% if links.returnVersions.returnsRequired %}
-    <p>
-      {{ govukButton({
-        text: "Set up new requirements",
-        href: links.returnVersions.returnsRequired,
-        classes: "govuk-button--secondary govuk-!-margin-right-3"
-      }) }}
-    </p>
-  {% endif %}
+<h3 class="govuk-heading-m"> Requirements for returns </h3>
 
-  {% if links.returnVersions.noReturnsRequired %}
-    <p>
-      {{ govukButton({
-        text: "Mark licence as 'no returns needed'",
-        href: links.returnVersions.noReturnsRequired,
-        classes: "govuk-button--secondary govuk-!-margin-right-3"
-      }) }}
-    </p>
-  {% endif %}
-
-<h3 class="govuk-heading-m"> Charge information </h3>
-
-{% if chargeInformation.length === 0 %}
-  <p class="govuk-body"> No charge information for this licence.</p>
+{% if returnVersions.length === 0 %}
+  <p class="govuk-body"> No requirements for returns have been set up for this licence.</p>
 {% else %}
-  {% set chargeVersionRows = [] %}
+  {% set returnVersionsTableRows = [] %}
 
-  {% for chargeVersion in  chargeInformation %}
-    {% set chargeVersionRows = (chargeVersionRows.push([
+  {% for returnsRequirement in returnVersions %}
+    {% set returnVersionsTableRows = (returnVersionsTableRows.push([
       {
-        text: chargeVersion.startDate
+        text: returnsRequirement.startDate
       },
       {
-        text: chargeVersion.endDate
+        text: returnsRequirement.endDate
       },
       {
-        text: chargeVersion.reason
+        text: returnsRequirement.reason
       },
       {
-        html: chargeVersionStatusTag(chargeVersion.status, true)
+        html: returnVersionStatusTag(returnsRequirement.status, true)
       },
       {
-        html: createLink(chargeVersion)
+        html: createLink(returnsRequirement)
       }
-    ]), chargeVersionRows) %}
+    ]), returnVersionsTableRows) %}
   {% endfor %}
 
-
   {{ govukTable({
-    head: [
+      head: [
       {
         text: "Start date"
       },
@@ -131,96 +111,167 @@
         text: "Action"
       }
     ],
-    rows: chargeVersionRows
-  }) }}
+      rows: returnVersionsTableRows
+    }) }}
 {% endif %}
 
-{% if links.chargeInformation.setupNewCharge %}
+{% if links.returnVersions.returnsRequired %}
   <p>
     {{ govukButton({
-      text: "Set up a new charge",
-      href: links.chargeInformation.setupNewCharge,
+      text: "Set up new requirements",
+      href: links.returnVersions.returnsRequired,
       classes: "govuk-button--secondary govuk-!-margin-right-3"
     }) }}
   </p>
 {% endif %}
 
-{% if links.chargeInformation.makeLicenceNonChargeable %}
+{% if links.returnVersions.noReturnsRequired %}
   <p>
     {{ govukButton({
-      text: "Make licence non-chargeable",
-      href: links.chargeInformation.makeLicenceNonChargeable,
-      classes: "govuk-button--secondary"
+      text: "Mark licence as 'no returns needed'",
+      href: links.returnVersions.noReturnsRequired,
+      classes: "govuk-button--secondary govuk-!-margin-right-3"
     }) }}
   </p>
 {% endif %}
 
-<hr />
+{% if viewChargeInformation %}
+  <h3 class="govuk-heading-m"> Charge information </h3>
 
-<h3 class="govuk-heading-m"> Charging agreements </h3>
+  {% if chargeInformation.length === 0 %}
+    <p class="govuk-body"> No charge information for this licence.</p>
+  {% else %}
+    {% set chargeVersionRows = [] %}
 
-{% if agreements.length === 0 %}
-  <p class="govuk-body"> No agreements for this licence.</p>
-{% else %}
-  {% set agreementRows = [] %}
+    {% for chargeVersion in  chargeInformation %}
+      {% set chargeVersionRows = (chargeVersionRows.push([
+        {
+          text: chargeVersion.startDate
+        },
+        {
+          text: chargeVersion.endDate
+        },
+        {
+          text: chargeVersion.reason
+        },
+        {
+          html: chargeVersionStatusTag(chargeVersion.status, true)
+        },
+        {
+          html: createLink(chargeVersion)
+        }
+      ]), chargeVersionRows) %}
+    {% endfor %}
 
-  {% for agreement in  agreements %}
-    {% set agreementRows = (agreementRows.push([
-      {
-        text: agreement.startDate
-      },
-      {
-        text: agreement.endDate
-      },
-      {
-        text: agreement.description
-      },
-      {
-        text: agreement.signedOn
-      },
-      {
-        html: createLink(agreement)
-      }
-    ]), agreementRows) %}
-  {% endfor %}
+    {{ govukTable({
+      head: [
+        {
+          text: "Start date"
+        },
+        {
+          text: "End date"
+        },
+        {
+          text: "Reason"
+        },
+        {
+          text: "Status"
+        },
+        {
+          text: "Action"
+        }
+      ],
+      rows: chargeVersionRows
+    }) }}
+  {% endif %}
 
-  {{ govukTable({
-    head: [
-      {
-        text: "Start date"
-      },
-      {
-        text: "End date"
-      },
-      {
-        text: "Agreement"
-      },
-      {
-        text: "Date signed"
-      },
-      {
-        text: "Action"
-      }
-    ],
-    rows: agreementRows
-  }) }}
-{% endif %}
+  {% if links.chargeInformation.setupNewCharge %}
+    <p>
+      {{ govukButton({
+        text: "Set up a new charge",
+        href: links.chargeInformation.setupNewCharge,
+        classes: "govuk-button--secondary govuk-!-margin-right-3"
+      }) }}
+    </p>
+  {% endif %}
 
-{% if links.agreements.setUpAgreement %}
-  {{ govukButton({
-    text: "Set up a new agreement",
-    href: links.agreements.setUpAgreement,
-    classes: "govuk-button--secondary"
-  }) }}
-{% endif %}
+  {% if links.chargeInformation.makeLicenceNonChargeable %}
+    <p>
+      {{ govukButton({
+        text: "Make licence non-chargeable",
+        href: links.chargeInformation.makeLicenceNonChargeable,
+        classes: "govuk-button--secondary"
+      }) }}
+    </p>
+  {% endif %}
 
-{% if links.recalculateBills.markForSupplementaryBilling %}
-  <div>
+  <hr />
+
+  <h3 class="govuk-heading-m"> Charging agreements </h3>
+
+  {% if agreements.length === 0 %}
+    <p class="govuk-body"> No agreements for this licence.</p>
+  {% else %}
+    {% set agreementRows = [] %}
+
+    {% for agreement in  agreements %}
+      {% set agreementRows = (agreementRows.push([
+        {
+          text: agreement.startDate
+        },
+        {
+          text: agreement.endDate
+        },
+        {
+          text: agreement.description
+        },
+        {
+          text: agreement.signedOn
+        },
+        {
+          html: createLink(agreement)
+        }
+      ]), agreementRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      head: [
+        {
+          text: "Start date"
+        },
+        {
+          text: "End date"
+        },
+        {
+          text: "Agreement"
+        },
+        {
+          text: "Date signed"
+        },
+        {
+          text: "Action"
+        }
+      ],
+      rows: agreementRows
+    }) }}
+  {% endif %}
+
+  {% if links.agreements.setUpAgreement %}
     {{ govukButton({
-      text: "Recalculate bills",
-      href: links.recalculateBills.markForSupplementaryBilling,
+      text: "Set up a new agreement",
+      href: links.agreements.setUpAgreement,
       classes: "govuk-button--secondary"
     }) }}
-  </div>
+  {% endif %}
+
+  {% if links.recalculateBills.markForSupplementaryBilling %}
+    <div>
+      {{ govukButton({
+        text: "Recalculate bills",
+        href: links.recalculateBills.markForSupplementaryBilling,
+        classes: "govuk-button--secondary"
+      }) }}
+    </div>
+  {% endif %}
 {% endif %}
 {% endblock %}

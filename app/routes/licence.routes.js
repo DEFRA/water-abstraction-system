@@ -2,6 +2,8 @@
 
 const LicencesController = require('../controllers/licences.controller.js')
 
+const featureFlagsConfig = require('../../config/feature-flags.config.js')
+
 const routes = [
   {
     method: 'GET',
@@ -68,11 +70,15 @@ const routes = [
     path: '/licences/{id}/set-up',
     options: {
       handler: LicencesController.viewSetUp,
-      auth: {
-        access: {
-          scope: ['view_charge_versions']
-        }
-      }
+      ...(!featureFlagsConfig.enableLicenceVersions
+        ? {
+            auth: {
+              access: {
+                scope: ['view_charge_versions']
+              }
+            }
+          }
+        : {})
     }
   },
   {

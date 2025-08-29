@@ -8,6 +8,8 @@
 const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for common licence data `/licences/{id}` page's
  *
@@ -21,6 +23,7 @@ function go(licence, auth) {
 
   const primaryUser = licence.$primaryUser()
   const ends = licence.$ends()
+  const roles = _roles(auth)
 
   return {
     backLink: {
@@ -36,7 +39,8 @@ function go(licence, auth) {
     pageTitle: `Licence number ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
     primaryUser,
-    roles: _roles(auth),
+    roles,
+    viewLicenceSetup: _viewLicenceSetup(roles),
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
@@ -98,6 +102,14 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
   }
 
   return baseMessage + 'two-part tariff supplementary bill run.'
+}
+
+function _viewLicenceSetup(roles) {
+  if (featureFlagsConfig.enableLicenceVersions) {
+    return true
+  }
+
+  return roles.includes('view_charge_versions')
 }
 
 function _warning(ends) {

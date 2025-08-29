@@ -14,6 +14,7 @@ const ROLES = {
   billing: 'billing',
   deleteAgreements: 'delete_agreements',
   manageAgreements: 'manage_agreements',
+  viewChargeVersions: 'view_charge_versions',
   workflowEditor: 'charge_version_workflow_editor',
   workflowReviewer: 'charge_version_workflow_reviewer'
 }
@@ -28,6 +29,7 @@ const AGREEMENTS = {
 /**
  * Formats data for the `/licences/{id}/set-up` view licence set up page
  *
+ * @param {module:LicenceVersionModel[]} licenceVersions - All licence versions records for the licence
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
  * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
@@ -37,20 +39,24 @@ const AGREEMENTS = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go(chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+function go(licenceVersions, chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
   const enableTwoPartSupplementary = FeatureFlagsConfig.enableTwoPartTariffSupplementary
 
+  const viewChargeInformation = auth.credentials.scope.includes(ROLES.viewChargeVersions)
+
   return {
+    agreements: _agreements(commonData, agreements, auth, enableTwoPartSupplementary),
+    chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
+    licenceVersions: _licenceVersions(licenceVersions),
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
       returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns, auth),
       recalculateBills: _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary)
     },
-    agreements: _agreements(commonData, agreements, auth, enableTwoPartSupplementary),
-    chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    returnVersions: _returnVersions(returnVersions)
+    returnVersions: _returnVersions(returnVersions),
+    viewChargeInformation
   }
 }
 
@@ -187,6 +193,23 @@ function _financialAgreementCode(agreement) {
 function _hasTwoPartTariffAgreement(agreements) {
   return agreements.some((agreement) => {
     return agreement.financialAgreement.code === 'S127'
+  })
+}
+
+function _licenceVersions(licenceVersions) {
+  return licenceVersions.map((licenceVersion) => {
+    return {
+      action: [
+        {
+          text: 'View',
+          link: `/system/licence-versions/${licenceVersion.id}`
+        }
+      ],
+      endDate: licenceVersion.endDate ? formatLongDate(licenceVersion.endDate) : '',
+      reason: licenceVersion.$reason() ?? '',
+      startDate: formatLongDate(licenceVersion.startDate),
+      changeType: licenceVersion.administrative ? 'administrative' : 'substantive'
+    }
   })
 }
 

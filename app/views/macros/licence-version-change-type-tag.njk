@@ -1,0 +1,23 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro changeTypeTag(changeType, inline=false) %}
+  {# Default the text to the type as that covers most tags #}
+  {% set text = changeType %}
+
+  {% if changeType === 'substantive' %}
+    {% set color = "govuk-tag--green" %}
+  {% else %}
+    {% set color = "govuk-tag--blue" %}
+  {% endif %}
+
+  {% if inline %}
+    {% set fontSize = "" %}
+  {% else %}
+    {% set fontSize = "govuk-!-font-size-27" %}
+  {% endif %}
+
+  {{ govukTag({
+    text: text,
+    classes: color + ' ' + fontSize
+  }) }}
+{% endmacro %}

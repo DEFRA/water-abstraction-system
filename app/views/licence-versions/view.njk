@@ -1,0 +1,170 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/licence-version-change-type-tag.njk" import changeTypeTag %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% macro abstractionPointsCell(abstractionPoints, purposeDescription) %}
+  {% if abstractionPoints.length > 5 %}
+    {{ govukDetails({
+      summaryText: "View your " + abstractionPoints.length + " abstraction points for " + purposeDescription | lower,
+      html: newLineArrayItems(abstractionPoints) | safe,
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
+    }) }}
+  {% else %}
+    {{ newLineArrayItems(abstractionPoints) | safe }}
+  {% endif %}
+{% endmacro %}
+
+{% block pageContent %}
+  {{ pageHeadingHtml }}
+
+  <p>{{ changeTypeTag(changeType, false) }}</p>
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
+
+  {{ govukSummaryList({
+    classes: 'govuk-!-margin-bottom-2',
+    rows: [
+      {
+        classes: 'govuk-summary-list__row--no-border',
+        key: {
+          text: "Start date"
+        },
+        value: {
+          html: '<span data-test="start-date">' + startDate + '</span>'
+        }
+      },
+      {
+        classes: 'govuk-summary-list__row--no-border',
+        key: {
+          text: "End date"
+        },
+        value: {
+          html: '<span data-test="end-date">' + endDate + '</span>'
+        }
+      } if endDate,
+      {
+        classes: 'govuk-summary-list__row--no-border',
+        key: {
+          text: "Reason"
+        },
+        value: {
+          html: '<span data-test="reason">' + reason + '</span>'
+        }
+      },
+      {
+        classes: 'govuk-summary-list__row--no-border',
+        key: {
+          text: "Created date"
+        },
+        value: {
+          html: '<span data-test="created-date">' + createdDate + '</span>'
+        }
+      },
+      {
+        classes: 'govuk-summary-list__row--no-border',
+        key: {
+          text: "Created by"
+        },
+        value: {
+          html: '<span data-test="created-by">' + createdBy + '</span>'
+        }
+      }
+    ]
+  }) }}
+
+  {% if notes.length > 0 %}
+    <hr class="govuk-section-break govuk-!-margin-bottom-5 govuk-section-break--visible">
+
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
+    {{ newLineArrayItems(notes) }}
+  {% endif %}
+
+  <hr class="govuk-section-break govuk-!-margin-top-5 govuk-!-margin-bottom-5 govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Purpose details</h2>
+
+  {% if purposes.length > 0 %}
+    {% for purpose in purposes %}
+      {# Set an easier to use index. #}
+      {% set rowIndex = loop.index0 %}
+
+      {% set tableRows = [] %}
+
+      {# Abstraction points cell #}
+      {% set abstractionPointsRow = {
+        key: {
+          text: purpose.abstractionPointsTitle,
+          attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
+        },
+        value: {
+          html: abstractionPointsCell(purpose.abstractionPoints, purpose.purposeDescription),
+          attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
+
+      {# Period of abstraction cell #}
+      {% set abstractionPeriodRow = {
+        key: {
+          text: 'Period of abstraction',
+          attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
+        },
+        value: {
+          text: purpose.abstractionPeriod,
+          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
+
+      {# Abstraction method cell #}
+      {% set abstractionMethodsRow = {
+        key: {
+          text: purpose.abstractionMethodsTitle,
+          attributes: { 'data-test': 'abstraction-method-title-' + rowIndex }
+        },
+        value: {
+          text: purpose.abstractionMethods,
+          attributes: { 'data-test': 'abstraction-method-' + rowIndex },
+          classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(abstractionMethodsRow), tableRows) %}
+
+      {# Abstraction amount cell #}
+      {% set abstractionAmountsRow = {
+        key: {
+          text: purpose.abstractionAmountsTitle,
+          attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
+        },
+        value: {
+          text: newLineArrayItems(purpose.abstractionAmounts),
+          attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
+          classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(abstractionAmountsRow), tableRows) %}
+
+      {# Summary card #}
+      {{ govukSummaryList({
+        card: {
+          title: {
+            text: purpose.purposeDescription,
+            classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+          }
+        },
+        rows: tableRows
+      }) }}
+    {% endfor %}
+  {% else %}
+    <p>No purposes exist for this licence version.</p>
+  {% endif %}
+{% endblock %}
