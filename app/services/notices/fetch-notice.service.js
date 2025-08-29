@@ -5,8 +5,8 @@
  * @module FetchNoticeService
  */
 
-const { db } = require('../../../db/db.js')
 const EventModel = require('../../models/event.model.js')
+const NotificationModel = require('../../models/notification.model.js')
 
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
@@ -29,34 +29,39 @@ async function go(noticeId) {
 }
 
 async function _fetch(noticeId) {
-  const params = [noticeId]
-  const query = `
-    SELECT
-      *
-    FROM (
-      SELECT
-        n.id,
-        (CASE
-          WHEN n.message_type = 'email' THEN n.recipient
-          ELSE n.personalisation->>'address_line_1'
-        END) AS "recipientName",
-        n.licences,
-        n.message_type AS "messageType",
-        n.notify_status AS "notifyStatus",
-        n.personalisation,
-        n.status
-      FROM
-        public.notifications n
-      WHERE
-        n.event_id = ?
-    ) notice_notifications
-    ORDER BY
-      notice_notifications."recipientName" ASC;
-  `
-
-  const result = await db.raw(query, params)
-
-  return result.rows
+  return NotificationModel.query()
+    .select([
+      'notifications.id',
+      'rn.recipient_name',
+      'notifications.licences',
+      'notifications.messageType',
+      'notifications.notifyStatus',
+      'notifications.personalisation',
+      'notifications.status'
+    ])
+    .joinRaw(
+      `
+      INNER JOIN (
+        SELECT
+          rn.id,
+          (CASE
+            WHEN rn.message_type = 'email' THEN rn.recipient
+            ELSE rn.personalisation->>'address_line_1'
+          END) AS recipient_name
+        FROM
+          public.notifications rn
+        WHERE
+          rn.event_id = ?
+      ) rn ON rn.id = notifications.id
+      `,
+      [noticeId]
+    )
+    .where('event_id', noticeId)
+    .orderBy([
+      { column: 'rn.recipient_name', order: 'asc' },
+      { column: 'notifications.licences', order: 'asc' },
+      { column: 'notifications.createdAt', order: 'asc' }
+    ])
 }
 
 module.exports = {
