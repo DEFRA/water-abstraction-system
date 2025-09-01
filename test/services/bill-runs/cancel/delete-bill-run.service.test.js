@@ -47,6 +47,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the bill run exists', () => {
