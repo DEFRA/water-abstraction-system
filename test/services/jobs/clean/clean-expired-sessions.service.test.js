@@ -31,6 +31,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the clean is successful', () => {

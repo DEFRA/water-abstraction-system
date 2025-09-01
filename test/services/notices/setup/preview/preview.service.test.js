@@ -16,29 +16,23 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-const NotifyPreviewRequest = require('../../../../../app/requests/notify/notify-preview.request.js')
+const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
 const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
 
 describe('Notices Setup - Preview - Preview service', () => {
+  let licenceMonitoringStationId
   let recipients
   let session
   let testRecipient
   let testRecipients
-
-  beforeEach(() => {
-    // As the services presenter uses Notify to generate the template preview contents, we need to stub the request
-    Sinon.stub(NotifyPreviewRequest, 'send').resolves({ plaintext: 'Preview of the notification contents' })
-  })
 
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when the journey is a return journey', () => {
-    const licenceMonitoringStationId = undefined
-
     beforeEach(async () => {
       recipients = RecipientsFixture.recipients()
 
@@ -63,17 +57,34 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
       Sinon.stub(FetchRecipientsService, 'go').resolves()
+
+      // As the services presenter uses Notify to generate the template preview contents, we need to stub the request
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            body: 'Dear licence holder,\r\n',
+            html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
+            id: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
+            postage: null,
+            subject: 'Submit your water abstraction returns by 28th April 2025',
+            type: 'email',
+            version: 40
+          }
+        }
+      })
     })
 
     it('returns the page data for the view', async () => {
-      const result = await PreviewService.go(testRecipient.contact_hash_id, licenceMonitoringStationId, session.id)
+      const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice RINV-0Q7AD8',
-        contents: 'Preview of the notification contents',
+        contents: 'Dear licence holder,\r\n',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}`
@@ -82,9 +93,8 @@ describe('Notices Setup - Preview - Preview service', () => {
   })
 
   describe('when the journey is an abstraction alert journey', () => {
-    const licenceMonitoringStationId = '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8'
-
     beforeEach(async () => {
+      licenceMonitoringStationId = '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8'
       recipients = RecipientsFixture.recipients()
 
       testRecipients = [recipients.primaryUser]
@@ -128,17 +138,33 @@ describe('Notices Setup - Preview - Preview service', () => {
 
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
       Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            body: 'Dear licence contact,\r\n',
+            html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence contact,</p>',
+            id: 'bf32327a-f170-4854-8abb-3068aee9cdec',
+            postage: null,
+            subject: 'Water abstraction alert: You may need to reduce or stop water abstraction soon',
+            type: 'email',
+            version: 1
+          }
+        }
+      })
     })
 
     it('returns the page data for the view', async () => {
-      const result = await PreviewService.go(testRecipient.contact_hash_id, licenceMonitoringStationId, session.id)
+      const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
         caption: 'Notice WAA-6KN0KF',
-        contents: 'Preview of the notification contents',
+        contents: 'Dear licence contact,\r\n',
         messageType: 'email',
         pageTitle: 'Water abstraction alert reduce warning email',
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/alert/${licenceMonitoringStationId}`

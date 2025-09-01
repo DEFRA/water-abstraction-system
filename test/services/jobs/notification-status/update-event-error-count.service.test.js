@@ -12,9 +12,9 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
-const UpdateEventErrorCountService = require('../../../../app/services/jobs/notifications/update-event-error-count.service.js')
+const UpdateEventErrorCountService = require('../../../../app/services/jobs/notification-status/update-event-error-count.service.js')
 
-describe('Job - Notifications - Update event service', () => {
+describe('Job - Notification Status - Update Event service', () => {
   let event
 
   beforeEach(async () => {

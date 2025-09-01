@@ -27,21 +27,22 @@ describe('Tear down service', () => {
   let waterSchemaServiceStub
 
   beforeEach(async () => {
-    // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-
     crmSchemaServiceStub = Sinon.stub(CrmSchemaService, 'go').resolves()
     idmSchemaServiceStub = Sinon.stub(IdmSchemaService, 'go').resolves()
     permitSchemaServiceStub = Sinon.stub(PermitSchemaService, 'go').resolves()
     returnsSchemaServiceStub = Sinon.stub(ReturnsSchemaService, 'go').resolves()
     waterSchemaServiceStub = Sinon.stub(WaterSchemaService, 'go').resolves()
+
+    // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   it('tears down the schemas', async () => {

@@ -13,9 +13,9 @@ const NotificationHelper = require('../../../support/helpers/notification.helper
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const UpdateNotificationsService = require('../../../../app/services/jobs/notifications/update-notifications.service.js')
+const UpdateNotificationsService = require('../../../../app/services/jobs/notification-status/update-notifications.service.js')
 
-describe('Job - Notifications - Update Notifications service', () => {
+describe('Job - Notification Status - Update Notifications service', () => {
   let eventId
   let notifications
   let notification
