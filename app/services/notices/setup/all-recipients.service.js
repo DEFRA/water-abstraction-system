@@ -1,14 +1,12 @@
 'use strict'
 
 /**
- * Orchestrates the recipients with additional and selected recipients
- * @module RecipientsAddService
+ * Orchestrates merging the recipients with additional and selected recipients
+ * @module AllRecipientsService
  */
 
 /**
- * Orchestrates the recipients with additional and selected recipients
- *
- * Formats the recipients to contain only the selectedRecipients
+ * Orchestrates merging the recipients with additional and selected recipients
  *
  * @param {module:SessionModel} session - The session instance
  * @param {object[]} recipientsData

@@ -5,11 +5,11 @@
  * @module RecipientsService
  */
 
+const AllRecipientsService = require('./all-recipients.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
-const RecipientsAddService = require('./recipients-add.service.js')
 
 /**
  * Orchestrates fetching and determining recipients
@@ -24,7 +24,7 @@ const RecipientsAddService = require('./recipients-add.service.js')
 async function go(session, allRecipients = true) {
   const recipientsData = await _recipientsData(session)
 
-  const recipients = RecipientsAddService.go(session, recipientsData, allRecipients)
+  const recipients = AllRecipientsService.go(session, recipientsData, allRecipients)
 
   return DetermineRecipientsService.go(recipients)
 }

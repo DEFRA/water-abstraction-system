@@ -6,11 +6,11 @@
  */
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
+const AllRecipientsService = require('./all-recipients.service.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const RecipientsAddService = require('./recipients-add.service.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
@@ -36,7 +36,7 @@ async function go(sessionId) {
   } else {
     const recipientsData = await FetchDownloadRecipientsService.go(session)
 
-    const recipients = RecipientsAddService.go(session, recipientsData, false)
+    const recipients = AllRecipientsService.go(session, recipientsData, false)
 
     formattedData = DownloadRecipientsPresenter.go(recipients, session.notificationType)
   }
