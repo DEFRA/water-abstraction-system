@@ -18,9 +18,9 @@ const FetchLetterRecipientsService = require('../../../../app/services/notices/s
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
-const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
-describe('Notices - Setup - Recipients service', () => {
+describe('Notices - Setup - Fetch recipients service', () => {
   let recipients
   let session
 
@@ -43,7 +43,7 @@ describe('Notices - Setup - Recipients service', () => {
       })
 
       it('returns all the recipients formatted for display', async () => {
-        const result = await RecipientsService.go(session)
+        const result = await FetchRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -82,7 +82,7 @@ describe('Notices - Setup - Recipients service', () => {
         })
 
         it('returns only the selected recipients formatted for display', async () => {
-          const result = await RecipientsService.go(session, false)
+          const result = await FetchRecipientsService.go(session, false)
 
           expect(result).to.equal([
             {
@@ -126,7 +126,7 @@ describe('Notices - Setup - Recipients service', () => {
         })
 
         it('returns all the recipients formatted for display', async () => {
-          const result = await RecipientsService.go(session, false)
+          const result = await FetchRecipientsService.go(session, false)
 
           expect(result).to.equal([
             {
@@ -165,7 +165,7 @@ describe('Notices - Setup - Recipients service', () => {
       })
 
       it('returns all the recipients (including "additionalRecipients") formatted for display', async () => {
-        const result = await RecipientsService.go(session)
+        const result = await FetchRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -226,7 +226,7 @@ describe('Notices - Setup - Recipients service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await RecipientsService.go(session)
+      const result = await FetchRecipientsService.go(session)
 
       expect(result).to.equal([
         {
@@ -255,7 +255,7 @@ describe('Notices - Setup - Recipients service', () => {
     })
 
     it('returns only letter recipients', async () => {
-      const result = await RecipientsService.go(session)
+      const result = await FetchRecipientsService.go(session)
 
       expect(result).to.equal([
         {

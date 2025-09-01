@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and determining recipients
- * @module RecipientsService
+ * @module FetchRecipientsService
  */
 
 const AllRecipientsService = require('./all-recipients.service.js')
