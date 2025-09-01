@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates merging the recipients with additional and selected recipients
- * @module AllRecipientsService
+ * @module RecipientsService
  */
 
 /**

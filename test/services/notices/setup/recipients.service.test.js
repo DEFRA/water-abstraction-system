@@ -11,9 +11,9 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const AllRecipientsService = require('../../../../app/services/notices/setup/all-recipients.service.js')
+const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
 
-describe('Notices - Setup - All Recipients service', () => {
+describe('Notices - Setup - Recipients service', () => {
   let recipients
   let recipientsFixture
   let session
@@ -33,7 +33,7 @@ describe('Notices - Setup - All Recipients service', () => {
       })
 
       it('returns all the recipients formatted for display', () => {
-        const result = AllRecipientsService.go(session, recipients)
+        const result = RecipientsService.go(session, recipients)
 
         expect(result).to.equal([
           {
@@ -84,7 +84,7 @@ describe('Notices - Setup - All Recipients service', () => {
         })
 
         it('returns only the selected recipients formatted for display', () => {
-          const result = AllRecipientsService.go(session, recipients, false)
+          const result = RecipientsService.go(session, recipients, false)
 
           expect(result).to.equal([
             {
@@ -118,7 +118,7 @@ describe('Notices - Setup - All Recipients service', () => {
         })
 
         it('returns all the recipients formatted for display', () => {
-          const result = AllRecipientsService.go(session, recipients, false)
+          const result = RecipientsService.go(session, recipients, false)
 
           expect(result).to.equal([
             {
@@ -150,7 +150,7 @@ describe('Notices - Setup - All Recipients service', () => {
       })
 
       it('returns all the recipients (including "additionalRecipients") formatted for display', () => {
-        const result = AllRecipientsService.go(session, recipients, false)
+        const result = RecipientsService.go(session, recipients, false)
 
         expect(result).to.equal([
           {
