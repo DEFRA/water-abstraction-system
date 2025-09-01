@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Fetches the recipients data for the `/notices/setup/check` page
- * @module FetchRecipientsService
+ * Fetches the returns recipients data for the `/notices/setup/check` page
+ * @module FetchReturnsRecipientsService
  */
 
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
- * Fetches the recipients data for the `/notices/setup/check` page
+ * Fetches the returns recipients data for the `/notices/setup/check` page
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.

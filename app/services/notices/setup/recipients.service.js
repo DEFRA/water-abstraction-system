@@ -9,7 +9,7 @@ const AllRecipientsService = require('./all-recipients.service.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('./fetch-returns-recipients.service.js')
 
 /**
  * Orchestrates fetching and determining recipients
@@ -35,7 +35,7 @@ async function _recipientsData(session) {
   } else if (session.noticeType === 'returnForms') {
     return FetchLetterRecipientsService.go(session)
   } else {
-    return FetchRecipientsService.go(session)
+    return FetchReturnsRecipientsService.go(session)
   }
 }
 

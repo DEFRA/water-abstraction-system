@@ -11,9 +11,9 @@ const { expect } = Code
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
-describe('Notices - Setup - Fetch recipients service', () => {
+describe('Notices - Setup - Fetch returns recipients service', () => {
   const dueDate = '2025-04-28'
 
   let recipients
@@ -44,7 +44,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
     describe('when there is a "primary user"', () => {
       it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [testRecipient] = result.filter((res) => {
           return res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -61,7 +61,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
       describe('and there is a "returns agent" (known as userReturns in the DB)', () => {
         it('correctly returns the "returns agent" as well as the primary user', async () => {
-          const result = await FetchRecipientsService.go(session)
+          const result = await FetchReturnsRecipientsService.go(session)
 
           const [, testRecipientReturnsAgent] = result.filter((res) => {
             return res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -80,7 +80,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
     describe('when the licence number only has one recipient which has the "licence holder" role', () => {
       it('correctly returns the licence holder data', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [testRecipient] = result.filter((res) => {
           return res.licence_refs.includes(recipients.licenceHolder.licenceRef)
@@ -113,7 +113,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
 
     describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
       it('correctly returns the licence holder and returns to data', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [licenceHolder, returnsTo] = result.filter((res) => {
           return res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
@@ -175,7 +175,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
       })
 
       it('correctly returns recipients without the "removeLicences"', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [testRecipient] = result.filter((res) => {
           return res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -193,7 +193,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
       })
 
       it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [testRecipient] = result.filter((res) => {
           return res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -214,7 +214,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
         })
 
         it('correctly returns the "returns agent" as well as the primary user', async () => {
-          const result = await FetchRecipientsService.go(session)
+          const result = await FetchReturnsRecipientsService.go(session)
 
           const [, testRecipientReturnsAgent] = result.filter((res) => {
             return res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -237,7 +237,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
       })
 
       it('correctly returns the licence holder data', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [testRecipient] = result.filter((res) => {
           return res.licence_refs.includes(recipients.licenceHolder.licenceRef)
@@ -274,7 +274,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
       })
 
       it('correctly returns the licence holder and returns to data', async () => {
-        const result = await FetchRecipientsService.go(session)
+        const result = await FetchReturnsRecipientsService.go(session)
 
         const [licenceHolder, returnsTo] = result.filter((res) => {
           return res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)

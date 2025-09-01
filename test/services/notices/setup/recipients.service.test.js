@@ -15,7 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
 const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
@@ -39,7 +39,7 @@ describe('Notices - Setup - Recipients service', () => {
           }
         })
 
-        Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
+        Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
       })
 
       it('returns all the recipients formatted for display', async () => {
@@ -78,7 +78,7 @@ describe('Notices - Setup - Recipients service', () => {
             }
           })
 
-          Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser, recipients.licenceHolder])
+          Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.licenceHolder])
         })
 
         it('returns only the selected recipients formatted for display', async () => {
@@ -122,7 +122,7 @@ describe('Notices - Setup - Recipients service', () => {
             }
           })
 
-          Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
+          Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
         })
 
         it('returns all the recipients formatted for display', async () => {
@@ -161,7 +161,7 @@ describe('Notices - Setup - Recipients service', () => {
           }
         })
 
-        Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
+        Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
       })
 
       it('returns all the recipients (including "additionalRecipients") formatted for display', async () => {
