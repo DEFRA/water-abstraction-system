@@ -129,7 +129,7 @@ FROM (
       LOWER(
         concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
-     )) AS contact_hash_id
+    )) AS contact_hash_id
   FROM public.licence_document_headers ldh
     INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON TRUE
     INNER JOIN public.return_logs rl
