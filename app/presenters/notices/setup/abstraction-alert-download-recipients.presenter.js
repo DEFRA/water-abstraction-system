@@ -5,7 +5,7 @@
  * @module AbstractionAlertDownloadRecipientsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const { addressToCSV } = require('../base.presenter.js')
 const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
@@ -103,7 +103,7 @@ function _row(matchingRecipient, licenceMonitoringStation, notificationType, lic
     contact ? 'letter' : 'email',
     matchingRecipient.contact_type,
     matchingRecipient.email || '',
-    ..._address(contact)
+    ...addressToCSV(contact)
   ]
 }
 
