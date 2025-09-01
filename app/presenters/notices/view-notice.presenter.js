@@ -5,20 +5,32 @@
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const DatabaseConfig = require('../../../config/database.config.js')
+const { formatLongDate, titleCase } = require('../base.presenter.js')
+
+const NOTICE_MAPPINGS = {
+  'hof-resume': 'HOF resume',
+  'hof-stop': 'HOF stop',
+  'hof-warning': 'HOF warning',
+  paperReturnForms: 'Paper return',
+  renewal: 'Renewal',
+  returnInvitation: 'Returns invitation',
+  returnReminder: 'Returns reminder',
+  waterAbstractionAlerts: 'alert'
+}
 
 /**
  * Formats data for the 'notices/{id}' page
  *
- * @param {object} notice - The notice object
- * @param {object[]} notifications - The data to be formatted for display
- * @param {number} page - The current page for the pagination service
+ * @param {module:EventModel} notice - The notice object
+ * @param {module:NotificationModel[]} notifications - The notifications linked to the notice
+ * @param {number} totalNumber - The total number of notifications linked to the notice
+ * @param {number} selectedPage - The selected page of results
+ * @param {number} numberOfPages - The number of pages of results to paginate
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications, page = 1) {
-  const tableRows = _formatTableData(notifications, page)
+function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
+  const tableRows = _formatTableData(notifications)
 
   return {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
@@ -26,18 +38,16 @@ function go(notice, notifications, page = 1) {
     dateCreated: formatLongDate(notice.createdAt),
     reference: notice.referenceCode,
     notices: tableRows,
-    pageTitle: _pageTitle(notice.subtype),
+    numberShowing: notifications.length,
+    pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
-    status: _status(notifications)
+    showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
+    status: _status(notice)
   }
 }
 
-function _formatTableData(notifications, page) {
-  const to = page === 1 ? DatabaseConfig.defaultPageSize : page * DatabaseConfig.defaultPageSize
-  const from = page === 1 ? 0 : to - DatabaseConfig.defaultPageSize
-  const rows = notifications.slice(from, to)
-
-  return rows.map((notification) => {
+function _formatTableData(notifications) {
+  return notifications.map((notification) => {
     return {
       recipient: _recipient(notification),
       licenceRefs: notification.licences,
@@ -47,24 +57,20 @@ function _formatTableData(notifications, page) {
   })
 }
 
-function _pageTitle(subtype) {
-  if (subtype === 'paperReturnForms') {
-    return 'Returns invitations'
+function _pageTitle(notice, selectedPage, numberOfPages) {
+  const { alertType, subtype } = notice
+
+  let title = NOTICE_MAPPINGS[subtype]
+
+  if (alertType) {
+    title = `${titleCase(alertType)} alert`
   }
 
-  if (subtype === 'returnReminder') {
-    return 'Returns reminders'
+  if (numberOfPages === 1) {
+    return title
   }
 
-  if (subtype === 'adHocReminder') {
-    return 'Ad-hoc notice'
-  }
-
-  if (subtype === 'waterAbstractionAlerts') {
-    return 'Water abstraction alert'
-  }
-
-  return 'Notifications'
+  return `${title} (page ${selectedPage} of ${numberOfPages})`
 }
 
 function _recipient(notification) {
@@ -86,20 +92,22 @@ function _recipient(notification) {
   ].filter(Boolean)
 }
 
-function _status(notifications) {
-  const erroredNotifications = notifications.some((notice) => {
-    return notice.status === 'error'
-  })
+function _showingDeclaration(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} notifications`
+  }
 
-  if (erroredNotifications) {
+  return `Showing all ${totalNumber} notifications`
+}
+
+function _status(notice) {
+  const { errorCount, pendingCount } = notice
+
+  if (errorCount > 0) {
     return 'error'
   }
 
-  const pendingNotifications = notifications.some((notice) => {
-    return notice.status === 'pending'
-  })
-
-  if (pendingNotifications) {
+  if (pendingCount > 0) {
     return 'pending'
   }
 

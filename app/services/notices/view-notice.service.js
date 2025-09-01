@@ -6,7 +6,6 @@
  * @module ViewNoticeService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
@@ -20,32 +19,26 @@ const ViewNoticePresenter = require('../../presenters/notices/view-notice.presen
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(noticeId, page) {
-  const { notice, notifications } = await FetchNoticeService.go(noticeId)
-
   const selectedPageNumber = page ? Number(page) : 1
-  const defaultPageSize = DatabaseConfig.defaultPageSize
-  const numberShowing = notifications.length < defaultPageSize ? notifications.length : defaultPageSize
 
-  const pagination = PaginatorPresenter.go(notifications.length, selectedPageNumber, `/system/notices/${notice.id}`)
+  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber)
 
-  const pageData = ViewNoticePresenter.go(notice, notifications, page)
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices/${notice.id}`)
+
+  const pageData = ViewNoticePresenter.go(
+    notice,
+    notifications,
+    totalNumber,
+    selectedPageNumber,
+    pagination.numberOfPages
+  )
 
   return {
     activeNavBar: 'manage',
     ...pageData,
-    numberOfRecipients: notifications.length,
-    numberShowing,
     pagination,
-    pageNumbers: _numberOfNotifications(pagination.numberOfPages, selectedPageNumber)
+    totalNumber
   }
-}
-
-function _numberOfNotifications(numberOfPages, selectedPageNumber) {
-  if (numberOfPages < 2) {
-    return 'Showing all notifications'
-  }
-
-  return `Showing page ${selectedPageNumber} of ${numberOfPages} notifications`
 }
 
 module.exports = {
