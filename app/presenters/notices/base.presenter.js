@@ -3,9 +3,18 @@
 const NotifyAddressPresenter = require('./setup/notify-address.presenter.js')
 
 /**
- * Formats an address into as CSV string.
+ * Formats an address object into a fixed array of 7 strings to be used as a CSV.
  *
- * When there is noaddress then return empty csv values.
+ * When an address has less than 7 address lines, we fill the remaining lines with empty strings to maintain the
+ * integrity of the CSV.
+ *
+ * ```javascript
+ * // Full address
+ * ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR', 'UK']
+ *
+ * // Address missing some lines
+ * ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', '']
+ * ```
  *
  * @param {object} address
  *
