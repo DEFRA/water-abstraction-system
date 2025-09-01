@@ -23,7 +23,7 @@ exports.up = function (knex) {
         'under_query',
         // 'under_query_comment',
         // 'is_test',
-        'return_cycle_id', // is populated but links to a table that does not appear to be used
+        // 'return_cycle_id' // is populated but links to a table that does not appear to be used
         'created_at',
         'updated_at'
       ])
