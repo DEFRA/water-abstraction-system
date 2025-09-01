@@ -52,24 +52,6 @@ function go(recipients, session) {
   return [HEADERS + '\n', ...rows].join('')
 }
 
-function _address(contact) {
-  if (!contact) {
-    return ['', '', '', '', '', '', '']
-  }
-
-  const notifyAddress = NotifyAddressPresenter.go(contact)
-
-  return [
-    notifyAddress.address_line_1,
-    notifyAddress.address_line_2 || '',
-    notifyAddress.address_line_3 || '',
-    notifyAddress.address_line_4 || '',
-    notifyAddress.address_line_5 || '',
-    notifyAddress.address_line_6 || '',
-    notifyAddress.address_line_7 || ''
-  ]
-}
-
 /**
  * Matches a recipient to a licence monitoring station by the licence ref.
  *
