@@ -38,9 +38,9 @@ async function go(sessionId) {
 
 async function _formattedDate(session) {
   if (session.journey === 'alerts') {
-    const recipients = await FetchAbstractionAlertRecipientsService.go(session)
+    const abstractionAlertRecipients = await FetchAbstractionAlertRecipientsService.go(session)
 
-    return AbstractionAlertDownloadRecipientsPresenter.go(recipients, session)
+    return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
   }
 
   const recipients = await FetchDownloadRecipientsService.go(session)
