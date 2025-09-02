@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/notices/setup/download` link
- * @module DownloadRecipientsPresenter
+ * @module DownloadAdHocRecipientsPresenter
  */
 
 const { addressToCSV } = require('../base.presenter.js')
@@ -10,10 +10,6 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
 
 const HEADERS = [
   'Licence',
-  'Return reference',
-  'Return period start date',
-  'Return period end date',
-  'Return due date',
   'Notification type',
   'Message type',
   'Contact type',
@@ -62,10 +58,6 @@ function _transformToCsv(recipients, notificationType) {
 
     const row = [
       recipient.licence_ref,
-      recipient.return_reference,
-      recipient.start_date,
-      recipient.end_date,
-      recipient.due_date,
       notificationType,
       contact ? 'letter' : 'email',
       recipient.contact_type,
