@@ -33,15 +33,13 @@ const RETURN_TYPE = {
  * Each page will be assigned a corresponding object to isolate the data to each page where possible. Those pages are:
  * - The "cover" page, this is the first page. The address is on this page.
  *
- * @param {SessionModel} session - The session instance
+ * @param {string} licenceRef
  * @param {object} dueReturnLog
  * @param {object} recipient
  *
  * @returns {object} - The data formatted for the return form
  */
-function go(session, dueReturnLog, recipient) {
-  const { licenceRef } = session
-
+function go(licenceRef, dueReturnLog, recipient) {
   const {
     dueDate,
     endDate,

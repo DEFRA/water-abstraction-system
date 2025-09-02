@@ -18,36 +18,29 @@ const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/ge
 const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
 
 describe('Notices - Setup - Prepare Return Forms Service', () => {
+  const buffer = new TextEncoder().encode('mock file').buffer
+  const licenceRef = '123'
+
+  let dueReturnLog
   let notifierStub
   let recipient
-  let returnId
-  let session
 
   beforeEach(async () => {
-    returnId = '1234'
-
     recipient = RecipientsFixture.recipients().licenceHolder
 
-    session = {
-      licenceRef: '123',
-      dueReturns: [
-        {
-          dueDate: '2025-07-06',
-          endDate: '2025-06-06',
-          naldAreaCode: 'MIDLT',
-          purpose: 'A purpose',
-          regionName: 'North West',
-          returnId,
-          returnReference: '123456',
-          returnsFrequency: 'day',
-          siteDescription: 'Water park',
-          startDate: '2025-01-01',
-          twoPartTariff: false
-        }
-      ]
+    dueReturnLog = {
+      dueDate: '2025-07-06',
+      endDate: '2025-06-06',
+      naldAreaCode: 'MIDLT',
+      purpose: 'A purpose',
+      regionName: 'North West',
+      returnId: '1234',
+      returnReference: '123456',
+      returnsFrequency: 'day',
+      siteDescription: 'Water park',
+      startDate: '2025-01-01',
+      twoPartTariff: false
     }
-
-    const buffer = new TextEncoder().encode('mock file').buffer
 
     Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
       response: {
@@ -65,16 +58,46 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
   })
 
   describe('when called', () => {
-    it('returns generated pdf as an array buffer', async () => {
-      const result = await PrepareReturnFormsService.go(session, returnId, recipient)
+    it('returns file and page data', async () => {
+      const result = await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
 
-      expect(result).to.be.instanceOf(ArrayBuffer)
+      expect(result).to.equal({
+        file: buffer,
+        pageData: {
+          address: {
+            address_line_1: 'Mr H J Licence holder',
+            address_line_2: '1',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR'
+          },
+          dueDate: '6 July 2025',
+          endDate: '6 June 2025',
+          licenceRef: '123',
+          pageEntries: result.pageData.pageEntries,
+          pageTitle: 'Water abstraction daily return',
+          purpose: 'A purpose',
+          regionAndArea: 'North West / Lower Trent',
+          returnsFrequency: 'day',
+          returnReference: '123456',
+          siteDescription: 'Water park',
+          startDate: '1 January 2025',
+          twoPartTariff: false
+        }
+      })
+    })
+
+    it('returns the file as an Array Buffer ', async () => {
+      const result = await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
+
+      expect(result.file).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
-      expect(result.byteLength).to.equal(9)
+      expect(result.file.byteLength).to.equal(9)
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
-      await PrepareReturnFormsService.go(session, returnId, recipient)
+      await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 

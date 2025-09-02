@@ -14,13 +14,12 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
+  const licenceRef = '123'
+
   let dueReturnLog
   let recipient
-  let session
 
   beforeEach(() => {
-    session = { licenceRef: '123' }
-
     recipient = RecipientsFixture.recipients().licenceHolder
 
     dueReturnLog = {
@@ -39,7 +38,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+      const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
       expect(result).to.equal({
         address: {
@@ -72,7 +71,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" and "naldAreaCode" in the text ', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
           expect(result.regionAndArea).to.equal('North West / Lower Trent')
         })
@@ -84,7 +83,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" in the text', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
           expect(result.regionAndArea).to.equal('North West')
         })
@@ -98,7 +97,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
@@ -111,7 +110,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageTitle).to.equal('Water abstraction monthly return')
           })
@@ -125,7 +124,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageTitle).to.equal('Water abstraction weekly return')
           })
@@ -140,7 +139,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return entries', () => {
-          const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
           expect(result.pageEntries).to.equal([
             // Page
@@ -204,7 +203,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the start and end are 6 months apart', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -232,7 +231,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -267,7 +266,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the period fits onto one page', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageEntries.length).to.equal(1)
             expect(result.pageEntries).to.equal([
@@ -313,7 +312,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
             expect(result.pageEntries.length).to.equal(2)
             expect(result.pageEntries.length).to.equal(2)

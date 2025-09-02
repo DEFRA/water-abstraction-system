@@ -12,26 +12,24 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
 /**
  * Orchestrates fetching and presenting the data for the return form
  *
- * @param {module:SessionModel} session - The session instance
- * @param {string} returnId - The UUID of the return log
+ * We return the 'pageData' to be used when sending the notification. The legacy code relies on setting the
+ * personalisation in the database (mainly the address and due dates).
+ *
+ * @param {string} licenceRef
+ * @param {object} dueReturnLog
  * @param {object} recipient
  *
- * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
+ * @returns {Promise<{}>} - Resolves with the generated form file as an ArrayBuffer and the page data.
  */
-async function go(session, returnId, recipient) {
-  const dueReturnLog = _dueReturnLog(session.dueReturns, returnId)
-
-  const pageData = PrepareReturnFormsPresenter.go(session, dueReturnLog, recipient)
+async function go(licenceRef, dueReturnLog, recipient) {
+  const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 
-  return requestData.response.body
-}
-
-function _dueReturnLog(dueReturns, returnId) {
-  return dueReturns.find((dueReturn) => {
-    return dueReturn.returnId === returnId
-  })
+  return {
+    file: requestData.response.body,
+    pageData
+  }
 }
 
 module.exports = {
