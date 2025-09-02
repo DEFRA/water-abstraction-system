@@ -71,13 +71,17 @@ function _returns(returns, canManageReturns) {
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
       returnLogId,
-      status: dueDate ? _status(returnLog) : 'not due yet'
+      status: _status(returnLog)
     }
   })
 }
 
 function _status(returnLog) {
   const { status, dueDate } = returnLog
+
+  if (!dueDate) {
+    return 'not due yet'
+  }
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
   // statues
