@@ -30,7 +30,7 @@ exports.up = function (knex) {
     table.string('job_id')
 
     // Legacy timestamps
-    table.timestamp('date_created', { useTz: false }).notNullable()
+    table.timestamp('date_created', { useTz: false })
 
     // Constraints
     table.unique(['job_id'], { useConstraint: true })
