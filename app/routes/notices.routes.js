@@ -38,6 +38,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/notices/{id}',
+    options: {
+      handler: NoticesController.submitView,
+      auth: {
+        access: {
+          scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
+        }
+      }
+    }
   }
 ]
 

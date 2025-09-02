@@ -37,7 +37,7 @@ function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
     createdBy: notice.issuer,
     dateCreated: formatLongDate(notice.createdAt),
     reference: notice.referenceCode,
-    notices: tableRows,
+    notifications: tableRows,
     numberShowing: notifications.length,
     pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
@@ -66,7 +66,8 @@ function _pageTitle(notice, selectedPage, numberOfPages) {
     title = `${titleCase(alertType)} alert`
   }
 
-  if (numberOfPages === 1) {
+  // NOTE: when there are no results at all numberOfPages will be 0. Hence our test is `< 2` instead of `=== 1`
+  if (numberOfPages < 2) {
     return title
   }
 
