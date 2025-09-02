@@ -26,7 +26,7 @@ describe('Notify - Create precompiled file request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       reference = 'test-123'
-      content = Buffer.from('Test data').toString('base64')
+      content = new TextEncoder().encode('Test data').buffer
 
       response = {
         statusCode: 201,

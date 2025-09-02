@@ -18,7 +18,7 @@ const NotifyRequest = require('../notify.request.js')
  *
  * > See {@link https://docs.notifications.service.gov.uk/rest-api.html#send-a-file-by-email | Send a precompiled letter} for more details.
  *
- * @param {string} content - a base 64 encoded string
+ * @param {ArrayBuffer} content - an array buffer for the file to send
  * @param {string} reference - the unique string for the notification group
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
@@ -28,7 +28,7 @@ async function send(content, reference) {
 
   const body = {
     reference,
-    content
+    content: Buffer.from(content).toString('base64')
   }
 
   return NotifyRequest.post(path, body)
