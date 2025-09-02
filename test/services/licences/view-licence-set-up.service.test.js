@@ -126,6 +126,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [
               {
+                dataTest: 'charge-version-0',
                 link: '/licences/456/charge-information/c0601335-b6ad-4651-b54b-c586f8d22ac3/view',
                 text: 'View'
               }

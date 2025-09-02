@@ -7,11 +7,9 @@
 {% macro createLink(data) %}
   {% for linkItem in data.action %}
     {% if not loop.first %} | {% endif %}
-    <a href="{{ linkItem.link }}"
-      class="govuk-link"
-      {% if linkItem.dataTest %} data-test="{{ linkItem.dataTest }}" {% endif %}
-    >
-      {{ linkItem.text }} </a>
+    <a href="{{ linkItem.link }}" class="govuk-link" data-test="{{ linkItem.dataTest }}">
+      {{ linkItem.text }}
+    </a>
   {% endfor %}
 {% endmacro %}
 
