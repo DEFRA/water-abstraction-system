@@ -66,12 +66,12 @@ function _returns(returns, canManageReturns) {
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description === 'null' ? '' : metadata.description,
-      dueDate: formatLongDate(new Date(dueDate)),
+      dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: _link(status, returnLogId, canManageReturns),
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
       returnLogId,
-      status: _status(returnLog)
+      status: dueDate ? _status(returnLog) : 'not due yet'
     }
   })
 }
