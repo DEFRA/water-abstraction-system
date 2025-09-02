@@ -17,11 +17,52 @@ const databaseConfig = require('../../../config/database.config.js')
  *
  * @param {string} noticeId - the UUID of the selected notice
  * @param {number} page - The current page for the pagination service
+ * @param {object} filters - an object containing the different filters to apply to the query
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
-async function go(noticeId, page) {
-  const notice = await EventModel.query()
+async function go(noticeId, page, filters) {
+  const notice = await _fetchNotice(noticeId)
+
+  const notificationsQuery = _fetchNotificationsQuery(noticeId)
+
+  _applyFilters(notificationsQuery, filters)
+
+  notificationsQuery
+    .orderBy([
+      { column: 'rn.recipient_name', order: 'asc' },
+      { column: 'notifications.licences', order: 'asc' },
+      { column: 'notifications.createdAt', order: 'asc' }
+    ])
+    .page(page - 1, databaseConfig.defaultPageSize)
+
+  const { results: notifications, total: totalNumber } = await notificationsQuery
+
+  return {
+    notice,
+    notifications,
+    totalNumber
+  }
+}
+
+function _applyFilters(query, filters) {
+  const { status, licence, recipient } = filters
+
+  if (recipient) {
+    query.whereILike('rn.recipient_name', `%${recipient}%`)
+  }
+
+  if (status) {
+    query.where('notifications.status', '=', status)
+  }
+
+  if (licence) {
+    query.where('notifications.licences', '?', licence)
+  }
+}
+
+async function _fetchNotice(noticeId) {
+  return EventModel.query()
     .findById(noticeId)
     .select([
       'createdAt',
@@ -49,19 +90,9 @@ async function go(noticeId, page) {
       `,
       [noticeId]
     )
-
-  console.log(notice)
-
-  const { results: notifications, total: totalNumber } = await _fetch(noticeId, page)
-
-  return {
-    notice,
-    notifications,
-    totalNumber
-  }
 }
 
-async function _fetch(noticeId, page) {
+function _fetchNotificationsQuery(noticeId) {
   return NotificationModel.query()
     .select([
       'notifications.id',
@@ -90,12 +121,6 @@ async function _fetch(noticeId, page) {
       [noticeId]
     )
     .where('event_id', noticeId)
-    .orderBy([
-      { column: 'rn.recipient_name', order: 'asc' },
-      { column: 'notifications.licences', order: 'asc' },
-      { column: 'notifications.createdAt', order: 'asc' }
-    ])
-    .page(page - 1, databaseConfig.defaultPageSize)
 }
 
 module.exports = {

@@ -1,8 +1,11 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
@@ -13,8 +16,6 @@
   {{ pageHeadingHtml }}
 
   <p>{{ statusTag(status, false) }}</p>
-
-  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
 
   {{ govukSummaryList({
     classes: 'govuk-summary-list--no-border',
@@ -35,61 +36,165 @@
 
   <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
 
-  <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{showingDeclaration}}</p>
+  {# Filters #}
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+    <form  method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-  {% set tableRows = [] %}
-  {% for notice in notices %}
-    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
-    {% set rowIndex = loop.index0 %}
+      {# Filter by status #}
+      {{ govukRadios({
+        name: "status",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            attributes: { 'data-test': 'filter-status-error' },
+            checked: 'error' === filters.status,
+            text: "Error",
+            value: "error"
+          },
+          {
+            attributes: { 'data-test': 'filter-status-pending' },
+            checked: 'pending' === filters.status,
+            text: "Pending",
+            value: "pending"
+          },
+          {
+            attributes: { 'data-test': 'filter-status-sent' },
+            checked: 'sent' === filters.status,
+            text: "Sent",
+            value: "sent"
+          }
+        ]
+      }) }}
 
-    {% set licenceNumbers %}
-      {% if notice.licenceRefs.length > 5 %}
-        {{
-        govukDetails({
-          classes: 'govuk-!-margin-bottom-0',
-          summaryText: notice.licenceRefs.length + ' licences',
-          html: newLineArrayItems(notice.licenceRefs)
-        })
-        }}
-      {% else %}
-        {{ newLineArrayItems(notice.licenceRefs)  }}
-      {% endif %}
-    {% endset %}
+      {# Filter by recipient #}
+      {{ govukInput({
+        label: {
+          text: "Recipient",
+          classes: "govuk-label--s",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-20",
+        hint: {
+          text: 'Compares to first line of address or email. You can use partial matches, for example, "rachel" or "defra.gov.uk"'
+        },
+        id: "recipient",
+        name: "recipient",
+        value: filters.recipient,
+        attributes: { 'data-test': 'filter-recipient' },
+        errorMessage: {
+          text: error.recipient.message
+        } if error.recipient
+      }) }}
 
-    {% set noticeStatusTag %}
-      {{ statusTag(notice.status, true) }}
-    {% endset %}
+      {# Filter by licence #}
+      {{ govukInput({
+        label: {
+          text: "Licence number",
+          classes: "govuk-label--s",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-20",
+        id: "licence",
+        name: "licence",
+        value: filters.licence,
+        attributes: { 'data-test': 'filter-licence' },
+        errorMessage: {
+          text: error.licence.message
+        } if error.licence
+      }) }}
 
-    {% set row = [
-      {
-        text: newLineArrayItems(notice.recipient),
-        attributes: { 'data-test': 'notice-recipient' + rowIndex }
-      },
-      {
-        html: licenceNumbers,
-        attributes: { 'data-test': 'notice-licences-' + rowIndex }
-      },
-      {
-        html: noticeStatusTag,
-        attributes: { 'data-test': 'notice-status-' + rowIndex }
-      }
-    ] %}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Apply filters",
+          preventDoubleClick: true
+        }) }}
 
-    {% set tableRows = (tableRows.push(row), tableRows) %}
-  {% endfor %}
+        {{ govukButton({
+          text: "Clear filters",
+          classes: "govuk-button--secondary ",
+          name: "clearFilters",
+          value: 'reset',
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  {% endset %}
 
-  {{ govukTable({
-    firstCellIsHeader: false,
-    attributes: { 'data-test': 'notices' },
-    head: [
-      { text: 'Recipient' },
-      { text: 'Licence number' },
-      { text: 'Status' }
-    ],
-    rows: tableRows
+  {{ govukDetails({
+    summaryText: "Filters",
+    html: filtersForm,
+    classes: "govuk-!-margin-bottom-2",
+    open: filters.openFilter
   }) }}
 
-  {% if pagination.numberOfPages > 1  %}
-    {{ govukPagination(pagination.component) }}
+  {# Results #}
+  {% if notifications|length === 0 %}
+    <p class="govuk-body">No notifications found.</p>
+  {% else %}
+    <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{showingDeclaration}}</p>
+
+    {% set tableRows = [] %}
+    {% for notification in notifications %}
+      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+      {% set rowIndex = loop.index0 %}
+
+      {% set licenceNumbers %}
+        {% if notification.licenceRefs.length > 5 %}
+          {{
+          govukDetails({
+            classes: 'govuk-!-margin-bottom-0',
+            summaryText: notification.licenceRefs.length + ' licences',
+            html: newLineArrayItems(notification.licenceRefs)
+          })
+          }}
+        {% else %}
+          {{ newLineArrayItems(notification.licenceRefs)  }}
+        {% endif %}
+      {% endset %}
+
+      {% set noticeStatusTag %}
+        {{ statusTag(notification.status, true) }}
+      {% endset %}
+
+      {% set row = [
+        {
+          text: newLineArrayItems(notification.recipient),
+          attributes: { 'data-test': 'notification-recipient' + rowIndex }
+        },
+        {
+          html: licenceNumbers,
+          attributes: { 'data-test': 'notification-licences-' + rowIndex }
+        },
+        {
+          html: noticeStatusTag,
+          attributes: { 'data-test': 'notification-status-' + rowIndex }
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      firstCellIsHeader: false,
+      attributes: { 'data-test': 'notices' },
+      head: [
+        { text: 'Recipient' },
+        { text: 'Licence number' },
+        { text: 'Status' }
+      ],
+      rows: tableRows
+    }) }}
+
+    {% if pagination.numberOfPages > 1  %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
   {% endif %}
 {% endblock %}
