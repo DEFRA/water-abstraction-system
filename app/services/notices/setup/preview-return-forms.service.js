@@ -29,9 +29,7 @@ async function go(sessionId, contactHashId, returnId) {
 
   const dueReturnLog = _dueReturnLog(dueReturns, returnId)
 
-  const { file } = await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
-
-  return file
+  return PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
 }
 
 function _dueReturnLog(dueReturns, returnId) {

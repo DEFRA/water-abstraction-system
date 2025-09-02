@@ -26,10 +26,7 @@ async function go(licenceRef, dueReturnLog, recipient) {
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 
-  return {
-    file: requestData.response.body,
-    pageData
-  }
+  return requestData.response.body
 }
 
 module.exports = {
