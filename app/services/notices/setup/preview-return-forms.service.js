@@ -6,8 +6,8 @@
  * @module PreviewReturnFormsService
  */
 
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
-const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -30,7 +30,7 @@ async function go(sessionId, contactHashId, returnId) {
 }
 
 async function _recipient(session, contactHashId) {
-  const recipients = await RecipientsService.go(session)
+  const recipients = await FetchRecipientsService.go(session)
 
   return recipients.filter((recipient) => {
     return recipient.contact_hash_id === contactHashId
