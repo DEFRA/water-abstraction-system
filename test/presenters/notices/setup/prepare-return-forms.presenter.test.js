@@ -14,7 +14,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
 
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
-  const licenceRef = '123'
+  const licenceRef = '01/123'
 
   let dueReturnLog
   let recipient
