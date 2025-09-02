@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
@@ -33,7 +33,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
 
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
