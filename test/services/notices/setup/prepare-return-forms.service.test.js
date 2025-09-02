@@ -19,7 +19,7 @@ const PrepareReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Prepare Return Forms Service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
-  const licenceRef = '123'
+  const licenceRef = '01/123'
 
   let dueReturnLog
   let notifierStub
