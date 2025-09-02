@@ -9,6 +9,7 @@ const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
+const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -33,7 +34,9 @@ async function go(sessionId) {
 
     formattedData = AbstractionAlertDownloadRecipientsPresenter.go(recipients, session)
   } else {
-    const recipients = await FetchDownloadRecipientsService.go(session)
+    const recipientsData = await FetchDownloadRecipientsService.go(session)
+
+    const recipients = RecipientsService.go(session, recipientsData, false)
 
     formattedData = DownloadRecipientsPresenter.go(recipients, session.notificationType)
   }
