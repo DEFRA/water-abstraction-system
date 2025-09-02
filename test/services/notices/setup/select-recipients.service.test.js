@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
 const SelectRecipientsService = require('../../../../app/services/notices/setup/select-recipients.service.js')
@@ -32,7 +32,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
 
     session = await SessionHelper.add({ data: sessionData })
 
-    Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
   })
 
   afterEach(() => {

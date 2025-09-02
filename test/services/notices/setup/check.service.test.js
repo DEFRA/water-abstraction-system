@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
 const CheckService = require('../../../../app/services/notices/setup/check.service.js')
@@ -42,7 +42,7 @@ describe('Notices - Setup - Check service', () => {
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([testRecipients.primaryUser])
+    Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([testRecipients.primaryUser])
   })
 
   afterEach(() => {
