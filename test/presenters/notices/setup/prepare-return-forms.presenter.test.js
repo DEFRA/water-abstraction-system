@@ -52,7 +52,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         siteDescription: 'Water park',
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
-        licenceRef: '123',
+        licenceRef: '01/123',
         pageEntries: result.pageEntries,
         purpose: 'A purpose',
         regionAndArea: 'North West / Lower Trent',

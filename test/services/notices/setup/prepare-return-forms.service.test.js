@@ -83,7 +83,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
         },
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
-        licenceRef: '123',
+        licenceRef: '01/123',
         pageEntries: actualCallArgs.pageEntries,
         pageTitle: 'Water abstraction daily return',
         purpose: 'A purpose',
