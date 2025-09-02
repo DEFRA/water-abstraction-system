@@ -6,9 +6,11 @@
  */
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
+const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
+const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -26,23 +28,31 @@ async function go(sessionId) {
 
   const { notificationType, referenceCode } = session
 
-  let formattedData
-
-  if (session.journey === 'alerts') {
-    const recipients = await FetchAbstractionAlertRecipientsService.go(session)
-
-    formattedData = AbstractionAlertDownloadRecipientsPresenter.go(recipients, session)
-  } else {
-    const recipients = await FetchDownloadRecipientsService.go(session)
-
-    formattedData = DownloadRecipientsPresenter.go(recipients, session.notificationType)
-  }
+  const formattedData = await _formattedDate(session)
 
   return {
     data: formattedData,
     type: 'text/csv',
     filename: `${notificationType} - ${referenceCode}.csv`
   }
+}
+
+async function _formattedDate(session) {
+  if (session.journey === 'alerts') {
+    const abstractionAlertRecipients = await FetchAbstractionAlertRecipientsService.go(session)
+
+    return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
+  }
+
+  const downloadRecipients = await FetchDownloadRecipientsService.go(session)
+
+  const recipients = RecipientsService.go(session, downloadRecipients, false)
+
+  if (session.journey === 'adhoc' && session.noticeType !== 'returnForms') {
+    return DownloadAdHocRecipientsPresenter.go(recipients, session)
+  }
+
+  return DownloadRecipientsPresenter.go(recipients, session)
 }
 
 module.exports = {

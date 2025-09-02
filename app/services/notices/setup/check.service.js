@@ -6,8 +6,8 @@
  */
 
 const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, yar, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await RecipientsService.go(session, false)
+  const recipients = await FetchRecipientsService.go(session, false)
 
   await _initialiseSelectedRecipients(recipients, session)
 
@@ -48,7 +48,7 @@ async function go(sessionId, yar, page = 1) {
  * all the contact_hash_id values from the provided recipients array. This ensures that
  * all recipients are initially selected by default.
  *
- * This has to be done after the initial 'RecipientsService' call so 'contact_hash_id' is available.
+ * This has to be done after the initial 'FetchRecipientsService' call so 'contact_hash_id' is available.
  *
  * @private
  */
