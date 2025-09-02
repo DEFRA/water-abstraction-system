@@ -61,6 +61,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           expect(primaryUser).to.equal({
             contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             due_date: new Date(dueDate),
             email: 'primary.user@important.com',
@@ -72,6 +73,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           expect(returnsAgent).to.equal({
             contact: null,
+            contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
             due_date: new Date(dueDate),
             email: 'returns.agent@important.com',
@@ -109,6 +111,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
               due_date: new Date(dueDate),
               email: null,
@@ -147,6 +150,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Licence holder',
               due_date: new Date(dueDate),
               email: null,
@@ -172,6 +176,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Returns to',
               due_date: new Date(dueDate),
               email: null,
@@ -228,6 +233,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           expect(primaryUser).to.equal({
             contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             due_date: new Date(dueDate),
             email: 'primary.user@important.com',
@@ -239,6 +245,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           expect(returnsAgent).to.equal({
             contact: null,
+            contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
             due_date: new Date(dueDate),
             email: 'returns.agent@important.com',
@@ -280,6 +287,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
               due_date: new Date(dueDate),
               email: null,
@@ -322,6 +330,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Licence holder',
               due_date: new Date(dueDate),
               email: null,
@@ -347,6 +356,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 town: 'Little Whinging',
                 type: 'Person'
               },
+              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Returns to',
               due_date: new Date(dueDate),
               email: null,

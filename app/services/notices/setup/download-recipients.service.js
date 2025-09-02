@@ -10,6 +10,7 @@ const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/d
 const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
+const RecipientsService = require('./recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -43,7 +44,9 @@ async function _formattedDate(session) {
     return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
   }
 
-  const recipients = await FetchDownloadRecipientsService.go(session)
+  const downloadRecipients = await FetchDownloadRecipientsService.go(session)
+
+  const recipients = RecipientsService.go(session, downloadRecipients, false)
 
   if (session.journey === 'adhoc' && session.noticeType !== 'returnForms') {
     return DownloadAdHocRecipientsPresenter.go(recipients, session)
