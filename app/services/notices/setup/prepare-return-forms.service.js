@@ -19,7 +19,7 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
  * @param {object} dueReturnLog
  * @param {object} recipient
  *
- * @returns {Promise<{}>} - Resolves with the generated form file as an ArrayBuffer and the page data.
+ * @returns {Promise<{ArrayBuffer}>} - Resolves with the generated form file as an ArrayBuffer
  */
 async function go(licenceRef, dueReturnLog, recipient) {
   const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
