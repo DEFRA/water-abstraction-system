@@ -57,6 +57,42 @@ describe('Notices - Setup - Download Recipients service', () => {
     })
   })
 
+  describe('when the journey is for "adhoc"', () => {
+    let removeLicences
+
+    before(async () => {
+      removeLicences = ''
+      referenceCode = 'RREM-00R1MQ'
+
+      session = await SessionHelper.add({
+        data: {
+          journey: 'adhoc',
+          notificationType: 'Returns reminder',
+          referenceCode,
+          removeLicences,
+          returnsPeriod: 'quarterFour'
+        }
+      })
+
+      testRecipients = _recipients()
+      Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
+    })
+
+    it('correctly returns the csv string, filename and type', async () => {
+      const result = await DownloadRecipientsService.go(session.id)
+
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          // Row - licence holder
+          '"1/343/3","Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
+        filename: `Returns reminder - ${referenceCode}.csv`,
+        type: 'text/csv'
+      })
+    })
+  })
+
   describe('when the journey is "alerts"', () => {
     let recipients
 

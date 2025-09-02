@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const DownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-recipients.presenter.js')
+const DownloadAdHocRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-adhoc-recipients.presenter.js')
 
-describe('Notices - Setup - Download Recipients presenter', () => {
+describe('Notices - Setup - Download AdHoc Recipients presenter', () => {
   const notificationType = 'Returns invitation'
 
   let recipients
@@ -26,27 +26,27 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRecipientsPresenter.go(
+      const result = DownloadAdHocRecipientsPresenter.go(
         [recipients.primaryUser, recipients.licenceHolder, recipients.returnsTo, recipients.organisation],
         session
       )
 
       expect(result).to.equal(
         // Headers
-        'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+        'Licence,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - Primary user
-          '"123/46","2434",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","email","Primary user","primary.user@important.com",,,,,,,\n' +
+          '"123/46","Returns invitation","email","Primary user","primary.user@important.com",,,,,,,\n' +
           // Row - Licence holder
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n' +
+          '"1/343/3","Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n' +
           // Row - Returns to
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","WD25 7LR"\n' +
+          '"1/343/3","Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","WD25 7LR"\n' +
           //  Row - Licence holder - organisation
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n'
+          '"1/343/3","Returns invitation","letter","Licence holder",,"Gringotts","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n'
       )
     })
 
     it('correctly formats the headers', () => {
-      const result = DownloadRecipientsPresenter.go([recipients.primaryUser], session)
+      const result = DownloadAdHocRecipientsPresenter.go([recipients.primaryUser], session)
 
       let [headers] = result.split('\n')
       // We want to test the header includes the new line
@@ -54,10 +54,6 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
       expect(headers).to.equal(
         'Licence,' +
-          'Return reference,' +
-          'Return period start date,' +
-          'Return period end date,' +
-          'Return due date,' +
           'Notification type,' +
           'Message type,' +
           'Contact type,' +
@@ -75,7 +71,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
     describe('when the recipient is a "primary_user"', () => {
       it('correctly formats the row', () => {
-        const result = DownloadRecipientsPresenter.go([recipients.primaryUser], session)
+        const result = DownloadAdHocRecipientsPresenter.go([recipients.primaryUser], session)
 
         let [, row] = result.split('\n')
         // We want to test the row includes the new line
@@ -83,10 +79,6 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
         expect(row).to.equal(
           '"123/46",' + // Licence
-            '"2434",' + // Return reference
-            '2018-01-01,' + // Return period start date
-            '2019-01-01,' + // Return period end date
-            '2021-01-01,' + // Return due date
             '"Returns invitation",' + // Notification type
             '"email",' + // Message type
             '"Primary user",' + // Contact type
@@ -106,7 +98,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
       describe('and the "contact" is a "person"', () => {
         describe('and the "person" is a "Licence holder"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.licenceHolder], session)
+            const result = DownloadAdHocRecipientsPresenter.go([recipients.licenceHolder], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -114,10 +106,6 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
             expect(row).to.equal(
               '"1/343/3",' + // Licence
-                '"376439279",' + // Return reference
-                '2018-01-01,' + // Return period start date
-                '2019-01-01,' + // Return period end date
-                '2021-01-01,' + // Return due date
                 '"Returns invitation",' + // Notification type
                 '"letter",' + // Message type
                 '"Licence holder",' + // Contact type
@@ -136,7 +124,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
         describe('and the "person" is a "Returns to"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.returnsTo], session)
+            const result = DownloadAdHocRecipientsPresenter.go([recipients.returnsTo], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -144,10 +132,6 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
             expect(row).to.equal(
               '"1/343/3",' + // Licence
-                '"376439279",' + // Return reference
-                '2018-01-01,' + // Return period start date
-                '2019-01-01,' + // Return period end date
-                '2021-01-01,' + // Return due date
                 '"Returns invitation",' + // Notification type
                 '"letter",' + // Message type
                 '"Returns to",' + // Contact type
@@ -167,7 +151,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
       describe('and the "contact" is a "organisation"', () => {
         it('correctly formats the row', () => {
-          const result = DownloadRecipientsPresenter.go([recipients.organisation], session)
+          const result = DownloadAdHocRecipientsPresenter.go([recipients.organisation], session)
 
           let [, row] = result.split('\n')
           // We want to test the row includes the new line
@@ -175,10 +159,6 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
           expect(row).to.equal(
             '"1/343/3",' + // Licence
-              '"376439279",' + // Return reference
-              '2018-01-01,' + // Return period start date
-              '2019-01-01,' + // Return period end date
-              '2021-01-01,' + // Return due date
               '"Returns invitation",' + // Notification type
               '"letter",' + // Message type
               '"Licence holder",' + // Contact type
@@ -195,6 +175,8 @@ describe('Notices - Setup - Download Recipients presenter', () => {
         })
       })
     })
+
+    describe('and the "noticeType" is ""', () => {})
   })
 })
 

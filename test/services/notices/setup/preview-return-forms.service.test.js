@@ -13,8 +13,8 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
-const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
 
 // Thing under test
 const PreviewReturnFormsService = require('../../../../app/services/notices/setup/preview-return-forms.service.js')
@@ -63,7 +63,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
       }
     })
 
-    Sinon.stub(RecipientsService, 'go').resolves([
+    Sinon.stub(FetchRecipientsService, 'go').resolves([
       {
         ...recipient
       },

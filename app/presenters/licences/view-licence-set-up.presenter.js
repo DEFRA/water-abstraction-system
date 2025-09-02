@@ -55,18 +55,18 @@ function go(chargeVersions, workflows, agreements, returnVersions, auth, commonD
 }
 
 function _agreements(commonData, agreements, auth, enableTwoPartSupplementary) {
-  return agreements.map((agreement) => {
+  return agreements.map((agreement, index) => {
     return {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: AGREEMENTS[_financialAgreementCode(agreement)],
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
-      action: _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary)
+      action: _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary, index)
     }
   })
 }
 
-function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary) {
+function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary, index) {
   if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
     return []
   }
@@ -80,6 +80,7 @@ function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplem
 
   if (auth.credentials.scope.includes(ROLES.deleteAgreements)) {
     actionLinks.push({
+      dataTest: `delete-agreement-${index}`,
       text: 'Delete',
       link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/delete`
     })
@@ -87,6 +88,7 @@ function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplem
 
   if (hasNotEnded) {
     actionLinks.push({
+      dataTest: `end-agreement-${index}`,
       text: 'End',
       link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/end`
     })
@@ -104,6 +106,7 @@ function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplem
       auth.credentials.scope.includes(ROLES.billing)
     ) {
       actionLinks.push({
+        dataTest: `recalculate-agreement-${index}`,
         text: 'Recalculate bills',
         link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
       })
@@ -139,7 +142,7 @@ function _chargeInformation(chargeVersions, workflows, auth) {
 }
 
 function _chargeVersions(chargeVersions) {
-  return chargeVersions.map((chargeVersion) => {
+  return chargeVersions.map((chargeVersion, index) => {
     return {
       id: chargeVersion.id,
       startDate: formatLongDate(chargeVersion.startDate),
@@ -148,6 +151,7 @@ function _chargeVersions(chargeVersions) {
       reason: chargeVersion.changeReason?.description,
       action: [
         {
+          dataTest: `charge-version-${index}`,
           text: 'View',
           link: `/licences/${chargeVersion.licenceId}/charge-information/${chargeVersion.id}/view`
         }
@@ -218,10 +222,11 @@ function _recalculateBills(agreements, auth, commonData, enableTwoPartSupplement
 }
 
 function _returnVersions(returnVersions = [{}]) {
-  return returnVersions.map((returnVersion) => {
+  return returnVersions.map((returnVersion, index) => {
     return {
       action: [
         {
+          dataTest: `return-version-${index}`,
           text: 'View',
           link: `/system/return-versions/${returnVersion.id}`
         }
@@ -246,9 +251,9 @@ function _returnVersionsLinks(commonData, enableRequirementsForReturns, auth) {
 }
 
 function _workflows(workflows, auth) {
-  return workflows.map((workflow) => {
+  return workflows.map((workflow, index) => {
     return {
-      action: _workflowAction(workflow, auth),
+      action: _workflowAction(workflow, auth, index),
       endDate: '',
       id: workflow.id,
       reason: workflow.data.chargeVersion?.changeReason?.description,
@@ -258,34 +263,37 @@ function _workflows(workflows, auth) {
   })
 }
 
-function _workflowAction(workflow, auth) {
+function _workflowAction(workflow, auth, index) {
   if (workflow.status === 'to_setup' && auth.credentials.scope.includes(ROLES.workflowEditor)) {
-    return _workflowActionEditor(workflow)
+    return _workflowActionEditor(workflow, index)
   }
 
   if (auth.credentials.scope.includes(ROLES.workflowReviewer)) {
-    return _workflowActionReviewer(workflow)
+    return _workflowActionReviewer(workflow, index)
   }
 
   return []
 }
 
-function _workflowActionEditor(workflow) {
+function _workflowActionEditor(workflow, index) {
   return [
     {
+      dataTest: `set-up-charge-version-${index}`,
       text: 'Set up',
       link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
     },
     {
+      dataTest: `remove-charge-version-${index}`,
       text: 'Remove',
       link: `/charge-information-workflow/${workflow.id}/remove`
     }
   ]
 }
 
-function _workflowActionReviewer(workflow) {
+function _workflowActionReviewer(workflow, index) {
   return [
     {
+      dataTest: `review-charge-version-${index}`,
       text: 'Review',
       link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
     }

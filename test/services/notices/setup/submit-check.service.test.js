@@ -17,7 +17,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')
@@ -74,7 +74,7 @@ describe('Notices - Setup - Submit Check service', () => {
       testRecipients = [recipients.primaryUser]
 
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(FetchReturnsRecipientsService, 'go').resolves(testRecipients)
     })
 
     it('correctly returns the event id', async () => {

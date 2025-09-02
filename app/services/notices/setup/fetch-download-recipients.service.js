@@ -113,7 +113,8 @@ SELECT
   contacts.end_date,
   contacts.due_date,
   contacts.email,
-  contacts.contact
+  contacts.contact,
+  contacts.contact_hash_id
 FROM (
   SELECT DISTINCT
     ldh.licence_ref,
@@ -123,7 +124,12 @@ FROM (
     rl.return_reference,
     rl.start_date,
     rl.end_date,
-    rl.due_date
+    rl.due_date,
+    (md5(
+      LOWER(
+        concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+      )
+    )) AS contact_hash_id
   FROM public.licence_document_headers ldh
     INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON TRUE
     INNER JOIN public.return_logs rl
@@ -153,7 +159,8 @@ FROM (
     rl.return_reference,
     rl.start_date,
     rl.end_date,
-    rl.due_date
+    rl.due_date,
+    md5(LOWER(le."name")) AS contact_hash_id
   FROM public.licence_document_headers ldh
   INNER JOIN public.licence_entity_roles ler
     ON ler.company_entity_id = ldh.company_entity_id

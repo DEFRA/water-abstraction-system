@@ -126,6 +126,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [
               {
+                dataTest: 'charge-version-0',
                 link: '/licences/456/charge-information/c0601335-b6ad-4651-b54b-c586f8d22ac3/view',
                 text: 'View'
               }
@@ -153,6 +154,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [
               {
+                dataTest: 'return-version-0',
                 link: '/system/return-versions/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                 text: 'View'
               }

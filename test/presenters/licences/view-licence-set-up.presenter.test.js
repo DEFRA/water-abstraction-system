@@ -133,14 +133,17 @@ describe('View Licence Set Up presenter', () => {
             {
               action: [
                 {
+                  dataTest: 'delete-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                   text: 'Delete'
                 },
                 {
+                  dataTest: 'end-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                   text: 'End'
                 },
                 {
+                  dataTest: 'recalculate-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
                   text: 'Recalculate bills'
                 }
@@ -166,14 +169,17 @@ describe('View Licence Set Up presenter', () => {
 
             expect(result.agreements[0].action).to.equal([
               {
+                dataTest: 'delete-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                 text: 'Delete'
               },
               {
+                dataTest: 'end-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                 text: 'End'
               },
               {
+                dataTest: 'recalculate-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
                 text: 'Recalculate bills'
               }
@@ -218,10 +224,12 @@ describe('View Licence Set Up presenter', () => {
 
               expect(result.agreements[0].action).to.equal([
                 {
+                  dataTest: 'end-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                   text: 'End'
                 },
                 {
+                  dataTest: 'recalculate-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
                   text: 'Recalculate bills'
                 }
@@ -246,6 +254,7 @@ describe('View Licence Set Up presenter', () => {
 
               expect(result.agreements[0].action).to.equal([
                 {
+                  dataTest: 'delete-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                   text: 'Delete'
                 }
@@ -270,10 +279,12 @@ describe('View Licence Set Up presenter', () => {
 
               expect(result.agreements[0].action).to.equal([
                 {
+                  dataTest: 'delete-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                   text: 'Delete'
                 },
                 {
+                  dataTest: 'end-agreement-0',
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                   text: 'End'
                 }
@@ -372,14 +383,17 @@ describe('View Licence Set Up presenter', () => {
 
             expect(result.agreements[0].action).to.equal([
               {
+                dataTest: 'delete-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                 text: 'Delete'
               },
               {
+                dataTest: 'end-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                 text: 'End'
               },
               {
+                dataTest: 'recalculate-agreement-0',
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
                 text: 'Recalculate bills'
               }
@@ -443,6 +457,7 @@ describe('View Licence Set Up presenter', () => {
             {
               action: [
                 {
+                  dataTest: 'charge-version-0',
                   link:
                     '/licences/' +
                     'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
@@ -485,6 +500,7 @@ describe('View Licence Set Up presenter', () => {
               {
                 action: [
                   {
+                    dataTest: 'charge-version-0',
                     link:
                       '/licences/' +
                       'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
@@ -521,6 +537,7 @@ describe('View Licence Set Up presenter', () => {
               {
                 action: [
                   {
+                    dataTest: 'charge-version-0',
                     link:
                       '/licences' +
                       '/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
@@ -567,6 +584,7 @@ describe('View Licence Set Up presenter', () => {
                 {
                   action: [
                     {
+                      dataTest: 'review-charge-version-0',
                       link:
                         '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
                         'f547f465-0a62-45ff-9909-38825f05e0c4/review',
@@ -633,6 +651,7 @@ describe('View Licence Set Up presenter', () => {
                 {
                   action: [
                     {
+                      dataTest: 'review-charge-version-0',
                       link:
                         '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
                         'f547f465-0a62-45ff-9909-38825f05e0c4/review',
@@ -699,6 +718,7 @@ describe('View Licence Set Up presenter', () => {
                 {
                   action: [
                     {
+                      dataTest: 'review-charge-version-0',
                       link:
                         '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
                         'f547f465-0a62-45ff-9909-38825f05e0c4/review',
@@ -764,6 +784,7 @@ describe('View Licence Set Up presenter', () => {
             {
               action: [
                 {
+                  dataTest: 'return-version-0',
                   link: '/system/return-versions/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                   text: 'View'
                 }
@@ -797,6 +818,7 @@ describe('View Licence Set Up presenter', () => {
               {
                 action: [
                   {
+                    dataTest: 'return-version-0',
                     link: '/system/return-versions/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                     text: 'View'
                   }
