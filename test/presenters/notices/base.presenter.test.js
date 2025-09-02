@@ -24,7 +24,7 @@ describe('Notices - Base presenter', () => {
 
           recipient = recipients.licenceHolder.contact
 
-          recipient.country = 'UK'
+          recipient.addressLine3 = 'The Cupboard Under the Stairs'
         })
 
         it('returns a fixed array of 7 strings with all the address lines', () => {
@@ -35,10 +35,10 @@ describe('Notices - Base presenter', () => {
             'Mr H J Licence holder',
             '1',
             'Privet Drive',
+            'The Cupboard Under the Stairs',
             'Little Whinging',
             'Surrey',
-            'WD25 7LR',
-            'UK'
+            'WD25 7LR'
           ])
         })
       })
