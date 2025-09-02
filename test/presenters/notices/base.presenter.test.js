@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../fixtures/recipients.fixtures.js')
 // Thing under test
 const BasePresenter = require('../../../app/presenters/notices/base.presenter.js')
 
-describe('Base presenter', () => {
+describe('Notices - Base presenter', () => {
   describe('#addressToCSV()', () => {
     let recipient
 
