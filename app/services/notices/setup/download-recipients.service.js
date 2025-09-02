@@ -6,8 +6,8 @@
  */
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
-const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
+const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
