@@ -23,10 +23,19 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, contactHashId, returnId) {
   const session = await SessionModel.query().findById(sessionId)
+  const { licenceRef, dueReturns } = session
 
   const [recipient] = await _recipient(session, contactHashId)
 
-  return PrepareReturnFormsService.go(session, returnId, recipient)
+  const dueReturnLog = _dueReturnLog(dueReturns, returnId)
+
+  return PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
+}
+
+function _dueReturnLog(dueReturns, returnId) {
+  return dueReturns.find((dueReturn) => {
+    return dueReturn.returnId === returnId
+  })
 }
 
 async function _recipient(session, contactHashId) {
