@@ -59,7 +59,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -107,7 +109,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -147,7 +151,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -177,7 +183,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         sessionData.additionalRecipients = [
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ]
@@ -195,12 +203,16 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           },
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])

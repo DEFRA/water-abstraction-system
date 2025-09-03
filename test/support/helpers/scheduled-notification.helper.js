@@ -4,15 +4,12 @@
  * @module ScheduledNotificationHelper
  */
 
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ScheduledNotificationModel = require('../../../app/models/scheduled-notification.model.js')
 
 /**
  * Add a new scheduled notification
  *
- * If no `data` is provided, default values will be used. These are
- *
- * - `createdAt` - new Date()
+ * If no `data` is provided, default values will be used.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -37,10 +34,7 @@ function add(data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults(data = {}) {
-  const defaults = {
-    // INFO: The table does not have a default for the createdAt column.
-    createdAt: timestampForPostgres()
-  }
+  const defaults = {}
 
   return {
     ...defaults,
