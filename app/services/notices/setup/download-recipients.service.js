@@ -46,7 +46,7 @@ async function _formattedDate(session) {
 
   const downloadRecipients = await FetchDownloadRecipientsService.go(session)
 
-  const recipients = RecipientsService.go(session, downloadRecipients, false)
+  const recipients = RecipientsService.go(session, downloadRecipients)
 
   if (session.journey === 'adhoc' && session.noticeType !== 'returnForms') {
     return DownloadAdHocRecipientsPresenter.go(recipients, session)

@@ -84,7 +84,7 @@ describe('Notices - Setup - Recipients service', () => {
         })
 
         it('returns only the selected recipients formatted for display', () => {
-          const result = RecipientsService.go(session, recipients, false)
+          const result = RecipientsService.go(session, recipients)
 
           expect(result).to.equal([
             {
@@ -118,7 +118,7 @@ describe('Notices - Setup - Recipients service', () => {
         })
 
         it('returns all the recipients formatted for display', () => {
-          const result = RecipientsService.go(session, recipients, false)
+          const result = RecipientsService.go(session, recipients)
 
           expect(result).to.equal([
             {
@@ -150,7 +150,7 @@ describe('Notices - Setup - Recipients service', () => {
       })
 
       it('returns all the recipients (including "additionalRecipients") formatted for display', () => {
-        const result = RecipientsService.go(session, recipients, false)
+        const result = RecipientsService.go(session, recipients)
 
         expect(result).to.equal([
           {
