@@ -24,7 +24,7 @@ describe('Notices - Setup - Recipient Name Presenter', () => {
       expect(result).to.equal({
         backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/check` },
         name: undefined,
-        pageTitle: 'Enter recipient name'
+        pageTitle: "Enter the recipient's name"
       })
     })
 

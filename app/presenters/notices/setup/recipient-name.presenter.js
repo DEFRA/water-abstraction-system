@@ -18,7 +18,7 @@ function go(session) {
   return {
     backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/check` },
     name,
-    pageTitle: 'Enter recipient name'
+    pageTitle: "Enter the recipient's name"
   }
 }
 

@@ -89,10 +89,10 @@ describe('Notices - Setup - Recipient Name Service', () => {
         },
         error: {
           href: '#name',
-          text: 'Enter the recipients name'
+          text: "Enter the recipient's name"
         },
         name: undefined,
-        pageTitle: 'Enter recipient name'
+        pageTitle: "Enter the recipient's name"
       })
     })
   })

@@ -33,7 +33,7 @@ describe('Notices - Setup - Recipient Name Service', () => {
           text: 'Back'
         },
         name: undefined,
-        pageTitle: 'Enter recipient name'
+        pageTitle: "Enter the recipient's name"
       })
     })
   })
