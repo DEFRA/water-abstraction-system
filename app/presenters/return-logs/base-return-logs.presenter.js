@@ -57,10 +57,6 @@ function formatMeterDetails(meter) {
 function formatStatus(returnLog) {
   const { status, dueDate } = returnLog
 
-  if (!dueDate) {
-    return 'not due yet'
-  }
-
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
   // statues
   if (status === 'completed') {
@@ -75,6 +71,10 @@ function formatStatus(returnLog) {
   today.setHours(0, 0, 0, 0)
 
   if (status === 'due') {
+    if (!dueDate) {
+      return 'not due yet'
+    }
+
     if (dueDate < today) {
       return 'overdue'
     }
