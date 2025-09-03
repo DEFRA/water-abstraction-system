@@ -17,24 +17,21 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar, page) {
+async function go(yar, page = 1) {
   const filters = _filters(yar)
 
-  const selectedPageNumber = page ? Number(page) : 1
+  const selectedPageNumber = Number(page)
 
-  const { results, total: numberOfNotices } = await FetchNoticesService.go(filters, selectedPageNumber)
+  const { results, total: totalNumber } = await FetchNoticesService.go(filters, selectedPageNumber)
 
-  const pageData = NoticesIndexPresenter.go(results, numberOfNotices)
-  const pagination = PaginatorPresenter.go(numberOfNotices, selectedPageNumber, `/system/notices`)
-  const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
+  const pageData = NoticesIndexPresenter.go(results, totalNumber, selectedPageNumber, pagination.numberOfPages)
 
   return {
     activeNavBar: 'manage',
     filters,
-    numberOfNotices,
     ...pageData,
-    pagination,
-    pageTitle
+    pagination
   }
 }
 
@@ -66,14 +63,6 @@ function _filters(yar) {
     toDate: null,
     ...savedFilters
   }
-}
-
-function _pageTitle(numberOfPages, selectedPageNumber) {
-  if (numberOfPages < 2) {
-    return 'Notices'
-  }
-
-  return `Notices (page ${selectedPageNumber} of ${numberOfPages})`
 }
 
 module.exports = {

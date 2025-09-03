@@ -26,119 +26,53 @@ describe('Notices - Index Notices service', () => {
     Sinon.restore()
   })
 
-  describe('when there are multiple pages of results', () => {
+  describe('when called', () => {
     beforeEach(() => {
-      // For the purposes of these tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
-
-      // NOTE: The presenter tests cover ensuring the page data is as expected. We don't need to replicate them here.
-      // So, we pretend there are lots of results, even though we just return one. It helps reduce the noise in these
-      // tests.
-      fetchResults = { results: [NoticesFixture.alertReduce()], total: 70 }
-      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
-    })
-
-    describe('and no "page" was selected', () => {
-      beforeEach(() => {
-        page = undefined
-      })
-
-      it('returns the first page of notices, the title with page info and a pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.have.length(1)
-        expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
-        expect(result.pagination.component).to.exist()
-      })
-    })
-
-    describe('and a "page" other than 1 was selected', () => {
-      beforeEach(() => {
-        page = 2
-      })
-
-      it('returns the selected page of notices, the title with page info and a pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.have.length(1)
-        expect(result.pageTitle).to.equal('Notices (page 2 of 3)')
-        expect(result.pagination.component).to.exist()
-      })
-    })
-  })
-
-  describe('when there is only one page of results', () => {
-    beforeEach(() => {
-      // For the purposes of these tests the filter doesn't matter
+      // For the purposes of this tests the filter doesn't matter
       yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
 
       fetchResults = { results: [NoticesFixture.alertReduce()], total: 1 }
       Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
     })
 
-    describe('and no "page" was selected', () => {
-      beforeEach(() => {
-        page = undefined
-      })
+    it('returns page data for the view', async () => {
+      const result = await IndexNoticesService.go(yarStub, page)
 
-      it('returns all notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.have.length(1)
-        expect(result.pageTitle).to.equal('Notices')
-        expect(result.pagination.component).not.to.exist()
-      })
-    })
-
-    describe('and a "page" other than 1 was selected', () => {
-      beforeEach(() => {
-        page = 2
-      })
-
-      it('returns all notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.have.length(1)
-        expect(result.pageTitle).to.equal('Notices')
-        expect(result.pagination.component).not.to.exist()
-      })
-    })
-  })
-
-  describe('when are no results', () => {
-    beforeEach(() => {
-      // For the purposes of these tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
-
-      fetchResults = { results: [], total: 0 }
-      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
-    })
-
-    describe('and no "page" was selected', () => {
-      beforeEach(() => {
-        page = undefined
-      })
-
-      it('returns no notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.be.empty()
-        expect(result.pageTitle).to.equal('Notices')
-        expect(result.pagination.component).not.to.exist()
-      })
-    })
-
-    describe('and a "page" other than 1 was selected', () => {
-      beforeEach(() => {
-        page = 2
-      })
-
-      it('returns no notices, the title without page info and no pagination component for the view', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
-
-        expect(result.notices).to.be.empty()
-        expect(result.pageTitle).to.equal('Notices')
-        expect(result.pagination.component).not.to.exist()
+      expect(result).to.equal({
+        activeNavBar: 'manage',
+        filters: {
+          fromDate: null,
+          noticeTypes: [],
+          openFilter: true,
+          reference: null,
+          sentBy: null,
+          toDate: null,
+          noticesFilter: {
+            noticeTypes: [],
+            reference: null,
+            sentBy: null,
+            sentFromDay: null,
+            sentFromMonth: null,
+            sentFromYear: null,
+            sentToDay: null,
+            sentToMonth: null,
+            sentToYear: null
+          }
+        },
+        notices: [
+          {
+            createdDate: '25 March 2025',
+            link: `/notifications/report/${fetchResults.results[0].id}`,
+            recipients: fetchResults.results[0].recipientCount,
+            reference: fetchResults.results[0].referenceCode,
+            sentBy: 'billing.data@wrls.gov.uk',
+            status: 'sent',
+            type: 'Reduce alert'
+          }
+        ],
+        pageTitle: 'Notices',
+        tableCaption: 'Showing all 1 notices',
+        pagination: { numberOfPages: 1 }
       })
     })
   })
