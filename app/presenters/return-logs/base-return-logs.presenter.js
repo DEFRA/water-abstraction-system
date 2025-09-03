@@ -71,6 +71,10 @@ function formatStatus(returnLog) {
   today.setHours(0, 0, 0, 0)
 
   if (status === 'due') {
+    if (!dueDate) {
+      return 'not due yet'
+    }
+
     if (dueDate < today) {
       return 'overdue'
     }
