@@ -11,6 +11,7 @@ const {
   determineCycleEndDate,
   determineCycleStartDate
 } = require('../../../lib/return-cycle-dates.lib.js')
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
@@ -50,7 +51,7 @@ async function _createReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
     .insert({
       createdAt: timestamp,
-      dueDate: determineCycleDueDate(summer, endDate),
+      dueDate: _dueDate(summer, endDate),
       endDate,
       startDate,
       submittedInWrls: true,
@@ -58,6 +59,14 @@ async function _createReturnCycle(startDate, endDate, summer) {
       updatedAt: timestamp
     })
     .returning(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+}
+
+function _dueDate(summer, endDate) {
+  if (FeatureFlagsConfig.enableNullDueDate) {
+    return null
+  }
+
+  return determineCycleDueDate(summer, endDate)
 }
 
 async function _matchingReturnCycle(startDate, endDate, summer) {
