@@ -21,8 +21,9 @@ describe('Fetch licence returns service', () => {
   describe('when the licence has return logs', () => {
     const dueDate = new Date('2020-04-01')
     const endDate = new Date('2020-06-01')
+    const latestStartDate = new Date('2020-05-01')
     const startDate = new Date('2020-02-01')
-    const latestDueDate = new Date('2020-05-01')
+
     const firstReturn = {
       id: generateUUID(),
       dueDate,
@@ -30,14 +31,15 @@ describe('Fetch licence returns service', () => {
       metadata: '323',
       returnReference: '32',
       startDate,
-      status: '32'
+      status: 'due'
     }
 
     const latestReturn = {
       ...firstReturn,
       id: generateUUID(),
       returnReference: '123',
-      dueDate: latestDueDate
+      startDate: latestStartDate,
+      dueDate: null
     }
 
     beforeEach(async () => {
@@ -61,13 +63,13 @@ describe('Fetch licence returns service', () => {
       //  This should be ordered by due date
       expect(result.returns).to.equal([
         {
-          dueDate: latestDueDate,
+          dueDate: null,
           endDate,
           id: latestReturn.id,
           metadata: 323,
           returnReference: '123',
-          startDate,
-          status: '32'
+          startDate: latestStartDate,
+          status: 'due'
         },
         {
           dueDate,
@@ -76,7 +78,7 @@ describe('Fetch licence returns service', () => {
           metadata: 323,
           returnReference: '32',
           startDate,
-          status: '32'
+          status: 'due'
         }
       ])
     })
