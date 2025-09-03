@@ -210,6 +210,18 @@ describe('Base Return Logs presenter', () => {
 
         expect(result).to.equal('STATUS')
       })
+
+      describe('and the due date is null', () => {
+        before(() => {
+          testReturnLog.dueDate = null
+        })
+
+        it('returns the status', () => {
+          const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+          expect(result).to.equal('STATUS')
+        })
+      })
     })
   })
 
