@@ -152,6 +152,22 @@ describe('Notices - Setup - Check presenter', () => {
             manage: `/system/notices/setup/${session.id}/select-recipients`
           })
         })
+
+        describe('and the "noticeType" is "returnForms"', () => {
+          beforeEach(() => {
+            session.noticeType = 'returnForms'
+          })
+
+          it('should return the links for the "adhoc" journey', () => {
+            const result = CheckPresenter.go(testInput, page, pagination, session)
+            expect(result.links).to.equal({
+              back: `/system/notices/setup/${session.id}/check-notice-type`,
+              cancel: `/system/notices/setup/${session.id}/cancel`,
+              download: `/system/notices/setup/${session.id}/download`,
+              manage: `/system/notices/setup/${session.id}/recipient-name`
+            })
+          })
+        })
       })
 
       describe('when the journey is for "alerts"', () => {
