@@ -39,6 +39,11 @@ async function go(sessionId, payload) {
   }
 }
 
+/**
+ * We save the back link so the generic address journey can redirect back to this page
+ *
+ * @private
+ */
 async function _save(session, payload) {
   session.contactName = payload.name
 

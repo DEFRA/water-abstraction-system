@@ -31,7 +31,40 @@ describe('Notices - Setup - Recipient Name Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({
+        ...session,
+        data: {
+          backLink: {
+            href: `/system/notices/setup/${session.id}/recipient-name`,
+            text: 'Back'
+          },
+          contactName: 'Ronald Weasley'
+        },
+        backLink: {
+          href: `/system/notices/setup/${session.id}/recipient-name`,
+          text: 'Back'
+        },
+        contactName: 'Ronald Weasley'
+      })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitRecipientNameService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.contactName).to.equal('Ronald Weasley')
+    })
+
+    it('saves the back link', async () => {
+      await SubmitRecipientNameService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.backLink).to.equal({
+        href: `/system/notices/setup/${session.id}/recipient-name`,
+        text: 'Back'
+      })
     })
 
     it('continues the journey', async () => {
