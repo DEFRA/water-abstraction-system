@@ -1,28 +1,24 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      classes: 'govuk-!-width-one-third',
+      errorMessage: error,
+      label: {
+        text: pageTitle,
+        classes: 'govuk-label--l',
+        isPageHeading: true
+      },
+      id: 'name',
+      name: 'name',
+      value: name
+    }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>

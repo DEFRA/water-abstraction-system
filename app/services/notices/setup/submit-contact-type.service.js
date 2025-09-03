@@ -103,6 +103,11 @@ async function _save(session, payload, yar) {
   session.contactName = payload.name
   session.contactType = payload.type
 
+  session.backLink = {
+    href: `/system/notices/setup/${session.id}/contact-type`,
+    text: 'Back'
+  }
+
   return session.$update()
 }
 

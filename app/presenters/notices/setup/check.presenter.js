@@ -56,7 +56,7 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 }
 
 function _links(session) {
-  const { id, journey } = session
+  const { id, journey, noticeType } = session
 
   const links = {
     cancel: `/system/notices/setup/${id}/cancel`,
@@ -64,6 +64,14 @@ function _links(session) {
   }
 
   if (journey === 'adhoc') {
+    if (noticeType === 'returnForms') {
+      return {
+        ...links,
+        back: `/system/notices/setup/${id}/check-notice-type`,
+        manage: `/system/notices/setup/${id}/recipient-name`
+      }
+    }
+
     return {
       ...links,
       back: `/system/notices/setup/${id}/check-notice-type`,

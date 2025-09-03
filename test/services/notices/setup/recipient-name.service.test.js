@@ -27,7 +27,14 @@ describe('Notices - Setup - Recipient Name Service', () => {
     it('returns page data for the view', async () => {
       const result = await RecipientNameService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
+        name: undefined,
+        pageTitle: 'Enter recipient name'
+      })
     })
   })
 })

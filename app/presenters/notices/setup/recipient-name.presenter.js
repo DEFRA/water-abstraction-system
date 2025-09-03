@@ -8,10 +8,18 @@
 /**
  * Formats data for the '/notices/setup/{sessionId}/recipient-name' page
  *
+ * @param {SessionModel} session - The session instance
+ *
  * @returns {object} - The data formatted for the view template
  */
-function go() {
-  return {}
+function go(session) {
+  const { id: sessionId, contactName: name } = session
+
+  return {
+    backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/check` },
+    name,
+    pageTitle: 'Enter recipient name'
+  }
 }
 
 module.exports = {

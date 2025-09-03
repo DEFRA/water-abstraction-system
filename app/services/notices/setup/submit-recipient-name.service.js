@@ -29,6 +29,8 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.contactName = payload.name
+
   const pageData = RecipientNamePresenter.go(session)
 
   return {
@@ -37,7 +39,14 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, _payload) {
+async function _save(session, payload) {
+  session.contactName = payload.name
+
+  session.backLink = {
+    href: `/system/notices/setup/${session.id}/recipient-name`,
+    text: 'Back'
+  }
+
   return session.$update()
 }
 
@@ -51,7 +60,8 @@ function _validate(payload) {
   const { message } = validation.error.details[0]
 
   return {
-    text: message
+    text: message,
+    href: '#name'
   }
 }
 

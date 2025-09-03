@@ -14,14 +14,30 @@ describe('Notices - Setup - Recipient Name Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = { id: '123' }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = RecipientNamePresenter.go(session)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/check` },
+        name: undefined,
+        pageTitle: 'Enter recipient name'
+      })
+    })
+
+    describe('and the name has previously been set', () => {
+      beforeEach(() => {
+        session.contactName = 'Ronald Weasley'
+      })
+
+      it('returns previously set name', () => {
+        const result = RecipientNamePresenter.go(session)
+
+        expect(result.name).to.equal('Ronald Weasley')
+      })
     })
   })
 })
