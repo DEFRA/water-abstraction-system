@@ -66,7 +66,7 @@ function _returns(returns, canManageReturns) {
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description === 'null' ? '' : metadata.description,
-      dueDate: formatLongDate(new Date(dueDate)),
+      dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: _link(status, returnLogId, canManageReturns),
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
@@ -78,6 +78,10 @@ function _returns(returns, canManageReturns) {
 
 function _status(returnLog) {
   const { status, dueDate } = returnLog
+
+  if (!dueDate) {
+    return 'not due yet'
+  }
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
   // statues
