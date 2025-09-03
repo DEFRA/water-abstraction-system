@@ -9,6 +9,7 @@ const FetchNoticesService = require('./fetch-notices.service.js')
 const IndexValidator = require('../../validators/notices/index.validator.js')
 const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -31,9 +32,9 @@ async function go(payload, yar, page = 1) {
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     _save(payload, yar)
 
     return {}
@@ -52,7 +53,7 @@ async function go(payload, yar, page = 1) {
 
   return {
     activeNavBar: 'manage',
-    error: validationResult,
+    error,
     filters: { ...savedFilters, ...payload },
     numberOfNotices,
     ...pageData,
@@ -136,25 +137,9 @@ function _savedFilters(payload) {
 }
 
 function _validate(payload) {
-  const validation = IndexValidator.go(payload)
+  const validationResult = IndexValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    const path = detail.path[0]
-
-    result.errorList.push({ href: `#${path}`, text: detail.message })
-
-    result[path] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
