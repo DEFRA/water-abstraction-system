@@ -69,6 +69,8 @@ describe('Notices - Setup - Add Recipient service', () => {
                 postcode: session.address.postcode
               },
               contact_hash_id: contactHashId,
+              contact_type: 'Single use',
+              licence_ref: session.licenceRef,
               licence_refs: session.licenceRef
             }
           ])
@@ -131,6 +133,8 @@ describe('Notices - Setup - Add Recipient service', () => {
                 postcode: session.address.postcode
               },
               contact_hash_id: contactHashId,
+              contact_type: 'Single use',
+              licence_ref: session.licenceRef,
               licence_refs: session.licenceRef
             }
           ])
@@ -175,6 +179,8 @@ describe('Notices - Setup - Add Recipient service', () => {
                 country: session.address.country
               },
               contact_hash_id: contactHashId,
+              contact_type: 'Single use',
+              licence_ref: session.licenceRef,
               licence_refs: session.licenceRef
             }
           ])
