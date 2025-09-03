@@ -43,6 +43,9 @@ describe('Address - Postcode Service', () => {
         contactName: 'Fake Person',
         address: {
           postcode: 'SW1A 1AA'
+        },
+        backLink: {
+          href: `/system/notices/setup/123/contact-type`
         }
       }
 
@@ -54,7 +57,7 @@ describe('Address - Postcode Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/contact-type`,
+        backLink: `/system/notices/setup/123/contact-type`,
         internationalLink: `/system/address/${session.id}/international`,
         pageTitle: 'Enter a UK postcode',
         postcode: 'SW1A 1AA'

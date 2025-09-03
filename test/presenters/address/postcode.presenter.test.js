@@ -11,12 +11,14 @@ const { expect } = Code
 const PostcodePresenter = require('../../../app/presenters/address/postcode.presenter.js')
 
 describe('Address - Postcode Presenter', () => {
+  const sessionId = 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
+
   let session
 
   describe('when called with an empty session object', () => {
     beforeEach(async () => {
       session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
+        id: sessionId
       }
     })
 
@@ -35,7 +37,10 @@ describe('Address - Postcode Presenter', () => {
   describe('when called with a name saved in the session', () => {
     beforeEach(async () => {
       session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
+        id: sessionId,
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`
+        },
         contactName: 'Fake Person'
       }
     })
@@ -55,9 +60,12 @@ describe('Address - Postcode Presenter', () => {
   describe('when called with a contactType object and a saved postcode', () => {
     beforeEach(async () => {
       session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
+        id: sessionId,
         address: {
           postcode: 'SW1A 1AA'
+        },
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`
         },
         contactName: 'Fake Person'
       }

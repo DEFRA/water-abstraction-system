@@ -251,6 +251,17 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.contactName).to.equal(payload.name)
       })
 
+      it('saves the "backLink" to the session', async () => {
+        await SubmitContactTypeService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.backLink).to.equal({
+          href: `/system/notices/setup/${session.id}/contact-type`,
+          text: 'Back'
+        })
+      })
+
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
 

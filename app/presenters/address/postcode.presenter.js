@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `address/{sessionId}/postcode` page
- * @module ManualAddressPresenter
+ * @module PostcodePresenter
  */
 
 /**
@@ -22,14 +22,18 @@ function go(session) {
 }
 
 /**
- * The address lookup journey currently only supports ad-hoc notice journey so we return to the contact-type page for
- * that journey. The default return to the postcode page is a placeholder until the address lookup journey is expanded.
+ * The address lookup can support multiple journeys; we need a mechanism to redirect the user back to the previous page
+ * when they are on this generic journey.
+ *
+ * We achieve this by having the previous page provide the backlink in the session.
+ *
+ * The default return to the postcode page is a placeholder until the address lookup journey is expanded.
  *
  * @private
  */
 function _backLink(session) {
-  if (session.contactName) {
-    return `/system/notices/setup/${session.id}/contact-type`
+  if (session.backLink) {
+    return session.backLink.href
   }
 
   return `/system/address/${session.id}/postcode`

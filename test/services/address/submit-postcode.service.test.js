@@ -23,7 +23,9 @@ describe('Address - Submit Postcode Service', () => {
       payload = {
         postcode: 'SW1A 1AA'
       }
-      sessionData = { address: {} }
+      sessionData = {
+        address: {}
+      }
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -91,6 +93,9 @@ describe('Address - Submit Postcode Service', () => {
         payload = {}
         sessionData = {
           address: {},
+          backLink: {
+            href: `/system/notices/setup/123/contact-type`
+          },
           contactName: 'Fake Person'
         }
 
@@ -102,7 +107,7 @@ describe('Address - Submit Postcode Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/contact-type`,
+          backLink: `/system/notices/setup/123/contact-type`,
           internationalLink: `/system/address/${session.id}/international`,
           error: { text: 'Enter a UK postcode' },
           pageTitle: 'Enter a UK postcode',
@@ -116,6 +121,9 @@ describe('Address - Submit Postcode Service', () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
           address: {},
+          backLink: {
+            href: `/system/notices/setup/123/contact-type`
+          },
           contactName: 'Fake Person'
         }
 
@@ -127,7 +135,7 @@ describe('Address - Submit Postcode Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/contact-type`,
+          backLink: `/system/notices/setup/123/contact-type`,
           error: { text: 'Enter a valid UK postcode' },
           internationalLink: `/system/address/${session.id}/international`,
           pageTitle: 'Enter a UK postcode',
