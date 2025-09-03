@@ -126,7 +126,7 @@ describe('Base Return Logs presenter', () => {
   })
 
   describe('#formatStatus()', () => {
-    const testReturnLog = { dueDate: new Date() }
+    const testReturnLog = { dueDate: null }
 
     describe('when status is completed', () => {
       before(() => {
@@ -137,6 +137,30 @@ describe('Base Return Logs presenter', () => {
         const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
 
         expect(result).to.equal('complete')
+      })
+    })
+
+    describe('when status is received', () => {
+      before(() => {
+        testReturnLog.status = 'received'
+      })
+
+      it('returns received', () => {
+        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+        expect(result).to.equal('received')
+      })
+    })
+
+    describe('when status is void', () => {
+      before(() => {
+        testReturnLog.status = 'void'
+      })
+
+      it('returns void', () => {
+        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+        expect(result).to.equal('void')
       })
     })
 
@@ -196,30 +220,6 @@ describe('Base Return Logs presenter', () => {
           const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
 
           expect(result).to.equal('not due yet')
-        })
-      })
-    })
-
-    describe('when status is none of these', () => {
-      before(() => {
-        testReturnLog.status = 'STATUS'
-      })
-
-      it('returns the status', () => {
-        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
-
-        expect(result).to.equal('STATUS')
-      })
-
-      describe('and the due date is null', () => {
-        before(() => {
-          testReturnLog.dueDate = null
-        })
-
-        it('returns the status', () => {
-          const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
-
-          expect(result).to.equal('STATUS')
         })
       })
     })
