@@ -103,9 +103,8 @@ describe('Notices - Index Notices presenter', () => {
           type: 'Returns reminder'
         }
       ],
-      numberShowing: notices.length,
       pageTitle: 'Notices',
-      totalNumber: notices.length.toString()
+      tableCaption: `Showing all ${notices.length} notices`
     })
   })
 

@@ -5,7 +5,7 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.js')
+const { formatLongDate, titleCase } = require('../base.presenter.js')
 
 const NOTICE_MAPPINGS = {
   'hof-resume': 'HOF resume',
@@ -31,9 +31,8 @@ const NOTICE_MAPPINGS = {
 function go(notices, totalNumber, selectedPage, numberOfPages) {
   return {
     notices: _noticeRowData(notices),
-    numberShowing: notices.length,
     pageTitle: _pageTitle(selectedPage, numberOfPages),
-    totalNumber: formatNumber(totalNumber)
+    tableCaption: _tableCaption(notices.length, totalNumber)
   }
 }
 
@@ -59,6 +58,14 @@ function _pageTitle(selectedPage, numberOfPages) {
   }
 
   return `Notices (page ${selectedPage} of ${numberOfPages})`
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} notices`
+  }
+
+  return `Showing all ${totalNumber} notices`
 }
 
 function _type(notice) {

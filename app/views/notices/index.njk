@@ -284,15 +284,8 @@
           {% set tableRows = (tableRows.push(tableRow), tableRows) %}
         {% endfor %}
 
-        {# Sets the caption to be used in the table below #}
-        {% if numberOfNotices > numberOfNoticesDisplayed %}
-          {% set caption = "Showing " + numberOfNoticesDisplayed + " of " + totalNumberOfNotices + " notices" %}
-        {% else %}
-          {% set caption = "Showing all " + totalNumberOfNotices + " notices" %}
-        {% endif %}
-
         {{ govukTable({
-          caption: caption,
+          caption: tableCaption,
           captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
           firstCellIsHeader: false,
           attributes: { 'data-test': 'notifications' },
