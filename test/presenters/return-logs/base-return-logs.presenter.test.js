@@ -140,30 +140,6 @@ describe('Base Return Logs presenter', () => {
       })
     })
 
-    describe('when status is received', () => {
-      before(() => {
-        testReturnLog.status = 'received'
-      })
-
-      it('returns received', () => {
-        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
-
-        expect(result).to.equal('received')
-      })
-    })
-
-    describe('when status is void', () => {
-      before(() => {
-        testReturnLog.status = 'void'
-      })
-
-      it('returns void', () => {
-        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
-
-        expect(result).to.equal('void')
-      })
-    })
-
     describe('when the status is due', () => {
       beforeEach(() => {
         testReturnLog.status = 'due'
@@ -221,6 +197,30 @@ describe('Base Return Logs presenter', () => {
 
           expect(result).to.equal('not due yet')
         })
+      })
+    })
+
+    describe('when status is received', () => {
+      before(() => {
+        testReturnLog.status = 'received'
+      })
+
+      it('returns received', () => {
+        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+        expect(result).to.equal('received')
+      })
+    })
+
+    describe('when status is void', () => {
+      before(() => {
+        testReturnLog.status = 'void'
+      })
+
+      it('returns void', () => {
+        const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+        expect(result).to.equal('void')
       })
     })
   })
