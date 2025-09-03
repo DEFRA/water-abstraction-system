@@ -17,14 +17,18 @@ describe('Notices - Index Notices presenter', () => {
   let notice
   let notices
   let numberOfNotices
+  let numberOfPages
+  let selectedPage
 
   beforeEach(() => {
     notices = NoticesFixture.notices()
     numberOfNotices = notices.length
+    numberOfPages = 1
+    selectedPage = 1
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, numberOfNotices)
+    const result = IndexNoticesPresenter.go(notices, numberOfNotices, selectedPage, numberOfPages)
 
     expect(result).to.equal({
       notices: [
@@ -101,8 +105,9 @@ describe('Notices - Index Notices presenter', () => {
           type: 'Returns reminder'
         }
       ],
-      numberOfNoticesDisplayed: numberOfNotices,
-      totalNumberOfNotices: numberOfNotices.toString()
+      numberShowing: numberOfNotices,
+      pageTitle: 'Notices',
+      totalNumber: numberOfNotices.toString()
     })
   })
 
@@ -133,6 +138,28 @@ describe('Notices - Index Notices presenter', () => {
 
           expect(result.notices[0].status).to.equal('error')
         })
+      })
+    })
+  })
+
+  describe('the ""pageTitle" property', () => {
+    describe('when there is only one page of results', () => {
+      it('the "pageTitle" without page info', () => {
+        const result = IndexNoticesPresenter.go(notices, numberOfNotices, selectedPage, numberOfPages)
+
+        expect(result.pageTitle).to.equal('Notices')
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      beforeEach(() => {
+        numberOfPages = 3
+      })
+
+      it('the "pageTitle" with page info', () => {
+        const result = IndexNoticesPresenter.go(notices, numberOfNotices, selectedPage, numberOfPages)
+
+        expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
       })
     })
   })
