@@ -17,14 +17,13 @@ const RecipientsService = require('./recipients.service.js')
  * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
  *
  * @param {module:SessionModel} session - The session instance
- * @param {boolean} allRecipients - flag to decide if all recipients are required
  *
  * @returns {Promise<object[]>} - recipients
  */
-async function go(session, allRecipients = true) {
+async function go(session) {
   const recipientsData = await _recipientsData(session)
 
-  const recipients = RecipientsService.go(session, recipientsData, allRecipients)
+  const recipients = RecipientsService.go(session, recipientsData)
 
   return DetermineRecipientsService.go(recipients)
 }

@@ -40,11 +40,13 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
-  session.selectedRecipients = payload.recipients || []
+  const selectedRecipients = payload.recipients || []
+
+  _clearSelectedRecipients(session)
 
   const recipients = await FetchRecipientsService.go(session)
 
-  const pageData = SelectRecipientsPresenter.go(session, recipients)
+  const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
   return {
     error: validationResult,
@@ -62,6 +64,15 @@ async function _save(session, payload) {
   session.selectedRecipients = payload.recipients
 
   return session.$update()
+}
+
+/**
+ * Clear the 'selectedRecipients' from the session to fetch all the recipients
+ *
+ * @private
+ */
+function _clearSelectedRecipients(session) {
+  delete session.selectedRecipients
 }
 
 function _validate(payload) {
