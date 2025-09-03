@@ -145,6 +145,18 @@ describe('Base Return Logs presenter', () => {
         testReturnLog.status = 'due'
       })
 
+      describe('and the due date is null', () => {
+        before(() => {
+          testReturnLog.dueDate = null
+        })
+
+        it('returns not due yet', () => {
+          const result = BaseReturnLogsPresenter.formatStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
+        })
+      })
+
       describe('and the due date is in the past', () => {
         before(() => {
           const lastWeek = new Date()
