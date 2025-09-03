@@ -34,7 +34,8 @@ async function go(sessionId, yar) {
       postcode: session.address.postcode
     },
     contact_hash_id: _contactHashId(session),
-    licence_refs: session.licenceRef
+    licence_refs: session.licenceRef,
+    ..._addDownloadRecipientData(session.licenceRef)
   }
 
   _addRecipient(session, additionalRecipient)
@@ -44,6 +45,25 @@ async function go(sessionId, yar) {
   await _resetGenericAddressSupport(session)
 
   GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
+}
+
+/**
+ * This logic is implemented as a function to illustrate the additional data required for the download link.
+ *
+ * We set the 'contact_type' to 'Single use'. This will be shown in the download for the recipient. This does not
+ * affect the contact type used to send the notice. This is because the 'DetermineRecipientsService' sets the
+ * default 'contact_type' to 'Returns agent' when prior conditions are not met.
+ *
+ * We set the 'licence_ref' the same as the 'licence_refs' to allow the download to render each recipient (it fetches
+ * all possible recipients without deduping).
+ *
+ * @private
+ */
+function _addDownloadRecipientData(licenceRef) {
+  return {
+    contact_type: 'Single use',
+    licence_ref: licenceRef
+  }
 }
 
 function _addRecipient(session, additionalRecipient) {
