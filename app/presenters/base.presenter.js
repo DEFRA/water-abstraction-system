@@ -256,6 +256,117 @@ function formatPurposes(purposes) {
 }
 
 /**
+ * Format a Joi validation result into a format that can be used by our views
+ *
+ * If {@link https://joi.dev/ | Joi} found no validation errors the result will not contain an `error:` property.
+ *
+ * ```javascript
+ * {
+ *   value: {
+ *     noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *     reference: 'RREM-VB9EFA',
+ *     sentFromDay: '01',
+ *     sentFromMonth: '09',
+ *     sentFromYear: '2025',
+ *     fromDate: 2025-09-01T00:00:00.000Z,
+ *     toDate: undefined
+ *   }
+ * }
+ * ```
+ * When this is the case we return null.
+ *
+ * If there is an `error` property, it will contain details of error found.
+ *
+ * ```javascript
+ * {
+ *   value: {
+ *     noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *     reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *     sentFromDay: '01',
+ *     sentFromMonth: '09',
+ *     fromDate: '-09-01',
+ *     toDate: undefined
+ *   },
+ *   error: [Error [ValidationError]: Enter a valid from date. Reference must be 11 characters or less] {
+ *     _original: {
+ *       noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *       reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *       sentFromDay: '01',
+ *       sentFromMonth: '09',
+ *       fromDate: '-09-01',
+ *       toDate: undefined
+ *     },
+ *     details: [
+ *       {
+ *         message: 'Enter a valid from date',
+ *         path: [ 'fromDate' ],
+ *         type: 'date.format',
+ *         context: {
+ *           format: [ 'YYYY-MM-DD' ],
+ *           label: 'fromDate',
+ *           value: '-09-01',
+ *           key: 'fromDate'
+ *         }
+ *       },
+ *       {
+ *         message: 'Reference must be 11 characters or less',
+ *         path: [ 'reference' ],
+ *         type: 'string.max',
+ *         context: {
+ *           limit: 11,
+ *           value: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *           encoding: undefined,
+ *           label: 'reference',
+ *           key: 'reference'
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ * ```
+ *
+ * We format the result into an 'error' object compatible with our views and `layout.njk`.
+ *
+ * `path` will come from the `name:` property of a component in the view, which when submitted will be translated to
+ * a property on the Hapi payload received.
+ *
+ * We typically pass the `payload` to a **Joi** validator in the our 'submit services'. It will validate each of the
+ * payloads properties, and where an error is found return it as seen in the example above.
+ *
+ * We can then use `path` to set the following in our formatted error.
+ *
+ * - a property on the `error` object against which we will assign the message to be display in the component
+ * - the href to use in the error summary, to allow a user to click an error and be taken to the correct component
+ *
+ * This is how we link back the right errors to the right components, and ensure that the error summary behaves as
+ * expected.
+ *
+ * @param {object} validationResult - the result of a Joi validation
+ *
+ * @returns {object|null} the formatted validation result or null if the validation result does not have an `error`
+ * property
+ */
+function formatValidationResult(validationResult) {
+  if (!validationResult.error) {
+    return null
+  }
+
+  const formattedResult = {
+    errorList: []
+  }
+
+  validationResult.error.details.forEach((detail) => {
+    const path = detail.path[0]
+
+    formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
+
+    formattedResult[path] = { message: detail.message }
+  })
+
+  return formattedResult
+}
+
+/**
  * Formats a value and unit to be displayed without a space, as per the GOV UK style guide
  *
  * For example, a value of 100 and a unit of Ml/d will be formatted as '100Ml/d'.
@@ -336,6 +447,7 @@ module.exports = {
   formatPounds,
   formatPurposes,
   formatQuantity,
+  formatValidationResult,
   formatValueUnit,
   leftPadZeroes,
   sentenceCase,
