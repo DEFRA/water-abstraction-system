@@ -50,6 +50,25 @@ async function go(sessionId, payload, yar) {
   }
 }
 
+/**
+ * This logic is implemented as a function to illustrate the additional data required for the download link.
+ *
+ * We set the 'contact_type' to 'Single use'. This will be shown in the download for the recipient. This does not
+ * affect the contact type used to send the notice. This is because the 'DetermineRecipientsService' sets the
+ * default 'contact_type' to 'Returns to' when prior conditions are not met.
+ *
+ * We set the 'licence_ref' the same as the 'licence_refs' to allow the download to render each recipient (it fetches
+ * all possible recipients without deduping).
+ *
+ * @private
+ */
+function _addDownloadRecipientData(licenceRef) {
+  return {
+    contact_type: 'Single use',
+    licence_ref: licenceRef
+  }
+}
+
 function _createMD5Hash(email) {
   return crypto.createHash('md5').update(email).digest('hex')
 }
@@ -61,7 +80,8 @@ async function _save(session, payload, yar) {
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
       email,
-      licence_refs: session.licenceRef
+      licence_refs: session.licenceRef,
+      ..._addDownloadRecipientData(session.licenceRef)
     }
 
     if (Array.isArray(session.additionalRecipients)) {
