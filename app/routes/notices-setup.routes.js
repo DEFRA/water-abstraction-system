@@ -341,6 +341,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/recipient-name',
+    options: {
+      handler: NoticesSetupController.viewRecipientName,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/recipient-name',
+    options: {
+      handler: NoticesSetupController.submitRecipientName,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
       handler: NoticesSetupController.viewRemoveLicences,
