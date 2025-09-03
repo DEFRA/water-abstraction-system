@@ -12,11 +12,12 @@ const ContactPresenter = require('./contact.presenter.js')
  *
  * @param {module:SessionModel} session - The session instance
  * @param {object[]} recipients
+ * @param {string[]} selectedRecipients - an array of 'contact_hash_id' selected by the user
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, recipients) {
-  const { id: sessionId, selectedRecipients } = session
+function go(session, recipients, selectedRecipients) {
+  const { id: sessionId } = session
 
   return {
     backLink: `/system/notices/setup/${sessionId}/check`,

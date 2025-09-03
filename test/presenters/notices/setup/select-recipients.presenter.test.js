@@ -15,28 +15,30 @@ const SelectRecipientsPresenter = require('../../../../app/presenters/notices/se
 
 describe('Notices - Setup - Select Recipients Presenter', () => {
   let recipients
+  let selectedRecipients
   let session
   let testRecipients
 
   beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
+    selectedRecipients = [
+      recipients.primaryUser.contact_hash_id,
+      recipients.returnsAgent.contact_hash_id,
+      recipients.licenceHolder.contact_hash_id,
+      recipients.returnsTo.contact_hash_id,
+      recipients.licenceHolderWithMultipleLicences.contact_hash_id
+    ]
+
     session = {
-      id: 123,
-      selectedRecipients: [
-        recipients.primaryUser.contact_hash_id,
-        recipients.returnsAgent.contact_hash_id,
-        recipients.licenceHolder.contact_hash_id,
-        recipients.returnsTo.contact_hash_id,
-        recipients.licenceHolderWithMultipleLicences.contact_hash_id
-      ]
+      id: 123
     }
 
     testRecipients = [...Object.values(recipients)]
   })
 
   it('returns page data for the view', () => {
-    const result = SelectRecipientsPresenter.go(session, testRecipients)
+    const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
     expect(result).to.equal({
       backLink: `/system/notices/setup/${session.id}/check`,
@@ -90,18 +92,18 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
     beforeEach(() => {
       const recipient = Object.values(recipients)
 
-      session.selectedRecipients = [recipient[0].contact_hash_id]
+      selectedRecipients = [recipient[0].contact_hash_id]
 
       testRecipients = [recipient[0]]
     })
 
     describe('and there are no "selectedRecipients"', () => {
       beforeEach(() => {
-        session.selectedRecipients = []
+        selectedRecipients = []
       })
 
       it('returns page data for the view with relevant recipients not checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients)
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).to.equal([
           {
@@ -115,7 +117,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
 
     describe('and there are "selectedRecipients"', () => {
       beforeEach(() => {
-        session.selectedRecipients = [recipients.primaryUser.contact_hash_id]
+        selectedRecipients = [recipients.primaryUser.contact_hash_id]
 
         const recipient = Object.values(recipients)
 
@@ -123,7 +125,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
       })
 
       it('returns page data for the view with relevant recipients checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients)
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).to.equal([
           {

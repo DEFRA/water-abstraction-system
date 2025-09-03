@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, yar, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session, false)
+  const recipients = await FetchRecipientsService.go(session)
 
   await _initialiseSelectedRecipients(recipients, session)
 

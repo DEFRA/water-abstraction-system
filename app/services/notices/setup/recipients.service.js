@@ -10,14 +10,13 @@
  *
  * @param {module:SessionModel} session - The session instance
  * @param {object[]} recipientsData
- * @param {boolean} allRecipients - flag to decide if all recipients are required
  *
  * @returns {object[]} - recipients
  */
-function go(session, recipientsData, allRecipients = true) {
+function go(session, recipientsData) {
   const recipients = _additionalRecipients(recipientsData, session)
 
-  if (allRecipients || !session.selectedRecipients) {
+  if (!session.selectedRecipients) {
     return recipients
   }
 
