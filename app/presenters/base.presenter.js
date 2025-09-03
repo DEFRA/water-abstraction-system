@@ -338,6 +338,17 @@ function formatPurposes(purposes) {
  * - a property on the `error` object against which we will assign the message to be display in the component
  * - the href to use in the error summary, to allow a user to click an error and be taken to the correct component
  *
+ * ```javascript
+ * {
+ *   errorList: [
+ *     { href: '#fromDate', text: 'Enter a valid from date' },
+ *     { href: '#reference', text: 'Reference must be 11 characters or less' }
+ *   ],
+ *   fromDate: { message: 'Enter a valid from date' },
+ *   reference: { message: 'Reference must be 11 characters or less' }
+ * }
+ * ```
+ *
  * This is how we link back the right errors to the right components, and ensure that the error summary behaves as
  * expected.
  *
