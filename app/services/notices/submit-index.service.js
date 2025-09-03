@@ -45,20 +45,17 @@ async function go(payload, yar, page = 1) {
   const selectedPageNumber = Number(page)
 
   const savedFilters = _savedFilters(yar)
-  const { results, total: numberOfNotices } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
+  const { results, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
-  const pageData = NoticesIndexPresenter.go(results, numberOfNotices)
-  const pagination = PaginatorPresenter.go(numberOfNotices, selectedPageNumber, `/system/notices`)
-  const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
+  const pageData = NoticesIndexPresenter.go(results, totalNumber, selectedPageNumber, pagination.numberOfPages)
 
   return {
     activeNavBar: 'manage',
     error,
     filters: { ...savedFilters, ...payload },
-    numberOfNotices,
     ...pageData,
-    pagination,
-    pageTitle
+    pagination
   }
 }
 
@@ -92,14 +89,6 @@ function _handleOneOptionSelected(payload) {
   if (!Array.isArray(payload?.noticeTypes)) {
     payload.noticeTypes = [payload?.noticeTypes]
   }
-}
-
-function _pageTitle(numberOfPages, selectedPageNumber) {
-  if (numberOfPages < 2) {
-    return 'Notices'
-  }
-
-  return `Notices (page ${selectedPageNumber} of ${numberOfPages})`
 }
 
 function _save(payload, yar) {

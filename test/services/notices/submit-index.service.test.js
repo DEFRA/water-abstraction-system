@@ -249,10 +249,8 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop alert'
                 }
               ],
-              numberOfNotices: 70,
-              numberOfNoticesDisplayed: 1,
-              totalNumberOfNotices: '70',
-              pageTitle: 'Notices (page 2 of 3)'
+              pageTitle: 'Notices (page 2 of 3)',
+              tableCaption: 'Showing 1 of 70 notices'
             },
             { skip: ['pagination'] }
           )
@@ -299,10 +297,8 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop alert'
                 }
               ],
-              numberOfNotices: 1,
-              numberOfNoticesDisplayed: 1,
-              totalNumberOfNotices: '1',
-              pageTitle: 'Notices'
+              pageTitle: 'Notices',
+              tableCaption: 'Showing all 1 notices'
             },
             { skip: ['pagination'] }
           )
