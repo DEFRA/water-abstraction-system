@@ -6,8 +6,8 @@
  */
 
 const FetchNoticesService = require('./fetch-notices.service.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const IndexValidator = require('../../validators/notices/index.validator.js')
+const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
 /**
