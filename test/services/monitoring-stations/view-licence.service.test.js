@@ -12,9 +12,9 @@ const { expect } = Code
 const FetchLicenceTagDetailsService = require('../../../app/services/monitoring-stations/fetch-licence-tag-details.service.js')
 
 // Thing under test
-const LicenceService = require('../../../app/services/monitoring-stations/licence.service.js')
+const ViewLicenceService = require('../../../app/services/monitoring-stations/view-licence.service.js')
 
-describe('Monitoring Stations - Licence service', () => {
+describe('Monitoring Stations - View Licence service', () => {
   const auth = {
     credentials: {
       scope: ['manage_gauging_station_licence_links']
@@ -56,7 +56,7 @@ describe('Monitoring Stations - Licence service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await LicenceService.go(auth, licenceId, monitoringStationId)
+      const result = await ViewLicenceService.go(auth, licenceId, monitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
