@@ -102,7 +102,6 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
           expect(notification).to.equal({
             title: 'Updated',
             titleText: 'Updated',
-            titleText: 'Updated',
             text: 'Requirements for returns updated'
           })
         })
