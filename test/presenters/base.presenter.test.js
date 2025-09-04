@@ -42,42 +42,6 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatNumber()', () => {
-    it('formats a number for display', () => {
-      const result = BasePresenter.formatNumber(12345.6789)
-
-      expect(result).to.equal('12,345.679')
-    })
-  })
-
-  describe('#formatQuantity()', () => {
-    describe('when quantity and units are provided', () => {
-      describe('and the value is not 0', () => {
-        it('returns converted and formatted quantity', () => {
-          const result = BasePresenter.formatQuantity('gal', 100)
-
-          expect(result).to.equal('21,996.925')
-        })
-      })
-
-      describe('and the value is 0', () => {
-        it('returns 0 as a string', () => {
-          const result = BasePresenter.formatQuantity('gal', 0)
-
-          expect(result).to.equal('0')
-        })
-      })
-    })
-
-    describe('when quantity is null', () => {
-      it('returns null', () => {
-        const result = BasePresenter.formatQuantity('someUnit', null)
-
-        expect(result).to.equal(null)
-      })
-    })
-  })
-
   describe('#formatAbstractionDate()', () => {
     let day
     let month
@@ -203,16 +167,6 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatPounds()', () => {
-    const valueInPence = 114950
-
-    it('correctly returns the value as pounds, for example, 1149.50', async () => {
-      const result = BasePresenter.formatPounds(valueInPence)
-
-      expect(result).to.equal('1149.50')
-    })
-  })
-
   describe('#formatMoney()', () => {
     let valueInPence
 
@@ -248,6 +202,24 @@ describe('Base presenter', () => {
           expect(result).to.equal('-£1,149.50')
         })
       })
+    })
+  })
+
+  describe('#formatNumber()', () => {
+    it('formats a number for display', () => {
+      const result = BasePresenter.formatNumber(12345.6789)
+
+      expect(result).to.equal('12,345.679')
+    })
+  })
+
+  describe('#formatPounds()', () => {
+    const valueInPence = 114950
+
+    it('correctly returns the value as pounds, for example, 1149.50', async () => {
+      const result = BasePresenter.formatPounds(valueInPence)
+
+      expect(result).to.equal('1149.50')
     })
   })
 
@@ -315,6 +287,34 @@ describe('Base presenter', () => {
           'Spray Irrigation - Anti Frost',
           'Spray Irrigation - Storage'
         ])
+      })
+    })
+  })
+
+  describe('#formatQuantity()', () => {
+    describe('when quantity and units are provided', () => {
+      describe('and the value is not 0', () => {
+        it('returns converted and formatted quantity', () => {
+          const result = BasePresenter.formatQuantity('gal', 100)
+
+          expect(result).to.equal('21,996.925')
+        })
+      })
+
+      describe('and the value is 0', () => {
+        it('returns 0 as a string', () => {
+          const result = BasePresenter.formatQuantity('gal', 0)
+
+          expect(result).to.equal('0')
+        })
+      })
+    })
+
+    describe('when quantity is null', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatQuantity('someUnit', null)
+
+        expect(result).to.equal(null)
       })
     })
   })
