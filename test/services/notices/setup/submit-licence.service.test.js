@@ -106,7 +106,8 @@ describe('Notices - Setup - Submit Licence service', () => {
             expect(flashType).to.equal('notification')
             expect(bannerMessage).to.equal({
               text: 'Licence number updated',
-              title: 'Updated'
+              title: 'Updated',
+              titleText: 'Updated'
             })
           })
         })

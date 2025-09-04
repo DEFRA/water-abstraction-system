@@ -46,7 +46,11 @@ describe('Notices - Setup - Add Recipient service', () => {
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: sessionData })
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = {
+            flash: Sinon.stub().returns([
+              { title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }
+            ])
+          }
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
@@ -57,7 +61,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -98,7 +102,11 @@ describe('Notices - Setup - Add Recipient service', () => {
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
 
           session = await SessionHelper.add({ data: sessionData })
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = {
+            flash: Sinon.stub().returns([
+              { title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }
+            ])
+          }
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
@@ -109,7 +117,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -158,7 +166,11 @@ describe('Notices - Setup - Add Recipient service', () => {
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: sessionData })
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = {
+            flash: Sinon.stub().returns([
+              { title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }
+            ])
+          }
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
@@ -169,7 +181,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {

@@ -47,7 +47,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -81,7 +83,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -97,7 +99,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -123,7 +127,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -139,7 +143,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value with the email address in lowercase', async () => {
@@ -165,7 +171,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -191,7 +197,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         ]
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -224,7 +232,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'

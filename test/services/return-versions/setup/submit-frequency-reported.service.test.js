@@ -99,7 +99,11 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Requirements for returns updated' })
+          expect(notification).to.equal({
+            title: 'Updated',
+            titleText: 'Updated',
+            text: 'Requirements for returns updated'
+          })
         })
       })
     })

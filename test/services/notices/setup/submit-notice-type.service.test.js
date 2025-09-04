@@ -108,7 +108,8 @@ describe('Notice Type Service', () => {
           expect(flashType).to.equal('notification')
           expect(bannerMessage).to.equal({
             text: 'Notice type updated',
-            title: 'Updated'
+            title: 'Updated',
+            titleText: 'Updated'
           })
         })
       })

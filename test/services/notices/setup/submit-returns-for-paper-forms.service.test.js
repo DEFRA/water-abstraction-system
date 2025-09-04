@@ -95,7 +95,8 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
           expect(flashType).to.equal('notification')
           expect(bannerMessage).to.equal({
             text: 'Returns updated',
-            title: 'Updated'
+            title: 'Updated',
+            titleText: 'Updated'
           })
         })
       })

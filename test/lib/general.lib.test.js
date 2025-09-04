@@ -133,7 +133,7 @@ describe('GeneralLib', () => {
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+      expect(notification).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Changes made' })
     })
 
     it('returns the overridden notification { title: "Fancy new title", text: "better text" }', () => {
@@ -142,7 +142,7 @@ describe('GeneralLib', () => {
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Fancy new title', text: 'better text' })
+      expect(notification).to.equal({ title: 'Fancy new title', titleText: 'Fancy new title', text: 'better text' })
     })
   })
 

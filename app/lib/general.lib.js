@@ -101,7 +101,32 @@ function determineCurrentFinancialYear() {
 /**
  * Creates a flash notification using yar.
  *
- * This function adds a key/value to 'notification' in yar.
+ * This function adds a key / value to 'notification' in a year.
+ *
+ * We are updating the way we use the notifications by having the layout automatically provide the GDS Notification
+ * banner macro.
+ *
+ * This is how we provide the notification macro:
+ * ```
+ * {% if notification %}
+ *   {{ govukNotificationBanner(notification) }}
+ * {% endif %}
+ * ```
+ *
+ * We are in the process of migrating pages to use this improved layout. But we need to support the existing way of
+ * presenting a notification. This is how we do it:
+ * ```html
+ * {{ govukNotificationBanner({
+ *      titleText: notification.title,
+ *      text: notification.text
+ * }) }}
+ * ```
+ *
+ * So we need to support two ways of presenting a notification. The updated layout expects the notification object to
+ * have 'titleText' and the 'text' to be present to render the notification, the existing process expects the 'title'
+ * and 'text'.
+ *
+ * Fortunately, we can set both without the value conflicting.
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} [title='Updated'] - title for the notification
@@ -110,8 +135,9 @@ function determineCurrentFinancialYear() {
  */
 function flashNotification(yar, title = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
+    text,
     title,
-    text
+    titleText: title
   })
 }
 
