@@ -13,7 +13,7 @@ const SessionModel = require('../../models/session.model.js')
 /**
  * Orchestrates validating the data for `address/{sessionId}/manual` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} - The data formatted for the view template
@@ -21,24 +21,19 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
+  _applyPayload(session, payload)
+
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session)
 
     return {
-      redirect: session.address.redirectUrl
+      redirect: session.addressJourney.redirectUrl
     }
   }
 
-  const submittedData = {
-    id: session.id,
-    address: {
-      ...payload
-    }
-  }
-
-  const pageData = ManualAddressPresenter.go(submittedData)
+  const pageData = ManualAddressPresenter.go(session)
 
   return {
     error: validationResult,
@@ -46,13 +41,25 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
-  session.address.addressLine1 = payload.addressLine1
-  session.address.addressLine2 = payload.addressLine2 ?? null
-  session.address.addressLine3 = payload.addressLine3 ?? null
-  session.address.addressLine4 = payload.addressLine4 ?? null
-  session.address.postcode = payload.postcode
+/**
+ * Applies the payload to the session object.
+ *
+ * We can apply the payload _before_ validating. This is because if it is valid, we can then simply update the session
+ * object in `_save()`.
+ * If it is not valid, we want to replay what they entered. The presenter will ensure we do that because it takes its
+ * data from the session, which we've updated with the payload values!
+ *
+ * @private
+ */
+function _applyPayload(session, payload) {
+  session.addressJourney.address.addressLine1 = payload.addressLine1
+  session.addressJourney.address.addressLine2 = payload.addressLine2 ?? null
+  session.addressJourney.address.addressLine3 = payload.addressLine3 ?? null
+  session.addressJourney.address.addressLine4 = payload.addressLine4 ?? null
+  session.addressJourney.address.postcode = payload.postcode
+}
 
+async function _save(session) {
   return session.$update()
 }
 
