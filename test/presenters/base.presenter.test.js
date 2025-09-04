@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { ValidationError } = require('joi')
+
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
@@ -312,6 +315,145 @@ describe('Base presenter', () => {
           'Spray Irrigation - Anti Frost',
           'Spray Irrigation - Storage'
         ])
+      })
+    })
+  })
+
+  describe('#formatValidationResult()', () => {
+    let validationResult
+
+    describe('when the validation result has no errors', () => {
+      beforeEach(() => {
+        validationResult = {
+          value: {
+            noticeTypes: ['returnReminder', 'returnInvitation'],
+            reference: 'RREM-VB9EFA',
+            sentFromDay: '01',
+            sentFromMonth: '09',
+            sentFromYear: '2025',
+            fromDate: new Date('2025-09-01'),
+            toDate: undefined
+          }
+        }
+      })
+
+      it('returns null', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the validation result contains a single failure', () => {
+      beforeEach(() => {
+        const error = new ValidationError('Enter an email address in the correct format, like name@example.com', [
+          {
+            message: 'Enter an email address in the correct format, like name@example.com',
+            path: ['email'],
+            type: 'string.email',
+            context: {
+              value: 'fudge',
+              invalids: ['fudge'],
+              label: 'email',
+              key: 'email'
+            }
+          }
+        ])
+
+        validationResult = {
+          value: { type: 'email', email: 'fudge' },
+          error
+        }
+      })
+
+      it('returns the validation result formatted for our view pages', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.equal({
+          errorList: [
+            {
+              href: '#email',
+              text: 'Enter an email address in the correct format, like name@example.com'
+            }
+          ],
+          email: {
+            text: 'Enter an email address in the correct format, like name@example.com'
+          }
+        })
+      })
+    })
+
+    describe('when the validation result contains multiple failures', () => {
+      beforeEach(() => {
+        const error = new ValidationError(
+          'Enter a valid from date. Reference must be 11 characters or less. Enter a valid to date',
+          [
+            {
+              message: 'Enter a valid from date',
+              path: ['fromDate'],
+              type: 'date.format',
+              context: {
+                format: ['YYYY-MM-DD'],
+                label: 'fromDate',
+                value: '--01',
+                key: 'fromDate'
+              }
+            },
+            {
+              message: 'Reference must be 11 characters or less',
+              path: ['reference'],
+              type: 'string.max',
+              context: {
+                limit: 11,
+                value: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+                encoding: undefined,
+                label: 'reference',
+                key: 'reference'
+              }
+            },
+            {
+              message: 'Enter a valid to date',
+              path: ['toDate'],
+              type: 'date.format',
+              context: {
+                format: ['YYYY-MM-DD'],
+                label: 'toDate',
+                value: '-04-',
+                key: 'toDate'
+              }
+            }
+          ]
+        )
+
+        validationResult = {
+          value: {
+            reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+            sentFromDay: '01',
+            sentToMonth: '04',
+            noticeTypes: [],
+            fromDate: '--01',
+            toDate: '-04-'
+          },
+          error
+        }
+      })
+
+      it('returns the validation result formatted for our view pages', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.equal({
+          errorList: [
+            { href: '#fromDate', text: 'Enter a valid from date' },
+            {
+              href: '#reference',
+              text: 'Reference must be 11 characters or less'
+            },
+            { href: '#toDate', text: 'Enter a valid to date' }
+          ],
+          fromDate: { text: 'Enter a valid from date' },
+          reference: { text: 'Reference must be 11 characters or less' },
+          toDate: { text: 'Enter a valid to date' }
+        })
       })
     })
   })
