@@ -222,7 +222,7 @@ describe('Notices - Submit Index Notices service', () => {
               activeNavBar: 'manage',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { message: 'Enter a valid from date' }
+                fromDate: { text: 'Enter a valid from date' }
               },
               filters: {
                 noticeTypes: [],
@@ -270,7 +270,7 @@ describe('Notices - Submit Index Notices service', () => {
               activeNavBar: 'manage',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { message: 'Enter a valid from date' }
+                fromDate: { text: 'Enter a valid from date' }
               },
               filters: {
                 noticeTypes: [],

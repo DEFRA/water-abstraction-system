@@ -183,7 +183,7 @@ function _noticePageData(error = false) {
   if (error) {
     pageData.error = {
       errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-      fromDate: { message: 'Enter a valid from date' }
+      fromDate: { text: 'Enter a valid from date' }
     }
   }
 
