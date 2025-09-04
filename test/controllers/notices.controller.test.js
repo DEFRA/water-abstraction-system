@@ -12,7 +12,7 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const IndexNoticesService = require('../../app/services/notices/index-notices.service.js')
-const SubmitIndexNoticesService = require('../../app/services/notices/submit-index.service.js')
+const SubmitIndexNoticesService = require('../../app/services/notices/submit-index-notices.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -54,6 +54,7 @@ describe('Notices controller', () => {
           }
 
           const pageData = _noticePageData()
+
           Sinon.stub(IndexNoticesService, 'go').returns(pageData)
         })
 
@@ -79,10 +80,9 @@ describe('Notices controller', () => {
 
           const pageData = _noticePageData()
 
-          pageData.numberOfNoticesDisplayed = 25
-          pageData.numberOfNotices = 70
-          pageData.totalNumberOfNotices = '70'
           pageData.pageTitle = 'Notices (page 2 of 3)'
+          pageData.tableCaption = 'Showing 25 of 70 notices'
+
           Sinon.stub(IndexNoticesService, 'go').returns(pageData)
         })
 
@@ -137,10 +137,9 @@ describe('Notices controller', () => {
           beforeEach(async () => {
             const pageData = _noticePageData(true)
 
-            pageData.numberOfNoticesDisplayed = 25
-            pageData.numberOfNotices = 70
-            pageData.totalNumberOfNotices = '70'
             pageData.pageTitle = 'Notices (page 2 of 3)'
+            pageData.tableCaption = 'Showing 25 of 70 notices'
+
             Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
           })
 
@@ -177,10 +176,8 @@ function _noticePageData(error = false) {
         type: 'Stop - Water abstraction alert'
       }
     ],
-    numberOfNotices: 1,
-    numberOfNoticesDisplayed: 1,
-    totalNumberOfNotices: '1',
-    pageTitle: 'Notices'
+    pageTitle: 'Notices',
+    tableCaption: 'Showing all 1 notices'
   }
 
   if (error) {

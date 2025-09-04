@@ -2,7 +2,7 @@
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
- * @module SubmitIndexService
+ * @module SubmitIndexNoticesService
  */
 
 const FetchNoticesService = require('./fetch-notices.service.js')
