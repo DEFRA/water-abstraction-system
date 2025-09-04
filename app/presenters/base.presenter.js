@@ -344,8 +344,8 @@ function formatPurposes(purposes) {
  *     { href: '#fromDate', text: 'Enter a valid from date' },
  *     { href: '#reference', text: 'Reference must be 11 characters or less' }
  *   ],
- *   fromDate: { message: 'Enter a valid from date' },
- *   reference: { message: 'Reference must be 11 characters or less' }
+ *   fromDate: { text: 'Enter a valid from date' },
+ *   reference: { text: 'Reference must be 11 characters or less' }
  * }
  * ```
  *
@@ -371,7 +371,7 @@ function formatValidationResult(validationResult) {
 
     formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
 
-    formattedResult[path] = { message: detail.message }
+    formattedResult[path] = { text: detail.message }
   })
 
   return formattedResult

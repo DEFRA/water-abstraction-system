@@ -377,7 +377,7 @@ describe('Base presenter', () => {
             }
           ],
           email: {
-            message: 'Enter an email address in the correct format, like name@example.com'
+            text: 'Enter an email address in the correct format, like name@example.com'
           }
         })
       })
@@ -450,9 +450,9 @@ describe('Base presenter', () => {
             },
             { href: '#toDate', text: 'Enter a valid to date' }
           ],
-          fromDate: { message: 'Enter a valid from date' },
-          reference: { message: 'Reference must be 11 characters or less' },
-          toDate: { message: 'Enter a valid to date' }
+          fromDate: { text: 'Enter a valid from date' },
+          reference: { text: 'Reference must be 11 characters or less' },
+          toDate: { text: 'Enter a valid to date' }
         })
       })
     })
