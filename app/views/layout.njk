@@ -53,8 +53,8 @@
 {% endblock %}
 
 {% block content %}
-  {% if errorList %}
-    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+  {% if error %}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
   {% endif %}
 
   {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
