@@ -38,6 +38,7 @@ describe('Return Logs - Generate Return Log service', () => {
   describe('when called', () => {
     beforeEach(() => {
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
     })
 
     it('returns the generated return log data', () => {

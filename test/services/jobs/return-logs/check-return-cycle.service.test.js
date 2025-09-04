@@ -51,6 +51,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
   describe('when the enableNullDueDate feature flag is enabled', () => {
     beforeEach(() => {
       firstStub.resolves(cycleData)
+      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
     })
 
     describe('when summer is true', () => {
