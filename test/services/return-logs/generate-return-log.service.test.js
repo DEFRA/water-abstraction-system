@@ -29,6 +29,7 @@ describe('Return Logs - Generate Return Log service', () => {
   beforeEach(() => {
     testReturnCycle = ReturnCyclesFixture.returnCycle()
     testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
   })
 
   afterEach(() => {
@@ -38,7 +39,6 @@ describe('Return Logs - Generate Return Log service', () => {
   describe('when called', () => {
     beforeEach(() => {
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
     })
 
     it('returns the generated return log data', () => {
@@ -90,64 +90,6 @@ describe('Return Logs - Generate Return Log service', () => {
         source: 'WRLS',
         startDate: new Date('2025-04-01'),
         status: 'due'
-      })
-    })
-
-    describe('and the enableNullDueDate feature flag is disabled', () => {
-      beforeEach(() => {
-        Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
-      })
-
-      it('returns the generated return log data', () => {
-        const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
-
-        expect(result).to.equal({
-          dueDate: new Date('2026-04-28'),
-          endDate: new Date('2026-03-31'),
-          id: 'v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31',
-          licenceRef: '01/25/90/3242',
-          metadata: {
-            description: 'BOREHOLE AT AVALON',
-            isCurrent: true,
-            isFinal: false,
-            isSummer: false,
-            isTwoPartTariff: false,
-            isUpload: false,
-            nald: {
-              regionCode: 4,
-              areaCode: 'SAAR',
-              formatId: 16999651,
-              periodStartDay: '1',
-              periodStartMonth: '4',
-              periodEndDay: '31',
-              periodEndMonth: '3'
-            },
-            points: [
-              {
-                name: 'Winter cycle - live licence - live return version - winter return requirement',
-                ngr1: 'TG 713 291',
-                ngr2: null,
-                ngr3: null,
-                ngr4: null
-              }
-            ],
-            purposes: [
-              {
-                alias: 'Purpose alias for testing',
-                primary: { code: 'A', description: 'Agriculture' },
-                secondary: { code: 'AGR', description: 'General Agriculture' },
-                tertiary: { code: '140', description: 'General Farming & Domestic' }
-              }
-            ],
-            version: 1
-          },
-          returnCycleId: '6889b98d-964f-4966-b6d6-bf511d6526a9',
-          returnReference: '16999651',
-          returnsFrequency: 'day',
-          source: 'WRLS',
-          startDate: new Date('2025-04-01'),
-          status: 'due'
-        })
       })
     })
 

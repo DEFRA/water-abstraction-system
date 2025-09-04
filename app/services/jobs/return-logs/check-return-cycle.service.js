@@ -11,8 +11,9 @@ const {
   determineCycleEndDate,
   determineCycleStartDate
 } = require('../../../lib/return-cycle-dates.lib.js')
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
+
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Check if the current summer or all year return cycle exists, and if not create it, then return the result
@@ -62,7 +63,7 @@ async function _createReturnCycle(startDate, endDate, summer) {
 }
 
 function _dueDate(summer, endDate) {
-  if (FeatureFlagsConfig.enableNullDueDate) {
+  if (featureFlagsConfig.enableNullDueDate) {
     return null
   }
 

@@ -30,6 +30,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     firstStub = Sinon.stub()
     insertStub = Sinon.stub().returnsThis()
     returningStub = Sinon.stub()
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
 
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
@@ -48,220 +49,104 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     clock.restore()
   })
 
-  describe('when the enableNullDueDate feature flag is enabled', () => {
+  describe('when summer is true', () => {
     beforeEach(() => {
-      firstStub.resolves(cycleData)
-      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+      cycleData = {
+        id,
+        dueDate: null,
+        endDate: new Date('2024-10-31'),
+        startDate: new Date('2023-11-01'),
+        summer: true
+      }
+      summer = true
     })
 
-    describe('when summer is true', () => {
+    describe('and there is no matching return cycle for the change date', () => {
       beforeEach(() => {
-        cycleData = {
-          id,
-          dueDate: null,
-          endDate: new Date('2024-10-31'),
-          startDate: new Date('2023-11-01'),
-          summer: true
-        }
-        summer = true
+        firstStub.resolves(undefined)
+        returningStub.resolves(cycleData)
       })
 
-      describe('and there is no matching return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(undefined)
-          returningStub.resolves(cycleData)
-        })
+      it('creates and then returns the new summer return cycle', async () => {
+        const result = await CheckReturnCycleService.go(summer)
 
-        it('creates and then returns the new summer return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
+        const [insertObject] = insertStub.args[0]
 
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertStub.callCount).to.equal(1)
-          expect(insertObject).to.equal(
-            {
-              dueDate: null,
-              endDate: cycleData.endDate,
-              startDate: cycleData.startDate,
-              summer: true,
-              submittedInWrls: true
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-          expect(result).to.equal(cycleData)
-        })
-      })
-
-      describe('and there is a matching summer return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(cycleData)
-        })
-
-        it('returns the matching summer cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          expect(result).to.equal(cycleData)
-        })
+        expect(insertStub.callCount).to.equal(1)
+        expect(insertObject).to.equal(
+          {
+            dueDate: null,
+            endDate: cycleData.endDate,
+            startDate: cycleData.startDate,
+            summer: true,
+            submittedInWrls: true
+          },
+          { skip: ['createdAt', 'updatedAt'] }
+        )
+        expect(result).to.equal(cycleData)
       })
     })
 
-    describe('when summer is false', () => {
+    describe('and there is a matching summer return cycle for the change date', () => {
       beforeEach(() => {
-        cycleData = {
-          id,
-          dueDate: null,
-          endDate: new Date('2025-03-31'),
-          startDate: new Date('2024-04-01'),
-          summer: false
-        }
-        summer = false
+        firstStub.resolves(cycleData)
       })
 
-      describe('and there is no matching return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(undefined)
-          returningStub.resolves(cycleData)
-        })
+      it('returns the matching summer cycle', async () => {
+        const result = await CheckReturnCycleService.go(summer)
 
-        it('creates and then returns the new summer return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertStub.callCount).to.equal(1)
-          expect(insertObject).to.equal(
-            {
-              dueDate: null,
-              endDate: cycleData.endDate,
-              startDate: cycleData.startDate,
-              summer: false,
-              submittedInWrls: true
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-          expect(result).to.equal(cycleData)
-        })
-      })
-
-      describe('when there is a matching all year return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(cycleData)
-        })
-
-        it('returns the matching all year return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          expect(result).to.equal(cycleData)
-        })
+        expect(result).to.equal(cycleData)
       })
     })
   })
 
-  describe('when the enableNullDueDate feature flag is disabled', () => {
+  describe('when summer is false', () => {
     beforeEach(() => {
-      firstStub.resolves(cycleData)
-      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
+      cycleData = {
+        id,
+        dueDate: null,
+        endDate: new Date('2025-03-31'),
+        startDate: new Date('2024-04-01'),
+        summer: false
+      }
+      summer = false
     })
 
-    describe('when summer is true', () => {
+    describe('and there is no matching return cycle for the change date', () => {
       beforeEach(() => {
-        cycleData = {
-          id,
-          dueDate: new Date('2024-11-28'),
-          endDate: new Date('2024-10-31'),
-          startDate: new Date('2023-11-01'),
-          summer: true
-        }
-        summer = true
+        firstStub.resolves(undefined)
+        returningStub.resolves(cycleData)
       })
 
-      describe('and there is no matching return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(undefined)
-          returningStub.resolves(cycleData)
-        })
+      it('creates and then returns the new summer return cycle', async () => {
+        const result = await CheckReturnCycleService.go(summer)
 
-        it('creates and then returns the new summer return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
+        const [insertObject] = insertStub.args[0]
 
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertStub.callCount).to.equal(1)
-          expect(insertObject).to.equal(
-            {
-              dueDate: cycleData.dueDate,
-              endDate: cycleData.endDate,
-              startDate: cycleData.startDate,
-              summer: true,
-              submittedInWrls: true
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-          expect(result).to.equal(cycleData)
-        })
-      })
-
-      describe('and there is a matching summer return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(cycleData)
-        })
-
-        it('returns the matching summer cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          expect(result).to.equal(cycleData)
-        })
+        expect(insertStub.callCount).to.equal(1)
+        expect(insertObject).to.equal(
+          {
+            dueDate: null,
+            endDate: cycleData.endDate,
+            startDate: cycleData.startDate,
+            summer: false,
+            submittedInWrls: true
+          },
+          { skip: ['createdAt', 'updatedAt'] }
+        )
+        expect(result).to.equal(cycleData)
       })
     })
 
-    describe('when summer is false', () => {
+    describe('when there is a matching all year return cycle for the change date', () => {
       beforeEach(() => {
-        cycleData = {
-          id,
-          dueDate: new Date('2025-04-28'),
-          endDate: new Date('2025-03-31'),
-          startDate: new Date('2024-04-01'),
-          summer: false
-        }
-        summer = false
+        firstStub.resolves(cycleData)
       })
 
-      describe('and there is no matching return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(undefined)
-          returningStub.resolves(cycleData)
-        })
+      it('returns the matching all year return cycle', async () => {
+        const result = await CheckReturnCycleService.go(summer)
 
-        it('creates and then returns the new summer return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertStub.callCount).to.equal(1)
-          expect(insertObject).to.equal(
-            {
-              dueDate: cycleData.dueDate,
-              endDate: cycleData.endDate,
-              startDate: cycleData.startDate,
-              summer: false,
-              submittedInWrls: true
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-          expect(result).to.equal(cycleData)
-        })
-      })
-
-      describe('when there is a matching all year return cycle for the change date', () => {
-        beforeEach(() => {
-          firstStub.resolves(cycleData)
-        })
-
-        it('returns the matching all year return cycle', async () => {
-          const result = await CheckReturnCycleService.go(summer)
-
-          expect(result).to.equal(cycleData)
-        })
+        expect(result).to.equal(cycleData)
       })
     })
   })

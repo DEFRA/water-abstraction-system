@@ -5,9 +5,10 @@
  * @module GenerateReturnLogService
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
 const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
+
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Generate return log data from a return requirement and return cycle
@@ -59,7 +60,7 @@ function _abstractionPeriodValue(value) {
 }
 
 function _dueDate(dueDate) {
-  if (FeatureFlagsConfig.enableNullDueDate) {
+  if (featureFlagsConfig.enableNullDueDate) {
     return null
   }
 
