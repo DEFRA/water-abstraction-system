@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -315,6 +315,105 @@ describe('Base presenter', () => {
         const result = BasePresenter.formatQuantity('someUnit', null)
 
         expect(result).to.equal(null)
+      })
+    })
+  })
+
+  describe('#formatReturnLogStatus()', () => {
+    let testReturnLog
+
+    describe('when status is completed', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'completed' }
+      })
+
+      it('returns complete', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('complete')
+      })
+    })
+
+    describe('when the status is due', () => {
+      describe('and the due date is null', () => {
+        before(() => {
+          testReturnLog = { dueDate: null, status: 'due' }
+        })
+
+        it('returns not due yet', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
+        })
+      })
+
+      describe('and the due date is in the past', () => {
+        before(() => {
+          const lastWeek = new Date()
+          lastWeek.setDate(lastWeek.getDate() - 7)
+
+          testReturnLog = { dueDate: lastWeek, status: 'due' }
+        })
+
+        it('returns overdue', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('overdue')
+        })
+      })
+
+      describe('and the due date is in the next 28 days', () => {
+        before(() => {
+          const nextWeek = new Date()
+          nextWeek.setDate(nextWeek.getDate() + 7)
+
+          testReturnLog = { dueDate: nextWeek, status: 'due' }
+        })
+
+        it('returns due', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('due')
+        })
+      })
+
+      describe('and the due date is after the next 28 days', () => {
+        before(() => {
+          const fourWeeks = new Date()
+          fourWeeks.setDate(fourWeeks.getDate() + 27)
+
+          testReturnLog = { dueDate: fourWeeks, status: 'due' }
+        })
+
+        it('returns not due yet', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
+        })
+      })
+    })
+
+    describe('when status is received', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'received' }
+      })
+
+      it('returns received', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('received')
+      })
+    })
+
+    describe('when status is void', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'void' }
+      })
+
+      it('returns void', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('void')
       })
     })
   })
