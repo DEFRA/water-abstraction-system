@@ -2,6 +2,8 @@
 
 const { returnUnits } = require('../lib/static-lookups.lib.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
