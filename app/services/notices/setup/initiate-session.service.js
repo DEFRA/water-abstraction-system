@@ -64,7 +64,12 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
  * @private
  */
 async function _genericAddressJourneySupport(session) {
-  session.address = { redirectUrl: `/system/notices/setup/${session.id}/add-recipient` }
+  session.addressJourney = {
+    activeNavBar: 'manage',
+    address: {},
+    backLink: { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' },
+    redirectUrl: `/system/notices/setup/${session.id}/add-recipient`
+  }
 
   await session.$update()
 }
@@ -87,10 +92,6 @@ function _notice(journey, noticeType) {
 }
 
 function _redirect(journey) {
-  if (journey === 'standard') {
-    return 'returns-period'
-  }
-
   if (journey === 'standard') {
     return 'returns-period'
   }
