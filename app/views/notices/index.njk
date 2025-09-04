@@ -96,9 +96,7 @@
         },
         name: "sentBy",
         value: filters.sentBy,
-        errorMessage: {
-          text: error.sentBy.message
-        } if error.sentBy
+        errorMessage: error.sentBy
       }) }}
 
       {# Filter by reference #}
@@ -112,9 +110,7 @@
         },
         name: "reference",
         value: filters.reference,
-        errorMessage: {
-          text: error.reference.message
-        } if error.reference
+        errorMessage: error.reference
       }) }}
 
       <p class="govuk-!-font-weight-bold">Sent Dates</p>
@@ -149,9 +145,7 @@
           }
         ],
         name: "fromDate",
-        errorMessage: {
-          text: error.fromDate.message
-        } if error.fromDate
+        errorMessage: error.fromDate
       }) }}
 
       {# Filter by to date #}
@@ -184,9 +178,7 @@
           }
         ],
         name: "toDate",
-        errorMessage: {
-          text: error.toDate.message
-        } if error.toDate
+        errorMessage: error.toDate
       }) }}
 
       <div class="govuk-button-group">
