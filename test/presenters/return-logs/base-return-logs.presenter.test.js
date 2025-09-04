@@ -7,12 +7,13 @@ const Code = require('@hapi/code')
 const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+
 // Thing under test
 const BaseReturnLogsPresenter = require('../../../app/presenters/return-logs/base-return-logs.presenter.js')
 
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
-
-describe('Base Return Logs presenter', () => {
+describe('Return Logs - Base Return Logs presenter', () => {
   describe('#convertToCubicMetres()', () => {
     let quantity
     let units
