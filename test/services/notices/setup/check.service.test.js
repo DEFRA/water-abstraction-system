@@ -54,6 +54,7 @@ describe('Notices - Setup - Check service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      caption: 'Notice RINV-123',
       defaultPageSize: 25,
       links: {
         back: `/system/notices/setup/${session.id}/returns-period`,
@@ -80,7 +81,6 @@ describe('Notices - Setup - Check service', () => {
         }
       ],
       recipientsAmount: 1,
-      referenceCode: 'RINV-123',
       warning: null
     })
   })
@@ -146,6 +146,7 @@ describe('Notices - Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
+        caption: 'Notice WAA-123',
         defaultPageSize: 25,
         links: {
           back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
@@ -171,7 +172,6 @@ describe('Notices - Setup - Check service', () => {
           }
         ],
         recipientsAmount: 1,
-        referenceCode: 'WAA-123',
         warning: null
       })
     })
