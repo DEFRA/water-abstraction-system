@@ -8,11 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../support/helpers/session.helper.js')
-
 // Things to stub
 const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
+const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')
@@ -29,138 +27,112 @@ describe('Address - Select service', () => {
     postcode: 'BS1 5AH',
     country: 'United Kingdom'
   }
+  const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  let getByPostcodeStub
-  let session
+  let lookupPostcodeRequestStub
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { address: { postcode: 'BS1 5AH' } } })
+    Sinon.stub(SessionModel, 'query').returns({
+      findById: Sinon.stub().resolves({
+        id: sessionId,
+        addressJourney: {
+          activeNavBar: 'manage',
+          address: { postcode: 'BS1 5AH' },
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+        }
+      })
+    })
 
-    getByPostcodeStub = Sinon.stub(LookupPostcodeRequest, 'send')
+    lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when called with a postcode that returns one result', () => {
-    beforeEach(async () => {
-      getByPostcodeStub.resolves({
-        succeeded: true,
-        response: {
-          statusCode: 200,
-          body: {
-            results: [match]
-          }
-        },
-        matches: [match]
-      })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await SelectService.go(session.id)
-
-      expect(result).to.equal({
-        backLink: `/system/address/${session.id}/postcode`,
-        addresses: [
-          {
-            value: 'select',
-            selected: true,
-            text: `1 address found`
+  describe('when called', () => {
+    describe('and the postcode lookup returns a match', () => {
+      beforeEach(() => {
+        lookupPostcodeRequestStub.resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              results: [match]
+            }
           },
-          {
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-            value: 340116
-          }
-        ],
-        pageTitle: 'Select the address',
-        postcode: 'BS1 5AH',
-        sessionId: session.id
+          matches: [match]
+        })
       })
-    })
-  })
 
-  describe('when called with a postcode that returns multiple results', () => {
-    beforeEach(async () => {
-      getByPostcodeStub.resolves({
-        succeeded: true,
-        response: {
-          statusCode: 200,
-          body: {
-            results: [match]
-          }
-        },
-        matches: [match, { ...match, uprn: 12345, address: 'DEFRA, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH' }]
-      })
-    })
+      it('returns page data for the view', async () => {
+        const result = await SelectService.go(sessionId)
 
-    it('returns page data for the view', async () => {
-      const result = await SelectService.go(session.id)
-
-      expect(result).to.equal({
-        backLink: `/system/address/${session.id}/postcode`,
-        addresses: [
-          {
-            value: 'select',
-            selected: true,
-            text: `2 addresses found`
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          addresses: [
+            {
+              value: 'select',
+              selected: true,
+              text: `1 address found`
+            },
+            {
+              text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+              value: 340116
+            }
+          ],
+          backLink: {
+            href: `/system/address/${sessionId}/postcode`,
+            text: 'Back'
           },
-          {
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-            value: 340116
+          pageTitle: 'Select the address',
+          postcode: 'BS1 5AH',
+          sessionId
+        })
+      })
+    })
+
+    describe('and the postcode lookup returns no matches', () => {
+      beforeEach(async () => {
+        lookupPostcodeRequestStub.resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              results: []
+            }
           },
-          {
-            text: 'DEFRA, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-            value: 12345
-          }
-        ],
-        pageTitle: 'Select the address',
-        postcode: 'BS1 5AH',
-        sessionId: session.id
+          matches: []
+        })
       })
-    })
-  })
 
-  describe('when called with a postcode that returns no results', () => {
-    beforeEach(async () => {
-      getByPostcodeStub.resolves({
-        succeeded: true,
-        response: {
-          statusCode: 200,
-          body: {
-            results: []
-          }
-        },
-        matches: []
+      it('returns page data that causes a redirect to the manual page', async () => {
+        const result = await SelectService.go(sessionId)
+
+        expect(result).to.equal({ redirect: true })
       })
     })
 
-    it('returns page data that causes a redirect to the manual page', async () => {
-      const result = await SelectService.go(session.id)
-
-      expect(result).to.equal({
-        redirect: true
+    describe('and the postcode lookup fails', () => {
+      beforeEach(async () => {
+        lookupPostcodeRequestStub.resolves({
+          succeeded: false,
+          response: {
+            statusCode: 500,
+            body: { statusCode: 500, error: 'Computer says no', message: 'Computer says no' }
+          },
+          matches: []
+        })
       })
-    })
-  })
 
-  describe('when called with a postcode but the request to the look up service fails', () => {
-    beforeEach(async () => {
-      getByPostcodeStub.resolves({
-        succeeded: false,
-        response: {
-          statusCode: 404,
-          body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
-        },
-        matches: []
-      })
-    })
+      it('returns page data that causes a redirect to the manual page', async () => {
+        const result = await SelectService.go(sessionId)
 
-    it('returns page data to that causes a redirect to the manual page', async () => {
-      const result = await SelectService.go(session.id)
-
-      expect(result).to.equal({
-        redirect: true
+        expect(result).to.equal({ redirect: true })
       })
     })
   })
