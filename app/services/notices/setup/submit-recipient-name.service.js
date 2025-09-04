@@ -47,7 +47,7 @@ async function go(sessionId, payload) {
 async function _save(session, payload) {
   session.contactName = payload.name
 
-  session.backLink = {
+  session.address.backLink = {
     href: `/system/notices/setup/${session.id}/recipient-name`,
     text: 'Back'
   }

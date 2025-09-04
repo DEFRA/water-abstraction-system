@@ -20,7 +20,9 @@ describe('Notices - Setup - Recipient Name Service', () => {
 
   beforeEach(async () => {
     payload = { name: 'Ronald Weasley' }
-    sessionData = {}
+    sessionData = {
+      address: {}
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -34,15 +36,19 @@ describe('Notices - Setup - Recipient Name Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
-          backLink: {
-            href: `/system/notices/setup/${session.id}/recipient-name`,
-            text: 'Back'
+          address: {
+            backLink: {
+              href: `/system/notices/setup/${session.id}/recipient-name`,
+              text: 'Back'
+            }
           },
           contactName: 'Ronald Weasley'
         },
-        backLink: {
-          href: `/system/notices/setup/${session.id}/recipient-name`,
-          text: 'Back'
+        address: {
+          backLink: {
+            href: `/system/notices/setup/${session.id}/recipient-name`,
+            text: 'Back'
+          }
         },
         contactName: 'Ronald Weasley'
       })
@@ -61,7 +67,7 @@ describe('Notices - Setup - Recipient Name Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.backLink).to.equal({
+      expect(refreshedSession.address.backLink).to.equal({
         href: `/system/notices/setup/${session.id}/recipient-name`,
         text: 'Back'
       })
