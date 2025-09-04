@@ -17,24 +17,6 @@ function convertPenceToPounds(value) {
 }
 
 /**
- * Converts a quantity in cubic metres to a given unit and formats it
- *
- * @param {string} units - the unit to convert the quantity to
- * @param {number} quantity - the quantity in cubic metres to be formatted
- *
- * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
- */
-function formatQuantity(units, quantity) {
-  if (quantity === null || quantity === undefined) {
-    return null
-  }
-
-  const convertedQuantity = quantity * returnUnits[units].multiplier
-
-  return formatNumber(convertedQuantity)
-}
-
-/**
  * Formats an abstraction day and month into its string variant, for example, 1 and 4 becomes '1 April'
  *
  * If either value is null or undefined, it returns null.
@@ -253,6 +235,24 @@ function formatPurposes(purposes) {
   })
 
   return purposeDescriptionArray
+}
+
+/**
+ * Converts a quantity in cubic metres to a given unit and formats it
+ *
+ * @param {string} units - the unit to convert the quantity to
+ * @param {number} quantity - the quantity in cubic metres to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
+function formatQuantity(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
 }
 
 /**
