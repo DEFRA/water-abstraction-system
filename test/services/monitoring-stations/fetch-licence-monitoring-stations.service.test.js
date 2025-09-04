@@ -20,9 +20,9 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Thing under test
-const FetchLicenceTagDetailsService = require('../../../app/services/monitoring-stations/fetch-licence-tag-details.service.js')
+const FetchLicenceMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-licence-monitoring-stations.service.js')
 
-describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
+describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
   let monitoringStation
 
   before(async () => {
@@ -41,7 +41,7 @@ describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
 
     describe('and NO alerts exist for the licence', () => {
       it('returns nothing', async () => {
-        const result = await FetchLicenceTagDetailsService.go(licenceId, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsService.go(licenceId, monitoringStation.id)
 
         expect(result.lastAlert).to.be.undefined()
       })
@@ -56,7 +56,7 @@ describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
       })
 
       it('returns the latest sent water abstraction alert', async () => {
-        const result = await FetchLicenceTagDetailsService.go(licenceId, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsService.go(licenceId, monitoringStation.id)
 
         expect(result.lastAlert).to.equal(
           {
@@ -110,7 +110,7 @@ describe('Monitoring Stations - Fetch Licence Tag Details service', () => {
     })
 
     it('returns the matching data', async () => {
-      const result = await FetchLicenceTagDetailsService.go(licence.id, monitoringStation.id)
+      const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
 
       expect(result.monitoringStationLicenceTags).to.equal({
         id: monitoringStation.id,

@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches the matching licence monitoring station and additional records needed for the licence tag details page
- * @module FetchLicenceTagDetailsService
+ * Fetches the matching monitoring station and additional records needed for the view licence page
+ * @module FetchLicenceMonitoringStationsService
  */
 
 const { ref } = require('objection')
@@ -11,13 +11,13 @@ const MonitoringStationModel = require('../../models/monitoring-station.model.js
 const NotificationModel = require('../../models/notification.model.js')
 
 /**
- * Fetches the matching licence monitoring station and additional records needed for the licence tag details page
+ * Fetches the matching monitoring station and additional records needed for the view licence page
  *
- * @param {string} licenceId - The UUID of the licence record
- * @param {string} monitoringStationId - The UUID of the monitoring station record
+ * @param {string} licenceId - The UUID of the licence
+ * @param {string} monitoringStationId - The UUID of the monitoring station
  *
  * @returns {Promise<object>} the matching instance of the `MonitoringStationModel` and `NotificationModel` populated
- * with the data needed for the licence tag details page
+ * with the data needed for the view licence page
  */
 async function go(licenceId, monitoringStationId) {
   const lastAlert = await _fetchLastAlert(licenceId)

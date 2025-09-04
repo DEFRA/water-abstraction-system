@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceTagDetailsService = require('../../../app/services/monitoring-stations/fetch-licence-tag-details.service.js')
+const FetchLicenceMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-licence-monitoring-stations.service.js')
 
 // Thing under test
 const ViewLicenceService = require('../../../app/services/monitoring-stations/view-licence.service.js')
@@ -47,7 +47,7 @@ describe('Monitoring Stations - View Licence service', () => {
   }
 
   beforeEach(() => {
-    Sinon.stub(FetchLicenceTagDetailsService, 'go').resolves({ lastAlert, monitoringStationLicenceTags })
+    Sinon.stub(FetchLicenceMonitoringStationsService, 'go').resolves({ lastAlert, monitoringStationLicenceTags })
   })
 
   afterEach(() => {
