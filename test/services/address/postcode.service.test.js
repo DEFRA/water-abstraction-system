@@ -19,7 +19,9 @@ describe('Address - Postcode Service', () => {
 
   describe('when called and there is no session data', () => {
     beforeEach(async () => {
-      sessionData = {}
+      sessionData = {
+        address: {}
+      }
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -42,10 +44,10 @@ describe('Address - Postcode Service', () => {
       sessionData = {
         contactName: 'Fake Person',
         address: {
+          backLink: {
+            href: `/system/notices/setup/123/contact-type`
+          },
           postcode: 'SW1A 1AA'
-        },
-        backLink: {
-          href: `/system/notices/setup/123/contact-type`
         }
       }
 

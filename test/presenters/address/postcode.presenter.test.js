@@ -18,7 +18,8 @@ describe('Address - Postcode Presenter', () => {
   describe('when called with an empty session object', () => {
     beforeEach(async () => {
       session = {
-        id: sessionId
+        id: sessionId,
+        address: {}
       }
     })
 
@@ -38,8 +39,10 @@ describe('Address - Postcode Presenter', () => {
     beforeEach(async () => {
       session = {
         id: sessionId,
-        backLink: {
-          href: `/system/notices/setup/${sessionId}/contact-type`
+        address: {
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`
+          }
         },
         contactName: 'Fake Person'
       }
@@ -62,10 +65,10 @@ describe('Address - Postcode Presenter', () => {
       session = {
         id: sessionId,
         address: {
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`
+          },
           postcode: 'SW1A 1AA'
-        },
-        backLink: {
-          href: `/system/notices/setup/${sessionId}/contact-type`
         },
         contactName: 'Fake Person'
       }

@@ -32,8 +32,8 @@ function go(session) {
  * @private
  */
 function _backLink(session) {
-  if (session.backLink) {
-    return session.backLink.href
+  if (session.address.backLink) {
+    return session.address.backLink.href
   }
 
   return `/system/address/${session.id}/postcode`

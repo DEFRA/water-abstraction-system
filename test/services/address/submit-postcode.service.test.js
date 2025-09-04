@@ -92,9 +92,10 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = {}
         sessionData = {
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/123/contact-type`
+          address: {
+            backLink: {
+              href: `/system/notices/setup/123/contact-type`
+            }
           },
           contactName: 'Fake Person'
         }
@@ -120,9 +121,10 @@ describe('Address - Submit Postcode Service', () => {
       beforeEach(async () => {
         payload = { postcode: 'notapostcode' }
         sessionData = {
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/123/contact-type`
+          address: {
+            backLink: {
+              href: `/system/notices/setup/123/contact-type`
+            }
           },
           contactName: 'Fake Person'
         }

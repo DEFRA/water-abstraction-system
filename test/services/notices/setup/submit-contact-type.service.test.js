@@ -34,6 +34,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
   describe('when called with a valid', () => {
     beforeEach(() => {
       sessionData = {
+        address: {},
         licenceRef: '12345',
         selectedRecipients: ['123']
       }
@@ -256,7 +257,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.backLink).to.equal({
+        expect(refreshedSession.address.backLink).to.equal({
           href: `/system/notices/setup/${session.id}/contact-type`,
           text: 'Back'
         })
@@ -277,7 +278,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('when validation fails because no type is selected', () => {
       beforeEach(async () => {
         payload = {}
-        sessionData = {}
+        sessionData = {
+          address: {}
+        }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -310,7 +313,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'email'
         }
-        sessionData = {}
+        sessionData = {
+          address: {}
+        }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -343,7 +348,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'post'
         }
-        sessionData = {}
+        sessionData = {
+          address: {}
+        }
 
         session = await SessionHelper.add({ data: sessionData })
       })
