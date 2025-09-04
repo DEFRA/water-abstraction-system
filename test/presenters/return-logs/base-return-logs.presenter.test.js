@@ -126,11 +126,11 @@ describe('Base Return Logs presenter', () => {
   })
 
   describe('#formatStatus()', () => {
-    const testReturnLog = { dueDate: null }
+    let testReturnLog
 
     describe('when status is completed', () => {
       before(() => {
-        testReturnLog.status = 'completed'
+        testReturnLog = { dueDate: null, status: 'completed' }
       })
 
       it('returns complete', () => {
@@ -141,13 +141,9 @@ describe('Base Return Logs presenter', () => {
     })
 
     describe('when the status is due', () => {
-      beforeEach(() => {
-        testReturnLog.status = 'due'
-      })
-
       describe('and the due date is null', () => {
         before(() => {
-          testReturnLog.dueDate = null
+          testReturnLog = { dueDate: null, status: 'due' }
         })
 
         it('returns not due yet', () => {
@@ -161,7 +157,8 @@ describe('Base Return Logs presenter', () => {
         before(() => {
           const lastWeek = new Date()
           lastWeek.setDate(lastWeek.getDate() - 7)
-          testReturnLog.dueDate = lastWeek
+
+          testReturnLog = { dueDate: lastWeek, status: 'due' }
         })
 
         it('returns overdue', () => {
@@ -175,7 +172,8 @@ describe('Base Return Logs presenter', () => {
         before(() => {
           const nextWeek = new Date()
           nextWeek.setDate(nextWeek.getDate() + 7)
-          testReturnLog.dueDate = nextWeek
+
+          testReturnLog = { dueDate: nextWeek, status: 'due' }
         })
 
         it('returns due', () => {
@@ -189,7 +187,8 @@ describe('Base Return Logs presenter', () => {
         before(() => {
           const fourWeeks = new Date()
           fourWeeks.setDate(fourWeeks.getDate() + 27)
-          testReturnLog.dueDate = fourWeeks
+
+          testReturnLog = { dueDate: fourWeeks, status: 'due' }
         })
 
         it('returns not due yet', () => {
@@ -202,7 +201,7 @@ describe('Base Return Logs presenter', () => {
 
     describe('when status is received', () => {
       before(() => {
-        testReturnLog.status = 'received'
+        testReturnLog = { dueDate: null, status: 'received' }
       })
 
       it('returns received', () => {
@@ -214,7 +213,7 @@ describe('Base Return Logs presenter', () => {
 
     describe('when status is void', () => {
       before(() => {
-        testReturnLog.status = 'void'
+        testReturnLog = { dueDate: null, status: 'void' }
       })
 
       it('returns void', () => {
