@@ -45,18 +45,8 @@ async function go(payload, yar, page = 1) {
   const selectedPageNumber = Number(page)
 
   const savedFilters = _savedFilters(yar)
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
-  const pageData = NoticesIndexPresenter.go(notices, totalNumber, selectedPageNumber, pagination.numberOfPages)
-
-  return {
-    activeNavBar: 'manage',
-    error,
-    filters: { ...savedFilters, ...payload },
-    ...pageData,
-    pagination
-  }
+  return _replayView(payload, error, selectedPageNumber, savedFilters)
 }
 
 function _clearFilters(payload, yar) {
@@ -88,6 +78,21 @@ function _handleOneOptionSelected(payload) {
 
   if (!Array.isArray(payload?.noticeTypes)) {
     payload.noticeTypes = [payload?.noticeTypes]
+  }
+}
+
+async function _replayView(payload, error, selectedPageNumber, savedFilters) {
+  const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
+
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
+  const pageData = NoticesIndexPresenter.go(notices, totalNumber, selectedPageNumber, pagination.numberOfPages)
+
+  return {
+    activeNavBar: 'manage',
+    error,
+    filters: { ...savedFilters, ...payload },
+    ...pageData,
+    pagination
   }
 }
 
