@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { countries } = require('../../../app/lib/static-lookups.lib.js')
+const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -103,7 +103,7 @@ describe('Address - Submit International Service', () => {
               href: `/system/address/${sessionId}/postcode`,
               text: 'Back'
             },
-            country: _countries(),
+            country: countryLookup(),
             pageTitle: 'Enter the international address',
             postcode: null
           })
@@ -137,7 +137,7 @@ describe('Address - Submit International Service', () => {
               href: `/system/address/${sessionId}/postcode`,
               text: 'Back'
             },
-            country: _countries(),
+            country: countryLookup(),
             pageTitle: 'Enter the international address',
             postcode: null
           })
@@ -146,21 +146,3 @@ describe('Address - Submit International Service', () => {
     })
   })
 })
-
-function _countries(savedCountry) {
-  const displayCountries = countries.map((country) => {
-    return {
-      value: country,
-      selected: savedCountry === country,
-      text: country
-    }
-  })
-
-  displayCountries.unshift({
-    value: 'select',
-    selected: savedCountry !== 'select',
-    text: 'Select a country'
-  })
-
-  return displayCountries
-}

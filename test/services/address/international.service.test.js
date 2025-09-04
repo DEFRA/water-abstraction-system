@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { countries } = require('../../../app/lib/static-lookups.lib.js')
+const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
 
 // Things we need to stub
 const SessionModel = require('../../../app/models/session.model.js')
@@ -55,28 +55,10 @@ describe('Address - International Service', () => {
           href: `/system/address/${sessionId}/postcode`,
           text: 'Back'
         },
-        country: _countries(),
+        country: countryLookup(),
         pageTitle: 'Enter the international address',
         postcode: null
       })
     })
   })
 })
-
-function _countries(value = 'select') {
-  const displayCountries = countries.map((country) => {
-    return {
-      value: country,
-      selected: value === country,
-      text: country
-    }
-  })
-
-  displayCountries.unshift({
-    value: 'select',
-    selected: value === 'select',
-    text: 'Select a country'
-  })
-
-  return displayCountries
-}

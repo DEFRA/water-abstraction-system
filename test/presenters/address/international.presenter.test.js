@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { countries } = require('../../../app/lib/static-lookups.lib.js')
+const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
 
 // Thing under test
 const InternationalPresenter = require('../../../app/presenters/address/international.presenter.js')
@@ -44,7 +44,7 @@ describe('Address - International Presenter', () => {
         href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
         text: 'Back'
       },
-      country: _countries(),
+      country: countryLookup(),
       pageTitle: 'Enter the international address',
       postcode: null
     })
@@ -143,7 +143,7 @@ describe('Address - International Presenter', () => {
       it('returns the list of countries with the "Select a country" option selected', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.country).to.equal(_countries())
+        expect(result.country).to.equal(countryLookup())
       })
     })
 
@@ -155,7 +155,7 @@ describe('Address - International Presenter', () => {
       it('returns the list of countries with the matching country selected', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.country).to.equal(_countries('France'))
+        expect(result.country).to.equal(countryLookup('France'))
       })
     })
   })
@@ -182,21 +182,3 @@ describe('Address - International Presenter', () => {
     })
   })
 })
-
-function _countries(value = 'select') {
-  const displayCountries = countries.map((country) => {
-    return {
-      value: country,
-      selected: value === country,
-      text: country
-    }
-  })
-
-  displayCountries.unshift({
-    value: 'select',
-    selected: value === 'select',
-    text: 'Select a country'
-  })
-
-  return displayCountries
-}
