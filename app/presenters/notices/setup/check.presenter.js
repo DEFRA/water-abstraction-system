@@ -199,14 +199,20 @@ function _warning(formattedRecipients) {
   }
 
   if (invalidRecipients.length === 1) {
-    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    return {
+      iconFallbackText: 'Warning',
+      text: `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    }
   }
 
   const contactNames = invalidRecipients.map((invalidRecipient) => {
     return invalidRecipient.contact[0]
   })
 
-  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  return {
+    iconFallbackText: 'Warning',
+    text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  }
 }
 
 module.exports = {

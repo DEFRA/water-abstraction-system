@@ -67,10 +67,7 @@
   {% endif %}
 
   {% if warning %}
-    {{ govukWarningText({
-      text: warning,
-      iconFallbackText: "Warning"
-    }) }}
+    {{ govukWarningText(warning)}
   {% endif %}
 
   {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}

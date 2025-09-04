@@ -136,7 +136,10 @@ describe('Notices - Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
-        warning: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+        warning: {
+          iconFallbackText: 'Warning',
+          text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+        }
       })
     })
 
@@ -549,9 +552,10 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns a warning for that recipient', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
-          expect(result.warning).to.equal(
-            'A notification will not be sent for Mr H J Returns to because the address is invalid.'
-          )
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+          })
         })
       })
 
@@ -563,9 +567,10 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns a warning that lists the recipients', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
-          expect(result.warning).to.equal(
-            'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
-          )
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
+          })
         })
       })
     })
