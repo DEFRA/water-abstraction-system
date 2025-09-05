@@ -103,7 +103,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
           },
 
           pageTitle: 'Select Recipients',
-          pageTitleCaption: 'Notice ' + referenceCode,
+          pageTitleCaption: `Notice ${referenceCode}`,
           recipients: [
             {
               checked: false,
