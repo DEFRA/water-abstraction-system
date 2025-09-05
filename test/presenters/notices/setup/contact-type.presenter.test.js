@@ -19,7 +19,7 @@ describe('Contact Type Presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)k
+      const result = ContactTypePresenter.go(session)
 
       expect(result).to.equal({
         backLink: {
