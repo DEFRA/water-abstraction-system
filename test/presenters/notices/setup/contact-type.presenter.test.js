@@ -15,11 +15,11 @@ describe('Contact Type Presenter', () => {
 
   describe('when called with no session data', () => {
     beforeEach(() => {
-      session = {}
+      session = { referenceCode: 'RINV-CPFRQ4' }
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter.go(session)k
 
       expect(result).to.equal({
         backLink: {
@@ -39,7 +39,8 @@ describe('Contact Type Presenter', () => {
     beforeEach(() => {
       session = {
         email: 'test@test.gov.uk',
-        contactType: 'email'
+        contactType: 'email',
+        referenceCode: 'RINV-CPFRQ4'
       }
     })
 
