@@ -81,6 +81,7 @@ describe('Address - Submit Postcode Service', () => {
             },
             internationalLink: `/system/address/${sessionId}/international`,
             pageTitle: 'Enter a UK postcode',
+            pageTitleCaption: null,
             postcode: null
           })
         })
