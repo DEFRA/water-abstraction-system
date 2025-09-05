@@ -46,6 +46,7 @@ describe('Address - International Presenter', () => {
       },
       country: countryLookup(),
       pageTitle: 'Enter the international address',
+      pageTitleCaption: null,
       postcode: null
     })
   })
@@ -156,6 +157,28 @@ describe('Address - International Presenter', () => {
         const result = InternationalPresenter.go(session)
 
         expect(result.country).to.equal(countryLookup('France'))
+      })
+    })
+  })
+
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the property has not been configured', () => {
+      it('returns null', () => {
+        const result = InternationalPresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal(null)
+      })
+    })
+
+    describe('when the property has been set', () => {
+      beforeEach(async () => {
+        session.addressJourney.pageTitleCaption = 'Super awesome caption'
+      })
+
+      it('returns the set value', () => {
+        const result = InternationalPresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal('Super awesome caption')
       })
     })
   })

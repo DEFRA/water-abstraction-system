@@ -105,6 +105,7 @@ describe('Address - Submit International Service', () => {
             },
             country: countryLookup(),
             pageTitle: 'Enter the international address',
+            pageTitleCaption: null,
             postcode: null
           })
         })
@@ -139,6 +140,7 @@ describe('Address - Submit International Service', () => {
             },
             country: countryLookup(),
             pageTitle: 'Enter the international address',
+            pageTitleCaption: null,
             postcode: null
           })
         })

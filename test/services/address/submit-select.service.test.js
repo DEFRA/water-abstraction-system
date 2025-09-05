@@ -370,6 +370,7 @@ describe('Address - Submit Select Service', () => {
                 text: 'Back'
               },
               pageTitle: 'Select the address',
+              pageTitleCaption: null,
               postcode: 'BS1 5AH',
               sessionId
             })

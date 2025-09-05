@@ -14,13 +14,14 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session, addresses) {
-  const { activeNavBar, address } = session.addressJourney
+  const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
     activeNavBar,
     addresses: _addresses(addresses),
     backLink: { href: `/system/address/${session.id}/postcode`, text: 'Back' },
     pageTitle: 'Select the address',
+    pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode,
     sessionId: session.id
   }

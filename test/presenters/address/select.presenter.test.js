@@ -67,6 +67,7 @@ describe('Address - Select Presenter', () => {
         text: 'Back'
       },
       pageTitle: 'Select the address',
+      pageTitleCaption: null,
       postcode: 'SW1A 1AA',
       sessionId: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
     })
@@ -110,6 +111,28 @@ describe('Address - Select Presenter', () => {
             value: '123456789'
           }
         ])
+      })
+    })
+  })
+
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the property has not been configured', () => {
+      it('returns null', () => {
+        const result = SelectPresenter.go(session, addresses)
+
+        expect(result.pageTitleCaption).to.equal(null)
+      })
+    })
+
+    describe('when the property has been set', () => {
+      beforeEach(async () => {
+        session.addressJourney.pageTitleCaption = 'Super awesome caption'
+      })
+
+      it('returns the set value', () => {
+        const result = SelectPresenter.go(session, addresses)
+
+        expect(result.pageTitleCaption).to.equal('Super awesome caption')
       })
     })
   })

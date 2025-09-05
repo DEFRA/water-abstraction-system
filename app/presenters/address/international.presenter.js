@@ -15,7 +15,7 @@ const { countryLookup } = require('./base-address.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { activeNavBar, address } = session.addressJourney
+  const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
     activeNavBar,
@@ -26,6 +26,7 @@ function go(session) {
     backLink: { href: `/system/address/${session.id}/postcode`, text: 'Back' },
     country: countryLookup(address?.country),
     pageTitle: 'Enter the international address',
+    pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode ?? null
   }
 }

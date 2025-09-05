@@ -90,6 +90,7 @@ describe('Address - Select service', () => {
             text: 'Back'
           },
           pageTitle: 'Select the address',
+          pageTitleCaption: null,
           postcode: 'BS1 5AH',
           sessionId
         })

@@ -53,6 +53,7 @@ describe('Address - Manual Service', () => {
           text: 'Back'
         },
         pageTitle: 'Enter the address',
+        pageTitleCaption: null,
         postcode: 'SW1A 1AA'
       })
     })

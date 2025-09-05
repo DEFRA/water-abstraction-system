@@ -13,7 +13,7 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { activeNavBar, address } = session.addressJourney
+  const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
     activeNavBar,
@@ -23,6 +23,7 @@ function go(session) {
     addressLine4: address.addressLine4 ?? null,
     backLink: _backLink(address, session.id),
     pageTitle: 'Enter the address',
+    pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode ?? null
   }
 }

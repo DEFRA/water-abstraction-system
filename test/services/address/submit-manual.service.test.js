@@ -101,6 +101,7 @@ describe('Address - Submit Manual Service', () => {
               text: 'Back'
             },
             pageTitle: 'Enter the address',
+            pageTitleCaption: null,
             postcode: null
           })
         })
@@ -134,6 +135,7 @@ describe('Address - Submit Manual Service', () => {
               text: 'Back'
             },
             pageTitle: 'Enter the address',
+            pageTitleCaption: null,
             postcode: 'foo'
           })
         })

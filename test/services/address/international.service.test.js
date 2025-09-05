@@ -57,6 +57,7 @@ describe('Address - International Service', () => {
         },
         country: countryLookup(),
         pageTitle: 'Enter the international address',
+        pageTitleCaption: null,
         postcode: null
       })
     })

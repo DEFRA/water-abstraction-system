@@ -20,6 +20,7 @@ function go(session) {
     backLink: addressJourney.backLink,
     internationalLink: `/system/address/${id}/international`,
     pageTitle: 'Enter a UK postcode',
+    pageTitleCaption: addressJourney.pageTitleCaption ?? null,
     postcode: addressJourney.address?.postcode ?? null
   }
 }

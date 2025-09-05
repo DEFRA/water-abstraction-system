@@ -42,6 +42,7 @@ describe('Address - Manual Presenter', () => {
         text: 'Back'
       },
       pageTitle: 'Enter the address',
+      pageTitleCaption: null,
       postcode: 'SW1A 1AA'
     })
   })
@@ -158,6 +159,28 @@ describe('Address - Manual Presenter', () => {
           href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
           text: 'Back'
         })
+      })
+    })
+  })
+
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the property has not been configured', () => {
+      it('returns null', () => {
+        const result = ManualPresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal(null)
+      })
+    })
+
+    describe('when the property has been set', () => {
+      beforeEach(async () => {
+        session.addressJourney.pageTitleCaption = 'Super awesome caption'
+      })
+
+      it('returns the set value', () => {
+        const result = ManualPresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal('Super awesome caption')
       })
     })
   })
