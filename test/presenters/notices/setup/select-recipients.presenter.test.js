@@ -23,7 +23,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
   beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
-    referenceCode = `RINV-${Math.floor(1000 + Math.random() * 9000).toString()}`
+    referenceCode = 'RINV-CPFRQ4'
 
     selectedRecipients = [
       recipients.primaryUser.contact_hash_id,
