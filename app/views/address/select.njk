@@ -1,18 +1,10 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
-
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-5">{{ pageTitle }}</h1>
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   <div class="govuk-form-group">
     <p class="govuk-!-margin-bottom-0">Postcode</p>
@@ -25,11 +17,12 @@
 
     {{ govukSelect({
       id: "addresses",
-      name: "addresses",
+      items: addresses,
       label: {
+        isPageHeading: false,
         text: "Address"
       },
-      items: addresses,
+      name: "addresses",
       errorMessage: error.addresses
     }) }}
 

@@ -1,86 +1,77 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
-
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-5">{{ pageTitle }}</h1>
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukInput({
+      classes: "govuk-input--width-30",
+      id: "addressLine1",
       label: {
         text: "Address line 1"
       },
-      classes: "govuk-input--width-30",
-      value: addressLine1,
-      id: "addressLine1",
       name: "addressLine1",
+      value: addressLine1,
       errorMessage: error.addressLine1
     }) }}
 
     {{ govukInput({
+      classes: "govuk-input--width-30",
+      id: "addressLine2",
       label: {
         text: "Address line 2 (optional)"
       },
-      classes: "govuk-input--width-30",
-      value: addressLine2,
-      id: "addressLine2",
       name: "addressLine2",
+      value: addressLine2,
       errorMessage: error.addressLine2
     }) }}
 
     {{ govukInput({
+      classes: "govuk-input--width-30",
+      id: "addressLine3",
       label: {
         text: "Address line 3 (optional)"
       },
-      classes: "govuk-input--width-30",
-      value: addressLine3,
-      id: "addressLine3",
       name: "addressLine3",
+      value: addressLine3,
       errorMessage: error.addressLine3
     }) }}
 
     {{ govukInput({
+      classes: "govuk-input--width-30",
+      id: "addressLine4",
       label: {
         text: "Address line 4 (optional)"
       },
-      classes: "govuk-input--width-30",
-      value: addressLine4,
-      id: "addressLine4",
       name: "addressLine4",
+      value: addressLine4,
       errorMessage: error.addressLine4
     }) }}
 
     {{ govukInput({
+      classes: "govuk-input--width-10",
+      id: "postcode",
       label: {
         text: "Postal or zip code (optional)"
       },
-      classes: "govuk-input--width-10",
-      value: postcode,
-      id: "postcode",
       name: "postcode",
+      value: postcode,
       errorMessage: error.postcode
     }) }}
 
     {{ govukSelect({
       id: "country",
-      name: "country",
+      items: country,
       label: {
         text: "Country"
       },
-      items: country,
+      name: "country",
       errorMessage: error.country
     }) }}
 
