@@ -9,6 +9,7 @@
 const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
 const PostcodeValidator = require('../../validators/address/postcode.validator.js')
 const SessionModel = require('../../models/session.model.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/postcode` page
@@ -23,9 +24,9 @@ async function go(sessionId, payload) {
 
   _applyPayload(session, payload)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session)
 
     return {}
@@ -35,7 +36,7 @@ async function go(sessionId, payload) {
 
   return {
     activeNavBar: 'manage',
-    error: validationResult,
+    error,
     ...pageData
   }
 }
@@ -59,26 +60,9 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validation = PostcodeValidator.go(payload)
+  const validationResult = PostcodeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    result.errorList.push({
-      href: `#${detail.context.key}`,
-      text: detail.message
-    })
-
-    result[detail.context.key] = detail.message
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

@@ -72,7 +72,7 @@ describe('Address - Submit Postcode Service', () => {
                   text: 'Enter a UK postcode'
                 }
               ],
-              postcode: 'Enter a UK postcode'
+              postcode: { text: 'Enter a UK postcode' }
             },
             activeNavBar: 'manage',
             backLink: {
@@ -102,7 +102,7 @@ describe('Address - Submit Postcode Service', () => {
                   text: 'Enter a valid UK postcode'
                 }
               ],
-              postcode: 'Enter a valid UK postcode'
+              postcode: { text: 'Enter a valid UK postcode' }
             },
             activeNavBar: 'manage',
             backLink: {
