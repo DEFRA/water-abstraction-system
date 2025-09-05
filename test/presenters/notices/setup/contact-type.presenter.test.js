@@ -22,10 +22,14 @@ describe('Contact Type Presenter', () => {
       const result = ContactTypePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/select-recipients`,
+          text: 'Back'
+        },
         email: null,
         name: null,
         pageTitle: 'Select how to contact the recipient',
+        pageTitleCaption: 'Notice RINV-CPFRQ4',
         type: null
       })
     })
@@ -43,10 +47,14 @@ describe('Contact Type Presenter', () => {
       const result = ContactTypePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/select-recipients`,
+          text: 'Back'
+        },
         email: 'test@test.gov.uk',
         name: null,
         pageTitle: 'Select how to contact the recipient',
+        pageTitleCaption: 'Notice RINV-CPFRQ4',
         type: 'email'
       })
     })
@@ -56,7 +64,8 @@ describe('Contact Type Presenter', () => {
     beforeEach(() => {
       session = {
         contactName: 'Fake Person',
-        contactType: 'post'
+        contactType: 'post',
+        referenceCode: 'RINV-CPFRQ4'
       }
     })
 
@@ -64,10 +73,14 @@ describe('Contact Type Presenter', () => {
       const result = ContactTypePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/select-recipients`,
+          text: 'Back'
+        },
         email: null,
         name: 'Fake Person',
         pageTitle: 'Select how to contact the recipient',
+        pageTitleCaption: 'Notice RINV-CPFRQ4',
         type: 'post'
       })
     })
