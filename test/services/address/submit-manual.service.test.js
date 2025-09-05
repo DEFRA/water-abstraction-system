@@ -78,7 +78,7 @@ describe('Address - Submit Manual Service', () => {
 
           expect(result).to.equal({
             error: {
-              addressLine1: 'Enter address line 1',
+              addressLine1: { text: 'Enter address line 1' },
               errorList: [
                 {
                   href: '#addressLine1',
@@ -89,7 +89,7 @@ describe('Address - Submit Manual Service', () => {
                   text: 'Enter a UK postcode'
                 }
               ],
-              postcode: 'Enter a UK postcode'
+              postcode: { text: 'Enter a UK postcode' }
             },
             activeNavBar: 'manage',
             addressLine1: null,
@@ -122,7 +122,7 @@ describe('Address - Submit Manual Service', () => {
                   text: 'Enter a valid UK postcode'
                 }
               ],
-              postcode: 'Enter a valid UK postcode'
+              postcode: { text: 'Enter a valid UK postcode' }
             },
             activeNavBar: 'manage',
             addressLine1: 'Fake farm',
