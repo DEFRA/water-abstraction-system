@@ -81,8 +81,8 @@ describe('Address - Submit International Service', () => {
 
           expect(result).to.equal({
             error: {
-              addressLine1: 'Enter address line 1',
-              country: 'Select a country',
+              addressLine1: { text: 'Enter address line 1' },
+              country: { text: 'Select a country' },
               errorList: [
                 {
                   href: '#addressLine1',
@@ -120,7 +120,7 @@ describe('Address - Submit International Service', () => {
 
           expect(result).to.equal({
             error: {
-              country: 'Select a country',
+              country: { text: 'Select a country' },
               errorList: [
                 {
                   href: '#country',
