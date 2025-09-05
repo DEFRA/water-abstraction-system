@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -28,7 +27,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
   beforeEach(async () => {
     recipients = RecipientsFixture.recipients()
 
-    referenceCode = generateReferenceCode()
+    referenceCode = 'RINV-CPFRQ4'
 
     sessionData = {
       referenceCode,
@@ -55,7 +54,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
         },
         contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Select Recipients',
-        pageTitleCaption: `Notice ${referenceCode}`,
+        pageTitleCaption: `Notice RINV-CPFRQ4`,
         recipients: [
           {
             checked: true,

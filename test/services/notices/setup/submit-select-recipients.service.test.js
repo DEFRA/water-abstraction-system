@@ -29,7 +29,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
   beforeEach(async () => {
     payload = { recipients: ['123'] }
 
-    referenceCode = `RINV-${Math.floor(1000 + Math.random() * 9000).toString()}`
+    referenceCode = 'RINV-CPFRQ4'
 
     sessionData = { referenceCode }
 
@@ -103,7 +103,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
           },
 
           pageTitle: 'Select Recipients',
-          pageTitleCaption: `Notice ${referenceCode}`,
+          pageTitleCaption: `Notice RINV-CPFRQ4`,
           recipients: [
             {
               checked: false,
