@@ -25,6 +25,7 @@ async function go(sessionId) {
     activeNavBar: 'manage',
     address: {},
     backLink: _backLink(session),
+    pageTitleCaption: `Notice ${session.referenceCode}`,
     redirectUrl: `/system/notices/setup/${session.id}/add-recipient`
   }
 

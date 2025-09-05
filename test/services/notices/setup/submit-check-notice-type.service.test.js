@@ -56,13 +56,14 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           referenceCode: sessionData.referenceCode,
           subType: 'returnInvitation',
           addressJourney: {
+            activeNavBar: 'manage',
             address: {},
             backLink: {
               href: `/system/notices/setup/${sessionId}/contact-type`,
               text: 'Back'
             },
-            redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-            activeNavBar: 'manage'
+            pageTitleCaption: `Notice ${sessionData.referenceCode}`,
+            redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
           }
         })
       })
@@ -94,13 +95,14 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           referenceCode: sessionData.referenceCode,
           subType: 'paperReturnForms',
           addressJourney: {
+            activeNavBar: 'manage',
             address: {},
             backLink: {
               href: `/system/notices/setup/${sessionId}/contact-type`,
               text: 'Back'
             },
-            redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-            activeNavBar: 'manage'
+            pageTitleCaption: `Notice ${sessionData.referenceCode}`,
+            redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
           }
         })
       })
