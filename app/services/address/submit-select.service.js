@@ -11,6 +11,7 @@ const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.req
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
 const SessionModel = require('../../models/session.model.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
@@ -23,9 +24,9 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
     // NOTE: Handle the edge case that having selected a valid address, our call to the address facade fails. When this
@@ -56,7 +57,7 @@ async function go(sessionId, payload) {
   const pageData = SelectPresenter.go(session, postcodeResult.matches)
 
   return {
-    error: validationResult,
+    error,
     ...pageData
   }
 }
@@ -87,26 +88,9 @@ async function _save(session, address) {
 }
 
 function _validate(payload) {
-  const validation = SelectValidator.go(payload)
+  const validationResult = SelectValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    result.errorList.push({
-      href: `#${detail.context.key}`,
-      text: detail.message
-    })
-
-    result[detail.context.key] = detail.message
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

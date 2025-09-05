@@ -26,13 +26,11 @@
     {{ govukSelect({
       id: "addresses",
       name: "addresses",
-      errorMessage: {
-        text: error.text
-      } if error,
       label: {
         text: "Address"
       },
-      items: addresses
+      items: addresses,
+      errorMessage: error.addresses
     }) }}
 
     <p class="govuk-form-group">

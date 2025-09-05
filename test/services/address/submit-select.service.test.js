@@ -345,7 +345,7 @@ describe('Address - Submit Select Service', () => {
 
             expect(result).to.equal({
               error: {
-                addresses: 'Select an address',
+                addresses: { text: 'Select an address' },
                 errorList: [
                   {
                     href: '#addresses',
