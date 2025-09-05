@@ -15,9 +15,9 @@ const NoticesFixture = require('../../fixtures/notices.fixture.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
-const SubmitIndexService = require('../../../app/services/notices/submit-index.service.js')
+const SubmitIndexNoticesService = require('../../../app/services/notices/submit-index-notices.service.js')
 
-describe('Notices - Submit Index service', () => {
+describe('Notices - Submit Index Notices service', () => {
   let notice
   let payload
   let yarStub
@@ -43,13 +43,13 @@ describe('Notices - Submit Index service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexService.go(payload, yarStub)
+        const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
         expect(result).to.equal({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
-        await SubmitIndexService.go(payload, yarStub)
+        await SubmitIndexNoticesService.go(payload, yarStub)
 
         expect(yarStub.clear.called).to.be.true()
       })
@@ -61,13 +61,13 @@ describe('Notices - Submit Index service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexService.go(payload, yarStub)
+        const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
         expect(result).to.equal({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
-        await SubmitIndexService.go(payload, yarStub)
+        await SubmitIndexNoticesService.go(payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -104,13 +104,13 @@ describe('Notices - Submit Index service', () => {
 
       describe('but no notice types included', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -137,13 +137,13 @@ describe('Notices - Submit Index service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -170,13 +170,13 @@ describe('Notices - Submit Index service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -215,14 +215,14 @@ describe('Notices - Submit Index service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexService.go(payload, yarStub, '2')
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, '2')
 
           expect(result).to.equal(
             {
               activeNavBar: 'manage',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { message: 'Enter a valid from date' }
+                fromDate: { text: 'Enter a valid from date' }
               },
               filters: {
                 noticeTypes: [],
@@ -249,10 +249,8 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop alert'
                 }
               ],
-              numberOfNotices: 70,
-              numberOfNoticesDisplayed: 1,
-              totalNumberOfNotices: '70',
-              pageTitle: 'Notices (page 2 of 3)'
+              pageTitle: 'Notices (page 2 of 3)',
+              tableCaption: 'Showing 1 of 70 notices'
             },
             { skip: ['pagination'] }
           )
@@ -265,14 +263,14 @@ describe('Notices - Submit Index service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub)
 
           expect(result).to.equal(
             {
               activeNavBar: 'manage',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { message: 'Enter a valid from date' }
+                fromDate: { text: 'Enter a valid from date' }
               },
               filters: {
                 noticeTypes: [],
@@ -299,10 +297,8 @@ describe('Notices - Submit Index service', () => {
                   type: 'Stop alert'
                 }
               ],
-              numberOfNotices: 1,
-              numberOfNoticesDisplayed: 1,
-              totalNumberOfNotices: '1',
-              pageTitle: 'Notices'
+              pageTitle: 'Notices',
+              tableCaption: 'Showing all 1 notices'
             },
             { skip: ['pagination'] }
           )
