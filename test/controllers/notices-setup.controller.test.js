@@ -42,6 +42,7 @@ const SubmitAlertTypeService = require('../../app/services/notices/setup/abstrac
 const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
@@ -298,6 +299,21 @@ describe('Notices Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the notice type')
         })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(async () => {
+        postOptions = postRequestOptions(basePath + `/${session.id}/check-notice-type`, {})
+
+        Sinon.stub(SubmitCheckNoticeTypeService, 'go').resolves({ redirectUrl: 'check' })
+      })
+
+      it('redirects to the "check" page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
       })
     })
   })
