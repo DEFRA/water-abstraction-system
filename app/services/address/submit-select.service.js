@@ -15,7 +15,7 @@ const SessionModel = require('../../models/session.model.js')
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} - The data formatted for the view template
@@ -23,44 +23,46 @@ const SessionModel = require('../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  let validationResult = _validate(payload)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     const uprnResult = await LookupUPRNRequest.send(payload.addresses)
 
-    if (uprnResult.succeeded) {
-      await _save(session, uprnResult.matches[0])
-
+    // NOTE: Handle the edge case that having selected a valid address, our call to the address facade fails. When this
+    // happens we fall back to asking the user to enter the address manually
+    if (!uprnResult.succeeded || uprnResult.matches.length === 0) {
       return {
-        redirect: session.address.redirectUrl
+        redirect: `/system/address/${session.id}/manual`
       }
     }
 
-    validationResult = {
-      text: 'Address not found'
+    await _save(session, uprnResult.matches[0])
+
+    return {
+      redirect: session.addressJourney.redirectUrl
     }
   }
 
-  const postcodeResult = await LookupPostcodeRequest.send(session.address.postcode)
+  const postcodeResult = await LookupPostcodeRequest.send(session.addressJourney.address.postcode)
 
+  // NOTE: Another edge case. The user forgot to select an address and hit submit. So, we need to lookup the matching
+  // addresses by postcode again, only this time the request fails. Again, we simply fallback to entering it manually
   if (postcodeResult.succeeded === false || postcodeResult.matches.length === 0) {
     return {
       redirect: `/system/address/${session.id}/manual`
     }
   }
 
-  const pageData = SelectPresenter.go(postcodeResult.matches)
+  const pageData = SelectPresenter.go(session, postcodeResult.matches)
 
   return {
-    backLink: `/system/address/${session.id}/postcode`,
-    sessionId: session.id,
     error: validationResult,
     ...pageData
   }
 }
 
 async function _save(session, address) {
-  session.address.uprn = address.uprn
+  const mappedAddress = { uprn: address.uprn }
 
   const premises = address.premises ?? ''
   const streetAddress = address.street_address ?? ''
@@ -68,16 +70,18 @@ async function _save(session, address) {
   const premisesStreetAddress = `${premises} ${streetAddress}`.trim()
 
   if (!address.organisation) {
-    session.address.addressLine1 = premisesStreetAddress
-    session.address.addressLine2 = null
+    mappedAddress.addressLine1 = premisesStreetAddress
+    mappedAddress.addressLine2 = null
   } else {
-    session.address.addressLine1 = address.organisation
-    session.address.addressLine2 = premisesStreetAddress
+    mappedAddress.addressLine1 = address.organisation
+    mappedAddress.addressLine2 = premisesStreetAddress
   }
 
-  session.address.addressLine3 = address.locality ?? null
-  session.address.addressLine4 = address.city
-  session.address.postcode = address.postcode
+  mappedAddress.addressLine3 = address.locality ?? null
+  mappedAddress.addressLine4 = address.city
+  mappedAddress.postcode = address.postcode
+
+  session.addressJourney.address = mappedAddress
 
   return session.$update()
 }
@@ -89,11 +93,20 @@ function _validate(payload) {
     return null
   }
 
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
+  const result = {
+    errorList: []
   }
+
+  validation.error.details.forEach((detail) => {
+    result.errorList.push({
+      href: `#${detail.context.key}`,
+      text: detail.message
+    })
+
+    result[detail.context.key] = detail.message
+  })
+
+  return result
 }
 
 module.exports = {
