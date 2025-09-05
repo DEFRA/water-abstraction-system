@@ -48,30 +48,10 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
     })
     .returning('id')
 
-  await _genericAddressJourneySupport(session)
-
   return {
     sessionId: session.id,
     path: _redirect(journey)
   }
-}
-
-/**
- * Some notice setup journeys rely on using our 'shared' address setup journey. To support this, we have to add an
- * `address` property to the session data, configured with the path it should redirect to once an address has been
- * selected or entered.
- *
- * @private
- */
-async function _genericAddressJourneySupport(session) {
-  session.addressJourney = {
-    activeNavBar: 'manage',
-    address: {},
-    backLink: { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' },
-    redirectUrl: `/system/notices/setup/${session.id}/add-recipient`
-  }
-
-  await session.$update()
 }
 
 /**

@@ -54,15 +54,6 @@ describe('Notices - Setup - Initiate Session service', () => {
               journey: 'standard',
               subType: 'returnInvitation',
               noticeType: 'invitations',
-              addressJourney: {
-                address: {},
-                backLink: {
-                  href: `/system/notices/setup/${matchingSession.id}/contact-type`,
-                  text: 'Back'
-                },
-                redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`,
-                activeNavBar: 'manage'
-              },
               notificationType: 'Returns invitation'
             },
             { skip: ['referenceCode'] }
@@ -95,15 +86,6 @@ describe('Notices - Setup - Initiate Session service', () => {
               journey: 'standard',
               subType: 'returnReminder',
               noticeType: 'reminders',
-              addressJourney: {
-                address: {},
-                backLink: {
-                  href: `/system/notices/setup/${matchingSession.id}/contact-type`,
-                  text: 'Back'
-                },
-                redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`,
-                activeNavBar: 'manage'
-              },
               notificationType: 'Returns reminder'
             },
             { skip: ['referenceCode'] }
@@ -130,16 +112,7 @@ describe('Notices - Setup - Initiate Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
         expect(matchingSession.data).to.equal({
-          journey: 'adhoc',
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/notices/setup/${matchingSession.id}/contact-type`,
-              text: 'Back'
-            },
-            redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`,
-            activeNavBar: 'manage'
-          }
+          journey: 'adhoc'
         })
       })
     })
@@ -175,15 +148,6 @@ describe('Notices - Setup - Initiate Session service', () => {
             journey: 'alerts',
             subType: 'waterAbstractionAlerts',
             noticeType: 'abstractionAlerts',
-            addressJourney: {
-              address: {},
-              backLink: {
-                href: `/system/notices/setup/${matchingSession.id}/contact-type`,
-                text: 'Back'
-              },
-              redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`,
-              activeNavBar: 'manage'
-            },
             notificationType: 'Abstraction alert',
             monitoringStationId,
             monitoringStationName: 'Death star',
