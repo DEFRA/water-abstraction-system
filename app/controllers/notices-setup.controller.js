@@ -36,6 +36,7 @@ const SubmitAlertTypeService = require('../services/notices/setup/abstraction-al
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../services/notices/setup/submit-licence.service.js')
@@ -366,6 +367,16 @@ async function submitCheckLicenceMatches(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
 
+async function submitCheckNoticeType(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  await SubmitCheckNoticeTypeService.go(sessionId)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
 async function submitContactType(request, h) {
   const {
     params: { sessionId },
@@ -527,6 +538,7 @@ module.exports = {
   submitCancelAlerts,
   submitCheck,
   submitCheckLicenceMatches,
+  submitCheckNoticeType,
   submitContactType,
   submitLicence,
   submitNoticeType,
