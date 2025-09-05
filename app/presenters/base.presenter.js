@@ -277,6 +277,11 @@ function formatReturnLogStatus(returnLog) {
     return 'complete'
   }
 
+  // For all other statuses except 'due' we can just return the status
+  if (status !== 'due') {
+    return status
+  }
+
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
   const today = new Date()
 
@@ -284,30 +289,27 @@ function formatReturnLogStatus(returnLog) {
   // 'today' would be flagged as overdue when it is still due (just!)
   today.setHours(0, 0, 0, 0)
 
-  if (status === 'due') {
-    if (!dueDate) {
-      return 'not due yet'
-    }
-
-    if (dueDate < today) {
-      return 'overdue'
-    }
-
-    // A return is considered "due" for 28 days, starting 28 days before the due date
-    // Any date before this period should be marked as "not due yet"
-    const notDueUntil = new Date(dueDate)
-
-    // Calculate the start of the "due" period, which begins 27 days before the due date
-    notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
-
-    // If today is before the "due" period starts, the return is "not due yet"
-    if (today < notDueUntil) {
-      return 'not due yet'
-    }
+  if (!dueDate) {
+    return 'not due yet'
   }
 
-  // For all other cases we can just return the status and the return-status-tag macro will know how to display it
-  return status
+  if (dueDate < today) {
+    return 'overdue'
+  }
+
+  // A return is considered "due" for 28 days, starting 28 days before the due date
+  // Any date before this period should be marked as "not due yet"
+  const notDueUntil = new Date(dueDate)
+
+  // Calculate the start of the "due" period, which begins 27 days before the due date
+  notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
+
+  // If today is before the "due" period starts, the return is "not due yet"
+  if (today < notDueUntil) {
+    return 'not due yet'
+  }
+
+  return 'due'
 }
 
 /**
