@@ -55,7 +55,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
         },
         contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Select Recipients',
-        pageTitleCaption: 'Notice ' + referenceCode,
+        pageTitleCaption: `Notice ${referenceCode}`,
         recipients: [
           {
             checked: true,
