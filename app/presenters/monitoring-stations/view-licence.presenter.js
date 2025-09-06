@@ -2,7 +2,7 @@
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
- * @module LicencePresenter
+ * @module ViewLicencePresenter
  */
 
 const { formatLongDate, formatValueUnit, sentenceCase } = require('../base.presenter.js')
