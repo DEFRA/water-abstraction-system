@@ -11,49 +11,102 @@ const { formatRestrictionType } = require('./base.presenter.js')
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
  *
+ * @param {module:LicenceModel} licence - The selected licence
+ * @param {module:LicenceMonitoringStationModel} licenceMonitoringStations - The licence monitoring stations and
+ * associated data for the selected licence and monitoring station
+ * @param {module:MonitoringStationModel} monitoringStation - The monitoring station the user is viewing licence tag
+ * data
  * @param {object} auth - The auth object taken from `request.auth`
- * @param {module:NotificationModel} lastAlert - The last water abstraction alert sent
- * @param {module:MonitoringStationModel} monitoringStationLicenceTags - The licence monitoring station and associated
- * licence tag data
  *
  * @returns {object} page data needed by the view template
  */
-function go(auth, lastAlert, monitoringStationLicenceTags) {
-  const { id: monitoringStationId, label, licenceMonitoringStations, riverName } = monitoringStationLicenceTags
-  const { licence } = licenceMonitoringStations[0]
+function go(licence, licenceMonitoringStations, monitoringStation, auth) {
+  const canRemoveTags = auth.credentials.scope.includes('manage_gauging_station_licence_links')
 
   return {
-    backLink: `/system/monitoring-stations/${monitoringStationId}`,
-    lastAlertSent: _lastAlertSent(lastAlert),
-    licenceTags: _licenceTags(licenceMonitoringStations),
-    monitoringStationName: _monitoringStationName(label, riverName),
+    backLink: { href: `/system/monitoring-stations/${monitoringStation.id}`, text: 'Go back to monitoring station' },
+    lastAlertSent: _lastAlertSent(licenceMonitoringStations),
+    licenceTags: _licenceTags(licenceMonitoringStations, canRemoveTags),
     pageTitle: `Details for ${licence.licenceRef}`,
-    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links')
+    pageTitleCaption: _monitoringStationName(monitoringStation)
+  }
+}
+
+function _actions(canRemoveTags, licenceMonitoringStationId, tag, created) {
+  if (!canRemoveTags) {
+    return null
+  }
+
+  return {
+    items: [
+      {
+        href: `/system/licence-monitoring-station/${licenceMonitoringStationId}/remove`,
+        text: 'Remove tag',
+        visuallyHiddenText: `Remove ${tag} ${created}`
+      }
+    ]
   }
 }
 
 function _created(createdAt, user) {
-  const created = `Created on ${formatLongDate(createdAt)}`
+  const createdOn = `Created on ${formatLongDate(createdAt)}`
 
   if (user) {
-    return `${created} by ${user.username}`
+    return `${createdOn} by ${user.username}`
   }
 
-  return created
+  return createdOn
 }
 
-function _lastAlertSent(lastAlert) {
-  if (lastAlert) {
-    const { contact, createdAt, messageType, recipient, sendingAlertType } = lastAlert
-    const receiver = messageType === 'email' ? recipient : contact
-
-    return `${sentenceCase(sendingAlertType)} ${messageType} on ${formatLongDate(createdAt)} sent to ${receiver}`
+function _displaySupersededWarning(licenceVersionPurposeCondition) {
+  if (!licenceVersionPurposeCondition) {
+    return false
   }
 
-  return 'N/A'
+  return licenceVersionPurposeCondition.licenceVersionPurpose.licenceVersion.status === 'superseded'
 }
 
-function _licenceTags(licenceMonitoringStations) {
+function _effectOfRestriction(licenceVersionPurposeCondition) {
+  if (!licenceVersionPurposeCondition) {
+    return null
+  }
+
+  return licenceVersionPurposeCondition.notes
+}
+
+function _lastAlertSent(licenceMonitoringStations) {
+  // Filter out those without an abstraction alert
+  const licenceMonitoringStationsWithAlerts = licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return licenceMonitoringStation.statusUpdatedAt
+  })
+
+  if (!licenceMonitoringStationsWithAlerts.length) {
+    return null
+  }
+
+  // Sort by the most recent
+  licenceMonitoringStationsWithAlerts.sort((a, b) => {
+    return b.statusUpdatedAt - a.statusUpdatedAt
+  })
+
+  const { status, statusUpdatedAt } = licenceMonitoringStationsWithAlerts[0]
+
+  return `${sentenceCase(status)} alert sent on ${formatLongDate(statusUpdatedAt)}`
+}
+
+function _licenceCondition(licenceVersionPurposeCondition) {
+  if (!licenceVersionPurposeCondition) {
+    return 'Not linked to a condition'
+  }
+
+  const { externalId, licenceVersionPurposeConditionType } = licenceVersionPurposeCondition
+
+  const naldId = externalId.split(':').pop() // Get the last set of digits from the externalId
+
+  return `${licenceVersionPurposeConditionType.displayTitle}, NALD ID ${naldId}`
+}
+
+function _licenceTags(licenceMonitoringStations, canRemoveTags) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const {
       id: licenceMonitoringStationId,
@@ -65,44 +118,26 @@ function _licenceTags(licenceMonitoringStations) {
       user
     } = licenceMonitoringStation
 
-    const { effectOfRestriction, licenceVersionStatus, linkedCondition } =
-      _linkedConditionDetails(licenceVersionPurposeCondition)
+    const created = _created(createdAt, user)
+    const tag = `${formatRestrictionType(restrictionType)} tag`
 
     return {
-      created: _created(createdAt, user),
-      effectOfRestriction,
+      actions: _actions(canRemoveTags, licenceMonitoringStationId, tag, created),
+      created,
+      displaySupersededWarning: _displaySupersededWarning(licenceVersionPurposeCondition),
+      effectOfRestriction: _effectOfRestriction(licenceVersionPurposeCondition),
       licenceMonitoringStationId,
-      licenceVersionStatus,
-      linkedCondition,
-      tag: `${formatRestrictionType(restrictionType)} tag`,
+      linkedCondition: _licenceCondition(licenceVersionPurposeCondition),
+      tag,
       threshold: formatValueUnit(thresholdValue, thresholdUnit),
       type: formatRestrictionType(restrictionType)
     }
   })
 }
 
-function _linkedConditionDetails(licenceVersionPurposeCondition) {
-  if (licenceVersionPurposeCondition) {
-    const { externalId, licenceVersionPurpose, licenceVersionPurposeConditionType, notes } =
-      licenceVersionPurposeCondition
+function _monitoringStationName(monitoringStation) {
+  const { label, riverName } = monitoringStation
 
-    const lastDigits = externalId.split(':').pop() // Get the last set digits from the externalId
-
-    return {
-      effectOfRestriction: notes ?? '',
-      licenceVersionStatus: licenceVersionPurpose.licenceVersion.status,
-      linkedCondition: `${licenceVersionPurposeConditionType.displayTitle}, NALD ID ${lastDigits}`
-    }
-  }
-
-  return {
-    effectOfRestriction: null,
-    licenceVersionStatus: null,
-    linkedCondition: 'Not linked to a condition'
-  }
-}
-
-function _monitoringStationName(label, riverName) {
   if (riverName) {
     return `${riverName} at ${label}`
   }

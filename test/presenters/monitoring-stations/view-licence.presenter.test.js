@@ -12,8 +12,9 @@ const ViewLicencePresenter = require('../../../app/presenters/monitoring-station
 
 describe('Monitoring Stations - View Licence presenter', () => {
   let auth
-  let lastAlert
-  let monitoringStationLicenceTags
+  let licence
+  let licenceMonitoringStations
+  let monitoringStation
 
   beforeEach(() => {
     auth = {
@@ -21,265 +22,312 @@ describe('Monitoring Stations - View Licence presenter', () => {
         scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
       }
     }
-    lastAlert = undefined
-    monitoringStationLicenceTags = _monitoringStationLicenceTags()
+    licence = { id: '4f035ed9-b22d-4c6c-9ecb-3ec1bac43de5', licenceRef: '01/123' }
+    licenceMonitoringStations = [
+      {
+        createdAt: new Date('2025-08-07T13:49:42.953Z'),
+        id: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
+        restrictionType: 'reduce',
+        status: 'resume',
+        statusUpdatedAt: null,
+        thresholdUnit: 'm3/s',
+        thresholdValue: 500,
+        licenceVersionPurposeCondition: null,
+        user: {
+          id: 100002,
+          username: 'environment.officer@wrls.gov.uk'
+        }
+      },
+      {
+        createdAt: new Date('2025-08-06T13:49:42.951Z'),
+        id: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
+        restrictionType: 'stop',
+        status: 'resume',
+        statusUpdatedAt: new Date('2025-08-26T21:22:05.000Z'),
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100,
+        licenceVersionPurposeCondition: {
+          externalId: '9:99305:1:1234',
+          id: '3ce05856-c13a-4a6e-978b-fe9fdb4fe106',
+          notes: 'This is the effect of restriction',
+          licenceVersionPurpose: {
+            id: 'df841d8b-153a-45dc-858d-d410f88fdb02',
+            licenceVersion: {
+              id: 'c371244e-224e-4ed0-84d7-6eb476cf0671',
+              status: 'current'
+            }
+          },
+          licenceVersionPurposeConditionType: {
+            id: '4a142b01-5588-4dfc-9330-920c996babe0',
+            displayTitle: 'Rates m3 per day'
+          }
+        },
+        user: {
+          id: 100002,
+          username: 'environment.officer@wrls.gov.uk'
+        }
+      }
+    ]
+    monitoringStation = { id: 'b9b56105-aa8b-4015-b1a4-d50c6ba7436b', label: 'Hades', riverName: 'The River Styx' }
   })
 
-  describe('when provided with the result of the fetch licence tag details service', () => {
-    it('correctly presents the data', () => {
-      const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+  it('correctly presents the data', () => {
+    const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-      expect(result).to.equal({
-        backLink: '/system/monitoring-stations/863c375f-4f8d-4633-af0e-a2298f6f174e',
-        lastAlertSent: 'N/A',
-        licenceTags: [
-          {
-            created: 'Created on 23 April 2025 by environment.officer@wrls.gov.uk',
-            effectOfRestriction: null,
-            licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-            licenceVersionStatus: null,
-            linkedCondition: 'Not linked to a condition',
-            tag: 'Stop or reduce tag',
-            threshold: '175Ml/d',
-            type: 'Stop or reduce'
-          }
-        ],
-        monitoringStationName: 'The Station',
-        pageTitle: 'Details for 99/999',
-        permissionToManageLinks: true
-      })
+    expect(result).to.equal({
+      backLink: {
+        href: '/system/monitoring-stations/b9b56105-aa8b-4015-b1a4-d50c6ba7436b',
+        text: 'Go back to monitoring station'
+      },
+      lastAlertSent: 'Resume alert sent on 26 August 2025',
+      licenceTags: [
+        {
+          actions: {
+            items: [
+              {
+                href: '/system/licence-monitoring-station/8c79ddbe-b8d8-477f-b2f5-1f729b095f80/remove',
+                text: 'Remove tag',
+                visuallyHiddenText: 'Remove Reduce tag Created on 7 August 2025 by environment.officer@wrls.gov.uk'
+              }
+            ]
+          },
+          created: 'Created on 7 August 2025 by environment.officer@wrls.gov.uk',
+          displaySupersededWarning: false,
+          effectOfRestriction: null,
+          licenceMonitoringStationId: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
+          linkedCondition: 'Not linked to a condition',
+          tag: 'Reduce tag',
+          threshold: '500m3/s',
+          type: 'Reduce'
+        },
+        {
+          actions: {
+            items: [
+              {
+                href: '/system/licence-monitoring-station/7cbfb847-e666-4841-befc-d9bf3423c6ff/remove',
+                text: 'Remove tag',
+                visuallyHiddenText: 'Remove Stop tag Created on 6 August 2025 by environment.officer@wrls.gov.uk'
+              }
+            ]
+          },
+          created: 'Created on 6 August 2025 by environment.officer@wrls.gov.uk',
+          displaySupersededWarning: false,
+          effectOfRestriction: 'This is the effect of restriction',
+          licenceMonitoringStationId: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
+          linkedCondition: 'Rates m3 per day, NALD ID 1234',
+          tag: 'Stop tag',
+          threshold: '100m3/s',
+          type: 'Stop'
+        }
+      ],
+      pageTitle: 'Details for 01/123',
+      pageTitleCaption: 'The River Styx at Hades'
     })
   })
 
   describe('the "lastAlertSent" property', () => {
-    describe('when a water abstraction alert has NOT been sent for the licence', () => {
+    describe('when none of the licence monitoring stations is linked to an alert', () => {
       beforeEach(() => {
-        lastAlert = null
+        licenceMonitoringStations[1].status = null
+        licenceMonitoringStations[1].statusUpdatedAt = null
       })
 
-      it('returns the string "N/A"', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+      it('returns null', () => {
+        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSent).to.equal('N/A')
+        expect(result.lastAlertSent).to.be.null()
       })
     })
 
-    describe('when a water abstraction alert has been sent for the licence', () => {
-      describe('and the alert was sent by "letter"', () => {
-        beforeEach(() => {
-          lastAlert = {
-            id: '14372235-7726-47d3-b736-e1e2a3aeef9e',
-            alertType: 'reduce',
-            contact: 'Big Farm Co Ltd',
-            createdAt: new Date('2024-08-13'),
-            messageRef: 'water_abstraction_alert_stop_warning',
-            messageType: 'letter',
-            recipient: null,
-            sendingAlertType: 'warning',
-            status: 'sent'
-          }
-        })
+    describe('when just one licence monitoring stations is linked to an alert', () => {
+      it('returns that records alert details', () => {
+        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        it('returns details of the alert sent to the "contact"', () => {
-          const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+        expect(result.lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
+      })
+    })
 
-          expect(result.lastAlertSent).to.equal('Warning letter on 13 August 2024 sent to Big Farm Co Ltd')
-        })
+    describe('when multiple licence monitoring stations are linked to an alert', () => {
+      beforeEach(() => {
+        licenceMonitoringStations[0].status = 'warning'
+        licenceMonitoringStations[0].statusUpdatedAt = new Date('2025-08-30T21:22:05.000Z')
       })
 
-      describe('and the alert was sent by "email"', () => {
-        beforeEach(() => {
-          lastAlert = {
-            id: '14372235-7726-47d3-b736-e1e2a3aeef9e',
-            alertType: 'reduce',
-            contact: 'Big Farm Co Ltd',
-            createdAt: new Date('2024-08-13'),
-            messageRef: 'water_abstraction_alert_stop_warning',
-            messageType: 'email',
-            recipient: 'environment.officer@wrls.gov.uk',
-            sendingAlertType: 'warning',
-            status: 'sent'
-          }
-        })
+      it('returns the details of the most recent alert', () => {
+        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        it('returns details of the alert sent to the "recipient"', () => {
-          const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
-
-          expect(result.lastAlertSent).to.equal(
-            'Warning email on 13 August 2024 sent to environment.officer@wrls.gov.uk'
-          )
-        })
+        expect(result.lastAlertSent).to.equal('Warning alert sent on 30 August 2025')
       })
     })
   })
 
   describe('the "licenceTags" property', () => {
-    describe('when the licence monitoring station record is NOT linked to a condition', () => {
-      beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations[0].licenceVersionPurposeCondition = undefined
+    describe('the "actions" property', () => {
+      describe('when the user has permissions to remove tags', () => {
+        it('returns an "items" object need by the govukSummaryList to display a link to the remove page', () => {
+          it('returns null', () => {
+            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+            expect(result.licenceTags[0].actions).to.equal({
+              items: [
+                {
+                  href: '/system/licence-monitoring-station/8c79ddbe-b8d8-477f-b2f5-1f729b095f80/remove',
+                  text: 'Remove tag',
+                  visuallyHiddenText: 'Remove Reduce tag Created on 7 August 2025 by environment.officer@wrls.gov.uk'
+                }
+              ]
+            })
+            expect(result.licenceTags[1].actions).to.equal({
+              items: [
+                {
+                  href: '/system/licence-monitoring-station/7cbfb847-e666-4841-befc-d9bf3423c6ff/remove',
+                  text: 'Remove tag',
+                  visuallyHiddenText: 'Remove Stop tag Created on 6 August 2025 by environment.officer@wrls.gov.uk'
+                }
+              ]
+            })
+          })
+        })
       })
 
-      it('correctly formats the licence monitoring station record', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+      describe('when the user does not have permissions to remove tags', () => {
+        beforeEach(() => {
+          auth.credentials.scope = ['billing', 'hof_notifications']
+        })
 
-        expect(result.licenceTags).to.equal([
-          {
-            created: 'Created on 23 April 2025 by environment.officer@wrls.gov.uk',
-            effectOfRestriction: null,
-            licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-            licenceVersionStatus: null,
-            linkedCondition: 'Not linked to a condition',
-            tag: 'Stop or reduce tag',
-            threshold: '175Ml/d',
-            type: 'Stop or reduce'
-          }
-        ])
-      })
-    })
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-    describe('when the licence monitoring station record is linked to a condition', () => {
-      beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations[0].licenceVersionPurposeCondition = {
-          externalId: '12345:1:98765',
-          notes: 'licenceVersionPurposeCondition notes',
-          licenceVersionPurposeConditionType: {
-            displayTitle: 'Flow cessation condition'
-          },
-          licenceVersionPurpose: {
-            licenceVersion: {
-              status: 'current'
-            }
-          }
-        }
-      })
-
-      it('correctly formats the licence monitoring station record', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
-
-        expect(result.licenceTags).to.equal([
-          {
-            created: 'Created on 23 April 2025 by environment.officer@wrls.gov.uk',
-            effectOfRestriction: 'licenceVersionPurposeCondition notes',
-            licenceMonitoringStationId: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-            licenceVersionStatus: 'current',
-            linkedCondition: 'Flow cessation condition, NALD ID 98765',
-            tag: 'Stop or reduce tag',
-            threshold: '175Ml/d',
-            type: 'Stop or reduce'
-          }
-        ])
+          expect(result.licenceTags[0].actions).to.be.null()
+          expect(result.licenceTags[1].actions).to.be.null()
+        })
       })
     })
 
-    describe('when the licence monitoring station record is NOT linked to a user', () => {
-      beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations[0].user = null
+    describe('the "created" property', () => {
+      describe('when the user that created the licence monitoring station is known', () => {
+        it('returns when it was created and who by', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[0].created).to.equal('Created on 7 August 2025 by environment.officer@wrls.gov.uk')
+          expect(result.licenceTags[1].created).to.equal('Created on 6 August 2025 by environment.officer@wrls.gov.uk')
+        })
       })
 
-      it('correctly formats the licence monitoring station created string', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+      describe('when the user that created the licence monitoring station is not known', () => {
+        beforeEach(() => {
+          licenceMonitoringStations[0].user = null
+          licenceMonitoringStations[1].user = null
+        })
 
-        expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025')
+        it('returns just when it was created', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[0].created).to.equal('Created on 7 August 2025')
+          expect(result.licenceTags[1].created).to.equal('Created on 6 August 2025')
+        })
       })
     })
 
-    describe('when the licence monitoring station record is linked to a user', () => {
-      beforeEach(() => {
-        monitoringStationLicenceTags.licenceMonitoringStations[0].user = { username: 'a.user@wrls.gov.uk' }
+    describe('the "displaySupersededWarning" property', () => {
+      describe('when the licence monitoring station is linked via its condition to a superseded licence version', () => {
+        beforeEach(() => {
+          licenceMonitoringStations[1].licenceVersionPurposeCondition.licenceVersionPurpose.licenceVersion.status =
+            'superseded'
+        })
+
+        it('returns true (display the warning)', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].displaySupersededWarning).to.be.true()
+        })
       })
 
-      it('correctly formats the licence monitoring station created string', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+      describe('when the licence monitoring station is linked via its condition to a current licence version', () => {
+        it('returns false (do not display the warning)', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.licenceTags[0].created).to.equal('Created on 23 April 2025 by a.user@wrls.gov.uk')
+          expect(result.licenceTags[1].displaySupersededWarning).to.be.false()
+        })
+      })
+
+      describe('when the licence monitoring station is not linked to a condition', () => {
+        it('returns false (do not display the warning)', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].displaySupersededWarning).to.be.false()
+        })
+      })
+    })
+
+    describe('the "effectOfRestriction" property', () => {
+      describe('when the licence monitoring station is linked to a condition with notes', () => {
+        it('returns the notes', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].effectOfRestriction).to.equal('This is the effect of restriction')
+        })
+      })
+
+      describe('when the licence monitoring station is linked to a condition without notes', () => {
+        beforeEach(() => {
+          licenceMonitoringStations[1].licenceVersionPurposeCondition.notes = null
+        })
+
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].effectOfRestriction).to.be.null()
+        })
+      })
+
+      describe('when the licence monitoring station is not linked to a condition', () => {
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[0].effectOfRestriction).to.be.null()
+        })
+      })
+    })
+
+    describe('the "linkedCondition" property', () => {
+      describe('when the licence monitoring station is linked to a condition', () => {
+        it('returns the details of the condition', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].linkedCondition).to.equal('Rates m3 per day, NALD ID 1234')
+        })
+      })
+
+      describe('when the licence monitoring station is not linked to a condition', () => {
+        it('returns "Not linked to a condition"', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[0].linkedCondition).to.equal('Not linked to a condition')
+        })
       })
     })
   })
 
-  describe('the "monitoringStationName" property', () => {
-    describe('when the monitoring stations "riverName" property is blank', () => {
-      beforeEach(() => {
-        monitoringStationLicenceTags.label = 'The Station'
-        monitoringStationLicenceTags.riverName = ''
-      })
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the monitoring station has a river name recorded', () => {
+      it('returns both the station and river name', () => {
+        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-      it('returns the correct "monitoringStationName"', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
-
-        expect(result.monitoringStationName).to.equal('The Station')
+        expect(result.pageTitleCaption).to.equal('The River Styx at Hades')
       })
     })
 
-    describe('when the monitoring stations "riverName" property is populated', () => {
+    describe('when the monitoring station does not have a river name recorded', () => {
       beforeEach(() => {
-        monitoringStationLicenceTags.label = 'The Station'
-        monitoringStationLicenceTags.riverName = 'River Piddle'
+        monitoringStation.riverName = null
       })
 
-      it('returns the correct "monitoringStationName"', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+      it('returns just the station name', () => {
+        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.monitoringStationName).to.equal('River Piddle at The Station')
-      })
-    })
-  })
-
-  describe('the "permissionToManageLinks" property', () => {
-    describe('when the user has permission to manage links to monitoring stations', () => {
-      beforeEach(() => {
-        auth = {
-          credentials: {
-            scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
-          }
-        }
-      })
-
-      it('returns "permissionToManageLinks" as true', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
-
-        expect(result.permissionToManageLinks).to.be.true()
-      })
-    })
-
-    describe('when the user does not have permission to manage links to monitoring stations', () => {
-      beforeEach(() => {
-        auth = {
-          credentials: {
-            scope: ['billing', 'hof_notifications']
-          }
-        }
-      })
-
-      it('returns "permissionToManageLinks" as false', () => {
-        const result = ViewLicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
-
-        expect(result.permissionToManageLinks).to.be.false()
+        expect(result.pageTitleCaption).to.equal('Hades')
       })
     })
   })
 })
-
-function _monitoringStationLicenceTags() {
-  return {
-    id: '863c375f-4f8d-4633-af0e-a2298f6f174e',
-    label: 'The Station',
-    riverName: '',
-    licenceMonitoringStations: [
-      {
-        id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-        createdAt: new Date('2025-04-23'),
-        licenceId: '33615d39-cc4e-4747-9c27-2dfa49fe73bf',
-        restrictionType: 'stop_or_reduce',
-        thresholdUnit: 'Ml/d',
-        thresholdValue: 175,
-        licence: {
-          licenceRef: '99/999'
-        },
-        user: {
-          username: 'environment.officer@wrls.gov.uk'
-        },
-        licenceVersionPurposeCondition: undefined
-      }
-    ]
-  }
-}
