@@ -155,7 +155,7 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[0].id,
                 notes: null,
-                status: 'resume',
+                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[0].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
@@ -174,7 +174,7 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[1].id,
                 notes: 'I have a bad feeling about this',
-                status: 'resume',
+                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[1].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
@@ -193,7 +193,7 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[2].id,
                 notes: null,
-                status: 'resume',
+                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[2].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
