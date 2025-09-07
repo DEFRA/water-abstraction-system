@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceMonitoringStationsService = require('./fetch-licence-monitoring-stations.service.js')
-const LicencePresenter = require('../../presenters/monitoring-stations/licence.presenter.js')
+const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-licence.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/monitoring-stations/{monitoringStationId}/licence/{licenceId}`
@@ -18,12 +18,12 @@ const LicencePresenter = require('../../presenters/monitoring-stations/licence.p
  * @returns {Promise<object>} The view data for the licence tag details page
  */
 async function go(auth, licenceId, monitoringStationId) {
-  const { lastAlert, monitoringStationLicenceTags } = await FetchLicenceMonitoringStationsService.go(
+  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsService.go(
     licenceId,
     monitoringStationId
   )
 
-  const formattedData = LicencePresenter.go(auth, lastAlert, monitoringStationLicenceTags)
+  const formattedData = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
   return {
     activeNavBar: 'search',
