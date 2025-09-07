@@ -35,6 +35,7 @@ async function _fetchLicenceMonitoringStations(licenceId, monitoringStationId) {
     .select(['createdAt', 'id', 'restrictionType', 'status', 'statusUpdatedAt', 'thresholdUnit', 'thresholdValue'])
     .where('licenceId', licenceId)
     .where('monitoringStationId', monitoringStationId)
+    .whereNull('deletedAt')
     .orderBy([{ column: 'thresholdValue', order: 'desc' }])
     .withGraphFetched('licenceVersionPurposeCondition')
     .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {

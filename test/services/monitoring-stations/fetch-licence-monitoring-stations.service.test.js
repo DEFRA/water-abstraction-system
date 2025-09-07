@@ -93,9 +93,21 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
           thresholdValue: 500
         })
         licenceMonitoringStations.push(licenceMonitoringStation)
+
+        licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
+          createdBy: user.id,
+          deletedAt: new Date('2025-08-27 21:22:05'),
+          licenceId: licence.id,
+          licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
+          monitoringStationId: monitoringStation.id,
+          restrictionType: 'stop',
+          status: 'resume',
+          statusUpdatedAt: new Date('2025-08-26 21:22:05')
+        })
+        licenceMonitoringStations.push(licenceMonitoringStation)
       })
 
-      it('returns the licence, monitoring station and licence monitoring station records', async () => {
+      it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
         const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
 
         expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
