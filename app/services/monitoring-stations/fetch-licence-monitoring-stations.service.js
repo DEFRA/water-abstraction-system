@@ -65,53 +65,6 @@ async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().findById(monitoringStationId).select(['id', 'label', 'riverName'])
 }
 
-// async function _fetchMonitoringStationLicenceTags(licenceId, monitoringStationId) {
-//   return MonitoringStationModel.query()
-//     .findById(monitoringStationId)
-//     .select(['id', 'label', 'riverName'])
-//     .withGraphFetched('licenceMonitoringStations')
-//     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
-//       licenceMonitoringStationsBuilder
-//         .select([
-//           'licenceMonitoringStations.id',
-//           'licenceMonitoringStations.createdAt',
-//           'licenceMonitoringStations.licenceId',
-//           'licenceMonitoringStations.restrictionType',
-//           'licenceMonitoringStations.thresholdUnit',
-//           'licenceMonitoringStations.thresholdValue'
-//         ])
-//         .whereNull('licenceMonitoringStations.deletedAt')
-//         .where('licenceMonitoringStations.licenceId', licenceId)
-//         .orderBy([{ column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }])
-//         .withGraphFetched('licence')
-//         .modifyGraph('licence', (licenceBuilder) => {
-//           licenceBuilder.select(['licenceRef'])
-//         })
-//         .withGraphFetched('licenceVersionPurposeCondition')
-//         .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
-//           licenceVersionPurposeConditionBuilder
-//             .select(['externalId', 'notes'])
-//             .withGraphFetched('licenceVersionPurpose')
-//             .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
-//               licenceVersionPurposeBuilder
-//                 .select(['id'])
-//                 .withGraphFetched('licenceVersion')
-//                 .modifyGraph('licenceVersion', (licenceVersionBuilder) => {
-//                   licenceVersionBuilder.select(['status'])
-//                 })
-//             })
-//             .withGraphFetched('licenceVersionPurposeConditionType')
-//             .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
-//               licenceVersionPurposeConditionTypeBuilder.select(['displayTitle'])
-//             })
-//         })
-//         .withGraphFetched('user')
-//         .modifyGraph('user', (userBuilder) => {
-//           userBuilder.select(['username'])
-//         })
-//     })
-// }
-
 module.exports = {
   go
 }
