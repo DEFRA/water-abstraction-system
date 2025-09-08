@@ -3,96 +3,63 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { countries } = require('../../../app/lib/static-lookups.lib.js')
-
 // Test helpers
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
+
+// Things we need to stub
+const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
 const InternationalService = require('../../../app/services/address/international.service.js')
 
 describe('Address - International Service', () => {
-  let session
-  let sessionData
+  const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  describe('when called with no saved address', () => {
-    beforeEach(async () => {
-      sessionData = {
-        address: {}
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
+  beforeEach(async () => {
+    Sinon.stub(SessionModel, 'query').returns({
+      findById: Sinon.stub().resolves({
+        id: sessionId,
+        addressJourney: {
+          activeNavBar: 'manage',
+          address: {},
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+        }
+      })
     })
+  })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await InternationalService.go(session.id)
+      const result = await InternationalService.go(sessionId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeNavBar: 'manage',
         addressLine1: null,
         addressLine2: null,
         addressLine3: null,
         addressLine4: null,
-        backLink: `/system/address/${session.id}/postcode`,
-        country: _countries(),
+        backLink: {
+          href: `/system/address/${sessionId}/postcode`,
+          text: 'Back'
+        },
+        country: countryLookup(),
         pageTitle: 'Enter the international address',
+        pageTitleCaption: null,
         postcode: null
       })
     })
   })
-
-  describe('when called with the entire address saved', () => {
-    beforeEach(async () => {
-      sessionData = {
-        address: {
-          addressLine1: '1 Fake Farm',
-          addressLine2: '1 Fake street',
-          addressLine3: 'Fake Village',
-          addressLine4: 'Fake City',
-          country: 'England',
-          postcode: 'SW1A 1AA'
-        }
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await InternationalService.go(session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        addressLine1: '1 Fake Farm',
-        addressLine2: '1 Fake street',
-        addressLine3: 'Fake Village',
-        addressLine4: 'Fake City',
-        backLink: `/system/address/${session.id}/postcode`,
-        country: _countries('England'),
-        pageTitle: 'Enter the international address',
-        postcode: 'SW1A 1AA'
-      })
-    })
-  })
 })
-
-function _countries(value = 'select') {
-  const displayCountries = countries.map((country) => {
-    return {
-      value: country,
-      selected: value === country,
-      text: country
-    }
-  })
-
-  displayCountries.unshift({
-    value: 'select',
-    selected: value === 'select',
-    text: 'Select a country'
-  })
-
-  return displayCountries
-}

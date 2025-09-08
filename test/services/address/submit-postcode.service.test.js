@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -16,122 +17,104 @@ const SubmitPostcodeService = require('../../../app/services/address/submit-post
 describe('Address - Submit Postcode Service', () => {
   let payload
   let session
-  let sessionData
+  let sessionId
 
-  describe('when called with a valid payload', () => {
-    beforeEach(async () => {
-      payload = {
-        postcode: 'SW1A 1AA'
+  beforeEach(async () => {
+    sessionId = generateUUID()
+
+    session = await SessionHelper.add({
+      id: sessionId,
+      data: {
+        addressJourney: {
+          activeNavBar: 'manage',
+          address: {},
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+        }
       }
-      sessionData = { address: {} }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('saves the submitted value', async () => {
-      await SubmitPostcodeService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.address.postcode).to.equal(payload.postcode)
-    })
-
-    it('continues on the journey', async () => {
-      const result = await SubmitPostcodeService.go(session.id, payload)
-
-      expect(result).to.equal({})
     })
   })
 
-  describe('when called with a previously saved address', () => {
-    describe('and with a valid payload', () => {
-      beforeEach(async () => {
-        payload = {
-          postcode: 'SW1A 1AA'
-        }
-        sessionData = {
-          address: {
-            addressLine1: '1 Fake Farm',
-            addressLine2: '1 Fake street',
-            addressLine3: 'Fake Village',
-            addressLine4: 'Fake City',
-            postcode: 'SW1A 1AA'
-          }
-        }
-
-        session = await SessionHelper.add({ data: sessionData })
-
-        session.address.redirectUrl = `/system/notices/setup/${session.id}/check`
-
-        await session.$update()
+  describe('when called', () => {
+    describe('with a valid payload', () => {
+      beforeEach(() => {
+        payload = { postcode: 'SW1A 1AA' }
       })
 
-      it('resets the address object to postcode plus redirectUrl', async () => {
-        await SubmitPostcodeService.go(session.id, payload)
+      it('saves the submitted postcode and returns an empty object (tells controller to redirect to next page)', async () => {
+        const result = await SubmitPostcodeService.go(sessionId, payload)
+
+        expect(result).to.equal({})
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.address).to.equal({
-          postcode: payload.postcode,
-          redirectUrl: session.address.redirectUrl
-        })
-      })
-
-      it('continues on the journey', async () => {
-        const result = await SubmitPostcodeService.go(session.id, payload)
-
-        expect(result).to.equal({})
-      })
-    })
-  })
-
-  describe('when called with a invalid payload', () => {
-    describe('when there is no value provided', () => {
-      beforeEach(async () => {
-        payload = {}
-        sessionData = {
-          address: {},
-          contactName: 'Fake Person'
-        }
-
-        session = await SessionHelper.add({ data: sessionData })
-      })
-
-      it('returns the page data with an appropriate error', async () => {
-        const result = await SubmitPostcodeService.go(session.id, payload)
-
-        expect(result).to.equal({
-          activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/contact-type`,
-          internationalLink: `/system/address/${session.id}/international`,
-          error: { text: 'Enter a UK postcode' },
-          pageTitle: 'Enter a UK postcode',
-          postcode: null
-        })
+        expect(refreshedSession.addressJourney.address.postcode).to.equal('SW1A 1AA')
       })
     })
 
-    describe('when there is an invalid value provided', () => {
-      beforeEach(async () => {
-        payload = { postcode: 'notapostcode' }
-        sessionData = {
-          address: {},
-          contactName: 'Fake Person'
-        }
+    describe('with an invalid payload', () => {
+      describe('because the user has not entered anything', () => {
+        beforeEach(() => {
+          payload = {}
+        })
 
-        session = await SessionHelper.add({ data: sessionData })
+        it('returns page data needed to re-render the view including the validation error', async () => {
+          const result = await SubmitPostcodeService.go(sessionId, payload)
+
+          expect(result).to.equal({
+            error: {
+              errorList: [
+                {
+                  href: '#postcode',
+                  text: 'Enter a UK postcode'
+                }
+              ],
+              postcode: { text: 'Enter a UK postcode' }
+            },
+            activeNavBar: 'manage',
+            backLink: {
+              href: `/system/notices/setup/${sessionId}/contact-type`,
+              text: 'Back'
+            },
+            internationalLink: `/system/address/${sessionId}/international`,
+            pageTitle: 'Enter a UK postcode',
+            pageTitleCaption: null,
+            postcode: null
+          })
+        })
       })
 
-      it('returns the page data with an appropriate error', async () => {
-        const result = await SubmitPostcodeService.go(session.id, payload)
+      describe('because the user entered an invalid postcode', () => {
+        beforeEach(() => {
+          payload = { postcode: 'foo' }
+        })
 
-        expect(result).to.equal({
-          activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/contact-type`,
-          error: { text: 'Enter a valid UK postcode' },
-          internationalLink: `/system/address/${session.id}/international`,
-          pageTitle: 'Enter a UK postcode',
-          postcode: 'notapostcode'
+        it('returns page data needed to re-render the view including the validation error', async () => {
+          const result = await SubmitPostcodeService.go(sessionId, payload)
+
+          expect(result).to.equal({
+            error: {
+              errorList: [
+                {
+                  href: '#postcode',
+                  text: 'Enter a valid UK postcode'
+                }
+              ],
+              postcode: { text: 'Enter a valid UK postcode' }
+            },
+            activeNavBar: 'manage',
+            backLink: {
+              href: `/system/notices/setup/${sessionId}/contact-type`,
+              text: 'Back'
+            },
+            internationalLink: `/system/address/${sessionId}/international`,
+            pageTitle: 'Enter a UK postcode',
+            pageTitleCaption: null,
+            postcode: 'foo'
+          })
         })
       })
     })

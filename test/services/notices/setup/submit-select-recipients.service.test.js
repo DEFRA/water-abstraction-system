@@ -21,13 +21,17 @@ const SubmitSelectRecipientsService = require('../../../../app/services/notices/
 describe('Notices - Setup - Submit Select Recipients Service', () => {
   let payload
   let recipients
+  let referenceCode
   let session
   let sessionData
   let yarStub
 
   beforeEach(async () => {
     payload = { recipients: ['123'] }
-    sessionData = {}
+
+    referenceCode = 'RINV-CPFRQ4'
+
+    sessionData = { referenceCode }
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -81,12 +85,25 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
         const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          backLink: `/system/notices/setup/${session.id}/check`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Back'
+          },
           contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
           error: {
-            text: 'Select at least one recipient'
+            errorList: [
+              {
+                href: '#recipients',
+                text: 'Select at least one recipient'
+              }
+            ],
+            recipients: {
+              text: 'Select at least one recipient'
+            }
           },
+
           pageTitle: 'Select Recipients',
+          pageTitleCaption: `Notice RINV-CPFRQ4`,
           recipients: [
             {
               checked: false,

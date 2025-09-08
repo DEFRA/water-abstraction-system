@@ -18,10 +18,14 @@ function go(session) {
   const type = session?.contactType ?? null
 
   return {
-    backLink: `/system/notices/setup/${session.id}/select-recipients`,
+    backLink: {
+      href: `/system/notices/setup/${session.id}/select-recipients`,
+      text: 'Back'
+    },
     email,
     name,
     pageTitle: 'Select how to contact the recipient',
+    pageTitleCaption: `Notice ${session.referenceCode}`,
     type
   }
 }

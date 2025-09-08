@@ -352,6 +352,7 @@ function _manualPageData(error = false) {
 
   if (error) {
     pageData.error = {
+      addressLine1: 'Enter address line 1',
       errorList: [
         {
           href: '#addressLine1',
@@ -368,7 +369,15 @@ function _postcodePageData(error = false) {
   const pageData = _commonPageData()
 
   if (error) {
-    pageData.error = { text: 'Enter a UK postcode' }
+    pageData.error = {
+      errorList: [
+        {
+          href: '#postcode',
+          text: 'Enter a UK postcode'
+        }
+      ],
+      postcode: 'Enter a UK postcode'
+    }
   }
 
   return pageData
@@ -378,7 +387,15 @@ function _selectPageData(error = false) {
   const pageData = _commonPageData()
 
   if (error) {
-    pageData.error = { text: 'Select an address' }
+    pageData.error = {
+      addresses: 'Select an address',
+      errorList: [
+        {
+          href: '#addresses',
+          text: 'Select an address'
+        }
+      ]
+    }
   }
 
   return pageData

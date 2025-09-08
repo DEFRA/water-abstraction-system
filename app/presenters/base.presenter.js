@@ -2,6 +2,8 @@
 
 const { returnUnits } = require('../lib/static-lookups.lib.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
@@ -14,24 +16,6 @@ const { returnUnits } = require('../lib/static-lookups.lib.js')
  */
 function convertPenceToPounds(value) {
   return value / 100
-}
-
-/**
- * Converts a quantity in cubic metres to a given unit and formats it
- *
- * @param {string} units - the unit to convert the quantity to
- * @param {number} quantity - the quantity in cubic metres to be formatted
- *
- * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
- */
-function formatQuantity(units, quantity) {
-  if (quantity === null || quantity === undefined) {
-    return null
-  }
-
-  const convertedQuantity = quantity * returnUnits[units].multiplier
-
-  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -256,6 +240,79 @@ function formatPurposes(purposes) {
 }
 
 /**
+ * Converts a quantity in cubic metres to a given unit and formats it
+ *
+ * @param {string} units - the unit to convert the quantity to
+ * @param {number} quantity - the quantity in cubic metres to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
+function formatQuantity(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
+}
+
+/**
+ * Formats the status for a return log, adjusting for specific conditions.
+ *
+ * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due', but there are
+ * 28 days before the returns due date, it will display 'not due yet'. If the status is 'due' and the due date has
+ * passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
+ *
+ * @param {module:ReturnLogModel} returnLog - The return log containing status and due date information
+ *
+ * @returns {string} The formatted status for display.
+ */
+function formatReturnLogStatus(returnLog) {
+  const { status, dueDate } = returnLog
+
+  // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
+  // statues
+  if (status === 'completed') {
+    return 'complete'
+  }
+
+  // For all other statuses except 'due' we can just return the status
+  if (status !== 'due') {
+    return status
+  }
+
+  if (!dueDate) {
+    return 'not due yet'
+  }
+
+  // Work out if the return is overdue (status is still 'due' and it is past the due date)
+  const today = new Date()
+
+  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
+  // 'today' would be flagged as overdue when it is still due (just!)
+  today.setHours(0, 0, 0, 0)
+
+  if (dueDate < today) {
+    return 'overdue'
+  }
+
+  // A return is considered "due" for 28 days, starting 28 days before the due date
+  // Any date before this period should be marked as "not due yet"
+  const notDueUntil = new Date(dueDate)
+
+  // Calculate the start of the "due" period, which begins 27 days before the due date
+  notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
+
+  // If today is before the "due" period starts, the return is "not due yet"
+  if (today < notDueUntil) {
+    return 'not due yet'
+  }
+
+  return 'due'
+}
+
+/**
  * Format a Joi validation result into a format that can be used by our views
  *
  * If {@link https://joi.dev/ | Joi} found no validation errors the result will not contain an `error:` property.
@@ -458,6 +515,7 @@ module.exports = {
   formatPounds,
   formatPurposes,
   formatQuantity,
+  formatReturnLogStatus,
   formatValidationResult,
   formatValueUnit,
   leftPadZeroes,

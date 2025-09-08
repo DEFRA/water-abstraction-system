@@ -20,123 +20,200 @@ const InitiateSessionService = require('../../../../app/services/notices/setup/i
 
 describe('Notices - Setup - Initiate Session service', () => {
   let journey
-  let monitoringStationId
   let noticeType
-
-  beforeEach(() => {
-    journey = 'standard'
-    noticeType = 'invitations'
-    monitoringStationId = undefined
-  })
+  let monitoringStationId
 
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when called', () => {
-    it('creates a new session record', async () => {
-      const result = await InitiateSessionService.go(journey, noticeType)
+    describe('and the journey is "standard"', () => {
+      describe('and the notice type is "invitations"', () => {
+        beforeEach(() => {
+          journey = 'standard'
+          noticeType = 'invitations'
+          monitoringStationId = undefined
+        })
 
-      const matchingSession = await SessionModel.query().findById(result.sessionId)
+        it('initiates the session for the return invitations notice setup journey and returns the session ID and redirect path', async () => {
+          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
-      expect(matchingSession.data).to.equal({
-        address: {
-          redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
-        },
-        journey: 'standard',
-        name: 'Returns: invitation',
-        noticeType: 'invitations',
-        notificationType: 'Returns invitation',
-        referenceCode: matchingSession.referenceCode, // randomly generated
-        subType: 'returnInvitation'
-      })
-    })
+          expect(result).to.equal({
+            sessionId: result.sessionId,
+            path: 'returns-period'
+          })
 
-    it('correctly returns the redirect path and session id', async () => {
-      const result = await InitiateSessionService.go(journey, noticeType)
+          const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-      expect(result).to.equal({
-        sessionId: result.sessionId,
-        path: 'returns-period'
-      })
-    })
+          expect(matchingSession.referenceCode).to.startWith('RINV-')
 
-    describe('when the "journey" is "adhoc"', () => {
-      beforeEach(() => {
-        journey = 'adhoc'
-        noticeType = undefined
-      })
-
-      it('creates a new session record', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType)
-
-        const matchingSession = await SessionModel.query().findById(result.sessionId)
-
-        expect(matchingSession.data).to.equal({
-          address: {
-            redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
-          },
-          journey: 'adhoc'
+          expect(matchingSession.data).to.equal(
+            {
+              name: 'Returns: invitation',
+              journey: 'standard',
+              subType: 'returnInvitation',
+              noticeType: 'invitations',
+              notificationType: 'Returns invitation'
+            },
+            { skip: ['referenceCode'] }
+          )
         })
       })
 
-      it('correctly returns the redirect path and session id', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType)
+      describe('and the notice type is "reminders"', () => {
+        beforeEach(() => {
+          journey = 'standard'
+          noticeType = 'reminders'
+          monitoringStationId = undefined
+        })
+
+        it('initiates the session for the return reminders notice setup journey and returns the session ID and redirect path', async () => {
+          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+
+          expect(result).to.equal({
+            sessionId: result.sessionId,
+            path: 'returns-period'
+          })
+
+          const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+          expect(matchingSession.referenceCode).to.startWith('RREM-')
+
+          expect(matchingSession.data).to.equal(
+            {
+              name: 'Returns: reminder',
+              journey: 'standard',
+              subType: 'returnReminder',
+              noticeType: 'reminders',
+              notificationType: 'Returns reminder'
+            },
+            { skip: ['referenceCode'] }
+          )
+        })
+      })
+    })
+
+    describe('and the journey is "adhoc"', () => {
+      beforeEach(() => {
+        journey = 'adhoc'
+        noticeType = undefined
+        monitoringStationId = undefined
+      })
+
+      it('initiates the session for the ad-hoc notice setup journey and returns the session ID and redirect path', async () => {
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
           path: 'licence'
         })
-      })
-    })
-
-    describe('when the journey is "alerts"', () => {
-      let monitoringStationData
-
-      beforeEach(() => {
-        journey = 'alerts'
-        noticeType = 'abstractionAlerts'
-        monitoringStationId = '1234'
-
-        monitoringStationData = AbstractionAlertSessionData.get()
-
-        Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
-      })
-
-      it('creates a new session record', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
         expect(matchingSession.data).to.equal({
-          address: {
-            redirectUrl: `/system/notices/setup/${matchingSession.id}/add-recipient`
-          },
-          journey: 'alerts',
-          name: 'Water abstraction alert',
-          noticeType: 'abstractionAlerts',
-          notificationType: 'Abstraction alert',
-          referenceCode: matchingSession.referenceCode, // randomly generated
-          subType: 'waterAbstractionAlerts',
-          ...monitoringStationData
+          journey: 'adhoc'
         })
       })
+    })
 
-      it('adds the additional monitoring session data', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+    describe('and the journey is "alerts"', () => {
+      let monitoringStationData
 
-        const matchingSession = await SessionModel.query().findById(result.sessionId)
+      beforeEach(() => {
+        monitoringStationData = AbstractionAlertSessionData.get()
 
-        expect(matchingSession.data.monitoringStationName).to.equal('Death star')
+        journey = 'alerts'
+        noticeType = undefined
+        monitoringStationId = monitoringStationData.monitoringStationId
+
+        Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
       })
 
-      it('correctly returns the redirect path and session id', async () => {
+      it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
         const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
           path: 'abstraction-alerts/alert-type'
         })
+
+        const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+        expect(matchingSession.referenceCode).to.startWith('WAA-')
+
+        expect(matchingSession.data).to.equal(
+          {
+            name: 'Water abstraction alert',
+            journey: 'alerts',
+            subType: 'waterAbstractionAlerts',
+            noticeType: 'abstractionAlerts',
+            notificationType: 'Abstraction alert',
+            monitoringStationId,
+            monitoringStationName: 'Death star',
+            licenceMonitoringStations: [
+              {
+                id: monitoringStationData.licenceMonitoringStations[0].id,
+                notes: null,
+                status: 'resume',
+                licence: {
+                  id: monitoringStationData.licenceMonitoringStations[0].licence.id,
+                  licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
+                },
+                measureType: 'level',
+                thresholdUnit: 'm',
+                thresholdGroup: 'level-1000-m',
+                thresholdValue: 1000,
+                restrictionType: 'reduce',
+                statusUpdatedAt: null,
+                abstractionPeriodEndDay: 1,
+                abstractionPeriodEndMonth: 1,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 2
+              },
+              {
+                id: monitoringStationData.licenceMonitoringStations[1].id,
+                notes: 'I have a bad feeling about this',
+                status: 'resume',
+                licence: {
+                  id: monitoringStationData.licenceMonitoringStations[1].licence.id,
+                  licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
+                },
+                measureType: 'flow',
+                thresholdUnit: 'm3/s',
+                thresholdGroup: 'flow-100-m3/s',
+                thresholdValue: 100,
+                restrictionType: 'stop',
+                statusUpdatedAt: null,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 1
+              },
+              {
+                id: monitoringStationData.licenceMonitoringStations[2].id,
+                notes: null,
+                status: 'resume',
+                licence: {
+                  id: monitoringStationData.licenceMonitoringStations[2].licence.id,
+                  licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
+                },
+                measureType: 'level',
+                thresholdUnit: 'm',
+                thresholdGroup: 'level-100-m',
+                thresholdValue: 100,
+                restrictionType: 'stop',
+                statusUpdatedAt: null,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 1
+              }
+            ],
+            monitoringStationRiverName: 'Meridian Trench'
+          },
+          { skip: ['referenceCode'] }
+        )
       })
     })
   })
