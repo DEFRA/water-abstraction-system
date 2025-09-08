@@ -23,7 +23,6 @@ function go(session) {
   const { dueReturns = [], id: sessionId, licenceRef, noticeType, selectedReturns = [] } = session
 
   return {
-    continueButton: _continueButton(sessionId),
     licenceRef,
     noticeType,
     returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
@@ -41,10 +40,6 @@ function _selectedDueReturns(selectedReturns, dueReturns) {
   return selectedDueReturns.map((returnItem) => {
     return `${returnItem.returnReference} - ${formatLongDate(new Date(returnItem.startDate))} to ${formatLongDate(new Date(returnItem.endDate))}`
   })
-}
-
-function _continueButton(sessionId) {
-  return { text: 'Continue to check recipients', href: `/system/notices/setup/${sessionId}/check` }
 }
 
 module.exports = {
