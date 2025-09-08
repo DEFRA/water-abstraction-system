@@ -54,10 +54,7 @@
 {% block content %}
   <div class="govuk-body">
     {% if notification %}
-      {{ govukNotificationBanner({
-        titleText: notification.title,
-        text: notification.text
-      }) }}
+      {{ govukNotificationBanner(notification) }}
     {% endif %}
 
     {% if warning %}

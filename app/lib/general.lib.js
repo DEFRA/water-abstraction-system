@@ -101,17 +101,29 @@ function determineCurrentFinancialYear() {
 /**
  * Creates a flash notification using yar.
  *
- * This function adds a key/value to 'notification' in yar.
+ * This function adds a key / value to 'notification' in a year.
+ *
+ * The [GOV.UK Notification banner](https://design-system.service.gov.uk/components/notification-banner) expects the
+ * object to include the 'text' and 'titleText' (when using text and not html)
+ *
+ * To simplify our use of the macro we return the expected object with this generic flash notification helper.
+ *
+ * This is can be used in the view like so:
+ * ```
+ * {% if notification %}
+ *   {{ govukNotificationBanner(notification) }}
+ * {% endif %}
+ * ```
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {string} [title='Updated'] - title for the notification
+ * @param {string} [titleText='Updated'] - title for the notification
  * @param {string} [text='Changes made'] - text for the notification
  *
  */
-function flashNotification(yar, title = 'Updated', text = 'Changes made') {
+function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
-    title,
-    text
+    text,
+    titleText
   })
 }
 
