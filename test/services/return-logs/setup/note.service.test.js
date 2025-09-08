@@ -36,7 +36,7 @@ describe('Return Logs Setup - Note service', () => {
         backLink: `/system/return-logs/setup/${sessionId}/check`,
         note: null,
         pageTitle: 'Add a note',
-        returnReference: '1234',
+        caption: 'Return reference 1234',
         sessionId
       })
     })

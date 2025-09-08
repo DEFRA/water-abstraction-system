@@ -17,11 +17,11 @@ function go(session) {
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/meter-provided`,
+    caption: `Return reference ${returnReference}`,
     meterMake: meterMake ?? null,
     meterSerialNumber: meterSerialNumber ?? null,
     meter10TimesDisplay: meter10TimesDisplay ?? null,
     pageTitle: 'Meter details',
-    returnReference,
     sessionId
   }
 }

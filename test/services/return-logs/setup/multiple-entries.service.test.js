@@ -50,7 +50,7 @@ describe('Return Logs Setup - Multiple Entries service', () => {
           measurementType: 'volumes',
           multipleEntries: null,
           pageTitle: 'Enter multiple monthly volumes',
-          returnReference: '012345',
+          caption: 'Return reference 012345',
           startDate: '1 April 2023'
         },
         { skip: ['sessionId'] }
