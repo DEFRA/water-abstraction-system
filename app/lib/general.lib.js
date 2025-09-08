@@ -103,30 +103,17 @@ function determineCurrentFinancialYear() {
  *
  * This function adds a key / value to 'notification' in a year.
  *
- * We are updating the way we use the notifications by having the layout automatically provide the GDS Notification
- * banner macro.
+ * The [GOV.UK Notification banner](https://design-system.service.gov.uk/components/notification-banner) expects the
+ * object to include the 'text' and 'titleText' (when using text and not html)
  *
- * This is how we provide the notification macro:
+ * To simplify our use of the macro we return the expected object with this generic flash notification helper.
+ *
+ * This is can be used in the view like so:
  * ```
  * {% if notification %}
  *   {{ govukNotificationBanner(notification) }}
  * {% endif %}
  * ```
- *
- * We are in the process of migrating pages to use this improved layout. But we need to support the existing way of
- * presenting a notification. This is how we do it:
- * ```html
- * {{ govukNotificationBanner({
- *      titleText: notification.title,
- *      text: notification.text
- * }) }}
- * ```
- *
- * So we need to support two ways of presenting a notification. The updated layout expects the notification object to
- * have 'titleText' and the 'text' to be present to render the notification, the existing process expects the 'title'
- * and 'text'.
- *
- * Fortunately, we can set both without the value conflicting.
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} [titleText='Updated'] - title for the notification
