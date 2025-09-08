@@ -111,26 +111,28 @@ describe('Notices Setup - Preview - Preview service', () => {
           monitoringStationRiverName: '',
           relevantLicenceMonitoringStations: [
             {
+              alertType: 'reduce',
               id: '8c85d9ce-cfb9-4932-8da0-28de4d3dd3aa',
-              notes: null,
               licence: {
                 licenceRef: '99/999'
               },
               measureType: 'flow',
+              notes: null,
+              restrictionType: 'stop_or_reduce',
               thresholdUnit: 'Ml/d',
-              thresholdValue: 400,
-              restrictionType: 'stop_or_reduce'
+              thresholdValue: 400
             },
             {
+              alertType: 'reduce',
               id: '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8',
-              notes: null,
               licence: {
                 licenceRef: testRecipient.licence_refs
               },
               measureType: 'flow',
+              notes: null,
+              restrictionType: 'reduce',
               thresholdUnit: 'm3/s',
-              thresholdValue: 300,
-              restrictionType: 'reduce'
+              thresholdValue: 300
             }
           ]
         }
