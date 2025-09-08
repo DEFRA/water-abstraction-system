@@ -56,29 +56,29 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 }
 
 function _links(session) {
-  const { id, journey } = session
+  const { id: sessionId, journey } = session
 
   const links = {
-    cancel: `/system/notices/setup/${id}/cancel`,
-    download: `/system/notices/setup/${id}/download`
+    cancel: `/system/notices/setup/${sessionId}/cancel`,
+    download: `/system/notices/setup/${sessionId}/download`
   }
 
   if (journey === 'adhoc') {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/check-notice-type`,
-      manage: `/system/notices/setup/${id}/select-recipients`
+      back: `/system/notices/setup/${sessionId}/check-notice-type`,
+      manage: `/system/notices/setup/${sessionId}/select-recipients`
     }
   } else if (journey === 'alerts') {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
+      back: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`
     }
   } else {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/returns-period`,
-      removeLicences: `/system/notices/setup/${id}/remove-licences`
+      back: `/system/notices/setup/${sessionId}/returns-period`,
+      removeLicences: `/system/notices/setup/${sessionId}/remove-licences`
     }
   }
 }
