@@ -1,22 +1,12 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Back',
-    href: links.back
-  }) }}
-{% endblock %}
 
 {% set rows = [] %}
 
@@ -51,22 +41,8 @@
   ]), rows) %}
 {% endfor %}
 
-{% block content %}
-  <div class="govuk-body">
-    {% if notification %}
-      {{ govukNotificationBanner(notification) }}
-    {% endif %}
-
-    {% if warning %}
-      {{ govukWarningText({
-        text: warning,
-        iconFallbackText: "Warning"
-      }) }}
-    {% endif %}
-
-    <span class="govuk-caption-l">Notice {{referenceCode}} </span>
-
-    <h1 class="govuk-heading-l"> {{ pageTitle }} </h1>
+{% block pageContent %}
+    {{ pageHeadingHtml }}
 
     <p> {{ readyToSend }}</p>
 
@@ -143,5 +119,4 @@
         }) }}
       </form>
     </div>
-  </div>
 {% endblock %}

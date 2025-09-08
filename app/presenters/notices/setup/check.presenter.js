@@ -31,14 +31,44 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
+    backLink: _backLink(session),
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
+    pageTitleCaption: `Notice ${referenceCode}`,
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
-    referenceCode,
     warning: _warning(formattedRecipients)
+  }
+}
+
+/**
+ * Check pages should not have backlinks.
+ *
+ * This page has them as some journeys do not have a prior check page.
+ *
+ * The ad hoc journey has a check notice type and so does not require a backlink.
+ *
+ * @private
+ */
+function _backLink(session) {
+  const { id, journey } = session
+
+  if (journey === 'adhoc') {
+    return null
+  }
+
+  if (journey === 'alerts') {
+    return {
+      href: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`,
+      text: 'Back'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${id}/returns-period`,
+    text: 'Back'
   }
 }
 
@@ -56,30 +86,27 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 }
 
 function _links(session) {
-  const { id: sessionId, journey } = session
+  const { id, journey } = session
 
   const links = {
-    cancel: `/system/notices/setup/${sessionId}/cancel`,
-    download: `/system/notices/setup/${sessionId}/download`
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`
   }
 
   if (journey === 'adhoc') {
     return {
       ...links,
-      back: `/system/notices/setup/${sessionId}/check-notice-type`,
-      manage: `/system/notices/setup/${sessionId}/select-recipients`
+      manage: `/system/notices/setup/${id}/select-recipients`
     }
-  } else if (journey === 'alerts') {
-    return {
-      ...links,
-      back: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`
-    }
-  } else {
-    return {
-      ...links,
-      back: `/system/notices/setup/${sessionId}/returns-period`,
-      removeLicences: `/system/notices/setup/${sessionId}/remove-licences`
-    }
+  }
+
+  if (journey === 'alerts') {
+    return links
+  }
+
+  return {
+    ...links,
+    removeLicences: `/system/notices/setup/${id}/remove-licences`
   }
 }
 
@@ -174,14 +201,20 @@ function _warning(formattedRecipients) {
   }
 
   if (invalidRecipients.length === 1) {
-    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    return {
+      iconFallbackText: 'Warning',
+      text: `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    }
   }
 
   const contactNames = invalidRecipients.map((invalidRecipient) => {
     return invalidRecipient.contact[0]
   })
 
-  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  return {
+    iconFallbackText: 'Warning',
+    text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  }
 }
 
 module.exports = {
