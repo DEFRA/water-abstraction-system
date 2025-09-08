@@ -66,11 +66,10 @@ function _backLink(session) {
     }
   }
 
-    return {
-      href: `/system/notices/setup/${id}/returns-period`,
-      text: 'Back'
-    }
-
+  return {
+    href: `/system/notices/setup/${id}/returns-period`,
+    text: 'Back'
+  }
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
