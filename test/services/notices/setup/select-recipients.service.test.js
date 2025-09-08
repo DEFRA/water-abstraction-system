@@ -22,11 +22,15 @@ describe('Notices - Setup - Select Recipients Service', () => {
   let session
   let sessionData
   let recipients
+  let referenceCode
 
   beforeEach(async () => {
     recipients = RecipientsFixture.recipients()
 
+    referenceCode = 'RINV-CPFRQ4'
+
     sessionData = {
+      referenceCode,
       selectedRecipients: [recipients.primaryUser.contact_hash_id]
     }
 
@@ -44,9 +48,13 @@ describe('Notices - Setup - Select Recipients Service', () => {
       const result = await SelectRecipientsService.go(session.id)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/check`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Select Recipients',
+        pageTitleCaption: `Notice RINV-CPFRQ4`,
         recipients: [
           {
             checked: true,
