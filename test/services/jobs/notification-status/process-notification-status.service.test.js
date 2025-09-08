@@ -138,8 +138,9 @@ describe('Job - Notifications - Process Notification Status service', () => {
             notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
             notifyStatus: 'created',
             personalisation: {
-              alertType: 'resume',
-              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+              alertType: 'stop',
+              licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+              sending_alert_type: 'resume'
             },
             plaintext: 'Dear licence contact,\r\n',
             recipient: 'hello@example.com',
@@ -163,8 +164,9 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
               personalisation: {
-                alertType: 'resume',
-                licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+                alertType: 'stop',
+                licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+                sending_alert_type: 'resume'
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
