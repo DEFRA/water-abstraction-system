@@ -13,64 +13,77 @@ const PostcodePresenter = require('../../../app/presenters/address/postcode.pres
 describe('Address - Postcode Presenter', () => {
   let session
 
-  describe('when called with an empty session object', () => {
-    beforeEach(async () => {
-      session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
-      }
-    })
-
-    it('returns page data for the view', () => {
-      const result = PostcodePresenter.go(session)
-
-      expect(result).to.equal({
-        backLink: `/system/address/${session.id}/postcode`,
-        internationalLink: `/system/address/${session.id}/international`,
-        pageTitle: 'Enter a UK postcode',
-        postcode: null
-      })
-    })
-  })
-
-  describe('when called with a name saved in the session', () => {
-    beforeEach(async () => {
-      session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
-        contactName: 'Fake Person'
-      }
-    })
-
-    it('returns page data for the view', () => {
-      const result = PostcodePresenter.go(session)
-
-      expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/contact-type`,
-        internationalLink: `/system/address/${session.id}/international`,
-        pageTitle: 'Enter a UK postcode',
-        postcode: null
-      })
-    })
-  })
-
-  describe('when called with a contactType object and a saved postcode', () => {
-    beforeEach(async () => {
-      session = {
-        id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
-        address: {
-          postcode: 'SW1A 1AA'
+  beforeEach(() => {
+    session = {
+      id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: {},
+        backLink: {
+          href: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/contact-type',
+          text: 'Back'
         },
-        contactName: 'Fake Person'
+        redirectUrl: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
       }
+    }
+  })
+
+  it('correctly presents the data', () => {
+    const result = PostcodePresenter.go(session)
+
+    expect(result).to.equal({
+      activeNavBar: 'manage',
+      backLink: {
+        href: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/contact-type',
+        text: 'Back'
+      },
+      internationalLink: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international',
+      pageTitle: 'Enter a UK postcode',
+      pageTitleCaption: null,
+      postcode: null
+    })
+  })
+
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the property has not been configured', () => {
+      it('returns null', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal(null)
+      })
     })
 
-    it('returns page data for the view', () => {
-      const result = PostcodePresenter.go(session)
+    describe('when the property has been set', () => {
+      beforeEach(async () => {
+        session.addressJourney.pageTitleCaption = 'Super awesome caption'
+      })
 
-      expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/contact-type`,
-        internationalLink: `/system/address/${session.id}/international`,
-        pageTitle: 'Enter a UK postcode',
-        postcode: 'SW1A 1AA'
+      it('returns the set value', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.pageTitleCaption).to.equal('Super awesome caption')
+      })
+    })
+  })
+
+  describe('the "postcode" property', () => {
+    describe('when called with a postcode set in the session', () => {
+      beforeEach(async () => {
+        session.addressJourney.address.postcode = 'SW1A 1AA'
+      })
+
+      it('returns the postcode', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.postcode).to.equal('SW1A 1AA')
+      })
+    })
+
+    describe('when called with no postcode set in the session', () => {
+      it('returns null', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.postcode).to.equal(null)
       })
     })
   })

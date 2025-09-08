@@ -19,7 +19,7 @@ describe('Notices - Setup - Contact Type Service', () => {
 
   describe('when called with no saved data', () => {
     beforeEach(async () => {
-      sessionData = {}
+      sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -29,10 +29,14 @@ describe('Notices - Setup - Contact Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/select-recipients`,
+          text: 'Back'
+        },
         email: null,
         name: null,
         pageTitle: 'Select how to contact the recipient',
+        pageTitleCaption: 'Notice RINV-CPFRQ4',
         type: null
       })
     })
@@ -42,7 +46,8 @@ describe('Notices - Setup - Contact Type Service', () => {
     beforeEach(async () => {
       sessionData = {
         contactName: 'Fake Person',
-        contactType: 'post'
+        contactType: 'post',
+        referenceCode: 'RINV-CPFRQ4'
       }
 
       session = await SessionHelper.add({ data: sessionData })
@@ -53,10 +58,14 @@ describe('Notices - Setup - Contact Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/select-recipients`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/select-recipients`,
+          text: 'Back'
+        },
         email: null,
         name: 'Fake Person',
         pageTitle: 'Select how to contact the recipient',
+        pageTitleCaption: 'Notice RINV-CPFRQ4',
         type: 'post'
       })
     })

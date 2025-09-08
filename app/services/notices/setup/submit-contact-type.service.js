@@ -12,6 +12,7 @@ const ContactTypePresenter = require('../../../presenters/notices/setup/contact-
 const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
@@ -35,13 +36,10 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const submittedData = {
-    id: session.id,
-    contactType: payload?.type ?? null,
-    name: payload?.name ?? null
-  }
+  session.contactType = payload?.type ?? null
+  session.name = payload?.name ?? null
 
-  const pageData = ContactTypePresenter.go(submittedData)
+  const pageData = ContactTypePresenter.go(session)
 
   return {
     activeNavBar: 'manage',
@@ -107,26 +105,9 @@ async function _save(session, payload, yar) {
 }
 
 function _validate(payload) {
-  const validation = ContactTypeValidator.go(payload)
+  const validationResult = ContactTypeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    result.errorList.push({
-      href: `#${detail.context.key}`,
-      text: detail.message
-    })
-
-    result[detail.context.key] = detail.message
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

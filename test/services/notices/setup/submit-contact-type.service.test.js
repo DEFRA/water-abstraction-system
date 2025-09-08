@@ -274,7 +274,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('when validation fails because no type is selected', () => {
       beforeEach(async () => {
         payload = {}
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -284,7 +284,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -293,10 +296,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Select how to contact the recipient'
               }
             ],
-            type: 'Select how to contact the recipient'
+            type: {
+              text: 'Select how to contact the recipient'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: null
         })
       })
@@ -307,7 +313,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'email'
         }
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -317,7 +323,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -326,10 +335,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Enter an email address'
               }
             ],
-            email: 'Enter an email address'
+            email: {
+              text: 'Enter an email address'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: 'email'
         })
       })
@@ -340,7 +352,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'post'
         }
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -350,7 +362,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -359,10 +374,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Enter the recipients name'
               }
             ],
-            name: 'Enter the recipients name'
+            name: {
+              text: 'Enter the recipients name'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: 'post'
         })
       })

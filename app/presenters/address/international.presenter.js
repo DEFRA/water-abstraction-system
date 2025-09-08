@@ -5,7 +5,7 @@
  * @module InternationalPresenter
  */
 
-const { countries } = require('../../lib/static-lookups.lib.js')
+const { countryLookup } = require('./base-address.presenter.js')
 
 /**
  * Formats data for the `address/{sessionId}/international` page
@@ -15,36 +15,20 @@ const { countries } = require('../../lib/static-lookups.lib.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { address, id } = session
+  const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
-    addressLine1: address?.addressLine1 ?? null,
-    addressLine2: address?.addressLine2 ?? null,
-    addressLine3: address?.addressLine3 ?? null,
-    addressLine4: address?.addressLine4 ?? null,
-    backLink: `/system/address/${id}/postcode`,
-    country: _countries(address?.country),
+    activeNavBar,
+    addressLine1: address.addressLine1 ?? null,
+    addressLine2: address.addressLine2 ?? null,
+    addressLine3: address.addressLine3 ?? null,
+    addressLine4: address.addressLine4 ?? null,
+    backLink: { href: `/system/address/${session.id}/postcode`, text: 'Back' },
+    country: countryLookup(address?.country),
     pageTitle: 'Enter the international address',
-    postcode: address?.postcode ?? null
+    pageTitleCaption: pageTitleCaption ?? null,
+    postcode: address.postcode ?? null
   }
-}
-
-function _countries(value = 'select') {
-  const displayCountries = countries.map((country) => {
-    return {
-      value: country,
-      selected: value === country,
-      text: country
-    }
-  })
-
-  displayCountries.unshift({
-    value: 'select',
-    selected: value === 'select',
-    text: 'Select a country'
-  })
-
-  return displayCountries
 }
 
 module.exports = {
