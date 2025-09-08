@@ -55,15 +55,8 @@ function go(recipients, page, pagination, session) {
 function _backLink(session) {
   const { id, journey } = session
 
-  if (journey === 'adhoc') {
+  if (journey === 'adhoc' || journey === 'alerts') {
     return null
-  }
-
-  if (journey === 'alerts') {
-    return {
-      href: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`,
-      text: 'Back'
-    }
   }
 
   return {
