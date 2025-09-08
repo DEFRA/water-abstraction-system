@@ -163,13 +163,10 @@ describe('Notices - Setup - Check presenter', () => {
           session.monitoringStationId = '345'
         })
 
-        it('should return the links for "alerts" journey', () => {
+        it('should return null to not show the back link', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
-          expect(result.backLink).to.equal({
-            href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
-            text: 'Back'
-          })
+          expect(result.backLink).to.be.null()
         })
       })
 
