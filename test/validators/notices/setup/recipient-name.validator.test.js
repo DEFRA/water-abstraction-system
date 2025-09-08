@@ -26,7 +26,7 @@ describe('Notices - Setup - Recipient Name Validator', () => {
     })
   })
 
-  describe('when called with invalid data', () => {
+  describe('when called with no payload', () => {
     beforeEach(() => {
       payload = {}
     })
@@ -36,7 +36,7 @@ describe('Notices - Setup - Recipient Name Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter the recipients name')
+      expect(result.error.details[0].message).to.equal("Enter the recipient's name")
     })
   })
 })

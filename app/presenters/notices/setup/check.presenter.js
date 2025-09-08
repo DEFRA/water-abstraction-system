@@ -57,17 +57,20 @@ function _backLink(session) {
 
   if (journey === 'adhoc') {
     return null
-  } else if (journey === 'alerts') {
+  }
+
+  if (journey === 'alerts') {
     return {
       href: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`,
       text: 'Back'
     }
-  } else {
+  }
+
     return {
       href: `/system/notices/setup/${id}/returns-period`,
       text: 'Back'
     }
-  }
+
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {

@@ -30,7 +30,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
   })
 
   describe('when called', () => {
-    describe('and the notice type is "invitations"', () => {
+    describe('and the notice type is not "returnForms"', () => {
       beforeEach(async () => {
         sessionData.name = 'Returns: invitation'
         sessionData.noticeType = 'invitations'
@@ -80,7 +80,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
         session = await SessionHelper.add({ id: sessionId, data: sessionData })
       })
 
-      it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
+      it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {
         await SubmitCheckNoticeTypeService.go(sessionId)
 
         const refreshedSession = await session.$query()
@@ -98,7 +98,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
             activeNavBar: 'manage',
             address: {},
             backLink: {
-              href: `/system/notices/setup/${sessionId}/contact-type`,
+              href: `/system/notices/setup/${sessionId}/recipient-name`,
               text: 'Back'
             },
             pageTitleCaption: `Notice ${sessionData.referenceCode}`,

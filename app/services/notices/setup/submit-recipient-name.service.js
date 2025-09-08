@@ -9,6 +9,7 @@
 const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
 const RecipientNameValidator = require('../../../validators/notices/setup/recipient-name.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -29,30 +30,27 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.contactName = payload.name
+
   const pageData = RecipientNamePresenter.go(session)
 
   return {
     error: validationResult,
+    activeNavBar: 'manage',
     ...pageData
   }
 }
 
-async function _save(session, _payload) {
+async function _save(session, payload) {
+  session.contactName = payload.name
+
   return session.$update()
 }
 
 function _validate(payload) {
-  const validation = RecipientNameValidator.go(payload)
+  const validationResult = RecipientNameValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
