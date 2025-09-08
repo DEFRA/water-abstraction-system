@@ -31,6 +31,7 @@ describe('Notices - Setup - Recipient Name Service', () => {
       const result = await RecipientNameService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Back'

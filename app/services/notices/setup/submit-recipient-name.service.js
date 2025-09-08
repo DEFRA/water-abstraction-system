@@ -36,6 +36,7 @@ async function go(sessionId, payload) {
 
   return {
     error: validationResult,
+    activeNavBar: 'manage',
     ...pageData
   }
 }
