@@ -25,6 +25,7 @@ exports.up = function (knex) {
     table.string('alert_type').notNullable().default('reduce')
     table.integer('created_by')
     table.boolean('is_test').defaultTo(false)
+    table.uuid('notification_id')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).notNullable()
