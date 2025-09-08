@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 // Thing under test
 const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations by alert type service', () => {
+describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monitoring Stations By Alert Type service', () => {
   let alertType
   let licenceMonitoringStations
   let licenceMonitoringStationsData
@@ -42,10 +42,6 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
   describe('when the "alertType" is "stop"', () => {
     beforeEach(() => {
       alertType = 'stop'
-
-      licenceMonitoringStations.one.restrictionType = 'reduce'
-      licenceMonitoringStations.two.restrictionType = 'stop'
-      licenceMonitoringStations.three.restrictionType = 'stop_or_reduce'
 
       licenceMonitoringStationsData = [...Object.values(licenceMonitoringStations)]
     })
@@ -86,7 +82,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStations.one])
+      expect(result).to.equal([licenceMonitoringStations.one, licenceMonitoringStations.three])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
@@ -100,7 +96,11 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStations.one, licenceMonitoringStations.two])
+        expect(result).to.equal([
+          licenceMonitoringStations.one,
+          licenceMonitoringStations.two,
+          licenceMonitoringStations.three
+        ])
       })
     })
   })

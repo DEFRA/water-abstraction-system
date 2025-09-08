@@ -48,7 +48,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
     const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(recipient, session)
 
     notification = unfilteredNotifications.filter((unfilteredNotification) => {
-      return unfilteredNotification.personalisation.licenceMonitoringStationId === licenceMonitoringStationId
+      return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else {
     notification = NotificationsPresenter.go(recipient, session)

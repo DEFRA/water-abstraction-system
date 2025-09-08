@@ -47,14 +47,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
             },
             text: '100m3/s',
             value: licenceMonitoringStations.two.thresholdGroup
-          },
-          {
-            checked: false,
-            hint: {
-              text: 'Level threshold'
-            },
-            text: '100m',
-            value: licenceMonitoringStations.three.thresholdGroup
           }
         ]
       })
