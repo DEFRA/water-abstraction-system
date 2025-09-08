@@ -42,14 +42,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
             },
             text: '100m3/s',
             value: licenceMonitoringStations.two.thresholdGroup
-          },
-          {
-            checked: false,
-            hint: {
-              text: 'Level threshold'
-            },
-            text: '100m',
-            value: licenceMonitoringStations.three.thresholdGroup
           }
         ]
       })
@@ -70,12 +62,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               value: licenceMonitoringStations.two.thresholdGroup,
               text: '100m3/s',
               hint: { text: 'Flow threshold' }
-            },
-            {
-              checked: false,
-              value: licenceMonitoringStations.three.thresholdGroup,
-              text: '100m',
-              hint: { text: 'Level threshold' }
             }
           ])
         })
@@ -95,12 +81,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               value: licenceMonitoringStations.two.thresholdGroup,
               text: '100m3/s',
               hint: { text: 'Flow threshold' }
-            },
-            {
-              checked: false,
-              value: licenceMonitoringStations.three.thresholdGroup,
-              text: '100m',
-              hint: { text: 'Level threshold' }
             }
           ])
         })
@@ -145,6 +125,12 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () =
               checked: false,
               value: licenceMonitoringStations.one.thresholdGroup,
               text: '1000m',
+              hint: { text: 'Level threshold' }
+            },
+            {
+              checked: false,
+              value: licenceMonitoringStations.three.thresholdGroup,
+              text: '100m',
               hint: { text: 'Level threshold' }
             }
           ])

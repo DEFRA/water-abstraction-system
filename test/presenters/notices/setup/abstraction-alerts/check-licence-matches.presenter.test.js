@@ -81,7 +81,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
             alertDate: null,
             licenceId: licenceMonitoringStations.three.licence.id,
             licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-            restriction: 'Stop',
+            restriction: 'Stop or reduce',
             restrictionCount: 1,
             threshold: '100m'
           }
@@ -182,7 +182,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
                 alertDate: null,
                 licenceId: licenceMonitoringStations.three.licence.id,
                 licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-                restriction: 'Stop',
+                restriction: 'Stop or reduce',
                 restrictionCount: 1,
                 threshold: '100m'
               }
@@ -205,7 +205,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
                   alertDate: null,
                   licenceId: licenceMonitoringStations.three.licence.id,
                   licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-                  restriction: 'Stop',
+                  restriction: 'Stop or reduce',
                   restrictionCount: 1,
                   threshold: '100m'
                 }

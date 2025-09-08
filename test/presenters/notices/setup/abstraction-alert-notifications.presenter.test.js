@@ -118,7 +118,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licences: `["${recipients.additionalContact.licence_refs}"]`,
-        messageRef: 'water_abstraction_alert_stop_warning_email',
+        messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
         messageType: 'email',
         personalisation: {
           alertType: 'warning',
@@ -134,7 +134,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         },
         recipient: 'additional.contact@important.com',
         reference: 'TEST-123',
-        templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21'
+        templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
       }
     ])
   })
@@ -214,10 +214,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           reference: 'TEST-123',
-          templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21',
+          templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec',
           licences: `["${recipients.additionalContact.licence_refs}"]`,
           messageType: 'email',
-          messageRef: 'water_abstraction_alert_stop_warning_email',
+          messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
           personalisation: {
             alertType: 'warning',
             licenceMonitoringStationId: licenceMonitoringStations.three.id,

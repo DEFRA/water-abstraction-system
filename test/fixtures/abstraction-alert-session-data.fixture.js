@@ -60,7 +60,7 @@ function licenceMonitoringStations() {
       },
       measureType: 'level',
       notes: null,
-      restrictionType: 'stop',
+      restrictionType: 'stop_or_reduce',
       status: null,
       statusUpdatedAt: null,
       thresholdGroup: 'level-100-m',

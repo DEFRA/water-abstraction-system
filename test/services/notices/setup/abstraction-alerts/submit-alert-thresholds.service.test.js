@@ -14,7 +14,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service', () => {
+describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds Service', () => {
   let licenceMonitoringStations
   let payload
   let session
@@ -106,14 +106,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
               },
               text: '100m3/s',
               value: licenceMonitoringStations.two.thresholdGroup
-            },
-            {
-              checked: false,
-              hint: {
-                text: 'Level threshold'
-              },
-              text: '100m',
-              value: licenceMonitoringStations.three.thresholdGroup
             }
           ]
         })
@@ -151,14 +143,6 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Submit Service',
               },
               text: '100m3/s',
               value: licenceMonitoringStations.two.thresholdGroup
-            },
-            {
-              checked: false,
-              hint: {
-                text: 'Level threshold'
-              },
-              text: '100m',
-              value: licenceMonitoringStations.three.thresholdGroup
             }
           ]
         })

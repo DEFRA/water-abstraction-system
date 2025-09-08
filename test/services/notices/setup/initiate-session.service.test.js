@@ -202,7 +202,7 @@ describe('Notices - Setup - Initiate Session service', () => {
                 thresholdUnit: 'm',
                 thresholdGroup: 'level-100-m',
                 thresholdValue: 100,
-                restrictionType: 'stop',
+                restrictionType: 'stop_or_reduce',
                 statusUpdatedAt: null,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
