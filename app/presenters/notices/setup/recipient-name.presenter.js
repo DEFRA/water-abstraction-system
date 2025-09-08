@@ -13,12 +13,13 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { id: sessionId, contactName: name } = session
+  const { id: sessionId, contactName: name, referenceCode } = session
 
   return {
     backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/check` },
     name,
-    pageTitle: "Enter the recipient's name"
+    pageTitle: "Enter the recipient's name",
+    pageTitleCaption: `Notice ${referenceCode}`
   }
 }
 

@@ -9,6 +9,7 @@
 const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
 const RecipientNameValidator = require('../../../validators/notices/setup/recipient-name.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -39,35 +40,16 @@ async function go(sessionId, payload) {
   }
 }
 
-/**
- * We save the back link so the generic address journey can redirect back to this page
- *
- * @private
- */
 async function _save(session, payload) {
   session.contactName = payload.name
-
-  session.address.backLink = {
-    href: `/system/notices/setup/${session.id}/recipient-name`,
-    text: 'Back'
-  }
 
   return session.$update()
 }
 
 function _validate(payload) {
-  const validation = RecipientNameValidator.go(payload)
+  const validationResult = RecipientNameValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message,
-    href: '#name'
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

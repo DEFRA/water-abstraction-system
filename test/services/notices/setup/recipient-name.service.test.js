@@ -9,16 +9,19 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const RecipientNameService = require('../../../../app/services/notices/setup/recipient-name.service.js')
 
 describe('Notices - Setup - Recipient Name Service', () => {
+  let referenceCode
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    referenceCode = generateReferenceCode()
+    sessionData = { referenceCode }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -33,7 +36,8 @@ describe('Notices - Setup - Recipient Name Service', () => {
           text: 'Back'
         },
         name: undefined,
-        pageTitle: "Enter the recipient's name"
+        pageTitle: "Enter the recipient's name",
+        pageTitleCaption: `Notice ${referenceCode}`
       })
     })
   })

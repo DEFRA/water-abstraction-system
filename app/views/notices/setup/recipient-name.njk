@@ -7,6 +7,8 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
+    <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
+
     {{ govukInput({
       classes: 'govuk-!-width-one-third',
       errorMessage: error,

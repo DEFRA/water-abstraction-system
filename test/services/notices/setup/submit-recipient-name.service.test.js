@@ -9,19 +9,23 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const SubmitRecipientNameService = require('../../../../app/services/notices/setup/submit-recipient-name.service.js')
 
 describe('Notices - Setup - Recipient Name Service', () => {
   let payload
+  let referenceCode
   let session
   let sessionData
 
   beforeEach(async () => {
+    referenceCode = generateReferenceCode()
+
     payload = { name: 'Ronald Weasley' }
     sessionData = {
-      address: {}
+      referenceCode
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -36,19 +40,8 @@ describe('Notices - Setup - Recipient Name Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
-          address: {
-            backLink: {
-              href: `/system/notices/setup/${session.id}/recipient-name`,
-              text: 'Back'
-            }
-          },
-          contactName: 'Ronald Weasley'
-        },
-        address: {
-          backLink: {
-            href: `/system/notices/setup/${session.id}/recipient-name`,
-            text: 'Back'
-          }
+          contactName: 'Ronald Weasley',
+          referenceCode
         },
         contactName: 'Ronald Weasley'
       })
@@ -60,17 +53,6 @@ describe('Notices - Setup - Recipient Name Service', () => {
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.contactName).to.equal('Ronald Weasley')
-    })
-
-    it('saves the back link', async () => {
-      await SubmitRecipientNameService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.address.backLink).to.equal({
-        href: `/system/notices/setup/${session.id}/recipient-name`,
-        text: 'Back'
-      })
     })
 
     it('continues the journey', async () => {
@@ -94,11 +76,20 @@ describe('Notices - Setup - Recipient Name Service', () => {
           text: 'Back'
         },
         error: {
-          href: '#name',
-          text: "Enter the recipient's name"
+          errorList: [
+            {
+              href: '#name',
+              text: "Enter the recipient's name"
+            }
+          ],
+          name: {
+            text: "Enter the recipient's name"
+          }
         },
+
         name: undefined,
-        pageTitle: "Enter the recipient's name"
+        pageTitle: "Enter the recipient's name",
+        pageTitleCaption: `Notice ${referenceCode}`
       })
     })
   })
