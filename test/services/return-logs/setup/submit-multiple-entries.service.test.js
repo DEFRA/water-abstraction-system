@@ -60,7 +60,10 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: '2 monthly volumes have been updated' })
+          expect(notification).to.equal({
+            title: 'Updated',
+            text: '2 monthly volumes have been updated'
+          })
         })
       })
 
@@ -96,7 +99,10 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: '2 monthly meter readings have been updated' })
+          expect(notification).to.equal({
+            title: 'Updated',
+            text: '2 monthly meter readings have been updated'
+          })
         })
       })
     })

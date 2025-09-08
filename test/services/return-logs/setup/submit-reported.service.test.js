@@ -77,7 +77,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Reporting details changed' })
+          expect(notification).to.equal({ titleText: 'Updated', text: 'Reporting details changed' })
         })
       })
     })
