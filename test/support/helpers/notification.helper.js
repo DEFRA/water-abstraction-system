@@ -42,7 +42,19 @@ function defaults(data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generate reference code.
+ *
+ * @param {string} [prefix='RINV']
+ *
+ * @returns {string} - A randomly generated reference code
+ */
+function generateReferenceCode(prefix = 'RINV') {
+  return `${prefix}-${Math.floor(1000 + Math.random() * 9000).toString()}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateReferenceCode
 }
