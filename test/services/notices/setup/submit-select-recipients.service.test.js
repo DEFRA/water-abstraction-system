@@ -64,7 +64,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
       expect(flashType).to.equal('notification')
       expect(bannerMessage).to.equal({
         text: 'The recipients have been changed. Check details before sending invitations.',
-        title: 'Updated'
+        titleText: 'Updated'
       })
     })
 
@@ -89,7 +89,6 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
             href: `/system/notices/setup/${session.id}/check`,
             text: 'Back'
           },
-          contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
           error: {
             errorList: [
               {
@@ -110,7 +109,11 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
               contact: [recipients.primaryUser.email],
               contact_hash_id: recipients.primaryUser.contact_hash_id
             }
-          ]
+          ],
+          setupAddress: {
+            href: `/system/notices/setup/${session.id}/contact-type`,
+            text: 'Set up a single use address or email address'
+          }
         })
       })
     })

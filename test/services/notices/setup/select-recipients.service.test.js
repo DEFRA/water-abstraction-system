@@ -52,7 +52,6 @@ describe('Notices - Setup - Select Recipients Service', () => {
           href: `/system/notices/setup/${session.id}/check`,
           text: 'Back'
         },
-        contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
         pageTitle: 'Select Recipients',
         pageTitleCaption: `Notice RINV-CPFRQ4`,
         recipients: [
@@ -61,7 +60,11 @@ describe('Notices - Setup - Select Recipients Service', () => {
             contact: [recipients.primaryUser.email],
             contact_hash_id: recipients.primaryUser.contact_hash_id
           }
-        ]
+        ],
+        setupAddress: {
+          href: `/system/notices/setup/${session.id}/contact-type`,
+          text: 'Set up a single use address or email address'
+        }
       })
     })
   })

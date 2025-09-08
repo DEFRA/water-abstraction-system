@@ -89,7 +89,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Added', text: 'New requirement added' })
+          expect(notification).to.equal({ titleText: 'Added', text: 'New requirement added' })
         })
       })
 
@@ -112,7 +112,10 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Requirements for returns updated' })
+          expect(notification).to.equal({
+            titleText: 'Updated',
+            text: 'Requirements for returns updated'
+          })
         })
       })
     })

@@ -51,11 +51,10 @@ async function go(sessionId) {
  * @private
  */
 function _backLink(session) {
-  if (session.noticeType === 'invitations') {
-    return { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' }
+  if (session.noticeType === 'returnForms') {
+    return { href: `/system/notices/setup/${session.id}/recipient-name`, text: 'Back' }
   }
 
-  // TODO: This is temporarily the same as above as we are soon to merge the page and route we'll actually use.
   return { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' }
 }
 

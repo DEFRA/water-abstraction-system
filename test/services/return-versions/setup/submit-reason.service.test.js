@@ -100,7 +100,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Return version updated' })
+          expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
         })
       })
     })

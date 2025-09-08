@@ -8,7 +8,7 @@
 
 const Joi = require('joi')
 
-const errorMessage = 'Enter the recipients name'
+const errorMessage = `Enter the recipient's name`
 
 /**
  * Validates data submitted for the '/notices/setup/{sessionId}/recipient-name' page
