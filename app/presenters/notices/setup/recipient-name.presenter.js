@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, contactName: name, referenceCode } = session
 
   return {
-    backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/check` },
+    backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/select-recipients` },
     name,
     pageTitle: "Enter the recipient's name",
     pageTitleCaption: `Notice ${referenceCode}`

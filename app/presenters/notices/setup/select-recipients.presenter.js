@@ -17,17 +17,31 @@ const ContactPresenter = require('./contact.presenter.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session, recipients, selectedRecipients) {
-  const { id: sessionId, referenceCode } = session
+  const { id: sessionId, noticeType, referenceCode } = session
 
   return {
     backLink: {
       href: `/system/notices/setup/${sessionId}/check`,
       text: 'Back'
     },
-    contactTypeLink: `/system/notices/setup/${sessionId}/contact-type`,
     pageTitle: 'Select Recipients',
     pageTitleCaption: `Notice ${referenceCode}`,
-    recipients: _recipients(recipients, selectedRecipients)
+    recipients: _recipients(recipients, selectedRecipients),
+    setupAddress: _setupAddress(sessionId, noticeType)
+  }
+}
+
+function _setupAddress(sessionId, noticeType) {
+  if (noticeType === 'returnForms') {
+    return {
+      href: `/system/notices/setup/${sessionId}/recipient-name`,
+      text: 'Set up a single use address'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${sessionId}/contact-type`,
+    text: 'Set up a single use address or email address'
   }
 }
 

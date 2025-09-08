@@ -49,7 +49,6 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
         href: `/system/notices/setup/${session.id}/check`,
         text: 'Back'
       },
-      contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
       pageTitle: 'Select Recipients',
       pageTitleCaption: `Notice ${referenceCode}`,
       recipients: [
@@ -92,7 +91,11 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
           ],
           contact_hash_id: recipients.licenceHolderWithMultipleLicences.contact_hash_id
         }
-      ]
+      ],
+      setupAddress: {
+        href: '/system/notices/setup/123/contact-type',
+        text: 'Set up a single use address or email address'
+      }
     })
   })
 
@@ -147,6 +150,34 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
             contact_hash_id: recipients.returnsAgent.contact_hash_id
           }
         ])
+      })
+    })
+  })
+
+  describe('the "setupAddress" property', () => {
+    describe('when the "noticeType" is "returnForms"', () => {
+      beforeEach(() => {
+        session.noticeType = 'returnForms'
+      })
+
+      it('returns correct text and link', () => {
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+
+        expect(result.setupAddress).to.equal({
+          href: `/system/notices/setup/${session.id}/recipient-name`,
+          text: 'Set up a single use address'
+        })
+      })
+    })
+
+    describe('when the "noticeType" is not "returnForms"', () => {
+      it('returns correct text and link', () => {
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+
+        expect(result.setupAddress).to.equal({
+          href: `/system/notices/setup/${session.id}/contact-type`,
+          text: 'Set up a single use address or email address'
+        })
       })
     })
   })

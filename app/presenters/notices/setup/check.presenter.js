@@ -42,22 +42,6 @@ function go(recipients, page, pagination, session) {
   }
 }
 
-function _adHocLinks(links, sessionId, noticeType) {
-  if (noticeType === 'returnForms') {
-    return {
-      ...links,
-      back: `/system/notices/setup/${sessionId}/check-notice-type`,
-      manage: `/system/notices/setup/${sessionId}/recipient-name`
-    }
-  }
-
-  return {
-    ...links,
-    back: `/system/notices/setup/${sessionId}/check-notice-type`,
-    manage: `/system/notices/setup/${sessionId}/select-recipients`
-  }
-}
-
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
     const contact = ContactPresenter.go(recipient)
@@ -72,7 +56,7 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 }
 
 function _links(session) {
-  const { id: sessionId, journey, noticeType } = session
+  const { id: sessionId, journey } = session
 
   const links = {
     cancel: `/system/notices/setup/${sessionId}/cancel`,
@@ -80,7 +64,11 @@ function _links(session) {
   }
 
   if (journey === 'adhoc') {
-    return _adHocLinks(links, sessionId, noticeType)
+    return {
+      ...links,
+      back: `/system/notices/setup/${sessionId}/check-notice-type`,
+      manage: `/system/notices/setup/${sessionId}/select-recipients`
+    }
   } else if (journey === 'alerts') {
     return {
       ...links,
