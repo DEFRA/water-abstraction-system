@@ -13,6 +13,8 @@ const {
 } = require('../../../lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 /**
  * Check if the current summer or all year return cycle exists, and if not create it, then return the result
  *
@@ -50,7 +52,7 @@ async function _createReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
     .insert({
       createdAt: timestamp,
-      dueDate: determineCycleDueDate(summer, endDate),
+      dueDate: _dueDate(summer, endDate),
       endDate,
       startDate,
       submittedInWrls: true,
@@ -58,6 +60,14 @@ async function _createReturnCycle(startDate, endDate, summer) {
       updatedAt: timestamp
     })
     .returning(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+}
+
+function _dueDate(summer, endDate) {
+  if (featureFlagsConfig.enableNullDueDate) {
+    return null
+  }
+
+  return determineCycleDueDate(summer, endDate)
 }
 
 async function _matchingReturnCycle(startDate, endDate, summer) {

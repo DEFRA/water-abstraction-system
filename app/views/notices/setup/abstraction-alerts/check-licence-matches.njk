@@ -20,10 +20,7 @@
   <div>
 
     {% if notification %}
-      {{ govukNotificationBanner({
-        titleText: notification.title,
-        text: notification.text
-      }) }}
+      {{ govukNotificationBanner(notification) }}
     {% endif %}
 
     <span class="govuk-caption-l">{{caption}}</span>

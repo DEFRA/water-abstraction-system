@@ -11,6 +11,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -76,17 +77,9 @@ function _clearSelectedRecipients(session) {
 }
 
 function _validate(payload) {
-  const validation = SelectRecipientsValidator.go(payload)
+  const validationResult = SelectRecipientsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

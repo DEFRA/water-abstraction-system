@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -18,10 +19,13 @@ const AddRecipientService = require('../../../../app/services/notices/setup/add-
 describe('Notices - Setup - Add Recipient service', () => {
   let contactHashId
   let session
+  let sessionId
   let sessionData
   let yarStub
 
   beforeEach(async () => {
+    sessionId = generateUUID()
+
     sessionData = {
       contactName: 'Fake Person',
       licenceRef: '12345',
@@ -32,50 +36,59 @@ describe('Notices - Setup - Add Recipient service', () => {
   describe('when there is an address saved in the session', () => {
     describe('and it is a UK address', () => {
       beforeEach(() => {
-        sessionData.address = {
-          addressLine1: '1 Fake Farm',
-          addressLine2: '1 Fake street',
-          addressLine3: 'Fake Village',
-          addressLine4: 'Fake City',
-          postcode: 'SW1A 1AA'
+        sessionData.addressJourney = {
+          activeNavBar: 'manage',
+          address: {
+            uprn: 340116,
+            addressLine1: 'ENVIRONMENT AGENCY',
+            addressLine2: 'HORIZON HOUSE DEANERY ROAD',
+            addressLine3: 'VILLAGE GREEN',
+            addressLine4: 'BRISTOL',
+            postcode: 'BS1 5AH'
+          },
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         }
 
-        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.address)
+        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.addressJourney.address)
       })
 
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ id: sessionId, data: sessionData })
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(session.id, yarStub)
+          await AddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
-                name: session.contactName,
-                addressLine1: session.address.addressLine1,
-                addressLine2: session.address.addressLine2,
-                addressLine3: session.address.addressLine3,
-                addressLine4: session.address.addressLine4,
-                postcode: session.address.postcode
+                name: sessionData.contactName,
+                addressLine1: sessionData.addressJourney.address.addressLine1,
+                addressLine2: sessionData.addressJourney.address.addressLine2,
+                addressLine3: sessionData.addressJourney.address.addressLine3,
+                addressLine4: sessionData.addressJourney.address.addressLine4,
+                postcode: sessionData.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
-              licence_ref: session.licenceRef,
-              licence_refs: session.licenceRef
+              licence_ref: sessionData.licenceRef,
+              licence_refs: sessionData.licenceRef
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
-          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
+          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
 
@@ -97,19 +110,19 @@ describe('Notices - Setup - Add Recipient service', () => {
           ]
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ id: sessionId, data: sessionData })
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(session.id, yarStub)
+          await AddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -126,11 +139,11 @@ describe('Notices - Setup - Add Recipient service', () => {
             {
               contact: {
                 name: session.contactName,
-                addressLine1: session.address.addressLine1,
-                addressLine2: session.address.addressLine2,
-                addressLine3: session.address.addressLine3,
-                addressLine4: session.address.addressLine4,
-                postcode: session.address.postcode
+                addressLine1: session.addressJourney.address.addressLine1,
+                addressLine2: session.addressJourney.address.addressLine2,
+                addressLine3: session.addressJourney.address.addressLine3,
+                addressLine4: session.addressJourney.address.addressLine4,
+                postcode: session.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
@@ -139,53 +152,61 @@ describe('Notices - Setup - Add Recipient service', () => {
             }
           ])
           expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
-          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
+          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })
 
     describe('and it is an International address', () => {
       beforeEach(() => {
-        sessionData.address = {
-          addressLine1: '1 Faux Ferme',
-          addressLine4: 'Faux Ville',
-          country: 'France'
+        sessionData.addressJourney = {
+          activeNavBar: 'manage',
+          address: {
+            addressLine1: '1 Faux Ferme',
+            addressLine4: 'Faux Ville',
+            country: 'France'
+          },
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         }
 
-        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.address)
+        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.addressJourney.address)
       })
 
       describe('and this is the first additional contact to be added', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ id: sessionId, data: sessionData })
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(session.id, yarStub)
+          await AddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
-                name: session.contactName,
-                addressLine1: session.address.addressLine1,
-                addressLine4: session.address.addressLine4,
-                country: session.address.country
+                name: sessionData.contactName,
+                addressLine1: sessionData.addressJourney.address.addressLine1,
+                addressLine4: sessionData.addressJourney.address.addressLine4,
+                country: sessionData.addressJourney.address.country
               },
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
-              licence_ref: session.licenceRef,
-              licence_refs: session.licenceRef
+              licence_ref: sessionData.licenceRef,
+              licence_refs: sessionData.licenceRef
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
-          expect(refreshedSession.address.redirectUrl).equal(`/system/notices/setup/${session.id}/add-recipient`)
+          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })

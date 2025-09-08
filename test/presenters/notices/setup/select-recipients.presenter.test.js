@@ -15,12 +15,15 @@ const SelectRecipientsPresenter = require('../../../../app/presenters/notices/se
 
 describe('Notices - Setup - Select Recipients Presenter', () => {
   let recipients
+  let referenceCode
   let selectedRecipients
   let session
   let testRecipients
 
   beforeEach(() => {
     recipients = RecipientsFixture.recipients()
+
+    referenceCode = 'RINV-CPFRQ4'
 
     selectedRecipients = [
       recipients.primaryUser.contact_hash_id,
@@ -31,7 +34,8 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
     ]
 
     session = {
-      id: 123
+      id: 123,
+      referenceCode
     }
 
     testRecipients = [...Object.values(recipients)]
@@ -41,9 +45,13 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
     const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
     expect(result).to.equal({
-      backLink: `/system/notices/setup/${session.id}/check`,
+      backLink: {
+        href: `/system/notices/setup/${session.id}/check`,
+        text: 'Back'
+      },
       contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
       pageTitle: 'Select Recipients',
+      pageTitleCaption: `Notice ${referenceCode}`,
       recipients: [
         {
           checked: true,
