@@ -244,6 +244,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/check-notice-type',
+    options: {
+      handler: NoticesSetupController.submitCheckNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/notices/setup/{eventId}/confirmation',
     options: {
