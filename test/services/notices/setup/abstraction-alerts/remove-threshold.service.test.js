@@ -90,7 +90,6 @@ describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => 
         expect(flashType).to.equal('notification')
         expect(bannerMessage).to.equal({
           text: `Removed ${licenceMonitoringStations.one.licence.licenceRef} Reduce 1000m`,
-          title: 'Updated',
           titleText: 'Updated'
         })
       })

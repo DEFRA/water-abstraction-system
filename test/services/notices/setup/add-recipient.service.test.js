@@ -70,7 +70,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -122,7 +122,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {
@@ -190,7 +190,7 @@ describe('Notices - Setup - Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
           expect(refreshedSession.additionalRecipients).equal([
             {
               contact: {

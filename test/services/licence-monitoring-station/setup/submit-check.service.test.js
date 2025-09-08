@@ -77,7 +77,6 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
       expect(flashType).to.equal('notification')
       expect(notification).to.equal({
-        title: 'Success',
         titleText: 'Success',
         text: `Tag for licence ${session.licenceRef} added`
       })

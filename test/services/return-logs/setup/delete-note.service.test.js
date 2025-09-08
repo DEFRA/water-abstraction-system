@@ -48,6 +48,6 @@ describe('Return Logs Setup - Delete Note service', () => {
     const [flashType, notification] = yarStub.flash.args[0]
 
     expect(flashType).to.equal('notification')
-    expect(notification).to.equal({ title: 'Deleted', titleText: 'Deleted', text: 'Note deleted' })
+    expect(notification).to.equal({ titleText: 'Deleted', text: 'Note deleted' })
   })
 })

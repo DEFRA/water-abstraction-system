@@ -88,7 +88,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Readings have been updated' })
+          expect(notification).to.equal({ titleText: 'Updated', text: 'Readings have been updated' })
         })
       })
 
@@ -127,7 +127,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           const [flashType, notification] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Readings have been updated' })
+          expect(notification).to.equal({ titleText: 'Updated', text: 'Readings have been updated' })
         })
       })
     })

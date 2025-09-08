@@ -129,15 +129,14 @@ function determineCurrentFinancialYear() {
  * Fortunately, we can set both without the value conflicting.
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {string} [title='Updated'] - title for the notification
+ * @param {string} [titleText='Updated'] - title for the notification
  * @param {string} [text='Changes made'] - text for the notification
  *
  */
-function flashNotification(yar, title = 'Updated', text = 'Changes made') {
+function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
     text,
-    title,
-    titleText: title
+    titleText
   })
 }
 

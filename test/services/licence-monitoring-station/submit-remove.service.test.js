@@ -41,7 +41,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Updated', titleText: 'Updated', text: 'Tag removed for 99/999/9999' })
+      expect(notification).to.equal({ titleText: 'Updated', text: 'Tag removed for 99/999/9999' })
     })
   })
 })

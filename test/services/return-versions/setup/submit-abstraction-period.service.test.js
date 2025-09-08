@@ -108,7 +108,6 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
 
           expect(flashType).to.equal('notification')
           expect(notification).to.equal({
-            title: 'Updated',
             titleText: 'Updated',
             text: 'Requirements for returns updated'
           })
