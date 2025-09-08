@@ -33,7 +33,7 @@ describe('Notices - Setup - Recipient Name Service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: {
-          href: `/system/notices/setup/${session.id}/check`,
+          href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'
         },
         name: undefined,

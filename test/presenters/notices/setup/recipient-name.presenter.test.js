@@ -28,7 +28,7 @@ describe('Notices - Setup - Recipient Name Presenter', () => {
       const result = RecipientNamePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/check` },
+        backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/select-recipients` },
         name: undefined,
         pageTitle: "Enter the recipient's name",
         pageTitleCaption: `Notice ${referenceCode}`
