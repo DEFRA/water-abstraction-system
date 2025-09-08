@@ -86,7 +86,7 @@ function go(recipients, session, eventId) {
  *    licenceId: '94511891-9d40-48cb-aa3f-1d6ff4434dc4',
  *    licenceRef: '01/123,
  *    monitoring_station_name: 'Death star',
- *    sendingAlertType: 'resume',
+ *    sending_alert_type: 'resume',
  *    source: '',
  *    thresholdUnit: 'm3/s',
  *    thresholdValue: 100
