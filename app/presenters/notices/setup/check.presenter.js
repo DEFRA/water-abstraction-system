@@ -96,15 +96,15 @@ function _links(session) {
       ...links,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
-  } else if (journey === 'alerts') {
-    return {
-      ...links
-    }
-  } else {
-    return {
-      ...links,
-      removeLicences: `/system/notices/setup/${id}/remove-licences`
-    }
+  }
+
+  if (journey === 'alerts') {
+    return links
+  }
+
+  return {
+    ...links,
+    removeLicences: `/system/notices/setup/${id}/remove-licences`
   }
 }
 
