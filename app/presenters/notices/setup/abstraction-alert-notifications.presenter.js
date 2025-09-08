@@ -77,14 +77,19 @@ function go(recipients, session, eventId) {
  *
  * ```javascript
  *  {
+ *    alertType: 'stop
  *    condition_text: '',
  *    flow_or_level: 'flow',
  *    issuer_email_address: 'defra@admin.gov.uk',
- *    licence_ref: recipients.licenceHolder.licence_refs,
+ *    label: 'Death star',
+ *    licenceGaugingStationId: '0a8e59f1-305a-4866-b3f7-143ba5bcf5fb',
+ *    licenceId: '94511891-9d40-48cb-aa3f-1d6ff4434dc4',
+ *    licenceRef: '01/123,
  *    monitoring_station_name: 'Death star',
+ *    sendingAlertType: 'resume',
  *    source: '',
- *    threshold_unit: 'm3/s',
- *    threshold_value: 100
+ *    thresholdUnit: 'm3/s',
+ *    thresholdValue: 100
  *  }
  * ```
  *
@@ -92,7 +97,7 @@ function go(recipients, session, eventId) {
  *
  * In the case of a letter, the address is also required.
  *
- * The 'licenceMonitoringStationId' and 'alertType' are not required for Notify, we use them to update the licence
+ * The 'licenceGaugingStationId' and 'sendingAlertType' are not required for Notify, we use them to update the licence
  * monitoring 'status_updated_at' and 'status' field.
  *
  * @private
@@ -103,19 +108,22 @@ function _commonPersonalisation(
   monitoringStationName,
   alertEmailAddress,
   monitoringStationRiverName,
-  alertType
+  sendingAlertType
 ) {
   return {
-    alertType,
-    licenceMonitoringStationId: licenceMonitoringStation.id,
+    alertType: licenceMonitoringStation.restrictionType,
     condition_text: _conditionText(licenceMonitoringStation.notes),
     flow_or_level: licenceMonitoringStation.measureType,
     issuer_email_address: alertEmailAddress,
-    licence_ref: licenceMonitoringStation.licence.licenceRef,
+    label: monitoringStationName,
+    licenceGaugingStationId: licenceMonitoringStation.id,
+    licenceId: licenceMonitoringStation.licence.id,
+    licenceRef: licenceMonitoringStation.licence.licenceRef,
     monitoring_station_name: monitoringStationName,
+    sending_alert_type: sendingAlertType,
     source: _source(monitoringStationRiverName),
-    threshold_unit: licenceMonitoringStation.thresholdUnit,
-    threshold_value: licenceMonitoringStation.thresholdValue
+    thresholdUnit: licenceMonitoringStation.thresholdUnit,
+    thresholdValue: licenceMonitoringStation.thresholdValue
   }
 }
 
@@ -157,7 +165,7 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
   return {
     createdAt,
     eventId,
-    licences: _licences(commonPersonalisation.licence_ref),
+    licences: _licences(commonPersonalisation.licenceRef),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
@@ -202,7 +210,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
   return {
     createdAt,
     eventId,
-    licences: _licences(commonPersonalisation.licence_ref),
+    licences: _licences(commonPersonalisation.licenceRef),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {

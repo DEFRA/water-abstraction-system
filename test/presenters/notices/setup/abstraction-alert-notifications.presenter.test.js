@@ -70,16 +70,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
         personalisation: {
-          alertType: 'warning',
-          licenceMonitoringStationId: licenceMonitoringStations.one.id,
+          alertType: 'reduce',
           condition_text: '',
           flow_or_level: 'level',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
-          licence_ref: recipients.primaryUser.licence_refs,
+          label: 'Death star',
+          licenceGaugingStationId: licenceMonitoringStations.one.id,
+          licenceId: licenceMonitoringStations.one.licence.id,
+          licenceRef: recipients.primaryUser.licence_refs,
           monitoring_station_name: 'Death star',
+          sending_alert_type: 'warning',
           source: '* Source of supply: Meridian Trench',
-          threshold_unit: 'm',
-          threshold_value: 1000
+          thresholdUnit: 'm',
+          thresholdValue: 1000
         },
         recipient: 'primary.user@important.com',
         reference: 'TEST-123',
@@ -92,24 +95,26 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
         personalisation: {
-          alertType: 'warning',
-          licenceMonitoringStationId: licenceMonitoringStations.two.id,
-          name: 'Mr H J Licence holder',
           address_line_1: 'Mr H J Licence holder',
           address_line_2: '1',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          // common personalisation
+          alertType: 'stop',
           condition_text: 'Effect of restriction: I have a bad feeling about this',
           flow_or_level: 'flow',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
-          licence_ref: recipients.licenceHolder.licence_refs,
+          label: 'Death star',
+          licenceGaugingStationId: licenceMonitoringStations.two.id,
+          licenceId: licenceMonitoringStations.two.licence.id,
+          licenceRef: recipients.licenceHolder.licence_refs,
           monitoring_station_name: 'Death star',
+          name: 'Mr H J Licence holder',
+          sending_alert_type: 'warning',
           source: '* Source of supply: Meridian Trench',
-          threshold_unit: 'm3/s',
-          threshold_value: 100
+          thresholdUnit: 'm3/s',
+          thresholdValue: 100
         },
         reference: 'TEST-123',
         templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
@@ -121,16 +126,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
         messageType: 'email',
         personalisation: {
-          alertType: 'warning',
-          licenceMonitoringStationId: licenceMonitoringStations.three.id,
+          alertType: 'stop_or_reduce',
           condition_text: '',
           flow_or_level: 'level',
           issuer_email_address: 'luke.skywalker@rebelmail.test',
-          licence_ref: recipients.additionalContact.licence_refs,
+          label: 'Death star',
+          licenceGaugingStationId: licenceMonitoringStations.three.id,
+          licenceId: licenceMonitoringStations.three.licence.id,
+          licenceRef: recipients.additionalContact.licence_refs,
           monitoring_station_name: 'Death star',
+          sending_alert_type: 'warning',
           source: '* Source of supply: Meridian Trench',
-          threshold_unit: 'm',
-          threshold_value: 100
+          thresholdUnit: 'm',
+          thresholdValue: 100
         },
         recipient: 'additional.contact@important.com',
         reference: 'TEST-123',
@@ -160,16 +168,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.one.id,
+            alertType: 'reduce',
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.primaryUser.licence_refs,
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.one.id,
+            licenceId: licenceMonitoringStations.one.licence.id,
+            licenceRef: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm',
-            threshold_value: 1000
+            thresholdUnit: 'm',
+            thresholdValue: 1000
           },
           recipient: 'primary.user@important.com'
         },
@@ -180,16 +191,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.two.id,
+            alertType: 'stop',
             condition_text: 'Effect of restriction: I have a bad feeling about this',
             flow_or_level: 'flow',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.primaryUser.licence_refs,
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.two.id,
+            licenceId: licenceMonitoringStations.two.licence.id,
+            licenceRef: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm3/s',
-            threshold_value: 100
+            thresholdUnit: 'm3/s',
+            thresholdValue: 100
           },
           recipient: 'primary.user@important.com',
           reference: 'TEST-123',
@@ -219,16 +233,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
           personalisation: {
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.three.id,
+            alertType: 'stop_or_reduce',
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.additionalContact.licence_refs,
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.three.id,
+            licenceId: licenceMonitoringStations.three.licence.id,
+            licenceRef: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm',
-            threshold_value: 100
+            thresholdUnit: 'm',
+            thresholdValue: 100
           },
           recipient: 'additional.contact@important.com'
         }
@@ -259,16 +276,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.one.id,
+            alertType: 'reduce',
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.additionalContact.licence_refs,
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.one.id,
+            licenceId: licenceMonitoringStations.one.licence.id,
+            licenceRef: recipients.additionalContact.licence_refs,
             monitoring_station_name: 'Death star',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm',
-            threshold_value: 1000
+            thresholdUnit: 'm',
+            thresholdValue: 1000
           },
           recipient: 'additional.contact@important.com'
         }
@@ -299,16 +319,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           personalisation: {
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.one.id,
+            alertType: 'reduce',
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.primaryUser.licence_refs,
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.one.id,
+            licenceId: licenceMonitoringStations.one.licence.id,
+            licenceRef: recipients.primaryUser.licence_refs,
             monitoring_station_name: 'Death star',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm',
-            threshold_value: 1000
+            thresholdUnit: 'm',
+            thresholdValue: 1000
           },
           recipient: 'primary.user@important.com'
         }
@@ -337,24 +360,26 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           messageType: 'letter',
           messageRef: 'water_abstraction_alert_reduce_warning',
           personalisation: {
-            name: 'Mr H J Licence holder',
             address_line_1: 'Mr H J Licence holder',
             address_line_2: '1',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
-            // common personalisation
-            alertType: 'warning',
-            licenceMonitoringStationId: licenceMonitoringStations.one.id,
+            alertType: 'reduce',
+            label: 'Death star',
+            licenceGaugingStationId: licenceMonitoringStations.one.id,
+            licenceId: licenceMonitoringStations.one.licence.id,
+            licenceRef: recipients.licenceHolder.licence_refs,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
-            licence_ref: recipients.licenceHolder.licence_refs,
             monitoring_station_name: 'Death star',
+            name: 'Mr H J Licence holder',
+            sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
-            threshold_unit: 'm',
-            threshold_value: 1000
+            thresholdUnit: 'm',
+            thresholdValue: 1000
           }
         }
       ])
@@ -370,16 +395,19 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
       const [result] = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
       expect(result.personalisation).to.equal({
-        alertType: 'warning',
-        licenceMonitoringStationId: licenceMonitoringStations.one.id,
+        alertType: 'reduce',
         condition_text: '',
         flow_or_level: 'level',
         issuer_email_address: 'luke.skywalker@rebelmail.test',
-        licence_ref: recipients.primaryUser.licence_refs,
+        label: 'Death star',
+        licenceGaugingStationId: licenceMonitoringStations.one.id,
+        licenceId: licenceMonitoringStations.one.licence.id,
+        licenceRef: recipients.primaryUser.licence_refs,
         monitoring_station_name: 'Death star',
+        sending_alert_type: 'warning',
         source: '* Source of supply: Meridian Trench',
-        threshold_unit: 'm',
-        threshold_value: 1000
+        thresholdUnit: 'm',
+        thresholdValue: 1000
       })
     })
 
