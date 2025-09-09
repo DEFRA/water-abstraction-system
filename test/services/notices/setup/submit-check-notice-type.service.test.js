@@ -73,7 +73,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       beforeEach(async () => {
         sessionData.name = 'Paper returns'
         sessionData.noticeType = 'returnForms'
-        sessionData.notificationType = 'Paper invitation'
+        sessionData.notificationType = 'Paper returns'
         sessionData.referenceCode = `PRTF-${Math.floor(1000 + Math.random() * 9000).toString()}`
         sessionData.subType = 'paperReturnForms'
 
@@ -91,7 +91,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           journey: 'adhoc',
           name: 'Paper returns',
           noticeType: 'returnForms',
-          notificationType: 'Paper invitation',
+          notificationType: 'Paper returns',
           referenceCode: sessionData.referenceCode,
           subType: 'paperReturnForms',
           addressJourney: {

@@ -42,7 +42,7 @@ describe('Notices - Setup - Determine Notice Type service', () => {
         expect(result).to.equal({
           name: 'Paper returns',
           noticeType: 'returnForms',
-          notificationType: 'Paper invitation',
+          notificationType: 'Paper returns',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'paperReturnForms'
         })

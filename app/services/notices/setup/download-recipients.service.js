@@ -7,10 +7,13 @@
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
 const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
+const DownloadLetterRecipientsPresenter = require('../../../presenters/notices/setup/download-letter-recipients.presenter.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
+const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
+
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -28,7 +31,7 @@ async function go(sessionId) {
 
   const { notificationType, referenceCode } = session
 
-  const formattedData = await _formattedDate(session)
+  const formattedData = await _formattedData(session)
 
   return {
     data: formattedData,
@@ -37,22 +40,44 @@ async function go(sessionId) {
   }
 }
 
-async function _formattedDate(session) {
+async function _alerts(session) {
+  const abstractionAlertRecipients = await FetchAbstractionAlertRecipientsService.go(session)
+
+  return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
+}
+
+async function _adhoc(session) {
+  if (session.noticeType === 'returnForms') {
+    const letterRecipients = await FetchLetterRecipientsService.go(session)
+
+    const recipients = RecipientsService.go(session, letterRecipients)
+
+    return DownloadLetterRecipientsPresenter.go(recipients, session)
+  }
+
+  const recipients = await _recipients(session)
+
+  return DownloadAdHocRecipientsPresenter.go(recipients, session)
+}
+
+async function _formattedData(session) {
   if (session.journey === 'alerts') {
-    const abstractionAlertRecipients = await FetchAbstractionAlertRecipientsService.go(session)
-
-    return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
+    return _alerts(session)
   }
 
-  const downloadRecipients = await FetchDownloadRecipientsService.go(session)
-
-  const recipients = RecipientsService.go(session, downloadRecipients)
-
-  if (session.journey === 'adhoc' && session.noticeType !== 'returnForms') {
-    return DownloadAdHocRecipientsPresenter.go(recipients, session)
+  if (session.journey === 'adhoc') {
+    return _adhoc(session)
   }
+
+  const recipients = await _recipients(session)
 
   return DownloadRecipientsPresenter.go(recipients, session)
+}
+
+async function _recipients(session) {
+  const downloadRecipients = await FetchDownloadRecipientsService.go(session)
+
+  return RecipientsService.go(session, downloadRecipients)
 }
 
 module.exports = {
