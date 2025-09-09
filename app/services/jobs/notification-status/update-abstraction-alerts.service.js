@@ -34,8 +34,9 @@ function _stations(notifications) {
   })
 
   return stationsToUpdate.map((notification) => {
-    const { createdAt, personalisation } = notification
-    return LicenceMonitoringStationModel.query().findById(personalisation.licenceGaugingStationId).patch({
+    const { createdAt, licenceMonitoringStationId, personalisation } = notification
+
+    return LicenceMonitoringStationModel.query().findById(licenceMonitoringStationId).patch({
       status: personalisation.sending_alert_type,
       statusUpdatedAt: createdAt
     })
