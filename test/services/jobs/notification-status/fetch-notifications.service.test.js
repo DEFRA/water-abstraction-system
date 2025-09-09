@@ -72,6 +72,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
         createdAt: notification.createdAt,
         eventId: event.id,
         id: notification.id,
+        licenceMonitoringStationId: null,
         messageRef: 'returns_invitation_licence_holder_letter',
         notifyError: null,
         notifyId: null,
