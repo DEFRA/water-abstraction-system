@@ -23,6 +23,14 @@ class NotificationModel extends BaseModel {
           from: 'notifications.eventId',
           to: 'events.id'
         }
+      },
+      licenceMonitoringStation: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-monitoring-station.model',
+        join: {
+          from: 'notifications.licenceMonitoringStationId',
+          to: 'licenceMonitoringStations.id'
+        }
       }
     }
   }
