@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 
 // Thing under test
@@ -29,6 +30,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     firstStub = Sinon.stub()
     insertStub = Sinon.stub().returnsThis()
     returningStub = Sinon.stub()
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
 
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
@@ -51,7 +53,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     beforeEach(() => {
       cycleData = {
         id,
-        dueDate: new Date('2024-11-28'),
+        dueDate: null,
         endDate: new Date('2024-10-31'),
         startDate: new Date('2023-11-01'),
         summer: true
@@ -73,7 +75,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         expect(insertStub.callCount).to.equal(1)
         expect(insertObject).to.equal(
           {
-            dueDate: cycleData.dueDate,
+            dueDate: null,
             endDate: cycleData.endDate,
             startDate: cycleData.startDate,
             summer: true,
@@ -102,7 +104,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     beforeEach(() => {
       cycleData = {
         id,
-        dueDate: new Date('2025-04-28'),
+        dueDate: null,
         endDate: new Date('2025-03-31'),
         startDate: new Date('2024-04-01'),
         summer: false
@@ -124,7 +126,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
         expect(insertStub.callCount).to.equal(1)
         expect(insertObject).to.equal(
           {
-            dueDate: cycleData.dueDate,
+            dueDate: null,
             endDate: cycleData.endDate,
             startDate: cycleData.startDate,
             summer: false,

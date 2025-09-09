@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
 const CheckService = require('../../../../app/services/notices/setup/check.service.js')
@@ -42,7 +42,7 @@ describe('Notices - Setup - Check service', () => {
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([testRecipients.primaryUser])
+    Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([testRecipients.primaryUser])
   })
 
   afterEach(() => {
@@ -54,9 +54,12 @@ describe('Notices - Setup - Check service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      backLink: {
+        href: `/system/notices/setup/${session.id}/returns-period`,
+        text: 'Back'
+      },
       defaultPageSize: 25,
       links: {
-        back: `/system/notices/setup/${session.id}/returns-period`,
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
         removeLicences: `/system/notices/setup/${session.id}/remove-licences`
@@ -70,6 +73,7 @@ describe('Notices - Setup - Check service', () => {
         numberOfPages: 1
       },
       pageTitle: 'Check the recipients',
+      pageTitleCaption: 'Notice RINV-123',
       readyToSend: 'Returns invitations are ready to send.',
       recipients: [
         {
@@ -80,7 +84,6 @@ describe('Notices - Setup - Check service', () => {
         }
       ],
       recipientsAmount: 1,
-      referenceCode: 'RINV-123',
       warning: null
     })
   })
@@ -146,9 +149,9 @@ describe('Notices - Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
+        backLink: null,
         defaultPageSize: 25,
         links: {
-          back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`
         },
@@ -161,6 +164,7 @@ describe('Notices - Setup - Check service', () => {
           numberOfPages: 1
         },
         pageTitle: 'Check the recipients',
+        pageTitleCaption: 'Notice WAA-123',
         readyToSend: 'Abstraction alerts are ready to send.',
         recipients: [
           {
@@ -171,7 +175,6 @@ describe('Notices - Setup - Check service', () => {
           }
         ],
         recipientsAmount: 1,
-        referenceCode: 'WAA-123',
         warning: null
       })
     })

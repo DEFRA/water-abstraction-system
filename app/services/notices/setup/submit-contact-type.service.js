@@ -12,6 +12,7 @@ const ContactTypePresenter = require('../../../presenters/notices/setup/contact-
 const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
@@ -35,18 +36,34 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const submittedData = {
-    id: session.id,
-    contactType: payload?.type ?? null,
-    name: payload?.name ?? null
-  }
+  session.contactType = payload?.type ?? null
+  session.name = payload?.name ?? null
 
-  const pageData = ContactTypePresenter.go(submittedData)
+  const pageData = ContactTypePresenter.go(session)
 
   return {
     activeNavBar: 'manage',
     error: validationResult,
     ...pageData
+  }
+}
+
+/**
+ * This logic is implemented as a function to illustrate the additional data required for the download link.
+ *
+ * We set the 'contact_type' to 'Single use'. This will be shown in the download for the recipient. This does not
+ * affect the contact type used to send the notice. This is because the 'DetermineRecipientsService' sets the
+ * default 'contact_type' to 'Returns to' when prior conditions are not met.
+ *
+ * We set the 'licence_ref' the same as the 'licence_refs' to allow the download to render each recipient (it fetches
+ * all possible recipients without deduping).
+ *
+ * @private
+ */
+function _addDownloadRecipientData(licenceRef) {
+  return {
+    contact_type: 'Single use',
+    licence_ref: licenceRef
   }
 }
 
@@ -61,7 +78,8 @@ async function _save(session, payload, yar) {
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
       email,
-      licence_refs: session.licenceRef
+      licence_refs: session.licenceRef,
+      ..._addDownloadRecipientData(session.licenceRef)
     }
 
     if (Array.isArray(session.additionalRecipients)) {
@@ -87,26 +105,9 @@ async function _save(session, payload, yar) {
 }
 
 function _validate(payload) {
-  const validation = ContactTypeValidator.go(payload)
+  const validationResult = ContactTypeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    result.errorList.push({
-      href: `#${detail.context.key}`,
-      text: detail.message
-    })
-
-    result[detail.context.key] = detail.message
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

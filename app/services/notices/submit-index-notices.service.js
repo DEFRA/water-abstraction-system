@@ -2,13 +2,14 @@
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
- * @module SubmitIndexService
+ * @module SubmitIndexNoticesService
  */
 
 const FetchNoticesService = require('./fetch-notices.service.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const IndexValidator = require('../../validators/notices/index.validator.js')
+const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -31,9 +32,9 @@ async function go(payload, yar, page = 1) {
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     _save(payload, yar)
 
     return {}
@@ -44,21 +45,8 @@ async function go(payload, yar, page = 1) {
   const selectedPageNumber = Number(page)
 
   const savedFilters = _savedFilters(yar)
-  const { results, total: numberOfNotices } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
-  const pageData = NoticesIndexPresenter.go(results, numberOfNotices)
-  const pagination = PaginatorPresenter.go(numberOfNotices, selectedPageNumber, `/system/notices`)
-  const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
-
-  return {
-    activeNavBar: 'manage',
-    error: validationResult,
-    filters: { ...savedFilters, ...payload },
-    numberOfNotices,
-    ...pageData,
-    pagination,
-    pageTitle
-  }
+  return _replayView(payload, error, selectedPageNumber, savedFilters)
 }
 
 function _clearFilters(payload, yar) {
@@ -93,12 +81,19 @@ function _handleOneOptionSelected(payload) {
   }
 }
 
-function _pageTitle(numberOfPages, selectedPageNumber) {
-  if (numberOfPages < 2) {
-    return 'Notices'
-  }
+async function _replayView(payload, error, selectedPageNumber, savedFilters) {
+  const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
-  return `Notices (page ${selectedPageNumber} of ${numberOfPages})`
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
+  const pageData = NoticesIndexPresenter.go(notices, totalNumber, selectedPageNumber, pagination.numberOfPages)
+
+  return {
+    activeNavBar: 'manage',
+    error,
+    filters: { ...savedFilters, ...payload },
+    ...pageData,
+    pagination
+  }
 }
 
 function _save(payload, yar) {
@@ -136,25 +131,9 @@ function _savedFilters(payload) {
 }
 
 function _validate(payload) {
-  const validation = IndexValidator.go(payload)
+  const validationResult = IndexValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    const path = detail.path[0]
-
-    result.errorList.push({ href: `#${path}`, text: detail.message })
-
-    result[path] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

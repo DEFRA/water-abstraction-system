@@ -31,10 +31,6 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
       expect(result).to.equal({
-        continueButton: {
-          href: `/system/notices/setup/${session.id}/check`,
-          text: 'Continue to check recipients'
-        },
         licenceRef,
         noticeType: 'invitations',
         pageTitle: 'Check the notice type',
@@ -53,10 +49,6 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
         expect(result).to.equal({
-          continueButton: {
-            href: `/system/notices/setup/${session.id}/check`,
-            text: 'Continue to check recipients'
-          },
           licenceRef,
           noticeType: 'invitations',
           pageTitle: 'Check the notice type',
@@ -99,10 +91,6 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
         expect(result).to.equal({
-          continueButton: {
-            href: `/system/notices/setup/${session.id}/check`,
-            text: 'Continue to check recipients'
-          },
           licenceRef,
           noticeType: 'returnForms',
           pageTitle: 'Check the notice type',

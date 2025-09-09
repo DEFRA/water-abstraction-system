@@ -5,7 +5,7 @@
  * @module DownloadRecipientsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const { addressToCSV } = require('../base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 const HEADERS = [
@@ -36,33 +36,17 @@ const HEADERS = [
  * to an empty string.
  *
  * @param {object[]} recipients - An array of recipients
- * @param {string} notificationType - The selected notification type
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-function go(recipients, notificationType) {
+function go(recipients, session) {
+  const { notificationType } = session
+
   const rows = _transformToCsv(recipients, notificationType)
 
   return [HEADERS + '\n', ...rows].join('')
-}
-
-function _address(contact) {
-  if (!contact) {
-    return ['', '', '', '', '', '', '']
-  }
-
-  const notifyAddress = NotifyAddressPresenter.go(contact)
-
-  return [
-    notifyAddress.address_line_1,
-    notifyAddress.address_line_2 || '',
-    notifyAddress.address_line_3 || '',
-    notifyAddress.address_line_4 || '',
-    notifyAddress.address_line_5 || '',
-    notifyAddress.address_line_6 || '',
-    notifyAddress.address_line_7 || ''
-  ]
 }
 
 /**
@@ -86,7 +70,7 @@ function _transformToCsv(recipients, notificationType) {
       contact ? 'letter' : 'email',
       recipient.contact_type,
       recipient.email || '',
-      ..._address(contact)
+      ...addressToCSV(contact)
     ]
 
     return transformArrayToCSVRow(row)

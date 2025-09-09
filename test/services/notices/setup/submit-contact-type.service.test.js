@@ -47,7 +47,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -59,7 +61,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -79,7 +83,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -95,7 +99,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -107,7 +113,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -119,7 +127,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -135,7 +143,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         }
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value with the email address in lowercase', async () => {
@@ -147,7 +157,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -159,7 +171,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -177,13 +189,17 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         sessionData.additionalRecipients = [
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ]
 
         session = await SessionHelper.add({ data: sessionData })
-        yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+        yarStub = {
+          flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Additional recipient added' }])
+        }
       })
 
       it('saves the submitted value', async () => {
@@ -195,12 +211,16 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
+            contact_type: 'Single use',
             email: 'test@test.gov.uk',
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           },
           {
             contact_hash_id: _createMD5Hash(payload.email),
+            contact_type: 'Single use',
             email: payload.email,
+            licence_ref: session.licenceRef,
             licence_refs: session.licenceRef
           }
         ])
@@ -212,7 +232,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
         expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({ title: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
           type: 'email'
@@ -254,7 +274,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('when validation fails because no type is selected', () => {
       beforeEach(async () => {
         payload = {}
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -264,7 +284,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -273,10 +296,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Select how to contact the recipient'
               }
             ],
-            type: 'Select how to contact the recipient'
+            type: {
+              text: 'Select how to contact the recipient'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: null
         })
       })
@@ -287,7 +313,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'email'
         }
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -297,7 +323,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -306,10 +335,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Enter an email address'
               }
             ],
-            email: 'Enter an email address'
+            email: {
+              text: 'Enter an email address'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: 'email'
         })
       })
@@ -320,7 +352,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         payload = {
           type: 'post'
         }
-        sessionData = {}
+        sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -330,7 +362,10 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/select-recipients`,
+          backLink: {
+            href: `/system/notices/setup/${session.id}/select-recipients`,
+            text: 'Back'
+          },
           email: null,
           error: {
             errorList: [
@@ -339,10 +374,13 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
                 text: 'Enter the recipients name'
               }
             ],
-            name: 'Enter the recipients name'
+            name: {
+              text: 'Enter the recipients name'
+            }
           },
           name: null,
           pageTitle: 'Select how to contact the recipient',
+          pageTitleCaption: 'Notice RINV-CPFRQ4',
           type: 'post'
         })
       })

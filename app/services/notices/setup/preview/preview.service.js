@@ -6,9 +6,9 @@
  */
 
 const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
+const FetchRecipientsService = require('../fetch-recipients.service.js')
 const NotificationsPresenter = require('../../../../presenters/notices/setup/notifications.presenter.js')
 const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
-const RecipientsService = require('../recipients.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
@@ -48,7 +48,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
     const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(recipient, session)
 
     notification = unfilteredNotifications.filter((unfilteredNotification) => {
-      return unfilteredNotification.personalisation.licenceMonitoringStationId === licenceMonitoringStationId
+      return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else {
     notification = NotificationsPresenter.go(recipient, session)
@@ -59,7 +59,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
 }
 
 async function _recipient(contactHashId, session) {
-  const recipients = await RecipientsService.go(session)
+  const recipients = await FetchRecipientsService.go(session)
 
   // Using `filter` rather than `find` ensures we return an array which makes it simpler to reuse existing logic
   return recipients.filter((recipient) => {

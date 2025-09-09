@@ -127,22 +127,22 @@ describe('GeneralLib', () => {
       yarStub = { flash: Sinon.stub() }
     })
 
-    it('returns the standard notification { title: "Updated", text: "Changes made" }', () => {
+    it('returns the standard notification { titleText: "Updated", text: "Changes made" }', () => {
       GeneralLib.flashNotification(yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+      expect(notification).to.equal({ titleText: 'Updated', text: 'Changes made' })
     })
 
-    it('returns the overridden notification { title: "Fancy new title", text: "better text" }', () => {
+    it('returns the overridden notification { titleText: "Fancy new title", text: "better text" }', () => {
       GeneralLib.flashNotification(yarStub, 'Fancy new title', 'better text')
 
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Fancy new title', text: 'better text' })
+      expect(notification).to.equal({ titleText: 'Fancy new title', text: 'better text' })
     })
   })
 

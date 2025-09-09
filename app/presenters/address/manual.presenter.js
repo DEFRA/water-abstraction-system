@@ -13,25 +13,27 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { address, id } = session
+  const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
+    activeNavBar,
     addressLine1: address.addressLine1 ?? null,
     addressLine2: address.addressLine2 ?? null,
     addressLine3: address.addressLine3 ?? null,
     addressLine4: address.addressLine4 ?? null,
-    backLink: _backLink(address, id),
+    backLink: _backLink(address, session.id),
     pageTitle: 'Enter the address',
+    pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode ?? null
   }
 }
 
 function _backLink(address, sessionId) {
   if (address.uprn) {
-    return `/system/address/${sessionId}/select`
+    return { href: `/system/address/${sessionId}/select`, text: 'Back' }
   }
 
-  return `/system/address/${sessionId}/postcode`
+  return { href: `/system/address/${sessionId}/postcode`, text: 'Back' }
 }
 
 module.exports = {

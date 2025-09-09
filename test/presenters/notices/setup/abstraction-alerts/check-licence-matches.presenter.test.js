@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-al
 // Thing under test
 const CheckLicenceMatchesPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
 
-describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter', () => {
+describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter', () => {
   let licenceMonitoringStations
   let session
 
@@ -81,7 +81,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             alertDate: null,
             licenceId: licenceMonitoringStations.three.licence.id,
             licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-            restriction: 'Stop',
+            restriction: 'Stop or reduce',
             restrictionCount: 1,
             threshold: '100m'
           }
@@ -136,6 +136,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
             beforeEach(() => {
               statusUpdatedAt = new Date('2025-05-12')
 
+              session.licenceMonitoringStations[0].status = 'resume'
               session.licenceMonitoringStations[0].statusUpdatedAt = statusUpdatedAt
             })
             it('returns the correct action', () => {
@@ -181,7 +182,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                 alertDate: null,
                 licenceId: licenceMonitoringStations.three.licence.id,
                 licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-                restriction: 'Stop',
+                restriction: 'Stop or reduce',
                 restrictionCount: 1,
                 threshold: '100m'
               }
@@ -204,7 +205,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Presenter',
                   alertDate: null,
                   licenceId: licenceMonitoringStations.three.licence.id,
                   licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-                  restriction: 'Stop',
+                  restriction: 'Stop or reduce',
                   restrictionCount: 1,
                   threshold: '100m'
                 }

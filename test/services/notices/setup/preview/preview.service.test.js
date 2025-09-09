@@ -15,7 +15,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Things we need to stub
 const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
@@ -56,7 +56,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       })
 
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchRecipientsService, 'go').resolves()
+      Sinon.stub(FetchReturnsRecipientsService, 'go').resolves()
 
       // As the services presenter uses Notify to generate the template preview contents, we need to stub the request
       Sinon.stub(GeneratePreviewRequest, 'send').resolves({
@@ -111,26 +111,28 @@ describe('Notices Setup - Preview - Preview service', () => {
           monitoringStationRiverName: '',
           relevantLicenceMonitoringStations: [
             {
+              alertType: 'reduce',
               id: '8c85d9ce-cfb9-4932-8da0-28de4d3dd3aa',
-              notes: null,
               licence: {
                 licenceRef: '99/999'
               },
               measureType: 'flow',
+              notes: null,
+              restrictionType: 'stop_or_reduce',
               thresholdUnit: 'Ml/d',
-              thresholdValue: 400,
-              restrictionType: 'stop_or_reduce'
+              thresholdValue: 400
             },
             {
+              alertType: 'reduce',
               id: '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8',
-              notes: null,
               licence: {
                 licenceRef: testRecipient.licence_refs
               },
               measureType: 'flow',
+              notes: null,
+              restrictionType: 'reduce',
               thresholdUnit: 'm3/s',
-              thresholdValue: 300,
-              restrictionType: 'reduce'
+              thresholdValue: 300
             }
           ]
         }

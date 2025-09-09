@@ -15,33 +15,42 @@ const SelectRecipientsPresenter = require('../../../../app/presenters/notices/se
 
 describe('Notices - Setup - Select Recipients Presenter', () => {
   let recipients
+  let referenceCode
+  let selectedRecipients
   let session
   let testRecipients
 
   beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
+    referenceCode = 'RINV-CPFRQ4'
+
+    selectedRecipients = [
+      recipients.primaryUser.contact_hash_id,
+      recipients.returnsAgent.contact_hash_id,
+      recipients.licenceHolder.contact_hash_id,
+      recipients.returnsTo.contact_hash_id,
+      recipients.licenceHolderWithMultipleLicences.contact_hash_id
+    ]
+
     session = {
       id: 123,
-      selectedRecipients: [
-        recipients.primaryUser.contact_hash_id,
-        recipients.returnsAgent.contact_hash_id,
-        recipients.licenceHolder.contact_hash_id,
-        recipients.returnsTo.contact_hash_id,
-        recipients.licenceHolderWithMultipleLicences.contact_hash_id
-      ]
+      referenceCode
     }
 
     testRecipients = [...Object.values(recipients)]
   })
 
   it('returns page data for the view', () => {
-    const result = SelectRecipientsPresenter.go(session, testRecipients)
+    const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
     expect(result).to.equal({
-      backLink: `/system/notices/setup/${session.id}/check`,
-      contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
+      backLink: {
+        href: `/system/notices/setup/${session.id}/check`,
+        text: 'Back'
+      },
       pageTitle: 'Select Recipients',
+      pageTitleCaption: `Notice ${referenceCode}`,
       recipients: [
         {
           checked: true,
@@ -82,7 +91,11 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
           ],
           contact_hash_id: recipients.licenceHolderWithMultipleLicences.contact_hash_id
         }
-      ]
+      ],
+      setupAddress: {
+        href: '/system/notices/setup/123/contact-type',
+        text: 'Set up a single use address or email address'
+      }
     })
   })
 
@@ -90,18 +103,18 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
     beforeEach(() => {
       const recipient = Object.values(recipients)
 
-      session.selectedRecipients = [recipient[0].contact_hash_id]
+      selectedRecipients = [recipient[0].contact_hash_id]
 
       testRecipients = [recipient[0]]
     })
 
     describe('and there are no "selectedRecipients"', () => {
       beforeEach(() => {
-        session.selectedRecipients = []
+        selectedRecipients = []
       })
 
       it('returns page data for the view with relevant recipients not checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients)
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).to.equal([
           {
@@ -115,7 +128,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
 
     describe('and there are "selectedRecipients"', () => {
       beforeEach(() => {
-        session.selectedRecipients = [recipients.primaryUser.contact_hash_id]
+        selectedRecipients = [recipients.primaryUser.contact_hash_id]
 
         const recipient = Object.values(recipients)
 
@@ -123,7 +136,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
       })
 
       it('returns page data for the view with relevant recipients checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients)
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).to.equal([
           {
@@ -137,6 +150,34 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
             contact_hash_id: recipients.returnsAgent.contact_hash_id
           }
         ])
+      })
+    })
+  })
+
+  describe('the "setupAddress" property', () => {
+    describe('when the "noticeType" is "returnForms"', () => {
+      beforeEach(() => {
+        session.noticeType = 'returnForms'
+      })
+
+      it('returns correct text and link', () => {
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+
+        expect(result.setupAddress).to.equal({
+          href: `/system/notices/setup/${session.id}/recipient-name`,
+          text: 'Set up a single use address'
+        })
+      })
+    })
+
+    describe('when the "noticeType" is not "returnForms"', () => {
+      it('returns correct text and link', () => {
+        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+
+        expect(result.setupAddress).to.equal({
+          href: `/system/notices/setup/${session.id}/contact-type`,
+          text: 'Set up a single use address or email address'
+        })
       })
     })
   })

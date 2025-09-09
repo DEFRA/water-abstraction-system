@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const RecipientsService = require('../../../../app/services/notices/setup/recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
@@ -21,19 +21,23 @@ const SubmitSelectRecipientsService = require('../../../../app/services/notices/
 describe('Notices - Setup - Submit Select Recipients Service', () => {
   let payload
   let recipients
+  let referenceCode
   let session
   let sessionData
   let yarStub
 
   beforeEach(async () => {
     payload = { recipients: ['123'] }
-    sessionData = {}
+
+    referenceCode = 'RINV-CPFRQ4'
+
+    sessionData = { referenceCode }
 
     session = await SessionHelper.add({ data: sessionData })
 
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(RecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
@@ -60,7 +64,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
       expect(flashType).to.equal('notification')
       expect(bannerMessage).to.equal({
         text: 'The recipients have been changed. Check details before sending invitations.',
-        title: 'Updated'
+        titleText: 'Updated'
       })
     })
 
@@ -81,19 +85,35 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
         const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          backLink: `/system/notices/setup/${session.id}/check`,
-          contactTypeLink: `/system/notices/setup/${session.id}/contact-type`,
-          error: {
-            text: 'Select at least one recipient'
+          backLink: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Back'
           },
+          error: {
+            errorList: [
+              {
+                href: '#recipients',
+                text: 'Select at least one recipient'
+              }
+            ],
+            recipients: {
+              text: 'Select at least one recipient'
+            }
+          },
+
           pageTitle: 'Select Recipients',
+          pageTitleCaption: `Notice RINV-CPFRQ4`,
           recipients: [
             {
               checked: false,
               contact: [recipients.primaryUser.email],
               contact_hash_id: recipients.primaryUser.contact_hash_id
             }
-          ]
+          ],
+          setupAddress: {
+            href: `/system/notices/setup/${session.id}/contact-type`,
+            text: 'Set up a single use address or email address'
+          }
         })
       })
     })

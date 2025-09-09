@@ -2,6 +2,8 @@
 
 const { returnUnits } = require('../lib/static-lookups.lib.js')
 
+const DUE_PERIOD_DAYS = 27
+
 /**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
@@ -14,24 +16,6 @@ const { returnUnits } = require('../lib/static-lookups.lib.js')
  */
 function convertPenceToPounds(value) {
   return value / 100
-}
-
-/**
- * Converts a quantity in cubic metres to a given unit and formats it
- *
- * @param {string} units - the unit to convert the quantity to
- * @param {number} quantity - the quantity in cubic metres to be formatted
- *
- * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
- */
-function formatQuantity(units, quantity) {
-  if (quantity === null || quantity === undefined) {
-    return null
-  }
-
-  const convertedQuantity = quantity * returnUnits[units].multiplier
-
-  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -256,6 +240,201 @@ function formatPurposes(purposes) {
 }
 
 /**
+ * Converts a quantity in cubic metres to a given unit and formats it
+ *
+ * @param {string} units - the unit to convert the quantity to
+ * @param {number} quantity - the quantity in cubic metres to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
+function formatQuantity(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
+}
+
+/**
+ * Formats the status for a return log, adjusting for specific conditions.
+ *
+ * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due', but there are
+ * 28 days before the returns due date, it will display 'not due yet'. If the status is 'due' and the due date has
+ * passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
+ *
+ * @param {module:ReturnLogModel} returnLog - The return log containing status and due date information
+ *
+ * @returns {string} The formatted status for display.
+ */
+function formatReturnLogStatus(returnLog) {
+  const { status, dueDate } = returnLog
+
+  // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
+  // statues
+  if (status === 'completed') {
+    return 'complete'
+  }
+
+  // For all other statuses except 'due' we can just return the status
+  if (status !== 'due') {
+    return status
+  }
+
+  if (!dueDate) {
+    return 'not due yet'
+  }
+
+  // Work out if the return is overdue (status is still 'due' and it is past the due date)
+  const today = new Date()
+
+  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
+  // 'today' would be flagged as overdue when it is still due (just!)
+  today.setHours(0, 0, 0, 0)
+
+  if (dueDate < today) {
+    return 'overdue'
+  }
+
+  // A return is considered "due" for 28 days, starting 28 days before the due date
+  // Any date before this period should be marked as "not due yet"
+  const notDueUntil = new Date(dueDate)
+
+  // Calculate the start of the "due" period, which begins 27 days before the due date
+  notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
+
+  // If today is before the "due" period starts, the return is "not due yet"
+  if (today < notDueUntil) {
+    return 'not due yet'
+  }
+
+  return 'due'
+}
+
+/**
+ * Format a Joi validation result into a format that can be used by our views
+ *
+ * If {@link https://joi.dev/ | Joi} found no validation errors the result will not contain an `error:` property.
+ *
+ * ```javascript
+ * {
+ *   value: {
+ *     noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *     reference: 'RREM-VB9EFA',
+ *     sentFromDay: '01',
+ *     sentFromMonth: '09',
+ *     sentFromYear: '2025',
+ *     fromDate: 2025-09-01T00:00:00.000Z,
+ *     toDate: undefined
+ *   }
+ * }
+ * ```
+ * When this is the case we return null.
+ *
+ * If there is an `error` property, it will contain details of error found.
+ *
+ * ```javascript
+ * {
+ *   value: {
+ *     noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *     reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *     sentFromDay: '01',
+ *     sentFromMonth: '09',
+ *     fromDate: '-09-01',
+ *     toDate: undefined
+ *   },
+ *   error: [Error [ValidationError]: Enter a valid from date. Reference must be 11 characters or less] {
+ *     _original: {
+ *       noticeTypes: [ 'returnReminder', 'returnInvitation' ],
+ *       reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *       sentFromDay: '01',
+ *       sentFromMonth: '09',
+ *       fromDate: '-09-01',
+ *       toDate: undefined
+ *     },
+ *     details: [
+ *       {
+ *         message: 'Enter a valid from date',
+ *         path: [ 'fromDate' ],
+ *         type: 'date.format',
+ *         context: {
+ *           format: [ 'YYYY-MM-DD' ],
+ *           label: 'fromDate',
+ *           value: '-09-01',
+ *           key: 'fromDate'
+ *         }
+ *       },
+ *       {
+ *         message: 'Reference must be 11 characters or less',
+ *         path: [ 'reference' ],
+ *         type: 'string.max',
+ *         context: {
+ *           limit: 11,
+ *           value: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+ *           encoding: undefined,
+ *           label: 'reference',
+ *           key: 'reference'
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ * ```
+ *
+ * We format the result into an 'error' object compatible with our views and `layout.njk`.
+ *
+ * `path` will come from the `name:` property of a component in the view, which when submitted will be translated to
+ * a property on the Hapi payload received.
+ *
+ * We typically pass the `payload` to a **Joi** validator in the our 'submit services'. It will validate each of the
+ * payloads properties, and where an error is found return it as seen in the example above.
+ *
+ * We can then use `path` to set the following in our formatted error.
+ *
+ * - a property on the `error` object against which we will assign the message to be display in the component
+ * - the href to use in the error summary, to allow a user to click an error and be taken to the correct component
+ *
+ * ```javascript
+ * {
+ *   errorList: [
+ *     { href: '#fromDate', text: 'Enter a valid from date' },
+ *     { href: '#reference', text: 'Reference must be 11 characters or less' }
+ *   ],
+ *   fromDate: { text: 'Enter a valid from date' },
+ *   reference: { text: 'Reference must be 11 characters or less' }
+ * }
+ * ```
+ *
+ * This is how we link back the right errors to the right components, and ensure that the error summary behaves as
+ * expected.
+ *
+ * @param {object} validationResult - the result of a Joi validation
+ *
+ * @returns {object|null} the formatted validation result or null if the validation result does not have an `error`
+ * property
+ */
+function formatValidationResult(validationResult) {
+  if (!validationResult.error) {
+    return null
+  }
+
+  const formattedResult = {
+    errorList: []
+  }
+
+  validationResult.error.details.forEach((detail) => {
+    const path = detail.path[0]
+
+    formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
+
+    formattedResult[path] = { text: detail.message }
+  })
+
+  return formattedResult
+}
+
+/**
  * Formats a value and unit to be displayed without a space, as per the GOV UK style guide
  *
  * For example, a value of 100 and a unit of Ml/d will be formatted as '100Ml/d'.
@@ -336,6 +515,8 @@ module.exports = {
   formatPounds,
   formatPurposes,
   formatQuantity,
+  formatReturnLogStatus,
+  formatValidationResult,
   formatValueUnit,
   leftPadZeroes,
   sentenceCase,
