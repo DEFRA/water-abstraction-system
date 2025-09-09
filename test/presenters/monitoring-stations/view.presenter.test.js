@@ -3,13 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/monitoring-stations/view.presenter.js')
@@ -55,48 +51,76 @@ describe('Monitoring Stations - View presenter', () => {
         }
       ]
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsSetup').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableLicenceMonitoringStationsView').value(true)
   })
 
-  describe('when provided with the result of the fetch monitoring service', () => {
-    it('correctly presents the data', () => {
-      const result = ViewPresenter.go(auth, monitoringStation)
+  it('correctly presents the data', () => {
+    const result = ViewPresenter.go(auth, monitoringStation)
 
-      expect(result).to.equal({
-        catchmentName: null,
-        enableLicenceMonitoringStationsSetup: true,
-        links: {
-          createAlert: `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}`
-        },
-        gridReference: 'TL2664640047',
-        monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
-        pageTitle: 'BUSY POINT',
-        permissionToManageLinks: true,
-        permissionToSendAlerts: true,
-        restrictionHeading: 'Flow restriction type and threshold',
-        restrictions: [
-          {
-            action: {
-              link: '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5',
-              text: 'View'
-            },
-            abstractionPeriod: '1 April to 31 August',
-            alert: null,
-            alertDate: null,
-            licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
-            licenceRef: 'AT/TEST',
-            restriction: 'Reduce',
-            restrictionCount: 1,
-            threshold: '100m3/s'
-          }
-        ],
-        showRemoveTagButton: false,
-        stationReference: '',
-        tableCaption: 'Licences linked to this monitoring station',
-        wiskiId: ''
+    expect(result).to.equal({
+      backLink: { href: '/licences', text: 'Go back to search' },
+      buttons: {
+        createAlert: { href: `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}` },
+        tagLicence: { value: monitoringStation.id }
+      },
+      gridReference: 'TL2664640047',
+      pageTitle: 'BUSY POINT',
+      pageTitleCaption: null,
+      restrictionHeading: 'Flow restriction type and threshold',
+      restrictions: [
+        {
+          action: {
+            link: '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+            text: 'View'
+          },
+          abstractionPeriod: '1 April to 31 August',
+          alert: null,
+          alertDate: null,
+          licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+          licenceRef: 'AT/TEST',
+          restriction: 'Reduce',
+          restrictionCount: 1,
+          threshold: '100m3/s'
+        }
+      ],
+      stationReference: '',
+      wiskiId: ''
+    })
+  })
+
+  describe('the "buttons" property', () => {
+    describe('the "createAlert" button', () => {
+      describe('when there are no restrictions', () => {
+        beforeEach(() => {
+          monitoringStation.licenceMonitoringStations = []
+        })
+
+        it('returns null', () => {
+          const result = ViewPresenter.go(auth, monitoringStation)
+
+          expect(result.buttons.createAlert).to.be.null()
+        })
+      })
+
+      describe('when there are no restrictions', () => {
+        describe('but the user does not have permission to create abstraction alerts', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing', 'manage_gauging_station_licence_links']
+          })
+
+          it('returns null', () => {
+            const result = ViewPresenter.go(auth, monitoringStation)
+
+            expect(result.buttons.createAlert).to.be.null()
+          })
+        })
+
+        describe('and the user has permission to create abstraction alerts', () => {
+          it('returns the "href" needed for the button', () => {
+            const result = ViewPresenter.go(auth, monitoringStation)
+
+            expect(result.buttons.createAlert).to.equal({ href: `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}` })
+          })
+        })
       })
     })
   })
@@ -123,34 +147,6 @@ describe('Monitoring Stations - View presenter', () => {
     })
   })
 
-  describe('the "links" property', () => {
-    describe('when the link is "createAlert" ', () => {
-      describe('and the "enableMonitoringStationsAlertNotifications" flag  is true', () => {
-        it('returns the link', () => {
-          const result = ViewPresenter.go(auth, monitoringStation)
-
-          expect(result.links.createAlert).to.equal(
-            `/system/notices/setup/alerts?monitoringStationId=${monitoringStation.id}`
-          )
-        })
-      })
-
-      describe('and the "enableMonitoringStationsAlertNotifications" flag  is false', () => {
-        beforeEach(() => {
-          Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsAlertNotifications').value(false)
-        })
-
-        it('returns the legacy link', () => {
-          const result = ViewPresenter.go(auth, monitoringStation)
-
-          expect(result.links.createAlert).to.equal(
-            `/monitoring-stations/${monitoringStation.id}/send-alert/alert-type`
-          )
-        })
-      })
-    })
-  })
-
   describe('the "pageTitle" property', () => {
     describe('when a monitoring station has an associated river', () => {
       beforeEach(() => {
@@ -173,46 +169,24 @@ describe('Monitoring Stations - View presenter', () => {
     })
   })
 
-  describe('the "permissionToManageLinks" property', () => {
-    describe('when a user has the "manage_gauging_station_licence_links" role', () => {
-      it('returns true for "permissionToManageLinks"', () => {
-        const result = ViewPresenter.go(auth, monitoringStation)
-
-        expect(result.permissionToManageLinks).to.equal(true)
-      })
-    })
-
-    describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
+  describe('the "pageTitleCaption" property', () => {
+    describe('when a monitoring station has catchment name', () => {
       beforeEach(() => {
-        auth.credentials.scope = ['billing', 'hof_notifications']
+        monitoringStation.catchmentName = 'Test catchment'
       })
 
-      it('returns false for "permissionToManageLinks"', () => {
+      it('returns the catchment name', () => {
         const result = ViewPresenter.go(auth, monitoringStation)
 
-        expect(result.permissionToManageLinks).to.equal(false)
-      })
-    })
-  })
-
-  describe('the "permissionToSendAlerts" property', () => {
-    describe('when a user has the "hof_notifications" role', () => {
-      it('returns true for "permissionToSendAlerts"', () => {
-        const result = ViewPresenter.go(auth, monitoringStation)
-
-        expect(result.permissionToSendAlerts).to.equal(true)
+        expect(result.pageTitleCaption).to.equal('Test catchment')
       })
     })
 
-    describe('when a user does not have the "hof_notifications" role', () => {
-      beforeEach(() => {
-        auth.credentials.scope = ['billing', 'manage_gauging_station_licence_links']
-      })
-
-      it('returns false for "permissionToSendAlerts"', () => {
+    describe('when a monitoring station does not have an associated river', () => {
+      it('returns null', () => {
         const result = ViewPresenter.go(auth, monitoringStation)
 
-        expect(result.permissionToSendAlerts).to.equal(false)
+        expect(result.pageTitleCaption).to.be.null()
       })
     })
   })
