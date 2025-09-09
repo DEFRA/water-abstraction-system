@@ -48,11 +48,11 @@ async function _alerts(session) {
 
 async function _adhoc(session) {
   if (session.noticeType === 'returnForms') {
-    const letterRecipients = await FetchLetterRecipientsService.go(session)
+    const letterRecipientsData = await FetchLetterRecipientsService.go(session)
 
-    const recipients = RecipientsService.go(session, letterRecipients)
+    const letterRecipients = RecipientsService.go(session, letterRecipientsData)
 
-    return DownloadLetterRecipientsPresenter.go(recipients, session)
+    return DownloadLetterRecipientsPresenter.go(letterRecipients, session)
   }
 
   const recipients = await _recipients(session)

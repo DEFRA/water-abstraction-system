@@ -41,14 +41,14 @@ const HEADERS = [
  * and subsequent rows corresponding to the recipient details.
  */
 function go(recipients, session) {
-  const { notificationType, licenceRef, dueReturns, selectedReturns } = session
+  const { dueReturns, licenceRef, selectedReturns } = session
 
   const selectedDueReturns = _selectedDueReturns(selectedReturns, dueReturns)
 
   let rows = []
 
   for (const dueReturn of selectedDueReturns) {
-    rows = [...rows, ..._transformToCsv(recipients, notificationType, dueReturn, licenceRef)]
+    rows = [...rows, ..._transformToCsv(recipients, dueReturn, licenceRef)]
   }
 
   return [HEADERS + '\n', ...rows].join('')
@@ -76,7 +76,7 @@ function _selectedDueReturns(selectedReturns, dueReturns) {
  *
  * @private
  */
-function _transformToCsv(recipients, notificationType, dueReturn, licenceRef) {
+function _transformToCsv(recipients, dueReturn, licenceRef) {
   return recipients.map((recipient) => {
     const { contact } = recipient
 
