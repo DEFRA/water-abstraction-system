@@ -16,14 +16,6 @@ class LicenceMonitoringStationModel extends BaseModel {
 
   static get relationMappings() {
     return {
-      monitoringStation: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'monitoring-station.model',
-        join: {
-          from: 'licenceMonitoringStations.monitoringStationId',
-          to: 'monitoringStations.id'
-        }
-      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
@@ -38,6 +30,14 @@ class LicenceMonitoringStationModel extends BaseModel {
         join: {
           from: 'licenceMonitoringStations.licenceVersionPurposeConditionId',
           to: 'licenceVersionPurposeConditions.id'
+        }
+      },
+      monitoringStation: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'monitoring-station.model',
+        join: {
+          from: 'licenceMonitoringStations.monitoringStationId',
+          to: 'monitoringStations.id'
         }
       },
       user: {
