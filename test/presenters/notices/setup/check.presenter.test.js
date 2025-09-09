@@ -8,6 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+
+// Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -28,7 +31,12 @@ describe('Notices - Setup - Check presenter', () => {
       numberOfPages: 1
     }
 
-    session = { id: generateUUID(), journey: 'standard', noticeType: 'invitations', referenceCode: 'RINV-123' }
+    session = {
+      id: generateUUID(),
+      journey: 'standard',
+      noticeType: 'invitations',
+      referenceCode: generateReferenceCode('RINV')
+    }
 
     testRecipients = RecipientsFixture.recipients()
     // This data is used to ensure the recipients are grouped when they have the same licence ref / name.
@@ -63,7 +71,7 @@ describe('Notices - Setup - Check presenter', () => {
           removeLicences: `/system/notices/setup/${session.id}/remove-licences`
         },
         pageTitle: 'Check the recipients',
-        pageTitleCaption: 'Notice RINV-123',
+        pageTitleCaption: `Notice ${session.referenceCode}`,
         readyToSend: 'Returns invitations are ready to send.',
         recipients: [
           {
@@ -159,7 +167,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = 'WAA-123'
+          session.referenceCode = generateReferenceCode('WAA')
           session.monitoringStationId = '345'
         })
 
@@ -201,7 +209,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = 'WAA-123'
+          session.referenceCode = generateReferenceCode('WAA')
           session.monitoringStationId = '345'
         })
 
@@ -244,7 +252,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the "noticeType" is "returnForms"', () => {
           beforeEach(() => {
             session.noticeType = 'returnForms'
-            session.referenceCode = 'PRTF-123'
+            session.referenceCode = generateReferenceCode('PRTF')
           })
 
           it('should return the correct message', () => {
@@ -259,7 +267,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = 'WAA-123'
+          session.referenceCode = generateReferenceCode('WAA')
           session.monitoringStationId = '345'
         })
 
@@ -387,7 +395,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the "noticeType" is "returnForms"', () => {
             beforeEach(() => {
               session.noticeType = 'returnForms'
-              session.referenceCode = 'PRTF-123'
+              session.referenceCode = generateReferenceCode('PRTF')
             })
 
             it('should return null', () => {
@@ -404,7 +412,7 @@ describe('Notices - Setup - Check presenter', () => {
           beforeEach(() => {
             session.journey = 'alerts'
             session.noticeType = 'abstractionAlerts'
-            session.referenceCode = 'WAA-123'
+            session.referenceCode = generateReferenceCode('WAA')
             session.monitoringStationId = '345'
           })
 
@@ -455,7 +463,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the "noticeType" is "reminders"', () => {
             beforeEach(() => {
               session.noticeType = 'reminders'
-              session.referenceCode = 'RREM-123'
+              session.referenceCode = generateReferenceCode('RREM')
             })
 
             describe('and the method is "letter"', () => {

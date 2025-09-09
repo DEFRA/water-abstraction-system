@@ -9,14 +9,15 @@ const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const DownloadRecipientsService = require('../../../../app/services/notices/setup/download-recipients.service.js')
-const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 describe('Notices - Setup - Download Recipients service', () => {
   let referenceCode
@@ -32,7 +33,7 @@ describe('Notices - Setup - Download Recipients service', () => {
 
     before(async () => {
       removeLicences = ''
-      referenceCode = 'RREM-00R1MQ'
+      referenceCode = generateReferenceCode('RREM')
 
       session = await SessionHelper.add({
         data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns reminder', removeLicences }
@@ -62,7 +63,7 @@ describe('Notices - Setup - Download Recipients service', () => {
 
     before(async () => {
       removeLicences = ''
-      referenceCode = 'RREM-00R1MQ'
+      referenceCode = generateReferenceCode('RREM')
 
       session = await SessionHelper.add({
         data: {
@@ -106,7 +107,7 @@ describe('Notices - Setup - Download Recipients service', () => {
           recipients.licenceHolder.licence_refs
         ])
 
-        referenceCode = 'WAA-123'
+        referenceCode = generateReferenceCode('WAA')
 
         session = await SessionHelper.add({
           data: {
@@ -169,7 +170,7 @@ describe('Notices - Setup - Download Recipients service', () => {
           }
         ]
 
-        referenceCode = 'WAA-123'
+        referenceCode = generateReferenceCode('WAA')
 
         session = await SessionHelper.add({
           data: {
