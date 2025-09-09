@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
@@ -34,7 +35,7 @@ describe('Notices - Setup - Create Notice service', () => {
   })
 
   describe('when the notice is for a returns notification', () => {
-    const referenceCode = 'ABC-123'
+    const referenceCode = generateReferenceCode()
 
     beforeEach(() => {
       event = {
@@ -79,7 +80,7 @@ describe('Notices - Setup - Create Notice service', () => {
           },
           sent: 2783
         },
-        referenceCode: 'ABC-123',
+        referenceCode,
         status: 'started',
         subtype: 'returnInvitation',
         type: 'notification',
