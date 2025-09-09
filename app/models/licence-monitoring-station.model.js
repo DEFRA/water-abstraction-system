@@ -40,6 +40,14 @@ class LicenceMonitoringStationModel extends BaseModel {
           to: 'monitoringStations.id'
         }
       },
+      notifications: {
+        relation: Model.HasManyRelation,
+        modelClass: 'notification.model',
+        join: {
+          from: 'licenceMonitoringStations.id',
+          to: 'notifications.licenceMonitoringStationId'
+        }
+      },
       user: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'user.model',
