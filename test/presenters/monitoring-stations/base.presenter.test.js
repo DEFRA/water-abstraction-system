@@ -82,7 +82,7 @@ describe('Monitoring Stations - Base presenter', () => {
         {
           abstractionPeriod: '1 April to 31 August',
           action: null,
-          alert: null,
+          alert: '',
           alertDate: '',
           licenceId: licenceMonitoringStations[0].licence.id,
           licenceRef: licenceMonitoringStations[0].licence.licenceRef,

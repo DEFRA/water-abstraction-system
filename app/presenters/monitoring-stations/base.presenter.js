@@ -88,7 +88,7 @@ function formatRestrictions(licenceMonitoringStations) {
         abstractionPeriodEndMonth
       ),
       action: action ?? null,
-      alert: latestNotification?.sendingAlertType ? sentenceCase(latestNotification.sendingAlertType) : null,
+      alert: latestNotification?.sendingAlertType ? sentenceCase(latestNotification.sendingAlertType) : '',
       alertDate: _alertDate(latestNotification),
       licenceId: licence.id,
       licenceRef: licence.licenceRef,
