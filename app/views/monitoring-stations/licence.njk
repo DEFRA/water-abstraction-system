@@ -8,10 +8,10 @@
   {{ pageHeadingHtml}}
 
   {# Last alert #}
-  {% if lastAlertSent %}
+  {% if lastAlertSentForLicence %}
     {% set lastAlertInsetText %}
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Last water abstraction alert</h2>
-      <p class="govuk-body" data-test="last-alert-sent">{{ lastAlertSent }}</p>
+      <p class="govuk-body" data-test="last-alert-sent">{{ lastAlertSentForLicence }}</p>
     {% endset %}
 
     {{ govukInsetText({

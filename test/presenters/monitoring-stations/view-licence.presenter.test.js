@@ -42,8 +42,11 @@ describe('Monitoring Stations - View Licence presenter', () => {
         id: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
         restrictionType: 'stop',
         latestNotification: {
+          addressLine1: null,
           createdAt: '2025-08-26T21:22:05',
           id: 'dd7ac5eb-e0fb-44de-9819-b76b0669faca',
+          messageType: 'email',
+          recipient: 'carol.shaw@atari.com',
           sendingAlertType: 'resume'
         },
         thresholdUnit: 'm3/s',
@@ -81,7 +84,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         href: '/system/monitoring-stations/b9b56105-aa8b-4015-b1a4-d50c6ba7436b',
         text: 'Go back to monitoring station'
       },
-      lastAlertSent: 'Resume alert sent on 26 August 2025',
+      lastAlertSentForLicence: 'Resume email on 26 August 2025 sent to carol.shaw@atari.com',
       licenceTags: [
         {
           actions: {
@@ -116,7 +119,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           created: 'Created on 6 August 2025 by environment.officer@wrls.gov.uk',
           displaySupersededWarning: false,
           effectOfRestriction: 'This is the effect of restriction',
-          lastAlertSent: 'Resume alert sent on 26 August 2025',
+          lastAlertSent: 'Resume email on 26 August 2025 sent to carol.shaw@atari.com',
           licenceMonitoringStationId: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
           linkedCondition: 'Rates m3 per day, NALD ID 1234',
           tag: 'Stop tag',
@@ -129,7 +132,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
     })
   })
 
-  describe('the "lastAlertSent" property', () => {
+  describe('the "lastAlertSentForLicence" property', () => {
     describe('when none of the licence monitoring stations is linked to an alert', () => {
       beforeEach(() => {
         licenceMonitoringStations[1].latestNotification = null
@@ -138,7 +141,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns null', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSent).to.be.null()
+        expect(result.lastAlertSentForLicence).to.be.null()
       })
     })
 
@@ -146,15 +149,18 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns that records alert details', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
+        expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
     })
 
     describe('when multiple licence monitoring stations are linked to an alert', () => {
       beforeEach(() => {
         licenceMonitoringStations[0].latestNotification = {
+          addressLine1: 'Dr Watson',
           createdAt: '2025-08-25T21:22:05',
           id: '5f506edd-9a5f-47a3-afe7-0c54f9e3b231',
+          messageType: 'letter',
+          recipient: null,
           sendingAlertType: 'warning'
         }
       })
@@ -162,7 +168,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns the details of the most recent alert', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
+        expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
     })
   })
@@ -298,10 +304,30 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
     describe('the "lastAlertSent" property', () => {
       describe('when licence monitoring station has a latest notification', () => {
-        it('returns the details of the alert', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        describe('and it was an email', () => {
+          it('returns the details of the alert', () => {
+            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
+            expect(result.licenceTags[1].lastAlertSent).to.equal(
+              'Resume email on 26 August 2025 sent to carol.shaw@atari.com'
+            )
+          })
+        })
+
+        describe('and it was a letter', () => {
+          beforeEach(() => {
+            licenceMonitoringStations[1].latestNotification.addressLine1 = 'Sherlock Holmes'
+            licenceMonitoringStations[1].latestNotification.messageType = 'letter'
+            licenceMonitoringStations[1].latestNotification.recipient = null
+          })
+
+          it('returns the details of the alert', () => {
+            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+            expect(result.licenceTags[1].lastAlertSent).to.equal(
+              'Resume letter on 26 August 2025 sent to Sherlock Holmes'
+            )
+          })
         })
       })
 

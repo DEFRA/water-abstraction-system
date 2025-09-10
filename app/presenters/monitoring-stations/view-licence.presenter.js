@@ -25,7 +25,7 @@ function go(licence, licenceMonitoringStations, monitoringStation, auth) {
 
   return {
     backLink: { href: `/system/monitoring-stations/${monitoringStation.id}`, text: 'Go back to monitoring station' },
-    lastAlertSent: _lastAlertSentForLicence(licenceMonitoringStations),
+    lastAlertSentForLicence: _lastAlertSentForLicence(licenceMonitoringStations),
     licenceTags: _licenceTags(licenceMonitoringStations, canRemoveTags),
     pageTitle: `Details for ${licence.licenceRef}`,
     pageTitleCaption: _monitoringStationName(monitoringStation)
@@ -79,10 +79,11 @@ function _lastAlertSent(latestNotification) {
     return null
   }
 
-  const { createdAt, sendingAlertType } = latestNotification
+  const { addressLine1, createdAt, messageType, recipient, sendingAlertType } = latestNotification
   const createdAtDate = new Date(createdAt)
+  const receiver = messageType === 'email' ? recipient : addressLine1
 
-  return `${sentenceCase(sendingAlertType)} alert sent on ${formatLongDate(createdAtDate)}`
+  return `${sentenceCase(sendingAlertType)} ${messageType} on ${formatLongDate(createdAtDate)} sent to ${receiver}`
 }
 
 function _lastAlertSentForLicence(licenceMonitoringStations) {
@@ -95,17 +96,15 @@ function _lastAlertSentForLicence(licenceMonitoringStations) {
     return null
   }
 
-  let lastAlert = licenceMonitoringStationsWithAlerts[0].latestNotification
+  let lastAlertSent = licenceMonitoringStationsWithAlerts[0].latestNotification
 
   for (const licenceMonitoringStationsWithAlert of licenceMonitoringStationsWithAlerts) {
-    if (licenceMonitoringStationsWithAlert.latestNotification.createdAt > lastAlert.createdAt) {
-      lastAlert = licenceMonitoringStationsWithAlert.latestNotification
+    if (licenceMonitoringStationsWithAlert.latestNotification.createdAt > lastAlertSent.createdAt) {
+      lastAlertSent = licenceMonitoringStationsWithAlert.latestNotification
     }
   }
 
-  const createdAtDate = new Date(lastAlert.createdAt)
-
-  return `${sentenceCase(lastAlert.sendingAlertType)} alert sent on ${formatLongDate(createdAtDate)}`
+  return _lastAlertSent(lastAlertSent)
 }
 
 function _licenceCondition(licenceVersionPurposeCondition) {

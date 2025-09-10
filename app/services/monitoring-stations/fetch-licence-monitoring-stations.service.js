@@ -38,8 +38,11 @@ async function _fetchLicenceMonitoringStations(licenceId, monitoringStationId) {
         .select(
           LicenceMonitoringStationModel.knex().raw(`
             json_build_object(
+              'addressLine1', notifications.personalisation->>'address_line_1',
               'createdAt', notifications.created_at,
               'id', notifications.id,
+              'messageType', notifications.message_type,
+              'recipient', notifications.recipient,
               'sendingAlertType', notifications.personalisation->>'sending_alert_type'
             )
           `)

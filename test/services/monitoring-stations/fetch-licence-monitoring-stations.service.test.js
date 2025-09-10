@@ -91,7 +91,9 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
         // We add a notification for LMS one, but we don't expect to see it in the results because it is 'pending'
         let notification = await NotificationHelper.add({
           licenceMonitoringStationId: licenceMonitoringStation.id,
+          messageType: 'email',
           personalisation: { sending_alert_type: 'warning' },
+          recipient: 'carol.shaw@atari.com',
           status: 'error'
         })
         notifications.push(notification)
@@ -113,14 +115,18 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
         notification = await NotificationHelper.add({
           createdAt: new Date('2025-08-21'),
           licenceMonitoringStationId: licenceMonitoringStation.id,
-          personalisation: { sending_alert_type: 'reduce' },
+          messageType: 'letter',
+          personalisation: { address_line_1: 'Dr Watson', sending_alert_type: 'reduce' },
+          recipient: null,
           status: 'sent'
         })
         notifications.push(notification)
         notification = await NotificationHelper.add({
           createdAt: new Date('2025-09-10'),
           licenceMonitoringStationId: licenceMonitoringStation.id,
-          personalisation: { sending_alert_type: 'stop' },
+          messageType: 'letter',
+          personalisation: { address_line_1: 'Sherlock Holmes', sending_alert_type: 'stop' },
+          recipient: null,
           status: 'sent'
         })
         notifications.push(notification)
@@ -153,8 +159,11 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
             createdAt: licenceMonitoringStations[1].createdAt,
             id: licenceMonitoringStations[1].id,
             latestNotification: {
+              addressLine1: 'Sherlock Holmes',
               createdAt: '2025-09-10T00:00:00',
               id: notifications[2].id,
+              messageType: 'letter',
+              recipient: null,
               sendingAlertType: 'stop'
             },
             licenceVersionPurposeCondition: null,
