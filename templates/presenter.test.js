@@ -21,7 +21,13 @@ describe('__DESCRIBE_LABEL__', () => {
     it('returns page data for the view', () => {
       const result = __MODULE_NAME__.go(session)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: {
+          href: '',
+          text: 'Back'
+        },
+        pageTitle: ''
+      })
     })
   })
 })
