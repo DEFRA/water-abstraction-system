@@ -17,10 +17,10 @@ describe('Monitoring Stations - Base presenter', () => {
     licenceMonitoringStations = [
       {
         id: '3ee344db-784c-4d21-8d53-e50833f7e848',
-        abstractionPeriodEndDay: '31',
-        abstractionPeriodEndMonth: '08',
-        abstractionPeriodStartDay: '01',
-        abstractionPeriodStartMonth: '04',
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 8,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         latestNotification: null,
         licence: {
           id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',

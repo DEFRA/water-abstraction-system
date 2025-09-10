@@ -34,10 +34,10 @@ describe('Monitoring Stations - View presenter', () => {
 
     licenceMonitoringStations = [
       {
-        abstractionPeriodEndDay: '31',
-        abstractionPeriodEndMonth: '08',
-        abstractionPeriodStartDay: '01',
-        abstractionPeriodStartMonth: '04',
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 8,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         id: '3ee344db-784c-4d21-8d53-e50833f7e848',
         measureType: 'flow',
         restrictionType: 'reduce',
