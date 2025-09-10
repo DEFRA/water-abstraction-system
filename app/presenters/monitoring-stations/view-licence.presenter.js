@@ -77,21 +77,24 @@ function _effectOfRestriction(licenceVersionPurposeCondition) {
 function _lastAlertSent(licenceMonitoringStations) {
   // Filter out those without an abstraction alert
   const licenceMonitoringStationsWithAlerts = licenceMonitoringStations.filter((licenceMonitoringStation) => {
-    return licenceMonitoringStation.statusUpdatedAt
+    return licenceMonitoringStation.latestNotification
   })
 
   if (!licenceMonitoringStationsWithAlerts.length) {
     return null
   }
 
-  // Sort by the most recent
-  licenceMonitoringStationsWithAlerts.sort((a, b) => {
-    return b.statusUpdatedAt - a.statusUpdatedAt
-  })
+  let lastAlert = licenceMonitoringStationsWithAlerts[0].latestNotification
 
-  const { status, statusUpdatedAt } = licenceMonitoringStationsWithAlerts[0]
+  for (const licenceMonitoringStationsWithAlert of licenceMonitoringStationsWithAlerts) {
+    if (licenceMonitoringStationsWithAlert.latestNotification.createdAt > lastAlert.createdAt) {
+      lastAlert = licenceMonitoringStationsWithAlert.latestNotification
+    }
+  }
 
-  return `${sentenceCase(status)} alert sent on ${formatLongDate(statusUpdatedAt)}`
+  const createdAtDate = new Date(lastAlert.createdAt)
+
+  return `${sentenceCase(lastAlert.sendingAlertType)} alert sent on ${formatLongDate(createdAtDate)}`
 }
 
 function _licenceCondition(licenceVersionPurposeCondition) {

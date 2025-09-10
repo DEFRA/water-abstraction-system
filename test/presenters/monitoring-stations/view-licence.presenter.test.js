@@ -27,9 +27,8 @@ describe('Monitoring Stations - View Licence presenter', () => {
       {
         createdAt: new Date('2025-08-07T13:49:42.953Z'),
         id: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
+        latestNotification: null,
         restrictionType: 'reduce',
-        status: 'resume',
-        statusUpdatedAt: null,
         thresholdUnit: 'm3/s',
         thresholdValue: 500,
         licenceVersionPurposeCondition: null,
@@ -42,8 +41,11 @@ describe('Monitoring Stations - View Licence presenter', () => {
         createdAt: new Date('2025-08-06T13:49:42.951Z'),
         id: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
         restrictionType: 'stop',
-        status: 'resume',
-        statusUpdatedAt: new Date('2025-08-26T21:22:05.000Z'),
+        latestNotification: {
+          createdAt: '2025-08-26T21:22:05',
+          id: 'dd7ac5eb-e0fb-44de-9819-b76b0669faca',
+          sendingAlertType: 'resume'
+        },
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         licenceVersionPurposeCondition: {
@@ -128,8 +130,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
   describe('the "lastAlertSent" property', () => {
     describe('when none of the licence monitoring stations is linked to an alert', () => {
       beforeEach(() => {
-        licenceMonitoringStations[1].status = null
-        licenceMonitoringStations[1].statusUpdatedAt = null
+        licenceMonitoringStations[1].latestNotification = null
       })
 
       it('returns null', () => {
@@ -149,14 +150,17 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
     describe('when multiple licence monitoring stations are linked to an alert', () => {
       beforeEach(() => {
-        licenceMonitoringStations[0].status = 'warning'
-        licenceMonitoringStations[0].statusUpdatedAt = new Date('2025-08-30T21:22:05.000Z')
+        licenceMonitoringStations[0].latestNotification = {
+          createdAt: '2025-08-25T21:22:05',
+          id: '5f506edd-9a5f-47a3-afe7-0c54f9e3b231',
+          sendingAlertType: 'warning'
+        }
       })
 
       it('returns the details of the most recent alert', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSent).to.equal('Warning alert sent on 30 August 2025')
+        expect(result.lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
       })
     })
   })
