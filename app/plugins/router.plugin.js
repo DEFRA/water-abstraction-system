@@ -19,6 +19,7 @@ const BillRunRoutes = require('../routes/bill-runs.routes.js')
 const BillRunReviewRoutes = require('../routes/bill-runs-review.routes.js')
 const BillRunSetupRoutes = require('../routes/bill-runs-setup.routes.js')
 const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
+const CallbackRoutes = require('../routes/callbacks.routes.js')
 const CheckRoutes = require('../routes/check.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
@@ -53,6 +54,7 @@ const routes = [
   ...BillRunReviewRoutes,
   ...BillRunSetupRoutes,
   ...BillingAccountRoutes,
+  ...CallbackRoutes,
   ...CheckRoutes,
   ...NotificationRoutes,
   ...LicenceRoutes,
