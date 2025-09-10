@@ -45,7 +45,13 @@ describe('__DESCRIBE_LABEL__', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await __MODULE_NAME__.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        backLink: {
+          href: '',
+          text: 'Back'
+        },
+        pageTitle: ''
+      })
     })
   })
 })

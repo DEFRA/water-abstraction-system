@@ -11,7 +11,13 @@
  * @returns {object} - The data formatted for the view template
  */
 function go() {
-  return {}
+  return {
+    backLink: {
+      href: '',
+      text: 'Back'
+    },
+    pageTitle: ''
+  }
 }
 
 module.exports = {
