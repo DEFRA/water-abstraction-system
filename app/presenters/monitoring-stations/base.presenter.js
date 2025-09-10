@@ -121,7 +121,7 @@ function formatRestrictionType(restrictionType) {
 }
 
 function _alertDate(latestNotification) {
-  if (!latestNotification || !latestNotification.createdAt) {
+  if (!latestNotification?.createdAt) {
     return ''
   }
 
