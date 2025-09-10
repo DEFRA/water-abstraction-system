@@ -32,10 +32,16 @@ describe('Monitoring Stations - View Licence service', () => {
         createdAt: new Date('2025-08-07T13:49:42.953Z'),
         id: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
         restrictionType: 'reduce',
-        status: 'resume',
-        statusUpdatedAt: null,
         thresholdUnit: 'm3/s',
         thresholdValue: 500,
+        latestNotification: {
+          addressLine1: null,
+          createdAt: '2025-08-26T21:22:05',
+          id: 'dd7ac5eb-e0fb-44de-9819-b76b0669faca',
+          messageType: 'email',
+          recipient: 'carol.shaw@atari.com',
+          sendingAlertType: 'resume'
+        },
         licenceVersionPurposeCondition: null,
         user: {
           id: 100002,
@@ -46,10 +52,9 @@ describe('Monitoring Stations - View Licence service', () => {
         createdAt: new Date('2025-08-06T13:49:42.951Z'),
         id: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
         restrictionType: 'stop',
-        status: 'resume',
-        statusUpdatedAt: new Date('2025-08-26T21:22:05.000Z'),
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
+        latestNotification: null,
         licenceVersionPurposeCondition: {
           externalId: '9:99305:1:1234',
           id: '3ce05856-c13a-4a6e-978b-fe9fdb4fe106',
@@ -95,7 +100,7 @@ describe('Monitoring Stations - View Licence service', () => {
           href: '/system/monitoring-stations/b9b56105-aa8b-4015-b1a4-d50c6ba7436b',
           text: 'Go back to monitoring station'
         },
-        lastAlertSent: 'Resume alert sent on 26 August 2025',
+        lastAlertSentForLicence: 'Resume email on 26 August 2025 sent to carol.shaw@atari.com',
         licenceTags: [
           {
             actions: {
@@ -110,6 +115,7 @@ describe('Monitoring Stations - View Licence service', () => {
             created: 'Created on 7 August 2025 by environment.officer@wrls.gov.uk',
             displaySupersededWarning: false,
             effectOfRestriction: null,
+            lastAlertSent: 'Resume email on 26 August 2025 sent to carol.shaw@atari.com',
             licenceMonitoringStationId: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
             linkedCondition: 'Not linked to a condition',
             tag: 'Reduce tag',
@@ -129,6 +135,7 @@ describe('Monitoring Stations - View Licence service', () => {
             created: 'Created on 6 August 2025 by environment.officer@wrls.gov.uk',
             displaySupersededWarning: false,
             effectOfRestriction: 'This is the effect of restriction',
+            lastAlertSent: '',
             licenceMonitoringStationId: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
             linkedCondition: 'Rates m3 per day, NALD ID 1234',
             tag: 'Stop tag',
