@@ -60,6 +60,7 @@ render_file() {
   local presenter_path="$4"
   local session_model_path="$5"
   local validator_path="$6"
+  local format_validator_path="$7"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -71,6 +72,7 @@ render_file() {
   sed -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
       -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
+      -e "s#__FORMAT_VALIDATOR_PATH__#${format_validator_path}#g" \
       -e "s/__CONTROLLER_NAME__/${PASCAL_NAME}Controller/g" \
       -e "s/__NAME__/${PASCAL_NAME}/g" \
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
@@ -218,6 +220,7 @@ generate_paths() {
   PRESENTER_PATH="${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
   VALIDATOR_PATH="${RELATIVE_UP_PATH}validators/${REL_DIR}/${RAW_NAME}.validator.js"
   SESSION_MODEL_PATH="${RELATIVE_UP_PATH}models/session.model.js"
+  FORMAT_VALIDATOR_PATH="${RELATIVE_UP_PATH}presenters/base.presenter.js"
 
 }
 
@@ -228,7 +231,7 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$FORMAT_VALIDATOR_PATH"
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then

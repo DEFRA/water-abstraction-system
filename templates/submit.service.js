@@ -9,6 +9,7 @@
 const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
 const __VALIDATOR_NAME__ = require('__VALIDATOR_PATH__')
 const SessionModel = require('__SESSION_MODEL_PATH__')
+const { formatValidationResult } = require('__FORMAT_VALIDATOR_PATH__')
 
 /**
  * Orchestrates validating the data for `` page
@@ -42,17 +43,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = __VALIDATOR_NAME__.go(payload)
+  const validationResult = __VALIDATOR_NAME__.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
