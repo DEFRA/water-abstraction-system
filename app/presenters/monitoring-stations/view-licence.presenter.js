@@ -76,7 +76,7 @@ function _effectOfRestriction(licenceVersionPurposeCondition) {
 
 function _lastAlertSent(latestNotification) {
   if (!latestNotification) {
-    return null
+    return ''
   }
 
   const { addressLine1, createdAt, messageType, recipient, sendingAlertType } = latestNotification
@@ -133,6 +133,7 @@ function _licenceTags(licenceMonitoringStations, canRemoveTags) {
     } = licenceMonitoringStation
 
     const created = _created(createdAt, user)
+    const lastAlertSent = licenceMonitoringStations.length === 1 ? null : _lastAlertSent(latestNotification)
     const tag = `${formatRestrictionType(restrictionType)} tag`
 
     return {
@@ -140,7 +141,7 @@ function _licenceTags(licenceMonitoringStations, canRemoveTags) {
       created,
       displaySupersededWarning: _displaySupersededWarning(licenceVersionPurposeCondition),
       effectOfRestriction: _effectOfRestriction(licenceVersionPurposeCondition),
-      lastAlertSent: _lastAlertSent(latestNotification),
+      lastAlertSent,
       licenceMonitoringStationId,
       linkedCondition: _licenceCondition(licenceVersionPurposeCondition),
       tag,

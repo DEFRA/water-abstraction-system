@@ -99,7 +99,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           created: 'Created on 7 August 2025 by environment.officer@wrls.gov.uk',
           displaySupersededWarning: false,
           effectOfRestriction: null,
-          lastAlertSent: null,
+          lastAlertSent: '',
           licenceMonitoringStationId: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
           linkedCondition: 'Not linked to a condition',
           tag: 'Reduce tag',
@@ -303,39 +303,54 @@ describe('Monitoring Stations - View Licence presenter', () => {
     })
 
     describe('the "lastAlertSent" property', () => {
-      describe('when licence monitoring station has a latest notification', () => {
-        describe('and it was an email', () => {
-          it('returns the details of the alert', () => {
-            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
-
-            expect(result.licenceTags[1].lastAlertSent).to.equal(
-              'Resume email on 26 August 2025 sent to carol.shaw@atari.com'
-            )
-          })
+      describe('when there is only one licence monitoring station', () => {
+        beforeEach(() => {
+          licenceMonitoringStations = [licenceMonitoringStations[1]]
         })
 
-        describe('and it was a letter', () => {
-          beforeEach(() => {
-            licenceMonitoringStations[1].latestNotification.addressLine1 = 'Sherlock Holmes'
-            licenceMonitoringStations[1].latestNotification.messageType = 'letter'
-            licenceMonitoringStations[1].latestNotification.recipient = null
-          })
-
-          it('returns the details of the alert', () => {
-            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
-
-            expect(result.licenceTags[1].lastAlertSent).to.equal(
-              'Resume letter on 26 August 2025 sent to Sherlock Holmes'
-            )
-          })
-        })
-      })
-
-      describe('when licence monitoring station does not have a latest notification', () => {
-        it('returns null', () => {
+        it('returns null (we are already showing it in the "lastAlertSentForLicence" property)', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].lastAlertSent).to.be.null()
+          expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
+        })
+      })
+
+      describe('when multiple licence monitoring stations', () => {
+        describe('when a licence monitoring station has a latest notification', () => {
+          describe('and it was an email', () => {
+            it('returns the details of the alert', () => {
+              const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+              expect(result.licenceTags[1].lastAlertSent).to.equal(
+                'Resume email on 26 August 2025 sent to carol.shaw@atari.com'
+              )
+            })
+          })
+
+          describe('and it was a letter', () => {
+            beforeEach(() => {
+              licenceMonitoringStations[1].latestNotification.addressLine1 = 'Sherlock Holmes'
+              licenceMonitoringStations[1].latestNotification.messageType = 'letter'
+              licenceMonitoringStations[1].latestNotification.recipient = null
+            })
+
+            it('returns the details of the alert', () => {
+              const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+              expect(result.licenceTags[1].lastAlertSent).to.equal(
+                'Resume letter on 26 August 2025 sent to Sherlock Holmes'
+              )
+            })
+          })
+        })
+
+        describe('when licence monitoring station does not have a latest notification', () => {
+          it('returns an empty string (indicates show row in the view but leave empty)', () => {
+            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+            expect(result.licenceTags[0].lastAlertSent).to.equal('')
+          })
         })
       })
     })
