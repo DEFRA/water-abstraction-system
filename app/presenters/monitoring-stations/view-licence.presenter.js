@@ -25,7 +25,7 @@ function go(licence, licenceMonitoringStations, monitoringStation, auth) {
 
   return {
     backLink: { href: `/system/monitoring-stations/${monitoringStation.id}`, text: 'Go back to monitoring station' },
-    lastAlertSent: _lastAlertSent(licenceMonitoringStations),
+    lastAlertSent: _lastAlertSentForLicence(licenceMonitoringStations),
     licenceTags: _licenceTags(licenceMonitoringStations, canRemoveTags),
     pageTitle: `Details for ${licence.licenceRef}`,
     pageTitleCaption: _monitoringStationName(monitoringStation)
@@ -74,7 +74,18 @@ function _effectOfRestriction(licenceVersionPurposeCondition) {
   return licenceVersionPurposeCondition.notes
 }
 
-function _lastAlertSent(licenceMonitoringStations) {
+function _lastAlertSent(latestNotification) {
+  if (!latestNotification) {
+    return null
+  }
+
+  const { createdAt, sendingAlertType } = latestNotification
+  const createdAtDate = new Date(createdAt)
+
+  return `${sentenceCase(sendingAlertType)} alert sent on ${formatLongDate(createdAtDate)}`
+}
+
+function _lastAlertSentForLicence(licenceMonitoringStations) {
   // Filter out those without an abstraction alert
   const licenceMonitoringStationsWithAlerts = licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return licenceMonitoringStation.latestNotification
@@ -114,6 +125,7 @@ function _licenceTags(licenceMonitoringStations, canRemoveTags) {
     const {
       id: licenceMonitoringStationId,
       createdAt,
+      latestNotification,
       licenceVersionPurposeCondition,
       restrictionType,
       thresholdUnit,
@@ -129,6 +141,7 @@ function _licenceTags(licenceMonitoringStations, canRemoveTags) {
       created,
       displaySupersededWarning: _displaySupersededWarning(licenceVersionPurposeCondition),
       effectOfRestriction: _effectOfRestriction(licenceVersionPurposeCondition),
+      lastAlertSent: _lastAlertSent(latestNotification),
       licenceMonitoringStationId,
       linkedCondition: _licenceCondition(licenceVersionPurposeCondition),
       tag,

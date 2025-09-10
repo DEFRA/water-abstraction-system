@@ -96,6 +96,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           created: 'Created on 7 August 2025 by environment.officer@wrls.gov.uk',
           displaySupersededWarning: false,
           effectOfRestriction: null,
+          lastAlertSent: null,
           licenceMonitoringStationId: '8c79ddbe-b8d8-477f-b2f5-1f729b095f80',
           linkedCondition: 'Not linked to a condition',
           tag: 'Reduce tag',
@@ -115,6 +116,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           created: 'Created on 6 August 2025 by environment.officer@wrls.gov.uk',
           displaySupersededWarning: false,
           effectOfRestriction: 'This is the effect of restriction',
+          lastAlertSent: 'Resume alert sent on 26 August 2025',
           licenceMonitoringStationId: '7cbfb847-e666-4841-befc-d9bf3423c6ff',
           linkedCondition: 'Rates m3 per day, NALD ID 1234',
           tag: 'Stop tag',
@@ -290,6 +292,24 @@ describe('Monitoring Stations - View Licence presenter', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].effectOfRestriction).to.be.null()
+        })
+      })
+    })
+
+    describe('the "lastAlertSent" property', () => {
+      describe('when licence monitoring station has a latest notification', () => {
+        it('returns the details of the alert', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[1].lastAlertSent).to.equal('Resume alert sent on 26 August 2025')
+        })
+      })
+
+      describe('when licence monitoring station does not have a latest notification', () => {
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+
+          expect(result.licenceTags[0].lastAlertSent).to.be.null()
         })
       })
     })

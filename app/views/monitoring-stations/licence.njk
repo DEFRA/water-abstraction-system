@@ -58,7 +58,11 @@
         {
           key: { text: "Effect of restriction" },
           value: { html: '<span data-test="effect-of-restriction-' + rowIndex + '">' + licenceTag.effectOfRestriction + '</span>' }
-        } if licenceTag.effectOfRestriction
+        } if licenceTag.effectOfRestriction,
+        {
+          key: { text: "Last alert sent" },
+          value: { html: '<span data-test="last-alert-sent-' + rowIndex + '">' + licenceTag.lastAlertSent + '</span>' }
+        } if licenceTag.lastAlertSent
       ]
     }) }}
   {% endfor %}
