@@ -46,30 +46,22 @@ async function _alerts(session) {
   return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
 }
 
-async function _adhoc(session) {
-  if (session.noticeType === 'returnForms') {
-    const letterRecipientsData = await FetchLetterRecipientsService.go(session)
-
-    const letterRecipients = RecipientsService.go(session, letterRecipientsData)
-
-    return DownloadLetterRecipientsPresenter.go(letterRecipients, session)
-  }
-
-  const recipients = await _recipients(session)
-
-  return DownloadAdHocRecipientsPresenter.go(recipients, session)
-}
-
 async function _formattedData(session) {
   if (session.journey === 'alerts') {
     return _alerts(session)
   }
 
-  if (session.journey === 'adhoc') {
-    return _adhoc(session)
+  if (session.noticeType === 'returnForms') {
+    return _returnForms(session)
   }
 
+  // Both standard return invitations and reminders, and ad-hoc return invitations fetch recipients in the same way
   const recipients = await _recipients(session)
+
+  // They just present the same data differently!
+  if (session.journey === 'adhoc') {
+    return DownloadAdHocRecipientsPresenter.go(recipients, session)
+  }
 
   return DownloadRecipientsPresenter.go(recipients, session)
 }
@@ -78,6 +70,14 @@ async function _recipients(session) {
   const downloadRecipients = await FetchDownloadRecipientsService.go(session)
 
   return RecipientsService.go(session, downloadRecipients)
+}
+
+async function _returnForms(session) {
+  const letterRecipientsData = await FetchLetterRecipientsService.go(session)
+
+  const letterRecipients = RecipientsService.go(session, letterRecipientsData)
+
+  return DownloadLetterRecipientsPresenter.go(letterRecipients, session)
 }
 
 module.exports = {
