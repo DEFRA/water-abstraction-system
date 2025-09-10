@@ -43,6 +43,22 @@ async function _fetchLicenceMonitoringStations(monitoringStationId) {
       'licenceMonitoringStations.thresholdUnit',
       'licenceMonitoringStations.thresholdValue'
     ])
+    .select(
+      LicenceMonitoringStationModel.relatedQuery('notifications')
+        .select(
+          LicenceMonitoringStationModel.knex().raw(`
+            json_build_object(
+              'createdAt', notifications.created_at,
+              'id', notifications.id,
+              'sendingAlertType', notifications.personalisation->>'sending_alert_type'
+            )
+          `)
+        )
+        .where('status', 'sent')
+        .orderBy('created_at', 'desc')
+        .limit(1)
+        .as('latestNotification')
+    )
     .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
     .where('monitoringStationId', monitoringStationId)
     .whereNull('licenceMonitoringStations.deletedAt')

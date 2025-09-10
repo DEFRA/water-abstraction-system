@@ -15,6 +15,7 @@ const LicenceVersionHelper = require('../../support/helpers/licence-version.help
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
 
 // Thing under test
@@ -24,6 +25,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
   let monitoringStation
   let licenceMonitoringStationOne
   let licenceMonitoringStationTwo
+  let licenceMonitoringStationTwoNotification
   let licenceMonitoringStationThree
   let licenceOne
   let licenceTwo
@@ -53,14 +55,34 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
           licenceVersionPurposeConditionId: licenceOne.purposeCondition.id,
           monitoringStationId: monitoringStation.id
         })
+        // We add a notification for LMS one, but we don't expect to see it in the results because it is 'pending'
+        await NotificationHelper.add({
+          licenceMonitoringStationId: licenceMonitoringStationOne.id,
+          personalisation: { sending_alert_type: 'warning' },
+          status: 'error'
+        })
 
         licenceTwo = { licence: await LicenceHelper.add({ licenceRef: `01/01/01/${generateRandomInteger(1, 9999)}` }) }
         licenceMonitoringStationTwo = await LicenceMonitoringStationHelper.add({
           licenceId: licenceTwo.licence.id,
           monitoringStationId: monitoringStation.id
         })
+        // NOTE: We create two 'sent' notifications for LMS two. We only expect to see the latest one in the results
+        await NotificationHelper.add({
+          createdAt: new Date('2025-08-21'),
+          licenceMonitoringStationId: licenceMonitoringStationTwo.id,
+          personalisation: { sending_alert_type: 'reduce' },
+          status: 'sent'
+        })
+        licenceMonitoringStationTwoNotification = await NotificationHelper.add({
+          createdAt: new Date('2025-09-10'),
+          licenceMonitoringStationId: licenceMonitoringStationTwo.id,
+          personalisation: { sending_alert_type: 'stop' },
+          status: 'sent'
+        })
 
-        // NOTE: We set the threshold used to assert the restriction sorting is working as expected
+        // NOTE: We set the threshold used to assert the restriction sorting is working as expected.
+        // We don't set any notifications for LMS three to show this does not cause an error.
         licenceMonitoringStationThree = await LicenceMonitoringStationHelper.add({
           licenceId: licenceTwo.licence.id,
           monitoringStationId: monitoringStation.id,
@@ -100,6 +122,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
             thresholdValue: 150,
+            latestNotification: null,
             licence: {
               id: licenceTwo.licence.id,
               licenceRef: licenceTwo.licence.licenceRef
@@ -116,6 +139,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
             thresholdValue: 100,
+            latestNotification: {
+              createdAt: '2025-09-10T00:00:00',
+              id: licenceMonitoringStationTwoNotification.id,
+              sendingAlertType: 'stop'
+            },
             licence: {
               id: licenceTwo.licence.id,
               licenceRef: licenceTwo.licence.licenceRef
@@ -132,6 +160,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
             thresholdValue: 100,
+            latestNotification: null,
             licence: {
               id: licenceOne.licence.id,
               licenceRef: licenceOne.licence.licenceRef
