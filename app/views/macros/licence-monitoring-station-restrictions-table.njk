@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) %}
+{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, caption) %}
 
   {% set showActionHeader = false %}
 
@@ -85,6 +85,8 @@
     <div>
       {{ govukTable({
         firstCellIsHeader: false,
+        caption: caption,
+        captionClasses: "govuk-table__caption--m",
         head: [
           {
             text: "Licence"
