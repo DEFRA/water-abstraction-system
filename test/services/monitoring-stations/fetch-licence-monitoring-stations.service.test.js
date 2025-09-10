@@ -15,6 +15,7 @@ const LicenceVersionPurposeHelper = require('../../support/helpers/licence-versi
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Thing under test
@@ -28,6 +29,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
   let monitoringStation
+  let notifications
   let user
 
   before(async () => {
@@ -51,11 +53,16 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
 
   beforeEach(() => {
     licenceMonitoringStations = []
+    notifications = []
   })
 
   afterEach(async () => {
     for (const licenceMonitoringStation of licenceMonitoringStations) {
       await licenceMonitoringStation.$query().delete()
+    }
+
+    for (const notification of notifications) {
+      await notification.$query().delete()
     }
   })
 
@@ -81,6 +88,14 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
         })
         licenceMonitoringStations.push(licenceMonitoringStation)
 
+        // We add a notification for LMS one, but we don't expect to see it in the results because it is 'pending'
+        let notification = await NotificationHelper.add({
+          licenceMonitoringStationId: licenceMonitoringStation.id,
+          personalisation: { sending_alert_type: 'warning' },
+          status: 'error'
+        })
+        notifications.push(notification)
+
         licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 4,
@@ -93,6 +108,22 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
           thresholdValue: 500
         })
         licenceMonitoringStations.push(licenceMonitoringStation)
+
+        // NOTE: We create two 'sent' notifications for LMS two. We only expect to see the latest one in the results
+        notification = await NotificationHelper.add({
+          createdAt: new Date('2025-08-21'),
+          licenceMonitoringStationId: licenceMonitoringStation.id,
+          personalisation: { sending_alert_type: 'reduce' },
+          status: 'sent'
+        })
+        notifications.push(notification)
+        notification = await NotificationHelper.add({
+          createdAt: new Date('2025-09-10'),
+          licenceMonitoringStationId: licenceMonitoringStation.id,
+          personalisation: { sending_alert_type: 'stop' },
+          status: 'sent'
+        })
+        notifications.push(notification)
 
         licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
           createdBy: user.id,
@@ -121,6 +152,11 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
           {
             createdAt: licenceMonitoringStations[1].createdAt,
             id: licenceMonitoringStations[1].id,
+            latestNotification: {
+              createdAt: '2025-09-10T00:00:00',
+              id: notifications[2].id,
+              sendingAlertType: 'stop'
+            },
             licenceVersionPurposeCondition: null,
             restrictionType: licenceMonitoringStations[1].restrictionType,
             status: licenceMonitoringStations[1].status,
@@ -132,6 +168,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
           {
             createdAt: licenceMonitoringStations[0].createdAt,
             id: licenceMonitoringStations[0].id,
+            latestNotification: null,
             licenceVersionPurposeCondition: {
               externalId: licenceVersionPurposeCondition.externalId,
               id: licenceVersionPurposeCondition.id,
@@ -198,72 +235,4 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
       expect(result.licenceMonitoringStations).to.be.empty()
     })
   })
-
-  // describe('when a matching licence monitoring station exists', () => {
-  //   let licence
-  //   let licenceMonitoringStation
-  //   let licenceVersionPurposeCondition
-  //   let licenceVersionPurposeId
-
-  //   beforeEach(async () => {
-  //     licence = await LicenceHelper.add()
-
-  //     const { id: licenceVersionId } = await LicenceVersionHelper.add({ licenceId: licence.id })
-
-  //     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId })
-  //     licenceVersionPurposeId = licenceVersionPurpose.id
-
-  //     const { id: licenceVersionPurposeConditionTypeId } = LicenceVersionPurposeConditionTypeHelper.select(22)
-
-  //     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-  //       licenceVersionPurposeId,
-  //       licenceVersionPurposeConditionTypeId,
-  //       notes: 'This is the effect of restriction'
-  //     })
-
-  //     const { id: userId } = await UserHelper.add({ username: 'station-monitor@wrls.gov.uk' })
-
-  //     licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-  //       createdAt: new Date('2025-05-20'),
-  //       createdBy: userId,
-  //       licenceId: licence.id,
-  //       licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
-  //       monitoringStationId: monitoringStation.id,
-  //       restrictionType: 'reduce'
-  //     })
-  //   })
-
-  //   it('returns the matching data', async () => {
-  //     const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
-
-  //     expect(result.monitoringStationLicenceTags).to.equal({
-  //       id: monitoringStation.id,
-  //       label: 'The Monitoring Station',
-  //       riverName: 'The River',
-  //       licenceMonitoringStations: [
-  //         {
-  //           id: licenceMonitoringStation.id,
-  //           createdAt: new Date('2025-05-20'),
-  //           licenceId: licence.id,
-  //           restrictionType: 'reduce',
-  //           thresholdUnit: 'm3/s',
-  //           thresholdValue: 100,
-  //           licence: { licenceRef: licence.licenceRef },
-  //           licenceVersionPurposeCondition: {
-  //             externalId: licenceVersionPurposeCondition.externalId,
-  //             notes: 'This is the effect of restriction',
-  //             licenceVersionPurpose: {
-  //               id: licenceVersionPurposeId,
-  //               licenceVersion: { status: 'current' }
-  //             },
-  //             licenceVersionPurposeConditionType: {
-  //               displayTitle: 'Flow cessation condition'
-  //             }
-  //           },
-  //           user: { username: 'station-monitor@wrls.gov.uk' }
-  //         }
-  //       ]
-  //     })
-  //   })
-  // })
 })
