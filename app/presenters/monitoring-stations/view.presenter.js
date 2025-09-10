@@ -23,19 +23,19 @@ const { determineRestrictionHeading, formatRestrictions } = require('./base.pres
  * licence condition need to display the abstraction period on the associated licence purpose. Else the user will have
  * added an abstraction period against the licence monitoring station record when they tagged it.
  *
+ * @param {module:MonitoringStationModel} monitoringStation - The monitoring station
+ * @param {module:LicenceMonitoringStationModel[]} licenceMonitoringStations - The 'live' licence monitoring stations
+ * tagged to the monitoring station
  * @param {object} auth - The auth object taken from `request.auth`
- * @param {module:MonitoringStationModel} monitoringStation - The monitoring station and associated licence monitoring
- * station data
  *
  * @returns {object} page data needed by the view template
  */
-function go(auth, monitoringStation) {
+function go(monitoringStation, licenceMonitoringStations, auth) {
   const {
     id: monitoringStationId,
     catchmentName,
     gridReference,
     label: monitoringStationName,
-    licenceMonitoringStations,
     riverName,
     stationReference,
     wiskiId
@@ -47,7 +47,7 @@ function go(auth, monitoringStation) {
     backLink: { href: '/licences', text: 'Go back to search' },
     buttons: {
       createAlert: _createAlertButton(restrictions, auth, monitoringStationId),
-      tagLicence: _tagLicenceButton(auth, monitoringStationId),
+      tagLicence: _tagLicenceButton(auth, monitoringStationId)
     },
     gridReference: gridReference ?? '',
     pageTitle: _pageTitle(riverName, monitoringStationName),
