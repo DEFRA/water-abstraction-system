@@ -155,7 +155,6 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[0].id,
                 notes: null,
-                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[0].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
@@ -165,7 +164,7 @@ describe('Notices - Setup - Initiate Session service', () => {
                 thresholdGroup: 'level-1000-m',
                 thresholdValue: 1000,
                 restrictionType: 'reduce',
-                statusUpdatedAt: null,
+                latestNotification: null,
                 abstractionPeriodEndDay: 1,
                 abstractionPeriodEndMonth: 1,
                 abstractionPeriodStartDay: 1,
@@ -174,7 +173,6 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[1].id,
                 notes: 'I have a bad feeling about this',
-                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[1].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
@@ -184,7 +182,7 @@ describe('Notices - Setup - Initiate Session service', () => {
                 thresholdGroup: 'flow-100-m3/s',
                 thresholdValue: 100,
                 restrictionType: 'stop',
-                statusUpdatedAt: null,
+                latestNotification: null,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
@@ -193,7 +191,6 @@ describe('Notices - Setup - Initiate Session service', () => {
               {
                 id: monitoringStationData.licenceMonitoringStations[2].id,
                 notes: null,
-                status: null,
                 licence: {
                   id: monitoringStationData.licenceMonitoringStations[2].licence.id,
                   licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
@@ -203,7 +200,7 @@ describe('Notices - Setup - Initiate Session service', () => {
                 thresholdGroup: 'level-100-m',
                 thresholdValue: 100,
                 restrictionType: 'stop_or_reduce',
-                statusUpdatedAt: null,
+                latestNotification: null,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
