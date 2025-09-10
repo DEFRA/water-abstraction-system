@@ -2,9 +2,10 @@
 
 /**
  * Fetches the matching monitoring station and additional records needed for the view monitoring station page
- * @module FetchMonitoringStationService
+ * @module FetchMonitoringStationDetailsService
  */
 
+const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
 const MonitoringStationModel = require('../../models/monitoring-station.model.js')
 
 /**
@@ -12,58 +13,60 @@ const MonitoringStationModel = require('../../models/monitoring-station.model.js
  *
  * @param {string} monitoringStationId - The UUID for the monitoring station to fetch
  *
- * @returns {Promise<module:MonitoringStationModel>} the matching instance of `MonitoringStationModel` populated with
- * the data needed for the view monitoring station page
+ * @returns {Promise<object>} the matching instance of `MonitoringStationModel` and the `LicenceMonitoringStationModel`s
+ * with the additional information needed for the view
  */
 async function go(monitoringStationId) {
-  return _fetch(monitoringStationId)
+  const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
+
+  const licenceMonitoringStations = await _fetchLicenceMonitoringStations(monitoringStationId)
+
+  return { licenceMonitoringStations, monitoringStation }
 }
 
-async function _fetch(monitoringStationId) {
+async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query()
     .findById(monitoringStationId)
-    .select(['id', 'catchmentName', 'gridReference', 'label', 'riverName', 'stationReference', 'wiskiId'])
-    .withGraphFetched('licenceMonitoringStations')
-    .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
-      licenceMonitoringStationsBuilder
-        .select([
-          'licenceMonitoringStations.id',
-          'licenceMonitoringStations.abstractionPeriodEndDay',
-          'licenceMonitoringStations.abstractionPeriodEndMonth',
-          'licenceMonitoringStations.abstractionPeriodStartDay',
-          'licenceMonitoringStations.abstractionPeriodStartMonth',
-          'licenceMonitoringStations.licenceId',
-          'licenceMonitoringStations.measureType',
-          'licenceMonitoringStations.restrictionType',
-          'licenceMonitoringStations.status',
-          'licenceMonitoringStations.statusUpdatedAt',
-          'licenceMonitoringStations.thresholdUnit',
-          'licenceMonitoringStations.thresholdValue'
-        ])
-        .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
-        .whereNull('licenceMonitoringStations.deletedAt')
-        .orderBy([
-          { column: 'licences.licenceRef', order: 'asc' },
-          { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
-        ])
-        .withGraphFetched('licence')
-        .modifyGraph('licence', (licenceBuilder) => {
-          licenceBuilder.select(['id', 'licenceRef'])
-        })
-        .withGraphFetched('licenceVersionPurposeCondition')
-        .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
-          licenceVersionPurposeConditionBuilder
-            .select(['id'])
-            .withGraphFetched('licenceVersionPurpose')
-            .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
-              licenceVersionPurposeBuilder.select([
-                'id',
-                'abstractionPeriodEndDay',
-                'abstractionPeriodEndMonth',
-                'abstractionPeriodStartMonth',
-                'abstractionPeriodStartDay'
-              ])
-            })
+    .select(['catchmentName', 'gridReference', 'id', 'label', 'riverName', 'stationReference', 'wiskiId'])
+}
+
+async function _fetchLicenceMonitoringStations(monitoringStationId) {
+  return LicenceMonitoringStationModel.query()
+    .select([
+      'licenceMonitoringStations.id',
+      'licenceMonitoringStations.abstractionPeriodEndDay',
+      'licenceMonitoringStations.abstractionPeriodEndMonth',
+      'licenceMonitoringStations.abstractionPeriodStartDay',
+      'licenceMonitoringStations.abstractionPeriodStartMonth',
+      'licenceMonitoringStations.measureType',
+      'licenceMonitoringStations.restrictionType',
+      'licenceMonitoringStations.thresholdUnit',
+      'licenceMonitoringStations.thresholdValue'
+    ])
+    .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
+    .where('monitoringStationId', monitoringStationId)
+    .whereNull('licenceMonitoringStations.deletedAt')
+    .orderBy([
+      { column: 'licences.licenceRef', order: 'asc' },
+      { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
+    ])
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
+    })
+    .withGraphFetched('licenceVersionPurposeCondition')
+    .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
+      licenceVersionPurposeConditionBuilder
+        .select(['id'])
+        .withGraphFetched('licenceVersionPurpose')
+        .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
+          licenceVersionPurposeBuilder.select([
+            'id',
+            'abstractionPeriodEndDay',
+            'abstractionPeriodEndMonth',
+            'abstractionPeriodStartMonth',
+            'abstractionPeriodStartDay'
+          ])
         })
     })
 }
