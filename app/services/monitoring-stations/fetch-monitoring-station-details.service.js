@@ -33,11 +33,11 @@ async function _fetchMonitoringStation(monitoringStationId) {
 async function _fetchLicenceMonitoringStations(monitoringStationId) {
   return LicenceMonitoringStationModel.query()
     .select([
-      'licenceMonitoringStations.id',
       'licenceMonitoringStations.abstractionPeriodEndDay',
       'licenceMonitoringStations.abstractionPeriodEndMonth',
       'licenceMonitoringStations.abstractionPeriodStartDay',
       'licenceMonitoringStations.abstractionPeriodStartMonth',
+      'licenceMonitoringStations.id',
       'licenceMonitoringStations.measureType',
       'licenceMonitoringStations.restrictionType',
       'licenceMonitoringStations.thresholdUnit',

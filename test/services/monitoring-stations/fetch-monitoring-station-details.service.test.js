@@ -113,11 +113,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
 
         expect(result.licenceMonitoringStations).to.equal([
           {
-            id: licenceMonitoringStationThree.id,
             abstractionPeriodEndDay: null,
             abstractionPeriodEndMonth: null,
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
+            id: licenceMonitoringStationThree.id,
             measureType: 'flow',
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
@@ -130,11 +130,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             licenceVersionPurposeCondition: null
           },
           {
-            id: licenceMonitoringStationTwo.id,
             abstractionPeriodEndDay: null,
             abstractionPeriodEndMonth: null,
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
+            id: licenceMonitoringStationTwo.id,
             measureType: 'flow',
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
@@ -151,11 +151,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             licenceVersionPurposeCondition: null
           },
           {
-            id: licenceMonitoringStationOne.id,
             abstractionPeriodEndDay: null,
             abstractionPeriodEndMonth: null,
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
+            id: licenceMonitoringStationOne.id,
             measureType: 'flow',
             restrictionType: 'reduce',
             thresholdUnit: 'm3/s',
