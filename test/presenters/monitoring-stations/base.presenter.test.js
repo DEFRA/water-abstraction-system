@@ -21,16 +21,14 @@ describe('Monitoring Stations - Base presenter', () => {
         abstractionPeriodEndMonth: '08',
         abstractionPeriodStartDay: '01',
         abstractionPeriodStartMonth: '04',
+        latestNotification: null,
         licence: {
           id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
           licenceRef: 'AT/TEST'
         },
-        licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
         licenceVersionPurposeCondition: null,
         measureType: 'flow',
         restrictionType: 'reduce',
-        status: 'resume',
-        statusUpdatedAt: null,
         thresholdUnit: 'm3/s',
         thresholdValue: 100
       }
@@ -77,136 +75,99 @@ describe('Monitoring Stations - Base presenter', () => {
   })
 
   describe('#formatRestrictions', () => {
-    describe('the "abstraction" property', () => {
-      it('returns the abstraction period', () => {
-        const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
+    it('returns each licence monitoring station formatted as a restriction for display', () => {
+      const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-        expect(result[0].abstractionPeriod).to.equal('1 April to 31 August')
-      })
+      expect(results).to.equal([
+        {
+          abstractionPeriod: '1 April to 31 August',
+          action: null,
+          alert: null,
+          alertDate: '',
+          licenceId: licenceMonitoringStations[0].licence.id,
+          licenceRef: licenceMonitoringStations[0].licence.licenceRef,
+          restriction: 'Reduce',
+          restrictionCount: 1,
+          threshold: '100m3/s'
+        }
+      ])
     })
 
-    describe('the "action" property', () => {
-      describe('when the licence monitoring station has an action', () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].action = {
-            link: `/system/licence-monitoring-station/${licenceMonitoringStations[0].id}`,
-            text: 'View'
-          }
-        })
-
-        it('returns the action object', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].action).to.equal({
-            link: `/system/licence-monitoring-station/${licenceMonitoringStations[0].id}`,
-            text: 'View'
-          })
-        })
-      })
-
-      describe('when the licence monitoring station has no action', () => {
-        it('returns the action object', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].action).to.be.undefined()
-        })
-      })
-    })
-
-    describe('the "alert" property', () => {
-      describe('when the licence monitoring station record has never had an alert sent', () => {
-        it('returns null', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].alert).to.be.null()
-        })
-      })
-
-      describe('when the licence monitoring station record has had an alert sent', () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].statusUpdatedAt = new Date('2024-06-17')
-        })
-
-        it('returns the current "status" formatted for display', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].alert).to.equal('Resume')
-        })
-      })
-    })
-
-    describe('the "alertDate" property', () => {
-      describe('when the licence monitoring station record has never had an alert sent', () => {
-        it('returns null', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].alertDate).to.be.null()
-        })
-      })
-
-      describe('when the licence monitoring station record has had an alert sent', () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].statusUpdatedAt = new Date('2024-06-17')
-        })
-
-        it('returns the "statusUpdatedAt" formatted for display', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].alertDate).to.equal('17 June 2024')
-        })
-      })
-    })
-
-    describe('the "restriction" property', () => {
-      describe("when the licence monitoring station record's restriction type is 'stop_or_reduce'", () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].restrictionType = 'stop_or_reduce'
-        })
-
-        it('returns "Stop or reduce"', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].restriction).to.equal('Stop or reduce')
-        })
-      })
-
-      describe("when the licence monitoring station record's restriction type is 'reduce'", () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].restrictionType = 'reduce'
-        })
-
-        it('returns "Reduce"', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].restriction).to.equal('Reduce')
-        })
-      })
-
-      describe("when the licence monitoring station record's restriction type is 'stop'", () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].restrictionType = 'stop'
-        })
-
-        it('returns "Stop"', () => {
-          const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
-
-          expect(result[0].restriction).to.equal('Stop')
-        })
-      })
-    })
-
-    describe('the "restrictionCount" property', () => {
+    describe('when a licence monitoring station has an action', () => {
       beforeEach(() => {
-        const secondLicenceMonitoringStation = { ...licenceMonitoringStations[0] }
-
-        secondLicenceMonitoringStation.id = '6f498459-8b7e-48f9-bc88-293dce414e8d'
-        licenceMonitoringStations.push(secondLicenceMonitoringStation)
+        licenceMonitoringStations[0].action = {
+          link: `/system/licence-monitoring-station/${licenceMonitoringStations[0].id}`,
+          text: 'View'
+        }
       })
 
-      it('returns returns the count of licence monitoring stations for the licence linked to this monitoring station', () => {
+      it('sets the action in the result', () => {
+        const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
+
+        expect(results[0].action).to.equal(licenceMonitoringStations[0].action)
+      })
+    })
+
+    describe('when a licence monitoring station has a latest Notification', () => {
+      beforeEach(() => {
+        licenceMonitoringStations[0].latestNotification = {
+          createdAt: null,
+          id: 'b027843b-5139-4905-848f-f10bdc37012d',
+          sendingAlertType: 'warning'
+        }
+      })
+
+      describe('which is properly formed (created_at is present)', () => {
+        beforeEach(() => {
+          licenceMonitoringStations[0].latestNotification.createdAt = new Date('2025-09-10')
+        })
+
+        it('sets the alert details in the result', () => {
+          const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
+
+          expect(results[0].alert).to.equal('Warning')
+          expect(results[0].alertDate).to.equal('10 September 2025')
+        })
+      })
+
+      describe('which is not properly formed (created_at is not present - an edge case from a legacy notification)', () => {
+        it('sets only the alert in the result', () => {
+          const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
+
+          expect(results[0].alert).to.equal('Warning')
+          expect(results[0].alertDate).to.equal('')
+        })
+      })
+    })
+
+    describe('when there are multiple licence monitoring stations linked to the same licence', () => {
+      beforeEach(() => {
+        // Leave the second licence monitoring station linked to the same licence as the first
+        const secondLicenceMonitoringStation = {
+          ...licenceMonitoringStations[0],
+          id: '6f498459-8b7e-48f9-bc88-293dce414e8d'
+        }
+
+        // Set the third licence monitoring station linked to a different licence
+        const thirdLicenceMonitoringStation = {
+          ...licenceMonitoringStations[0],
+          id: '48f98f60-f4da-40a7-b02d-8df8b713e04b',
+          licence: {
+            id: 'a6faa6df-eac9-4013-a783-3d6fa102bdc1',
+            licenceRef: 'AT/TEST/03'
+          }
+        }
+
+        licenceMonitoringStations.push(secondLicenceMonitoringStation)
+        licenceMonitoringStations.push(thirdLicenceMonitoringStation)
+      })
+
+      it('returns the count of licence monitoring stations (LMS) for the licence the LMS is linked to', () => {
         const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
         expect(result[0].restrictionCount).to.equal(2)
+        expect(result[1].restrictionCount).to.equal(2)
+        expect(result[2].restrictionCount).to.equal(1)
       })
     })
   })

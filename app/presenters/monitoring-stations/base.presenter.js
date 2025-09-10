@@ -73,10 +73,9 @@ function formatRestrictions(licenceMonitoringStations) {
       abstractionPeriodStartDay,
       abstractionPeriodStartMonth,
       action,
+      latestNotification,
       licence,
       restrictionType,
-      status,
-      statusUpdatedAt,
       thresholdUnit,
       thresholdValue
     } = licenceMonitoringStation
@@ -88,14 +87,14 @@ function formatRestrictions(licenceMonitoringStations) {
         abstractionPeriodEndDay,
         abstractionPeriodEndMonth
       ),
-      alert: _alert(status, statusUpdatedAt),
-      alertDate: statusUpdatedAt ? formatLongDate(statusUpdatedAt) : null,
+      action: action ?? null,
+      alert: latestNotification?.sendingAlertType ? sentenceCase(latestNotification.sendingAlertType) : null,
+      alertDate: _alertDate(latestNotification),
       licenceId: licence.id,
       licenceRef: licence.licenceRef,
       restriction: formatRestrictionType(restrictionType),
       restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
-      threshold: formatValueUnit(thresholdValue, thresholdUnit),
-      action
+      threshold: formatValueUnit(thresholdValue, thresholdUnit)
     }
   })
 }
@@ -121,12 +120,14 @@ function formatRestrictionType(restrictionType) {
   return sentenceCase(restrictionType)
 }
 
-function _alert(status, statusUpdatedAt) {
-  if (!statusUpdatedAt) {
-    return null
+function _alertDate(latestNotification) {
+  if (!latestNotification || !latestNotification.createdAt) {
+    return ''
   }
 
-  return sentenceCase(status)
+  const asDate = new Date(latestNotification.createdAt)
+
+  return formatLongDate(asDate)
 }
 
 function _restrictionCount(licenceId, licenceMonitoringStations) {
