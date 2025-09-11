@@ -769,8 +769,18 @@ describe('Notices Setup controller', () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '' })
 
           Sinon.stub(SubmitLicenceService, 'go').resolves({
-            licenceRef: '01/115',
-            error: { text: 'Enter a Licence number' }
+            licenceRef: null,
+            error: {
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: 'Enter a licence number'
+                }
+              ],
+              licenceRef: {
+                text: 'Enter a licence number'
+              }
+            }
           })
         })
 
@@ -778,7 +788,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Enter a Licence number')
+          expect(response.payload).to.contain('Enter a licence number')
           expect(response.payload).to.contain('There is a problem')
         })
       })
