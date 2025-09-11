@@ -125,7 +125,7 @@ describe('Notices - Index Notices presenter', () => {
       describe('when the notice has errors', () => {
         beforeEach(() => {
           notice = notices[0]
-          notice.errorCount = 1
+          notice.overallStatus = 'error'
         })
 
         it('returns "error"', () => {
