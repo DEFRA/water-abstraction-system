@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
+
 // Things we need to stub
 const NotifyRequest = require('../../../app/requests/notify.request.js')
 
@@ -16,7 +19,7 @@ const CreatePrecompiledFileRequest = require('../../../app/requests/notify/creat
 
 describe('Notify - Create precompiled file request', () => {
   let response
-  let reference
+  let referenceCode
   let content
 
   afterEach(() => {
@@ -25,7 +28,7 @@ describe('Notify - Create precompiled file request', () => {
 
   describe('when the request succeeds', () => {
     beforeEach(() => {
-      reference = 'test-123'
+      referenceCode = generateReferenceCode()
       content = new TextEncoder().encode('Test data').buffer
 
       response = {
@@ -33,7 +36,7 @@ describe('Notify - Create precompiled file request', () => {
         body: {
           id: 'f39a18b7-f12a-4149-9aad-da18d6972b48',
           postage: 'second',
-          reference: 'test-123'
+          reference: referenceCode
         }
       }
 
@@ -44,23 +47,23 @@ describe('Notify - Create precompiled file request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, reference)
+      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, reference)
+      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
       expect(result.response.body).to.equal(response.body)
     })
 
     it('calls NotifyRequest.post with the correct arguments', async () => {
-      await CreatePrecompiledFileRequest.send(content, reference)
+      await CreatePrecompiledFileRequest.send(content, referenceCode)
 
       expect(NotifyRequest.post.calledOnce).to.be.true()
       expect(NotifyRequest.post.firstCall.args[0]).to.equal('v2/notifications/letter')
-      expect(NotifyRequest.post.firstCall.args[1]).to.equal({ content: 'VGVzdCBkYXRh', reference: 'test-123' })
+      expect(NotifyRequest.post.firstCall.args[1]).to.equal({ content: 'VGVzdCBkYXRh', reference: referenceCode })
     })
   })
 
@@ -87,13 +90,13 @@ describe('Notify - Create precompiled file request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, reference)
+        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, reference)
+        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
         expect(result.response.body).to.equal(response.body)
       })

@@ -11,13 +11,14 @@ const { expect } = Code
 // Test helpers
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const AbstractionAlertNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 
 describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
-  const referenceCode = 'TEST-123'
+  const referenceCode = generateReferenceCode()
 
   let clock
   let licenceMonitoringStations
@@ -66,9 +67,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
+        licenceMonitoringStationId: licenceMonitoringStations.one.id,
         licences: `["${recipients.primaryUser.licence_refs}"]`,
-        messageType: 'email',
         messageRef: 'water_abstraction_alert_reduce_warning_email',
+        messageType: 'email',
         personalisation: {
           alertType: 'reduce',
           condition_text: '',
@@ -85,12 +87,13 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdValue: 1000
         },
         recipient: 'primary.user@important.com',
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
       },
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
+        licenceMonitoringStationId: licenceMonitoringStations.two.id,
         licences: `["${recipients.licenceHolder.licence_refs}"]`,
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
@@ -116,12 +119,13 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdUnit: 'm3/s',
           thresholdValue: 100
         },
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
       },
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
+        licenceMonitoringStationId: licenceMonitoringStations.three.id,
         licences: `["${recipients.additionalContact.licence_refs}"]`,
         messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
         messageType: 'email',
@@ -141,7 +145,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdValue: 100
         },
         recipient: 'additional.contact@important.com',
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
       }
     ])
@@ -162,11 +166,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-          reference: 'TEST-123',
-          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f',
+          licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: `["${recipients.primaryUser.licence_refs}"]`,
-          messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageType: 'email',
           personalisation: {
             alertType: 'reduce',
             condition_text: '',
@@ -182,11 +185,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdUnit: 'm',
             thresholdValue: 1000
           },
-          recipient: 'primary.user@important.com'
+          recipient: 'primary.user@important.com',
+          reference: referenceCode,
+          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         },
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
+          licenceMonitoringStationId: licenceMonitoringStations.two.id,
           licences: `["${recipients.primaryUser.licence_refs}"]`,
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
@@ -206,7 +212,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 100
           },
           recipient: 'primary.user@important.com',
-          reference: 'TEST-123',
+          reference: referenceCode,
           templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21'
         }
       ])
@@ -227,11 +233,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-          reference: 'TEST-123',
-          templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec',
+          licenceMonitoringStationId: licenceMonitoringStations.three.id,
           licences: `["${recipients.additionalContact.licence_refs}"]`,
-          messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
+          messageType: 'email',
           personalisation: {
             alertType: 'stop_or_reduce',
             condition_text: '',
@@ -247,7 +252,9 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdUnit: 'm',
             thresholdValue: 100
           },
-          recipient: 'additional.contact@important.com'
+          recipient: 'additional.contact@important.com',
+          reference: referenceCode,
+          templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
         }
       ])
     })
@@ -270,11 +277,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-          reference: 'TEST-123',
-          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f',
+          licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: `["${recipients.additionalContact.licence_refs}"]`,
-          messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageType: 'email',
           personalisation: {
             alertType: 'reduce',
             condition_text: '',
@@ -290,7 +296,9 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdUnit: 'm',
             thresholdValue: 1000
           },
-          recipient: 'additional.contact@important.com'
+          recipient: 'additional.contact@important.com',
+          reference: referenceCode,
+          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         }
       ])
     })
@@ -313,11 +321,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-          reference: 'TEST-123',
-          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f',
+          licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: `["${recipients.primaryUser.licence_refs}"]`,
-          messageType: 'email',
           messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageType: 'email',
           personalisation: {
             alertType: 'reduce',
             condition_text: '',
@@ -333,7 +340,9 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdUnit: 'm',
             thresholdValue: 1000
           },
-          recipient: 'primary.user@important.com'
+          recipient: 'primary.user@important.com',
+          reference: referenceCode,
+          templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         }
       ])
     })
@@ -354,11 +363,10 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
-          reference: 'TEST-123',
-          templateId: '27499bbd-e854-4f13-884e-30e0894526b6',
+          licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: `["${recipients.licenceHolder.licence_refs}"]`,
-          messageType: 'letter',
           messageRef: 'water_abstraction_alert_reduce_warning',
+          messageType: 'letter',
           personalisation: {
             address_line_1: 'Mr H J Licence holder',
             address_line_2: '1',
@@ -380,7 +388,9 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             source: '* Source of supply: Meridian Trench',
             thresholdUnit: 'm',
             thresholdValue: 1000
-          }
+          },
+          reference: referenceCode,
+          templateId: '27499bbd-e854-4f13-884e-30e0894526b6'
         }
       ])
     })

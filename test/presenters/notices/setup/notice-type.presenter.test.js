@@ -68,7 +68,7 @@ describe('Notice Type Presenter', () => {
           session.noticeType = 'returnForms'
         })
 
-        it('returns the paper invitation checked', () => {
+        it('returns the Return forms checked', () => {
           const result = NoticeTypePresenter.go(session)
 
           expect(result.options).to.equal([

@@ -10,12 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const NotificationsPresenter = require('../../../../app/presenters/notices/setup/notifications.presenter.js')
 
 describe('Notices - Setup - Notifications Presenter', () => {
-  const referenceCode = 'TEST-123'
+  const referenceCode = generateReferenceCode()
   const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let clock
@@ -69,7 +70,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         recipient: 'primary.user@important.com',
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
       {
@@ -83,7 +84,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
-        reference: 'TEST-123',
+        reference: referenceCode,
         recipient: 'returns.agent@important.com',
         templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
       },
@@ -105,7 +106,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       },
       {
@@ -126,7 +127,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
       },
       {
@@ -147,7 +148,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
-        reference: 'TEST-123',
+        reference: referenceCode,
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       }
     ])
@@ -181,7 +182,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
               }
             ])
@@ -209,7 +210,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'returns.agent@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
               }
             ])
@@ -237,7 +238,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
               }
             ])
@@ -273,7 +274,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
               }
             ])
@@ -307,7 +308,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
               }
             ])
@@ -341,7 +342,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
               }
             ])
@@ -377,7 +378,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
               }
             ])
@@ -405,7 +406,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'returns.agent@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a'
               }
             ])
@@ -433,7 +434,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
               }
             ])
@@ -469,7 +470,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
               }
             ])
@@ -503,7 +504,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
               }
             ])
@@ -537,7 +538,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
               }
             ])
@@ -576,7 +577,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
               }
             ])
@@ -604,7 +605,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'returns.agent@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94'
               }
             ])
@@ -632,7 +633,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
               }
             ])
@@ -668,7 +669,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
               }
             ])
@@ -702,7 +703,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
               }
             ])
@@ -736,7 +737,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
-                reference: 'TEST-123',
+                reference: referenceCode,
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
               }
             ])

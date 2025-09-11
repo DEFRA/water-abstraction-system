@@ -208,52 +208,57 @@ describe('Notices - Setup - Batch Notifications service', () => {
           expect(createdNotifications).to.have.length(5)
           expect(createdNotifications[0]).to.equal(
             {
-              recipient: 'primary.user@important.com',
-              messageType: 'email',
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: recipients[0].licence_refs.split(','),
               messageRef: 'returns_invitation_primary_user_email',
+              messageType: 'email',
+              plaintext: null,
               personalisation: {
                 periodEndDate: '31 March 2023',
                 returnDueDate: '28 April 2025',
                 periodStartDate: '1 April 2022'
               },
-              status: 'error',
               notifyError:
                 '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
-              licences: recipients[0].licence_refs.split(','),
               notifyId: null,
               notifyStatus: null,
-              plaintext: null,
-              eventId: event.id
+              recipient: 'primary.user@important.com',
+              status: 'error'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[1]).to.equal(
             {
-              recipient: 'returns.agent@important.com',
-              messageType: 'email',
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: recipients[1].licence_refs.split(','),
               messageRef: 'returns_invitation_returns_agent_email',
+              messageType: 'email',
+              plaintext: 'Dear licence holder,\r\n',
               personalisation: {
                 periodEndDate: '31 March 2023',
                 returnDueDate: '28 April 2025',
                 periodStartDate: '1 April 2022'
               },
-              status: 'pending',
               notifyError: null,
-              licences: recipients[1].licence_refs.split(','),
               notifyId: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
               notifyStatus: 'created',
-              plaintext: 'Dear licence holder,\r\n',
-              eventId: event.id
+              recipient: 'returns.agent@important.com',
+              status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[2]).to.equal(
             {
-              recipient: null,
-              messageType: 'letter',
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: recipients[2].licence_refs.split(','),
               messageRef: 'returns_invitation_licence_holder_letter',
+              messageType: 'letter',
+              plaintext: 'Dear Licence holder,\r\n',
               personalisation: {
                 name: 'Mr H J Licence holder',
                 periodEndDate: '31 March 2023',
@@ -266,22 +271,23 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 address_line_6: 'WD25 7LR',
                 periodStartDate: '1 April 2022'
               },
-              status: 'pending',
               notifyError: null,
-              licences: recipients[2].licence_refs.split(','),
               notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
               notifyStatus: 'created',
-              plaintext: 'Dear Licence holder,\r\n',
-              eventId: event.id
+              recipient: null,
+              status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[3]).to.equal(
             {
-              recipient: null,
-              messageType: 'letter',
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: recipients[3].licence_refs.split(','),
               messageRef: 'returns_invitation_returns_to_letter',
+              messageType: 'letter',
+              plaintext: null,
               personalisation: {
                 name: 'Mr H J Returns to',
                 periodEndDate: '31 March 2023',
@@ -294,23 +300,24 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 address_line_6: 'Surrey',
                 periodStartDate: '1 April 2022'
               },
-              status: 'error',
               notifyError:
                 '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: returnDueDate"}]}',
-              licences: recipients[3].licence_refs.split(','),
               notifyId: null,
               notifyStatus: null,
-              plaintext: null,
-              eventId: event.id
+              recipient: null,
+              status: 'error'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[4]).to.equal(
             {
-              recipient: null,
-              messageType: 'letter',
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: recipients[4].licence_refs.split(','),
               messageRef: 'returns_invitation_licence_holder_letter',
+              messageType: 'letter',
+              plaintext: 'Dear Licence holder with multiple licences,\r\n',
               personalisation: {
                 name: 'Mr H J Licence holder with multiple licences',
                 periodEndDate: '31 March 2023',
@@ -323,13 +330,11 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 address_line_6: 'WD25 7LR',
                 periodStartDate: '1 April 2022'
               },
-              status: 'pending',
               notifyError: null,
-              licences: recipients[4].licence_refs.split(','),
               notifyId: '997a76c7-7866-4bd3-b199-ca69eef31a41',
               notifyStatus: 'created',
-              plaintext: 'Dear Licence holder with multiple licences,\r\n',
-              eventId: event.id
+              recipient: null,
+              status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )
@@ -536,9 +541,12 @@ describe('Notices - Setup - Batch Notifications service', () => {
           expect(createdNotifications).to.have.length(3)
           expect(createdNotifications[0]).to.equal(
             {
-              recipient: 'additional.contact@important.com',
-              messageType: 'email',
+              eventId: event.id,
+              licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
+              licences: recipients[0].licence_refs.split(','),
               messageRef: 'water_abstraction_alert_stop_warning_email',
+              messageType: 'email',
+              plaintext: null,
               personalisation: {
                 alertType: 'stop',
                 condition_text: '',
@@ -554,23 +562,24 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 thresholdUnit: 'Ml/d',
                 thresholdValue: 500
               },
-              status: 'error',
               notifyError:
                 '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: monitoring_station_name"}]}',
-              licences: recipients[0].licence_refs.split(','),
               notifyId: null,
               notifyStatus: null,
-              plaintext: null,
-              eventId: event.id
+              recipient: 'additional.contact@important.com',
+              status: 'error'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[1]).to.equal(
             {
-              recipient: null,
-              messageType: 'letter',
+              eventId: event.id,
+              licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
+              licences: recipients[1].licence_refs.split(','),
               messageRef: 'water_abstraction_alert_stop_warning',
+              messageType: 'letter',
+              plaintext: 'Dear licence contact,\r\n',
               personalisation: {
                 address_line_1: 'Mr H J Licence holder',
                 address_line_2: '1',
@@ -593,22 +602,23 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 thresholdUnit: 'Ml/d',
                 thresholdValue: 750
               },
-              status: 'pending',
               notifyError: null,
-              licences: recipients[1].licence_refs.split(','),
               notifyId: '797cfc1e-0699-4006-985d-10f4219a280a',
               notifyStatus: 'created',
-              plaintext: 'Dear licence contact,\r\n',
-              eventId: event.id
+              recipient: null,
+              status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )
 
           expect(createdNotifications[2]).to.equal(
             {
-              recipient: 'primary.user@important.com',
-              messageType: 'email',
+              eventId: event.id,
+              licenceMonitoringStationId: session.licenceMonitoringStations[2].id,
+              licences: recipients[2].licence_refs.split(','),
               messageRef: 'water_abstraction_alert_stop_warning_email',
+              messageType: 'email',
+              plaintext: 'Dear licence contact,\r\n',
               personalisation: {
                 alertType: 'stop',
                 flow_or_level: 'flow',
@@ -624,13 +634,11 @@ describe('Notices - Setup - Batch Notifications service', () => {
                 thresholdUnit: 'Ml/d',
                 thresholdValue: 1000
               },
-              status: 'pending',
               notifyError: null,
-              licences: recipients[2].licence_refs.split(','),
               notifyId: 'a5488243-9c8d-4c2b-95df-d65f7c9a5f41',
               notifyStatus: 'created',
-              plaintext: 'Dear licence contact,\r\n',
-              eventId: event.id
+              recipient: 'primary.user@important.com',
+              status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )

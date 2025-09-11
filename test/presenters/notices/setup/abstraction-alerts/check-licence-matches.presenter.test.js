@@ -49,8 +49,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.one.licence.id,
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
@@ -63,8 +63,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.two.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.two.licence.id,
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
@@ -77,8 +77,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.three.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.three.licence.id,
             licenceRef: licenceMonitoringStations.three.licence.licenceRef,
             restriction: 'Stop or reduce',
@@ -100,8 +100,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.one.licence.id,
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
@@ -126,19 +126,19 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
             it('returns the correct action', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
-              expect(result.restrictions[0].alertDate).to.equal(null)
+              expect(result.restrictions[0].alertDate).to.equal('')
             })
           })
 
           describe('when the "statusUpdatedAt" is a string', () => {
-            let statusUpdatedAt
-
             beforeEach(() => {
-              statusUpdatedAt = new Date('2025-05-12')
-
-              session.licenceMonitoringStations[0].status = 'resume'
-              session.licenceMonitoringStations[0].statusUpdatedAt = statusUpdatedAt
+              session.licenceMonitoringStations[0].latestNotification = {
+                createdAt: new Date('2025-05-12'),
+                id: 'cf2f5564-0659-4d2f-873d-99bf3c065548',
+                sendingAlertType: 'resume'
+              }
             })
+
             it('returns the correct action', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
@@ -164,8 +164,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
                   link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.two.id}`,
                   text: 'Remove'
                 },
-                alert: null,
-                alertDate: null,
+                alert: '',
+                alertDate: '',
                 licenceId: licenceMonitoringStations.two.licence.id,
                 licenceRef: licenceMonitoringStations.two.licence.licenceRef,
                 restriction: 'Stop',
@@ -178,8 +178,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
                   link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.three.id}`,
                   text: 'Remove'
                 },
-                alert: null,
-                alertDate: null,
+                alert: '',
+                alertDate: '',
                 licenceId: licenceMonitoringStations.three.licence.id,
                 licenceRef: licenceMonitoringStations.three.licence.licenceRef,
                 restriction: 'Stop or reduce',
@@ -201,8 +201,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
                 {
                   abstractionPeriod: '1 January to 31 March',
                   action: null,
-                  alert: null,
-                  alertDate: null,
+                  alert: '',
+                  alertDate: '',
                   licenceId: licenceMonitoringStations.three.licence.id,
                   licenceRef: licenceMonitoringStations.three.licence.licenceRef,
                   restriction: 'Stop or reduce',

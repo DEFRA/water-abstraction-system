@@ -165,6 +165,7 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
   return {
     createdAt,
     eventId,
+    licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: _licences(commonPersonalisation.licenceRef),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
@@ -210,6 +211,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
   return {
     createdAt,
     eventId,
+    licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: _licences(commonPersonalisation.licenceRef),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,

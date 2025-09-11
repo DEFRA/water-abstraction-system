@@ -24,9 +24,9 @@ async function go(sessionId, payload) {
 
   _applyPayload(session, payload)
 
-  const error = _validate(payload)
+  const validationResult = _validate(payload)
 
-  if (!error) {
+  if (!validationResult) {
     await _save(session)
 
     return {
@@ -37,7 +37,7 @@ async function go(sessionId, payload) {
   const pageData = InternationalPresenter.go(session)
 
   return {
-    error,
+    error: validationResult,
     ...pageData
   }
 }

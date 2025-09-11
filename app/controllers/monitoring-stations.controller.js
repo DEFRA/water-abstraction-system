@@ -5,7 +5,7 @@
  * @module MonitoringStationsController
  */
 
-const LicenceService = require('../services/monitoring-stations/licence.service.js')
+const ViewLicenceService = require('../services/monitoring-stations/view-licence.service.js')
 const ViewService = require('../services/monitoring-stations/view.service.js')
 
 async function licence(request, h) {
@@ -14,7 +14,7 @@ async function licence(request, h) {
     params: { licenceId, monitoringStationId }
   } = request
 
-  const pageData = await LicenceService.go(auth, licenceId, monitoringStationId)
+  const pageData = await ViewLicenceService.go(auth, licenceId, monitoringStationId)
 
   return h.view('monitoring-stations/licence.njk', pageData)
 }

@@ -28,6 +28,7 @@ async function go() {
       'createdAt',
       'eventId',
       'id',
+      'licenceMonitoringStationId',
       'messageRef',
       'notifyId',
       'notifyStatus',

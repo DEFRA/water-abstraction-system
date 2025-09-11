@@ -1,6 +1,7 @@
 'use strict'
 
 const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
+const { generateReferenceCode } = require('../support/helpers/notification.helper.js')
 
 /**
  * Represents a notice of type 'alert reduce'
@@ -12,7 +13,7 @@ function alertReduce() {
 
   data.alertType = 'reduce'
   data.name = 'Water abstraction alert'
-  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -28,7 +29,7 @@ function alertResume() {
 
   data.alertType = 'resume'
   data.name = 'Water abstraction alert'
-  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -44,7 +45,7 @@ function alertStop() {
 
   data.alertType = 'stop'
   data.name = 'Water abstraction alert'
-  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -60,7 +61,7 @@ function alertWarning() {
 
   data.alertType = 'warning'
   data.name = 'Water abstraction alert'
-  data.referenceCode = `WAA-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -75,7 +76,7 @@ function legacyNotification() {
   const data = _defaults()
 
   data.name = 'Hands off flow: levels warning'
-  data.referenceCode = `HOF-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('HOF')
   data.subtype = 'hof-warning'
 
   return data
@@ -107,7 +108,7 @@ function notices() {
 function returnsInvitation() {
   const data = _defaults()
 
-  data.referenceCode = `RINV-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('RINV')
 
   return data
 }
@@ -121,7 +122,7 @@ function returnsPaperForm() {
   const data = _defaults()
 
   data.name = 'Paper returns'
-  data.referenceCode = `PRTF-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('PRTF')
   data.subtype = 'paperReturnForms'
 
   return data
@@ -136,7 +137,7 @@ function returnsReminder() {
   const data = _defaults()
 
   data.name = 'Returns: reminder'
-  data.referenceCode = `RREM-${generateRandomInteger(100000, 999999)}`
+  data.referenceCode = generateReferenceCode('RREM')
   data.subtype = 'returnReminder'
 
   return data
