@@ -11,6 +11,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
@@ -33,28 +34,28 @@ async function go(sessionId, payload, yar) {
 
   const validationResult = await _validate(payload)
 
-  if (validationResult) {
-    session.licenceRef = payload.licenceRef
+  if (!validationResult) {
+    if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
+      GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
 
-    const formattedData = LicencePresenter.go(session)
+      session.checkPageVisited = false
+    }
+
+    await _save(session, payload)
 
     return {
-      activeNavBar: 'manage',
-      error: validationResult,
-      ...formattedData
+      redirectUrl: _redirect(session.checkPageVisited)
     }
   }
 
-  if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
-    GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
+  session.licenceRef = payload.licenceRef
 
-    session.checkPageVisited = false
-  }
-
-  await _save(session, payload)
+  const pageData = LicencePresenter.go(session)
 
   return {
-    redirectUrl: _redirect(session.checkPageVisited)
+    activeNavBar: 'manage',
+    error: validationResult,
+    ...pageData
   }
 }
 
@@ -95,17 +96,9 @@ async function _validate(payload) {
     dueReturns = await _dueReturnsExist(payload.licenceRef)
   }
 
-  const validation = LicenceValidator.go(payload, licenceExists, dueReturns)
+  const validationResult = LicenceValidator.go(payload, licenceExists, dueReturns)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

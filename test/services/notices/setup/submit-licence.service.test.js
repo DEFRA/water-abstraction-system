@@ -128,11 +128,22 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
-            backLink: `/manage`,
-            licenceRef: null,
-            error: {
-              text: 'Enter a licence number'
+            backLink: {
+              href: '/manage',
+              text: 'Back'
             },
+            error: {
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: 'Enter a licence number'
+                }
+              ],
+              licenceRef: {
+                text: 'Enter a licence number'
+              }
+            },
+            licenceRef: null,
             pageTitle: 'Enter a licence number'
           })
         })
@@ -140,8 +151,10 @@ describe('Notices - Setup - Submit Licence service', () => {
 
       describe('because the user has entered a licence that does not exist', () => {
         beforeEach(() => {
+          licenceRef = '1111'
+
           payload = {
-            licenceRef: '1111'
+            licenceRef
           }
         })
 
@@ -150,11 +163,26 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
-            backLink: `/manage`,
-            licenceRef: '1111',
-            error: {
-              text: 'Enter a valid licence number'
+            backLink: {
+              href: '/manage',
+              text: 'Back'
             },
+            error: {
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: 'Enter a valid licence number'
+                },
+                {
+                  href: '#licenceRef',
+                  text: `There are no returns due for licence ${licenceRef}`
+                }
+              ],
+              licenceRef: {
+                text: `There are no returns due for licence ${licenceRef}`
+              }
+            },
+            licenceRef,
             pageTitle: 'Enter a licence number'
           })
         })
@@ -162,10 +190,12 @@ describe('Notices - Setup - Submit Licence service', () => {
 
       describe('because the user has entered a licence that has no due returns', () => {
         beforeEach(async () => {
-          await LicenceHelper.add({ licenceRef: '01/145' })
+          const licence = await LicenceHelper.add()
+
+          licenceRef = licence.licenceRef
 
           payload = {
-            licenceRef: '01/145'
+            licenceRef
           }
         })
 
@@ -174,11 +204,22 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'manage',
-            backLink: `/manage`,
-            error: {
-              text: 'There are no returns due for licence 01/145'
+            backLink: {
+              href: '/manage',
+              text: 'Back'
             },
-            licenceRef: '01/145',
+            error: {
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: `There are no returns due for licence ${licenceRef}`
+                }
+              ],
+              licenceRef: {
+                text: `There are no returns due for licence ${licenceRef}`
+              }
+            },
+            licenceRef,
             pageTitle: 'Enter a licence number'
           })
         })
