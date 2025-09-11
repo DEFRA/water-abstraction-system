@@ -154,4 +154,22 @@ describe('Notices - Index Notices presenter', () => {
       })
     })
   })
+
+  describe('the "tableCaption" property', () => {
+    describe('when there is only one page of results', () => {
+      it('returns the "tableCaption" without page info', () => {
+        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+
+        expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      it('returns the "tableCaption" with page info', () => {
+        const result = IndexNoticesPresenter.go(notices, 50, selectedPage, numberOfPages)
+
+        expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)
+      })
+    })
+  })
 })
