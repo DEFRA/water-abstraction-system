@@ -6,23 +6,19 @@
 {% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    {{ govukInput({
+      classes: "govuk-!-width-two-thirds",
+      label: {
+        text: pageTitle,
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      value: licenceRef,
+      id: "licenceRef",
+      name: "licenceRef",
+      errorMessage: error.licenceRef
+    }) }}
 
-        {{ govukInput({
-          label: {
-            text: pageTitle,
-            classes: "govuk-label--l",
-            isPageHeading: true
-          },
-          value: licenceRef,
-          id: "licenceRef",
-          name: "licenceRef",
-          errorMessage: error.licenceRef
-        }) }}
-
-        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-      </div>
-    </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
