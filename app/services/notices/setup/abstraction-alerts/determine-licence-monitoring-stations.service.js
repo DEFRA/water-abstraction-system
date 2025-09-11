@@ -28,29 +28,19 @@ function _abstractionPeriod(licenceMonitoringStation) {
   const licenceVersionPurpose = licenceMonitoringStation?.licenceVersionPurposeCondition?.licenceVersionPurpose
 
   if (licenceVersionPurpose) {
-    const {
-      abstractionPeriodEndDay,
-      abstractionPeriodEndMonth,
-      abstractionPeriodStartDay,
-      abstractionPeriodStartMonth
-    } = licenceVersionPurpose
-
     return {
-      abstractionPeriodEndDay,
-      abstractionPeriodEndMonth,
-      abstractionPeriodStartDay,
-      abstractionPeriodStartMonth
+      abstractionPeriodEndDay: licenceVersionPurpose.abstractionPeriodEndDay,
+      abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
+      abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth
     }
   }
 
-  const { abstractionPeriodEndDay, abstractionPeriodEndMonth, abstractionPeriodStartDay, abstractionPeriodStartMonth } =
-    licenceMonitoringStation
-
   return {
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth,
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth
+    abstractionPeriodEndDay: licenceMonitoringStation.abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: licenceMonitoringStation.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: licenceMonitoringStation.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: licenceMonitoringStation.abstractionPeriodStartMonth
   }
 }
 
