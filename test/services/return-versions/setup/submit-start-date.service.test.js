@@ -359,7 +359,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             anotherStartDateDay: null,
             anotherStartDateMonth: null,
             anotherStartDateYear: null,
-            backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+            backLink: {
+              href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceVersionStartDate: '1 January 2023',
@@ -374,9 +377,13 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Select the start date for the requirements for returns',
-            radioFormElement: { text: 'Select the start date for the requirements for returns' },
-            dateInputFormElement: null
+            errorList: [
+              {
+                href: '#start-date-options',
+                text: 'Select the start date for the requirements for returns'
+              }
+            ],
+            'start-date-options': { text: 'Select the start date for the requirements for returns' }
           })
         })
       })
@@ -395,9 +402,13 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Enter a real start date',
-            radioFormElement: null,
-            dateInputFormElement: { text: 'Enter a real start date' }
+            errorList: [
+              {
+                href: '#fullDate',
+                text: 'Enter a real start date'
+              }
+            ],
+            fullDate: { text: 'Enter a real start date' }
           })
         })
 

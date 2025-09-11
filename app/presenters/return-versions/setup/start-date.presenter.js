@@ -34,16 +34,22 @@ function go(session) {
 }
 
 function _backLink(session) {
+  let backLink
   const { checkPageVisited, id, licence } = session
 
   if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+    backLink = `/system/return-versions/setup/${id}/check`
   }
 
   if (FeatureFlagsConfig.enableSystemLicenceView) {
-    return `/system/licences/${licence.id}/set-up`
+    backLink = `/system/licences/${licence.id}/set-up`
   } else {
-    return `/licences/${licence.id}#charge`
+    backLink = `/licences/${licence.id}#charge`
+  }
+
+  return {
+    href: backLink,
+    text: 'Back'
   }
 }
 

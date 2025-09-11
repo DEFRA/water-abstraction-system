@@ -6,6 +6,8 @@
  */
 
 const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const DetermineRelevantLicenceVersionService = require('./determine-relevant-licence-version.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -164,17 +166,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload, licenceStartDate, licenceEndDate) {
   const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message, type } = validation.error.details[0]
-
-  return {
-    message,
-    radioFormElement: type === 'any.required' ? { text: message } : null,
-    dateInputFormElement: type === 'any.required' ? null : { text: message }
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {
