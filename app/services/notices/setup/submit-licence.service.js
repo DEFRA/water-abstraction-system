@@ -5,7 +5,6 @@
  * @module SubmitLicenceService
  */
 
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
