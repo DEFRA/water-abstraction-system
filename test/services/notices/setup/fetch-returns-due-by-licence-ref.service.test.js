@@ -29,6 +29,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
       licenceRef,
       metadata: {
         description: 'Water park',
+        isCurrent: 'true',
         nald: {
           areaCode: 'SE',
           regionCode: `${region.naldRegionId}`
