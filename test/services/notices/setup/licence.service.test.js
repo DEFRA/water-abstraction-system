@@ -16,8 +16,8 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const LicenceService = require('../../../../app/services/notices/setup/licence.service.js')
 
 describe('Notices - Setup - Licence service', () => {
-  let session
   let licenceRef
+  let session
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
