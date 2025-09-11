@@ -31,38 +31,23 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
-    backLink: _backLink(session),
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
-    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
+    readyToSend: _readyToSend(recipients, noticeType),
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
     warning: _warning(formattedRecipients)
   }
 }
 
-/**
- * Check pages should not have backlinks.
- *
- * This page has them as some journeys do not have a prior check page.
- *
- * The ad hoc journey has a check notice type and so does not require a backlink.
- *
- * @private
- */
-function _backLink(session) {
-  const { id, journey } = session
-
-  if (journey === 'adhoc' || journey === 'alerts') {
-    return null
+function _readyToSend(recipients, noticeType) {
+  if (recipients.length === 0) {
+    return 'No recipients with due returns'
   }
 
-  return {
-    href: `/system/notices/setup/${id}/returns-period`,
-    text: 'Back'
-  }
+  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
