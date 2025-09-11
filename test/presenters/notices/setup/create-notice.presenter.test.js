@@ -158,7 +158,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       })
 
       describe('the "returnCycle" property', () => {
-        describe('when there are pre determined return periods', () => {
+        describe('when there are "determinedReturnsPeriod"', () => {
           beforeEach(() => {
             session.determinedReturnsPeriod = {
               dueDate: new Date(`2025-07-28`),
@@ -180,7 +180,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           })
         })
 
-        describe('when there are NO pre determined return periods', () => {
+        describe('when there are NO "determinedReturnsPeriod"', () => {
           beforeEach(() => {
             delete session.determinedReturnsPeriod
           })
