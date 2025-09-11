@@ -27,12 +27,18 @@ function go(session) {
 
 function _backLink(session) {
   const { checkPageVisited, id } = session
+  let backLink
 
   if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+    backLink = `/system/return-versions/setup/${id}/check`
+  } else {
+    backLink = `/system/return-versions/setup/${id}/start-date`
   }
 
-  return `/system/return-versions/setup/${id}/start-date`
+  return {
+    href: backLink,
+    text: 'Back'
+  }
 }
 
 module.exports = {

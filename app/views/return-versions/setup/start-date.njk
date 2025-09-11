@@ -8,7 +8,7 @@
   {{ govukDateInput({
     id: 'other-start-date',
     namePrefix: 'start-date',
-    errorMessage: error.dateInputFormElement,
+    errorMessage: error.fullDate,
     fieldset: {
       legend: {
         classes: 'govuk-fieldset__legend--m',
@@ -41,7 +41,7 @@
 
     {{ govukRadios({
       name: 'start-date-options',
-      errorMessage: error.radioFormElement,
+      errorMessage: error['start-date-options'],
       fieldset: {
         legend: {
           html: pageHeadingHtml
