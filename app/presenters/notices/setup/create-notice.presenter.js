@@ -7,6 +7,7 @@
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { futureDueDate } = require('../base.presenter.js')
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -62,12 +63,31 @@ function _licences(recipients) {
   return JSON.stringify(formattedRecipients)
 }
 
+/**
+ * When the user has not selected a "returnsPeriod", we only require the due date.
+ *
+ * This is set in the future depending on the message type we are sending (letter or an email).
+ *
+ * As this is for all the notices and not an individual notice, we do not set it (but it will default to 28 days in
+ * the future)
+ *
+ * When a "returnsPeriod" is provided, then we format accordingly.
+ * @private
+ */
 function _returnCycle(returnsPeriod) {
-  return {
-    dueDate: formatDateObjectToISO(new Date(returnsPeriod.dueDate)),
-    endDate: formatDateObjectToISO(new Date(returnsPeriod.endDate)),
-    isSummer: returnsPeriod.summer === 'true',
-    startDate: formatDateObjectToISO(new Date(returnsPeriod.startDate))
+  if (returnsPeriod) {
+    return {
+      dueDate: formatDateObjectToISO(new Date(returnsPeriod.dueDate)),
+      endDate: formatDateObjectToISO(new Date(returnsPeriod.endDate)),
+      isSummer: returnsPeriod.summer === 'true',
+      startDate: formatDateObjectToISO(new Date(returnsPeriod.startDate))
+    }
+  } else {
+    const dueDate = futureDueDate()
+
+    return {
+      dueDate: formatDateObjectToISO(dueDate)
+    }
   }
 }
 

@@ -553,6 +553,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
       beforeEach(() => {
         session.journey = 'adhoc'
         session.noticeType = 'invitations'
+
+        delete session.determinedReturnsPeriod
       })
 
       describe('when the notifications is an email', () => {
@@ -572,9 +574,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
                 reference: referenceCode,
@@ -600,9 +600,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '29 January 2025'
                 },
                 recipient: 'returns.agent@important.com',
                 reference: referenceCode,
@@ -628,15 +626,25 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
                 reference: referenceCode,
                 templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
               }
             ])
+          })
+        })
+
+        describe('the "returnDueDate" property', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.primaryUser]
+          })
+
+          it('should be 28 days past the current date', () => {
+            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result.personalisation.returnDueDate).to.equal('29 January 2025')
           })
         })
       })
@@ -665,9 +673,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Surrey',
                   address_line_6: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '30 January 2025'
                 },
                 reference: referenceCode,
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
@@ -699,9 +705,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Little Whinging',
                   address_line_6: 'Surrey',
                   name: 'Mr H J Returns to',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '30 January 2025'
                 },
                 reference: referenceCode,
                 templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
@@ -733,14 +737,24 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Surrey',
                   address_line_6: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
+                  returnDueDate: '30 January 2025'
                 },
                 reference: referenceCode,
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
               }
             ])
+          })
+        })
+
+        describe('the "returnDueDate" property', () => {
+          beforeEach(() => {
+            testRecipients = [recipients.licenceHolder]
+          })
+
+          it('should be 29 days past the current date', () => {
+            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
+
+            expect(result.personalisation.returnDueDate).to.equal('30 January 2025')
           })
         })
       })

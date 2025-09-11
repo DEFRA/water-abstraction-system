@@ -57,20 +57,6 @@ describe('Notices - Setup - Submit Licence service', () => {
         expect(refreshedSession.licenceRef).to.equal(licenceRef)
       })
 
-      it('saves the "determinedReturnsPeriod" with the "dueDate" set 28 days from "today"', async () => {
-        await SubmitLicenceService.go(session.id, payload, yarStub)
-
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.determinedReturnsPeriod).to.equal({
-          dueDate: '2020-07-04T00:00:00.000Z',
-          endDate: '2021-03-31T00:00:00.000Z',
-          name: 'allYear',
-          startDate: '2020-04-01T00:00:00.000Z',
-          summer: 'false'
-        })
-      })
-
       it('returns the redirect url', async () => {
         const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 

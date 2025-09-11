@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,6 +15,16 @@ const RecipientsFixture = require('../../fixtures/recipients.fixtures.js')
 const BasePresenter = require('../../../app/presenters/notices/base.presenter.js')
 
 describe('Notices - Base presenter', () => {
+  let clock
+
+  beforeEach(() => {
+    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+  })
+
+  afterEach(() => {
+    clock.restore()
+  })
+
   describe('#addressToCSV()', () => {
     let recipient
 
@@ -67,6 +78,38 @@ describe('Notices - Base presenter', () => {
 
         expect(result.length).to.equal(7)
         expect(result).to.equal(['', '', '', '', '', '', ''])
+      })
+    })
+  })
+
+  describe('#futureDueDate()', () => {
+    describe('when the "messageType" is "letter', () => {
+      it('should set the date to 29 days in the future', () => {
+        const result = BasePresenter.futureDueDate('letter')
+
+        const expectedDate = new Date(`2025-01-30`)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the "messageType" is "email"', () => {
+      it('should set the date to 28 days in the future', () => {
+        const result = BasePresenter.futureDueDate('email')
+
+        const expectedDate = new Date(`2025-01-29`)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when no "messageType" is provided', () => {
+      it('should set the date to 28 days in the future', () => {
+        const result = BasePresenter.futureDueDate()
+
+        const expectedDate = new Date(`2025-01-29`)
+
+        expect(result).to.equal(expectedDate)
       })
     })
   })

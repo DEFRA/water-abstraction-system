@@ -7,6 +7,7 @@
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { futureDueDate } = require('../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
@@ -112,7 +113,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId, notic
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
-      ..._returnsPeriod(returnsPeriod)
+      ..._returnsPeriods(returnsPeriod, messageType)
     },
     recipient: recipient.email
   }
@@ -166,7 +167,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noti
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ...address,
-      ..._returnsPeriod(returnsPeriod),
+      ..._returnsPeriods(returnsPeriod, messageType),
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     }
@@ -186,14 +187,6 @@ function _letterTemplate(contactType, journey, noticeType) {
   return notifyTemplates[journey][noticeType].licenceHolderLetter
 }
 
-function _returnsPeriod(returnsPeriod) {
-  return {
-    periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
-    periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
-    returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
-  }
-}
-
 /**
  * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
  *
@@ -205,6 +198,31 @@ function _licences(licenceRefs) {
   const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
 
   return JSON.stringify(formattedRecipients)
+}
+
+/**
+ * When the user has not selected a return period, we only require the due date.
+ *
+ * This is set in the future depending on the message type we are sending (letter or an email).
+ *
+ * When a "returnsPeriod" is provided, then we format accordingly.
+ *
+ * @private
+ */
+function _returnsPeriods(returnsPeriod, messageType) {
+  if (returnsPeriod) {
+    return {
+      periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
+      periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
+      returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
+    }
+  } else {
+    const dueDate = futureDueDate(messageType)
+
+    return {
+      returnDueDate: formatLongDate(dueDate)
+    }
+  }
 }
 
 /**
