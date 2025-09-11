@@ -24,25 +24,44 @@ async function go(id) {
   }
 }
 
-function _licenceMonitoringStations(licenceMonitoringStations) {
-  return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const { licenceVersionPurposeCondition, ...rest } = licenceMonitoringStation
+function _abstractionPeriod(licenceMonitoringStation) {
+  const licenceVersionPurpose = licenceMonitoringStation?.licenceVersionPurposeCondition?.licenceVersionPurpose
 
+  if (licenceVersionPurpose) {
     return {
-      ...rest,
-      ..._licenceVersionPurpose(licenceVersionPurposeCondition),
-      notes: _notes(licenceVersionPurposeCondition),
-      thresholdGroup: _thresholdGroup(rest.measureType, rest.thresholdValue, rest.thresholdUnit)
+      abstractionPeriodEndDay: licenceVersionPurpose.abstractionPeriodEndDay,
+      abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
+      abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth
     }
-  })
+  }
+
+  return {
+    abstractionPeriodEndDay: licenceMonitoringStation.abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: licenceMonitoringStation.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: licenceMonitoringStation.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: licenceMonitoringStation.abstractionPeriodStartMonth
+  }
 }
 
-function _licenceVersionPurpose(licenceVersionPurposeCondition) {
-  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
-    return licenceVersionPurposeCondition.licenceVersionPurpose
-  } else {
-    return {}
-  }
+function _licenceMonitoringStations(licenceMonitoringStations) {
+  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+    const { id, latestNotification, licence, measureType, restrictionType, thresholdUnit, thresholdValue } =
+      licenceMonitoringStation
+
+    return {
+      id,
+      latestNotification,
+      licence,
+      measureType,
+      restrictionType,
+      thresholdUnit,
+      thresholdValue,
+      ..._abstractionPeriod(licenceMonitoringStation),
+      notes: _notes(licenceMonitoringStation),
+      thresholdGroup: _thresholdGroup(measureType, thresholdValue, thresholdUnit)
+    }
+  })
 }
 
 /**
@@ -59,10 +78,10 @@ function _licenceVersionPurpose(licenceVersionPurposeCondition) {
  *
  * @private
  */
-function _notes(licenceVersionPurposeCondition) {
-  return licenceVersionPurposeCondition?.notes && licenceVersionPurposeCondition?.notes.length > 0
-    ? licenceVersionPurposeCondition.notes
-    : null
+function _notes(licenceMonitoringStation) {
+  const { licenceVersionPurposeCondition } = licenceMonitoringStation
+
+  return licenceVersionPurposeCondition?.notes.length > 0 ? licenceVersionPurposeCondition.notes : null
 }
 
 /**
@@ -72,7 +91,6 @@ function _notes(licenceVersionPurposeCondition) {
  * These are not unique and can/ will occur multiple times. When a threshold/s is selected by the user we use this key
  * to find all the relevant licence monitoring stations data.
  *
- * @returns {string}
  * @private
  */
 function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
