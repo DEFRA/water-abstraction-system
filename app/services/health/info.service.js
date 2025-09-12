@@ -37,6 +37,7 @@ async function go() {
   const legacyAppData = await _legacyAppData()
   const notifyData = await _notifyData()
   const redisConnectivityData = await _redisConnectivityData()
+  const respData = await _respData()
   const virusScannerData = await _virusScannerData()
 
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
@@ -49,6 +50,7 @@ async function go() {
     gotenbergData,
     notifyData,
     redisConnectivityData,
+    respData,
     virusScannerData
   }
 }
@@ -152,6 +154,17 @@ async function _redisConnectivityData() {
       await redis.disconnect()
     }
   }
+}
+
+async function _respData() {
+  // const result = await ChargingModuleViewHealthRequest.send()
+
+  // if (result.succeeded) {
+  //   return result.response.info.dockerTag
+  // }
+
+  // return _parseFailedRequestResult(result)
+  return 'Fake it till you make it!'
 }
 
 async function _virusScannerData() {
