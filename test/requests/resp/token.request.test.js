@@ -14,7 +14,7 @@ const BaseRequest = require('../../../app/requests/base.request.js')
 // Thing under test
 const TokenRequest = require('../../../app/requests/resp/token.request.js')
 
-describe.only('ReSP API Token request', () => {
+describe('ReSP API Token request', () => {
   afterEach(() => {
     Sinon.restore()
   })
