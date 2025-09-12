@@ -91,6 +91,34 @@ describe('Notices - Base presenter', () => {
 
         expect(result).to.equal(expectedDate)
       })
+
+      describe('when calculating across month boundaries', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+        })
+
+        it('should correctly calculate date across month boundary', () => {
+          const result = BasePresenter.futureDueDate('letter')
+
+          const expectedDate = new Date(`2025-02-13`)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('when calculating across year boundaries', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+        })
+
+        it('should correctly calculate date across year boundary', () => {
+          const result = BasePresenter.futureDueDate('letter')
+
+          const expectedDate = new Date(`2025-01-13`)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
     })
 
     describe('when the "messageType" is "email"', () => {
@@ -100,6 +128,34 @@ describe('Notices - Base presenter', () => {
         const expectedDate = new Date(`2025-01-29`)
 
         expect(result).to.equal(expectedDate)
+      })
+
+      describe('when calculating across month boundaries', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+        })
+
+        it('should correctly calculate date across month boundary', () => {
+          const result = BasePresenter.futureDueDate('email')
+
+          const expectedDate = new Date(`2025-02-12`)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('when calculating across year boundaries', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+        })
+
+        it('should correctly calculate date across year boundary', () => {
+          const result = BasePresenter.futureDueDate('email')
+
+          const expectedDate = new Date(`2025-01-12`)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
     })
 
