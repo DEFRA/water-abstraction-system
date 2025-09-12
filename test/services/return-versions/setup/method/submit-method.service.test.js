@@ -145,7 +145,10 @@ describe('Return Versions - Setup - Submit Method service', () => {
             activeNavBar: 'search',
             pageTitle: 'How do you want to set up the requirements for returns?',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/reason`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/reason`,
+              text: 'Back'
+            },
             displayCopyExisting: true,
             licenceRef: '01/ABC',
             method: null
@@ -159,7 +162,13 @@ describe('Return Versions - Setup - Submit Method service', () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select how you want to set up the requirements for returns'
+            errorList: [
+              {
+                href: '#method',
+                text: 'Select how you want to set up the requirements for returns'
+              }
+            ],
+            method: { text: 'Select how you want to set up the requirements for returns' }
           })
         })
       })
