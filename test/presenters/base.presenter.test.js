@@ -152,10 +152,44 @@ describe('Base presenter', () => {
   })
 
   describe('#formatLongDate()', () => {
-    it('correctly formats the given date, for example, 12 September 2021', async () => {
-      const result = BasePresenter.formatLongDate(new Date('2021-09-12T14:41:10.511Z'))
+    describe('when a valid "Date" is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = BasePresenter.formatLongDate(new Date('2021-09-12T14:41:10.511Z'))
 
-      expect(result).to.equal('12 September 2021')
+        expect(result).to.equal('12 September 2021')
+      })
+    })
+
+    describe('when a valid "String" date is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = BasePresenter.formatLongDate('2021-09-12')
+
+        expect(result).to.equal('12 September 2021')
+      })
+    })
+
+    describe('when an invalid "Date" is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const result = BasePresenter.formatLongDate(new Date('2021-09-50'))
+
+        expect(result).to.equal('Invalid Date')
+      })
+    })
+
+    describe('when an invalid "String" date is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const result = BasePresenter.formatLongDate('2021-09-50')
+
+        expect(result).to.equal('Invalid Date')
+      })
+    })
+
+    describe('when a falsey value date is provided', () => {
+      it('correctly returns null', async () => {
+        const result = BasePresenter.formatLongDate(undefined)
+
+        expect(result).to.be.null()
+      })
     })
   })
 

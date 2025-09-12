@@ -38,6 +38,29 @@ function addressToCSV(address) {
   ]
 }
 
+/**
+ * Provides a date in the future for a due date.
+ *
+ * This is determined by the business to be 28 days from 'today'.
+ *
+ * When the 'messageType' is a 'letter', then we allow an additional day.
+ *
+ * @param {string} [messageType] - Should be either 'letter' or 'email'
+ *
+ * @returns {Date} - A date either 28 or 29 days from the 'today'
+ */
+function futureDueDate(messageType) {
+  const dueDate = new Date()
+  const twentyEightDays = 28 // The days to add when sending an email
+  const twentyNineDays = 29 // The days to add when sending a letter
+
+  const daysToAdd = messageType === 'letter' ? twentyNineDays : twentyEightDays
+  dueDate.setDate(dueDate.getDate() + daysToAdd)
+
+  return dueDate
+}
+
 module.exports = {
-  addressToCSV
+  addressToCSV,
+  futureDueDate
 }

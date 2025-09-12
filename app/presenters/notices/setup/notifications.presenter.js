@@ -7,6 +7,7 @@
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { futureDueDate } = require('../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
@@ -112,7 +113,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId, notic
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
-      ..._returnsPeriod(returnsPeriod)
+      ..._returnsPeriods(returnsPeriod, messageType)
     },
     recipient: recipient.email
   }
@@ -166,7 +167,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noti
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ...address,
-      ..._returnsPeriod(returnsPeriod),
+      ..._returnsPeriods(returnsPeriod, messageType),
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     }
@@ -186,14 +187,6 @@ function _letterTemplate(contactType, journey, noticeType) {
   return notifyTemplates[journey][noticeType].licenceHolderLetter
 }
 
-function _returnsPeriod(returnsPeriod) {
-  return {
-    periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
-    periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
-    returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
-  }
-}
-
 /**
  * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
  *
@@ -205,6 +198,28 @@ function _licences(licenceRefs) {
   const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
 
   return JSON.stringify(formattedRecipients)
+}
+
+/**
+ * Determines the period start, end and due dates for an invitation and reminder notice
+ *
+ * On the standard returns invitation and reminder journeys, all 3 dates are determined. What period the user selects
+ * will determine the actual dates used.
+ *
+ * For ad-hoc invitations we don't care about the start and end dates. But we do need to calculate a due date. This is
+ * set in the future depending on the message type we are sending (letter or an email).
+ *
+ * > NOTE - Due date will soon be calculated for _all_ notices. But that dynamic due dates is still being refined and
+ * > developed.
+ *
+ * @private
+ */
+function _returnsPeriods(returnsPeriod, messageType) {
+  return {
+    periodEndDate: formatLongDate(returnsPeriod?.endDate),
+    periodStartDate: formatLongDate(returnsPeriod?.startDate),
+    returnDueDate: formatLongDate(returnsPeriod?.dueDate) ?? formatLongDate(futureDueDate(messageType))
+  }
 }
 
 /**
