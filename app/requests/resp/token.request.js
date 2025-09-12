@@ -5,7 +5,7 @@
  * @module TokenRequest
  */
 
-const querystring = require('querystring');
+const querystring = require('querystring')
 
 const BaseRequest = require('../base.request.js')
 
@@ -41,7 +41,7 @@ function _options() {
   return {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      'accept': 'application/json'
+      accept: 'application/json'
     },
     data
   }
