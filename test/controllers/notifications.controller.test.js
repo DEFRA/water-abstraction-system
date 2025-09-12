@@ -8,6 +8,8 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+const NotifyConfig = require('../../config/notify.config.js')
+
 // Things we need to stub
 const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
 
@@ -15,9 +17,8 @@ const ViewNotificationService = require('../../app/services/notifications/view-n
 const { init } = require('../../app/server.js')
 
 describe('Notifications controller', () => {
-  const basePath = '/notifications'
-
-  let getOptions
+  let notifierStub
+  let options
   let server
 
   // Create server before running the tests
@@ -32,6 +33,8 @@ describe('Notifications controller', () => {
 
     // We silence sending a notification to our Errbit instance using Airbrake
     Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -39,43 +42,83 @@ describe('Notifications controller', () => {
   })
 
   describe('Notifications controller', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        getOptions = {
-          method: 'GET',
-          url: basePath,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
+    describe('/notifications/{notificationId}', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          options = {
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
           }
-        }
-      })
+        })
 
-      describe('/notifications/{notificationId}', () => {
-        describe('GET', () => {
+        describe('when a request is valid', () => {
           beforeEach(async () => {
-            getOptions = {
-              method: 'GET',
-              url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
-              auth: {
-                strategy: 'session',
-                credentials: { scope: ['returns'] }
-              }
+            Sinon.stub(ViewNotificationService, 'go').resolves(_viewNotification())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Licence 01/117')
+            expect(response.payload).to.contain('Hands off flow: levels warning')
+          })
+        })
+      })
+    })
+
+    describe('/notifications/callbacks/letters', () => {
+      describe('POST', () => {
+        describe('when the request has valid authorization', () => {
+          beforeEach(() => {
+            options = {
+              headers: {
+                authorization: `Bearer ${NotifyConfig.callbackToken}`
+              },
+              method: 'POST',
+              payload: {
+                notification_id: '506c20c7-7741-4c95-85c1-de3fe87314f3',
+                reference: 'reference'
+              },
+              url: '/notifications/callbacks/letters'
             }
           })
 
-          describe('when a request is valid', () => {
-            beforeEach(async () => {
-              Sinon.stub(ViewNotificationService, 'go').resolves(_viewNotification())
-            })
+          it('returns a 204 response', async () => {
+            const response = await server.inject(options)
 
-            it('returns the page successfully', async () => {
-              const response = await server.inject(getOptions)
+            const logDataArg = notifierStub.omg.args[0][1]
 
-              expect(response.statusCode).to.equal(200)
-              expect(response.payload).to.contain('Licence 01/117')
-              expect(response.payload).to.contain('Hands off flow: levels warning')
-            })
+            expect(response.statusCode).to.equal(204)
+            expect(notifierStub.omg.calledWith('Return letter callback triggered')).to.be.true()
+            expect(logDataArg.notificationId).to.equal('506c20c7-7741-4c95-85c1-de3fe87314f3')
+            expect(logDataArg.reference).to.equal('reference')
+          })
+        })
+
+        describe('when the request has an invalid authorization', () => {
+          beforeEach(() => {
+            options = {
+              headers: {
+                authorization: 'Bearer wrong'
+              },
+              method: 'POST',
+              payload: {
+                notification_id: '506c20c7-7741-4c95-85c1-de3fe87314f3',
+                reference: 'reference'
+              },
+              url: '/notifications/callbacks/letters'
+            }
+          })
+
+          it('returns a 404 response', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(404)
           })
         })
       })

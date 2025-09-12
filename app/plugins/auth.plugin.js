@@ -5,9 +5,12 @@
  * @module AuthPlugin
  */
 
+const Boom = require('@hapi/boom')
+
 const AuthService = require('../services/plugins/auth.service.js')
 
 const AuthenticationConfig = require('../../config/authentication.config.js')
+const NotifyConfig = require('../../config/notify.config.js')
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -50,6 +53,22 @@ const AuthPlugin = {
         return AuthService.go(session.userId)
       }
     })
+
+    server.auth.strategy('callback', 'bearer-access-token', {
+      allowQueryToken: false, // only accept header by default
+      unauthorized: () => {
+        return Boom.notFound()
+      },
+      validate: async (_request, token) => {
+        const isValid = token === NotifyConfig.callbackToken
+
+        return {
+          isValid,
+          credentials: isValid ? { token } : null
+        }
+      }
+    })
+
     // NOTE: This defaults Hapi to authenticate all routes. If a route, for example `/status`, does not require
     // authentication `options.auth: false` should be set in the route's config.
     server.auth.default('session')

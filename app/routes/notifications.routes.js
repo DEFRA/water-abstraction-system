@@ -9,6 +9,20 @@ const routes = [
     options: {
       handler: NotificationsController.view
     }
+  },
+  {
+    method: 'POST',
+    path: '/notifications/callbacks/letters',
+    options: {
+      app: {
+        plainOutput: true
+      },
+      auth: { strategy: 'callback' },
+      handler: NotificationsController.returnedLetter,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 

@@ -1,6 +1,7 @@
 'use strict'
 
 const Hapi = require('@hapi/hapi')
+const Bearer = require('hapi-auth-bearer-token')
 
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
 const AuthPlugin = require('./plugins/auth.plugin.js')
@@ -27,6 +28,7 @@ const registerPlugins = async (server) => {
   await server.register(require('@hapi/inert'))
   await server.register(require('@hapi/cookie'))
   await server.register(YarPlugin)
+  await server.register(Bearer)
   await server.register(AuthPlugin)
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin())
