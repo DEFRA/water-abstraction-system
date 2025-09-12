@@ -201,27 +201,26 @@ function _licences(licenceRefs) {
 }
 
 /**
- * When the user has not selected a return period, we only require the due date.
+ * Determines the period start, end and due dates for a invitation and reminder notice
  *
- * This is set in the future depending on the message type we are sending (letter or an email).
+ * On the standard returns invitation and reminder journeys, all 3 dates are determined. What period the user selects
+ * will determine the actual dates used.
  *
- * When a "returnsPeriod" is provided, then we format accordingly.
+ * For ad-hoc invitations we don't care about the start and end dates. But we do need to calculate a due date. This is
+ * set in the future depending on the message type we are sending (letter or an email).
+ *
+ * > NOTE - Due date will soon be calculated for _all_ notices. But that dynamic due dates is still being refined and
+ * > developed.
  *
  * @private
  */
 function _returnsPeriods(returnsPeriod, messageType) {
-  if (returnsPeriod) {
-    return {
-      periodEndDate: formatLongDate(new Date(returnsPeriod.endDate)),
-      periodStartDate: formatLongDate(new Date(returnsPeriod.startDate)),
-      returnDueDate: formatLongDate(new Date(returnsPeriod.dueDate))
-    }
-  } else {
-    const dueDate = futureDueDate(messageType)
+  const { dueDate, endDate, startDate} = returnsPeriod
 
-    return {
-      returnDueDate: formatLongDate(dueDate)
-    }
+  return {
+    periodEndDate: endDate ? formatLongDate(new Date(endDate)) : null,
+    periodStartDate: startDate ? formatLongDate(new Date(startDate)) : null,
+    returnDueDate: dueDate ? formatLongDate(new Date(dueDate)) : futureDueDate(messageType)
   }
 }
 
