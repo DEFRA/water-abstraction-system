@@ -64,6 +64,8 @@ module.exports = {
     'HapiServerMethods',
     // Caused by eslint-plugin-import-x which is a dependence of Neostandard we rely on to ensure the team adds the .js
     // extension to files when requiring them
-    '__rewriteRelativeImportExtension'
+    '__rewriteRelativeImportExtension',
+    // Caused by @aws-sdk/client-s3 v3.887.0
+    'awslambda'
   ].join(',')
 }
