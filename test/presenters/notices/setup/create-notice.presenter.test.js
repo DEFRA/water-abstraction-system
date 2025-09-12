@@ -185,11 +185,13 @@ describe('Notices - Setup - Create Notice presenter', () => {
             delete session.determinedReturnsPeriod
           })
 
-          it('correctly returns the return cycle, with only the due date', () => {
+          it('correctly returns the return cycle', () => {
             const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
             expect(result.metadata.returnCycle).to.equal({
-              dueDate: '2025-01-29'
+              dueDate: '2025-01-29',
+              endDate: null,
+              startDate: null
             })
           })
         })

@@ -574,6 +574,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
+                  periodEndDate: null,
+                  periodStartDate: null,
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
@@ -600,6 +602,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
+                  periodEndDate: null,
+                  periodStartDate: null,
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'returns.agent@important.com',
@@ -626,6 +630,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
+                  periodEndDate: null,
+                  periodStartDate: null,
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
@@ -673,7 +679,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Surrey',
                   address_line_6: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
-                  returnDueDate: '30 January 2025'
+                  returnDueDate: '30 January 2025',
+                  periodEndDate: null,
+                  periodStartDate: null
                 },
                 reference: referenceCode,
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
@@ -705,7 +713,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Little Whinging',
                   address_line_6: 'Surrey',
                   name: 'Mr H J Returns to',
-                  returnDueDate: '30 January 2025'
+                  returnDueDate: '30 January 2025',
+                  periodEndDate: null,
+                  periodStartDate: null
                 },
                 reference: referenceCode,
                 templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
@@ -737,6 +747,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   address_line_5: 'Surrey',
                   address_line_6: 'WD25 7LR',
                   name: 'Mr H J Licence holder',
+                  periodEndDate: null,
+                  periodStartDate: null,
                   returnDueDate: '30 January 2025'
                 },
                 reference: referenceCode,

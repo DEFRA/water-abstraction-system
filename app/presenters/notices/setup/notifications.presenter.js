@@ -201,7 +201,7 @@ function _licences(licenceRefs) {
 }
 
 /**
- * Determines the period start, end and due dates for a invitation and reminder notice
+ * Determines the period start, end and due dates for an invitation and reminder notice
  *
  * On the standard returns invitation and reminder journeys, all 3 dates are determined. What period the user selects
  * will determine the actual dates used.
@@ -215,12 +215,12 @@ function _licences(licenceRefs) {
  * @private
  */
 function _returnsPeriods(returnsPeriod, messageType) {
-  const { dueDate, endDate, startDate} = returnsPeriod
-
   return {
-    periodEndDate: endDate ? formatLongDate(new Date(endDate)) : null,
-    periodStartDate: startDate ? formatLongDate(new Date(startDate)) : null,
-    returnDueDate: dueDate ? formatLongDate(new Date(dueDate)) : futureDueDate(messageType)
+    periodEndDate: returnsPeriod?.endDate ? formatLongDate(new Date(returnsPeriod.endDate)) : null,
+    periodStartDate: returnsPeriod?.startDate ? formatLongDate(new Date(returnsPeriod.startDate)) : null,
+    returnDueDate: returnsPeriod?.dueDate
+      ? formatLongDate(new Date(returnsPeriod.dueDate))
+      : formatLongDate(futureDueDate(messageType))
   }
 }
 
