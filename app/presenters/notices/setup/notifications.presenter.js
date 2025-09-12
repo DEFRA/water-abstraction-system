@@ -216,11 +216,9 @@ function _licences(licenceRefs) {
  */
 function _returnsPeriods(returnsPeriod, messageType) {
   return {
-    periodEndDate: returnsPeriod?.endDate ? formatLongDate(new Date(returnsPeriod.endDate)) : null,
-    periodStartDate: returnsPeriod?.startDate ? formatLongDate(new Date(returnsPeriod.startDate)) : null,
-    returnDueDate: returnsPeriod?.dueDate
-      ? formatLongDate(new Date(returnsPeriod.dueDate))
-      : formatLongDate(futureDueDate(messageType))
+    periodEndDate: formatLongDate(returnsPeriod?.endDate),
+    periodStartDate: formatLongDate(returnsPeriod?.startDate),
+    returnDueDate: formatLongDate(returnsPeriod?.dueDate) ?? formatLongDate(futureDueDate(messageType))
   }
 }
 

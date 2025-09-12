@@ -82,14 +82,10 @@ function _licences(recipients) {
  * @private
  */
 function _returnCycle(returnsPeriod) {
-  const dueDate = futureDueDate()
-
   return {
-    dueDate: returnsPeriod?.dueDate
-      ? formatDateObjectToISO(new Date(returnsPeriod.dueDate))
-      : formatDateObjectToISO(dueDate),
-    endDate: returnsPeriod?.endDate ? formatDateObjectToISO(new Date(returnsPeriod.endDate)) : null,
-    startDate: returnsPeriod?.startDate ? formatDateObjectToISO(new Date(returnsPeriod.startDate)) : null,
+    dueDate: formatDateObjectToISO(returnsPeriod?.dueDate) ?? formatDateObjectToISO(futureDueDate()),
+    endDate: formatDateObjectToISO(returnsPeriod?.endDate),
+    startDate: formatDateObjectToISO(returnsPeriod?.startDate),
     ..._summer(returnsPeriod)
   }
 }

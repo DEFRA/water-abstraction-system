@@ -172,6 +172,52 @@ describe('Dates lib', () => {
     })
   })
 
+  describe('formatDateObjectToISO', () => {
+    describe('when a valid "Date" is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = DateLib.formatDateObjectToISO(new Date('2021-09-12T14:41:10.511Z'))
+
+        expect(result).to.equal('2021-09-12')
+      })
+    })
+
+    describe('when a valid "String" date is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = DateLib.formatDateObjectToISO('2021-09-12')
+
+        expect(result).to.equal('2021-09-12')
+      })
+    })
+
+    describe('when an invalid "Date" is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const invalidDate = new Date('2021-09-50')
+
+        expect(() => {
+          return DateLib.formatDateObjectToISO(invalidDate)
+        }).to.throw('Invalid time value')
+      })
+    })
+
+    describe('when an invalid "String" date is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const invalidDate = '2021-09-50'
+
+        expect(() => {
+          return DateLib.formatDateObjectToISO(invalidDate)
+        }).to.throw('Invalid time value')
+      })
+    })
+
+    describe('when a falsey value date is provided', () => {
+      it('correctly returns null', async () => {
+        const result = DateLib.formatDateObjectToISO(undefined)
+
+        expect(result).to.be.null()
+      })
+    })
+  })
+
   describe('formatStandardDateToISO', () => {
     it('returns null if the date is null ', () => {
       const result = DateLib.formatStandardDateToISO(null)
