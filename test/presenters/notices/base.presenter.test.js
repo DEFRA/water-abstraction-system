@@ -94,6 +94,7 @@ describe('Notices - Base presenter', () => {
 
       describe('when calculating across month boundaries', () => {
         beforeEach(() => {
+          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
         })
 
@@ -108,6 +109,7 @@ describe('Notices - Base presenter', () => {
 
       describe('when calculating across year boundaries', () => {
         beforeEach(() => {
+          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
         })
 
@@ -132,6 +134,7 @@ describe('Notices - Base presenter', () => {
 
       describe('when calculating across month boundaries', () => {
         beforeEach(() => {
+          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
         })
 
@@ -146,6 +149,7 @@ describe('Notices - Base presenter', () => {
 
       describe('when calculating across year boundaries', () => {
         beforeEach(() => {
+          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
         })
 
