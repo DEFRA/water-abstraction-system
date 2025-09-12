@@ -5,7 +5,7 @@
  * @module ViewService
  */
 
-const FetchMonitoringStationService = require('../monitoring-stations/fetch-monitoring-station.service.js')
+const FetchMonitoringStationDetailsService = require('../monitoring-stations/fetch-monitoring-station-details.service.js')
 const ViewPresenter = require('../../presenters/monitoring-stations/view.presenter.js')
 
 /**
@@ -18,16 +18,17 @@ const ViewPresenter = require('../../presenters/monitoring-stations/view.present
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(auth, monitoringStationId, yar) {
-  const monitoringStation = await FetchMonitoringStationService.go(monitoringStationId)
+  const { licenceMonitoringStations, monitoringStation } =
+    await FetchMonitoringStationDetailsService.go(monitoringStationId)
 
-  const pageData = ViewPresenter.go(auth, monitoringStation)
+  const pageData = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
   const notification = yar.flash('notification')[0]
 
   return {
     activeNavBar: 'search',
-    ...pageData,
-    notification
+    notification,
+    ...pageData
   }
 }
 

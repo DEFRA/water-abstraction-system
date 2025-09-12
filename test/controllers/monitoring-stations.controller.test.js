@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const LicenceService = require('../../app/services/monitoring-stations/licence.service.js')
+const ViewLicenceService = require('../../app/services/monitoring-stations/view-licence.service.js')
 const ViewService = require('../../app/services/monitoring-stations/view.service.js')
 
 // For running our service
@@ -104,7 +104,7 @@ describe('Monitoring stations controller', () => {
           }
         }
 
-        Sinon.stub(LicenceService, 'go').resolves({
+        Sinon.stub(ViewLicenceService, 'go').resolves({
           backLink: '/system/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
           lastAlertSent: 'Warning letter on 13 August 2024 sent to Big Farm Co Ltd',
           licenceTags: [

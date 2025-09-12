@@ -31,6 +31,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
     notification = {
       createdAt: new Date(),
+      licenceMonitoringStationId: licenceMonitoringStation.id,
       messageRef: 'water_abstraction_alert_resume_email',
       personalisation: {
         licenceGaugingStationId: licenceMonitoringStation.id,

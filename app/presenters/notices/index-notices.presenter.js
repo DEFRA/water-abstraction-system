@@ -38,7 +38,7 @@ function go(notices, totalNumber, selectedPage, numberOfPages) {
 
 function _noticeRowData(notices) {
   return notices.map((notice) => {
-    const { createdAt, errorCount, id, issuer, referenceCode, recipientCount } = notice
+    const { createdAt, id, issuer, overallStatus, referenceCode, recipientCount } = notice
 
     return {
       createdDate: formatLongDate(createdAt),
@@ -46,7 +46,7 @@ function _noticeRowData(notices) {
       recipients: recipientCount,
       reference: referenceCode,
       sentBy: issuer,
-      status: errorCount > 0 ? 'error' : 'sent',
+      status: overallStatus,
       type: _type(notice)
     }
   })

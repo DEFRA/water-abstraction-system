@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -29,7 +30,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
   beforeEach(async () => {
     payload = { recipients: ['123'] }
 
-    referenceCode = 'RINV-CPFRQ4'
+    referenceCode = generateReferenceCode()
 
     sessionData = { referenceCode }
 
@@ -102,7 +103,7 @@ describe('Notices - Setup - Submit Select Recipients Service', () => {
           },
 
           pageTitle: 'Select Recipients',
-          pageTitleCaption: `Notice RINV-CPFRQ4`,
+          pageTitleCaption: `Notice ${referenceCode}`,
           recipients: [
             {
               checked: false,
