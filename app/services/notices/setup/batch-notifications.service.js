@@ -8,10 +8,12 @@
 const { setTimeout } = require('node:timers/promises')
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
+const CreateNotificationsService = require('./create-notifications.service.js')
+const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
+const DetermineReturnFormsService = require('./determine-return-forms.service.js')
+const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const UpdateEventService = require('./update-event.service.js')
 
@@ -59,11 +61,17 @@ async function go(recipients, session, eventId) {
   await UpdateEventService.go(eventId, totalErrorCount)
 }
 
+async function _returnsForm(recipients, session) {
+  return DetermineReturnFormsService.go(session, recipients)
+}
+
 async function _batch(recipients, session, eventId) {
   let notifications
 
   if (session.journey === 'alerts') {
     notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
+  } else if (session.noticeType === 'returnForms') {
+    notifications = await _returnsForm(recipients, session)
   } else {
     notifications = NotificationsPresenter.go(recipients, session, eventId)
   }
@@ -127,12 +135,20 @@ function _notificationsToSend(notifications) {
   for (const notification of notifications) {
     if (notification.messageType === 'email') {
       sentNotifications.push(_sendEmail(notification))
+    } else if (notification.messageType === 'returnForms') {
+      sentNotifications.push(_sendReturnForm(notification))
     } else {
       sentNotifications.push(_sendLetter(notification))
     }
   }
 
   return sentNotifications
+}
+
+async function _sendReturnForm(notification) {
+  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, notification.reference)
+
+  return _sentNotification(notification, notifyResult)
 }
 
 async function _sendLetter(notification) {
@@ -164,6 +180,7 @@ async function _sendEmail(notification) {
 function _sentNotification(notification, notifyResult) {
   delete notification.reference
   delete notification.templateId
+  delete notification.content // Just for returnsForm
 
   return {
     ...notification,
