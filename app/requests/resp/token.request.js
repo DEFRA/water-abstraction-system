@@ -40,10 +40,9 @@ function _options() {
 
   return {
     headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      accept: 'application/json'
+      'content-type': 'application/x-www-form-urlencoded'
     },
-    data
+    body: data
   }
 }
 
