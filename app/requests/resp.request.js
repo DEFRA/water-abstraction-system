@@ -27,9 +27,9 @@ async function get(path) {
  *
  * @private
  */
-async function _sendRequest(path, method, body) {
+async function _sendRequest(path, method) {
   const authentication = await global.HapiServerMethods.getRespToken()
-  const options = _requestOptions(authentication.accessToken, body)
+  const options = _requestOptions(authentication.accessToken)
 
   const result = await method(path, options)
 
@@ -43,20 +43,18 @@ async function _sendRequest(path, method, body) {
  *
  * - the base ReSP API URL for all requests
  * - the authorization header with the Azure AD token on our requests
- * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
  *
  * @private
  */
-function _requestOptions(accessToken, body) {
+function _requestOptions(accessToken) {
   return {
     prefixUrl: respConfig.url,
     headers: {
       authorization: `Bearer ${accessToken}`
     },
-    responseType: 'json',
-    json: body
+    responseType: 'json'
   }
 }
 
