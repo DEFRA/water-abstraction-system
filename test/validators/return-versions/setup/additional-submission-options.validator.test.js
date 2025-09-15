@@ -16,7 +16,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
   before(() => {
     payload = {
-      additionalSubmissionOptions: ['multiple-upload']
+      'additional-submission-options': ['multiple-upload']
     }
 
     session = _testSession()
@@ -54,7 +54,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
       session.data.requirements[0].returnsCycle = 'summer'
 
       payload = {
-        additionalSubmissionOptions: ['quarterly-returns']
+        'additional-submission-options': ['quarterly-returns']
       }
     })
 

@@ -55,7 +55,10 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
           quarterlyReturnSubmissions: false,
           quarterlyReturns: undefined,
           activeNavBar: 'search',
-          backLink: `/system/return-versions/setup/${session.id}/check`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/check`,
+            text: 'Back'
+          },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           pageTitle: 'Select any additional submission options for the return requirements',
