@@ -5,6 +5,8 @@
  * @module SubmitReturnsCycleService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReturnsCyclePresenter = require('../../../presenters/return-versions/setup/returns-cycle.presenter.js')
 const ReturnsCycleValidator = require('../../../validators/return-versions/setup/returns-cycle.validator.js')
@@ -54,7 +56,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].returnsCycle = payload.returnsCycle
+  session.requirements[requirementIndex].returnsCycle = payload['returns-cycle']
 
   return session.$update()
 }
@@ -62,15 +64,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload, session) {
   const validation = ReturnsCycleValidator.go(payload, session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {
