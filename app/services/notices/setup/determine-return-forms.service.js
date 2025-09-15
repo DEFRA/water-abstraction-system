@@ -13,9 +13,10 @@ const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
  * @param {string} session - The current session
  * @param {string} recipients - The recipients unique identifier
  *
+ * @param eventId
  * @returns {Promise<{}>} - Resolves with
  */
-async function go(session, recipients) {
+async function go(session, recipients, eventId) {
   const { licenceRef, dueReturns, selectedReturns, referenceCode } = session
 
   const dueReturnLogs = _dueReturnLog(dueReturns, selectedReturns)
@@ -28,7 +29,7 @@ async function go(session, recipients) {
 
       const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturn, recipient)
 
-      notices.push(_notificationPresenter(returnForm, pageData, referenceCode, licenceRef))
+      notices.push(_notificationPresenter(returnForm, pageData, referenceCode, licenceRef, eventId, dueReturn))
     }
   }
 
@@ -41,16 +42,21 @@ function _dueReturnLog(dueReturns, selectedReturns) {
   })
 }
 
-function _notificationPresenter(returnForm, pageData, referenceCode, licenceRef) {
+function _notificationPresenter(returnForm, pageData, referenceCode, licenceRef, eventId, dueReturn) {
   return {
     // Core
     content: returnForm,
-    messageType: 'returnForms',
     personalisation: pageData,
     reference: referenceCode,
-    // From other presenter
-    messageRef: 'form',
-    licences: JSON.stringify([licenceRef])
+    licences: JSON.stringify([licenceRef]),
+    // Form legacy
+    messageRef: 'pdf.return_form',
+    messageType: 'letter',
+    // metaDate: {
+    //   return_id: dueReturn.id
+    // },
+    // Is return id missing ?
+    eventId
   }
 }
 

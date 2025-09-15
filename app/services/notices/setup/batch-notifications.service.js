@@ -61,17 +61,13 @@ async function go(recipients, session, eventId) {
   await UpdateEventService.go(eventId, totalErrorCount)
 }
 
-async function _returnsForm(recipients, session) {
-  return DetermineReturnFormsService.go(session, recipients)
-}
-
 async function _batch(recipients, session, eventId) {
   let notifications
 
   if (session.journey === 'alerts') {
     notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
   } else if (session.noticeType === 'returnForms') {
-    notifications = await _returnsForm(recipients, session)
+    notifications = await DetermineReturnFormsService.go(session, recipients, eventId)
   } else {
     notifications = NotificationsPresenter.go(recipients, session, eventId)
   }
@@ -135,7 +131,7 @@ function _notificationsToSend(notifications) {
   for (const notification of notifications) {
     if (notification.messageType === 'email') {
       sentNotifications.push(_sendEmail(notification))
-    } else if (notification.messageType === 'returnForms') {
+    } else if (notification.messageRef === 'pdf.return_form') {
       sentNotifications.push(_sendReturnForm(notification))
     } else {
       sentNotifications.push(_sendLetter(notification))

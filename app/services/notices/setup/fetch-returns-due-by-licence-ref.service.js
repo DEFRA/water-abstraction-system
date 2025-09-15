@@ -26,7 +26,7 @@ async function _fetch(licenceRef) {
     SELECT
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
-      rl.return_id AS "returnId",
+      rl.id AS "returnId",
       rl.return_reference AS "returnReference",
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
