@@ -10,8 +10,6 @@ const { expect } = Code
 
 // Things we need to stub
 const BaseRequest = require('../../app/requests/base.request.js')
-const respConfig = require('../../config/resp.config.js')
-const serverConfig = require('../../config/server.config.js')
 
 // Thing under test
 const RespRequest = require('../../app/requests/resp.request.js')
