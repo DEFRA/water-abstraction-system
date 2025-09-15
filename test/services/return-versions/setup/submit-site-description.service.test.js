@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          siteDescription: 'This is a valid return requirement description'
+          'site-description': 'This is a valid return requirement description'
         }
       })
 
@@ -122,7 +122,10 @@ describe('Return Versions Setup - Submit Site Description service', () => {
             activeNavBar: 'search',
             pageTitle: 'Enter a site description for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             siteDescription: null
@@ -136,7 +139,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Enter a description of the site'
+            errorList: [
+              {
+                href: '#site-description',
+                text: 'Enter a description of the site'
+              }
+            ],
+            'site-description': { text: 'Enter a description of the site' }
           })
         })
       })
@@ -144,7 +153,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       describe('because the user has entered a description less than 10 characters', () => {
         beforeEach(() => {
           payload = {
-            siteDescription: 'Too short'
+            'site-description': 'Too short'
           }
         })
 
@@ -152,7 +161,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Site description must be 10 characters or more'
+            errorList: [
+              {
+                href: '#site-description',
+                text: 'Site description must be 10 characters or more'
+              }
+            ],
+            'site-description': { text: 'Site description must be 10 characters or more' }
           })
         })
 
@@ -170,7 +185,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
         beforeEach(() => {
           payload = {
-            siteDescription: invalidSiteDescription
+            'site-description': invalidSiteDescription
           }
         })
 
@@ -178,7 +193,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Site description must be 100 characters or less'
+            errorList: [
+              {
+                href: '#site-description',
+                text: 'Site description must be 100 characters or less'
+              }
+            ],
+            'site-description': { text: 'Site description must be 100 characters or less' }
           })
         })
 

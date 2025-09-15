@@ -29,13 +29,19 @@ function go(session, requirementIndex) {
 }
 
 function _backLink(session, requirementIndex) {
+  let backLink
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+    backLink = `/system/return-versions/setup/${id}/check`
+  } else {
+    backLink = `/system/return-versions/setup/${id}/returns-cycle/${requirementIndex}`
   }
 
-  return `/system/return-versions/setup/${id}/returns-cycle/${requirementIndex}`
+  return {
+    href: backLink,
+    text: 'Back'
+  }
 }
 
 module.exports = {
