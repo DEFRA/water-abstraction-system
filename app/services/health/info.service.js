@@ -20,6 +20,8 @@ const NotifyViewHealthRequest = require('../../requests/notify/view-health.reque
 const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
+const SERVICE_RUNNING_MESSAGE = 'Up and running'
+
 /**
  * Checks status and gathers info for each of the services which make up WRLS
  *
@@ -133,7 +135,7 @@ async function _notifyData() {
   const result = await NotifyViewHealthRequest.send()
 
   if (result.succeeded) {
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   }
 
   return _parseFailedRequestResult(result)
@@ -147,7 +149,7 @@ async function _redisConnectivityData() {
 
     await redis.ping()
 
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   } catch (error) {
     return `ERROR: ${error.message}`
   } finally {
@@ -161,7 +163,7 @@ async function _respData() {
   const result = await RespViewHealthRequest.send()
 
   if (result.succeeded) {
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   }
 
   return _parseFailedRequestResult(result)
