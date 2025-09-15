@@ -16,7 +16,7 @@ describe('Return Versions Setup - Frequency Collected validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyCollected: 'month'
+        'frequency-collected': 'month'
       }
     })
 
@@ -24,14 +24,14 @@ describe('Return Versions Setup - Frequency Collected validator', () => {
       const result = FrequencyCollectedValidator.go(payload)
 
       expect(result.error).not.to.exist()
-      expect(result.value.frequencyCollected).to.equal('month')
+      expect(result.value['frequency-collected']).to.equal('month')
     })
   })
 
   describe('when invalid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyCollected: 'ABC123'
+        'frequency-collected': 'ABC123'
       }
     })
 
