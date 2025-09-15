@@ -17,7 +17,7 @@ const config = require('../../../config/resp.config.js')
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future ReSP requests
  */
 async function send() {
-  const url = new URL(`/${config.tenantId}/oauth2/token`, config.tokenUrl)
+  const url = new URL(`/${config.tenantId}/oauth2/v2.0/token`, config.tokenUrl)
 
   const result = await BaseRequest.post(url.href, _options())
 
