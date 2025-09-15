@@ -160,12 +160,11 @@ async function _redisConnectivityData() {
 async function _respData() {
   const result = await RespViewHealthRequest.send()
 
-  // if (result.succeeded) {
-  //   return result.response.info.dockerTag
-  // }
+  if (result.succeeded) {
+    return 'Up and running'
+  }
 
-  // return _parseFailedRequestResult(result)
-  return 'Fake it till you make it!'
+  return _parseFailedRequestResult(result)
 }
 
 async function _virusScannerData() {
