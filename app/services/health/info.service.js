@@ -17,6 +17,7 @@ const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
 const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
 const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
+const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
 /**
@@ -157,7 +158,7 @@ async function _redisConnectivityData() {
 }
 
 async function _respData() {
-  // const result = await ChargingModuleViewHealthRequest.send()
+  const result = await RespViewHealthRequest.send()
 
   // if (result.succeeded) {
   //   return result.response.info.dockerTag
