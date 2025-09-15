@@ -20,12 +20,10 @@ const Joi = require('joi')
  * `error:` property will also exist detailing what the issue is.
  */
 function go(payload) {
-  const agreementsExceptions = payload.agreementsExceptions
-
   const errorMessage = 'Select if there are any agreements and exceptions needed for the requirements for returns'
 
   const schema = Joi.object({
-    agreementsExceptions: Joi.array()
+    'agreements-exceptions': Joi.array()
       .items(Joi.string().valid(...VALID_VALUES))
       .required()
       .messages({
@@ -37,7 +35,7 @@ function go(payload) {
       })
   })
 
-  return schema.validate({ agreementsExceptions }, { abortEarly: false })
+  return schema.validate(payload)
 }
 
 const VALID_VALUES = [

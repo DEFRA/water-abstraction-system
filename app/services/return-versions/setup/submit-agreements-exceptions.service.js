@@ -5,6 +5,8 @@
  * @module SubmitAgreementsExceptions
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../../validators/return-versions/setup/agreements-exceptions.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
@@ -65,13 +67,13 @@ async function go(sessionId, requirementIndex, payload, yar) {
  * @private
  */
 function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.agreementsExceptions)) {
-    payload.agreementsExceptions = [payload.agreementsExceptions]
+  if (!Array.isArray(payload['agreements-exceptions'])) {
+    payload['agreements-exceptions'] = [payload['agreements-exceptions']]
   }
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].agreementsExceptions = payload.agreementsExceptions
+  session.requirements[requirementIndex].agreementsExceptions = payload['agreements-exceptions']
 
   return session.$update()
 }
@@ -79,15 +81,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = AgreementsExceptionsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {
