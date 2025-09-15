@@ -16,14 +16,14 @@ describe('Return Versions Setup - Frequency reported validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyReported: 'month'
+        'frequency-reported': 'month'
       }
     })
 
     it('confirms the data is valid', async () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.value.frequencyReported).to.equal('month')
+      expect(result.value['frequency-reported']).to.equal('month')
       expect(result.error).not.to.exist()
     })
   })
@@ -31,7 +31,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
   describe('when invalid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyReported: 'ABC123'
+        'frequency-reported': 'ABC123'
       }
     })
 
