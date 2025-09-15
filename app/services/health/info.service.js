@@ -123,7 +123,7 @@ async function _legacyAppData() {
 
 function _parseFailedRequestResult(result) {
   if (result.response.statusCode) {
-    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
+    return `ERROR: ${result.response.statusCode} - ${result.response.body.message}`
   }
 
   return `ERROR: ${result.response.name} - ${result.response.message}`
