@@ -150,11 +150,20 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: {
-              text: 'Select any purpose for the requirements for returns'
+              errorList: [
+                {
+                  href: '#purposes',
+                  text: 'Select any purpose for the requirements for returns'
+                }
+              ],
+              purposes: { text: 'Select any purpose for the requirements for returns' }
             },
             pageTitle: 'Select the purpose for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/method`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/method`,
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             purposes: [
@@ -186,11 +195,20 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: {
-              text: 'Purpose description must be 100 characters or less'
+              errorList: [
+                {
+                  href: '#purposes',
+                  text: 'Purpose description must be 100 characters or less'
+                }
+              ],
+              purposes: { text: 'Purpose description must be 100 characters or less' }
             },
             pageTitle: 'Select the purpose for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/method`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/method`,
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             purposes: [
