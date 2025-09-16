@@ -30,7 +30,7 @@ const Bearer = require('hapi-auth-bearer-token')
  * or if Royal Mail are unable to deliver the letter to the address as it is invalid.
  *
  * GovNotify has a screen for managing the callback URL and token. We manage the token on our side like our normal
- * encvironment variables.
+ * environment variables.
  *
  */
 const BearerPlugin = {

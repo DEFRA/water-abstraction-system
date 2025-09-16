@@ -8,9 +8,8 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const NotifyConfig = require('../../config/notify.config.js')
-
 // Things we need to stub
+const notifyConfig = require('../../config/notify.config.js')
 const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
 
 // For running our service
@@ -73,11 +72,15 @@ describe('Notifications controller', () => {
 
     describe('/notifications/callbacks/letters', () => {
       describe('POST', () => {
+        beforeEach(() => {
+          Sinon.stub(notifyConfig, 'callbackToken').value('valid')
+        })
+
         describe('when the request has valid authorization', () => {
           beforeEach(() => {
             options = {
               headers: {
-                authorization: `Bearer ${NotifyConfig.callbackToken}`
+                authorization: `Bearer ${notifyConfig.callbackToken}`
               },
               method: 'POST',
               payload: {
