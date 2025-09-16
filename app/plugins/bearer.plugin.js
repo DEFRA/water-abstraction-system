@@ -29,7 +29,7 @@ const Bearer = require('hapi-auth-bearer-token')
  * has been returned to their printer. This can happen when someone marks the letter as 'not known at this address'
  * or if Royal Mail are unable to deliver the letter to the address as it is invalid.
  *
- * GovNotify has a screen for managing the callback URL and token. We manage the toke on our side like our normal
+ * GovNotify has a screen for managing the callback URL and token. We manage the token on our side like our normal
  * encvironment variables.
  *
  */
