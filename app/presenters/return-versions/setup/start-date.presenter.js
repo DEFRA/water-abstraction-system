@@ -34,8 +34,8 @@ function go(session) {
 }
 
 function _backLink(session) {
-  let backLink
   const { checkPageVisited, id, licence } = session
+  let backLink
 
   if (checkPageVisited) {
     backLink = `/system/return-versions/setup/${id}/check`

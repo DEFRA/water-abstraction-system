@@ -32,8 +32,8 @@ function go(session, requirementIndex, points) {
 }
 
 function _backLink(session, requirementIndex) {
-  let backLink
   const { checkPageVisited, id } = session
+  let backLink
 
   if (checkPageVisited) {
     backLink = `/system/return-versions/setup/${id}/check`
