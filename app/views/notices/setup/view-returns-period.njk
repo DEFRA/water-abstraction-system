@@ -1,33 +1,18 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% from 'macros/page-heading.njk' import pageHeading %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
+{% if error %}
+  {% set errorList = [{
+    text: error.text,
+    href: error.href
+  }] %}
+{% endif %}
 
-{% block content %}
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, caption) }}
-  {% endset %}
-
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#returnsPeriod-error"
-        }
-      ]
-    }) }}
-  {% endif %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
@@ -36,7 +21,7 @@
       errorMessage: error,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: returnsPeriod

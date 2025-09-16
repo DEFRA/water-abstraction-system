@@ -22,7 +22,7 @@ function go(session) {
   const savedReturnsPeriod = session.returnsPeriod ?? null
 
   return {
-    backLink: '/manage',
+    backLink: { href: '/manage', text: 'Back' },
     caption: `Notice ${referenceCode}`,
     pageTitle: `Select the returns periods for the ${journey}`,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
