@@ -34,7 +34,7 @@ const RespTokenCachePlugin = {
           // Hapi requires us to set an expiry time here but we will always override it via `flags.ttl`
           expiresIn: ONE_HOUR_IN_MS,
           // Hapi requires us to set a timeout value here so we set it to error after one minute. In practice we would
-          // expect ChargingModuleTokenService to have returned an unsuccessful response which we would gracefully handle
+          // expect RespTokenRequest to have returned an unsuccessful response which we would gracefully handle
           generateTimeout: ONE_MINUTE_IN_MS
         }
       }
