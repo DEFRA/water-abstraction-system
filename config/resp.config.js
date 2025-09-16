@@ -16,7 +16,7 @@ const config = {
   clientSecret: process.env.RESP_CLIENT_SECRET,
   scope: process.env.RESP_SCOPE,
   tenantId: process.env.RESP_TENANT_ID,
-  tokenUrl: process.env.RESP_TOKEN_URL || 'https://example.com',
+  tokenUrl: process.env.RESP_TOKEN_URL,
   url: process.env.RESP_URL
 }
 
