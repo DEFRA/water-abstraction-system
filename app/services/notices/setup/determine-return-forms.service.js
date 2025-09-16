@@ -15,7 +15,7 @@ const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email / address.
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {Promise<{}>} - Resolves an array of return forms notifications
+ * @returns {Promise<object[]>} - Resolves an array of return forms notifications
  */
 async function go(session, recipients, eventId) {
   const { licenceRef, dueReturns, selectedReturns } = session
