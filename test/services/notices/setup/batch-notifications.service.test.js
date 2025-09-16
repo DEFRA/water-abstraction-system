@@ -698,7 +698,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       ])
     })
 
-    describe('that contains letters and emails', () => {
+    describe('that contains PDF files', () => {
       describe('and the requests to Notify in the batch are a mix of successes and failures', () => {
         beforeEach(() => {
           Sinon.stub(CreatePrecompiledFileRequest, 'send')
