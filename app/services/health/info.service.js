@@ -17,7 +17,10 @@ const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
 const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
 const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
+const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
+
+const SERVICE_RUNNING_MESSAGE = 'Up and running'
 
 /**
  * Checks status and gathers info for each of the services which make up WRLS
@@ -37,6 +40,7 @@ async function go() {
   const legacyAppData = await _legacyAppData()
   const notifyData = await _notifyData()
   const redisConnectivityData = await _redisConnectivityData()
+  const respData = await _respData()
   const virusScannerData = await _virusScannerData()
 
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
@@ -49,6 +53,7 @@ async function go() {
     gotenbergData,
     notifyData,
     redisConnectivityData,
+    respData,
     virusScannerData
   }
 }
@@ -120,7 +125,7 @@ async function _legacyAppData() {
 
 function _parseFailedRequestResult(result) {
   if (result.response.statusCode) {
-    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
+    return `ERROR: ${result.response.statusCode} - ${result.response.body.message}`
   }
 
   return `ERROR: ${result.response.name} - ${result.response.message}`
@@ -130,7 +135,7 @@ async function _notifyData() {
   const result = await NotifyViewHealthRequest.send()
 
   if (result.succeeded) {
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   }
 
   return _parseFailedRequestResult(result)
@@ -144,7 +149,7 @@ async function _redisConnectivityData() {
 
     await redis.ping()
 
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   } catch (error) {
     return `ERROR: ${error.message}`
   } finally {
@@ -152,6 +157,16 @@ async function _redisConnectivityData() {
       await redis.disconnect()
     }
   }
+}
+
+async function _respData() {
+  const result = await RespViewHealthRequest.send()
+
+  if (result.succeeded) {
+    return SERVICE_RUNNING_MESSAGE
+  }
+
+  return _parseFailedRequestResult(result)
 }
 
 async function _virusScannerData() {
