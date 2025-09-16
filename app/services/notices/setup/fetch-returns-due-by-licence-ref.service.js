@@ -24,6 +24,7 @@ async function go(licenceRef) {
 async function _fetch(licenceRef) {
   const query = `
     SELECT
+      rl.id as id,
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
       rl.return_id AS "returnId",
