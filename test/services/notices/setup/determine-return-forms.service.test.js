@@ -11,6 +11,8 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -25,12 +27,18 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
   let additionalDueReturn
   let buffer
   let dueReturnLog
+  let licenceRef
   let recipients
+  let referenceCode
   let session
   let sessionData
   let testRecipients
 
   beforeEach(async () => {
+    licenceRef = generateLicenceRef()
+
+    referenceCode = generateReferenceCode('PRTF')
+
     recipients = RecipientsFixture.recipients()
     testRecipients = [recipients.licenceHolder, recipients.returnsTo]
 
@@ -63,8 +71,9 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
     }
 
     sessionData = {
-      licenceRef: '123',
+      licenceRef,
       dueReturns: [dueReturnLog, additionalDueReturn],
+      referenceCode,
       selectedReturns: [dueReturnLog.returnId]
     }
 
@@ -87,6 +96,10 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
         expect(result).to.equal([
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Licence holder',
@@ -98,7 +111,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[0].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -109,10 +122,14 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           },
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Returns to',
@@ -124,7 +141,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[1].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -135,7 +152,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           }
         ])
       })
@@ -152,6 +169,10 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
         expect(result).to.equal([
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Licence holder',
@@ -163,7 +184,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[0].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -174,10 +195,14 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           },
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Returns to',
@@ -189,7 +214,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[1].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -200,10 +225,14 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           },
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Licence holder',
@@ -215,7 +244,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[2].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -226,10 +255,14 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           },
           {
             content: buffer,
+            eventId,
+            licences: `["${licenceRef}"]`,
+            messageRef: 'pdf.return_form',
+            messageType: 'letter',
             personalisation: {
               address: {
                 address_line_1: 'Mr H J Returns to',
@@ -241,7 +274,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               },
               dueDate: '6 July 2025',
               endDate: '6 June 2025',
-              licenceRef: '123',
+              licenceRef,
               pageEntries: result[3].personalisation.pageEntries,
               pageTitle: 'Water abstraction daily return',
               purpose: 'A purpose',
@@ -252,7 +285,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               startDate: '1 January 2025',
               twoPartTariff: false
             },
-            eventId
+            reference: referenceCode
           }
         ])
       })

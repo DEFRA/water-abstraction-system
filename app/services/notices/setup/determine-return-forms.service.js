@@ -18,7 +18,7 @@ const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
  * @returns {Promise<object[]>} - Resolves an array of return forms notifications
  */
 async function go(session, recipients, eventId) {
-  const { licenceRef, dueReturns, selectedReturns } = session
+  const { licenceRef, dueReturns, selectedReturns, referenceCode } = session
 
   const dueReturnLogs = _dueReturnLog(dueReturns, selectedReturns)
 
@@ -32,8 +32,12 @@ async function go(session, recipients, eventId) {
 
       notifications.push({
         content: returnForm,
+        eventId,
+        licences: JSON.stringify([licenceRef]),
+        messageRef: 'pdf.return_form',
+        messageType: 'letter',
         personalisation: pageData,
-        eventId
+        reference: referenceCode
       })
     }
   }
