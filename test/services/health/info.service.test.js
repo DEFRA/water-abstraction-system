@@ -16,6 +16,7 @@ const CreateRedisClientService = require('../../../app/services/health/create-re
 const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
 const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
 const NotifyViewHealthRequest = require('../../../app/requests/notify/view-health.request.js')
+const RespViewHealthRequest = require('../../../app/requests/resp/view-health.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
@@ -52,6 +53,17 @@ describe('Health - Info service', () => {
         statusCode: 200
       }
     },
+    resp: {
+      succeeded: true,
+      response: {
+        body: {
+          error: null,
+          result: [],
+          source: 'ReSP'
+        },
+        statusCode: 200
+      }
+    },
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
@@ -61,6 +73,7 @@ describe('Health - Info service', () => {
   let legacyViewHealthRequestStub
   let notifyViewHealthRequestStub
   let redisStub
+  let respViewHealthRequestStub
 
   beforeEach(() => {
     addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
@@ -69,6 +82,7 @@ describe('Health - Info service', () => {
     legacyViewHealthRequestStub = Sinon.stub(LegacyViewHealthRequest, 'send')
     notifyViewHealthRequestStub = Sinon.stub(NotifyViewHealthRequest, 'send')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
+    respViewHealthRequestStub = Sinon.stub(RespViewHealthRequest, 'send')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
@@ -85,6 +99,7 @@ describe('Health - Info service', () => {
     chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
     gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
     notifyViewHealthRequestStub.resolves(goodRequestResults.notify)
+    respViewHealthRequestStub.resolves(goodRequestResults.resp)
   })
 
   afterEach(() => {
@@ -92,7 +107,7 @@ describe('Health - Info service', () => {
   })
 
   describe('when all the services are running', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
@@ -129,6 +144,7 @@ describe('Health - Info service', () => {
         'gotenbergData',
         'notifyData',
         'redisConnectivityData',
+        'respData',
         'virusScannerData'
       ])
 
@@ -144,6 +160,7 @@ describe('Health - Info service', () => {
       expect(result.chargingModuleData).to.equal('v0.19.1')
       expect(result.gotenbergData).to.equal('Up - Chromium Up')
       expect(result.notifyData).to.equal('Up and running')
+      expect(result.respData).to.equal('Up and running')
     })
   })
 
@@ -185,6 +202,7 @@ describe('Health - Info service', () => {
           'gotenbergData',
           'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -196,6 +214,7 @@ describe('Health - Info service', () => {
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
         expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })
@@ -237,6 +256,7 @@ describe('Health - Info service', () => {
           'gotenbergData',
           'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -248,6 +268,7 @@ describe('Health - Info service', () => {
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
         expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
 
@@ -277,6 +298,7 @@ describe('Health - Info service', () => {
           'gotenbergData',
           'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -288,6 +310,7 @@ describe('Health - Info service', () => {
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
         expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })
@@ -329,6 +352,7 @@ describe('Health - Info service', () => {
           'gotenbergData',
           'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -340,6 +364,7 @@ describe('Health - Info service', () => {
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
         expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
 
@@ -362,6 +387,7 @@ describe('Health - Info service', () => {
           'gotenbergData',
           'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -373,6 +399,7 @@ describe('Health - Info service', () => {
         expect(result.chargingModuleData).to.equal('v0.19.1')
         expect(result.gotenbergData).to.equal('Up - Chromium Up')
         expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })
