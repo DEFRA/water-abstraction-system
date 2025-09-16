@@ -10,18 +10,16 @@
 
 {% set rows = [] %}
 
-{%for recipient in recipients %}
+{% for recipient in recipients %}
   {% set licenceNumbers %}
     {% if recipient.licences.length > 5 %}
-      {{
-      govukDetails({
+      {{ govukDetails({
         classes: 'govuk-!-margin-bottom-0',
         summaryText: recipient.licences.length + ' licences',
         html: newLineArrayItems(recipient.licences)
-      })
-      }}
+      }) }}
     {% else %}
-      {{ newLineArrayItems(recipient.licences)  }}
+      {{ newLineArrayItems(recipient.licences) }}
     {% endif %}
   {% endset %}
 
@@ -41,11 +39,13 @@
   ]), rows) %}
 {% endfor %}
 
+
 {% block pageContent %}
-    {{ pageHeadingHtml }}
+  {{ pageHeadingHtml }}
 
-    <p> {{ readyToSend }}</p>
+  <p> {{ readyToSend }}</p>
 
+  {% if recipients.length > 0 %}
     <div class="govuk-button-group">
 
       {{ govukButton({
@@ -56,12 +56,12 @@
       }) }}
 
       {% if links.removeLicences %}
-      {{ govukButton({
-        text: "Remove licences",
-        classes: "govuk-button--secondary",
-        href: links.removeLicences,
-        preventDoubleClick: true
-      }) }}
+        {{ govukButton({
+          text: "Remove licences",
+          classes: "govuk-button--secondary",
+          href: links.removeLicences,
+          preventDoubleClick: true
+        }) }}
       {% endif %}
 
       {% if links.manage %}
@@ -106,8 +106,7 @@
 
     <div class="govuk-button-group">
       <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
-
+        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
         {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
 
@@ -119,4 +118,5 @@
         }) }}
       </form>
     </div>
+  {% endif %}
 {% endblock %}

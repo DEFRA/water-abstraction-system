@@ -141,13 +141,19 @@ function formatStandardDateToISO(date) {
 }
 
 /**
- * Formate the provided date in ISO format.
+ * Format the provided date in ISO format.
  *
- * @param {Date} date - a date object to be formatted
- * @returns {Date} - the date formatted in YYYY-MM-DD.
+ * @param {Date | string } date - a date object to be formatted
+ * @returns {Date | null} - the date formatted in YYYY-MM-DD.
  */
 function formatDateObjectToISO(date) {
-  return date.toISOString().split('T')[0]
+  if (!date) {
+    return null
+  }
+
+  const localDate = new Date(date)
+
+  return localDate.toISOString().split('T')[0]
 }
 
 /**

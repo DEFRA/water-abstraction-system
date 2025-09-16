@@ -148,9 +148,9 @@ function _defaults() {
     alertType: null,
     id: generateUUID(),
     createdAt: new Date('2025-03-25'),
-    errorCount: 0,
     issuer: 'billing.data@wrls.gov.uk',
     name: 'Returns: invitation',
+    overallStatus: 'sent',
     recipientCount: generateRandomInteger(1, 5000),
     subtype: 'returnInvitation'
   }

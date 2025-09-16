@@ -24,10 +24,16 @@ function go(session) {
 
 function _backLink(sessionId, checkPageVisited) {
   if (checkPageVisited) {
-    return `/system/notices/setup/${sessionId}/check-notice-type`
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
   }
 
-  return `/manage`
+  return {
+    href: '/manage',
+    text: 'Back'
+  }
 }
 
 module.exports = {

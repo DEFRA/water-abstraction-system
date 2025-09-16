@@ -47,7 +47,8 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
 
         licenceOne.purpose = await LicenceVersionPurposeHelper.add({ licenceVersionId: licenceVersion.id })
         licenceOne.purposeCondition = await LicenceVersionPurposeConditionHelper.add({
-          licenceVersionPurposeId: licenceOne.purpose.id
+          licenceVersionPurposeId: licenceOne.purpose.id,
+          notes: 'Pick up milk'
         })
 
         licenceMonitoringStationOne = await LicenceMonitoringStationHelper.add({
@@ -167,6 +168,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             },
             licenceVersionPurposeCondition: {
               id: licenceOne.purposeCondition.id,
+              notes: 'Pick up milk',
               licenceVersionPurpose: {
                 id: licenceOne.purpose.id,
                 abstractionPeriodEndDay: 31,
