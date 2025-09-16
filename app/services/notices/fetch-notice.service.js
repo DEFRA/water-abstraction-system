@@ -96,11 +96,11 @@ function _fetchNotificationsQuery(noticeId) {
   return NotificationModel.query()
     .select([
       'notifications.id',
-      'rn.recipient_name',
       'notifications.licences',
       'notifications.messageType',
       'notifications.notifyStatus',
       'notifications.personalisation',
+      'rn.recipient_name',
       'notifications.status'
     ])
     .joinRaw(
