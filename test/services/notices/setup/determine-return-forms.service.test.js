@@ -19,7 +19,7 @@ const PrepareReturnFormsService = require('../../../../app/services/notices/setu
 // Thing under test
 const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
 
-describe.only('Notices - Setup - Determine Return Forms Service', () => {
+describe('Notices - Setup - Determine Return Forms Service', () => {
   const eventId = generateUUID()
 
   let additionalDueReturn
