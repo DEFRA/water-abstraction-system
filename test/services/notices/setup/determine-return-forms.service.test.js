@@ -146,7 +146,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
         session.selectedReturns.push(additionalDueReturn.returnId)
       })
 
-      it('returns notifications with all the recipient for multiple due return log', async () => {
+      it('returns a notification for each combination of recipient and selected due return log', async () => {
         const result = await DetermineReturnFormsService.go(session, testRecipients, eventId)
 
         expect(result).to.equal([
