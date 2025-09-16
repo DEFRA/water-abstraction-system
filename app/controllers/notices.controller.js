@@ -6,7 +6,7 @@
  */
 
 const IndexNoticesService = require('../services/notices/index-notices.service.js')
-const SubmitIndexNoticesService = require('../services/notices/submit-index.service.js')
+const SubmitIndexNoticesService = require('../services/notices/submit-index-notices.service.js')
 const SubmitViewNoticeService = require('../services/notices/submit-view.service.js')
 const ViewNoticeService = require('../services/notices/view-notice.service.js')
 
