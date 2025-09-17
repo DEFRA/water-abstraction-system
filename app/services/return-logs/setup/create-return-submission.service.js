@@ -19,7 +19,7 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
  * @param {string} notes - Text of any note added to the return submission
- * @param {number} createdBy - Numeric user ID of the user who created the note
+ * @param {number} createdBy - Numeric user ID of the user who created the return submission
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
@@ -27,20 +27,18 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
 async function go(returnLogId, userId, metadata, nilReturn, notes, createdBy, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
 
-  // We only set the notes and createdBy fields if note text has actually been provided
-  const note = notes ? { notes, createdBy } : {}
-
   const returnSubmission = {
     id: generateUUID(),
     createdAt: timestampForPostgres(),
+    createdBy,
     current: true,
     nilReturn,
     metadata,
+    notes,
     returnLogId,
     userId,
     userType: 'internal',
-    version,
-    ...note
+    version
   }
 
   if (previousVersion) {
