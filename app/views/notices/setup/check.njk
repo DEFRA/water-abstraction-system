@@ -8,14 +8,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
-{% from 'macros/page-heading.njk' import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: links.back }) }}
-{% endblock %}
 
 {% set rows = [] %}
 
@@ -48,7 +42,7 @@
   ]), rows) %}
 {% endfor %}
 
-{% block content %}
+{% block pageContent %}
   {% if notification %}
     {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
   {% endif %}
@@ -57,7 +51,7 @@
     {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
   {% endif %}
 
-  {{ pageHeading(pageTitle, caption) }}
+  {{ pageHeadingHtml }}
 
   <p>{{ readyToSend }}</p>
 

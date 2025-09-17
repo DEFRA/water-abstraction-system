@@ -31,15 +31,32 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
-    caption: `Notice ${referenceCode}`,
+    backLink: _backLink(session),
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
+    pageTitleCaption: `Notice ${referenceCode}`,
     readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
     warning: _warning(formattedRecipients)
   }
+}
+
+function _backLink(session) {
+  const { journey, id } = session
+
+  let href
+
+  if (journey === 'adhoc') {
+    href = `/system/notices/setup/${id}/check-notice-type`
+  } else if (journey === 'alerts') {
+    href = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
+  } else {
+    href = `/system/notices/setup/${id}/returns-period`
+  }
+
+  return { text: 'Back', href }
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
@@ -66,18 +83,13 @@ function _links(session) {
   if (journey === 'adhoc') {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/check-notice-type`,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
   } else if (journey === 'alerts') {
-    return {
-      ...links,
-      back: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
-    }
+    return links
   } else {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/returns-period`,
       removeLicences: `/system/notices/setup/${id}/remove-licences`
     }
   }

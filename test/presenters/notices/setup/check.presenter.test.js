@@ -52,15 +52,15 @@ describe('Notices - Setup - Check presenter', () => {
       const result = CheckPresenter.go(testInput, page, pagination, session)
 
       expect(result).to.equal({
-        caption: 'Notice RINV-123',
+        backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/returns-period` },
         defaultPageSize: 25,
         links: {
-          back: `/system/notices/setup/${session.id}/returns-period`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
           removeLicences: `/system/notices/setup/${session.id}/remove-licences`
         },
         pageTitle: 'Check the recipients',
+        pageTitleCaption: 'Notice RINV-123',
         readyToSend: 'Returns invitations are ready to send.',
         recipients: [
           {
@@ -137,6 +137,49 @@ describe('Notices - Setup - Check presenter', () => {
       })
     })
 
+    describe('the "backLink" property', () => {
+      describe('when the journey is for "adhoc"', () => {
+        beforeEach(() => {
+          session.journey = 'adhoc'
+        })
+
+        it('should return the back link for the "adhoc" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/check-notice-type`,
+            text: 'Back'
+          })
+        })
+      })
+
+      describe('when the journey is for "alerts"', () => {
+        beforeEach(() => {
+          session.journey = 'alerts'
+          session.noticeType = 'abstractionAlerts'
+          session.referenceCode = 'WAA-123'
+          session.monitoringStationId = '345'
+        })
+
+        it('should return the back link for "alerts" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
+            text: 'Back'
+          })
+        })
+      })
+
+      describe('when the journey is for "standard"', () => {
+        it('should return the back link for the "standard" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/returns-period`,
+            text: 'Back'
+          })
+        })
+      })
+    })
+
     describe('the "links" property', () => {
       describe('when the journey is for "adhoc"', () => {
         beforeEach(() => {
@@ -146,7 +189,6 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the links for the "adhoc" journey', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/check-notice-type`,
             cancel: `/system/notices/setup/${session.id}/cancel`,
             download: `/system/notices/setup/${session.id}/download`,
             manage: `/system/notices/setup/${session.id}/select-recipients`
@@ -166,7 +208,6 @@ describe('Notices - Setup - Check presenter', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
           expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
             cancel: `/system/notices/setup/${session.id}/cancel`,
             download: `/system/notices/setup/${session.id}/download`
           })
@@ -177,7 +218,6 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the links for the "standard" journey', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
           expect(result.links).to.equal({
-            back: `/system/notices/setup/${session.id}/returns-period`,
             cancel: `/system/notices/setup/${session.id}/cancel`,
             download: `/system/notices/setup/${session.id}/download`,
             removeLicences: `/system/notices/setup/${session.id}/remove-licences`

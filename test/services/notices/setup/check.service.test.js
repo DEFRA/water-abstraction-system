@@ -54,10 +54,9 @@ describe('Notices - Setup - Check service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
-      caption: 'Notice RINV-123',
+      backLink: { href: `/system/notices/setup/${session.id}/returns-period`, text: 'Back' },
       defaultPageSize: 25,
       links: {
-        back: `/system/notices/setup/${session.id}/returns-period`,
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
         removeLicences: `/system/notices/setup/${session.id}/remove-licences`
@@ -71,6 +70,7 @@ describe('Notices - Setup - Check service', () => {
         numberOfPages: 1
       },
       pageTitle: 'Check the recipients',
+      pageTitleCaption: 'Notice RINV-123',
       readyToSend: 'Returns invitations are ready to send.',
       recipients: [
         {
@@ -146,10 +146,9 @@ describe('Notices - Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        caption: 'Notice WAA-123',
+        backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`, text: 'Back' },
         defaultPageSize: 25,
         links: {
-          back: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`
         },
@@ -162,6 +161,7 @@ describe('Notices - Setup - Check service', () => {
           numberOfPages: 1
         },
         pageTitle: 'Check the recipients',
+        pageTitleCaption: 'Notice WAA-123',
         readyToSend: 'Abstraction alerts are ready to send.',
         recipients: [
           {
