@@ -82,7 +82,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
         })
 
         it('returns only the selected recipients formatted for display', async () => {
-          const result = await FetchRecipientsService.go(session, false)
+          const result = await FetchRecipientsService.go(session)
 
           expect(result).to.equal([
             {
@@ -126,7 +126,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
         })
 
         it('returns all the recipients formatted for display', async () => {
-          const result = await FetchRecipientsService.go(session, false)
+          const result = await FetchRecipientsService.go(session)
 
           expect(result).to.equal([
             {

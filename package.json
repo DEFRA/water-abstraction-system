@@ -1,6 +1,6 @@
 {
   "name": "water-abstraction-system",
-  "version": "0.40.1",
+  "version": "0.41.0",
   "description": "System for managing water abstraction licences, including alerts, returns and billing",
   "homepage": "https://github.com/DEFRA/water-abstraction-team",
   "main": "index.js",
@@ -48,6 +48,7 @@
     "dotenv": "^17.2.1",
     "got": "^14.4.7",
     "govuk-frontend": "^4.7.0",
+    "hapi-auth-bearer-token": "^8.0.0",
     "hapi-pino": "^12.1.0",
     "hpagent": "^1.2.0",
     "ioredis": "^5.3.2",

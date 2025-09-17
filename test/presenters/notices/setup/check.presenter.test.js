@@ -61,10 +61,6 @@ describe('Notices - Setup - Check presenter', () => {
 
       expect(result).to.equal({
         defaultPageSize: 25,
-        backLink: {
-          href: `/system/notices/setup/${session.id}/returns-period`,
-          text: 'Back'
-        },
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -148,44 +144,6 @@ describe('Notices - Setup - Check presenter', () => {
           iconFallbackText: 'Warning',
           text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
         }
-      })
-    })
-
-    describe('the "backLink" property', () => {
-      describe('when the journey is for "adhoc"', () => {
-        beforeEach(() => {
-          session.journey = 'adhoc'
-        })
-
-        it('should return null to not show the back link', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.backLink).to.equal(null)
-        })
-      })
-
-      describe('when the journey is for "alerts"', () => {
-        beforeEach(() => {
-          session.journey = 'alerts'
-          session.noticeType = 'abstractionAlerts'
-          session.referenceCode = generateReferenceCode('WAA')
-          session.monitoringStationId = '345'
-        })
-
-        it('should return null to not show the back link', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-
-          expect(result.backLink).to.be.null()
-        })
-      })
-
-      describe('when the journey is for "standard"', () => {
-        it('should return the links for the "standard" journey', () => {
-          const result = CheckPresenter.go(testInput, page, pagination, session)
-          expect(result.backLink).to.equal({
-            href: `/system/notices/setup/${session.id}/returns-period`,
-            text: 'Back'
-          })
-        })
       })
     })
 

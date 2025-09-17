@@ -54,6 +54,11 @@
           classes: classes
         },
         {
+          text: entry.startDate,
+          attributes: { 'data-test': 'entry-start-date-' + rowIndex },
+          classes: classes
+        },
+        {
           text: entry.reason,
           attributes: { 'data-test': 'entry-reason-' + rowIndex },
           classes: classes
@@ -83,7 +88,7 @@
           {
             html: noteCell,
             attributes: { 'data-test': 'entry-note-' + rowIndex },
-            colspan: 3
+            colspan: 4
           }
         ] %}
 
@@ -95,9 +100,10 @@
       attributes: { 'data-test': 'bills-table' },
       firstCellIsHeader: false,
       head: [
-        { text: 'Date and type', classes: 'govuk-!-width-one-quarter' },
-        { text: 'Reason' },
-        { text: 'Created by', classes: 'govuk-!-width-one-third' }
+        { text: 'Date and type' },
+        { text: 'Start date' },
+        { text: 'Reason', classes: 'govuk-!-width-one-quarter' },
+        { text: 'Created by', classes: 'govuk-!-width-one-quarter' }
       ],
       rows: tableRows
     }) }}

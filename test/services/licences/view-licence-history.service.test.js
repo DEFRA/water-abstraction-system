@@ -23,7 +23,7 @@ const FetchLicenceHistoryService = require('../../../app/services/licences/fetch
 // Thing under test
 const ViewLicenceHistoryService = require('../../../app/services/licences/view-licence-history.service.js')
 
-describe('View Licence History service', () => {
+describe('Licences - View Licence History service', () => {
   const licenceId = '91aff99a-3204-4727-86bd-7bdf3ef24533'
 
   beforeEach(() => {
@@ -48,6 +48,7 @@ describe('View Licence History service', () => {
             notes: ['Charge version test note'],
             link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
             reason: 'Major change',
+            startDate: '1 April 2020',
             type: { index: 1, name: 'Charge version' }
           },
           {
@@ -58,6 +59,7 @@ describe('View Licence History service', () => {
             notes: [],
             link: null,
             reason: null,
+            startDate: '1 April 2022',
             type: { index: 0, name: 'Licence version' }
           },
           {
@@ -68,6 +70,7 @@ describe('View Licence History service', () => {
             notes: ['Test note'],
             link: '/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
             reason: 'New licence',
+            startDate: '1 April 2021',
             type: { index: 2, name: 'Return version' }
           }
         ]

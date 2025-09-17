@@ -1,27 +1,27 @@
 'use strict'
 
-const ChargingModuleTokenRequest = require('../requests/charging-module/token.request.js')
+const RespTokenRequest = require('../requests/resp/token.request.js')
 
 /**
- * Adds a server method which returns a Cognito token for the Charging Module.
+ * Adds a server method which returns a Azure AD token for the ReSP API.
  *
  * We use hapi's built-in caching to return a token if one exists, or retrieve a new one if it doesn't
  *
- * @module ChargingModuleTokenCachePlugin
+ * @module RespTokenCachePlugin
  */
 
 const ONE_HOUR_IN_MS = 60 * 60 * 1000
 const ONE_MINUTE_IN_MS = 60 * 1000
 
-const ChargingModuleTokenCachePlugin = {
-  name: 'ChargingModuleTokenCache',
+const RespTokenCachePlugin = {
+  name: 'RespTokenCache',
   register: (server, _options) => {
     // `flags` is passed to our server method automatically by hapi. Overwriting `flags.ttl` in our method lets us
     // override the cache default expiry time
     server.method(
-      'getChargingModuleToken',
+      'getRespToken',
       async (flags) => {
-        const token = await ChargingModuleTokenRequest.send()
+        const token = await RespTokenRequest.send()
 
         // If the token request was successful it returns an expiry time, so use this to set the cache expiry
         // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt
@@ -34,7 +34,7 @@ const ChargingModuleTokenCachePlugin = {
           // Hapi requires us to set an expiry time here but we will always override it via `flags.ttl`
           expiresIn: ONE_HOUR_IN_MS,
           // Hapi requires us to set a timeout value here so we set it to error after one minute. In practice we would
-          // expect ChargingModuleTokenRequest to have returned an unsuccessful response which we would gracefully handle
+          // expect RespTokenRequest to have returned an unsuccessful response which we would gracefully handle
           generateTimeout: ONE_MINUTE_IN_MS
         }
       }
@@ -49,4 +49,4 @@ function _setExpiryTime(expiresIn) {
   return (expiresIn - 60) * 1000
 }
 
-module.exports = ChargingModuleTokenCachePlugin
+module.exports = RespTokenCachePlugin
