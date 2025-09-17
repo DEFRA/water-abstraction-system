@@ -96,6 +96,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             {
               eventId: event.id,
               id: notification.id,
+              licenceMonitoringStationId: null,
               licences: ['11/111'],
               notifyError: null,
               messageRef: 'returns_invitation_primary_user_email',
@@ -132,14 +133,16 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           notification = await NotificationHelper.add({
             eventId: event.id,
+            licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
             licences: '["11/111"]',
             messageRef: 'water_abstraction_alert_resume_email',
             messageType: 'email',
             notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
             notifyStatus: 'created',
             personalisation: {
-              alertType: 'resume',
-              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+              alertType: 'stop',
+              licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+              sending_alert_type: 'resume'
             },
             plaintext: 'Dear licence contact,\r\n',
             recipient: 'hello@example.com',
@@ -156,6 +159,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             {
               eventId: event.id,
               id: notification.id,
+              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
               licences: ['11/111'],
               messageRef: 'water_abstraction_alert_resume_email',
               messageType: 'email',
@@ -163,8 +167,9 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
               personalisation: {
-                alertType: 'resume',
-                licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+                alertType: 'stop',
+                licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+                sending_alert_type: 'resume'
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
@@ -228,6 +233,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           {
             eventId: event.id,
             id: notification.id,
+            licenceMonitoringStationId: null,
             licences: ['11/111'],
             notifyError: null,
             messageRef: 'returns_invitation_primary_user_email',
@@ -314,6 +320,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           eventId: event.id,
           id: notification.id,
           licences: ['11/111'],
+          licenceMonitoringStationId: null,
           notifyError: null,
           messageRef: 'returns_invitation_primary_user_email',
           messageType: 'email',

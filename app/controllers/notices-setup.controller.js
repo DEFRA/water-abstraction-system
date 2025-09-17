@@ -24,21 +24,24 @@ const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
+const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
-const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
+const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice-type.service.js')
+const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnFormsService = require('../services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
@@ -233,6 +236,14 @@ async function viewPreviewReturnForms(request, h) {
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
+async function viewRecipientName(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await RecipientNameService.go(sessionId)
+
+  return h.view(`notices/setup/recipient-name.njk`, pageData)
+}
+
 async function viewRemoveThreshold(request, h) {
   const {
     params: { sessionId, licenceMonitoringStationId },
@@ -356,6 +367,16 @@ async function submitCheckLicenceMatches(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
 
+async function submitCheckNoticeType(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  await SubmitCheckNoticeTypeService.go(sessionId)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
 async function submitContactType(request, h) {
   const {
     params: { sessionId },
@@ -405,6 +426,21 @@ async function submitNoticeType(request, h) {
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/${pageData.redirectUrl}`)
+}
+
+async function submitRecipientName(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitRecipientNameService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/recipient-name.njk`, pageData)
+  }
+
+  return h.redirect(`/system/address/${sessionId}/postcode`)
 }
 
 async function submitRemoveLicences(request, h) {
@@ -488,6 +524,7 @@ module.exports = {
   viewLicence,
   viewNoticeType,
   viewPreviewReturnForms,
+  viewRecipientName,
   viewRemoveLicences,
   viewRemoveThreshold,
   viewReturnForms,
@@ -501,9 +538,11 @@ module.exports = {
   submitCancelAlerts,
   submitCheck,
   submitCheckLicenceMatches,
+  submitCheckNoticeType,
   submitContactType,
   submitLicence,
   submitNoticeType,
+  submitRecipientName,
   submitRemoveLicences,
   submitReturnForms,
   submitReturnsPeriod,

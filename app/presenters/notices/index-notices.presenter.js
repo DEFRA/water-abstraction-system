@@ -5,7 +5,7 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNumber, titleCase } = require('../base.presenter.js')
+const { formatLongDate, titleCase } = require('../base.presenter.js')
 
 const NOTICE_MAPPINGS = {
   'hof-resume': 'HOF resume',
@@ -22,21 +22,23 @@ const NOTICE_MAPPINGS = {
  * Formats data for the `/notices` page
  *
  * @param {module:NoticeModel[]} notices - An array of notices to display
- * @param {number} numberOfNotices - The total number of notices
+ * @param {number} totalNumber - The total number of notices
+ * @param {number} selectedPage - The selected page of results
+ * @param {number} numberOfPages - The number of pages of results to paginate
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(notices, numberOfNotices) {
+function go(notices, totalNumber, selectedPage, numberOfPages) {
   return {
     notices: _noticeRowData(notices),
-    numberOfNoticesDisplayed: notices.length,
-    totalNumberOfNotices: formatNumber(numberOfNotices)
+    pageTitle: _pageTitle(selectedPage, numberOfPages),
+    tableCaption: _tableCaption(notices.length, totalNumber)
   }
 }
 
 function _noticeRowData(notices) {
   return notices.map((notice) => {
-    const { createdAt, errorCount, id, issuer, referenceCode, recipientCount } = notice
+    const { createdAt, id, issuer, overallStatus, referenceCode, recipientCount } = notice
 
     return {
       createdDate: formatLongDate(createdAt),
@@ -44,10 +46,26 @@ function _noticeRowData(notices) {
       recipients: recipientCount,
       reference: referenceCode,
       sentBy: issuer,
-      status: errorCount > 0 ? 'error' : 'sent',
+      status: overallStatus,
       type: _type(notice)
     }
   })
+}
+
+function _pageTitle(selectedPage, numberOfPages) {
+  if (numberOfPages < 2) {
+    return 'Notices'
+  }
+
+  return `Notices (page ${selectedPage} of ${numberOfPages})`
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} notices`
+  }
+
+  return `Showing all ${totalNumber} notices`
 }
 
 function _type(notice) {

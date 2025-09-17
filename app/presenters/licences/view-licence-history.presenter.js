@@ -47,6 +47,7 @@ function _chargeVersionEntries(licence) {
       notes,
       link: `/licences/${id}/charge-information/${chargeVersion.id}/view`,
       reason: chargeVersion.$reason(),
+      startDate: formatLongDate(chargeVersion.startDate),
       type: { index: 1, name: 'Charge version' }
     }
   })
@@ -77,6 +78,7 @@ function _licenceVersionEntries(licence) {
       notes,
       link: null,
       reason: licenceVersion.$reason(),
+      startDate: formatLongDate(licenceVersion.startDate),
       type: { index: 0, name: 'Licence version' }
     }
   })
@@ -99,6 +101,7 @@ function _returnVersionEntries(licence) {
       notes,
       link: `/system/return-versions/${returnVersion.id}`,
       reason: mappedReason ?? reason,
+      startDate: formatLongDate(returnVersion.startDate),
       type: { index: 2, name: 'Return version' }
     }
   })

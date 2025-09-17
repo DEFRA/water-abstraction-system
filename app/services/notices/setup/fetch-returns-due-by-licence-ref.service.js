@@ -24,6 +24,7 @@ async function go(licenceRef) {
 async function _fetch(licenceRef) {
   const query = `
     SELECT
+      rl.id as id,
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
       rl.return_id AS "returnId",
@@ -41,6 +42,7 @@ async function _fetch(licenceRef) {
     WHERE rl.licence_ref = ?
     AND rl.status = 'due'
     AND rl.end_date <= ?
+    AND rl.metadata->>'isCurrent' = 'true'
     ORDER BY rl.start_date DESC, rl.return_reference ASC;
   `
 

@@ -4,8 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const { ValidationError } = require('joi')
 
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
@@ -35,42 +38,6 @@ describe('Base presenter', () => {
         const result = BasePresenter.convertPenceToPounds(valueInPence)
 
         expect(result).to.equal(1149.01)
-      })
-    })
-  })
-
-  describe('#formatNumber()', () => {
-    it('formats a number for display', () => {
-      const result = BasePresenter.formatNumber(12345.6789)
-
-      expect(result).to.equal('12,345.679')
-    })
-  })
-
-  describe('#formatQuantity()', () => {
-    describe('when quantity and units are provided', () => {
-      describe('and the value is not 0', () => {
-        it('returns converted and formatted quantity', () => {
-          const result = BasePresenter.formatQuantity('gal', 100)
-
-          expect(result).to.equal('21,996.925')
-        })
-      })
-
-      describe('and the value is 0', () => {
-        it('returns 0 as a string', () => {
-          const result = BasePresenter.formatQuantity('gal', 0)
-
-          expect(result).to.equal('0')
-        })
-      })
-    })
-
-    describe('when quantity is null', () => {
-      it('returns null', () => {
-        const result = BasePresenter.formatQuantity('someUnit', null)
-
-        expect(result).to.equal(null)
       })
     })
   })
@@ -185,10 +152,44 @@ describe('Base presenter', () => {
   })
 
   describe('#formatLongDate()', () => {
-    it('correctly formats the given date, for example, 12 September 2021', async () => {
-      const result = BasePresenter.formatLongDate(new Date('2021-09-12T14:41:10.511Z'))
+    describe('when a valid "Date" is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = BasePresenter.formatLongDate(new Date('2021-09-12T14:41:10.511Z'))
 
-      expect(result).to.equal('12 September 2021')
+        expect(result).to.equal('12 September 2021')
+      })
+    })
+
+    describe('when a valid "String" date is provided', () => {
+      it('correctly formats the given date, for example, 12 September 2021', async () => {
+        const result = BasePresenter.formatLongDate('2021-09-12')
+
+        expect(result).to.equal('12 September 2021')
+      })
+    })
+
+    describe('when an invalid "Date" is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const result = BasePresenter.formatLongDate(new Date('2021-09-50'))
+
+        expect(result).to.equal('Invalid Date')
+      })
+    })
+
+    describe('when an invalid "String" date is provided', () => {
+      it('correctly returns invalid date', async () => {
+        const result = BasePresenter.formatLongDate('2021-09-50')
+
+        expect(result).to.equal('Invalid Date')
+      })
+    })
+
+    describe('when a falsey value date is provided', () => {
+      it('correctly returns null', async () => {
+        const result = BasePresenter.formatLongDate(undefined)
+
+        expect(result).to.be.null()
+      })
     })
   })
 
@@ -197,16 +198,6 @@ describe('Base presenter', () => {
       const result = BasePresenter.formatLongDateTime(new Date('2021-09-12T14:41:10.511Z'))
 
       expect(result).to.equal('12 September 2021 at 14:41:10')
-    })
-  })
-
-  describe('#formatPounds()', () => {
-    const valueInPence = 114950
-
-    it('correctly returns the value as pounds, for example, 1149.50', async () => {
-      const result = BasePresenter.formatPounds(valueInPence)
-
-      expect(result).to.equal('1149.50')
     })
   })
 
@@ -245,6 +236,24 @@ describe('Base presenter', () => {
           expect(result).to.equal('-£1,149.50')
         })
       })
+    })
+  })
+
+  describe('#formatNumber()', () => {
+    it('formats a number for display', () => {
+      const result = BasePresenter.formatNumber(12345.6789)
+
+      expect(result).to.equal('12,345.679')
+    })
+  })
+
+  describe('#formatPounds()', () => {
+    const valueInPence = 114950
+
+    it('correctly returns the value as pounds, for example, 1149.50', async () => {
+      const result = BasePresenter.formatPounds(valueInPence)
+
+      expect(result).to.equal('1149.50')
     })
   })
 
@@ -312,6 +321,272 @@ describe('Base presenter', () => {
           'Spray Irrigation - Anti Frost',
           'Spray Irrigation - Storage'
         ])
+      })
+    })
+  })
+
+  describe('#formatQuantity()', () => {
+    describe('when quantity and units are provided', () => {
+      describe('and the value is not 0', () => {
+        it('returns converted and formatted quantity', () => {
+          const result = BasePresenter.formatQuantity('gal', 100)
+
+          expect(result).to.equal('21,996.925')
+        })
+      })
+
+      describe('and the value is 0', () => {
+        it('returns 0 as a string', () => {
+          const result = BasePresenter.formatQuantity('gal', 0)
+
+          expect(result).to.equal('0')
+        })
+      })
+    })
+
+    describe('when quantity is null', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatQuantity('someUnit', null)
+
+        expect(result).to.equal(null)
+      })
+    })
+  })
+
+  describe('#formatReturnLogStatus()', () => {
+    let testReturnLog
+
+    describe('when status is completed', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'completed' }
+      })
+
+      it('returns complete', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('complete')
+      })
+    })
+
+    describe('when the status is due', () => {
+      describe('and the due date is null', () => {
+        before(() => {
+          testReturnLog = { dueDate: null, status: 'due' }
+        })
+
+        it('returns not due yet', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
+        })
+      })
+
+      describe('and the due date is in the past', () => {
+        before(() => {
+          const lastWeek = new Date()
+          lastWeek.setDate(lastWeek.getDate() - 7)
+
+          testReturnLog = { dueDate: lastWeek, status: 'due' }
+        })
+
+        it('returns overdue', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('overdue')
+        })
+      })
+
+      describe('and the due date is in the next 28 days', () => {
+        before(() => {
+          const nextWeek = new Date()
+          nextWeek.setDate(nextWeek.getDate() + 7)
+
+          testReturnLog = { dueDate: nextWeek, status: 'due' }
+        })
+
+        it('returns due', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('due')
+        })
+      })
+
+      describe('and the due date is after the next 28 days', () => {
+        before(() => {
+          const fourWeeks = new Date()
+          fourWeeks.setDate(fourWeeks.getDate() + 27)
+
+          testReturnLog = { dueDate: fourWeeks, status: 'due' }
+        })
+
+        it('returns not due yet', () => {
+          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+          expect(result).to.equal('not due yet')
+        })
+      })
+    })
+
+    describe('when status is received', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'received' }
+      })
+
+      it('returns received', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('received')
+      })
+    })
+
+    describe('when status is void', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'void' }
+      })
+
+      it('returns void', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('void')
+      })
+    })
+  })
+
+  describe('#formatValidationResult()', () => {
+    let validationResult
+
+    describe('when the validation result has no errors', () => {
+      beforeEach(() => {
+        validationResult = {
+          value: {
+            noticeTypes: ['returnReminder', 'returnInvitation'],
+            reference: 'RREM-VB9EFA',
+            sentFromDay: '01',
+            sentFromMonth: '09',
+            sentFromYear: '2025',
+            fromDate: new Date('2025-09-01'),
+            toDate: undefined
+          }
+        }
+      })
+
+      it('returns null', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the validation result contains a single failure', () => {
+      beforeEach(() => {
+        const error = new ValidationError('Enter an email address in the correct format, like name@example.com', [
+          {
+            message: 'Enter an email address in the correct format, like name@example.com',
+            path: ['email'],
+            type: 'string.email',
+            context: {
+              value: 'fudge',
+              invalids: ['fudge'],
+              label: 'email',
+              key: 'email'
+            }
+          }
+        ])
+
+        validationResult = {
+          value: { type: 'email', email: 'fudge' },
+          error
+        }
+      })
+
+      it('returns the validation result formatted for our view pages', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.equal({
+          errorList: [
+            {
+              href: '#email',
+              text: 'Enter an email address in the correct format, like name@example.com'
+            }
+          ],
+          email: {
+            text: 'Enter an email address in the correct format, like name@example.com'
+          }
+        })
+      })
+    })
+
+    describe('when the validation result contains multiple failures', () => {
+      beforeEach(() => {
+        const error = new ValidationError(
+          'Enter a valid from date. Reference must be 11 characters or less. Enter a valid to date',
+          [
+            {
+              message: 'Enter a valid from date',
+              path: ['fromDate'],
+              type: 'date.format',
+              context: {
+                format: ['YYYY-MM-DD'],
+                label: 'fromDate',
+                value: '--01',
+                key: 'fromDate'
+              }
+            },
+            {
+              message: 'Reference must be 11 characters or less',
+              path: ['reference'],
+              type: 'string.max',
+              context: {
+                limit: 11,
+                value: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+                encoding: undefined,
+                label: 'reference',
+                key: 'reference'
+              }
+            },
+            {
+              message: 'Enter a valid to date',
+              path: ['toDate'],
+              type: 'date.format',
+              context: {
+                format: ['YYYY-MM-DD'],
+                label: 'toDate',
+                value: '-04-',
+                key: 'toDate'
+              }
+            }
+          ]
+        )
+
+        validationResult = {
+          value: {
+            reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+            sentFromDay: '01',
+            sentToMonth: '04',
+            noticeTypes: [],
+            fromDate: '--01',
+            toDate: '-04-'
+          },
+          error
+        }
+      })
+
+      it('returns the validation result formatted for our view pages', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.equal({
+          errorList: [
+            { href: '#fromDate', text: 'Enter a valid from date' },
+            {
+              href: '#reference',
+              text: 'Reference must be 11 characters or less'
+            },
+            { href: '#toDate', text: 'Enter a valid to date' }
+          ],
+          fromDate: { text: 'Enter a valid from date' },
+          reference: { text: 'Reference must be 11 characters or less' },
+          toDate: { text: 'Enter a valid to date' }
+        })
       })
     })
   })

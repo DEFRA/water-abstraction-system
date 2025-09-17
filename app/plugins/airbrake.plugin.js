@@ -19,17 +19,17 @@
  */
 
 const { Notifier } = require('@airbrake/node')
-const Request = require('request')
 
 const airbrakeConfig = require('../../config/airbrake.config.js')
+const { gotWrapper } = require('../lib/got-wrapper.lib.js')
 const serverConfig = require('../../config/server.config.js')
 
 const AirbrakePlugin = {
   name: 'airbrake',
-  register: (server, _options) => {
+  register: async (server, _options) => {
     // We add an instance of the Airbrake Notifier so we can send notifications via Airbrake to Errbit manually if
     // needed. It's main use is when passed in as a param to RequestNotifierLib in the RequestNotifierPlugin
-    server.app.airbrake = new Notifier(_notifierArgs())
+    server.app.airbrake = new Notifier(await _notifierArgs())
 
     // When Hapi emits a request event with an error we capture the details and use Airbrake to send a request to our
     // Errbit instance
@@ -55,7 +55,7 @@ const AirbrakePlugin = {
   }
 }
 
-function _notifierArgs() {
+async function _notifierArgs() {
   const args = {
     host: airbrakeConfig.host,
     projectId: airbrakeConfig.projectId,
@@ -67,7 +67,7 @@ function _notifierArgs() {
   }
 
   if (serverConfig.httpProxy) {
-    args.request = Request.defaults({ proxy: serverConfig.httpProxy })
+    args.request = await gotWrapper({ proxy: serverConfig.httpProxy })
   }
 
   return args

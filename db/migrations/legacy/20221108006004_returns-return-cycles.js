@@ -10,7 +10,7 @@ exports.up = function (knex) {
     // Data
     table.date('start_date').notNullable()
     table.date('end_date').notNullable()
-    table.date('due_date').notNullable()
+    table.date('due_date')
     table.boolean('is_summer')
     table.boolean('is_submitted_in_wrls')
 

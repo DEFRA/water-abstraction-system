@@ -57,8 +57,8 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
               link: `/system/notices/setup/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStations.one.id}`,
               text: 'Preview'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.one.licence.id,
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
@@ -71,8 +71,8 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
               link: `/system/notices/setup/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStations.two.id}`,
               text: 'Preview'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.two.licence.id,
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
@@ -99,8 +99,8 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
                 link: `/system/notices/setup/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStations.two.id}`,
                 text: 'Preview'
               },
-              alert: null,
-              alertDate: null,
+              alert: '',
+              alertDate: '',
               licenceId: licenceMonitoringStations.two.licence.id,
               licenceRef: licenceMonitoringStations.two.licence.licenceRef,
               restriction: 'Stop',

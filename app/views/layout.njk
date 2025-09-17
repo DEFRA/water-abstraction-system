@@ -1,7 +1,9 @@
 {% extends "govuk/template.njk" %}
 
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% from "macros/page-heading.njk" import pageHeading %}
@@ -53,8 +55,16 @@
 {% endblock %}
 
 {% block content %}
-  {% if errorList %}
-    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+  {% if error %}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
+  {% endif %}
+
+  {% if notification %}
+    {{ govukNotificationBanner(notification) }}
+  {% endif %}
+
+  {% if warning %}
+    {{ govukWarningText(warning) }}
   {% endif %}
 
   {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}

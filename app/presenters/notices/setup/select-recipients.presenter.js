@@ -12,17 +12,36 @@ const ContactPresenter = require('./contact.presenter.js')
  *
  * @param {module:SessionModel} session - The session instance
  * @param {object[]} recipients
+ * @param {string[]} selectedRecipients - an array of 'contact_hash_id' selected by the user
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, recipients) {
-  const { id: sessionId, selectedRecipients } = session
+function go(session, recipients, selectedRecipients) {
+  const { id: sessionId, noticeType, referenceCode } = session
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/check`,
-    contactTypeLink: `/system/notices/setup/${sessionId}/contact-type`,
+    backLink: {
+      href: `/system/notices/setup/${sessionId}/check`,
+      text: 'Back'
+    },
     pageTitle: 'Select Recipients',
-    recipients: _recipients(recipients, selectedRecipients)
+    pageTitleCaption: `Notice ${referenceCode}`,
+    recipients: _recipients(recipients, selectedRecipients),
+    setupAddress: _setupAddress(sessionId, noticeType)
+  }
+}
+
+function _setupAddress(sessionId, noticeType) {
+  if (noticeType === 'returnForms') {
+    return {
+      href: `/system/notices/setup/${sessionId}/recipient-name`,
+      text: 'Set up a single use address'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${sessionId}/contact-type`,
+    text: 'Set up a single use address or email address'
   }
 }
 

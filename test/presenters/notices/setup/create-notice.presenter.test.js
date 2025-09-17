@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,6 +16,7 @@ const CreateNoticePresenter = require('../../../../app/presenters/notices/setup/
 
 describe('Notices - Setup - Create Notice presenter', () => {
   let auth
+  let clock
   let recipients
   let session
   let testRecipients
@@ -27,6 +29,12 @@ describe('Notices - Setup - Create Notice presenter', () => {
         }
       }
     }
+
+    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   describe('when the journey is not for "alerts"', () => {
@@ -150,23 +158,41 @@ describe('Notices - Setup - Create Notice presenter', () => {
       })
 
       describe('the "returnCycle" property', () => {
-        beforeEach(() => {
-          session.determinedReturnsPeriod = {
-            dueDate: new Date(`2025-07-28`),
-            endDate: new Date(`2025-06-30`),
-            startDate: new Date(`2025-04-01`),
-            summer: 'true'
-          }
+        describe('when there are "determinedReturnsPeriod"', () => {
+          beforeEach(() => {
+            session.determinedReturnsPeriod = {
+              dueDate: new Date(`2025-07-28`),
+              endDate: new Date(`2025-06-30`),
+              startDate: new Date(`2025-04-01`),
+              summer: 'true'
+            }
+          })
+
+          it('correctly returns the return cycle', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.returnCycle).to.equal({
+              dueDate: '2025-07-28',
+              endDate: '2025-06-30',
+              isSummer: true,
+              startDate: '2025-04-01'
+            })
+          })
         })
 
-        it('correctly returns the return cycle', () => {
-          const result = CreateNoticePresenter.go(session, testRecipients, auth)
+        describe('when there are NO "determinedReturnsPeriod"', () => {
+          beforeEach(() => {
+            delete session.determinedReturnsPeriod
+          })
 
-          expect(result.metadata.returnCycle).to.equal({
-            dueDate: '2025-07-28',
-            endDate: '2025-06-30',
-            isSummer: true,
-            startDate: '2025-04-01'
+          it('correctly returns the return cycle', () => {
+            const result = CreateNoticePresenter.go(session, testRecipients, auth)
+
+            expect(result.metadata.returnCycle).to.equal({
+              dueDate: '2025-01-29',
+              endDate: null,
+              startDate: null
+            })
           })
         })
       })

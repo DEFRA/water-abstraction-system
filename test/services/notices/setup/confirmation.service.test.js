@@ -10,12 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const ConfirmationService = require('../../../../app/services/notices/setup/confirmation.service.js')
 
 describe('Notices - Setup - Confirmation service', () => {
-  const referenceCode = 'RINV-123'
+  const referenceCode = generateReferenceCode()
 
   let event
 
@@ -40,7 +41,7 @@ describe('Notices - Setup - Confirmation service', () => {
         forwardLink: `/notifications/report/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Returns invitations sent',
-        referenceCode: 'RINV-123'
+        referenceCode
       })
     })
   })

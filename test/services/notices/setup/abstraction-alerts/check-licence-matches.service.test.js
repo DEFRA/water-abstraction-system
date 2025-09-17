@@ -63,8 +63,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.one.licence.id,
             licenceRef: licenceMonitoringStations.one.licence.licenceRef,
             restriction: 'Reduce',
@@ -77,8 +77,8 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.two.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.two.licence.id,
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',
@@ -91,11 +91,11 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.three.id}`,
               text: 'Remove'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.three.licence.id,
             licenceRef: licenceMonitoringStations.three.licence.licenceRef,
-            restriction: 'Stop',
+            restriction: 'Stop or reduce',
             restrictionCount: 1,
             threshold: '100m'
           }

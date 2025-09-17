@@ -28,9 +28,10 @@ exports.up = function (knex) {
     table.timestamp('next_status_check')
     table.decimal('notification_type')
     table.string('job_id')
+    table.uuid('licence_gauging_station_id')
 
     // Legacy timestamps
-    table.timestamp('date_created', { useTz: false }).notNullable()
+    table.timestamp('date_created', { useTz: false }).defaultTo(knex.fn.now())
 
     // Constraints
     table.unique(['job_id'], { useConstraint: true })

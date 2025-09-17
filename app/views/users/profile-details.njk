@@ -26,10 +26,7 @@
   {%endif%}
 
   {% if notification %}
-    {{ govukNotificationBanner({
-      titleText: notification.title,
-      text: notification.text
-    }) }}
+    {{ govukNotificationBanner(notification) }}
   {% endif %}
 
   {{ pageHeading(pageTitle) }}

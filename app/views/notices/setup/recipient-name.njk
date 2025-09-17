@@ -1,0 +1,30 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
+
+    {{ govukInput({
+      classes: 'govuk-!-width-one-third',
+      errorMessage: error,
+      label: {
+        text: pageTitle,
+        classes: 'govuk-label--l',
+        isPageHeading: true
+      },
+      id: 'name',
+      name: 'name',
+      value: name,
+      hint: {
+        text: 'This will be used as the first line of the address'
+      }
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
