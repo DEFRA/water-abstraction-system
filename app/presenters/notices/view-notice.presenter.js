@@ -36,11 +36,11 @@ function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
     createdBy: notice.issuer,
     dateCreated: formatLongDate(notice.createdAt),
-    reference: notice.referenceCode,
     notifications: tableRows,
     numberShowing: notifications.length,
     pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
+    reference: notice.referenceCode,
     showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
     status: _status(notice)
   }

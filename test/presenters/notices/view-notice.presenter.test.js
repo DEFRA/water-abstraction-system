@@ -8,165 +8,291 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventModel = require('../../../app/models/event.model.js')
+const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
 
 // Thing under test
 const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice.presenter.js')
 
 describe('Notices - View Notice presenter', () => {
-  const notices = {
-    event: EventModel.fromJson({
-      id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
-      referenceCode: 'PRTF-VPV3J9',
-      issuer: 'test@wrls.gov.uk',
+  let notice
+  let notifications
+  let numberOfPages
+  let totalNumber
+  let selectedPage
+
+  beforeEach(() => {
+    numberOfPages = 1
+    selectedPage = 1
+    totalNumber = 2
+
+    notice = {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
+      id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
+      issuer: 'test@wrls.gov.uk',
+      referenceCode: generateReferenceCode('WAA'),
       status: 'completed',
-      subtype: 'paperReturnForms'
-    }),
-    results: [
+      subtype: 'waterAbstractionAlerts',
+      alertType: 'warning',
+      errorCount: 1,
+      pendingCount: 0
+    }
+
+    notifications = [
       {
-        recipient_name: 'Big Farm Co Ltd',
-        message_type: 'letter',
+        id: '2384d26f-5acb-4e3b-ab31-532197db095f',
+        licences: ['01/123'],
+        messageType: 'letter',
+        notifyStatus: 'received',
         personalisation: {
-          address_line_1: 'Big Farm Co Ltd',
-          address_line_2: 'Big Farm',
-          address_line_3: 'Windy road',
-          address_line_4: 'Buttercup meadow',
-          address_line_5: 'Buttercup Village',
-          postcode: 'TT1 1TT'
+          address_line_1: 'Clean Water Limited',
+          address_line_2: 'c/o Bob Bobbles',
+          address_line_3: 'Water Lane',
+          address_line_4: 'Swampy Heath',
+          address_line_5: 'CAMBRIDGESHIRE',
+          address_line_6: 'CB23 1ZZ',
+          alertType: 'warning',
+          condition_text: 'Effect of restriction: 9.2 (ii) No abstraction shall take place when we say so',
+          flow_or_level: 'flow',
+          issuer_email_address: 'admin-internal@wrls.gov.uk',
+          licence_ref: '01/123',
+          licenceMonitoringStationId: 'b7cb48d1-7e23-49b8-9cee-686d302fdc48',
+          name: 'Clean Water Limited',
+          monitoring_station_name: 'FRENCHAY',
+          source: '',
+          threshold_unit: 'm3/s',
+          threshold_value: 100
         },
-        status: 'completed',
-        licences: "['AT/TST/MONTHLY/02']",
-        recipient: 'n/a'
+        recipientName: null,
+        status: 'sent'
       },
       {
-        recipient_name: 'test@wrls.gov.uk',
-        message_type: 'email',
-        status: 'completed',
-        licences: "['AT/TST/MONTHLY/02']",
-        recipient: 'test@wrls.gov.uk'
-      },
-      {
-        recipient_name: 'Big Farm Co Ltd',
-        message_type: 'letter',
+        id: '93679656-03f5-4ad2-93eb-7c9b9b1b7b92',
+        licences: ['01/124'],
+        messageType: 'email',
+        notifyStatus: 'permanent-failure',
         personalisation: {
-          address_line_1: 'Big Farm Co Ltd',
-          address_line_2: 'Big Farm',
-          address_line_3: 'Windy road',
-          address_line_4: 'Buttercup meadow',
-          address_line_5: 'Buttercup Village',
-          postcode: 'TT1 1TT'
+          alertType: 'warning',
+          condition_text: '',
+          flow_or_level: 'flow',
+          issuer_email_address: 'admin-internal@wrls.gov.uk',
+          licence_ref: '01/124',
+          licenceMonitoringStationId: '399d4483-a198-4fe5-b229-45e2fc2a57ec',
+          monitoring_station_name: 'FRENCHAY',
+          source: '',
+          threshold_unit: 'm3/s',
+          threshold_value: 100
         },
-        status: 'completed',
-        licences: "['AT/TST/MONTHLY/02']",
-        recipient: null
+        recipientName: 'shaw.carol@atari.com',
+        status: 'error'
       }
     ]
-  }
+  })
 
-  describe('when a notice exists', () => {
-    it('correctly presents the data for display', () => {
-      const result = ViewNoticePresenter.go(notices, 1)
+  it('correctly presents the data', () => {
+    const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
 
-      expect(result).to.equal({
-        backLink: { href: '/system/notices', text: 'Go back to notices' },
-        createdBy: 'test@wrls.gov.uk',
-        dateCreated: '21 February 2025',
-        reference: 'PRTF-VPV3J9',
-        pageTitle: 'Returns invitations',
-        pageTitleCaption: 'Notice PRTF-VPV3J9',
-        notices: [
-          {
-            recipient: [
-              'Big Farm Co Ltd',
-              'Big Farm',
-              'Windy road',
-              'Buttercup meadow',
-              'Buttercup Village',
-              'TT1 1TT'
-            ],
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'letter',
-            status: 'completed'
-          },
-          {
-            recipient: 'test@wrls.gov.uk',
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'email',
-            status: 'completed'
-          },
-          {
-            recipient: [
-              'Big Farm Co Ltd',
-              'Big Farm',
-              'Windy road',
-              'Buttercup meadow',
-              'Buttercup Village',
-              'TT1 1TT'
-            ],
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'letter',
-            status: 'completed'
-          }
-        ],
-        status: 'sent'
+    expect(result).to.equal({
+      backLink: { href: '/system/notices', text: 'Go back to notices' },
+      createdBy: 'test@wrls.gov.uk',
+      dateCreated: '21 February 2025',
+      notifications: [
+        {
+          recipient: [
+            'Clean Water Limited',
+            'c/o Bob Bobbles',
+            'Water Lane',
+            'Swampy Heath',
+            'CAMBRIDGESHIRE',
+            'CB23 1ZZ'
+          ],
+          licenceRefs: ['01/123'],
+          messageType: 'letter',
+          status: 'sent'
+        },
+        {
+          recipient: ['shaw.carol@atari.com'],
+          licenceRefs: ['01/124'],
+          messageType: 'email',
+          status: 'error'
+        }
+      ],
+      numberShowing: 2,
+      pageTitle: 'Warning alert',
+      pageTitleCaption: `Notice ${notice.referenceCode}`,
+      reference: notice.referenceCode,
+      showingDeclaration: 'Showing all 2 notifications',
+      status: 'error'
+    })
+  })
+
+  describe('the "notifications" property', () => {
+    describe('the "recipient" property', () => {
+      describe('when the "messageType" is "letter"', () => {
+        describe('and the notification was created by the legacy system (has postcode rather than line_7', () => {
+          beforeEach(() => {
+            notifications[0].personalisation.address_line_6 = null
+            notifications[0].personalisation.postcode = 'CB23 1ZZ'
+          })
+
+          it('returns only the populated address lines as an array', () => {
+            const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+            expect(result.notifications[0].recipient).to.equal([
+              'Clean Water Limited',
+              'c/o Bob Bobbles',
+              'Water Lane',
+              'Swampy Heath',
+              'CAMBRIDGESHIRE',
+              'CB23 1ZZ'
+            ])
+          })
+        })
+
+        describe('and the notification was created by this system (has line_7 rather than postcode', () => {
+          beforeEach(() => {
+            // NOTE: Because our addresses go through NotifyAddressPresenter _before_ sending, what we save to the DB
+            // will never feature a blank line in the middle of the address. So, if address_line_7 is populated, it is
+            // because _all_ the address lines are populated
+            notifications[0].personalisation.address_line_5 = 'Cambridge'
+            notifications[0].personalisation.address_line_6 = 'CAMBRIDGESHIRE'
+            notifications[0].personalisation.address_line_7 = 'CB23 1ZZ'
+          })
+
+          it('returns only the populated address lines as an array', () => {
+            const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+            expect(result.notifications[0].recipient).to.equal([
+              'Clean Water Limited',
+              'c/o Bob Bobbles',
+              'Water Lane',
+              'Swampy Heath',
+              'Cambridge',
+              'CAMBRIDGESHIRE',
+              'CB23 1ZZ'
+            ])
+          })
+        })
+      })
+
+      describe('when the "messageType" is "letter"', () => {
+        it('returns the recipient email in an array', () => {
+          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+          expect(result.notifications[1].recipient).to.equal(['shaw.carol@atari.com'])
+        })
       })
     })
   })
 
-  describe('when a notice does not exist and has paginated results', () => {
-    beforeEach(async () => {
-      const emptyObjects = Array.from({ length: 25 }, () => {
-        return {}
+  describe('the "pageTitle" property', () => {
+    describe('when the notice is an abstraction alert', () => {
+      describe('and there is only one page of results', () => {
+        it('returns the "pageTitle" without page info', () => {
+          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+          expect(result.pageTitle).to.equal('Warning alert')
+        })
       })
-      notices.results.unshift(...emptyObjects)
+
+      describe('and there are multiple pages of results', () => {
+        beforeEach(() => {
+          numberOfPages = 3
+        })
+
+        it('returns the "pageTitle" with page info', () => {
+          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+          expect(result.pageTitle).to.equal('Warning alert (page 1 of 3)')
+        })
+      })
     })
 
-    it('correctly presents the data for display', () => {
-      const result = ViewNoticePresenter.go(notices, 2)
+    describe('when the notice is not an abstraction alert', () => {
+      beforeEach(() => {
+        notice.subtype = 'returnInvitation'
+        notice.alertType = null
+      })
 
-      expect(result).to.equal({
-        backLink: { href: '/system/notices', text: 'Go back to notices' },
-        createdBy: 'test@wrls.gov.uk',
-        dateCreated: '21 February 2025',
-        reference: 'PRTF-VPV3J9',
-        pageTitle: 'Returns invitations',
-        pageTitleCaption: 'Notice PRTF-VPV3J9',
-        notices: [
-          {
-            recipient: [
-              'Big Farm Co Ltd',
-              'Big Farm',
-              'Windy road',
-              'Buttercup meadow',
-              'Buttercup Village',
-              'TT1 1TT'
-            ],
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'letter',
-            status: 'completed'
-          },
-          {
-            recipient: 'test@wrls.gov.uk',
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'email',
-            status: 'completed'
-          },
-          {
-            recipient: [
-              'Big Farm Co Ltd',
-              'Big Farm',
-              'Windy road',
-              'Buttercup meadow',
-              'Buttercup Village',
-              'TT1 1TT'
-            ],
-            licenceRefs: "['AT/TST/MONTHLY/02']",
-            messageType: 'letter',
-            status: 'completed'
-          }
-        ],
-        status: 'sent'
+      describe('and there is only one page of results', () => {
+        it('returns the "pageTitle" without page info', () => {
+          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+          expect(result.pageTitle).to.equal('Returns invitation')
+        })
+      })
+
+      describe('and there are multiple pages of results', () => {
+        beforeEach(() => {
+          numberOfPages = 3
+        })
+
+        it('returns the "pageTitle" with page info', () => {
+          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+          expect(result.pageTitle).to.equal('Returns invitation (page 1 of 3)')
+        })
+      })
+    })
+  })
+
+  describe('the "showingDeclaration" property', () => {
+    describe('when there is only one page of results', () => {
+      it('returns the "showingDeclaration" without page info', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.showingDeclaration).to.equal('Showing all 2 notifications')
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      beforeEach(() => {
+        totalNumber = 50
+      })
+
+      it('returns the "showingDeclaration" with page info', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.showingDeclaration).to.equal('Showing 2 of 50 notifications')
+      })
+    })
+  })
+
+  describe('the "status" property', () => {
+    describe('when the error count is greater than 0', () => {
+      beforeEach(() => {
+        // NOTE: We set pending count to more than 0 to demonstrate that the error count takes precedence
+        notice.pendingCount = 1
+      })
+
+      it('returns "error"', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.status).to.equal('error')
+      })
+    })
+
+    describe('when the error count is 0 but the pending count is greater than 0', () => {
+      beforeEach(() => {
+        notice.errorCount = 0
+        notice.pendingCount = 1
+      })
+
+      it('returns "pending"', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.status).to.equal('pending')
+      })
+    })
+
+    describe('when both the error count and the pending count are 0', () => {
+      beforeEach(() => {
+        notice.errorCount = 0
+      })
+
+      it('returns "sent"', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.status).to.equal('sent')
       })
     })
   })
