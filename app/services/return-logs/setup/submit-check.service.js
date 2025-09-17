@@ -7,6 +7,7 @@
 
 const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const GenerateReturnSubmissionMetadata = require('./generate-return-submission-metadata.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -60,7 +61,9 @@ async function go(sessionId, user) {
 }
 
 async function _markReturnLogAsSubmitted(returnLogId, receivedDate, trx) {
-  await ReturnLogModel.query(trx).patch({ status: 'completed', receivedDate }).where({ id: returnLogId })
+  await ReturnLogModel.query(trx)
+    .patch({ status: 'completed', receivedDate, updatedAt: timestampForPostgres() })
+    .where({ id: returnLogId })
 }
 
 async function _cleanupSession(sessionId, trx) {
