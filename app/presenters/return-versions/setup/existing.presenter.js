@@ -19,7 +19,10 @@ function go(session) {
   const { id: sessionId, licence, licenceVersion } = session
 
   return {
-    backLink: `/system/return-versions/setup/${sessionId}/method`,
+    backLink: {
+      href: `/system/return-versions/setup/${sessionId}/method`,
+      text: 'Back'
+    },
     existingOptions: _existingOptions(licenceVersion.copyableReturnVersions),
     licenceRef: licence.licenceRef,
     pageTitle: 'Use previous requirements for returns',

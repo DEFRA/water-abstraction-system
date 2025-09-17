@@ -2,15 +2,10 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
-  {% if notification %}
-    {{ govukNotificationBanner(notification) }}
-  {% endif %}
-
   {{ pageHeadingHtml }}
 
   <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">

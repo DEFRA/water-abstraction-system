@@ -75,7 +75,10 @@ describe('Return Versions - Setup - Existing service', () => {
           activeNavBar: 'search',
           pageTitle: 'Use previous requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/method`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/method`,
+            text: 'Back'
+          },
           existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
           licenceRef: '01/ABC'
         },
