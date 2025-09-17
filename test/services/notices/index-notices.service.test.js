@@ -12,6 +12,7 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
@@ -21,6 +22,10 @@ describe('Notices - Index Notices service', () => {
   let fetchResults
   let page
   let yarStub
+
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -62,7 +67,7 @@ describe('Notices - Index Notices service', () => {
         notices: [
           {
             createdDate: '25 March 2025',
-            link: `/notifications/report/${fetchResults.results[0].id}`,
+            link: `/system/notices/${fetchResults.results[0].id}`,
             recipients: fetchResults.results[0].recipientCount,
             reference: fetchResults.results[0].referenceCode,
             sentBy: 'billing.data@wrls.gov.uk',
