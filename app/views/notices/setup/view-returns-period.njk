@@ -3,8 +3,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% from 'macros/page-heading.njk' import pageHeading %}
-
 {% if error %}
   {% set errorList = [{
     text: error.text,
