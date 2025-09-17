@@ -12,6 +12,7 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
@@ -23,6 +24,8 @@ describe('Notices - Submit Index Notices service', () => {
   let yarStub
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
+
     yarStub = {
       clear: Sinon.stub().returns(),
       get: Sinon.stub(),
@@ -241,7 +244,7 @@ describe('Notices - Submit Index Notices service', () => {
               notices: [
                 {
                   createdDate: '25 March 2025',
-                  link: `/notifications/report/${notice.id}`,
+                  link: `/system/notices/${notice.id}`,
                   recipients: notice.recipientCount,
                   reference: notice.referenceCode,
                   sentBy: 'billing.data@wrls.gov.uk',
@@ -289,7 +292,7 @@ describe('Notices - Submit Index Notices service', () => {
               notices: [
                 {
                   createdDate: '25 March 2025',
-                  link: `/notifications/report/${notice.id}`,
+                  link: `/system/notices/${notice.id}`,
                   recipients: notice.recipientCount,
                   reference: notice.referenceCode,
                   sentBy: 'billing.data@wrls.gov.uk',
