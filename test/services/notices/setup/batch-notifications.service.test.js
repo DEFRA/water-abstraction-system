@@ -12,11 +12,14 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
-const NotifyConfig = require('../../../../config/notify.config.js')
 const CreateEmailRequest = require('../../../../app/requests/notify/create-email.request.js')
+const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/create-precompiled-file.request.js')
+const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
+const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 
 // Thing under test
@@ -46,7 +49,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when sending return invitations or reminders', () => {
     beforeEach(async () => {
-      reference = 'RINV-H1EZR6'
+      reference = generateReferenceCode()
 
       recipientsFixture = RecipientsFixture.recipients()
       recipients = [...Object.values(recipientsFixture)]
@@ -345,7 +348,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when sending abstraction alerts', () => {
     beforeEach(async () => {
-      reference = 'WAA-7KN0KF'
+      reference = generateReferenceCode('WAA')
 
       recipientsFixture = RecipientsFixture.alertsRecipients()
       recipients = [...Object.values(recipientsFixture)]
@@ -638,6 +641,191 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: 'a5488243-9c8d-4c2b-95df-d65f7c9a5f41',
               notifyStatus: 'created',
               recipient: 'primary.user@important.com',
+              status: 'pending'
+            },
+            { skip: ['id', 'createdAt'] }
+          )
+        })
+      })
+    })
+  })
+
+  describe('when sending return forms', () => {
+    beforeEach(async () => {
+      reference = generateReferenceCode('PRTF')
+
+      recipientsFixture = RecipientsFixture.recipients()
+      recipients = [recipientsFixture.licenceHolder]
+
+      event = await EventHelper.add({
+        metadata: {},
+        licences: _licences(recipients),
+        referenceCode: reference,
+        status: 'completed',
+        subtype: 'paperReturnForms',
+        type: 'notification'
+      })
+
+      session = {
+        noticeType: 'returnForms',
+        referenceCode: reference
+      }
+
+      const buffer = new TextEncoder().encode('mock file').buffer
+
+      const notification = {
+        content: buffer,
+        eventId: event.id,
+        licences: JSON.stringify([recipientsFixture.licenceHolder.licence_refs]),
+        messageRef: 'pdf.return_form',
+        messageType: 'letter',
+        reference
+      }
+
+      Sinon.stub(DetermineReturnFormsService, 'go').resolves([
+        {
+          ...notification,
+          personalisation: { name: 'Red 5' }
+        },
+        {
+          ...notification,
+          personalisation: { name: 'Rouge One' }
+        },
+        {
+          ...notification,
+          personalisation: { name: 'Gold leader' }
+        }
+      ])
+    })
+
+    describe('that contains PDF files', () => {
+      describe('and the requests to Notify in the batch are a mix of successes and failures', () => {
+        beforeEach(() => {
+          Sinon.stub(CreatePrecompiledFileRequest, 'send')
+            .onCall(0)
+            .resolves({
+              succeeded: true,
+              response: {
+                statusCode: 200,
+                body: {
+                  id: 'fff6c2a9-77fc-4553-8265-546109a45044',
+                  reference
+                }
+              }
+            })
+            .onCall(1)
+            .resolves({
+              succeeded: false,
+              response: {
+                statusCode: 400,
+                body: {
+                  errors: [
+                    {
+                      error: 'BadRequestError',
+                      message: 'File is not a PDF'
+                    }
+                  ],
+                  status_code: 400
+                }
+              }
+            })
+            .onCall(2)
+            .resolves({
+              succeeded: true,
+              response: {
+                statusCode: 200,
+                body: {
+                  id: '997a76c7-7866-4bd3-b199-ca69eef31a41',
+                  reference
+                }
+              }
+            })
+        })
+
+        it("always creates the notifications including the result of the request to Notify, and updates the Event's error count", async () => {
+          await BatchNotificationsService.go(recipients, session, event.id)
+
+          // Confirm the event is updated with the error count
+          const refreshedEvent = await event.$query()
+
+          expect(refreshedEvent).to.equal({
+            id: event.id,
+            referenceCode: reference,
+            type: 'notification',
+            subtype: 'paperReturnForms',
+            issuer: 'test.user@defra.gov.uk',
+            licences: event.licences,
+            entities: null,
+            metadata: { error: 1 },
+            status: 'completed',
+            createdAt: event.createdAt,
+            updatedAt: refreshedEvent.updatedAt
+          })
+
+          // Confirm the notifications are created and Notify request recorded as expected
+          const createdNotifications = await NotificationModel.query().where('eventId', event.id)
+
+          expect(createdNotifications).to.have.length(3)
+
+          // A successful notification
+          expect(createdNotifications[0]).to.equal(
+            {
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: [recipientsFixture.licenceHolder.licence_refs],
+              messageRef: 'pdf.return_form',
+              messageType: 'letter',
+              notifyError: null,
+              notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
+              notifyStatus: 'created',
+              personalisation: {
+                name: 'Red 5'
+              },
+              plaintext: null,
+              recipient: null,
+              status: 'pending'
+            },
+            { skip: ['id', 'createdAt'] }
+          )
+
+          // An unsuccessful notification
+          expect(createdNotifications[1]).to.equal(
+            {
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: [recipientsFixture.licenceHolder.licence_refs],
+              messageRef: 'pdf.return_form',
+              messageType: 'letter',
+              notifyError:
+                '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"File is not a PDF"}]}',
+              notifyId: null,
+              notifyStatus: null,
+              personalisation: {
+                name: 'Rouge One'
+              },
+              plaintext: null,
+              recipient: null,
+              status: 'error'
+            },
+            { skip: ['id', 'createdAt'] }
+          )
+
+          // A successful notification
+          expect(createdNotifications[2]).to.equal(
+            {
+              eventId: event.id,
+              licenceMonitoringStationId: null,
+              licences: [recipientsFixture.licenceHolder.licence_refs],
+              messageRef: 'pdf.return_form',
+              messageType: 'letter',
+              notifyError: null,
+              notifyId: '997a76c7-7866-4bd3-b199-ca69eef31a41',
+              notifyStatus: 'created',
+              personalisation: {
+                name: 'Gold leader'
+              },
+              plaintext: null,
+              recipient: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
