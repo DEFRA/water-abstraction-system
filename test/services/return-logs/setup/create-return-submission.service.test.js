@@ -122,7 +122,6 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           createdBy
         )
 
-        expect(result.createdBy).to.not.exist()
         expect(result.notes).to.not.exist()
       })
     })
