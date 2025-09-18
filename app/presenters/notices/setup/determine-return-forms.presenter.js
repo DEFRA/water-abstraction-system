@@ -8,9 +8,10 @@
 /**
  * Formats recipients into notifications for a return form
  *
- * The 'pageData' this function receives is used when we create the PDF file. We have updated some of the keys and
- * reduced all the complex logic set i in the view into its presenter. That means the data is not in the shape the
- * legacy code expect. So we need to map this 'pageData' into the legacies expected 'personalisation'
+ * The 'pageData' is the result of the presenter used when creating the PDF file. It uses different keys, and returns
+ * different values specific to creating the file. We cannot just save its 'personalisation' to the DB as it differs
+ * from what the legacy code persisted and uses. So, we use this presenter to map that output to what is needed when
+ * saving the notification.
  *
  * @param {{ArrayBuffer}} returnForm - The return forms PDF file
  * @param {object} pageData - The data formatted for the return form
