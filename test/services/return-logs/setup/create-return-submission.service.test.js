@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
@@ -20,6 +21,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
   const createdBy = 123456
   const metadata = {}
   const nilReturn = false
+  const timestamp = timestampForPostgres()
   const userId = 'admin-internal@wrls.gov.uk'
 
   let notes
@@ -39,11 +41,13 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           metadata,
           nilReturn,
           notes,
+          timestamp,
           createdBy
         )
 
         expect(result).to.equal(
           {
+            createdAt: timestamp,
             createdBy,
             current: true,
             metadata,
@@ -54,7 +58,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             userType: 'internal',
             version: 1
           },
-          { skip: ['id', 'createdAt'] }
+          { skip: ['id'] }
         )
         expect(result).to.be.instanceOf(ReturnSubmissionModel)
       })
@@ -74,11 +78,13 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           metadata,
           nilReturn,
           notes,
+          timestamp,
           createdBy
         )
 
         expect(result).to.equal(
           {
+            createdAt: timestamp,
             createdBy,
             current: true,
             metadata,
@@ -89,13 +95,13 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             userType: 'internal',
             version: 2
           },
-          { skip: ['id', 'createdAt'] }
+          { skip: ['id'] }
         )
         expect(result).to.be.instanceOf(ReturnSubmissionModel)
       })
 
       it('marks the previous version as superseded', async () => {
-        await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn, notes, createdBy)
+        await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn, notes, timestamp, createdBy)
 
         const previousVersion = await ReturnSubmissionModel.query()
           .where('returnLogId', returnLogId)
@@ -119,6 +125,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           metadata,
           nilReturn,
           notes,
+          timestamp,
           createdBy
         )
 
@@ -137,7 +144,16 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
     it('does not persist anything if an error occurs', async () => {
       try {
         await ReturnLogModel.transaction(async (trx) => {
-          await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn, notes, createdBy, trx)
+          await CreateReturnSubmissionService.go(
+            returnLogId,
+            userId,
+            metadata,
+            nilReturn,
+            notes,
+            timestamp,
+            createdBy,
+            trx
+          )
           throw new Error()
         })
       } catch (_error) {

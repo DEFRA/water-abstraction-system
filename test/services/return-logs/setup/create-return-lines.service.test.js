@@ -8,138 +8,197 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
 
 // Thing under test
 const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 
 describe('Return Logs Setup - Create New Return Lines service', () => {
-  const lines = [
-    {
-      startDate: '2024-10-26T00:00:00.000Z',
-      endDate: '2024-11-01T00:00:00.000Z',
-      reading: 1234,
-      quantity: 16
-    },
-    {
-      startDate: '2024-11-02T00:00:00.000Z',
-      endDate: '2024-11-08T00:00:00.000Z',
-      reading: 2345,
-      quantity: 32
-    },
-    {
-      startDate: '2024-11-09T00:00:00.000Z',
-      endDate: '2024-11-15T00:00:00.000Z',
-      reading: 3456,
-      quantity: 64
-    }
-  ]
+  const timestamp = timestampForPostgres()
 
+  let lines
+  let meter10TimesDisplay
+  let meterProvided
+  let returnsFrequency
   let returnSubmissionId
+  let startReading
+  let units
+  let volumes
 
   describe('when called with valid data', () => {
     beforeEach(() => {
+      lines = [
+        {
+          startDate: '2024-10-26T00:00:00.000Z',
+          endDate: '2024-11-01T00:00:00.000Z',
+          reading: 1234,
+          quantity: 16
+        },
+        {
+          startDate: '2024-11-02T00:00:00.000Z',
+          endDate: '2024-11-08T00:00:00.000Z',
+          reading: 2345,
+          quantity: 32
+        },
+        {
+          startDate: '2024-11-09T00:00:00.000Z',
+          endDate: '2024-11-15T00:00:00.000Z',
+          reading: 3456,
+          quantity: 64
+        }
+      ]
+      meter10TimesDisplay = false
+      meterProvided = false
+      returnsFrequency = 'week'
       returnSubmissionId = generateUUID()
+      startReading = null
+      units = 'cubic-metres'
+      volumes = true
     })
 
     it('inserts the lines', async () => {
-      await CreateReturnLinesService.go(lines, returnSubmissionId, 'week', 'cubic-metres', true, false, null, false)
+      await CreateReturnLinesService.go(
+        lines,
+        meter10TimesDisplay,
+        meterProvided,
+        returnsFrequency,
+        returnSubmissionId,
+        startReading,
+        timestamp,
+        units,
+        volumes
+      )
 
       const [result] = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
-      expect(result.startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
+      expect(result.createdAt).to.equal(new Date(timestamp))
       expect(result.endDate).to.equal(new Date('2024-11-01T00:00:00.000Z'))
       expect(result.quantity).to.equal(16)
-      expect(result.timePeriod).to.equal('week')
       expect(result.readingType).to.equal('estimated')
-      expect(result.userUnit).to.equal('m³')
       expect(result.returnSubmissionId).to.equal(returnSubmissionId)
+      expect(result.startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
+      expect(result.timePeriod).to.equal('week')
+      expect(result.userUnit).to.equal('m³')
     })
 
-    it('correctly converts quantity', async () => {
-      const [result] = await CreateReturnLinesService.go(
-        lines,
-        returnSubmissionId,
-        'week',
-        'megalitres',
-        true,
-        false,
-        null,
-        false
-      )
-
-      expect(result.quantity).to.equal(16000)
-      expect(result.userUnit).to.equal('Ml')
-    })
-
-    it('sets readingType to "estimated" when meterProvided is "yes"', async () => {
-      const [result] = await CreateReturnLinesService.go(
-        lines,
-        returnSubmissionId,
-        'week',
-        'cubic-metres',
-        true,
-        true,
-        null,
-        false
-      )
-
-      expect(result.readingType).to.equal('measured')
-    })
-
-    it('recalculates quantities from meter readings', async () => {
-      const result = await CreateReturnLinesService.go(
-        lines,
-        returnSubmissionId,
-        'week',
-        'cubic-metres',
-        false,
-        false,
-        1000,
-        false
-      )
-
-      const quantities = result.map((line) => {
-        return line.quantity
+    describe('when the unit of measurement is megalitres', () => {
+      beforeEach(() => {
+        units = 'megalitres'
       })
 
-      // First quantity is 1234 - 1000
-      // Second quantity is 2345 - 1234
-      // Third quantity is 3456 - 2345
-      expect(quantities).to.equal([234, 1111, 1111])
+      it('correctly converts quantity', async () => {
+        const [result] = await CreateReturnLinesService.go(
+          lines,
+          meter10TimesDisplay,
+          meterProvided,
+          returnsFrequency,
+          returnSubmissionId,
+          startReading,
+          timestamp,
+          units,
+          volumes
+        )
+
+        expect(result.quantity).to.equal(16000)
+        expect(result.userUnit).to.equal('Ml')
+      })
     })
 
-    it('correctly handles 10x display by multiplying calculated quantities by 10', async () => {
-      const result = await CreateReturnLinesService.go(
-        lines,
-        returnSubmissionId,
-        'week',
-        'cubic-metres',
-        false,
-        false,
-        1000,
-        true
-      )
-
-      const quantities = result.map((line) => {
-        return line.quantity
+    describe('when meterProvided is "yes"', () => {
+      beforeEach(() => {
+        meterProvided = true
       })
 
-      expect(quantities).to.equal([2340, 11110, 11110])
+      it('sets readingType to "measured"', async () => {
+        const [result] = await CreateReturnLinesService.go(
+          lines,
+          meter10TimesDisplay,
+          meterProvided,
+          returnsFrequency,
+          returnSubmissionId,
+          startReading,
+          timestamp,
+          units,
+          volumes
+        )
+
+        expect(result.readingType).to.equal('measured')
+      })
+    })
+
+    describe('when measured using meter readings', () => {
+      beforeEach(() => {
+        volumes = false
+        startReading = 1000
+      })
+
+      it('recalculates quantities from meter readings', async () => {
+        const result = await CreateReturnLinesService.go(
+          lines,
+          meter10TimesDisplay,
+          meterProvided,
+          returnsFrequency,
+          returnSubmissionId,
+          startReading,
+          timestamp,
+          units,
+          volumes
+        )
+
+        const quantities = result.map((line) => {
+          return line.quantity
+        })
+
+        // First quantity is 1234 - 1000
+        // Second quantity is 2345 - 1234
+        // Third quantity is 3456 - 2345
+        expect(quantities).to.equal([234, 1111, 1111])
+      })
+
+      describe('and the meter has a 10x display', () => {
+        beforeEach(() => {
+          meter10TimesDisplay = true
+        })
+
+        it('correctly handles 10x display by multiplying calculated quantities by 10', async () => {
+          const result = await CreateReturnLinesService.go(
+            lines,
+            meter10TimesDisplay,
+            meterProvided,
+            returnsFrequency,
+            returnSubmissionId,
+            startReading,
+            timestamp,
+            units,
+            volumes
+          )
+
+          const quantities = result.map((line) => {
+            return line.quantity
+          })
+
+          expect(quantities).to.equal([2340, 11110, 11110])
+        })
+      })
     })
 
     describe('when called with no lines', () => {
+      beforeEach(() => {
+        lines = []
+      })
+
       it('returns an empty array', async () => {
         const result = await CreateReturnLinesService.go(
-          [],
+          lines,
+          meter10TimesDisplay,
+          meterProvided,
+          returnsFrequency,
           returnSubmissionId,
-          'week',
-          'cubic-metres',
-          false,
-          true,
-          null,
-          false
+          startReading,
+          timestamp,
+          units,
+          volumes
         )
 
         expect(result).to.equal([])
@@ -156,13 +215,14 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
           await ReturnSubmissionLineModel.transaction(async (trx) => {
             await CreateReturnLinesService.go(
               lines,
+              meter10TimesDisplay,
+              meterProvided,
+              returnsFrequency,
               returnSubmissionId,
-              'week',
-              'cubic-metres',
-              true,
-              false,
-              null,
-              false,
+              startReading,
+              timestamp,
+              units,
+              volumes,
               trx
             )
             throw new Error()
