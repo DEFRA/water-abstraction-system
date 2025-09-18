@@ -148,7 +148,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
 
         expect(result).to.equal({
           notifyStatus: 'accepted',
-          status: 'sent'
+          status: 'pending'
         })
       })
     })
