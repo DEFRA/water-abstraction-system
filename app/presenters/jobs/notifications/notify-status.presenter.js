@@ -93,7 +93,6 @@ function _letterStatus(notifyStatus) {
     accepted: NOTIFICATIONS_STATUS.sent,
     created: NOTIFICATIONS_STATUS.pending,
     sending: NOTIFICATIONS_STATUS.pending,
-    delivered: NOTIFICATIONS_STATUS.sent,
     received: NOTIFICATIONS_STATUS.sent,
     'permanent-failure': NOTIFICATIONS_STATUS.error,
     'technical-failure': NOTIFICATIONS_STATUS.error,

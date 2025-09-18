@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const NotifyStatusPresenter = require('../../../../app/presenters/jobs/notifications/notify-status.presenter.js')
 
-describe('Notifications Setup - Notify status presenter', () => {
+describe('Jobs - Notifications - Notify Status presenter', () => {
   let notifyStatus
   let notification
 
@@ -179,21 +179,6 @@ describe('Notifications Setup - Notify status presenter', () => {
         expect(result).to.equal({
           notifyStatus: 'sending',
           status: 'pending'
-        })
-      })
-    })
-
-    describe('and the "notifyStatus" is "delivered"', () => {
-      beforeEach(() => {
-        notifyStatus = 'delivered'
-      })
-
-      it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-        expect(result).to.equal({
-          notifyStatus: 'delivered',
-          status: 'sent'
         })
       })
     })
