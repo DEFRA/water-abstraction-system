@@ -18,43 +18,35 @@ const ReturnSubmissionModel = require('../../../../app/models/return-submission.
 const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
-  const createdBy = 123456
   const metadata = {}
-  const nilReturn = false
   const timestamp = timestampForPostgres()
-  const userId = 'admin-internal@wrls.gov.uk'
+  const user = { id: 123456, username: 'admin-internal@wrls.gov.uk' }
 
-  let notes
-  let returnLogId
+  let session
 
   describe('when called with valid data', () => {
-    describe('and no previous submission exists for this return log', () => {
-      beforeEach(() => {
-        notes = 'TEST_NOTE'
-        returnLogId = ReturnLogHelper.generateReturnLogId()
-      })
+    beforeEach(() => {
+      session = {
+        journey: 'enter-return',
+        note: { content: 'TEST_NOTE' },
+        returnLogId: ReturnLogHelper.generateReturnLogId()
+      }
+    })
 
+    describe('and no previous submission exists for this return log', () => {
       it('creates a new return submission and sets the version to 1', async () => {
-        const result = await CreateReturnSubmissionService.go(
-          returnLogId,
-          userId,
-          metadata,
-          nilReturn,
-          notes,
-          timestamp,
-          createdBy
-        )
+        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         expect(result).to.equal(
           {
             createdAt: timestamp,
-            createdBy,
+            createdBy: user.id,
             current: true,
             metadata,
-            nilReturn,
-            notes,
-            returnLogId,
-            userId,
+            nilReturn: false,
+            notes: 'TEST_NOTE',
+            returnLogId: session.returnLogId,
+            userId: user.username,
             userType: 'internal',
             version: 1
           },
@@ -68,30 +60,22 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
 
-        returnLogId = returnSubmission.returnLogId
+        session.returnLogId = returnSubmission.returnLogId
       })
 
       it('creates a new return submission and sets the version to 2', async () => {
-        const result = await CreateReturnSubmissionService.go(
-          returnLogId,
-          userId,
-          metadata,
-          nilReturn,
-          notes,
-          timestamp,
-          createdBy
-        )
+        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         expect(result).to.equal(
           {
             createdAt: timestamp,
-            createdBy,
+            createdBy: user.id,
             current: true,
             metadata,
-            nilReturn,
-            notes,
-            returnLogId,
-            userId,
+            nilReturn: false,
+            notes: 'TEST_NOTE',
+            returnLogId: session.returnLogId,
+            userId: user.username,
             userType: 'internal',
             version: 2
           },
@@ -101,10 +85,10 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('marks the previous version as superseded', async () => {
-        await CreateReturnSubmissionService.go(returnLogId, userId, metadata, nilReturn, notes, timestamp, createdBy)
+        await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         const previousVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', returnLogId)
+          .where('returnLogId', session.returnLogId)
           .where('version', 1)
           .first()
 
@@ -114,64 +98,46 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
 
     describe('and no note text is provided', () => {
       beforeEach(() => {
-        notes = null
-        returnLogId = ReturnLogHelper.generateReturnLogId()
+        session.note = null
       })
 
-      it('leaves the note fields blank', async () => {
-        const result = await CreateReturnSubmissionService.go(
-          returnLogId,
-          userId,
-          metadata,
-          nilReturn,
-          notes,
-          timestamp,
-          createdBy
-        )
+      it('leaves the notes field blank', async () => {
+        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         expect(result.notes).to.not.exist()
       })
     })
-  })
 
-  describe('when called with a transaction', () => {
-    beforeEach(async () => {
-      const returnSubmission = await ReturnSubmissionHelper.add()
+    describe('when called with a transaction', () => {
+      beforeEach(async () => {
+        const returnSubmission = await ReturnSubmissionHelper.add()
 
-      returnLogId = returnSubmission.returnLogId
-    })
+        session.returnLogId = returnSubmission.returnLogId
+      })
 
-    it('does not persist anything if an error occurs', async () => {
-      try {
-        await ReturnLogModel.transaction(async (trx) => {
-          await CreateReturnSubmissionService.go(
-            returnLogId,
-            userId,
-            metadata,
-            nilReturn,
-            notes,
-            timestamp,
-            createdBy,
-            trx
-          )
-          throw new Error()
-        })
-      } catch (_error) {
-        // Ignore the error, we just want to test that nothing was persisted
-      }
+      it('does not persist anything if an error occurs', async () => {
+        try {
+          await ReturnLogModel.transaction(async (trx) => {
+            await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
+            throw new Error()
+          })
+        } catch (_error) {
+          // Ignore the error, we just want to test that nothing was persisted
+        }
 
-      const currentVersion = await ReturnSubmissionModel.query()
-        .where('returnLogId', returnLogId)
-        .where('version', 2)
-        .first()
+        const currentVersion = await ReturnSubmissionModel.query()
+          .where('returnLogId', session.returnLogId)
+          .where('version', 2)
+          .first()
 
-      const previousVersion = await ReturnSubmissionModel.query()
-        .where('returnLogId', returnLogId)
-        .where('version', 1)
-        .first()
+        const previousVersion = await ReturnSubmissionModel.query()
+          .where('returnLogId', session.returnLogId)
+          .where('version', 1)
+          .first()
 
-      expect(currentVersion).to.not.exist()
-      expect(previousVersion.current).to.be.true()
+        expect(currentVersion).to.not.exist()
+        expect(previousVersion.current).to.be.true()
+      })
     })
   })
 })

@@ -32,16 +32,7 @@ async function go(sessionId, user) {
   const metadata = GenerateReturnSubmissionMetadata.go(session)
 
   await ReturnLogModel.transaction(async (trx) => {
-    const returnSubmission = await CreateReturnSubmissionService.go(
-      session.returnLogId,
-      user.username,
-      metadata,
-      session.journey === 'nil-return',
-      session.note?.content,
-      timestamp,
-      user.id,
-      trx
-    )
+    const returnSubmission = await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
 
     await CreateReturnLinesService.go(
       session.lines,

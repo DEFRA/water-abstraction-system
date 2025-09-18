@@ -25,25 +25,25 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(returnLogId, userId, metadata, nilReturn, notes, timestamp, createdBy, trx = null) {
-  const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
+async function go(metadata, session, timestamp, user, trx = null) {
+  const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
     createdAt: timestamp,
-    createdBy,
+    createdBy: user.id,
     current: true,
-    nilReturn,
+    nilReturn: session.journey === 'nil-return',
     metadata,
-    notes,
-    returnLogId,
-    userId,
+    notes: session.note?.content,
+    returnLogId: session.returnLogId,
+    userId: user.username,
     userType: 'internal',
     version
   }
 
   if (previousVersion) {
-    await _markPreviousVersionAsSuperseded(returnLogId, previousVersion, trx)
+    await _markPreviousVersionAsSuperseded(session.returnLogId, previousVersion, trx)
   }
 
   return ReturnSubmissionModel.query(trx).insert(returnSubmission)
