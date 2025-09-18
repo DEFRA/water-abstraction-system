@@ -34,18 +34,7 @@ async function go(sessionId, user) {
   await ReturnLogModel.transaction(async (trx) => {
     const returnSubmission = await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
 
-    await CreateReturnLinesService.go(
-      session.lines,
-      session.meter10TimesDisplay === 'yes',
-      session.meterProvided === 'yes',
-      session.returnsFrequency,
-      returnSubmission.id,
-      session.startReading,
-      timestamp,
-      session.units,
-      session.reported === 'abstraction-volumes',
-      trx
-    )
+    await CreateReturnLinesService.go(returnSubmission.id, session, timestamp, trx)
 
     await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
     await _cleanupSession(sessionId, trx)
