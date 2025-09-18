@@ -62,7 +62,7 @@ describe('Notices - Setup - Determine Return Forms Presenter', () => {
   })
 
   describe('when called', () => {
-    it('returns a notification for each combination of recipient and selected due return log', () => {
+    it('returns the data re-formatted as a notification', () => {
       const result = DetermineReturnFormsPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
 
       expect(result).to.equal({
