@@ -25,30 +25,7 @@ async function go(returnSubmissionId, session, timestamp, trx = null) {
     return []
   }
 
-  const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
-  const volumes = session.reported === 'abstraction-volumes'
-
-  let previousReading = session.startReading ?? 0
-
-  const returnLines = session.lines.map((line) => {
-    const { rawQuantity, currentReading } = _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes)
-
-    previousReading = currentReading
-
-    // We use destructuring to remove the reading property as this is not a valid column in the db
-    const { reading, ...restOfLine } = line
-
-    return {
-      ...restOfLine,
-      id: generateUUID(),
-      createdAt: timestamp,
-      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : undefined,
-      readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
-      returnSubmissionId,
-      timePeriod: session.returnsFrequency,
-      userUnit: _getUserUnit(session.units)
-    }
-  })
+  const returnLines = _returnLines(returnSubmissionId, session, timestamp)
 
   return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
@@ -114,6 +91,33 @@ function _getUserUnit(unit) {
   })
 
   return foundEntry ? foundEntry[0] : undefined
+}
+
+function _returnLines(returnSubmissionId, session, timestamp) {
+  const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
+  const volumes = session.reported === 'abstraction-volumes'
+
+  let previousReading = session.startReading ?? 0
+
+  return session.lines.map((line) => {
+    const { rawQuantity, currentReading } = _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes)
+
+    previousReading = currentReading
+
+    // We use destructuring to remove the reading property as this is not a valid column in the db
+    const { reading, ...restOfLine } = line
+
+    return {
+      ...restOfLine,
+      id: generateUUID(),
+      createdAt: timestamp,
+      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : undefined,
+      readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
+      returnSubmissionId,
+      timePeriod: session.returnsFrequency,
+      userUnit: _getUserUnit(session.units)
+    }
+  })
 }
 
 module.exports = {
