@@ -96,6 +96,18 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
     })
 
+    describe('and it is a nil return', () => {
+      beforeEach(() => {
+        session.journey = 'nil-return'
+      })
+
+      it('sets the nillReturn field to true', async () => {
+        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+
+        expect(result.nilReturn).to.be.true()
+      })
+    })
+
     describe('and no note text is provided', () => {
       beforeEach(() => {
         session.note = null
