@@ -92,11 +92,11 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
         expect(result).to.equal(
           {
-            pageTitle: 'How was this return reported?',
             activeNavBar: 'search',
+            backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
             reported: null,
-            backLink: `/system/return-logs/setup/${session.id}/submission`,
-            caption: 'Return reference 12345'
+            pageTitle: 'How was this return reported?',
+            pageTitleCaption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error'] }
         )
@@ -106,7 +106,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitReportedService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select how this return was reported' })
+          expect(result.error.errorList).to.equal([{ href: '#reported', text: 'Select how this return was reported' }])
         })
       })
     })

@@ -36,10 +36,10 @@ describe('Return Logs Setup - Reported service', () => {
 
       expect(result).to.equal(
         {
-          pageTitle: 'How was this return reported?',
           activeNavBar: 'search',
-          caption: 'Return reference 012345',
-          backLink: `/system/return-logs/setup/${session.id}/submission`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
+          pageTitle: 'How was this return reported?',
+          pageTitleCaption: 'Return reference 012345',
           reported: null
         },
         { skip: ['sessionId'] }

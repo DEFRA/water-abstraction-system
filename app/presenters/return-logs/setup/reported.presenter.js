@@ -16,9 +16,9 @@ function go(session) {
   const { id: sessionId, returnReference, reported } = session
 
   return {
-    backLink: _backLink(session),
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: _backLink(session), text: 'Back' },
     pageTitle: 'How was this return reported?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     reported: reported ?? null,
     sessionId
   }
