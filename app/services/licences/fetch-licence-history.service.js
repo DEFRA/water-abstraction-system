@@ -24,15 +24,15 @@ async function _fetch(licenceId) {
     .select(['id', 'licenceRef'])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.select('id').modify('history')
+      builder.select(['id', 'startDate']).modify('history')
     })
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
-      builder.select('id').modify('history')
+      builder.select(['id', 'startDate']).modify('history')
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
-      builder.select('id').modify('history')
+      builder.select(['id', 'startDate']).modify('history')
     })
 }
 

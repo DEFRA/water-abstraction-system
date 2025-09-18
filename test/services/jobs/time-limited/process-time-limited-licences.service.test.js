@@ -32,6 +32,7 @@ describe('Process Time Limited Licences service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when there are licences with time limited charge elements', () => {

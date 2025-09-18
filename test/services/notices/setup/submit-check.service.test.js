@@ -17,7 +17,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')
@@ -31,9 +31,6 @@ describe('Notices - Setup - Submit Check service', () => {
   let testRecipients
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-
     auth = {
       credentials: {
         user: {
@@ -43,6 +40,9 @@ describe('Notices - Setup - Submit Check service', () => {
     }
 
     Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -74,7 +74,7 @@ describe('Notices - Setup - Submit Check service', () => {
       testRecipients = [recipients.primaryUser]
 
       Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(FetchReturnsRecipientsService, 'go').resolves(testRecipients)
     })
 
     it('correctly returns the event id', async () => {

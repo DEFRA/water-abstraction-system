@@ -51,7 +51,7 @@ describe('Licences - View Licence Returns presenter', () => {
           {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
-            dueDate: '28 November 2012',
+            dueDate: '28 November 2020',
             link: '/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046821',
@@ -61,7 +61,7 @@ describe('Licences - View Licence Returns presenter', () => {
           {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
-            dueDate: '28 November 2012',
+            dueDate: '28 November 2020',
             link: '/system/return-logs?id=v1:1:01/123:10046820:2020-01-02:2020-02-01',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046820',
@@ -100,6 +100,28 @@ describe('Licences - View Licence Returns presenter', () => {
           const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
           expect(result.returns[0].description).to.equal('')
+        })
+      })
+    })
+
+    describe('the "dueDate" property', () => {
+      describe('when the due date is set', () => {
+        it('returns the formatted due date', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+          expect(result.returns[0].dueDate).to.equal('28 November 2020')
+        })
+      })
+
+      describe('when the due date is "null"', () => {
+        beforeEach(() => {
+          returnLogs[0].dueDate = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+          expect(result.returns[0].dueDate).to.equal('')
         })
       })
     })
@@ -233,6 +255,18 @@ describe('Licences - View Licence Returns presenter', () => {
             expect(result.returns[1].status).to.equal('not due yet')
           })
         })
+
+        describe('and the due date is null', () => {
+          beforeEach(() => {
+            returnLogs[1].dueDate = null
+          })
+
+          it('returns "not due yet"', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+            expect(result.returns[1].status).to.equal('not due yet')
+          })
+        })
       })
 
       describe('when the return log has a status of "received"', () => {
@@ -300,7 +334,7 @@ describe('Licences - View Licence Returns presenter', () => {
 function _returnLogs() {
   const returnLog = {
     id: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
-    dueDate: new Date('2012-11-28'),
+    dueDate: new Date('2020-11-28'),
     status: 'completed',
     startDate: new Date('2020/01/02'),
     endDate: new Date('2020/02/01'),

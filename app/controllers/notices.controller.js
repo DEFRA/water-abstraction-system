@@ -7,7 +7,7 @@
 
 const IndexNoticesService = require('../services/notices/index-notices.service.js')
 const NoticesViewService = require('../services/notices/view.service.js')
-const SubmitIndexNoticesService = require('../services/notices/submit-index.service.js')
+const SubmitIndexNoticesService = require('../services/notices/submit-index-notices.service.js')
 
 async function index(request, h) {
   const { page } = request.query

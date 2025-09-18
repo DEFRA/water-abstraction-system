@@ -40,10 +40,6 @@ describe('Notices - Setup - Check Notice Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        continueButton: {
-          href: `/system/notices/setup/${session.id}/check`,
-          text: 'Continue to check recipients'
-        },
         licenceRef,
         noticeType: 'invitations',
         notification: undefined,

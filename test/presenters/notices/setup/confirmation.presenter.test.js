@@ -7,11 +7,14 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+
 // Thing under test
 const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
 
 describe('Notices - Setup - Confirmation presenter', () => {
-  const referenceCode = 'RNIV-1234'
+  const referenceCode = generateReferenceCode()
 
   let event
 
@@ -31,7 +34,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       forwardLink: '/notifications/report/123',
       monitoringStationLink: null,
       pageTitle: `Returns invitations sent`,
-      referenceCode: 'RNIV-1234'
+      referenceCode
     })
   })
 
@@ -47,7 +50,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
-        referenceCode: 'RNIV-1234'
+        referenceCode
       })
     })
   })
@@ -64,7 +67,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
-        referenceCode: 'RNIV-1234'
+        referenceCode
       })
     })
   })
@@ -83,7 +86,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
-        referenceCode: 'RNIV-1234'
+        referenceCode
       })
     })
   })
@@ -100,7 +103,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
         forwardLink: '/notifications/report/123',
         monitoringStationLink: null,
         pageTitle: 'Paper return forms sent',
-        referenceCode: 'RNIV-1234'
+        referenceCode
       })
     })
   })

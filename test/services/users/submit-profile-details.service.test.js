@@ -69,7 +69,10 @@ describe('Users - Submit profile details service', () => {
         await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(yarStub.flash.lastCall.args[0]).to.equal('notification')
-        expect(yarStub.flash.lastCall.args[1]).to.equal({ title: 'Updated', text: 'Profile details updated' })
+        expect(yarStub.flash.lastCall.args[1]).to.equal({
+          title: 'Updated',
+          text: 'Profile details updated'
+        })
       })
 
       describe('and the payload has empty or missing values', () => {

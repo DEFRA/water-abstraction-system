@@ -18,7 +18,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 // Thing under test
 const FetchLicenceHistoryService = require('../../../app/services/licences/fetch-licence-history.service.js')
 
-describe('Fetch Licence History service', () => {
+describe('Licences - Fetch Licence History service', () => {
   let chargeVersion
   let chargeVersionModLog
   let chargeVersionNote
@@ -63,6 +63,7 @@ describe('Fetch Licence History service', () => {
               id: chargeVersionNote.id,
               note: 'This is a test note'
             },
+            startDate: chargeVersion.startDate,
             modLogs: [
               {
                 id: chargeVersionModLog.id,
@@ -78,6 +79,7 @@ describe('Fetch Licence History service', () => {
           {
             createdAt: licenceVersion.createdAt,
             id: licenceVersion.id,
+            startDate: licenceVersion.startDate,
             modLogs: [
               {
                 id: licenceVersionModLog.id,
@@ -96,6 +98,7 @@ describe('Fetch Licence History service', () => {
             notes: null,
             createdBy: null,
             reason: 'new-licence',
+            startDate: returnVersion.startDate,
             modLogs: [
               {
                 id: returnVersionModLog.id,

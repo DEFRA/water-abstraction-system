@@ -40,6 +40,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when all clean tasks succeed', () => {

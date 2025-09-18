@@ -3,99 +3,57 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../support/helpers/session.helper.js')
+// Things we need to stub
+const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
 const ManualService = require('../../../app/services/address/manual.service.js')
 
 describe('Address - Manual Service', () => {
-  let session
-  let sessionData
+  const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  describe('when called with no saved address', () => {
-    beforeEach(async () => {
-      sessionData = {
-        address: {}
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await ManualService.go(session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        addressLine1: null,
-        addressLine2: null,
-        addressLine3: null,
-        addressLine4: null,
-        backLink: `/system/address/${session.id}/postcode`,
-        pageTitle: 'Enter the address',
-        postcode: null
+  beforeEach(async () => {
+    Sinon.stub(SessionModel, 'query').returns({
+      findById: Sinon.stub().resolves({
+        id: sessionId,
+        addressJourney: {
+          activeNavBar: 'manage',
+          address: { postcode: 'SW1A 1AA' },
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+        }
       })
     })
   })
 
-  describe('when called with just the postcode saved', () => {
-    beforeEach(async () => {
-      sessionData = {
-        address: {
-          postcode: 'SW1A 1AA'
-        }
-      }
+  afterEach(() => {
+    Sinon.restore()
+  })
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
+  describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ManualService.go(session.id)
+      const result = await ManualService.go(sessionId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeNavBar: 'manage',
         addressLine1: null,
         addressLine2: null,
         addressLine3: null,
         addressLine4: null,
-        backLink: `/system/address/${session.id}/postcode`,
+        backLink: {
+          href: `/system/address/${sessionId}/postcode`,
+          text: 'Back'
+        },
         pageTitle: 'Enter the address',
-        postcode: 'SW1A 1AA'
-      })
-    })
-  })
-
-  describe('when called with the entire address saved', () => {
-    beforeEach(async () => {
-      sessionData = {
-        address: {
-          uprn: '123456789',
-          addressLine1: '1 Fake Farm',
-          addressLine2: '1 Fake street',
-          addressLine3: 'Fake Village',
-          addressLine4: 'Fake City',
-          postcode: 'SW1A 1AA'
-        }
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await ManualService.go(session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        addressLine1: '1 Fake Farm',
-        addressLine2: '1 Fake street',
-        addressLine3: 'Fake Village',
-        addressLine4: 'Fake City',
-        backLink: `/system/address/${session.id}/select`,
-        pageTitle: 'Enter the address',
+        pageTitleCaption: null,
         postcode: 'SW1A 1AA'
       })
     })

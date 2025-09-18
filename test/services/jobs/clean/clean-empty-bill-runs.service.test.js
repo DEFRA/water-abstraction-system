@@ -52,6 +52,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when no bill runs are flagged as "empty"', () => {

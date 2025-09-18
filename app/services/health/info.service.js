@@ -10,15 +10,17 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const BaseRequest = require('../../requests/base.request.js')
-const ChargingModuleRequest = require('../../requests/charging-module.request.js')
+const AddressFacadeViewHealthRequest = require('../../requests/address-facade/view-health.request.js')
+const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const LegacyRequest = require('../../requests/legacy.request.js')
+const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
+const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
+const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
+const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
 const { sentenceCase } = require('../../presenters/base.presenter.js')
 
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
+const SERVICE_RUNNING_MESSAGE = 'Up and running'
 
 /**
  * Checks status and gathers info for each of the services which make up WRLS
@@ -32,12 +34,14 @@ const gotenbergConfig = require('../../../config/gotenberg.config.js')
  * @returns {object} data about each service formatted for the view
  */
 async function go() {
-  const addressFacadeData = await _getAddressFacadeData()
-  const chargingModuleData = await _getChargingModuleData()
-  const gotenbergData = await _getGotenbergData()
-  const legacyAppData = await _getLegacyAppData()
-  const redisConnectivityData = await _getRedisConnectivityData()
-  const virusScannerData = await _getVirusScannerData()
+  const addressFacadeData = await _addressFacadeData()
+  const chargingModuleData = await _chargingModuleData()
+  const gotenbergData = await _gotenbergData()
+  const legacyAppData = await _legacyAppData()
+  const notifyData = await _notifyData()
+  const redisConnectivityData = await _redisConnectivityData()
+  const respData = await _respData()
+  const virusScannerData = await _virusScannerData()
 
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
 
@@ -47,7 +51,9 @@ async function go() {
     appData,
     chargingModuleData,
     gotenbergData,
+    notifyData,
     redisConnectivityData,
+    respData,
     virusScannerData
   }
 }
@@ -58,9 +64,8 @@ async function _addSystemInfoToLegacyAppData(appData) {
   return [...appData, systemInfo]
 }
 
-async function _getAddressFacadeData() {
-  const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
-  const result = await BaseRequest.get(statusUrl.href)
+async function _addressFacadeData() {
+  const result = await AddressFacadeViewHealthRequest.send()
 
   if (result.succeeded) {
     return result.response.body
@@ -69,21 +74,28 @@ async function _getAddressFacadeData() {
   return _parseFailedRequestResult(result)
 }
 
-async function _getGotenbergData() {
-  const statusUrl = new URL('/health', gotenbergConfig.url)
-  const result = await BaseRequest.get(statusUrl.href)
+async function _chargingModuleData() {
+  const result = await ChargingModuleViewHealthRequest.send()
 
   if (result.succeeded) {
-    const response = JSON.parse(result.response.body)
-    return `${sentenceCase(response.status)} - Chromium ${sentenceCase(response.details.chromium.status)}`
+    return result.response.info.dockerTag
   }
 
   return _parseFailedRequestResult(result)
 }
 
-async function _getLegacyAppData() {
-  const healthInfoPath = 'health/info'
+async function _gotenbergData() {
+  const result = await GotenbergViewHealthRequest.send()
 
+  if (result.succeeded) {
+    const body = result.response.body
+    return `${sentenceCase(body.status)} - Chromium ${sentenceCase(body.details.chromium.status)}`
+  }
+
+  return _parseFailedRequestResult(result)
+}
+
+async function _legacyAppData() {
   const services = [
     { name: 'Import', serviceName: 'import' },
     { name: 'External UI', serviceName: 'external' },
@@ -97,7 +109,7 @@ async function _getLegacyAppData() {
   ]
 
   for (const service of services) {
-    const result = await LegacyRequest.get(service.serviceName, healthInfoPath, null, false)
+    const result = await LegacyViewHealthRequest.send(service.serviceName)
 
     if (result.succeeded) {
       service.version = result.response.body.version
@@ -111,17 +123,25 @@ async function _getLegacyAppData() {
   return services
 }
 
-async function _getChargingModuleData() {
-  const result = await ChargingModuleRequest.get('status')
+function _parseFailedRequestResult(result) {
+  if (result.response.statusCode) {
+    return `ERROR: ${result.response.statusCode} - ${result.response.body.message}`
+  }
+
+  return `ERROR: ${result.response.name} - ${result.response.message}`
+}
+
+async function _notifyData() {
+  const result = await NotifyViewHealthRequest.send()
 
   if (result.succeeded) {
-    return result.response.info.dockerTag
+    return SERVICE_RUNNING_MESSAGE
   }
 
   return _parseFailedRequestResult(result)
 }
 
-async function _getRedisConnectivityData() {
+async function _redisConnectivityData() {
   let redis
 
   try {
@@ -129,7 +149,7 @@ async function _getRedisConnectivityData() {
 
     await redis.ping()
 
-    return 'Up and running'
+    return SERVICE_RUNNING_MESSAGE
   } catch (error) {
     return `ERROR: ${error.message}`
   } finally {
@@ -139,7 +159,17 @@ async function _getRedisConnectivityData() {
   }
 }
 
-async function _getVirusScannerData() {
+async function _respData() {
+  const result = await RespViewHealthRequest.send()
+
+  if (result.succeeded) {
+    return SERVICE_RUNNING_MESSAGE
+  }
+
+  return _parseFailedRequestResult(result)
+}
+
+async function _virusScannerData() {
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
 
@@ -147,14 +177,6 @@ async function _getVirusScannerData() {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-function _parseFailedRequestResult(result) {
-  if (result.response.statusCode) {
-    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
-  }
-
-  return `ERROR: ${result.response.name} - ${result.response.message}`
 }
 
 module.exports = {

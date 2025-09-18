@@ -7,8 +7,6 @@
 
 const { determineRestrictionHeading, formatRestrictions } = require('./base.presenter.js')
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
  *
@@ -23,55 +21,81 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * The other key thing the presenter has to deal with is what abstraction period to show. Those records linked to a
  * licence condition need to display the abstraction period on the associated licence purpose. Else the user will have
- * add an abstraction period against the licence monitoring station record when they tagged it.
+ * added an abstraction period against the licence monitoring station record when they tagged it.
  *
+ * @param {module:MonitoringStationModel} monitoringStation - The monitoring station
+ * @param {module:LicenceMonitoringStationModel[]} licenceMonitoringStations - The 'live' licence monitoring stations
+ * tagged to the monitoring station
  * @param {object} auth - The auth object taken from `request.auth`
- * @param {module:MonitoringStationModel} monitoringStation - The monitoring station and associated licence monitoring
- * station data
  *
  * @returns {object} page data needed by the view template
  */
-function go(auth, monitoringStation) {
+function go(monitoringStation, licenceMonitoringStations, auth) {
   const {
     id: monitoringStationId,
     catchmentName,
     gridReference,
     label: monitoringStationName,
-    licenceMonitoringStations,
     riverName,
     stationReference,
     wiskiId
   } = monitoringStation
 
+  const restrictions = _restrictions(licenceMonitoringStations, monitoringStationId)
+
   return {
-    catchmentName,
-    enableLicenceMonitoringStationsSetup: FeatureFlagsConfig.enableLicenceMonitoringStationsSetup,
+    backLink: { href: '/licences', text: 'Go back to search' },
+    buttons: {
+      createAlert: _createAlertButton(restrictions, auth, monitoringStationId),
+      tagLicence: _tagLicenceButton(auth, monitoringStationId)
+    },
     gridReference: gridReference ?? '',
-    links: _links(monitoringStationId),
-    monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
-    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
-    permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
+    pageTitleCaption: catchmentName ?? null,
     restrictionHeading: determineRestrictionHeading(licenceMonitoringStations),
-    restrictions: _restrictions(licenceMonitoringStations, monitoringStationId),
-    showRemoveTagButton: !FeatureFlagsConfig.enableLicenceMonitoringStationsView,
+    restrictions,
     stationReference: stationReference ?? '',
-    tableCaption: 'Licences linked to this monitoring station',
     wiskiId: wiskiId ?? ''
   }
+}
+
+function _createAlertButton(restrictions, auth, monitoringStationId) {
+  if (restrictions.length === 0) {
+    return null
+  }
+
+  if (!auth.credentials.scope.includes('hof_notifications')) {
+    return null
+  }
+
+  return {
+    href: `/system/notices/setup/alerts?monitoringStationId=${monitoringStationId}`
+  }
+}
+
+function _licenceVersionPurpose(licenceVersionPurposeCondition) {
+  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
+    return licenceVersionPurposeCondition.licenceVersionPurpose
+  } else {
+    return {}
+  }
+}
+
+function _pageTitle(riverName, stationName) {
+  if (riverName) {
+    return `${riverName} at ${stationName}`
+  }
+
+  return stationName
 }
 
 function _restrictions(licenceMonitoringStations, monitoringStationId) {
   const preparedLicenceMonitoringStations = licenceMonitoringStations.map((licenceMonitoringStation) => {
     const { licence } = licenceMonitoringStation
 
-    let action
-
-    if (FeatureFlagsConfig.enableLicenceMonitoringStationsView) {
-      action = {
-        link: `/system/monitoring-stations/${monitoringStationId}/licence/${licence.id}`,
-        text: 'View'
-      }
+    const action = {
+      link: `/system/monitoring-stations/${monitoringStationId}/licence/${licence.id}`,
+      text: 'View'
     }
 
     return {
@@ -84,32 +108,14 @@ function _restrictions(licenceMonitoringStations, monitoringStationId) {
   return formatRestrictions(preparedLicenceMonitoringStations)
 }
 
-function _licenceVersionPurpose(licenceVersionPurposeCondition) {
-  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
-    return licenceVersionPurposeCondition.licenceVersionPurpose
-  } else {
-    return {}
-  }
-}
-
-function _links(monitoringStationId) {
-  let createAlert = `/system/notices/setup/alerts?monitoringStationId=${monitoringStationId}`
-
-  if (!FeatureFlagsConfig.enableMonitoringStationsAlertNotifications) {
-    createAlert = '/monitoring-stations/' + monitoringStationId + '/send-alert/alert-type'
+function _tagLicenceButton(auth, monitoringStationId) {
+  if (!auth.credentials.scope.includes('manage_gauging_station_licence_links')) {
+    return null
   }
 
   return {
-    createAlert
+    value: monitoringStationId
   }
-}
-
-function _pageTitle(riverName, stationName) {
-  if (riverName) {
-    return `${riverName} at ${stationName}`
-  }
-
-  return stationName
 }
 
 module.exports = {

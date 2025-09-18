@@ -32,6 +32,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when there are valid return logs that should be considered', () => {

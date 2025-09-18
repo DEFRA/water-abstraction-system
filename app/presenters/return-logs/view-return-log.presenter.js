@@ -5,10 +5,15 @@
  * @module ViewReturnLogPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatNumber, formatPurposes } = require('../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatLongDate,
+  formatNumber,
+  formatPurposes,
+  formatReturnLogStatus
+} = require('../base.presenter.js')
 const {
   formatMeterDetails,
-  formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } = require('./base-return-logs.presenter.js')
@@ -44,7 +49,7 @@ function go(returnLog, auth) {
 
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
-  const formattedStatus = formatStatus(returnLog)
+  const formattedStatus = formatReturnLogStatus(returnLog)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {

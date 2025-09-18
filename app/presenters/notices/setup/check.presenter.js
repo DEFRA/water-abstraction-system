@@ -34,12 +34,20 @@ function go(recipients, page, pagination, session) {
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
-    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
+    pageTitleCaption: `Notice ${referenceCode}`,
+    readyToSend: _readyToSend(recipients, noticeType),
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
-    referenceCode,
     warning: _warning(formattedRecipients)
   }
+}
+
+function _readyToSend(recipients, noticeType) {
+  if (recipients.length === 0) {
+    return 'No recipients with due returns'
+  }
+
+  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
@@ -66,20 +74,17 @@ function _links(session) {
   if (journey === 'adhoc') {
     return {
       ...links,
-      back: `/system/notices/setup/${id}/check-notice-type`,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
-  } else if (journey === 'alerts') {
-    return {
-      ...links,
-      back: `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
-    }
-  } else {
-    return {
-      ...links,
-      back: `/system/notices/setup/${id}/returns-period`,
-      removeLicences: `/system/notices/setup/${id}/remove-licences`
-    }
+  }
+
+  if (journey === 'alerts') {
+    return links
+  }
+
+  return {
+    ...links,
+    removeLicences: `/system/notices/setup/${id}/remove-licences`
   }
 }
 
@@ -174,14 +179,20 @@ function _warning(formattedRecipients) {
   }
 
   if (invalidRecipients.length === 1) {
-    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    return {
+      iconFallbackText: 'Warning',
+      text: `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    }
   }
 
   const contactNames = invalidRecipients.map((invalidRecipient) => {
     return invalidRecipient.contact[0]
   })
 
-  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  return {
+    iconFallbackText: 'Warning',
+    text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  }
 }
 
 module.exports = {

@@ -26,17 +26,18 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
   let payload
 
   beforeEach(() => {
+    Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
+
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
-
-    Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when given a valid payload', () => {

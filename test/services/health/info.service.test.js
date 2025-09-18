@@ -9,15 +9,14 @@ const Proxyquire = require('proxyquire')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
-
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
+const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
-const BaseRequest = require('../../../app/requests/base.request.js')
+const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
+const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
+const NotifyViewHealthRequest = require('../../../app/requests/notify/view-health.request.js')
+const RespViewHealthRequest = require('../../../app/requests/resp/view-health.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
@@ -26,48 +25,81 @@ let InfoService // = require('../../app/services/health/info.service')
 
 describe('Health - Info service', () => {
   const goodRequestResults = {
-    addressFacade: { succeeded: true, response: { statusCode: 200, body: 'hey there' } },
+    addressFacade: { succeeded: true, response: { statusCode: 200, body: 'hola' } },
     chargingModule: {
       succeeded: true,
       response: {
         statusCode: 200,
         info: {
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-        }
+          dockerTag: 'v0.19.1'
+        },
+        body: { status: 'alive' }
       }
     },
     gotenberg: {
       succeeded: true,
-      response: { body: JSON.stringify({ status: 'up', details: { chromium: { status: 'up' } } }) }
+      response: { body: { status: 'up', details: { chromium: { status: 'up' } } } }
+    },
+    notify: {
+      succeeded: true,
+      response: {
+        body: {
+          build_time: '2025-08-20:07:53:38',
+          db_version: '0511_process_type_nullable',
+          git_commit: '9a404353ee55a7f7cb3b8348b169ad00cc2d540a',
+          status: 'ok'
+        },
+        statusCode: 200
+      }
+    },
+    resp: {
+      succeeded: true,
+      response: {
+        body: {
+          error: null,
+          result: [],
+          source: 'ReSP'
+        },
+        statusCode: 200
+      }
     },
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
-  let chargingModuleRequestStub
-  let legacyRequestStub
-  let baseRequestStub
+  let addressFacadeViewStatusRequestStub
+  let chargingModuleViewHealthRequestStub
+  let gotenbergViewHealthRequestStub
+  let legacyViewHealthRequestStub
+  let notifyViewHealthRequestStub
   let redisStub
+  let respViewHealthRequestStub
 
   beforeEach(() => {
-    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'get')
-    legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
-    baseRequestStub = Sinon.stub(BaseRequest, 'get')
+    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
+    chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
+    gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
+    legacyViewHealthRequestStub = Sinon.stub(LegacyViewHealthRequest, 'send')
+    notifyViewHealthRequestStub = Sinon.stub(NotifyViewHealthRequest, 'send')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
+    respViewHealthRequestStub = Sinon.stub(RespViewHealthRequest, 'send')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    legacyRequestStub.withArgs('background', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('reporting', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('import', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('crm', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('external', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('internal', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('idm', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('permits', 'health/info', null, false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('background').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('reporting').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('import').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('crm').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('external').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('internal').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('idm').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('permits').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.withArgs('returns').resolves(goodRequestResults.app)
 
-    chargingModuleRequestStub.withArgs('status').resolves(goodRequestResults.chargingModule)
+    chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
+    gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
+    notifyViewHealthRequestStub.resolves(goodRequestResults.notify)
+    respViewHealthRequestStub.resolves(goodRequestResults.resp)
   })
 
   afterEach(() => {
@@ -75,16 +107,13 @@ describe('Health - Info service', () => {
   })
 
   describe('when all the services are running', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      baseRequestStub
-        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
-        .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
+      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -113,7 +142,9 @@ describe('Health - Info service', () => {
         'appData',
         'chargingModuleData',
         'gotenbergData',
+        'notifyData',
         'redisConnectivityData',
+        'respData',
         'virusScannerData'
       ])
 
@@ -123,21 +154,22 @@ describe('Health - Info service', () => {
       expect(result.appData[0].version).to.equal('9.0.99')
       expect(result.appData[0].commit).to.equal('99d0e8c')
 
-      expect(result.redisConnectivityData).to.equal('Up and running')
       expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      expect(result.redisConnectivityData).to.equal('Up and running')
+      expect(result.addressFacadeData).to.equal('hola')
+      expect(result.chargingModuleData).to.equal('v0.19.1')
       expect(result.gotenbergData).to.equal('Up - Chromium Up')
+      expect(result.notifyData).to.equal('Up and running')
+      expect(result.respData).to.equal('Up and running')
     })
   })
 
   describe('when Redis', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      baseRequestStub
-        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
-        .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
+      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
       const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
@@ -168,14 +200,21 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
 
-        expect(result.redisConnectivityData).to.equal('ERROR: Redis check went boom')
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).to.equal('ERROR: Redis check went boom')
+        expect(result.addressFacadeData).to.equal('hola')
+        expect(result.chargingModuleData).to.equal('v0.19.1')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })
@@ -185,12 +224,9 @@ describe('Health - Info service', () => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      baseRequestStub
-        .withArgs(`${addressFacadeConfig.url}/address-service/hola`)
-        .resolves(goodRequestResults.addressFacade)
-      baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
+      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
 
-      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -218,14 +254,21 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
 
-        expect(result.redisConnectivityData).to.equal('Up and running')
         expect(result.virusScannerData).to.startWith('ERROR:')
+        expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.addressFacadeData).to.equal('hola')
+        expect(result.chargingModuleData).to.equal('v0.19.1')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
 
@@ -253,7 +296,9 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
@@ -261,6 +306,11 @@ describe('Health - Info service', () => {
 
         expect(result.virusScannerData).to.startWith('ERROR:')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.addressFacadeData).to.equal('hola')
+        expect(result.chargingModuleData).to.equal('v0.19.1')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })
@@ -287,10 +337,9 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
-        baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
+        addressFacadeViewStatusRequestStub.resolves(badResult)
 
-        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
+        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -301,16 +350,21 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
 
-        expect(result.addressFacadeData).to.startWith('ERROR:')
-
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.addressFacadeData).to.startWith('ERROR:')
+        expect(result.chargingModuleData).to.equal('v0.19.1')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
 
@@ -318,10 +372,9 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
-        baseRequestStub.withArgs(`${addressFacadeConfig.url}/address-service/hola`).resolves(badResult)
-        baseRequestStub.withArgs(`${gotenbergConfig.url}/health`).resolves(goodRequestResults.gotenberg)
+        addressFacadeViewStatusRequestStub.resolves(badResult)
 
-        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
+        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -332,16 +385,21 @@ describe('Health - Info service', () => {
           'appData',
           'chargingModuleData',
           'gotenbergData',
+          'notifyData',
           'redisConnectivityData',
+          'respData',
           'virusScannerData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
 
-        expect(result.addressFacadeData).to.startWith('ERROR:')
-
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.addressFacadeData).to.startWith('ERROR:')
+        expect(result.chargingModuleData).to.equal('v0.19.1')
+        expect(result.gotenbergData).to.equal('Up - Chromium Up')
+        expect(result.notifyData).to.equal('Up and running')
+        expect(result.respData).to.equal('Up and running')
       })
     })
   })

@@ -1,37 +1,26 @@
 'use strict'
 
 /**
- * Orchestrates fetching and determining recipients
+ * Orchestrates merging the recipients with additional and selected recipients
  * @module RecipientsService
  */
 
-const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-
 /**
- * Orchestrates fetching and determining recipients
- *
- * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
+ * Orchestrates merging the recipients with additional and selected recipients
  *
  * @param {module:SessionModel} session - The session instance
- * @param {boolean} allRecipients - flag to decide if all recipients are required
+ * @param {object[]} recipientsData
  *
- * @returns {Promise<object[]>} - recipients
+ * @returns {object[]} - recipients
  */
-async function go(session, allRecipients = true) {
-  let recipientsData = await _recipientsData(session)
+function go(session, recipientsData) {
+  const recipients = _additionalRecipients(recipientsData, session)
 
-  recipientsData = _additionalRecipients(recipientsData, session)
-
-  if (allRecipients || !session.selectedRecipients) {
-    return DetermineRecipientsService.go(recipientsData)
+  if (!session.selectedRecipients) {
+    return recipients
   }
 
-  const selectedRecipientsData = _selectedRecipients(session.selectedRecipients, recipientsData)
-
-  return DetermineRecipientsService.go(selectedRecipientsData)
+  return _selectedRecipients(session.selectedRecipients, recipients)
 }
 
 function _additionalRecipients(recipientsData, session) {
@@ -40,16 +29,6 @@ function _additionalRecipients(recipientsData, session) {
   }
 
   return recipientsData
-}
-
-async function _recipientsData(session) {
-  if (session.journey === 'alerts') {
-    return FetchAbstractionAlertRecipientsService.go(session)
-  } else if (session.noticeType === 'returnForms') {
-    return FetchLetterRecipientsService.go(session)
-  } else {
-    return FetchRecipientsService.go(session)
-  }
 }
 
 function _selectedRecipients(selectedRecipients, recipientsData) {

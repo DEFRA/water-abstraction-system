@@ -8,7 +8,7 @@
 const BatchNotificationsService = require('./batch-notifications.service.js')
 const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
 const CreateNoticeService = require('./create-notice.service.js')
-const RecipientsService = require('./recipients.service.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
@@ -25,7 +25,7 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
 async function go(sessionId, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await RecipientsService.go(session, false)
+  const recipients = await FetchRecipientsService.go(session)
 
   const notice = await _notice(session, recipients, auth)
 

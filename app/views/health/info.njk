@@ -1,0 +1,64 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">Info</h1>
+
+  <h2 class="govuk-heading-m">Virus scanner</h2>
+  <p>{{ virusScannerData }}</p>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-m">Redis</h2>
+  <p>{{ redisConnectivityData }}</p>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-m">Address facade</h2>
+  <p>{{ addressFacadeData }}</p>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-m">Charging module</h2>
+  <p>{{ chargingModuleData }}</p>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-m">Gotenberg (Used for HTML to PDF conversion)</h2>
+  <p>{{ gotenbergData }}</p>
+
+  <h2 class="govuk-heading-m">Notify</h2>
+  <p>{{ notifyData }}</p>
+
+  <h2 class="govuk-heading-m">ReSP API</h2>
+  <p>{{ respData }}</p>
+
+  {% for app in appData %}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">{{ app.name }}</h2>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      rows: [
+        {
+          key: {
+            text: "Version"
+          },
+          value: {
+            text: app.version
+          }
+        },
+        {
+          key: {
+            text: "Commit hash"
+          },
+          value: {
+            text: app.commit
+          }
+        }
+      ]
+    }) }}
+  {% endfor %}
+{% endblock %}

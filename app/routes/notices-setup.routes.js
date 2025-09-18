@@ -244,6 +244,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/check-notice-type',
+    options: {
+      handler: NoticesSetupController.submitCheckNoticeType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/notices/setup/{eventId}/confirmation',
     options: {
@@ -335,6 +347,30 @@ const routes = [
       auth: {
         access: {
           scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/recipient-name',
+    options: {
+      handler: NoticesSetupController.viewRecipientName,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/recipient-name',
+    options: {
+      handler: NoticesSetupController.submitRecipientName,
+      auth: {
+        access: {
+          scope: ['returns']
         }
       }
     }
