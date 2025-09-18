@@ -19,7 +19,7 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
  * @param {string} returnSubmissionId - The ID of the return submission
  * @param {number} startReading - The starting meter reading
- * @param {date} timestamp - The timestamp to use for the createdAt property
+ * @param {Date} timestamp - The timestamp to use for the createdAt property
  * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
  * @param {boolean} volumes - Indicates if lines contain volumes or meter readings)
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}

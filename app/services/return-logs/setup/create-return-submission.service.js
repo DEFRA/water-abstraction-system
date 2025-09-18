@@ -19,7 +19,7 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
  * @param {string} notes - Text of any note added to the return submission
- * @param {date} timestamp - The timestamp to use for the createdAt property
+ * @param {Date} timestamp - The timestamp to use for the createdAt property
  * @param {number} createdBy - Numeric user ID of the user who created the return submission
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
