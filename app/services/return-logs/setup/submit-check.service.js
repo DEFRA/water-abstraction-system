@@ -27,6 +27,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
+  const timestamp = timestampForPostgres()
 
   const metadata = GenerateReturnSubmissionMetadata.go(session)
 
@@ -37,32 +38,34 @@ async function go(sessionId, user) {
       metadata,
       session.journey === 'nil-return',
       session.note?.content,
+      timestamp,
       user.id,
       trx
     )
 
     await CreateReturnLinesService.go(
       session.lines,
-      returnSubmission.id,
+      session.meter10TimesDisplay === 'yes',
+      session.meterProvided === 'yes',
       session.returnsFrequency,
+      returnSubmission.id,
+      session.startReading,
+      timestamp,
       session.units,
       session.reported === 'abstraction-volumes',
-      session.meterProvided === 'yes',
-      session.startReading,
-      session.meter10TimesDisplay === 'yes',
       trx
     )
 
-    await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, trx)
+    await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
     await _cleanupSession(sessionId, trx)
   })
 
   return session.returnLogId
 }
 
-async function _markReturnLogAsSubmitted(returnLogId, receivedDate, trx) {
+async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, trx) {
   await ReturnLogModel.query(trx)
-    .patch({ status: 'completed', receivedDate, updatedAt: timestampForPostgres() })
+    .patch({ status: 'completed', receivedDate, updatedAt: timestamp })
     .where({ id: returnLogId })
 }
 

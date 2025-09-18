@@ -5,7 +5,7 @@
  * @module CreateReturnSubmissionService
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
 
 /**
@@ -19,17 +19,18 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  * @param {object} metadata - Metadata for the return submission
  * @param {boolean} nilReturn - Indicates if the return is a nil return
  * @param {string} notes - Text of any note added to the return submission
+ * @param {date} timestamp - The timestamp to use for the createdAt property
  * @param {number} createdBy - Numeric user ID of the user who created the return submission
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(returnLogId, userId, metadata, nilReturn, notes, createdBy, trx = null) {
+async function go(returnLogId, userId, metadata, nilReturn, notes, timestamp, createdBy, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
-    createdAt: timestampForPostgres(),
+    createdAt: timestamp,
     createdBy,
     current: true,
     nilReturn,

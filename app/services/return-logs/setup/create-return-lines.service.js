@@ -5,7 +5,7 @@
  * @module CreateReturnLinesService
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
@@ -14,27 +14,28 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * Creates return lines by formatting the provided lines and inserting them into the database
  *
  * @param {object[]} lines - An array of line objects to be processed
- * @param {string} returnSubmissionId - The ID of the return submission
- * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
- * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
- * @param {boolean} volumes - Indicates if lines contain volumes
- * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether lines contain
- * volumes or meter readings)
- * @param {number} startReading - The starting meter reading
  * @param {boolean} meter10TimesDisplay - Whether the meter is a 10x display
+ * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether lines contain
+ * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
+ * @param {string} returnSubmissionId - The ID of the return submission
+ * @param {number} startReading - The starting meter reading
+ * @param {date} timestamp - The timestamp to use for the createdAt property
+ * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
+ * @param {boolean} volumes - Indicates if lines contain volumes or meter readings)
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if no lines were provided)
  */
 async function go(
   lines,
-  returnSubmissionId,
+  meter10TimesDisplay,
+  meterProvided,
   returnsFrequency,
+  returnSubmissionId,
+  startReading,
+  timestamp,
   units,
   volumes,
-  meterProvided,
-  startReading,
-  meter10TimesDisplay,
   trx = null
 ) {
   if (!lines?.length) {
@@ -54,7 +55,7 @@ async function go(
     return {
       ...restOfLine,
       id: generateUUID(),
-      createdAt: timestampForPostgres(),
+      createdAt: timestamp,
       quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, units) : undefined,
       readingType: meterProvided ? 'measured' : 'estimated',
       returnSubmissionId,
