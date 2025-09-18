@@ -15,9 +15,10 @@
  */
 function go(removeLicences, referenceCode) {
   return {
+    backLink: 'check',
+    caption: `Notice ${referenceCode}`,
     hint: 'Separate the licences numbers with a comma or new line.',
     pageTitle: 'Enter the licence numbers to remove from the mailing list',
-    referenceCode,
     removeLicences
   }
 }

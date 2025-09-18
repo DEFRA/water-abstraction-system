@@ -9,13 +9,12 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/notices/setup/cancel.presenter.js')
 
 describe('Notices - Setup - Cancel presenter', () => {
-  const referenceCode = generateReferenceCode()
+  const referenceCode = 'RNIV-1234'
 
   let licenceRef
   let session
@@ -34,8 +33,8 @@ describe('Notices - Setup - Cancel presenter', () => {
 
     expect(result).to.equal({
       backLink: `/system/notices/setup/${session.id}/check`,
+      caption: 'Notice RNIV-1234',
       pageTitle: 'You are about to cancel this notice',
-      referenceCode,
       summaryList: {
         text: 'Licence number',
         value: licenceRef
@@ -60,7 +59,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         alertType: 'stop',
         journey: 'alerts',
         monitoringStationId: '123',
-        referenceCode: generateReferenceCode('WAA')
+        referenceCode: 'WAA-1234'
       }
     })
 

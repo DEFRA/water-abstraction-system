@@ -4,14 +4,19 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+{% from 'macros/page-heading.njk' import pageHeading %}
 
 {% block content %}
   {% if notification %}
-    {{ govukNotificationBanner(notification) }}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
   {% endif %}
 
-  <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+  {{ pageHeading(pageTitle) }}
 
   {{ govukSummaryList({
     rows: [
@@ -69,9 +74,5 @@
     ]
   }) }}
 
-  <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-    {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
-  </form>
+  {{ govukButton(continueButton) }}
 {% endblock %}

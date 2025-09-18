@@ -1,10 +1,13 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/hint/macro.njk" import govukHint %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+{% from 'macros/page-heading.njk' import pageHeading %}
 
 {% set rows = [] %}
 
@@ -18,8 +21,27 @@
   ), rows) %}
 {% endfor %}
 
+{% block breadcrumbs %}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
+{% endblock %}
 
-{% block pageContent %}
+{% block content %}
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle) }}
+  {% endset %}
+
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#recipients"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {% set innerHintHtml %}
     {{ govukHint({
       id: "recipients",
@@ -27,22 +49,18 @@
       text: "Select all that apply"
       })
     }}
-    <a class="govuk-link" href="{{setupAddress.href}}">{{ setupAddress.text }}</a>
+    <a class="govuk-link" href="{{contactTypeLink}}">Set up a single use address or email address</a>
   {% endset %}
-
-  <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
       name: "recipients",
-      errorMessage: error.recipients,
+      errorMessage: error,
       fieldset: {
         legend: {
-          text: pageTitle,
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
+          html: pageHeading
         }
       },
       hint: {

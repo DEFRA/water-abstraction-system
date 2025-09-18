@@ -64,6 +64,7 @@ function _validate(payload) {
   const { message } = validation.error.details[0]
 
   return {
+    href: '#returnsPeriod-error',
     text: message
   }
 }

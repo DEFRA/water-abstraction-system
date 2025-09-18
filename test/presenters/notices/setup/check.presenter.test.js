@@ -8,9 +8,6 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-
-// Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -31,12 +28,7 @@ describe('Notices - Setup - Check presenter', () => {
       numberOfPages: 1
     }
 
-    session = {
-      id: generateUUID(),
-      journey: 'standard',
-      noticeType: 'invitations',
-      referenceCode: generateReferenceCode('RINV')
-    }
+    session = { id: generateUUID(), journey: 'standard', noticeType: 'invitations', referenceCode: 'RINV-123' }
 
     testRecipients = RecipientsFixture.recipients()
     // This data is used to ensure the recipients are grouped when they have the same licence ref / name.
@@ -60,6 +52,7 @@ describe('Notices - Setup - Check presenter', () => {
       const result = CheckPresenter.go(testInput, page, pagination, session)
 
       expect(result).to.equal({
+        backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/returns-period` },
         defaultPageSize: 25,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -67,7 +60,7 @@ describe('Notices - Setup - Check presenter', () => {
           removeLicences: `/system/notices/setup/${session.id}/remove-licences`
         },
         pageTitle: 'Check the recipients',
-        pageTitleCaption: `Notice ${session.referenceCode}`,
+        pageTitleCaption: 'Notice RINV-123',
         readyToSend: 'Returns invitations are ready to send.',
         recipients: [
           {
@@ -140,10 +133,50 @@ describe('Notices - Setup - Check presenter', () => {
           }
         ],
         recipientsAmount: 9,
-        warning: {
-          iconFallbackText: 'Warning',
-          text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
-        }
+        warning: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+      })
+    })
+
+    describe('the "backLink" property', () => {
+      describe('when the journey is for "adhoc"', () => {
+        beforeEach(() => {
+          session.journey = 'adhoc'
+        })
+
+        it('should return the back link for the "adhoc" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/check-notice-type`,
+            text: 'Back'
+          })
+        })
+      })
+
+      describe('when the journey is for "alerts"', () => {
+        beforeEach(() => {
+          session.journey = 'alerts'
+          session.noticeType = 'abstractionAlerts'
+          session.referenceCode = 'WAA-123'
+          session.monitoringStationId = '345'
+        })
+
+        it('should return the back link for "alerts" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`,
+            text: 'Back'
+          })
+        })
+      })
+
+      describe('when the journey is for "standard"', () => {
+        it('should return the back link for the "standard" journey', () => {
+          const result = CheckPresenter.go(testInput, page, pagination, session)
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/returns-period`,
+            text: 'Back'
+          })
+        })
       })
     })
 
@@ -167,7 +200,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = generateReferenceCode('WAA')
+          session.referenceCode = 'WAA-123'
           session.monitoringStationId = '345'
         })
 
@@ -210,7 +243,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the "noticeType" is "returnForms"', () => {
           beforeEach(() => {
             session.noticeType = 'returnForms'
-            session.referenceCode = generateReferenceCode('PRTF')
+            session.referenceCode = 'PRTF-123'
           })
 
           it('should return the correct message', () => {
@@ -225,7 +258,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = generateReferenceCode('WAA')
+          session.referenceCode = 'WAA-123'
           session.monitoringStationId = '345'
         })
 
@@ -353,7 +386,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the "noticeType" is "returnForms"', () => {
             beforeEach(() => {
               session.noticeType = 'returnForms'
-              session.referenceCode = generateReferenceCode('PRTF')
+              session.referenceCode = 'PRTF-123'
             })
 
             it('should return null', () => {
@@ -370,7 +403,7 @@ describe('Notices - Setup - Check presenter', () => {
           beforeEach(() => {
             session.journey = 'alerts'
             session.noticeType = 'abstractionAlerts'
-            session.referenceCode = generateReferenceCode('WAA')
+            session.referenceCode = 'WAA-123'
             session.monitoringStationId = '345'
           })
 
@@ -421,7 +454,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the "noticeType" is "reminders"', () => {
             beforeEach(() => {
               session.noticeType = 'reminders'
-              session.referenceCode = generateReferenceCode('RREM')
+              session.referenceCode = 'RREM-123'
             })
 
             describe('and the method is "letter"', () => {
@@ -515,10 +548,9 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns a warning for that recipient', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
-          expect(result.warning).to.equal({
-            iconFallbackText: 'Warning',
-            text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
-          })
+          expect(result.warning).to.equal(
+            'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+          )
         })
       })
 
@@ -530,10 +562,9 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns a warning that lists the recipients', () => {
           const result = CheckPresenter.go(testInput, page, pagination, session)
 
-          expect(result.warning).to.equal({
-            iconFallbackText: 'Warning',
-            text: 'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
-          })
+          expect(result.warning).to.equal(
+            'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
+          )
         })
       })
     })
