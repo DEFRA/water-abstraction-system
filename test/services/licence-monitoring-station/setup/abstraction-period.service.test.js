@@ -40,7 +40,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
         abstractionPeriodStartMonth: '2',
         abstractionPeriodEndMonth: '4',
         activeNavBar: 'search',
-        backLink: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
+        backLink: {
+          href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
+          text: 'Back'
+        },
         monitoringStationLabel: 'FRENCHAY',
         pageTitle: 'Enter an abstraction period for licence 01/115'
       })

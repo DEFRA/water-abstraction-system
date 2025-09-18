@@ -36,39 +36,45 @@ function go(payload) {
   const parsedStartDate = _parseDate(startDay, startMonth)
   const parsedEndDate = _parseDate(endDay, endMonth)
 
-  return {
-    startResult: _validateAbstractionDate(parsedStartDate, 'start'),
-    endResult: _validateAbstractionDate(parsedEndDate, 'end')
-  }
+  return _validateAbstractionDate({
+    'abstraction-period-start': parsedStartDate,
+    'abstraction-period-end': parsedEndDate
+  })
 }
 
 function _parseDate(day, month) {
+  if (!day || !month) {
+    return null
+  }
   const parsedDay = day ? leftPadZeroes(day, 2) : ''
   const parsedMonth = month ? leftPadZeroes(month, 2) : ''
 
-  return {
-    entry: `${parsedDay}${parsedMonth}`,
-    fullDate: `1970-${parsedMonth}-${parsedDay}`
-  }
+  return `1970-${parsedMonth}-${parsedDay}`
 }
 
-function _validateAbstractionDate(date, type) {
+function _validateAbstractionDate(payload) {
   const schema = Joi.object({
-    entry: Joi.string()
-      .required()
-      .messages({
-        'string.empty': `Select the ${type} date of the abstraction period`
-      }),
-    fullDate: Joi.date()
+    'abstraction-period-start': Joi.date()
       .format(['YYYY-MM-DD'])
       .required()
       .messages({
-        'date.base': `Enter a real ${type} date`,
-        'date.format': `Enter a real ${type} date`
+        'date.base': `Select the start date of the abstraction period`,
+        'date.format': _validationMessage('start')
+      }),
+    'abstraction-period-end': Joi.date()
+      .format(['YYYY-MM-DD'])
+      .required()
+      .messages({
+        'date.base': `Select the end date of the abstraction period`,
+        'date.format': _validationMessage('end')
       })
   })
 
-  return schema.validate(date, { abortEarly: true })
+  return schema.validate(payload, { abortEarly: false })
+}
+
+function _validationMessage(type) {
+  return `Enter a real ${type} date`
 }
 
 module.exports = {

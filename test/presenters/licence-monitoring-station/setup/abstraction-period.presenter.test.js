@@ -50,9 +50,10 @@ describe('Abstraction Period Presenter', () => {
       it('returns the back link to the check page', () => {
         const result = AbstractionPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal(
-          `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/check`
-        )
+        expect(result.backLink).to.equal({
+          href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/check`,
+          text: 'Back'
+        })
       })
     })
 
@@ -64,9 +65,10 @@ describe('Abstraction Period Presenter', () => {
       it('returns the back link to the full condition page', () => {
         const result = AbstractionPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal(
-          `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/full-condition`
-        )
+        expect(result.backLink).to.equal({
+          href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/full-condition`,
+          text: 'Back'
+        })
       })
     })
   })

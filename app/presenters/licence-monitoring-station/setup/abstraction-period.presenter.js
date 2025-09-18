@@ -35,12 +35,18 @@ function go(session) {
 
 function _backLink(session) {
   const { checkPageVisited, id } = session
+  let backLink
 
   if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
+    backLink = `/system/licence-monitoring-station/setup/${id}/check`
+  } else {
+    backLink = `/system/licence-monitoring-station/setup/${id}/full-condition`
   }
 
-  return `/system/licence-monitoring-station/setup/${id}/full-condition`
+  return {
+    href: backLink,
+    text: 'Back'
+  }
 }
 
 module.exports = {

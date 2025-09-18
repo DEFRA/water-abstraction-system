@@ -54,7 +54,10 @@ describe('Return Versions Setup - Abstraction Period service', () => {
           pageTitle: 'Enter the abstraction period for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
           abstractionPeriod: null,
-          backLink: `/system/return-versions/setup/${session.id}/points/0`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/points/0`,
+            text: 'Back'
+          },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC'
         },

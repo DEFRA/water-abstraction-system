@@ -30,12 +30,18 @@ function go(session, requirementIndex) {
 
 function _backLink(session, requirementIndex) {
   const { checkPageVisited, id } = session
+  let backLink
 
   if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+    backLink = `/system/return-versions/setup/${id}/check`
+  } else {
+    backLink = `/system/return-versions/setup/${id}/points/${requirementIndex}`
   }
 
-  return `/system/return-versions/setup/${id}/points/${requirementIndex}`
+  return {
+    href: backLink,
+    text: 'Back'
+  }
 }
 
 module.exports = {
