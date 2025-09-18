@@ -118,5 +118,11 @@
         }) }}
       </form>
     </div>
+  {% else %}
+    {{ govukButton({
+      text: "Cancel",
+      href: links.cancel,
+      preventDoubleClick: true
+    }) }}
   {% endif %}
 {% endblock %}
