@@ -14,13 +14,10 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  *
  * If a previous submission does exist then it will be marked as superseded by setting its `current` property to false
  *
- * @param {string} returnLogId - ID of the return log (typically something like v1:6:01/23:987654:2024-11-01:2025-10-31)
- * @param {string} userId - ID of the user creating the return submission (typically an email address)
  * @param {object} metadata - Metadata for the return submission
- * @param {boolean} nilReturn - Indicates if the return is a nil return
- * @param {string} notes - Text of any note added to the return submission
+ * @param {object} session - Session object containing the return submission data
  * @param {Date} timestamp - The timestamp to use for the createdAt property
- * @param {number} createdBy - Numeric user ID of the user who created the return submission
+ * @param {module:UserModel} user - Instance representing the user that originated the request
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
