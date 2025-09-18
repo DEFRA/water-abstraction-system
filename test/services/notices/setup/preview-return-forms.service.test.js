@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -21,6 +22,8 @@ const PreviewReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Preview Return Forms Service', () => {
   let contactHashId
+  let dueReturnLog
+  let licenceRef
   let notifierStub
   let recipient
   let returnId
@@ -28,29 +31,18 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    returnId = '1234'
+    dueReturnLog = ReturnLogFixture.dueReturn()
+
+    licenceRef = dueReturnLog.licenceRef
+    returnId = dueReturnLog.returnId
 
     recipient = RecipientsFixture.recipients().licenceHolder
 
     contactHashId = recipient.contact_hash_id
 
     sessionData = {
-      licenceRef: '123',
-      dueReturns: [
-        {
-          dueDate: '2025-07-06',
-          endDate: '2025-06-06',
-          naldAreaCode: 'MIDLT',
-          purpose: 'A purpose',
-          regionName: 'North West',
-          returnId,
-          returnReference: '123456',
-          returnsFrequency: 'day',
-          siteDescription: 'Water park',
-          startDate: '2025-01-01',
-          twoPartTariff: false
-        }
-      ]
+      licenceRef,
+      dueReturns: [dueReturnLog]
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -106,17 +98,20 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR'
         },
-        dueDate: '6 July 2025',
-        endDate: '6 June 2025',
-        licenceRef: '123',
+        dueDate: '28 April 2023',
+        endDate: '31 March 2023',
+        licenceRef,
+        naldAreaCode: 'MIDLT',
         pageEntries: actualCallArgs.pageEntries,
-        pageTitle: 'Water abstraction daily return',
-        purpose: 'A purpose',
+        pageTitle: 'Water abstraction monthly return',
+        purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
-        returnsFrequency: 'day',
-        returnReference: '123456',
-        siteDescription: 'Water park',
-        startDate: '1 January 2025',
+        regionCode: '1',
+        returnLogId: dueReturnLog.returnLogId,
+        returnsFrequency: 'month',
+        returnReference: dueReturnLog.returnReference,
+        siteDescription: 'BOREHOLE AT AVALON',
+        startDate: '1 April 2022',
         twoPartTariff: false
       })
     })
