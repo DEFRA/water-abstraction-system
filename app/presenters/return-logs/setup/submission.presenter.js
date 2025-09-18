@@ -16,11 +16,11 @@ function go(session) {
   const { beenReceived, journey, returnReference } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLink(session), text: 'Back' },
     beenReceived,
-    caption: `Return reference ${returnReference}`,
     journey: journey ?? null,
-    pageTitle: 'What do you want to do with this return?'
+    pageTitle: 'What do you want to do with this return?',
+    pageTitleCaption: `Return reference ${returnReference}`
   }
 }
 

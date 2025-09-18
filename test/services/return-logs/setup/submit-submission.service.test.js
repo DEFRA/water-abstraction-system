@@ -130,7 +130,9 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       it('includes an error for the radio form element', async () => {
         const result = await SubmitSubmissionService.go(session.id, payload)
 
-        expect(result.error).to.equal({ text: 'Select what you want to do with this return' })
+        expect(result.error.errorList).to.equal([
+          { href: '#journey', text: 'Select what you want to do with this return' }
+        ])
       })
 
       it('returns the page data for the view', async () => {
@@ -138,12 +140,15 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
-          backLink: `/system/return-logs/setup/${session.id}/received`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },
           beenReceived: false,
-          error: { text: 'Select what you want to do with this return' },
+          error: {
+            errorList: [{ href: '#journey', text: 'Select what you want to do with this return' }],
+            journey: { text: 'Select what you want to do with this return' }
+          },
           journey: null,
           pageTitle: 'What do you want to do with this return?',
-          caption: `Return reference ${session.returnReference}`
+          pageTitleCaption: `Return reference ${session.returnReference}`
         })
       })
     })

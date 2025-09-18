@@ -10,6 +10,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
@@ -79,17 +80,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = SubmissionValidator.go(payload)
+  const validationResult = SubmissionValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

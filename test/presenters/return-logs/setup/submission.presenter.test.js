@@ -26,11 +26,11 @@ describe('Return Logs Setup - Submission presenter', () => {
       const result = SubmissionPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
+        backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received', text: 'Back' },
         beenReceived: false,
         journey: null,
         pageTitle: 'What do you want to do with this return?',
-        caption: 'Return reference 1234'
+        pageTitleCaption: 'Return reference 1234'
       })
     })
 
@@ -43,7 +43,7 @@ describe('Return Logs Setup - Submission presenter', () => {
         it('returns a link back to the "check" page', () => {
           const result = SubmissionPresenter.go(session)
 
-          expect(result.backLink).to.equal('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check')
+          expect(result.backLink.href).to.equal('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check')
         })
       })
 
@@ -51,7 +51,9 @@ describe('Return Logs Setup - Submission presenter', () => {
         it('returns a link back to the "received" page on', () => {
           const result = SubmissionPresenter.go(session)
 
-          expect(result.backLink).to.equal('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received')
+          expect(result.backLink.href).to.equal(
+            '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received'
+          )
         })
       })
     })

@@ -27,11 +27,11 @@ describe('Return Logs Setup - Submission service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        backLink: `/system/return-logs/setup/${sessionId}/received`,
+        backLink: { href: `/system/return-logs/setup/${sessionId}/received`, text: 'Back' },
         beenReceived: false,
         journey: null,
         pageTitle: 'What do you want to do with this return?',
-        caption: 'Return reference 1234'
+        pageTitleCaption: 'Return reference 1234'
       })
     })
   })
