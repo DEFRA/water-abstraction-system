@@ -53,11 +53,11 @@ function _applyFilters(query, filters) {
   }
 
   if (fromDate) {
-    query.where('createdAt', '>=', new Date(fromDate))
+    query.where('events.createdAt', '>=', new Date(fromDate))
   }
 
   if (toDate) {
-    query.where('createdAt', '<=', new Date(toDate))
+    query.where('events.createdAt', '<=', new Date(toDate))
   }
 
   _applyNoticeTypeFilters(query, noticeTypes)
