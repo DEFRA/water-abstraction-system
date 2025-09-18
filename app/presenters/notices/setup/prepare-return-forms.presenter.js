@@ -34,6 +34,9 @@ const RETURN_TYPE = {
  * Each page will be assigned a corresponding object to isolate the data to each page where possible. Those pages are:
  * - The "cover" page, this is the first page. The address is on this page.
  *
+ * This presenter is also used to supply the data for the saved notifications, this has its own presenter which maps
+ * some of these keys to 'snake case'. So there is additional data in the response which may not be in the PDF file.
+ *
  * @param {string} licenceRef - The reference of the licence that the return log relates to
  * @param {object} dueReturnLog - The return log to populate the form data
  * @param {object} recipient - A single recipient with the contact / address
@@ -46,9 +49,11 @@ function go(licenceRef, dueReturnLog, recipient) {
     endDate,
     naldAreaCode,
     purpose,
+    regionCode,
     regionName,
-    returnsFrequency,
+    returnLogId,
     returnReference,
+    returnsFrequency,
     siteDescription,
     startDate,
     twoPartTariff
@@ -58,10 +63,13 @@ function go(licenceRef, dueReturnLog, recipient) {
     address: _address(recipient),
 
     licenceRef,
+    naldAreaCode,
     pageEntries: _entries(startDate, endDate, returnsFrequency),
     pageTitle: _pageTitle(returnsFrequency),
     purpose,
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
+    regionCode,
+    returnLogId,
     returnReference,
     returnsFrequency,
     siteDescription,

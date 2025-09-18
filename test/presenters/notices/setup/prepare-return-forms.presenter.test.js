@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 
 // Thing under test
 const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
@@ -24,19 +25,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   beforeEach(() => {
     recipient = RecipientsFixture.recipients().licenceHolder
 
-    dueReturnLog = {
-      dueDate: '2025-07-06',
-      endDate: '2025-06-06',
-      naldAreaCode: 'MIDLT',
-      purpose: 'A purpose',
-      regionName: 'North West',
-      returnReference: '123456',
-      returnsFrequency: 'week',
-      siteDescription: 'Water park',
-      startDate: '2025-01-01',
-      twoPartTariff: false
-    }
+    dueReturnLog = ReturnLogFixture.dueReturn()
 
+    dueReturnLog.dueDate = '2025-07-06'
+    dueReturnLog.endDate = '2025-06-06'
+    dueReturnLog.startDate = '2025-01-01'
     clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
   })
 
@@ -57,17 +50,20 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR'
         },
-        siteDescription: 'Water park',
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
         licenceRef: '01/123',
+        naldAreaCode: 'MIDLT',
         pageEntries: result.pageEntries,
-        purpose: 'A purpose',
+        pageTitle: 'Water abstraction monthly return',
+        purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
-        returnReference: '123456',
-        returnsFrequency: 'week',
+        regionCode: '1',
+        returnLogId: dueReturnLog.returnLogId,
+        returnReference: dueReturnLog.returnReference,
+        returnsFrequency: 'month',
+        siteDescription: 'BOREHOLE AT AVALON',
         startDate: '1 January 2025',
-        pageTitle: 'Water abstraction weekly return',
         twoPartTariff: false
       })
     })
