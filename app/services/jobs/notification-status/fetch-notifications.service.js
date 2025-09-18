@@ -30,6 +30,7 @@ async function go() {
       'id',
       'licenceMonitoringStationId',
       'messageRef',
+      'messageType',
       'notifyId',
       'notifyStatus',
       'notify_error',

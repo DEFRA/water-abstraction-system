@@ -29,6 +29,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     notification = await NotificationHelper.add({
       eventId: event.id,
       messageRef: 'returns_invitation_licence_holder_letter',
+      messageType: 'letter',
       status: 'pending'
     })
 
@@ -74,6 +75,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
         id: notification.id,
         licenceMonitoringStationId: null,
         messageRef: 'returns_invitation_licence_holder_letter',
+        messageType: 'letter',
         notifyError: null,
         notifyId: null,
         notifyStatus: null,
