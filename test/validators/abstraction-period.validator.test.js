@@ -27,10 +27,9 @@ describe('Abstraction Period validator', () => {
       it('confirms the data is valid', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error).not.to.exist()
-        expect(result.endResult.error).not.to.exist()
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error).not.to.exist()
       })
     })
 
@@ -47,10 +46,9 @@ describe('Abstraction Period validator', () => {
       it('confirms the data is valid', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error).not.to.exist()
-        expect(result.endResult.error).not.to.exist()
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error).not.to.exist()
       })
     })
   })
@@ -69,10 +67,10 @@ describe('Abstraction Period validator', () => {
       it('fails validation for only the start date', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error.details[0].message).to.equal('Enter a real start date')
-        expect(result.endResult.error).to.not.exist()
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a real start date')
+        expect(result.error.details.length).to.equal(1)
       })
     })
 
@@ -89,10 +87,10 @@ describe('Abstraction Period validator', () => {
       it('fails validation for only the end date', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error).to.not.exist()
-        expect(result.endResult.error.details[0].message).to.equal('Enter a real end date')
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a real end date')
+        expect(result.error.details.length).to.equal(1)
       })
     })
 
@@ -109,10 +107,11 @@ describe('Abstraction Period validator', () => {
       it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error.details[0].message).to.equal('Enter a real start date')
-        expect(result.endResult.error.details[0].message).to.equal('Select the end date of the abstraction period')
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.not.exist()
+        expect(result.error.details[0].message).to.equal('Enter a real start date')
+        expect(result.error.details[1].message).to.equal('Select the end date of the abstraction period')
+        expect(result.error.details.length).to.equal(2)
       })
     })
 
@@ -129,10 +128,11 @@ describe('Abstraction Period validator', () => {
       it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error.details[0].message).to.equal('Select the start date of the abstraction period')
-        expect(result.endResult.error.details[0].message).to.equal('Enter a real end date')
+        expect(result.value['abstraction-period-start']).to.not.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error.details[0].message).to.equal('Select the start date of the abstraction period')
+        expect(result.error.details[1].message).to.equal('Enter a real end date')
+        expect(result.error.details.length).to.equal(2)
       })
     })
 
@@ -149,10 +149,11 @@ describe('Abstraction Period validator', () => {
       it('fails validation correctly for both dates', () => {
         const result = AbstractionPeriodValidator.go(payload)
 
-        expect(result.startResult.value).to.exist()
-        expect(result.endResult.value).to.exist()
-        expect(result.startResult.error.details[0].message).to.equal('Enter a real start date')
-        expect(result.endResult.error.details[0].message).to.equal('Enter a real end date')
+        expect(result.value['abstraction-period-start']).to.exist()
+        expect(result.value['abstraction-period-end']).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a real start date')
+        expect(result.error.details[1].message).to.equal('Enter a real end date')
+        expect(result.error.details.length).to.equal(2)
       })
     })
   })
@@ -170,10 +171,10 @@ describe('Abstraction Period validator', () => {
     it('fails validation for only the end date', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
-      expect(result.startResult.value).to.exist()
-      expect(result.endResult.value).to.exist()
-      expect(result.startResult.error).not.to.exist()
-      expect(result.endResult.error.details[0].message).to.equal('Select the end date of the abstraction period')
+      expect(result.value['abstraction-period-start']).to.exist()
+      expect(result.value['abstraction-period-end']).to.not.exist()
+      expect(result.error.details[0].message).to.equal('Select the end date of the abstraction period')
+      expect(result.error.details.length).to.equal(1)
     })
   })
 
@@ -190,10 +191,10 @@ describe('Abstraction Period validator', () => {
     it('fails validation for only the start date', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
-      expect(result.startResult.value).to.exist()
-      expect(result.endResult.value).to.exist()
-      expect(result.startResult.error.details[0].message).to.equal('Select the start date of the abstraction period')
-      expect(result.endResult.error).not.to.exist()
+      expect(result.value['abstraction-period-start']).to.not.exist()
+      expect(result.value['abstraction-period-end']).to.exist()
+      expect(result.error.details[0].message).to.equal('Select the start date of the abstraction period')
+      expect(result.error.details.length).to.equal(1)
     })
   })
 
@@ -205,10 +206,11 @@ describe('Abstraction Period validator', () => {
     it('fails validation correctly for both dates', () => {
       const result = AbstractionPeriodValidator.go(payload)
 
-      expect(result.startResult.value).to.exist()
-      expect(result.endResult.value).to.exist()
-      expect(result.startResult.error.details[0].message).to.equal('Select the start date of the abstraction period')
-      expect(result.endResult.error.details[0].message).to.equal('Select the end date of the abstraction period')
+      expect(result.value['abstraction-period-start']).to.not.exist()
+      expect(result.value['abstraction-period-end']).to.not.exist()
+      expect(result.error.details[0].message).to.equal('Select the start date of the abstraction period')
+      expect(result.error.details[1].message).to.equal('Select the end date of the abstraction period')
+      expect(result.error.details.length).to.equal(2)
     })
   })
 })

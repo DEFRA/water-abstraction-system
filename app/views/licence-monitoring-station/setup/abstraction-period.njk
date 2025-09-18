@@ -1,41 +1,10 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {# Error summary #}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text.startResult,
-          href: "#abstraction-period-start"
-        },
-        {
-          text: error.text.endResult,
-          href: "#abstraction-period-end"
-        }
-      ]
-    }) }}
-  {%endif%}
-
-  {# Main heading #}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
-    <span class="govuk-caption-l">{{ monitoringStationLabel }}</span> {{ pageTitle }}
-  </h1>
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
@@ -44,7 +13,7 @@
       {{ govukDateInput({
         id: "abstraction-period-start",
         namePrefix: "abstraction-period-start",
-        errorMessage: { text: error.text.startResult } if error.text.startResult,
+        errorMessage: error["abstraction-period-start"],
         fieldset: {
           legend: {
             text: "Start date",
@@ -54,12 +23,12 @@
         items: [
           {
             name: "day",
-            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
+            classes: "govuk-input--width-2",
             value: abstractionPeriodStartDay
           },
           {
             name: "month",
-            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.startResult }}",
+            classes: "govuk-input--width-2",
             value: abstractionPeriodStartMonth
           }
         ]
@@ -69,7 +38,7 @@
       {{ govukDateInput({
         id: "abstraction-period-end",
         namePrefix: "abstraction-period-end",
-        errorMessage: { text: error.text.endResult } if error.text.endResult,
+        errorMessage: error["abstraction-period-end"],
         fieldset: {
           legend: {
             text: "End date",
@@ -79,12 +48,12 @@
         items: [
           {
             name: "day",
-            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
+            classes: "govuk-input--width-2",
             value: abstractionPeriodEndDay
           },
           {
             name: "month",
-            classes: "govuk-input--width-2 {{ 'govuk-input--error' if error.text.endResult }}",
+            classes: "govuk-input--width-2",
             value: abstractionPeriodEndMonth
           }
         ]
