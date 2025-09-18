@@ -13,14 +13,7 @@
 {% from "macros/page-heading.njk" import pageHeading %}
 {% from "macros/return-status-tag.njk" import statusTag %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: backLink.text,
-    href: backLink.href
-  }) }}
-{% endblock %}
-
-{% block content %}
+{% block pageContent %}
   {% if underQuery %}
     {{ govukNotificationBanner({ text: 'This return has been marked under query' }) }}
   {% endif %}
@@ -29,7 +22,7 @@
     {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
   {% endif %}
 
-  {{ pageHeading(pageTitle, caption, 'govuk-heading-xl govuk-!-margin-bottom-3') }}
+  {{ pageHeading(pageTitle, pageCaption, 'govuk-heading-xl govuk-!-margin-bottom-3') }}
 
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
