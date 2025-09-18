@@ -74,15 +74,13 @@ function _query() {
   WITH additional_contacts AS (
     SELECT
       DISTINCT
-      ldh.licence_ref,
+      ld.licence_ref,
       'Additional contact' AS contact_type,
       con.email,
       NULL::jsonb AS contact,
       md5(LOWER(con.email)) AS contact_hash_id
     FROM
-      public.licence_document_headers ldh
-      INNER JOIN public.licence_documents ld
-        ON ld.licence_ref = ldh.licence_ref
+      public.licence_documents ld
       INNER JOIN public.licence_document_roles ldr
         ON ldr.licence_document_id = ld.id
       INNER JOIN public.company_contacts cct
@@ -92,7 +90,11 @@ function _query() {
       INNER JOIN public.licence_roles lr
         ON lr.id = cct.licence_role_id
     WHERE
-      ldh.licence_ref = ANY (?)
+      ld.licence_ref = ANY (?)
+      AND (
+      ldr.end_date IS NULL
+        OR ldr.end_date >= CURRENT_DATE
+      )
       AND cct.abstraction_alerts = true
   ),
 
