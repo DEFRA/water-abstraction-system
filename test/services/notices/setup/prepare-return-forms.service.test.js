@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
@@ -19,28 +20,18 @@ const PrepareReturnFormsService = require('../../../../app/services/notices/setu
 
 describe('Notices - Setup - Prepare Return Forms Service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
-  const licenceRef = '01/123'
 
   let dueReturnLog
+  let licenceRef
   let notifierStub
   let recipient
 
   beforeEach(async () => {
     recipient = RecipientsFixture.recipients().licenceHolder
 
-    dueReturnLog = {
-      dueDate: '2025-07-06',
-      endDate: '2025-06-06',
-      naldAreaCode: 'MIDLT',
-      purpose: 'A purpose',
-      regionName: 'North West',
-      returnId: '1234',
-      returnReference: '123456',
-      returnsFrequency: 'day',
-      siteDescription: 'Water park',
-      startDate: '2025-01-01',
-      twoPartTariff: false
-    }
+    dueReturnLog = ReturnLogFixture.dueReturn()
+
+    licenceRef = dueReturnLog.licenceRef
 
     Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
       response: {
@@ -81,17 +72,20 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR'
         },
-        dueDate: '6 July 2025',
-        endDate: '6 June 2025',
-        licenceRef: '01/123',
+        dueDate: '28 April 2023',
+        endDate: '31 March 2023',
+        licenceRef,
+        naldAreaCode: 'MIDLT',
         pageEntries: actualCallArgs.pageEntries,
-        pageTitle: 'Water abstraction daily return',
-        purpose: 'A purpose',
+        pageTitle: 'Water abstraction monthly return',
+        purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
-        returnsFrequency: 'day',
-        returnReference: '123456',
-        siteDescription: 'Water park',
-        startDate: '1 January 2025',
+        regionCode: '1',
+        returnLogId: dueReturnLog.returnLogId,
+        returnsFrequency: 'month',
+        returnReference: dueReturnLog.returnReference,
+        siteDescription: 'BOREHOLE AT AVALON',
+        startDate: '1 April 2022',
         twoPartTariff: false
       })
     })
