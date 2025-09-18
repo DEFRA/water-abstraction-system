@@ -327,7 +327,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       )
     })
 
-    it('correctly only the "current" "additional contact"', async () => {
+    it('fetches only the "current" "additional contact"', async () => {
       const result = await FetchAbstractionAlertRecipientsService.go(session)
 
       expect(result).to.equal([
