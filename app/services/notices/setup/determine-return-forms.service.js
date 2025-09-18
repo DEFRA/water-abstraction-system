@@ -5,9 +5,9 @@
  * @module DetermineReturnFormsService
  */
 
-const DetermineReturnFormsPresenter = require('../../../presenters/notices/setup/determine-return-forms.presenter.js')
 const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/prepare-return-forms.presenter.js')
 const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
+const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 
 /**
  * Determines the PDF return forms data to send to notify and save to the database
@@ -31,7 +31,7 @@ async function go(session, recipients, eventId) {
 
       const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturn, recipient)
 
-      const notification = DetermineReturnFormsPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
+      const notification = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
 
       notifications.push(notification)
     }

@@ -2,7 +2,7 @@
 
 /**
  * Formats recipients into notifications for a return form
- * @module DetermineReturnFormsPresenter
+ * @module ReturnFormsNotificationPresenter
  */
 
 /**

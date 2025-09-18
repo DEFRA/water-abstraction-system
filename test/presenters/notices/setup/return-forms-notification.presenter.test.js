@@ -14,9 +14,9 @@ const { generateReturnLogId } = require('../../../support/helpers/return-log.hel
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const DetermineReturnFormsPresenter = require('../../../../app/presenters/notices/setup/determine-return-forms.presenter.js')
+const ReturnFormsNotificationPresenter = require('../../../../app/presenters/notices/setup/return-forms-notification.presenter.js')
 
-describe('Notices - Setup - Determine Return Forms Presenter', () => {
+describe('Notices - Setup - Return Forms Notification Presenter', () => {
   const eventId = generateUUID()
 
   let licenceRef
@@ -63,7 +63,7 @@ describe('Notices - Setup - Determine Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns the data re-formatted as a notification', () => {
-      const result = DetermineReturnFormsPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
+      const result = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
 
       expect(result).to.equal({
         content: returnForm,
