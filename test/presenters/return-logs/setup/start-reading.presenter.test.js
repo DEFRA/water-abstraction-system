@@ -25,11 +25,11 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       const result = StartReadingPresenter.go(session)
 
       expect(result).to.equal({
+        backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Enter the start meter reading',
+        pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        caption: 'Return reference 012345',
-        startReading: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported'
+        startReading: null
       })
     })
   })
@@ -69,7 +69,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -77,7 +77,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns a link back to the "Reported" page', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })
     })
   })

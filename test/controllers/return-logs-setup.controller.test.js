@@ -1495,7 +1495,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(() => {
           Sinon.stub(SubmitStartReadingService, 'go').resolves({
-            error: { text: 'Enter a start meter reading' },
+            error: {
+              errorList: [{ text: 'Enter a start meter reading', href: '#startReading' }]
+            },
             pageTitle: 'Enter the start meter reading',
             sessionId
           })

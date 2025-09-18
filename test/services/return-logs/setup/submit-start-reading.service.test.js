@@ -100,11 +100,11 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
         expect(result).to.equal(
           {
-            pageTitle: 'Enter the start meter reading',
             activeNavBar: 'search',
+            backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
             startReading: null,
-            backLink: `/system/return-logs/setup/${session.id}/reported`,
-            caption: 'Return reference 12345'
+            pageTitle: 'Enter the start meter reading',
+            pageTitleCaption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error'] }
         )
@@ -114,7 +114,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitStartReadingService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Enter a start meter reading' })
+          expect(result.error.errorList).to.equal([{ text: 'Enter a start meter reading', href: '#startReading' }])
         })
       })
     })
