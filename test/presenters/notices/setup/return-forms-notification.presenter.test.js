@@ -68,7 +68,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
       expect(result).to.equal({
         content: returnForm,
         eventId,
-        licences: `["${licenceRef}"]`,
+        licences: [licenceRef],
         messageRef: 'pdf.return_form',
         messageType: 'letter',
         personalisation: {

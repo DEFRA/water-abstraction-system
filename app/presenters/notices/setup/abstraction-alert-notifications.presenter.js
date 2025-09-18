@@ -166,7 +166,7 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: _licences(commonPersonalisation.licenceRef),
+    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
@@ -212,7 +212,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: _licences(commonPersonalisation.licenceRef),
+    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
@@ -224,19 +224,6 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
     reference: referenceCode,
     templateId: _templateId(alertType, restrictionType, 'letter')
   }
-}
-
-/**
- * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
- *
- * These licences are stored as 'jsonb' so we need to stringify the array to match the legacy schema.
- *
- * @private
- */
-function _licences(licenceRefs) {
-  const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
-
-  return JSON.stringify(formattedRecipients)
 }
 
 /**

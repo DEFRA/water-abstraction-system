@@ -109,7 +109,7 @@ function _email(recipient, returnsPeriod, referenceCode, journey, eventId, notic
 
   return {
     ..._common(referenceCode, templateId, eventId),
-    licences: _licences(recipient.licence_refs),
+    licences: transformStringOfLicencesToArray(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -162,7 +162,7 @@ function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noti
 
   return {
     ..._common(referenceCode, templateId, eventId),
-    licences: _licences(recipient.licence_refs),
+    licences: transformStringOfLicencesToArray(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -185,19 +185,6 @@ function _letterTemplate(contactType, journey, noticeType) {
   }
 
   return notifyTemplates[journey][noticeType].licenceHolderLetter
-}
-
-/**
- * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
- *
- * These licences are stored as 'jsonb' so we need to stringify the array to match the legacy schema.
- *
- * @private
- */
-function _licences(licenceRefs) {
-  const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
-
-  return JSON.stringify(formattedRecipients)
 }
 
 /**

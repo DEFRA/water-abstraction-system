@@ -25,7 +25,7 @@ function go(returnForm, pageData, licenceRef, referenceCode, eventId) {
   return {
     content: returnForm,
     eventId,
-    licences: JSON.stringify([licenceRef]),
+    licences: [licenceRef],
     messageRef: 'pdf.return_form',
     messageType: 'letter',
     personalisation: _personalisation(pageData),

@@ -80,7 +80,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
@@ -109,7 +109,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
@@ -151,7 +151,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
@@ -180,7 +180,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
@@ -209,7 +209,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
@@ -238,7 +238,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
