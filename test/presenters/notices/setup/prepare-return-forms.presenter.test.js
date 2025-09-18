@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,6 +17,7 @@ const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/
 describe('Notices - Setup - Prepare Return Forms Presenter', () => {
   const licenceRef = '01/123'
 
+  let clock
   let dueReturnLog
   let recipient
 
@@ -34,6 +36,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
       startDate: '2025-01-01',
       twoPartTariff: false
     }
+
+    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   describe('when called', () => {
@@ -389,6 +397,28 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
               ]
             ])
           })
+        })
+      })
+    })
+
+    describe('the "dueDate"', () => {
+      describe('when a due date is set', () => {
+        it('should return the due date', () => {
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+
+          expect(result.dueDate).to.equal('6 July 2025')
+        })
+      })
+
+      describe('when a due date is not set', () => {
+        beforeEach(() => {
+          delete dueReturnLog.dueDate
+        })
+
+        it('should return the due date (29 days in the future)', () => {
+          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+
+          expect(result.dueDate).to.equal('30 January 2025')
         })
       })
     })

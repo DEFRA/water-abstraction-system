@@ -8,6 +8,7 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { futureDueDate } = require('../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
 
@@ -55,8 +56,7 @@ function go(licenceRef, dueReturnLog, recipient) {
 
   return {
     address: _address(recipient),
-    dueDate: formatLongDate(new Date(dueDate)),
-    endDate: formatLongDate(new Date(endDate)),
+
     licenceRef,
     pageEntries: _entries(startDate, endDate, returnsFrequency),
     pageTitle: _pageTitle(returnsFrequency),
@@ -65,13 +65,21 @@ function go(licenceRef, dueReturnLog, recipient) {
     returnReference,
     returnsFrequency,
     siteDescription,
-    startDate: formatLongDate(new Date(startDate)),
-    twoPartTariff
+    twoPartTariff,
+    ..._dates(dueDate, endDate, startDate)
   }
 }
 
 function _address(recipient) {
   return NotifyAddressPresenter.go(recipient.contact)
+}
+
+function _dates(dueDate, endDate, startDate) {
+  return {
+    dueDate: formatLongDate(dueDate) || formatLongDate(futureDueDate('letter')),
+    endDate: formatLongDate(endDate),
+    startDate: formatLongDate(startDate)
+  }
 }
 
 /**
