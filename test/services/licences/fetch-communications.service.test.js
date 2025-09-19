@@ -33,7 +33,7 @@ describe('Licences - Fetch Communications service', () => {
 
     notification = await NotificationHelper.add({
       eventId: event.id,
-      licences: JSON.stringify([licenceRef]),
+      licences: [licenceRef],
       messageRef: 'returns_invitation_licence_holder_letter',
       messageType: 'letter',
       status: 'sent'
