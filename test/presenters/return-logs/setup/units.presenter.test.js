@@ -25,11 +25,11 @@ describe('Return Logs Setup - Units presenter', () => {
       const result = UnitsPresenter.go(session)
 
       expect(result).to.equal({
+        backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Which units were used?',
+        pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        caption: 'Return reference 012345',
-        units: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported'
+        units: null
       })
     })
   })
@@ -43,7 +43,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -51,7 +51,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "Reported" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })
     })
 
@@ -63,7 +63,9 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "Start reading" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start-reading')
+        expect(result.backLink.href).to.equal(
+          '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start-reading'
+        )
       })
     })
   })

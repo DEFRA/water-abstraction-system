@@ -90,11 +90,11 @@ describe('Return Logs Setup - Submit Units service', () => {
 
         expect(result).to.equal(
           {
-            pageTitle: 'Which units were used?',
             activeNavBar: 'search',
-            units: null,
-            backLink: `/system/return-logs/setup/${session.id}/reported`,
-            caption: 'Return reference 12345'
+            backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
+            pageTitle: 'Which units were used?',
+            pageTitleCaption: 'Return reference 12345',
+            units: null
           },
           { skip: ['sessionId', 'error'] }
         )
@@ -104,7 +104,7 @@ describe('Return Logs Setup - Submit Units service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select which units were used' })
+          expect(result.error.units).to.equal({ text: 'Select which units were used' })
         })
       })
     })

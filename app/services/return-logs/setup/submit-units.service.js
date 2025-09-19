@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const UnitsPresenter = require('../../../presenters/return-logs/setup/units.presenter.js')
 const UnitsValidator = require('../../../validators/return-logs/setup/units.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
@@ -42,12 +43,12 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = UnitsPresenter.go(session)
+  const pageData = UnitsPresenter.go(session)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -58,17 +59,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = UnitsValidator.go(payload)
+  const validationResult = UnitsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

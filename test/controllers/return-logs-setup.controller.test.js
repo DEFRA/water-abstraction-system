@@ -1623,7 +1623,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitUnitsService, 'go').resolves({
-              error: { text: 'Select which units were used' },
+              error: {
+                errorList: [{ href: '#units', text: 'Select which units were used' }],
+                units: { text: 'Select which units were used' }
+              },
               pageTitle: 'Which units were used?',
               sessionId
             })

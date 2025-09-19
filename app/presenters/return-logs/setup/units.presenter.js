@@ -16,9 +16,9 @@ function go(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {
-    backLink: _backLink(session),
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: _backLink(session), text: 'Back' },
     pageTitle: 'Which units were used?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     units: units ?? null
   }
