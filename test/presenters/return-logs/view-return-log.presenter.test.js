@@ -161,10 +161,11 @@ describe('Return Logs - View Return Log presenter', () => {
       })
     })
 
-    describe('when the return is "not due yet"', () => {
+    describe('when the return has not ended', () => {
       beforeEach(() => {
-        const notDueUntilDate = today()
-        returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 28))
+        const endDate = today()
+
+        returnLog.endDate = new Date(endDate.setDate(endDate.getDate() + 1))
         returnLog.status = 'due'
       })
 
