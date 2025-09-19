@@ -25,7 +25,9 @@ const config = {
   enableSystemReturnsView: String(process.env.ENABLE_SYSTEM_RETURNS_VIEW) === 'true' || false,
   enableTwoPartTariffSupplementary: String(process.env.ENABLE_TWO_PART_TARIFF_SUPPLEMENTARY) === 'true' || false,
   enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
-  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false
+  enableSystemManageView: String(process.env.ENABLE_SYSTEM_MANAGE_VIEW) === 'true' || false,
+  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,
+  enableAdHocNotifications: String(process.env.ENABLE_AD_HOC_NOTIFICATIONS) === 'true' || false
 }
 
 module.exports = config
