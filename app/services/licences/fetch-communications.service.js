@@ -15,7 +15,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Was built to provide the data needed for the '/licences/{id}/communications' page
  *
  * @param {string} licenceRef - The reference for the licence to fetch
- * @param {number|string} page - The current page for the pagination service
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
