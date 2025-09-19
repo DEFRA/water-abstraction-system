@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { today } = require('../../../app/lib/general.lib.js')
+
 // Thing under test
 const IndexValidator = require('../../../app/validators/notices/index.validator.js')
 
@@ -158,9 +161,9 @@ describe('Notices - Index validator', () => {
 
     describe('because "Sent from" is in the future', () => {
       beforeEach(() => {
-        const today = new Date()
+        const todaysDate = today()
 
-        payload.sentFromYear = (today.getFullYear() + 1).toString()
+        payload.sentFromYear = (todaysDate.getFullYear() + 1).toString()
       })
 
       it('fails validation', () => {

@@ -11,12 +11,14 @@ const { expect } = Code
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
+const { today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
 
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
-  const todayMinusOneDay = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString()
+  const todaysDate = today()
+  const todayMinusOneDay = new Date(todaysDate.setDate(todaysDate.getDate() - 1)).toISOString()
 
   let notifierStub
   let session

@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitReceivedService = require('../../../../app/services/return-logs/setup/submit-received.service.js')
@@ -39,8 +40,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
   describe('when called', () => {
     describe('with a valid payload (todays date)', () => {
       beforeEach(async () => {
-        testDate = new Date()
-        testDate.setHours(0, 0, 0, 0)
+        testDate = today()
         payload = {
           'received-date-options': 'today'
         }
@@ -91,9 +91,8 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
     describe('with a valid payload (yesterdays date)', () => {
       beforeEach(async () => {
-        testDate = new Date()
+        testDate = today()
         testDate.setDate(testDate.getDate() - 1)
-        testDate.setHours(0, 0, 0, 0)
         payload = {
           'received-date-options': 'yesterday'
         }

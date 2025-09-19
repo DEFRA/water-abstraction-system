@@ -5,10 +5,10 @@
  * @module SubmitReceivedService
  */
 
-const GeneralLib = require('../../../lib/general.lib.js')
 const ReceivedDateValidator = require('../../../validators/return-logs/setup/received-date.validator.js')
 const ReceivedPresenter = require('../../../presenters/return-logs/setup/received.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { flashNotification, today } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page
@@ -36,7 +36,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -55,8 +55,9 @@ async function go(sessionId, payload, yar) {
 
 async function _save(session, payload) {
   const selectedOption = payload['received-date-options']
+  const todaysDate = today()
+
   session.receivedDateOptions = selectedOption
-  const todaysDate = new Date(new Date().setHours(0, 0, 0, 0))
 
   if (selectedOption === 'today') {
     session.receivedDate = todaysDate
