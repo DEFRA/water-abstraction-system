@@ -15,8 +15,15 @@ const TransactionHelper = require('../support/helpers/transaction.helper.js')
 const GeneralLib = require('../../app/lib/general.lib.js')
 
 describe('GeneralLib', () => {
+  let clock
+  let testDate
+
   afterEach(() => {
     Sinon.restore()
+
+    if (clock) {
+      clock.restore()
+    }
   })
 
   describe('#calculateAndLogTimeTaken', () => {
@@ -80,13 +87,6 @@ describe('GeneralLib', () => {
   })
 
   describe('#determineCurrentFinancialYear', () => {
-    let clock
-    let testDate
-
-    afterEach(() => {
-      clock.restore()
-    })
-
     describe('when the current financial year is 2023 to 2024', () => {
       describe('and the current date is between April and December', () => {
         beforeEach(() => {
@@ -311,17 +311,10 @@ describe('GeneralLib', () => {
   })
 
   describe('#timestampForPostgres', () => {
-    let clock
-    let testDate
-
     beforeEach(() => {
       testDate = new Date(2015, 9, 21, 20, 31, 57)
 
       clock = Sinon.useFakeTimers(testDate)
-    })
-
-    afterEach(() => {
-      clock.restore()
     })
 
     it('returns the current date and time as an ISO string', () => {
