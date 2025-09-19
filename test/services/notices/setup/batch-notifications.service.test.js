@@ -227,6 +227,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: 'primary.user@important.com',
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -249,6 +250,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
               notifyStatus: 'created',
               recipient: 'returns.agent@important.com',
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -278,6 +280,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -308,6 +311,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: null,
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -337,6 +341,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '997a76c7-7866-4bd3-b199-ca69eef31a41',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -570,6 +575,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: 'additional.contact@important.com',
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -609,6 +615,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '797cfc1e-0699-4006-985d-10f4219a280a',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -641,6 +648,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: 'a5488243-9c8d-4c2b-95df-d65f7c9a5f41',
               notifyStatus: 'created',
               recipient: 'primary.user@important.com',
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -783,6 +791,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -805,6 +814,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -826,6 +836,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
