@@ -52,7 +52,7 @@ const { init } = require('../../app/server.js')
 
 const sessionId = 'f01efb63-4d27-4be7-ab10-54cf177f1908'
 
-describe.only('Return Logs - Setup - Controller', () => {
+describe('Return Logs - Setup - Controller', () => {
   let options
   let path
   let server
