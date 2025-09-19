@@ -14,28 +14,30 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ViewLicenceCommunicationsPresenter = require('../../../app/presenters/licences/view-licence-communications.presenter.js')
 
-describe('View Licence Communications presenter', () => {
-  let communications
+describe('Licences - View Licence Communications presenter', () => {
   const licenceId = 'e7aefa9b-b832-41c8-9add-4e3e03cc1331'
   const documentId = 'd5eacebe-ff92-4704-99f7-9e4e6112ab98'
+
+  let communications
 
   beforeEach(() => {
     communications = [
       {
+        createdAt: new Date('2024-05-15T10:27:15.000Z'),
         id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
         messageType: 'letter',
         messageRef: 'returns_invitation_licence_holder_letter',
         event: {
+          issuer: 'admin-internal@wrls.gov.uk',
           metadata: {
             name: 'Returns: invitation',
-            options: {}
+            error: 0,
+            options: { excludeLicences: [] }
           },
-          type: 'notification',
+          status: 'completed',
           subtype: 'returnInvitation',
-          status: 'processed',
-          issuer: 'admin-internal@wrls.gov.uk'
-        },
-        sendAfter: '2024-05-15T10:27:15.000Z'
+          type: 'notification'
+        }
       }
     ]
 
@@ -147,47 +149,6 @@ describe('View Licence Communications presenter', () => {
           label: 'Test - Water abstraction alert',
           pdf: false,
           sentVia: 'sent 15 May 2024 via letter'
-        })
-      })
-    })
-
-    describe('the "sent" property', () => {
-      describe('and there is a date for "sendAfter"', () => {
-        it('correctly presents the data', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
-
-          expect(result.communications[0].sent).to.equal('15 May 2024')
-          expect(result.communications[0].type.sentVia).to.equal('sent 15 May 2024 via letter')
-        })
-      })
-
-      describe('and there is a date for "createdAt"', () => {
-        beforeEach(() => {
-          communications = [
-            {
-              createdAt: '2025-06-06',
-              id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
-              messageType: 'letter',
-              messageRef: 'returns_invitation_licence_holder_letter',
-              event: {
-                metadata: {
-                  name: 'Returns: invitation',
-                  options: {}
-                },
-                type: 'notification',
-                subtype: 'returnInvitation',
-                status: 'processed',
-                issuer: 'admin-internal@wrls.gov.uk'
-              }
-            }
-          ]
-        })
-
-        it('correctly presents the data', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
-
-          expect(result.communications[0].sent).to.equal('6 June 2025')
-          expect(result.communications[0].type.sentVia).to.equal('sent 6 June 2025 via letter')
         })
       })
     })
