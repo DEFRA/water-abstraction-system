@@ -104,7 +104,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
@@ -133,7 +134,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           }
         ])
       })
@@ -175,7 +177,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
@@ -204,7 +207,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
@@ -233,7 +237,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [additionalDueReturn.returnId]
           },
           {
             content: buffer,
@@ -262,7 +267,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [additionalDueReturn.returnId]
           }
         ])
       })

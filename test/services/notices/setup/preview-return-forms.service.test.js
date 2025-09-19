@@ -107,6 +107,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
         purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
+        returnId: dueReturnLog.returnId,
         returnLogId: dueReturnLog.returnLogId,
         returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
