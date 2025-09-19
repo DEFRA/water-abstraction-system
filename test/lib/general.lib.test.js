@@ -324,6 +324,21 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#today', () => {
+    beforeEach(() => {
+      testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
+
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    it('returns the current date and time as date-only (time set to midnight)', () => {
+      const result = GeneralLib.today()
+
+      // We compare ISO strings as its a clearer way of ensuring the result is as expected
+      expect(result.toISOString()).to.equal('2025-10-19T00:00:00.000Z')
+    })
+  })
+
   describe('#splitArrayIntoGroups', () => {
     let testArray
     let testGroupSize
