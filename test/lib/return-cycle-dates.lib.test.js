@@ -8,14 +8,16 @@ const Sinon = require('sinon')
 const { afterEach, describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { today } = require('../../app/lib/general.lib.js')
 const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
 
 // Thing under test
 const ReturnCycleDatesLib = require('../../app/lib/return-cycle-dates.lib.js')
 
 describe('Return Cycle Dates lib', () => {
-  const today = new Date()
-  const year = today.getFullYear()
+  const todaysDate = today()
+  const year = todaysDate.getFullYear()
 
   let clock
   let expectedDate

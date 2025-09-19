@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { today } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for common licence data `/licences/{id}` page's
@@ -96,9 +97,7 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
 }
 
 function _warning(ends) {
-  const today = new Date()
-
-  if (!ends || ends.date > today) {
+  if (!ends || ends.date > today()) {
     return null
   }
 

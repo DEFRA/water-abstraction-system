@@ -1,5 +1,6 @@
 'use strict'
 
+const { today } = require('../lib/general.lib.js')
 const { returnUnits } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
@@ -293,13 +294,9 @@ function formatReturnLogStatus(returnLog) {
   }
 
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
-  const today = new Date()
+  const todaysDate = today()
 
-  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
-  // 'today' would be flagged as overdue when it is still due (just!)
-  today.setHours(0, 0, 0, 0)
-
-  if (dueDate < today) {
+  if (dueDate < todaysDate) {
     return 'overdue'
   }
 
@@ -311,7 +308,7 @@ function formatReturnLogStatus(returnLog) {
   notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
 
   // If today is before the "due" period starts, the return is "not due yet"
-  if (today < notDueUntil) {
+  if (todaysDate < notDueUntil) {
     return 'not due yet'
   }
 

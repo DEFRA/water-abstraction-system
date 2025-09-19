@@ -18,7 +18,7 @@ const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 // Thing under test
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
 
-describe('Fetch Licence Updates service', () => {
+describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
   let licence
   let licenceVersion
 
