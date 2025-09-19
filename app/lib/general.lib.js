@@ -270,11 +270,11 @@ function timestampForPostgres() {
  * @returns {Date}
  */
 function today() {
-  const today = new Date()
+  const todaysDate = new Date()
 
-  today.setHours(0, 0, 0, 0)
+  todaysDate.setHours(0, 0, 0, 0)
 
-  return today
+  return todaysDate
 }
 
 /**
