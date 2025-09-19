@@ -78,7 +78,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
             activeNavBar: 'search',
             backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
             pageTitle: 'Is it a single volume?',
-            returnReference: '12345',
+            caption: 'Return reference 12345',
             singleVolume: null,
             singleVolumeQuantity: null,
             units: 'litres'

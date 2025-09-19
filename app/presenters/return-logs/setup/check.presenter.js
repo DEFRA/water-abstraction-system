@@ -85,6 +85,7 @@ function _alwaysRequiredPageData(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    caption: `Return reference ${returnReference}`,
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
@@ -101,7 +102,6 @@ function _alwaysRequiredPageData(session) {
     purposes: purposes.join(', '),
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
-    returnReference,
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }

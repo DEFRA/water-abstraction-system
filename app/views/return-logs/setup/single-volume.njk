@@ -1,4 +1,5 @@
 {% extends 'layout.njk' %}
+
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
@@ -6,18 +7,13 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% from "macros/page-heading.njk" import pageHeading %}
+
 {% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({ text: 'Back', href: backLink }) }}
 {% endblock %}
 
 {% block content %}
-  {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -28,29 +24,19 @@
         }
       ]
     }) }}
-  {%endif%}
+  {% endif %}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% set pageHeading %}
+    {{ pageHeading(pageTitle, caption) }}
+  {% endset %}
 
-      {% set quantityInputHTML %}
-        {% if error %}
-          {% set errorClass = 'govuk-input--error' %}
-        {% else %}
-          {% set errorClass = '' %}
-        {% endif %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-
+    {% set quantityInputHTML %}
       {{ govukInput({
         label: {
-          text: "Enter the total amount",
-          classes: "govuk-label"
+          text: "Enter the total amount"
         },
         id: "single-volume-quantity",
         name: "singleVolumeQuantity",
@@ -61,35 +47,34 @@
         },
         errorMessage: error.volumeInputFormElement
       }) }}
-      {% endset %}
+    {% endset %}
 
-      {{ govukRadios({
-        id: "single-volume",
-        name: "singleVolume",
-        errorMessage: error.radioFormElement,
-        fieldset: {
-          legend: {
-            classes: "govuk-fieldset__legend--l"
+    {{ govukRadios({
+      id: "single-volume",
+      name: "singleVolume",
+      errorMessage: error.radioFormElement,
+      fieldset: {
+        legend: {
+          html: pageHeading
+        }
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: singleVolume === 'yes',
+          conditional: {
+            html: quantityInputHTML
           }
         },
-        items: [
-          {
-            value: "yes",
-            text: "Yes",
-            checked: singleVolume === 'yes',
-            conditional: {
-              html: quantityInputHTML
-            }
-          },
-          {
-            value: "no",
-            text: "No",
-            checked: singleVolume === 'no'
-          }
-        ]
-      }) }}
+        {
+          value: "no",
+          text: "No",
+          checked: singleVolume === 'no'
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

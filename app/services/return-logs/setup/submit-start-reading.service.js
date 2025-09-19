@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const StartReadingPresenter = require('../../../presenters/return-logs/setup/start-reading.presenter.js')
 const StartReadingValidator = require('../../../validators/return-logs/setup/start-reading.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/start-reading` page
@@ -43,12 +44,12 @@ async function go(sessionId, payload, yar) {
   }
 
   session.startReading = payload.startReading
-  const formattedData = StartReadingPresenter.go(session)
+  const pageData = StartReadingPresenter.go(session)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -59,17 +60,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, session) {
-  const validation = StartReadingValidator.go(payload, session.lines)
+  const validationResult = StartReadingValidator.go(payload, session.lines)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

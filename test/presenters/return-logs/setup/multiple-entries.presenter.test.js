@@ -38,7 +38,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
         measurementType: 'volumes',
         multipleEntries: null,
         pageTitle: 'Enter multiple monthly volumes',
-        returnReference: '012345',
+        caption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 April 2023'
       })

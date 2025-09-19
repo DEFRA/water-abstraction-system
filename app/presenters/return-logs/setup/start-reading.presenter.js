@@ -16,9 +16,9 @@ function go(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLink(session), text: 'Back' },
     pageTitle: 'Enter the start meter reading',
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     startReading: _savedValue(startReading)
   }

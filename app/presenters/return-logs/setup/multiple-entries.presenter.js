@@ -23,13 +23,13 @@ function go(session) {
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/check`,
+    caption: `Return reference ${returnReference}`,
     endDate: formatLongDate(new Date(lines[lines.length - 1].startDate)),
     frequency,
     lineCount: lines.length,
     measurementType,
     multipleEntries: multipleEntries ?? null,
     pageTitle: `Enter multiple ${frequency} ${measurementType}`,
-    returnReference,
     sessionId,
     startDate: formatLongDate(new Date(lines[0].startDate))
   }

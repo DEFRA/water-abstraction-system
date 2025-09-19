@@ -17,8 +17,8 @@ function go(session) {
 
   return {
     backLink: _backLink(session),
+    caption: `Return reference ${returnReference}`,
     pageTitle: 'Is it a single volume?',
-    returnReference,
     sessionId,
     singleVolume: singleVolume ?? null,
     singleVolumeQuantity: singleVolumeQuantity ?? null,

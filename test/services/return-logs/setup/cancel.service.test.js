@@ -49,7 +49,7 @@ describe('Return Logs Setup - Cancel service', () => {
         returnLogId: 'v1:6:09/999:1003992:2022-04-01:2023-03-31',
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReceivedDate: '31 January 2025',
-        returnReference: '1234',
+        caption: 'Return reference 1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         tariff: 'Standard'
       })
