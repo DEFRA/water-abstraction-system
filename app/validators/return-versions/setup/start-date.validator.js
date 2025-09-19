@@ -32,15 +32,12 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, licenceStartDate, licenceEndDate) {
-  const { 'start-date-options': selectedOption } = payload
-
-  if (selectedOption === 'anotherStartDate') {
-    payload.fullDate = _fullDate(payload)
-
-    return _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate)
+  const _payload = {
+    'start-date-options': payload['start-date-options'],
+    'other-start-date': _fullDate(payload)
   }
 
-  return _validateLicenceVersionStartDate(payload)
+  return _validateAnotherStartDate(_payload, licenceStartDate, licenceEndDate)
 }
 
 function _fullDate(payload) {
@@ -79,32 +76,28 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   const { minDate, minMessage } = _minimumDateDetails(licenceStartDate)
 
   const schema = Joi.object({
-    fullDate: Joi.date()
-      .format(['YYYY-MM-DD'])
-      .required()
-      .min(minDate)
-      .less(licenceEndDate || '9999-12-31')
-      .messages({
-        'date.base': 'Enter a real start date',
-        'date.format': 'Enter a real start date',
-        'date.min': minMessage,
-        'date.less': 'Start date must be before the licence end date'
-      }),
-    otherwise: Joi.forbidden()
-  })
-
-  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-function _validateLicenceVersionStartDate(payload) {
-  const schema = Joi.object({
     'start-date-options': Joi.string().required().messages({
       'any.required': 'Select the start date for the requirements for returns',
       'string.empty': 'Select the start date for the requirements for returns'
+    }),
+    'other-start-date': Joi.alternatives().conditional('start-date-options', {
+      is: 'anotherStartDate',
+      then: Joi.date()
+        .format(['YYYY-MM-DD'])
+        .required()
+        .min(minDate)
+        .less(licenceEndDate || '9999-12-31')
+        .messages({
+          'date.base': 'Enter a real start date',
+          'date.format': 'Enter a real start date',
+          'date.min': minMessage,
+          'date.less': 'Start date must be before the licence end date'
+        }),
+      otherwise: Joi.string().optional()
     })
   })
 
-  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {

@@ -5,6 +5,8 @@
  * @module SubmitPointsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const FetchPointsService = require('./fetch-points.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
@@ -79,15 +81,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = PointsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

@@ -59,7 +59,10 @@ describe('Return Versions - Setup - Existing presenter', () => {
       const result = ExistingPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+          text: 'Back'
+        },
         existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
         licenceRef: '01/ABC',
         pageTitle: 'Use previous requirements for returns',
@@ -73,7 +76,10 @@ describe('Return Versions - Setup - Existing presenter', () => {
     it('returns a link back to the "setup" page', () => {
       const result = ExistingPresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method')
+      expect(result.backLink).to.equal({
+        href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+        text: 'Back'
+      })
     })
   })
 

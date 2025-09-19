@@ -66,7 +66,10 @@ describe('Return Versions Setup - Cancel service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        backLink: `/system/return-versions/setup/${session.id}/check`,
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/check`,
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'You are about to cancel these requirements for returns',

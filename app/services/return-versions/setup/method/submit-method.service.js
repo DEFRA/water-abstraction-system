@@ -5,6 +5,8 @@
  * @module SubmitSetupService
  */
 
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
@@ -79,15 +81,7 @@ async function _save(session, payload) {
 function _validate(payload) {
   const validation = MethodValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

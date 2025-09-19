@@ -1,26 +1,14 @@
 {% extends 'layout.njk' %}
-{% from 'govuk/components/back-link/macro.njk' import govukBackLink %}
+
 {% from 'govuk/components/button/macro.njk' import govukButton %}
 {% from 'govuk/components/date-input/macro.njk' import govukDateInput %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 {% from 'govuk/components/radios/macro.njk' import govukRadios %}
-
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
 
 {% set dateInputHTML %}
   {{ govukDateInput({
     id: 'other-start-date',
     namePrefix: 'start-date',
-    errorMessage: error.dateInputFormElement,
+    errorMessage: error['other-start-date'],
     fieldset: {
       legend: {
         classes: 'govuk-fieldset__legend--m',
@@ -47,32 +35,16 @@
   }) }}
 {% endset %}
 
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.message,
-          href: '#startDate-error'
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: 'start-date-options',
-      errorMessage: error.radioFormElement,
+      errorMessage: error['start-date-options'],
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [

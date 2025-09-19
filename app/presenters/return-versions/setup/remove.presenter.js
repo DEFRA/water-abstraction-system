@@ -35,7 +35,10 @@ function go(session, requirementIndex) {
 function _backLink(session) {
   const { id } = session
 
-  return `/system/return-versions/setup/${id}/check`
+  return {
+    href: `/system/return-versions/setup/${id}/check`,
+    text: 'Back'
+  }
 }
 
 function _formattedReturnRequirement(requirement) {

@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          frequencyReported: 'week'
+          'frequency-reported': 'week'
         }
       })
 
@@ -120,7 +120,10 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
             activeNavBar: 'search',
             pageTitle: 'Select how often readings or volumes are reported',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/frequency-collected/0`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/frequency-collected/0`,
+              text: 'Back'
+            },
             frequencyReported: null,
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC'
@@ -133,7 +136,15 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select how often readings or volumes are reported' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#frequency-reported',
+                text: 'Select how often readings or volumes are reported'
+              }
+            ],
+            'frequency-reported': { text: 'Select how often readings or volumes are reported' }
+          })
         })
       })
     })

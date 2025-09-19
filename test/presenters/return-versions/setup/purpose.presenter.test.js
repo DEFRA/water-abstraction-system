@@ -71,7 +71,10 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Select the purpose for the requirements for returns',
@@ -102,7 +105,10 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         it('returns a link back to the "check" page', () => {
           const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-          expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+          expect(result.backLink).to.equal({
+            href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+            text: 'Back'
+          })
         })
       })
 
@@ -117,7 +123,10 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         it('returns a link back to the "check" page', () => {
           const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-          expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+          expect(result.backLink).to.equal({
+            href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+            text: 'Back'
+          })
         })
       })
     })
@@ -126,7 +135,10 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       it('returns a link back to the "method" page', () => {
         const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
+          text: 'Back'
+        })
       })
     })
   })

@@ -55,7 +55,10 @@ describe('Return Versions Setup - Remove presenter', () => {
       const result = RemovePresenter.go(session, requirementIndex)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'You are about to remove these requirements for returns',
@@ -71,7 +74,10 @@ describe('Return Versions Setup - Remove presenter', () => {
     it('returns a link back to the "setup" page', () => {
       const result = RemovePresenter.go(session, requirementIndex)
 
-      expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      expect(result.backLink).to.equal({
+        href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        text: 'Back'
+      })
     })
   })
 

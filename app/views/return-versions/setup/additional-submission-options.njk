@@ -1,53 +1,24 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.text,
-          href: '#additionalSubmissionOptions'
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
-      name: "additionalSubmissionOptions",
+      name: 'additional-submission-options',
+      id: 'additional-submission-options',
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       hint: {
         text: "Select all that apply"
       },
-      errorMessage: {
-        text: error.text
-      } if error,
+      errorMessage: error['additional-submission-options'],
       items: [
         {
           value: "multiple-upload",

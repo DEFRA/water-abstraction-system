@@ -45,7 +45,10 @@ describe('Return Versions Setup - Points presenter', () => {
       const result = PointsPresenter.go(session, requirementIndex, points)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
           {
@@ -81,7 +84,10 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -89,7 +95,10 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a link back to the "purpose" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
+          text: 'Back'
+        })
       })
     })
   })

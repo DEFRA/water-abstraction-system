@@ -16,14 +16,18 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        agreementsExceptions: ['gravity-fill', 'two-part-tariff', '56-returns-exception']
+        'agreements-exceptions': ['gravity-fill', 'two-part-tariff', '56-returns-exception']
       }
     })
 
     it('confirms the data is valid', () => {
       const result = AgreementsExceptionsValidator.go(payload)
 
-      expect(result.value.agreementsExceptions).to.equal(['gravity-fill', 'two-part-tariff', '56-returns-exception'])
+      expect(result.value['agreements-exceptions']).to.equal([
+        'gravity-fill',
+        'two-part-tariff',
+        '56-returns-exception'
+      ])
 
       expect(result.error).not.to.exist()
     })
@@ -32,7 +36,7 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
   describe('when invalid data is provided', () => {
     beforeEach(() => {
       payload = {
-        agreementsExceptions: ['ABC123']
+        'agreements-exceptions': ['ABC123']
       }
     })
 

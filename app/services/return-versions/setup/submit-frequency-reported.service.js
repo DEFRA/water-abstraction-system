@@ -5,6 +5,8 @@
  * @module SubmitFrequencyReportedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const FrequencyReportedPresenter = require('../../../presenters/return-versions/setup/frequency-reported.presenter.js')
 const FrequencyReportedValidator = require('../../../validators/return-versions/setup/frequency-reported.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
@@ -54,7 +56,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].frequencyReported = payload.frequencyReported
+  session.requirements[requirementIndex].frequencyReported = payload['frequency-reported']
 
   return session.$update()
 }
@@ -62,15 +64,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = FrequencyReportedValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

@@ -115,7 +115,10 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
             activeNavBar: 'search',
             pageTitle: 'Why are no returns required?',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/start-date`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/start-date`,
+              text: 'Back'
+            },
             licenceRef: '01/ABC',
             reason: null
           },
@@ -128,7 +131,13 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
           const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select the reason for no returns required'
+            errorList: [
+              {
+                href: '#reason',
+                text: 'Select the reason for no returns required'
+              }
+            ],
+            reason: { text: 'Select the reason for no returns required' }
           })
         })
       })

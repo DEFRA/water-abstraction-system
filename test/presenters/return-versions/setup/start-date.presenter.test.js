@@ -42,7 +42,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
         anotherStartDateDay: null,
         anotherStartDateMonth: null,
         anotherStartDateYear: null,
-        backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+        backLink: {
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',
@@ -63,7 +66,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
+        })
       })
     })
 
@@ -71,7 +77,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it("returns a link back to the licence page's charge tab", () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up')
+        expect(result.backLink).to.equal({
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
+        })
       })
     })
   })

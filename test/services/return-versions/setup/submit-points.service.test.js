@@ -149,7 +149,10 @@ describe('Return Versions - Setup - Submit Points service', () => {
           activeNavBar: 'search',
           pageTitle: 'Select the points for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/purpose/0`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/purpose/0`,
+            text: 'Back'
+          },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licencePoints: [
             {
@@ -169,7 +172,13 @@ describe('Return Versions - Setup - Submit Points service', () => {
         const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
 
         expect(result.error).to.equal({
-          text: 'Select any points for the requirements for returns'
+          errorList: [
+            {
+              href: '#points',
+              text: 'Select any points for the requirements for returns'
+            }
+          ],
+          points: { text: 'Select any points for the requirements for returns' }
         })
       })
     })

@@ -33,12 +33,18 @@ function go(session, requirementIndex, points) {
 
 function _backLink(session, requirementIndex) {
   const { checkPageVisited, id } = session
+  let backLink
 
   if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+    backLink = `/system/return-versions/setup/${id}/check`
+  } else {
+    backLink = `/system/return-versions/setup/${id}/purpose/${requirementIndex}`
   }
 
-  return `/system/return-versions/setup/${id}/purpose/${requirementIndex}`
+  return {
+    href: backLink,
+    text: 'Back'
+  }
 }
 
 function _licencePoints(points) {

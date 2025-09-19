@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          frequencyCollected: 'week'
+          'frequency-collected': 'week'
         }
       })
 
@@ -120,7 +120,10 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
             activeNavBar: 'search',
             pageTitle: 'Select how often readings or volumes are collected',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/site-description/0`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/site-description/0`,
+              text: 'Back'
+            },
             frequencyCollected: null,
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC'
@@ -133,7 +136,15 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitFrequencyCollectedService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select how often readings or volumes are collected' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#frequency-collected',
+                text: 'Select how often readings or volumes are collected'
+              }
+            ],
+            'frequency-collected': { text: 'Select how often readings or volumes are collected' }
+          })
         })
       })
     })

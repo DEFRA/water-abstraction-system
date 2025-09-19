@@ -61,7 +61,10 @@ describe('Return Versions Setup - Frequency Collected service', () => {
           activeNavBar: 'search',
           pageTitle: 'Select how often readings or volumes are collected',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/site-description/0`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/site-description/0`,
+            text: 'Back'
+          },
           frequencyCollected: null,
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC'

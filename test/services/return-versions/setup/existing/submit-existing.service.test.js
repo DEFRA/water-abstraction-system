@@ -130,7 +130,10 @@ describe('Return Versions - Setup - Submit Existing service', () => {
             activeNavBar: 'search',
             pageTitle: 'Use previous requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/method`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/method`,
+              text: 'Back'
+            },
             existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
             licenceRef: '01/ABC'
           },
@@ -142,7 +145,15 @@ describe('Return Versions - Setup - Submit Existing service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitExistingService.go(session.id, payload)
 
-          expect(result.error).to.equal({ text: 'Select a return version' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#existing',
+                text: 'Select a return version'
+              }
+            ],
+            existing: { text: 'Select a return version' }
+          })
         })
       })
     })

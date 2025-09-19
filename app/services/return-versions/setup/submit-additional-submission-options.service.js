@@ -5,6 +5,8 @@
  * @module AdditionalSubmissionOptionsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
 const AdditionalSubmissionOptionsValidator = require('../../../validators/return-versions/setup/additional-submission-options.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -61,15 +63,15 @@ async function go(sessionId, payload, yar) {
  * @private
  */
 function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.additionalSubmissionOptions)) {
-    payload.additionalSubmissionOptions = [payload.additionalSubmissionOptions]
+  if (!Array.isArray(payload['additional-submission-options'])) {
+    payload['additional-submission-options'] = [payload['additional-submission-options']]
   }
 }
 
 function _notification(session, payload) {
   const { additionalSubmissionOptions } = session ?? {}
 
-  if (additionalSubmissionOptions !== payload.additionalSubmissionOptions) {
+  if (additionalSubmissionOptions !== payload['additional-submission-options']) {
     return {
       text: 'Additional submission options updated',
       title: 'Updated'
@@ -80,17 +82,17 @@ function _notification(session, payload) {
 }
 
 async function _save(session, payload) {
-  session.multipleUpload = payload.additionalSubmissionOptions.includes('multiple-upload')
+  session.multipleUpload = payload['additional-submission-options'].includes('multiple-upload')
 
-  session.quarterlyReturns = payload.additionalSubmissionOptions.includes('quarterly-returns')
+  session.quarterlyReturns = payload['additional-submission-options'].includes('quarterly-returns')
 
-  session.noAdditionalOptions = payload.additionalSubmissionOptions.includes('none')
+  session.noAdditionalOptions = payload['additional-submission-options'].includes('none')
 
   return session.$update()
 }
 
 function _submittedSessionData(session, payload) {
-  session.additionalSubmissionOptions = payload.additionalSubmissionOptions ?? []
+  session.additionalSubmissionOptions = payload['additional-submission-options'] ?? []
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }
@@ -98,15 +100,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload, session) {
   const validation = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

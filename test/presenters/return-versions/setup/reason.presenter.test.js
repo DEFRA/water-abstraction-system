@@ -36,7 +36,10 @@ describe('Return Versions Setup - Reason presenter', () => {
       const result = ReasonPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
+          text: 'Back'
+        },
         licenceRef: '01/ABC',
         pageTitle: 'Select the reason for the requirements for returns',
         pageTitleCaption: 'Licence 01/ABC',
@@ -55,7 +58,10 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -63,9 +69,10 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns a link back to the "start-date" page', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.backLink).to.equal(
-          '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date'
-        )
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
+          text: 'Back'
+        })
       })
     })
   })
