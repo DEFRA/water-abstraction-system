@@ -5,7 +5,7 @@
  * @module FetchCommunicationsService
  */
 
-const ScheduledNotificationModel = require('../../models/scheduled-notification.model.js')
+const NotificationModel = require('../../models/notification.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -26,7 +26,7 @@ async function go(licenceRef, page) {
 }
 
 async function _fetch(licenceRef, page) {
-  return ScheduledNotificationModel.query()
+  return NotificationModel.query()
     .select(['id', 'messageType', 'messageRef', 'createdAt', 'sendAfter'])
     .where('licences', '@>', `["${licenceRef}"]`)
     .andWhere('notifyStatus', 'in', ['delivered', 'received'])

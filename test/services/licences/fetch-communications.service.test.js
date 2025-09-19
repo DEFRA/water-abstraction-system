@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
-const ScheduledNotificationModel = require('../../support/helpers/scheduled-notification.helper.js')
+const NotificationModel = require('../../support/helpers/notification.helper.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -19,7 +19,7 @@ describe('Fetch Communications service', () => {
   const licenceRef = generateLicenceRef()
 
   let event
-  let scheduledNotification
+  let notification
 
   beforeEach(async () => {
     event = await EventHelper.add({
@@ -31,7 +31,7 @@ describe('Fetch Communications service', () => {
       type: 'notification'
     })
 
-    scheduledNotification = await ScheduledNotificationModel.add({
+    notification = await NotificationModel.add({
       eventId: event.id,
       licences: JSON.stringify([licenceRef]),
       messageRef: 'returns_invitation_licence_holder_letter',
@@ -50,7 +50,7 @@ describe('Fetch Communications service', () => {
 
       expect(result.communications).to.equal([
         {
-          createdAt: scheduledNotification.createdAt,
+          createdAt: notification.createdAt,
           event: {
             issuer: 'test.user@defra.gov.uk',
             metadata: null,
@@ -58,7 +58,7 @@ describe('Fetch Communications service', () => {
             subtype: 'renewal',
             type: 'notification'
           },
-          id: scheduledNotification.id,
+          id: notification.id,
           messageRef: 'returns_invitation_licence_holder_letter',
           messageType: 'letter',
           sendAfter: null
