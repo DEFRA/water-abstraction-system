@@ -29,7 +29,7 @@ async function _fetch(licenceRef, page) {
   return NotificationModel.query()
     .select(['createdAt', 'id', 'messageType', 'messageRef'])
     .where('licences', '?', licenceRef)
-    .where('notifyStatus', 'in', ['delivered', 'received'])
+    .where('status', 'sent')
     .whereNotNull('eventId')
     .orderBy('notifications.created_at', 'DESC')
     .withGraphFetched('event')

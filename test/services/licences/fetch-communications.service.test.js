@@ -36,7 +36,7 @@ describe('Licences - Fetch Communications service', () => {
       licences: JSON.stringify([licenceRef]),
       messageRef: 'returns_invitation_licence_holder_letter',
       messageType: 'letter',
-      notifyStatus: 'delivered'
+      status: 'sent'
     })
   })
 
