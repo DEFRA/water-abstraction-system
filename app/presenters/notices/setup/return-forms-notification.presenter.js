@@ -29,7 +29,8 @@ function go(returnForm, pageData, licenceRef, referenceCode, eventId) {
     messageRef: 'pdf.return_form',
     messageType: 'letter',
     personalisation: _personalisation(pageData),
-    reference: referenceCode
+    reference: referenceCode,
+    returnLogIds: [pageData.returnId]
   }
 }
 

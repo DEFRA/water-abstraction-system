@@ -13,6 +13,7 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
@@ -659,9 +660,12 @@ describe('Notices - Setup - Batch Notifications service', () => {
   })
 
   describe('when sending return forms', () => {
+    let returnId
+
     beforeEach(async () => {
       reference = generateReferenceCode('PRTF')
 
+      returnId = generateUUID()
       recipientsFixture = RecipientsFixture.recipients()
       recipients = [recipientsFixture.licenceHolder]
 
@@ -687,7 +691,8 @@ describe('Notices - Setup - Batch Notifications service', () => {
         licences: JSON.stringify([recipientsFixture.licenceHolder.licence_refs]),
         messageRef: 'pdf.return_form',
         messageType: 'letter',
-        reference
+        reference,
+        returnLogIds: [returnId]
       }
 
       Sinon.stub(DetermineReturnFormsService, 'go').resolves([
@@ -791,7 +796,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
-              returnLogIds: null,
+              returnLogIds: [returnId],
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -814,7 +819,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
-              returnLogIds: null,
+              returnLogIds: [returnId],
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -836,7 +841,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
-              returnLogIds: null,
+              returnLogIds: [returnId],
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }

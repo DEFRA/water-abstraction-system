@@ -51,6 +51,7 @@ function go(licenceRef, dueReturnLog, recipient) {
     purpose,
     regionCode,
     regionName,
+    returnId,
     returnLogId,
     returnReference,
     returnsFrequency,
@@ -61,7 +62,6 @@ function go(licenceRef, dueReturnLog, recipient) {
 
   return {
     address: _address(recipient),
-
     licenceRef,
     naldAreaCode,
     pageEntries: _entries(startDate, endDate, returnsFrequency),
@@ -69,6 +69,7 @@ function go(licenceRef, dueReturnLog, recipient) {
     purpose,
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
     regionCode,
+    returnId,
     returnLogId,
     returnReference,
     returnsFrequency,
