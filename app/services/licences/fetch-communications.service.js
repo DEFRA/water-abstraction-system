@@ -27,7 +27,7 @@ async function go(licenceRef, page) {
 
 async function _fetch(licenceRef, page) {
   return NotificationModel.query()
-    .select(['id', 'messageType', 'messageRef', 'createdAt', 'sendAfter'])
+    .select(['id', 'messageType', 'messageRef', 'createdAt'])
     .where('licences', '@>', `["${licenceRef}"]`)
     .andWhere('notifyStatus', 'in', ['delivered', 'received'])
     .andWhere('eventId', 'is not', null)
@@ -36,12 +36,7 @@ async function _fetch(licenceRef, page) {
       builder.select(['issuer', 'metadata', 'status', 'subtype', 'type'])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
-    .orderByRaw(
-      `
-      scheduled_notifications."created_at" DESC NULLS LAST,
-      scheduled_notifications."send_after" DESC NULLS LAST
-    `
-    )
+    .orderByRaw('notifications."created_at" DESC NULLS LAST')
 }
 
 module.exports = {

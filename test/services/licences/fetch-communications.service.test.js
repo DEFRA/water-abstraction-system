@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 // Thing under test
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
 
-describe('Fetch Communications service', () => {
+describe('Licences - Fetch Communications service', () => {
   const licenceRef = generateLicenceRef()
 
   let event
@@ -60,8 +60,7 @@ describe('Fetch Communications service', () => {
           },
           id: notification.id,
           messageRef: 'returns_invitation_licence_holder_letter',
-          messageType: 'letter',
-          sendAfter: null
+          messageType: 'letter'
         }
       ])
     })
