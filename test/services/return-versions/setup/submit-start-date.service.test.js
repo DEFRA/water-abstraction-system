@@ -404,11 +404,11 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#fullDate',
+                href: '#other-start-date',
                 text: 'Enter a real start date'
               }
             ],
-            fullDate: { text: 'Enter a real start date' }
+            'other-start-date': { text: 'Enter a real start date' }
           })
         })
 
