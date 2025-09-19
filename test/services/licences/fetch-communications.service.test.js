@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationModel = require('../../support/helpers/notification.helper.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -31,7 +31,7 @@ describe('Fetch Communications service', () => {
       type: 'notification'
     })
 
-    notification = await NotificationModel.add({
+    notification = await NotificationHelper.add({
       eventId: event.id,
       licences: JSON.stringify([licenceRef]),
       messageRef: 'returns_invitation_licence_holder_letter',
