@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const databaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
 const EventModel = require('../../../app/models/event.model.js')
@@ -17,11 +21,11 @@ const FetchNoticesService = require('../../../app/services/notices/fetch-notices
 
 describe('Notices - Fetch Notices service', () => {
   const notifications = []
-  const pageNumber = 1
 
   let abstractionAlertNotice
   let filters
   let legacyNotice
+  let pageNumber
   let returnsInvitationNotice
 
   before(async () => {
@@ -93,6 +97,8 @@ describe('Notices - Fetch Notices service', () => {
     // NOTE: _filters() generates an empty filters object as used by the services that call FetchNotices when no filter
     // has been applied by the user
     filters = _filters()
+
+    pageNumber = 1
   })
 
   after(async () => {
@@ -106,6 +112,12 @@ describe('Notices - Fetch Notices service', () => {
   })
 
   describe('when no filter is applied', () => {
+    beforeEach(() => {
+      // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
+      // part of the full suite, and the risk our test record is returned in the second page of results.
+      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+    })
+
     it('returns all notices ordered by the date they were created (newest to oldest)', async () => {
       const result = await FetchNoticesService.go(filters, pageNumber)
 
@@ -122,6 +134,10 @@ describe('Notices - Fetch Notices service', () => {
   })
 
   describe('when a filter is applied', () => {
+    beforeEach(() => {
+      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+    })
+
     describe('and "Notice Types" has been set', () => {
       describe('and its a "standard" notice type (not an alert)', () => {
         describe('and its "returnsInvitation"', () => {
@@ -279,6 +295,21 @@ describe('Notices - Fetch Notices service', () => {
         expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
         expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
       })
+    })
+  })
+
+  describe('when the results are paginated', () => {
+    beforeEach(() => {
+      pageNumber = 2
+
+      // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
+      Sinon.stub(databaseConfig, 'defaultPageSize').value(2)
+    })
+
+    it('can return the selected page', async () => {
+      const result = await FetchNoticesService.go(filters, pageNumber)
+
+      expect(result.results).not.to.be.empty()
     })
   })
 })
