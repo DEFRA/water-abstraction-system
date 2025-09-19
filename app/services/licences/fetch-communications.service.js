@@ -36,7 +36,7 @@ async function _fetch(licenceRef, page) {
       builder.select(['issuer', 'metadata', 'status', 'subtype', 'type'])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
-    .orderByRaw('notifications."created_at" DESC NULLS LAST')
+    .orderBy('notifications.created_at', 'DESC')
 }
 
 module.exports = {
