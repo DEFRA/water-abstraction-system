@@ -16,7 +16,7 @@ class NotificationModel extends BaseModel {
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
   static get jsonAttributes() {
-    return ['personalisation']
+    return ['licences', 'personalisation']
   }
 
   static get relationMappings() {
