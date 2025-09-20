@@ -30,7 +30,7 @@ describe('Notices - Fetch Notices service', () => {
 
   before(async () => {
     returnsInvitationNotice = await EventHelper.add({
-      createdAt: new Date('2025-07-01'),
+      createdAt: new Date('2025-07-01T15:01:47.023Z'),
       issuer: 'billing.data@wrls.gov.uk',
       metadata: {
         name: 'Returns: invitation',
@@ -57,7 +57,7 @@ describe('Notices - Fetch Notices service', () => {
     await _addNotification(notifications, returnsInvitationNotice.id, 'sent')
 
     legacyNotice = await EventHelper.add({
-      createdAt: new Date('2024-09-01'),
+      createdAt: new Date('2024-09-01T18:42:59.659Z'),
       issuer: 'legacy.alerts@wrls.gov.uk',
       metadata: {
         name: 'Hands off flow: resume abstraction',
@@ -76,7 +76,7 @@ describe('Notices - Fetch Notices service', () => {
     await _addNotification(notifications, legacyNotice.id, 'sent')
 
     abstractionAlertNotice = await EventHelper.add({
-      createdAt: new Date('2025-09-17'),
+      createdAt: new Date('2025-09-17T09:13:26.924Z'),
       issuer: 'abstraction.alerts@wrls.gov.uk',
       metadata: {
         name: 'Water abstraction alert',
@@ -276,6 +276,18 @@ describe('Notices - Fetch Notices service', () => {
         expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
         expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
       })
+
+      describe('and when "From Date" is the same as a notice "Created At"', () => {
+        beforeEach(() => {
+          filters.fromDate = new Date('2025-07-01')
+        })
+
+        it('returns the matching notice', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+        })
+      })
     })
 
     describe('and "To Date" has been set', () => {
@@ -294,6 +306,18 @@ describe('Notices - Fetch Notices service', () => {
 
         expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
         expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+      })
+
+      describe('and when "To Date" is the same as a notice "Created At"', () => {
+        beforeEach(() => {
+          filters.toDate = new Date('2025-07-01')
+        })
+
+        it('returns the matching notice', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+        })
       })
     })
   })

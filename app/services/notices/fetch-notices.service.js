@@ -57,7 +57,14 @@ function _applyFilters(query, filters) {
   }
 
   if (toDate) {
-    query.where('events.createdAt', '<=', new Date(toDate))
+    // NOTE: createdAt is a timestamp, which means it will include a time element. For example, 2025-09-19 13:47:53.859.
+    // But `toDate` will just be the date part. This means when we create a date object from it, its time will be set
+    // to minute. This means if we don't shift toDate to 23:59:99 it will exclude any notices created on the toDate
+    // specified.
+    const toDateForQuery = new Date(toDate)
+
+    toDateForQuery.setHours(23, 59, 59, 999)
+    query.where('events.createdAt', '<=', toDateForQuery.toISOString())
   }
 
   _applyNoticeTypeFilters(query, noticeTypes)
