@@ -412,6 +412,10 @@ function formatReturnLogStatus(returnLog) {
  * This is how we link back the right errors to the right components, and ensure that the error summary behaves as
  * expected.
  *
+ * A single field could have multiple errors. When this is the case we want to set the first error only. This assumes
+ * the validation order is correct. For example, A licence number must be valid in order to check it has any due
+ * returns. Therefore, the validator should order them appropriately.
+ *
  * @param {object} validationResult - the result of a Joi validation
  *
  * @returns {object|null} the formatted validation result or null if the validation result does not have an `error`
@@ -426,12 +430,16 @@ function formatValidationResult(validationResult) {
     errorList: []
   }
 
+  const processedFields = new Set()
+
   validationResult.error.details.forEach((detail) => {
     const path = detail.path[0]
 
-    formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
-
-    formattedResult[path] = { text: detail.message }
+    if (!processedFields.has(path)) {
+      formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
+      formattedResult[path] = { text: detail.message }
+      processedFields.add(path)
+    }
   })
 
   return formattedResult
