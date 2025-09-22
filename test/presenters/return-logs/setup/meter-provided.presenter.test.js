@@ -25,11 +25,11 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       const result = MeterProvidedPresenter.go(session)
 
       expect(result).to.equal({
-        pageTitle: 'Have meter details been provided?',
-        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        caption: 'Return reference 012345',
+        backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units', text: 'Back' },
         meterProvided: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units'
+        pageTitle: 'Have meter details been provided?',
+        pageTitleCaption: 'Return reference 012345',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
   })
@@ -43,7 +43,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -51,7 +51,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns a link back to the "units" page on', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
       })
     })
   })

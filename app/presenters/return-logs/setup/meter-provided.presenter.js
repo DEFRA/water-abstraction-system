@@ -16,10 +16,10 @@ function go(session) {
   const { id: sessionId, returnReference, meterProvided } = session
 
   return {
-    backLink: _backLink(session),
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: _backLink(session), text: 'Back' },
     meterProvided: meterProvided ?? null,
     pageTitle: 'Have meter details been provided?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
 }

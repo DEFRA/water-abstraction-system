@@ -36,11 +36,11 @@ describe('Return Logs Setup - Meter Provided service', () => {
 
       expect(result).to.equal(
         {
-          pageTitle: 'Have meter details been provided?',
           activeNavBar: 'search',
-          caption: 'Return reference 012345',
-          backLink: `/system/return-logs/setup/${session.id}/units`,
-          meterProvided: null
+          backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
+          meterProvided: null,
+          pageTitle: 'Have meter details been provided?',
+          pageTitleCaption: 'Return reference 012345'
         },
         { skip: ['sessionId'] }
       )

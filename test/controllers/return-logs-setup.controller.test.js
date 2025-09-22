@@ -784,7 +784,10 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(() => {
           Sinon.stub(SubmitMeterProvidedService, 'go').resolves({
-            error: { text: 'Select if meter details have been provided' },
+            error: {
+              errorList: [{ href: '#meterProvided', text: 'Select if meter details have been provided' }],
+              meterProvided: { text: 'Select if meter details have been provided' }
+            },
             pageTitle: 'Have meter details been provided?',
             sessionId
           })
