@@ -36,13 +36,13 @@ describe('Return Logs Setup - Meter Details service', () => {
 
       expect(result).to.equal(
         {
-          pageTitle: 'Meter details',
           activeNavBar: 'search',
-          caption: 'Return reference 012345',
-          backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
           meterMake: null,
           meterSerialNumber: null,
-          meter10TimesDisplay: null
+          meter10TimesDisplay: null,
+          pageTitle: 'Meter details',
+          pageTitleCaption: 'Return reference 012345'
         },
         { skip: ['sessionId'] }
       )

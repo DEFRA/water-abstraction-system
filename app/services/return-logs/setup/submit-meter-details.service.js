@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const MeterDetailsPresenter = require('../../../presenters/return-logs/setup/meter-details.presenter.js')
 const MeterDetailsValidator = require('../../../validators/return-logs/setup/meter-details.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
@@ -43,12 +44,12 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...submittedSessionData
+    ...pageData
   }
 }
 
@@ -75,36 +76,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = MeterDetailsValidator.go(payload)
+  const validationResult = MeterDetailsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    let href
-
-    if (detail.context.key === 'meterMake') {
-      href = '#meter-make'
-    } else if (detail.context.key === 'meterSerialNumber') {
-      href = '#meter-serial-number'
-    } else {
-      href = '#meter-10-times-display'
-    }
-
-    result.errorList.push({
-      href,
-      text: detail.message
-    })
-
-    result[detail.context.key] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

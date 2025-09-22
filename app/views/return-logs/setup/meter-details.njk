@@ -1,23 +1,10 @@
 {% extends 'layout.njk' %}
-
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
-  {% endif %}
-
-  {{ pageHeading(pageTitle, caption) }}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
@@ -27,11 +14,11 @@
         text: "Make"
       },
       classes: "govuk-input--width-10",
-      id: "meter-make",
+      id: "meterMake",
       name: "meterMake",
       value: meterMake,
       errorMessage: {
-        text: error.meterMake.message
+        text: error.meterMake.text
       } if error.meterMake
     }) }}
 
@@ -40,11 +27,11 @@
         text: "Serial number"
       },
       classes: "govuk-input--width-10",
-      id: "meter-serial-number",
+      id: "meterSerialNumber",
       name: "meterSerialNumber",
       value: meterSerialNumber,
       errorMessage: {
-        text: error.meterSerialNumber.message
+        text: error.meterSerialNumber.text
       } if error.meterSerialNumber
     }) }}
 
@@ -52,7 +39,7 @@
       classes: "govuk-radios--inline",
       name: "meter10TimesDisplay",
       errorMessage: {
-        text: error.meter10TimesDisplay.message
+        text: error.meter10TimesDisplay.text
       } if error.meter10TimesDisplay,
       fieldset: {
         legend: {

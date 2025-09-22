@@ -99,13 +99,13 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
         expect(result).to.equal(
           {
-            pageTitle: 'Meter details',
             activeNavBar: 'search',
+            backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
             meterMake: null,
             meterSerialNumber: null,
             meter10TimesDisplay: null,
-            backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
-            caption: 'Return reference 12345'
+            pageTitle: 'Meter details',
+            pageTitleCaption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error'] }
         )
@@ -117,16 +117,16 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
           expect(result.error).to.equal({
             errorList: [
-              { href: '#meter-make', text: 'Enter the make of the meter' },
-              { href: '#meter-serial-number', text: 'Enter a serial number' },
+              { href: '#meterMake', text: 'Enter the make of the meter' },
+              { href: '#meterSerialNumber', text: 'Enter a serial number' },
               {
-                href: '#meter-10-times-display',
+                href: '#meter10TimesDisplay',
                 text: 'Select if the meter has a ×10 display'
               }
             ],
-            meterMake: { message: 'Enter the make of the meter' },
-            meterSerialNumber: { message: 'Enter a serial number' },
-            meter10TimesDisplay: { message: 'Select if the meter has a ×10 display' }
+            meterMake: { text: 'Enter the make of the meter' },
+            meterSerialNumber: { text: 'Enter a serial number' },
+            meter10TimesDisplay: { text: 'Select if the meter has a ×10 display' }
           })
         })
       })
@@ -143,8 +143,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
-            meterMake: { message: 'Enter the make of the meter' }
+            errorList: [{ href: '#meterMake', text: 'Enter the make of the meter' }],
+            meterMake: { text: 'Enter the make of the meter' }
           })
         })
       })
@@ -161,8 +161,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            errorList: [{ href: '#meter-serial-number', text: 'Enter a serial number' }],
-            meterSerialNumber: { message: 'Enter a serial number' }
+            errorList: [{ href: '#meterSerialNumber', text: 'Enter a serial number' }],
+            meterSerialNumber: { text: 'Enter a serial number' }
           })
         })
       })
@@ -179,8 +179,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            errorList: [{ href: '#meter-10-times-display', text: 'Select if the meter has a ×10 display' }],
-            meter10TimesDisplay: { message: 'Select if the meter has a ×10 display' }
+            errorList: [{ href: '#meter10TimesDisplay', text: 'Select if the meter has a ×10 display' }],
+            meter10TimesDisplay: { text: 'Select if the meter has a ×10 display' }
           })
         })
       })

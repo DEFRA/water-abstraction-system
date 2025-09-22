@@ -25,12 +25,15 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       const result = MeterDetailsPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
+        backLink: {
+          href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
+          text: 'Back'
+        },
         meterMake: null,
         meterSerialNumber: null,
         meter10TimesDisplay: null,
         pageTitle: 'Meter details',
-        caption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
