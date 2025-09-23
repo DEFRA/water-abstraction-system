@@ -19,39 +19,80 @@ describe('Notices - Setup - Update event service', () => {
 
   let event
 
-  beforeEach(async () => {
-    event = await EventHelper.add({
-      metadata: {
-        name: 'some existing data'
-      },
-      status: 'completed',
-      subtype: 'returnReminder',
-      type: 'notification'
+  describe('when there is no "error" count already set', () => {
+    beforeEach(async () => {
+      event = await EventHelper.add({
+        metadata: {
+          name: 'some existing data'
+        },
+        status: 'completed',
+        subtype: 'returnReminder',
+        type: 'notification'
+      })
+    })
+
+    it('should update the event', async () => {
+      await UpdateEventService.go(event.id, errorCount)
+
+      const updatedResult = await EventModel.query().findById(event.id)
+
+      expect(updatedResult.metadata.error).to.equal(errorCount)
+
+      expect(updatedResult).equal({
+        createdAt: event.createdAt,
+        entities: null,
+        id: event.id,
+        issuer: 'test.user@defra.gov.uk',
+        licences: null,
+        metadata: {
+          error: errorCount,
+          name: 'some existing data'
+        },
+        referenceCode: null,
+        status: 'completed',
+        subtype: 'returnReminder',
+        type: 'notification',
+        updatedAt: updatedResult.updatedAt
+      })
     })
   })
 
-  it('should update the event', async () => {
-    await UpdateEventService.go(event.id, errorCount)
+  describe('when an "error" count is already set', () => {
+    beforeEach(async () => {
+      event = await EventHelper.add({
+        metadata: {
+          name: 'some existing data',
+          error: 5
+        },
+        status: 'completed',
+        subtype: 'returnReminder',
+        type: 'notification'
+      })
+    })
 
-    const updatedResult = await EventModel.query().findById(event.id)
+    it('should update the event error count by adding the provided error count', async () => {
+      await UpdateEventService.go(event.id, errorCount)
 
-    expect(updatedResult.metadata.error).to.equal(errorCount)
+      const updatedResult = await EventModel.query().findById(event.id)
 
-    expect(updatedResult).equal({
-      createdAt: event.createdAt,
-      entities: null,
-      id: event.id,
-      issuer: 'test.user@defra.gov.uk',
-      licences: null,
-      metadata: {
-        error: errorCount,
-        name: 'some existing data'
-      },
-      referenceCode: null,
-      status: 'completed',
-      subtype: 'returnReminder',
-      type: 'notification',
-      updatedAt: updatedResult.updatedAt
+      expect(updatedResult.metadata.error).to.equal(10)
+
+      expect(updatedResult).equal({
+        createdAt: event.createdAt,
+        entities: null,
+        id: event.id,
+        issuer: 'test.user@defra.gov.uk',
+        licences: null,
+        metadata: {
+          error: 10,
+          name: 'some existing data'
+        },
+        referenceCode: null,
+        status: 'completed',
+        subtype: 'returnReminder',
+        type: 'notification',
+        updatedAt: updatedResult.updatedAt
+      })
     })
   })
 })

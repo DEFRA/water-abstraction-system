@@ -1,5 +1,6 @@
 'use strict'
 
+const { today } = require('../lib/general.lib.js')
 const { returnUnits } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
@@ -293,13 +294,9 @@ function formatReturnLogStatus(returnLog) {
   }
 
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
-  const today = new Date()
+  const todaysDate = today()
 
-  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
-  // 'today' would be flagged as overdue when it is still due (just!)
-  today.setHours(0, 0, 0, 0)
-
-  if (dueDate < today) {
+  if (dueDate < todaysDate) {
     return 'overdue'
   }
 
@@ -311,7 +308,7 @@ function formatReturnLogStatus(returnLog) {
   notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
 
   // If today is before the "due" period starts, the return is "not due yet"
-  if (today < notDueUntil) {
+  if (todaysDate < notDueUntil) {
     return 'not due yet'
   }
 
@@ -415,6 +412,10 @@ function formatReturnLogStatus(returnLog) {
  * This is how we link back the right errors to the right components, and ensure that the error summary behaves as
  * expected.
  *
+ * A single field could have multiple errors. When this is the case we want to set the first error only. This assumes
+ * the validation order is correct. For example, A licence number must be valid in order to check it has any due
+ * returns. Therefore, the validator should order them appropriately.
+ *
  * @param {object} validationResult - the result of a Joi validation
  *
  * @returns {object|null} the formatted validation result or null if the validation result does not have an `error`
@@ -429,12 +430,16 @@ function formatValidationResult(validationResult) {
     errorList: []
   }
 
+  const processedFields = new Set()
+
   validationResult.error.details.forEach((detail) => {
     const path = detail.path[0]
 
-    formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
-
-    formattedResult[path] = { text: detail.message }
+    if (!processedFields.has(path)) {
+      formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
+      formattedResult[path] = { text: detail.message }
+      processedFields.add(path)
+    }
   })
 
   return formattedResult

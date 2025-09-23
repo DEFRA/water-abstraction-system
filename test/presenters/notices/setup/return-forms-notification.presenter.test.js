@@ -23,10 +23,13 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
   let pageData
   let referenceCode
   let returnForm
+  let returnId
   let returnLogId
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
+
+    returnId = generateUUID()
 
     returnLogId = generateReturnLogId()
 
@@ -57,7 +60,8 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
       siteDescription: 'Water park',
       startDate: '1 January 2025',
       twoPartTariff: false,
-      returnLogId
+      returnLogId,
+      returnId
     }
   })
 
@@ -68,7 +72,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
       expect(result).to.equal({
         content: returnForm,
         eventId,
-        licences: `["${licenceRef}"]`,
+        licences: [licenceRef],
         messageRef: 'pdf.return_form',
         messageType: 'letter',
         personalisation: {
@@ -92,7 +96,8 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
           site_description: 'Water park',
           start_date: '1 January 2025'
         },
-        reference: referenceCode
+        reference: referenceCode,
+        returnLogIds: [returnId]
       })
     })
   })

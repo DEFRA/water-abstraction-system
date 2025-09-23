@@ -12,6 +12,7 @@ const { expect } = Code
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
+const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
@@ -753,11 +754,7 @@ describe('Licences - View Licence Summary presenter', () => {
         // NOTE: The date we get back from the DB is without time. If we just assigned new Date() to expiredDate
         // there is a chance the test could fail depending on how quickly this is compared to the logic in the
         // presenter
-        const today = new Date()
-
-        today.setHours(0, 0, 0, 0)
-
-        licence.expiredDate = today
+        licence.expiredDate = today()
       })
 
       it('returns null', () => {

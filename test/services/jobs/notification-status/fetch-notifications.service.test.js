@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const { today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
@@ -29,6 +30,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     notification = await NotificationHelper.add({
       eventId: event.id,
       messageRef: 'returns_invitation_licence_holder_letter',
+      messageType: 'letter',
       status: 'pending'
     })
 
@@ -49,9 +51,9 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
       type: 'notification'
     })
 
-    const today = new Date()
-    const eightDaysAgo = new Date()
-    eightDaysAgo.setDate(today.getDate() - 8)
+    const todaysDate = today()
+    const eightDaysAgo = today()
+    eightDaysAgo.setDate(todaysDate.getDate() - 8)
 
     await NotificationHelper.add({
       eventId: olderThanRetentionEvent.id,
@@ -74,11 +76,55 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
         id: notification.id,
         licenceMonitoringStationId: null,
         messageRef: 'returns_invitation_licence_holder_letter',
+        messageType: 'letter',
         notifyError: null,
         notifyId: null,
         notifyStatus: null,
         personalisation: null,
         status: 'pending'
+      })
+    })
+
+    describe('and an event id is provided', () => {
+      describe('and there are email notifications', () => {
+        beforeEach(async () => {
+          notification = await NotificationHelper.add({
+            eventId: event.id,
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            status: 'pending'
+          })
+        })
+
+        it('returns the event marked for "sending"', async () => {
+          const result = await FetchNotificationsService.go(event.id)
+
+          const foundEvent = result.find((resultEvent) => {
+            return resultEvent.eventId === event.id
+          })
+
+          expect(foundEvent).to.equal({
+            createdAt: notification.createdAt,
+            eventId: event.id,
+            id: notification.id,
+            licenceMonitoringStationId: null,
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            notifyError: null,
+            notifyId: null,
+            notifyStatus: null,
+            personalisation: null,
+            status: 'pending'
+          })
+        })
+      })
+
+      describe('and there are no email notifications', () => {
+        it('returns an empty array', async () => {
+          const result = await FetchNotificationsService.go(event.id)
+
+          expect(result).to.equal([])
+        })
       })
     })
   })
