@@ -107,4 +107,21 @@ describe('Return Logs Setup - Period Used presenter', () => {
       })
     })
   })
+
+  describe('when the default abstraction period does not overlap with the return period', () => {
+    beforeEach(() => {
+      session.periodStartDay = '01'
+      session.periodStartMonth = '11'
+      session.periodEndDay = '31'
+      session.periodEndMonth = '03'
+      session.startDate = new Date('2023-04-01')
+      session.endDate = new Date('2023-06-26')
+    })
+
+    it('does not show the default abstraction period', () => {
+      const result = PeriodUsedPresenter.go(session)
+
+      expect(result.showDefaultAbstractionPeriod).to.be.false()
+    })
+  })
 })
