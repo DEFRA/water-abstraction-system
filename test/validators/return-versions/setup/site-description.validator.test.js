@@ -17,7 +17,7 @@ describe('Return Versions Setup - Site Description validator', () => {
     describe('because the user provided a site description', () => {
       beforeEach(() => {
         payload = {
-          'site-description': 'This is a valid site description'
+          siteDescription: 'This is a valid site description'
         }
       })
 
@@ -48,7 +48,7 @@ describe('Return Versions Setup - Site Description validator', () => {
 
       beforeEach(() => {
         payload = {
-          'site-description': invalidSiteDescription
+          siteDescription: invalidSiteDescription
         }
       })
 
@@ -66,7 +66,7 @@ describe('Return Versions Setup - Site Description validator', () => {
 
       beforeEach(() => {
         payload = {
-          'site-description': invalidSiteDescription
+          siteDescription: invalidSiteDescription
         }
       })
 

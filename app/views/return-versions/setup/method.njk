@@ -17,22 +17,25 @@
       },
       items: [
         {
-          value: "use-abstraction-data",
+          id: 'useAbstractionData',
+          value: "useAbstractionData",
           text: "Start by using abstraction data",
-          checked: "use-abstraction-data" === method
+          checked: "useAbstractionData" === method
         },
         {
-          value: "use-existing-requirements",
+          id: 'useExistingRequirements',
+          value: "useExistingRequirements",
           text: "Copy existing requirements",
-          checked: "use-existing-requirements" === method
+          checked: "useExistingRequirements" === method
         } if displayCopyExisting,
         {
           divider: "or"
         },
         {
-          value: "set-up-manually",
+          id: 'setUpManually',
+          value: "setUpManually",
           text: "Set up manually",
-          checked: "set-up-manually" === method
+          checked: "setUpManually" === method
         }
       ]
     }) }}

@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'agreements-exceptions': ['gravity-fill', 'two-part-tariff', '56-returns-exception']
+          agreementsExceptions: ['gravity-fill', 'two-part-tariff', '56-returns-exception']
         }
       })
 
@@ -153,11 +153,11 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#agreements-exceptions',
+              href: '#agreementsExceptions',
               text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
             }
           ],
-          'agreements-exceptions': {
+          agreementsExceptions: {
             text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
           }
         })

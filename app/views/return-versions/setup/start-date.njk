@@ -6,9 +6,8 @@
 
 {% set dateInputHTML %}
   {{ govukDateInput({
-    id: 'other-start-date',
-    namePrefix: 'start-date',
-    errorMessage: error['other-start-date'],
+    id: 'anotherStartDate',
+    errorMessage: error.anotherStartDate,
     fieldset: {
       legend: {
         classes: 'govuk-fieldset__legend--m',
@@ -17,19 +16,25 @@
     },
     items: [
       {
-        classes: "govuk-input--width-2 {{ 'govuk-input--error' if error }}",
-        name: 'day',
-        value: anotherStartDateDay
+        classes: "govuk-input--width-2",
+        id: 'startDateDay',
+        name: 'startDateDay',
+        label: 'Day',
+        value: startDateDay
       },
       {
-        classes: "govuk-input--width-2 {{ 'govuk-input--error' if error }}",
-        name: 'month',
-        value: anotherStartDateMonth
+        classes: "govuk-input--width-2",
+        id: 'startDateMonth',
+        name: 'startDateMonth',
+        label: 'Month',
+        value: startDateMonth
       },
       {
-        classes: "govuk-input--width-4 {{ 'govuk-input--error' if error }}",
-        name: 'year',
-        value: anotherStartDateYear
+        classes: "govuk-input--width-4",
+        id: 'startDateYear',
+        name: 'startDateYear',
+        label: 'Year',
+        value: startDateYear
       }
     ]
   }) }}
@@ -40,8 +45,8 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      name: 'start-date-options',
-      errorMessage: error['start-date-options'],
+      name: 'startDateOptions',
+      errorMessage: error.startDateOptions,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -49,7 +54,7 @@
       },
       items: [
         {
-          id: 'licence-start-date',
+          id: 'licenceStartDate',
           value: 'licenceStartDate',
           text: 'Licence version start date',
           hint: {
@@ -58,7 +63,7 @@
           checked: startDateOption === 'licenceStartDate'
         },
         {
-          id: 'another-start-date',
+          id: 'anotherStartDate',
           value: 'anotherStartDate',
           text: 'Another date',
           hint: {

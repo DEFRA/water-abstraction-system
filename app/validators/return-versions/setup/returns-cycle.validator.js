@@ -20,11 +20,11 @@ const Joi = require('joi')
  * If any errors are found the `error:` property will also exist detailing what the issue is.
  */
 function go(payload, session) {
-  const VALID_VALUES = ['summer', 'winter-and-all-year']
+  const VALID_VALUES = ['summer', 'winterAndAllYear']
   const errorMessage = 'Select the returns cycle for the requirements for returns'
 
   const schema = Joi.object({
-    'returns-cycle': Joi.string()
+    returnsCycle: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({ 'any.required': errorMessage, 'any.only': errorMessage, 'string.empty': errorMessage })
@@ -40,7 +40,7 @@ function go(payload, session) {
 }
 
 function _noSummerCycleWithQuarterlyReturns(value, helpers, session) {
-  const { 'returns-cycle': returnsCycle } = value
+  const { returnsCycle } = value
 
   const isSummer = returnsCycle === 'summer'
   const hasQuarterlyReturns = session.data.quarterlyReturns === true

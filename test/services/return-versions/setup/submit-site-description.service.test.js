@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'site-description': 'This is a valid return requirement description'
+          siteDescription: 'This is a valid return requirement description'
         }
       })
 
@@ -141,11 +141,11 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#site-description',
+                href: '#siteDescription',
                 text: 'Enter a description of the site'
               }
             ],
-            'site-description': { text: 'Enter a description of the site' }
+            siteDescription: { text: 'Enter a description of the site' }
           })
         })
       })
@@ -153,7 +153,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       describe('because the user has entered a description less than 10 characters', () => {
         beforeEach(() => {
           payload = {
-            'site-description': 'Too short'
+            siteDescription: 'Too short'
           }
         })
 
@@ -163,11 +163,11 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#site-description',
+                href: '#siteDescription',
                 text: 'Site description must be 10 characters or more'
               }
             ],
-            'site-description': { text: 'Site description must be 10 characters or more' }
+            siteDescription: { text: 'Site description must be 10 characters or more' }
           })
         })
 
@@ -185,7 +185,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
         beforeEach(() => {
           payload = {
-            'site-description': invalidSiteDescription
+            siteDescription: invalidSiteDescription
           }
         })
 
@@ -195,11 +195,11 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#site-description',
+                href: '#siteDescription',
                 text: 'Site description must be 100 characters or less'
               }
             ],
-            'site-description': { text: 'Site description must be 100 characters or less' }
+            siteDescription: { text: 'Site description must be 100 characters or less' }
           })
         })
 

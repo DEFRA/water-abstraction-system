@@ -56,7 +56,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].frequencyReported = payload['frequency-reported']
+  session.requirements[requirementIndex].frequencyReported = payload.frequencyReported
 
   return session.$update()
 }

@@ -8,8 +8,8 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      name: 'returns-cycle',
-      errorMessage: error['returns-cycle'],
+      name: 'returnsCycle',
+      errorMessage: error.returnsCycle,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -17,14 +17,16 @@
       },
       items: [
         {
+          id: "summer",
           value: "summer",
           text: "Summer",
           checked: "summer" === returnsCycle
         },
         {
-          value: "winter-and-all-year",
+          id: "winterAndAllYear",
+          value: "winterAndAllYear",
           text: "Winter and all year",
-          checked: "winter-and-all-year" === returnsCycle
+          checked: "winterAndAllYear" === returnsCycle
         }
       ]
     }) }}

@@ -61,9 +61,9 @@ describe('Return Versions Setup - Start Date service', () => {
           activeNavBar: 'search',
           pageTitle: 'Select the start date for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
-          anotherStartDateDay: null,
-          anotherStartDateMonth: null,
-          anotherStartDateYear: null,
+          startDateDay: null,
+          startDateMonth: null,
+          startDateYear: null,
           backLink: {
             href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
             text: 'Back'

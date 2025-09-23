@@ -25,7 +25,7 @@ function go(payload) {
   const errorMessage = 'Select how often readings or volumes are collected'
 
   const schema = Joi.object({
-    'frequency-collected': Joi.string()
+    frequencyCollected: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({

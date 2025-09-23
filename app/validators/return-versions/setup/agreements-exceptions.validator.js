@@ -23,7 +23,7 @@ function go(payload) {
   const errorMessage = 'Select if there are any agreements and exceptions needed for the requirements for returns'
 
   const schema = Joi.object({
-    'agreements-exceptions': Joi.array()
+    agreementsExceptions: Joi.array()
       .items(Joi.string().valid(...VALID_VALUES))
       .required()
       .messages({

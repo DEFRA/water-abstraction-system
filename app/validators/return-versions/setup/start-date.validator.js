@@ -33,20 +33,20 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  */
 function go(payload, licenceStartDate, licenceEndDate) {
   const _payload = {
-    'start-date-options': payload['start-date-options'],
-    'other-start-date': _fullDate(payload)
+    startDateOptions: payload.startDateOptions,
+    anotherStartDate: _fullDate(payload)
   }
 
   return _validateAnotherStartDate(_payload, licenceStartDate, licenceEndDate)
 }
 
 function _fullDate(payload) {
-  const { 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = payload
+  const { startDateDay, startDateMonth, startDateYear } = payload
 
-  const paddedMonth = month ? leftPadZeroes(month, 2) : ''
-  const paddedDay = day ? leftPadZeroes(day, 2) : ''
+  const paddedMonth = startDateMonth ? leftPadZeroes(startDateMonth, 2) : ''
+  const paddedDay = startDateDay ? leftPadZeroes(startDateDay, 2) : ''
 
-  return `${year}-${paddedMonth}-${paddedDay}`
+  return `${startDateYear}-${paddedMonth}-${paddedDay}`
 }
 
 /**
@@ -76,11 +76,11 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   const { minDate, minMessage } = _minimumDateDetails(licenceStartDate)
 
   const schema = Joi.object({
-    'start-date-options': Joi.string().required().messages({
+    startDateOptions: Joi.string().required().messages({
       'any.required': 'Select the start date for the requirements for returns',
       'string.empty': 'Select the start date for the requirements for returns'
     }),
-    'other-start-date': Joi.alternatives().conditional('start-date-options', {
+    anotherStartDate: Joi.alternatives().conditional('startDateOptions', {
       is: 'anotherStartDate',
       then: Joi.date()
         .format(['YYYY-MM-DD'])

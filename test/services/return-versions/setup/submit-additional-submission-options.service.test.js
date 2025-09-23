@@ -45,7 +45,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
     describe('with no additional options ', () => {
       beforeEach(() => {
         payload = {
-          'additional-submission-options': 'none'
+          additionalSubmissionOptions: 'none'
         }
       })
 
@@ -73,7 +73,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
     describe('with multiple upload selected', () => {
       beforeEach(() => {
         payload = {
-          'additional-submission-options': 'multiple-upload'
+          additionalSubmissionOptions: 'multiple-upload'
         }
       })
 
@@ -101,7 +101,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
     describe('with quarterly returns selected', () => {
       beforeEach(() => {
         payload = {
-          'additional-submission-options': 'quarterly-returns'
+          additionalSubmissionOptions: 'quarterly-returns'
         }
       })
 
@@ -160,11 +160,11 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#additional-submission-options',
+                href: '#additionalSubmissionOptions',
                 text: 'Select additional submission options for the requirements for returns'
               }
             ],
-            'additional-submission-options': {
+            additionalSubmissionOptions: {
               text: 'Select additional submission options for the requirements for returns'
             }
           })

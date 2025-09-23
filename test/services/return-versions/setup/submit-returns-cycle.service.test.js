@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'returns-cycle': 'summer'
+          returnsCycle: 'summer'
         }
       })
 
@@ -139,11 +139,11 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#returns-cycle',
+                href: '#returnsCycle',
                 text: 'Select the returns cycle for the requirements for returns'
               }
             ],
-            'returns-cycle': { text: 'Select the returns cycle for the requirements for returns' }
+            returnsCycle: { text: 'Select the returns cycle for the requirements for returns' }
           })
         })
       })

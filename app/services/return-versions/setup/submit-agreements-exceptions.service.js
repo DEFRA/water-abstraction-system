@@ -67,13 +67,13 @@ async function go(sessionId, requirementIndex, payload, yar) {
  * @private
  */
 function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload['agreements-exceptions'])) {
-    payload['agreements-exceptions'] = [payload['agreements-exceptions']]
+  if (!Array.isArray(payload.agreementsExceptions)) {
+    payload.agreementsExceptions = [payload.agreementsExceptions]
   }
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].agreementsExceptions = payload['agreements-exceptions']
+  session.requirements[requirementIndex].agreementsExceptions = payload.agreementsExceptions
 
   return session.$update()
 }

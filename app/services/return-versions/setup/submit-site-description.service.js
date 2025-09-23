@@ -56,7 +56,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].siteDescription = payload['site-description']
+  session.requirements[requirementIndex].siteDescription = payload.siteDescription
 
   return session.$update()
 }
@@ -68,9 +68,7 @@ async function _save(session, requirementIndex, payload) {
  * @private
  */
 function _submittedSessionData(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].siteDescription = payload['site-description']
-    ? payload['site-description']
-    : null
+  session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null
 
   return SiteDescriptionPresenter.go(session, requirementIndex)
 }

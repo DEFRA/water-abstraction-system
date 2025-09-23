@@ -8,9 +8,9 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      name: 'frequency-collected',
-      id: 'frequency-collected',
-      errorMessage: error['frequency-collected'],
+      name: 'frequencyCollected',
+      id: 'frequencyCollected',
+      errorMessage: error.frequencyCollected,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -20,16 +20,19 @@
         {
           value: "day",
           text: "Daily",
+          id: "frequencyCollectedDay",
           checked: "day" === frequencyCollected
         },
         {
           value: "week",
           text: "Weekly",
+          id: "frequencyCollectedWeek",
           checked: "week" === frequencyCollected
         },
         {
           value: "month",
           text: "Monthly",
+          id: "frequencyCollectedMonth",
           checked: "month" === frequencyCollected
         }
       ]

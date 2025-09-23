@@ -16,7 +16,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
 
   before(() => {
     payload = {
-      'returns-cycle': 'winter-and-all-year'
+      returnsCycle: 'winter-and-all-year'
     }
 
     session = _testSession()
@@ -26,7 +26,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('confirms the data is valid', async () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.value['returns-cycle']).to.exist()
+      expect(result.value.returnsCycle).to.exist()
     })
   })
 
@@ -47,7 +47,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
   describe('when a user selects summer but quarterly returns is marked true', () => {
     before(() => {
       payload = {
-        'returns-cycle': 'summer'
+        returnsCycle: 'summer'
       }
 
       session.data.quarterlyReturns = true
@@ -65,7 +65,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
   describe('when a user selects summer but quarterly returns is marked false', () => {
     before(() => {
       payload = {
-        'returns-cycle': 'summer'
+        returnsCycle: 'summer'
       }
 
       session.data.quarterlyReturns = false
@@ -74,7 +74,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('confirms the data is valid', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.value['returns-cycle']).to.exist()
+      expect(result.value.returnsCycle).to.exist()
     })
   })
 

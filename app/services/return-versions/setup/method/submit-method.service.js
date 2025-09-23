@@ -50,11 +50,11 @@ async function go(sessionId, payload) {
 }
 
 function _redirect(method) {
-  if (method === 'use-abstraction-data') {
+  if (method === 'useAbstractionData') {
     return 'check'
   }
 
-  if (method === 'use-existing-requirements') {
+  if (method === 'useExistingRequirements') {
     return 'existing'
   }
 
@@ -67,7 +67,7 @@ async function _save(session, payload) {
   // If the user selected the method 'Start by using abstraction data' to setup the return requirements we use
   // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
-  if (payload.method === 'use-abstraction-data') {
+  if (payload.method === 'useAbstractionData') {
     session.requirements = await GenerateFromAbstractionDataService.go(
       session.licence.id,
       session.licenceVersion.id,

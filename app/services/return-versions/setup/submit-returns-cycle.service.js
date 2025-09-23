@@ -56,7 +56,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
 }
 
 async function _save(session, requirementIndex, payload) {
-  session.requirements[requirementIndex].returnsCycle = payload['returns-cycle']
+  session.requirements[requirementIndex].returnsCycle = payload.returnsCycle
 
   return session.$update()
 }

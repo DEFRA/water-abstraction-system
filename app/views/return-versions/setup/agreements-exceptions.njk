@@ -8,7 +8,8 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
-      name: 'agreements-exceptions',
+      name: 'agreementsExceptions',
+      id: 'agreementsExceptions',
       hint: {
         text: "Select all that apply"
       },
@@ -17,19 +18,22 @@
           html: pageHeadingHtml
         }
       },
-      errorMessage: error['agreements-exceptions'],
+      errorMessage: error.agreementsExceptions,
       items: [
         {
+          id: "gravityFill",
           value: "gravity-fill",
           text: "Gravity fill",
           checked: agreementsExceptions and "gravity-fill" in agreementsExceptions
         },
         {
+          id: "transferReAbstractionScheme",
           value: "transfer-re-abstraction-scheme",
           text: "Transfer re-abstraction scheme",
           checked: agreementsExceptions and "transfer-re-abstraction-scheme" in agreementsExceptions
         },
         {
+          id: "twoPartTariff",
           value: "two-part-tariff",
           text: "Two-part tarrif",
           checked: agreementsExceptions and "two-part-tariff" in agreementsExceptions,
@@ -38,6 +42,7 @@
           }
         },
         {
+          id: "56ReturnsException",
           value: "56-returns-exception",
           text: "56 returns exception",
           checked: agreementsExceptions and "56-returns-exception" in agreementsExceptions
@@ -46,6 +51,7 @@
           divider: "or"
         },
         {
+          id: "none",
           value: "none",
           text: "None",
           checked: agreementsExceptions and "none" in agreementsExceptions,

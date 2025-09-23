@@ -63,15 +63,15 @@ async function go(sessionId, payload, yar) {
  * @private
  */
 function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload['additional-submission-options'])) {
-    payload['additional-submission-options'] = [payload['additional-submission-options']]
+  if (!Array.isArray(payload.additionalSubmissionOptions)) {
+    payload.additionalSubmissionOptions = [payload.additionalSubmissionOptions]
   }
 }
 
 function _notification(session, payload) {
   const { additionalSubmissionOptions } = session ?? {}
 
-  if (additionalSubmissionOptions !== payload['additional-submission-options']) {
+  if (additionalSubmissionOptions !== payload.additionalSubmissionOptions) {
     return {
       text: 'Additional submission options updated',
       title: 'Updated'
@@ -82,17 +82,17 @@ function _notification(session, payload) {
 }
 
 async function _save(session, payload) {
-  session.multipleUpload = payload['additional-submission-options'].includes('multiple-upload')
+  session.multipleUpload = payload.additionalSubmissionOptions.includes('multiple-upload')
 
-  session.quarterlyReturns = payload['additional-submission-options'].includes('quarterly-returns')
+  session.quarterlyReturns = payload.additionalSubmissionOptions.includes('quarterly-returns')
 
-  session.noAdditionalOptions = payload['additional-submission-options'].includes('none')
+  session.noAdditionalOptions = payload.additionalSubmissionOptions.includes('none')
 
   return session.$update()
 }
 
 function _submittedSessionData(session, payload) {
-  session.additionalSubmissionOptions = payload['additional-submission-options'] ?? []
+  session.additionalSubmissionOptions = payload.additionalSubmissionOptions ?? []
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }

@@ -22,7 +22,7 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    'site-description': Joi.string().required().min(10).max(100).messages({
+    siteDescription: Joi.string().required().min(10).max(100).messages({
       'any.required': 'Enter a description of the site',
       'string.min': 'Site description must be 10 characters or more',
       'string.max': 'Site description must be 100 characters or less'

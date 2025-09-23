@@ -39,9 +39,9 @@ describe('Return Versions Setup - Start Date presenter', () => {
       const result = StartDatePresenter.go(session)
 
       expect(result).to.equal({
-        anotherStartDateDay: null,
-        anotherStartDateMonth: null,
-        anotherStartDateYear: null,
+        startDateDay: null,
+        startDateMonth: null,
+        startDateYear: null,
         backLink: {
           href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           text: 'Back'
@@ -102,11 +102,11 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns the "startDateOption" property populated to re-select the option', () => {
         const result = StartDatePresenter.go(session)
 
-        const { anotherStartDateDay, anotherStartDateMonth, anotherStartDateYear, startDateOption } = result
+        const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(anotherStartDateDay).to.be.null()
-        expect(anotherStartDateMonth).to.be.null()
-        expect(anotherStartDateYear).to.be.null()
+        expect(startDateDay).to.be.null()
+        expect(startDateMonth).to.be.null()
+        expect(startDateYear).to.be.null()
         expect(startDateOption).to.equal('licenceStartDate')
       })
     })
@@ -122,11 +122,11 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns the properties needed to re-populate the fields', () => {
         const result = StartDatePresenter.go(session)
 
-        const { anotherStartDateDay, anotherStartDateMonth, anotherStartDateYear, startDateOption } = result
+        const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(anotherStartDateDay).to.equal('26')
-        expect(anotherStartDateMonth).to.equal('11')
-        expect(anotherStartDateYear).to.equal('2023')
+        expect(startDateDay).to.equal('26')
+        expect(startDateMonth).to.equal('11')
+        expect(startDateYear).to.equal('2023')
         expect(startDateOption).to.equal('anotherStartDate')
       })
     })

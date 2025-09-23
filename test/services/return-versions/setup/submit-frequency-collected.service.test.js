@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'frequency-collected': 'week'
+          frequencyCollected: 'week'
         }
       })
 
@@ -139,11 +139,11 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#frequency-collected',
+                href: '#frequencyCollected',
                 text: 'Select how often readings or volumes are collected'
               }
             ],
-            'frequency-collected': { text: 'Select how often readings or volumes are collected' }
+            frequencyCollected: { text: 'Select how often readings or volumes are collected' }
           })
         })
       })

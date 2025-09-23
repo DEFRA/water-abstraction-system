@@ -24,7 +24,7 @@ function go(payload, session) {
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
-    'additional-submission-options': Joi.array().items(Joi.string()).required()
+    additionalSubmissionOptions: Joi.array().items(Joi.string()).required()
   })
     .custom((value, helpers) => {
       return _noQuarterlyReturnsForSummerCycle(value, helpers, session)
@@ -39,7 +39,7 @@ function go(payload, session) {
 }
 
 function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {
-  const { 'additional-submission-options': additionalSubmissionOptions } = value
+  const { additionalSubmissionOptions } = value
 
   const hasSummerCycle = session.data.requirements?.some((requirement) => {
     return requirement.returnsCycle === 'summer'

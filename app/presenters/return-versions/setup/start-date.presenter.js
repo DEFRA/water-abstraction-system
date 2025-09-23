@@ -19,9 +19,9 @@ function go(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
-    anotherStartDateDay: startDateDay ?? null,
-    anotherStartDateMonth: startDateMonth ?? null,
-    anotherStartDateYear: startDateYear ?? null,
+    startDateDay: startDateDay ?? null,
+    startDateMonth: startDateMonth ?? null,
+    startDateYear: startDateYear ?? null,
     backLink: _backLink(session),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
