@@ -1,35 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.message,
-          href: "#single-volume-error"
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, caption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -38,24 +13,28 @@
         label: {
           text: "Enter the total amount"
         },
-        id: "single-volume-quantity",
+        id: "singleVolumeQuantity",
         name: "singleVolumeQuantity",
         classes: "govuk-input--width-10",
         value: singleVolumeQuantity,
         suffix: {
           text: units
         },
-        errorMessage: error.volumeInputFormElement
+        errorMessage: {
+          text: error.singleVolumeQuantity.text
+        } if error.singleVolumeQuantity
       }) }}
     {% endset %}
 
     {{ govukRadios({
-      id: "single-volume",
+      id: "singleVolume",
       name: "singleVolume",
-      errorMessage: error.radioFormElement,
+      errorMessage: {
+        text: error.singleVolume.text
+      } if error.singleVolume,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [

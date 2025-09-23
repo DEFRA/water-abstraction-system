@@ -16,9 +16,9 @@ function go(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
-    backLink: _backLink(session),
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: _backLink(session), text: 'Back' },
     pageTitle: 'Is it a single volume?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     singleVolume: singleVolume ?? null,
     singleVolumeQuantity: singleVolumeQuantity ?? null,

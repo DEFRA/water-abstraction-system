@@ -21,11 +21,11 @@ const SingleVolumePresenter = require('../../../presenters/return-logs/setup/sin
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = SingleVolumePresenter.go(session)
+  const pageData = SingleVolumePresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...pageData
   }
 }
 

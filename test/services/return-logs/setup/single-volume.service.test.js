@@ -38,9 +38,9 @@ describe('Return Logs Setup - Single Volume service', () => {
       expect(result).to.equal(
         {
           activeNavBar: 'search',
-          backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
           pageTitle: 'Is it a single volume?',
-          caption: 'Return reference 012345',
+          pageTitleCaption: 'Return reference 012345',
           singleVolume: null,
           singleVolumeQuantity: null,
           units: 'cubic metres'

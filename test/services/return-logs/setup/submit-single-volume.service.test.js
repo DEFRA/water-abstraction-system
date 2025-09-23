@@ -76,9 +76,9 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         expect(result).to.equal(
           {
             activeNavBar: 'search',
-            backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
+            backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
             pageTitle: 'Is it a single volume?',
-            caption: 'Return reference 12345',
+            pageTitleCaption: 'Return reference 12345',
             singleVolume: null,
             singleVolumeQuantity: null,
             units: 'litres'
@@ -92,9 +92,8 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            message: "Select if it's a single volume",
-            radioFormElement: { text: "Select if it's a single volume" },
-            volumeInputFormElement: null
+            errorList: [{ href: '#singleVolume', text: "Select if it's a single volume" }],
+            singleVolume: { text: "Select if it's a single volume" }
           })
         })
       })
@@ -109,9 +108,8 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            message: 'Enter a total figure',
-            radioFormElement: null,
-            volumeInputFormElement: { text: 'Enter a total figure' }
+            errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total figure' }],
+            singleVolumeQuantity: { text: 'Enter a total figure' }
           })
         })
       })

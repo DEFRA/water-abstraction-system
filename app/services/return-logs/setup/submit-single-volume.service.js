@@ -8,6 +8,7 @@
 const SessionModel = require('../../../models/session.model.js')
 const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
 const SingleVolumeValidator = require('../../../validators/return-logs/setup/single-volume.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
@@ -28,6 +29,7 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
+  console.log('🚀 ~ go ~ validationResult:', validationResult)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -37,12 +39,12 @@ async function go(sessionId, payload) {
     }
   }
 
-  const formattedData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -61,21 +63,9 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = SingleVolumeValidator.go(payload)
+  const validationResult = SingleVolumeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message, path } = validation.error.details[0]
-
-  const result = {
-    message,
-    radioFormElement: path[0] === 'singleVolume' ? { text: message } : null,
-    volumeInputFormElement: path[0] === 'singleVolumeQuantity' ? { text: message } : null
-  }
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

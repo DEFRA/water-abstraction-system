@@ -1141,7 +1141,12 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(() => {
           Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
-            error: { message: 'Select which units were used' },
+            error: {
+              // Actual error message includes a ' which changes to &#39; in the HTML. For ease of testing we therefore
+              // use a placeholder error message.
+              errorList: [{ href: '#singleVolume', text: 'SINGLE_VOLUME_ERROR' }],
+              singleVolume: { text: 'SINGLE_VOLUME_ERROR' }
+            },
             pageTitle: 'Is it a single volume?',
             sessionId
           })
@@ -1151,7 +1156,7 @@ describe('Return Logs - Setup - Controller', () => {
           const response = await server.inject(_postOptions(path))
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select which units were used')
+          expect(response.payload).to.contain('SINGLE_VOLUME_ERROR')
           expect(response.payload).to.contain('There is a problem')
         })
       })
