@@ -63,13 +63,13 @@ async function _fetchBillLicence(id) {
           'startDate',
           'supportedSourceName',
           'volume',
-          ref('grossValuesCalculated:baselineCharge').castInt().as('baselineCharge'),
+          ref('grossValuesCalculated:baselineCharge').castDecimal().as('baselineCharge'),
           ref('abstractionPeriod:startDay').castInt().as('abstractionPeriodStartDay'),
           ref('abstractionPeriod:startMonth').castInt().as('abstractionPeriodStartMonth'),
           ref('abstractionPeriod:endDay').castInt().as('abstractionPeriodEndDay'),
           ref('abstractionPeriod:endMonth').castInt().as('abstractionPeriodEndMonth'),
-          ref('grossValuesCalculated:supportedSourceCharge').castInt().as('supportedSourceChargeValue'),
-          ref('grossValuesCalculated:waterCompanyCharge').castInt().as('waterCompanyChargeValue')
+          ref('grossValuesCalculated:supportedSourceCharge').castDecimal().as('supportedSourceChargeValue'),
+          ref('grossValuesCalculated:waterCompanyCharge').castDecimal().as('waterCompanyChargeValue')
         ])
         .orderBy([
           { column: 'chargeCategoryCode', order: 'desc' },

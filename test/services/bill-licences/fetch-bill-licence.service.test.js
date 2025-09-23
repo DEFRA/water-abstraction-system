@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, after } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,7 +28,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
   let transactions
   let purpose
 
-  after(async () => {
+  afterEach(async () => {
     for (const transaction of transactions) {
       transaction.$query().delete()
     }
@@ -37,14 +37,16 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
       chargeElement.$query().delete()
     }
 
-    chargeReference.$query().delete()
-    billLicence.$query().delete()
-    bill.$query().delete()
-    billRun.$query().delete()
+    if (billRun) {
+      chargeReference.$query().delete()
+      billLicence.$query().delete()
+      bill.$query().delete()
+      billRun.$query().delete()
+    }
   })
 
   describe('when a matching SROC bill licence exists', () => {
-    before(async () => {
+    beforeEach(async () => {
       purpose = PurposeHelper.select()
 
       billRun = await BillRunHelper.add({ scheme: 'sroc', status: 'ready' })
@@ -63,10 +65,42 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
       }
 
       const transactionValues = [
-        { billableDays: 10, chargeCategoryCode: '4.3.1', createdAt: new Date(), description: '3' },
-        { billableDays: 365, chargeCategoryCode: '4.3.2', createdAt: new Date('2023-02-02'), description: '1' },
-        { billableDays: 20, chargeCategoryCode: '4.3.1', createdAt: new Date(), description: '2' },
-        { billableDays: 365, chargeCategoryCode: '4.3.2', createdAt: new Date('2023-02-01'), description: '0' }
+        {
+          billableDays: 10,
+          chargeCategoryCode: '4.3.1',
+          createdAt: new Date(),
+          description: '3',
+          grossValuesCalculated: {
+            baselineCharge: '107.70',
+            supportedSourceCharge: '123.3',
+            waterCompanyCharge: '321.99'
+          }
+        },
+        {
+          billableDays: 365,
+          chargeCategoryCode: '4.3.2',
+          createdAt: new Date('2023-02-02'),
+          description: '1',
+          grossValuesCalculated: {
+            baselineCharge: '987',
+            supportedSourceCharge: '12345',
+            waterCompanyCharge: '6543'
+          }
+        },
+        {
+          billableDays: 20,
+          chargeCategoryCode: '4.3.1',
+          createdAt: new Date(),
+          description: '2',
+          grossValuesCalculated: {}
+        },
+        {
+          billableDays: 365,
+          chargeCategoryCode: '4.3.2',
+          createdAt: new Date('2023-02-01'),
+          description: '0',
+          grossValuesCalculated: {}
+        }
       ]
 
       transactions = []
@@ -77,7 +111,8 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
           chargeCategoryCode: transactionData.chargeCategoryCode,
           chargeReferenceId: chargeReference.id,
           createdAt: transactionData.createdAt,
-          description: transactionData.description
+          description: transactionData.description,
+          grossValuesCalculated: transactionData.grossValuesCalculated
         })
         transactions.push(transaction)
       }
@@ -112,7 +147,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
   })
 
   describe('when a matching PRESROC bill licence exists', () => {
-    before(async () => {
+    beforeEach(async () => {
       purpose = PurposeHelper.select()
 
       billRun = await BillRunHelper.add({ scheme: 'alcs', status: 'ready' })
@@ -124,10 +159,28 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
       chargeElements = []
 
       const transactionValues = [
-        { billableDays: 10, createdAt: new Date(), description: '3' },
-        { billableDays: 365, createdAt: new Date('2023-02-02'), description: '1' },
-        { billableDays: 20, createdAt: new Date(), description: '2' },
-        { billableDays: 365, createdAt: new Date('2023-02-01'), description: '0' }
+        {
+          billableDays: 10,
+          createdAt: new Date(),
+          description: '3',
+          grossValuesCalculated: {
+            baselineCharge: '107.70',
+            supportedSourceCharge: '123.3',
+            waterCompanyCharge: '321.99'
+          }
+        },
+        {
+          billableDays: 365,
+          createdAt: new Date('2023-02-02'),
+          description: '1',
+          grossValuesCalculated: {
+            baselineCharge: '987',
+            supportedSourceCharge: '12345',
+            waterCompanyCharge: '6543'
+          }
+        },
+        { billableDays: 20, createdAt: new Date(), description: '2', grossValuesCalculated: {} },
+        { billableDays: 365, createdAt: new Date('2023-02-01'), description: '0', grossValuesCalculated: {} }
       ]
 
       transactions = []
@@ -138,7 +191,8 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
           chargeCategoryCode: null,
           chargeReferenceId: chargeReference.id,
           createdAt: transactionData.createdAt,
-          description: transactionData.description
+          description: transactionData.description,
+          grossValuesCalculated: transactionData.grossValuesCalculated
         })
         transactions.push(transaction)
       }
@@ -182,6 +236,8 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
 })
 
 function _transactionResult(transaction, chargeReference, chargeElements, purpose) {
+  const { baselineCharge, supportedSourceCharge, waterCompanyCharge } = transaction.grossValuesCalculated
+
   const transactionResult = {
     abstractionPeriodEndDay: null,
     abstractionPeriodEndMonth: null,
@@ -190,7 +246,7 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
     adjustmentFactor: 1,
     aggregateFactor: 1,
     authorisedDays: 365,
-    baselineCharge: null,
+    baselineCharge: baselineCharge ? Number(baselineCharge) : null,
     billableDays: transaction.billableDays,
     chargeCategoryCode: transaction.chargeCategoryCode,
     chargeCategoryDescription: transaction.chargeCategoryDescription,
@@ -209,11 +265,11 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
     section130Agreement: 'false',
     source: 'non-tidal',
     startDate: new Date('2025-04-01'),
-    supportedSourceChargeValue: null,
+    supportedSourceChargeValue: supportedSourceCharge ? Number(supportedSourceCharge) : null,
     supportedSourceName: null,
     volume: 11,
     waterCompanyCharge: false,
-    waterCompanyChargeValue: null,
+    waterCompanyChargeValue: waterCompanyCharge ? Number(waterCompanyCharge) : null,
     winterOnly: false
   }
 
