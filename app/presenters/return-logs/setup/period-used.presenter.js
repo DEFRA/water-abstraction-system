@@ -33,9 +33,9 @@ function go(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
-    backLink: `/system/return-logs/setup/${sessionId}/single-volume`,
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/single-volume`, text: 'Back' },
     pageTitle: 'What period was used for this volume?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     periodDateUsedOptions: periodDateUsedOptions ?? null,
     periodUsedFromDay: periodUsedFromDay ?? null,
     periodUsedFromMonth: periodUsedFromMonth ?? null,

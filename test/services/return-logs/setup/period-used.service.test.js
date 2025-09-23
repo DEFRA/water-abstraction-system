@@ -42,9 +42,9 @@ describe('Return Logs Setup - Period used service', () => {
         {
           abstractionPeriod: '1 April to 31 March',
           activeNavBar: 'search',
-          backLink: `/system/return-logs/setup/${session.id}/single-volume`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
           pageTitle: 'What period was used for this volume?',
-          caption: 'Return reference 012345',
+          pageTitleCaption: 'Return reference 012345',
           periodDateUsedOptions: null,
           periodUsedFromDay: null,
           periodUsedFromMonth: null,

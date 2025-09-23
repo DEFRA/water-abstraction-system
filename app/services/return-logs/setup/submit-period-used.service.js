@@ -10,6 +10,7 @@ const DetermineAbstractionPeriodService = require('../../../services/bill-runs/d
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
@@ -37,12 +38,12 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -120,38 +121,9 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload, session) {
-  const { startDate, endDate } = session
+  const validationResult = PeriodUsedValidator.go(payload, session.startDate, session.endDate)
 
-  const validation = PeriodUsedValidator.go(payload, startDate, endDate)
-
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    let href
-
-    if (detail.context.key === 'fromFullDate') {
-      href = '#from-full-date'
-    } else if (detail.context.key === 'toFullDate') {
-      href = '#to-full-date'
-    } else {
-      href = '#period-date-used-options'
-    }
-
-    result.errorList.push({
-      href,
-      text: detail.message
-    })
-
-    result[detail.context.key] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

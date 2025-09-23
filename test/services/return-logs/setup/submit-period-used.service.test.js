@@ -148,9 +148,9 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           {
             abstractionPeriod: '1 April to 31 March',
             activeNavBar: 'search',
-            backLink: `/system/return-logs/setup/${session.id}/single-volume`,
+            backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
             pageTitle: 'What period was used for this volume?',
-            caption: 'Return reference 12345',
+            pageTitleCaption: 'Return reference 12345',
             periodDateUsedOptions: null,
             periodUsedFromDay: null,
             periodUsedFromMonth: null,
@@ -170,11 +170,11 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#period-date-used-options',
+                href: '#periodDateUsedOptions',
                 text: 'Select what period was used for this volume'
               }
             ],
-            periodDateUsedOptions: { message: 'Select what period was used for this volume' }
+            periodDateUsedOptions: { text: 'Select what period was used for this volume' }
           })
         })
       })
