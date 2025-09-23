@@ -18,10 +18,10 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @param {Date} timestamp - The timestamp to use for the createdAt property
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
- * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if no lines were provided)
+ * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if nil return)
  */
 async function go(returnSubmissionId, session, timestamp, trx = null) {
-  if (!session.lines?.length) {
+  if (session.journey === 'nil-return') {
     return []
   }
 
