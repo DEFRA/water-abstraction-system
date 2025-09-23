@@ -8,94 +8,18 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const AuthService = require('../../../app/services/plugins/auth.service.js')
+const { data: users } = require('../../../db/seeds/data/users.js')
+
 // Things we want to stub
 const featureFlags = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ManagePresenter = require('../../../app/presenters/manage/manage.presenter.js')
 
-// The full set of scopes that we will test against
-const ALL_USER_SCOPES = [
-  'ar_approver',
-  'billing',
-  'bulk_return_notifications',
-  'charge_version_workflow_editor',
-  'charge_version_workflow_reviewer',
-  'hof_notifications',
-  'manage_accounts',
-  'renewal_notifications',
-  'returns',
-  'DUMMY_some_other_scope' // Used for negative testing
-]
-
-// To avoid writing dozens of repetitive tests, we define the relationship between each item on the page and the scopes
-// that it needs to be tested against.
-// This can then be iterated over and each test can check the relevant scopes
-const REQUIRED_SCOPES_FOR_LINKS = {
-  flowNotices: {
-    handsOffFlow: ['hof_notifications'],
-    restriction: ['hof_notifications'],
-    resume: ['hof_notifications']
-  },
-  licenceNotices: {
-    renewal: ['renewal_notifications']
-  },
-  manageUsers: {
-    createAccount: ['manage_accounts']
-  },
-  returnNotices: {
-    adHoc: ['returns'],
-    invitations: ['bulk_return_notifications'],
-    paperForms: ['returns'],
-    reminders: ['bulk_return_notifications']
-  },
-  viewReports: {
-    digitise: ['ar_approver'],
-    kpis: [
-      'ar_approver',
-      'billing',
-      'bulk_return_notifications',
-      'hof_notifications',
-      'manage_accounts',
-      'renewal_notifications',
-      'returns'
-    ],
-    notices: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns'],
-    returnsCycles: ['returns']
-  },
-  viewWorkflow: {
-    checkLicences: ['charge_version_workflow_editor', 'charge_version_workflow_reviewer']
-  }
-}
-
-// List derived from the definition above, to make the iteration in the tests simpler
-// It just contains the section names and their required scopes, which are the set of distinct scopes of all links
-// in the section
-const SECTIONS_TO_TEST = Object.entries(REQUIRED_SCOPES_FOR_LINKS).map(([section, sectionLinks]) => {
-  const scopesSet = new Set(Object.values(sectionLinks).flat()) // Use a Set to remove duplicates
-  const scopes = [...scopesSet]
-
-  // The other scopes, which are not valid for the section, will be used for negative testing
-  const otherScopesForThisSection = new Set(ALL_USER_SCOPES).difference(scopesSet)
-  const otherScopes = [...otherScopesForThisSection]
-
-  return { section, scopes, otherScopes }
-})
-
-// List derived from the definition above, to make the iteration in the tests simpler
-// It just contains a flattened set of link names with their section and required scopes
-const LINKS_TO_TEST = Object.entries(REQUIRED_SCOPES_FOR_LINKS).flatMap(([section, sectionLinks]) => {
-  return Object.entries(sectionLinks).map(([link, scopes]) => {
-    // The other scopes, which are not valid for the link, will be used for negative testing
-    const otherScopesForThisLink = new Set(ALL_USER_SCOPES).difference(new Set(scopes))
-    const otherScopes = [...otherScopesForThisLink]
-
-    return { section, link, scopes, otherScopes }
-  })
-})
-
-describe('Manage - presenter', () => {
-  let userScopes
+describe('Manage - Manage presenter', () => {
+  let auth
 
   beforeEach(() => {
     Sinon.stub(featureFlags, 'enableAdHocNotifications').value(true)
@@ -105,12 +29,13 @@ describe('Manage - presenter', () => {
     Sinon.restore()
   })
 
-  describe('when provided with the necessary user scopes', () => {
-    beforeEach(() => {
-      userScopes = [...ALL_USER_SCOPES]
+  describe('when the user is assigned "Super user" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('super.user@wrls.gov.uk')
     })
+
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(userScopes)
+      const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
@@ -124,61 +49,192 @@ describe('Manage - presenter', () => {
     })
   })
 
-  // Tests to ensure the section headings are all correctly displayed - iterates over each section in turn
-  SECTIONS_TO_TEST.forEach(({ section, scopes, otherScopes }) => {
-    describe(`for the "${section}" section`, () => {
-      scopes.forEach((scope) => {
-        describe(`when the user has "${scope}" scope`, () => {
-          beforeEach(() => {
-            userScopes = [scope]
-          })
+  describe('when the user is assigned "Basic access" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('basic.access@wrls.gov.uk')
+    })
 
-          it('sets the section heading to be displayed', async () => {
-            const result = await ManagePresenter.go(userScopes)
-            expect(result[section].show).to.be.true()
-          })
-        })
-      })
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
 
-      describe('when the user has other scopes', () => {
-        beforeEach(() => {
-          userScopes = otherScopes
-        })
-
-        it('sets the section heading to not be displayed', async () => {
-          const result = await ManagePresenter.go(userScopes)
-          expect(result[section].show).to.not.be.true()
-        })
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: false }, show: false },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: false, notices: false, returnsCycles: false }, show: false },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
   })
 
-  // Tests to ensure the links within each section are all correctly displayed - iterates over each link in turn
-  LINKS_TO_TEST.forEach(({ section, link, scopes, otherScopes }) => {
-    describe(`for the "${link}" link in the "${section}" section`, () => {
-      scopes.forEach((scope) => {
-        describe(`when the user has "${scope}" scope`, () => {
-          beforeEach(() => {
-            userScopes = [scope]
-          })
+  describe('when the user is assigned "Billing and Data" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('billing.data@wrls.gov.uk')
+    })
 
-          it('sets the link to be displayed', async () => {
-            const result = await ManagePresenter.go(userScopes)
-            expect(result[section].links[link]).to.be.true()
-          })
-        })
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: false }, show: false },
+        manageUsers: { links: { createAccount: true }, show: true },
+        returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewWorkflow: { links: { checkLicences: true }, show: true }
       })
+    })
+  })
 
-      describe('when the user has other scopes', () => {
-        beforeEach(() => {
-          userScopes = otherScopes
-        })
+  describe('when the user is assigned "Environment Officer" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('environment.officer@wrls.gov.uk')
+    })
 
-        it('sets the link to not be displayed', async () => {
-          const result = await ManagePresenter.go(userScopes)
-          expect(result[section].links[link]).to.not.be.true()
-        })
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: true, restriction: true, resume: true }, show: true },
+        licenceNotices: { links: { renewal: false }, show: false },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
+      })
+    })
+  })
+
+  describe('when the user is assigned "National Permitting Service" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('national.permitting.service@wrls.gov.uk')
+    })
+
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: true }, show: true },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
+      })
+    })
+  })
+
+  describe('when the user is assigned "National Permitting Service and Digitise! editor" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('digitise.editor@wrls.gov.uk')
+    })
+
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: true }, show: true },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
+      })
+    })
+  })
+
+  describe('when the user is assigned "National Permitting Service and Digitise! approver" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('digitise.approver@wrls.gov.uk')
+    })
+
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: true }, show: true },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
+      })
+    })
+  })
+
+  describe('when the user is assigned "Permitting and Support Centre" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('permitting.support.centre@wrls.gov.uk')
+    })
+
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: true }, show: true },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
+          show: false
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
+      })
+    })
+  })
+
+  describe('when the user is assigned "Waste and Industry Regulatory Service" permissions', () => {
+    beforeEach(async () => {
+      auth = await _auth('waste.industry.regulatory.services@wrls.gov.uk')
+    })
+
+    it('provides the correct items to display', async () => {
+      const result = await ManagePresenter.go(auth.credentials.scope)
+
+      expect(result).to.equal({
+        pageTitle: 'Manage reports and notices',
+        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
+        licenceNotices: { links: { renewal: false }, show: false },
+        manageUsers: { links: { createAccount: false }, show: false },
+        returnNotices: {
+          links: { adHoc: true, invitations: false, paperForms: true, reminders: false },
+          show: true
+        },
+        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
   })
 })
+
+async function _auth(username) {
+  const user = users.find((user) => {
+    return user.username === username
+  })
+
+  return AuthService.go(user.id)
+}
