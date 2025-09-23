@@ -29,7 +29,6 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
-  console.log('🚀 ~ go ~ validationResult:', validationResult)
 
   if (!validationResult) {
     await _save(session, payload)
