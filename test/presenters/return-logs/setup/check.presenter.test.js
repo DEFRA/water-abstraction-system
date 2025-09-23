@@ -51,11 +51,11 @@ describe('Return Logs Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check details and enter new volumes or readings',
+        pageTitleCaption: 'Return reference 1234',
         purposes: 'Evaporative Cooling',
         returnReceivedDate: '31 January 2025',
         reportingFigures: 'Volumes',
         returnPeriod: '1 April 2023 to 31 March 2024',
-        caption: 'Return reference 1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startReading: undefined,
         summaryTableData: {
@@ -145,10 +145,10 @@ describe('Return Logs Setup - Check presenter', () => {
             text: 'No notes added'
           },
           pageTitle: 'Check details and enter new volumes or readings',
+          pageTitleCaption: 'Return reference 1234',
           purposes: 'Evaporative Cooling',
           returnPeriod: '1 April 2023 to 31 March 2024',
           returnReceivedDate: '31 January 2025',
-          caption: 'Return reference 1234',
           siteDescription: 'POINT A, TEST SITE DESCRIPTION',
           tariff: 'Standard'
         })

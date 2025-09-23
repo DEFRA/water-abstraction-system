@@ -85,7 +85,6 @@ function _alwaysRequiredPageData(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
-    caption: `Return reference ${returnReference}`,
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
@@ -99,6 +98,7 @@ function _alwaysRequiredPageData(session) {
     nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
+    pageTitleCaption: `Return reference ${returnReference}`,
     purposes: purposes.join(', '),
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
