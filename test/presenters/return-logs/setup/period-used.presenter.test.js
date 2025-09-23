@@ -40,7 +40,8 @@ describe('Return Logs Setup - Period Used presenter', () => {
         periodUsedFromYear: null,
         periodUsedToDay: null,
         periodUsedToMonth: null,
-        periodUsedToYear: null
+        periodUsedToYear: null,
+        showDefaultAbstractionPeriod: true
       })
     })
   })
