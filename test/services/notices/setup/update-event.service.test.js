@@ -57,7 +57,7 @@ describe('Notices - Setup - Update event service', () => {
     })
   })
 
-  describe('when there is an "error" count already set', () => {
+  describe('when an "error" count is already set', () => {
     beforeEach(async () => {
       event = await EventHelper.add({
         metadata: {
