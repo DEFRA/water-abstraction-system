@@ -22,6 +22,7 @@ const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/cr
 const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
+const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
@@ -42,6 +43,8 @@ describe('Notices - Setup - Batch Notifications service', () => {
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
+
+    Sinon.stub(ProcessNotificationStatusService, 'go')
   })
 
   afterEach(() => {
@@ -347,6 +350,14 @@ describe('Notices - Setup - Batch Notifications service', () => {
             },
             { skip: ['id', 'createdAt'] }
           )
+        })
+
+        it('should call the ProcessNotificationStatusService with the event id', async () => {
+          await BatchNotificationsService.go(recipients, session, event.id)
+
+          const args = ProcessNotificationStatusService.go.getCall(0).args
+
+          expect(args[0]).to.equal(event.id)
         })
       })
     })

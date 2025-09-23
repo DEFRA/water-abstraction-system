@@ -84,6 +84,49 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
         status: 'pending'
       })
     })
+
+    describe('and an event id is provided', () => {
+      describe('and the there are email notifications', () => {
+        beforeEach(async () => {
+          notification = await NotificationHelper.add({
+            eventId: event.id,
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            status: 'pending'
+          })
+        })
+
+        it('returns the event marked for "sending"', async () => {
+          const result = await FetchNotificationsService.go(event.id)
+
+          const foundEvent = result.find((resultEvent) => {
+            return resultEvent.eventId === event.id
+          })
+
+          expect(foundEvent).to.equal({
+            createdAt: notification.createdAt,
+            eventId: event.id,
+            id: notification.id,
+            licenceMonitoringStationId: null,
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            notifyError: null,
+            notifyId: null,
+            notifyStatus: null,
+            personalisation: null,
+            status: 'pending'
+          })
+        })
+      })
+
+      describe('and there are no email notifications', () => {
+        it('returns an empty array', async () => {
+          const result = await FetchNotificationsService.go(event.id)
+
+          expect(result).to.equal([])
+        })
+      })
+    })
   })
 
   describe('and the notification status is "error"', () => {
