@@ -41,14 +41,17 @@ const notifyConfig = require('../../../../config/notify.config.js')
  *
  * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
  * later.
+ *
+ * @param {string | null} [eventId] - When an event id is provided we check the status only for the event.
+ *
  */
-async function go() {
+async function go(eventId = null) {
   try {
     const startTime = currentTimeInNanoseconds()
 
     const { batchSize, delay } = notifyConfig
 
-    const notifications = await FetchNotificationsService.go()
+    const notifications = await FetchNotificationsService.go(eventId)
 
     for (let i = 0; i < notifications.length; i += batchSize) {
       const batchNotifications = notifications.slice(i, i + batchSize)

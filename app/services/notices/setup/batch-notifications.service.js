@@ -15,6 +15,7 @@ const CreatePrecompiledFileRequest = require('../../../requests/notify/create-pr
 const DetermineReturnFormsService = require('./determine-return-forms.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
+const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -33,7 +34,7 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  * To ensure compliance, we limit our batch notification requests to 1,500 requests per minute, which is half of the
  * Notify service's maximum allowed rate of 3,000 requests per minute. We also limit the number of batches sent per
- * minute to 6, with a 10-second delay between each batch, to stay within this rate limit."
+ * minute to 6, with a 10-second delay between each batch, to stay within this rate limit.
  *
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
@@ -54,6 +55,8 @@ async function go(recipients, session, eventId) {
     const errorCount = await _batch(batchRecipients, session, eventId)
 
     await _delay(delay)
+
+    await ProcessNotificationStatusService.go(eventId)
 
     totalErrorCount += errorCount
   }
