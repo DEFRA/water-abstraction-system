@@ -95,12 +95,10 @@ const LINKS_TO_TEST = Object.entries(REQUIRED_SCOPES_FOR_LINKS).flatMap(([sectio
 })
 
 describe('Manage - presenter', () => {
-  let featureStubEnableAdHocNotifications
   let userScopes
 
   beforeEach(() => {
-    // Stub feature flag to true - we'll test deactivating it separately
-    featureStubEnableAdHocNotifications = Sinon.stub(featureFlags, 'enableAdHocNotifications').value(true)
+    Sinon.stub(featureFlags, 'enableAdHocNotifications').value(true)
   })
 
   afterEach(() => {
@@ -123,20 +121,6 @@ describe('Manage - presenter', () => {
         viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: true }, show: true },
         viewWorkflow: { links: { checkLicences: true }, show: true }
       })
-    })
-  })
-
-  describe('when the ad-hoc notifications feature flag is not set', () => {
-    beforeEach(() => {
-      userScopes = ['returns']
-      featureStubEnableAdHocNotifications.restore()
-      featureStubEnableAdHocNotifications = Sinon.stub(featureFlags, 'enableAdHocNotifications').value(false)
-    })
-
-    it('sets the ad-hoc item to not display', async () => {
-      const result = await ManagePresenter.go(userScopes)
-
-      expect(result.returnNotices.links.adHoc).to.not.be.true()
     })
   })
 
