@@ -589,6 +589,66 @@ describe('Base presenter', () => {
         })
       })
     })
+
+    describe('when the validation result contains multiple failures for the same field', () => {
+      beforeEach(() => {
+        const error = new ValidationError(
+          'Enter a valid from date. Reference must be 11 characters or less. Enter a valid to date',
+          [
+            {
+              message: 'Reference must be 11 characters or less',
+              path: ['reference'],
+              type: 'string.max',
+              context: {
+                limit: 11,
+                value: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+                encoding: undefined,
+                label: 'reference',
+                key: 'reference'
+              }
+            },
+            {
+              message: 'Reference must be more then 1 character',
+              path: ['reference'],
+              type: 'string.max',
+              context: {
+                limit: 11,
+                value: '1',
+                encoding: undefined,
+                label: 'reference',
+                key: 'reference'
+              }
+            }
+          ]
+        )
+
+        validationResult = {
+          value: {
+            reference: 'jkdfshfhkfhsdjkfsdjkfghadshj',
+            sentFromDay: '01',
+            sentToMonth: '04',
+            noticeTypes: [],
+            fromDate: '--01',
+            toDate: '-04-'
+          },
+          error
+        }
+      })
+
+      it('returns the validation result formatted for our view pages', () => {
+        const result = BasePresenter.formatValidationResult(validationResult)
+
+        expect(result).to.equal({
+          errorList: [
+            {
+              href: '#reference',
+              text: 'Reference must be 11 characters or less'
+            }
+          ],
+          reference: { text: 'Reference must be 11 characters or less' }
+        })
+      })
+    })
   })
 
   describe('#formatValueUnit()', () => {
