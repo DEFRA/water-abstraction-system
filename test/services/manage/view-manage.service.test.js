@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
 
-describe.only('Manage - View Manage service', () => {
+describe('Manage - View Manage service', () => {
   let userAuth
 
   describe('when called', () => {
