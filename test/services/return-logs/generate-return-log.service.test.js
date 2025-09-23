@@ -11,13 +11,17 @@ const { expect } = Code
 // Test helpers
 const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const { today } = require('../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
 describe('Return Logs - Generate Return Log service', () => {
-  const today = new Date()
-  const year = today.getFullYear()
+  const todaysDate = today()
+  const year = todaysDate.getFullYear()
 
   let clock
   let testReturnCycle
@@ -26,6 +30,7 @@ describe('Return Logs - Generate Return Log service', () => {
   beforeEach(() => {
     testReturnCycle = ReturnCyclesFixture.returnCycle()
     testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
   })
 
   afterEach(() => {
@@ -41,7 +46,7 @@ describe('Return Logs - Generate Return Log service', () => {
       const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
       expect(result).to.equal({
-        dueDate: new Date('2026-04-28'),
+        dueDate: null,
         endDate: new Date('2026-03-31'),
         id: 'v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31',
         licenceRef: '01/25/90/3242',

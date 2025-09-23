@@ -8,11 +8,14 @@
 const { setTimeout } = require('node:timers/promises')
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
+const CreateNotificationsService = require('./create-notifications.service.js')
+const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
+const DetermineReturnFormsService = require('./determine-return-forms.service.js')
+const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
+const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -31,7 +34,7 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  * To ensure compliance, we limit our batch notification requests to 1,500 requests per minute, which is half of the
  * Notify service's maximum allowed rate of 3,000 requests per minute. We also limit the number of batches sent per
- * minute to 6, with a 10-second delay between each batch, to stay within this rate limit."
+ * minute to 6, with a 10-second delay between each batch, to stay within this rate limit.
  *
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
@@ -53,6 +56,8 @@ async function go(recipients, session, eventId) {
 
     await _delay(delay)
 
+    await ProcessNotificationStatusService.go(eventId)
+
     totalErrorCount += errorCount
   }
 
@@ -64,6 +69,8 @@ async function _batch(recipients, session, eventId) {
 
   if (session.journey === 'alerts') {
     notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
+  } else if (session.noticeType === 'returnForms') {
+    notifications = await DetermineReturnFormsService.go(session, recipients, eventId)
   } else {
     notifications = NotificationsPresenter.go(recipients, session, eventId)
   }
@@ -127,21 +134,14 @@ function _notificationsToSend(notifications) {
   for (const notification of notifications) {
     if (notification.messageType === 'email') {
       sentNotifications.push(_sendEmail(notification))
+    } else if (notification.messageRef === 'pdf.return_form') {
+      sentNotifications.push(_sendReturnForm(notification))
     } else {
       sentNotifications.push(_sendLetter(notification))
     }
   }
 
   return sentNotifications
-}
-
-async function _sendLetter(notification) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
-    personalisation: notification.personalisation,
-    reference: notification.reference
-  })
-
-  return _sentNotification(notification, notifyResult)
 }
 
 async function _sendEmail(notification) {
@@ -153,6 +153,20 @@ async function _sendEmail(notification) {
   return _sentNotification(notification, notifyResult)
 }
 
+async function _sendLetter(notification) {
+  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
+    personalisation: notification.personalisation,
+    reference: notification.reference
+  })
+
+  return _sentNotification(notification, notifyResult)
+}
+
+async function _sendReturnForm(notification) {
+  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, notification.reference)
+
+  return _sentNotification(notification, notifyResult)
+}
 /**
  * This removes some properties added just for sending the notifications, and then combines the original notification
  * with the result of the` NotifyUpdatePresenter`.
@@ -164,6 +178,7 @@ async function _sendEmail(notification) {
 function _sentNotification(notification, notifyResult) {
   delete notification.reference
   delete notification.templateId
+  delete notification.content
 
   return {
     ...notification,

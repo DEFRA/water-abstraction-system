@@ -4,250 +4,224 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
-const BillModel = require('../../../app/models/bill.model.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../../app/models/purpose.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
-const TransactionModel = require('../../../app/models/transaction.model.js')
 
 // Thing under test
 const FetchBillLicenceService = require('../../../app/services/bill-licences/fetch-bill-licence.service.js')
 
-describe('Fetch Bill Licence service', () => {
-  let linkedBill
-  let linkedBillRun
-  let linkedChargeReference
-  let linkedPurpose
-  let testBillLicence
+describe('Bill Licences - Fetch Bill Licence service', () => {
+  let bill
+  let billLicence
+  let billRun
+  let chargeReference
+  let chargeElements
+  let transactions
+  let purpose
 
-  beforeEach(async () => {
-    linkedBillRun = await BillRunHelper.add({ status: 'ready' })
-    linkedBill = await BillHelper.add({ billRunId: linkedBillRun.id })
+  afterEach(async () => {
+    for (const transaction of transactions) {
+      transaction.$query().delete()
+    }
 
-    testBillLicence = await BillLicenceHelper.add({ billId: linkedBill.id })
+    for (const chargeElement of chargeElements) {
+      chargeElement.$query().delete()
+    }
+
+    if (billRun) {
+      chargeReference.$query().delete()
+      billLicence.$query().delete()
+      bill.$query().delete()
+      billRun.$query().delete()
+    }
   })
 
-  describe('when a bill licence with a matching ID exists', () => {
-    it('will fetch the data and format it for use in the bill licence page', async () => {
-      const result = await FetchBillLicenceService.go(testBillLicence.id)
+  describe('when a matching SROC bill licence exists', () => {
+    beforeEach(async () => {
+      purpose = PurposeHelper.select()
 
-      // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
-      // scheme so we get into that in later tests.
+      billRun = await BillRunHelper.add({ scheme: 'sroc', status: 'ready' })
+      bill = await BillHelper.add({ billRunId: billRun.id })
+      billLicence = await BillLicenceHelper.add({ billId: bill.id })
+
+      chargeReference = await ChargeReferenceHelper.add()
+
+      chargeElements = []
+      for (let i = 0; i < 2; i++) {
+        const chargeElement = await ChargeElementHelper.add({
+          chargeReferenceId: chargeReference.id,
+          purposeId: purpose.id
+        })
+        chargeElements.push(chargeElement)
+      }
+
+      const transactionValues = [
+        {
+          billableDays: 10,
+          chargeCategoryCode: '4.3.1',
+          createdAt: new Date(),
+          description: '3',
+          grossValuesCalculated: {
+            baselineCharge: '107.70',
+            supportedSourceCharge: '123.3',
+            waterCompanyCharge: '321.99'
+          }
+        },
+        {
+          billableDays: 365,
+          chargeCategoryCode: '4.3.2',
+          createdAt: new Date('2023-02-02'),
+          description: '1',
+          grossValuesCalculated: {
+            baselineCharge: '987',
+            supportedSourceCharge: '12345',
+            waterCompanyCharge: '6543'
+          }
+        },
+        {
+          billableDays: 20,
+          chargeCategoryCode: '4.3.1',
+          createdAt: new Date(),
+          description: '2',
+          grossValuesCalculated: {}
+        },
+        {
+          billableDays: 365,
+          chargeCategoryCode: '4.3.2',
+          createdAt: new Date('2023-02-01'),
+          description: '0',
+          grossValuesCalculated: {}
+        }
+      ]
+
+      transactions = []
+      for (const transactionData of transactionValues) {
+        const transaction = await TransactionHelper.add({
+          billableDays: transactionData.billableDays,
+          billLicenceId: billLicence.id,
+          chargeCategoryCode: transactionData.chargeCategoryCode,
+          chargeReferenceId: chargeReference.id,
+          createdAt: transactionData.createdAt,
+          description: transactionData.description,
+          grossValuesCalculated: transactionData.grossValuesCalculated
+        })
+        transactions.push(transaction)
+      }
+    })
+
+    it('returns the matching bill licence and associated data', async () => {
+      const result = await FetchBillLicenceService.go(billLicence.id)
+
       expect(result).to.equal({
-        id: testBillLicence.id,
-        licenceId: testBillLicence.licenceId,
-        licenceRef: testBillLicence.licenceRef,
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
         bill: {
-          id: linkedBill.id,
-          accountNumber: linkedBill.accountNumber,
+          id: bill.id,
+          accountNumber: bill.accountNumber,
           billRun: {
-            id: linkedBillRun.id,
+            id: billRun.id,
             batchType: 'supplementary',
             scheme: 'sroc',
             source: 'wrls',
             status: 'ready'
           }
         },
-        transactions: []
+        transactions: [
+          _transactionResult(transactions[3], chargeReference, chargeElements, purpose),
+          _transactionResult(transactions[1], chargeReference, chargeElements, purpose),
+          _transactionResult(transactions[2], chargeReference, chargeElements, purpose),
+          _transactionResult(transactions[0], chargeReference, chargeElements, purpose)
+        ]
       })
     })
+  })
 
-    it('returns the matching instance of BillLicenceModel', async () => {
-      const result = await FetchBillLicenceService.go(testBillLicence.id)
+  describe('when a matching PRESROC bill licence exists', () => {
+    beforeEach(async () => {
+      purpose = PurposeHelper.select()
 
-      expect(result.id).to.equal(testBillLicence.id)
-      expect(result).to.be.an.instanceOf(BillLicenceModel)
+      billRun = await BillRunHelper.add({ scheme: 'alcs', status: 'ready' })
+      bill = await BillHelper.add({ billRunId: billRun.id })
+      billLicence = await BillLicenceHelper.add({ billId: bill.id })
+
+      chargeReference = await ChargeReferenceHelper.add({ purposeId: purpose.id })
+
+      chargeElements = []
+
+      const transactionValues = [
+        {
+          billableDays: 10,
+          createdAt: new Date(),
+          description: '3',
+          grossValuesCalculated: {
+            baselineCharge: '107.70',
+            supportedSourceCharge: '123.3',
+            waterCompanyCharge: '321.99'
+          }
+        },
+        {
+          billableDays: 365,
+          createdAt: new Date('2023-02-02'),
+          description: '1',
+          grossValuesCalculated: {
+            baselineCharge: '987',
+            supportedSourceCharge: '12345',
+            waterCompanyCharge: '6543'
+          }
+        },
+        { billableDays: 20, createdAt: new Date(), description: '2', grossValuesCalculated: {} },
+        { billableDays: 365, createdAt: new Date('2023-02-01'), description: '0', grossValuesCalculated: {} }
+      ]
+
+      transactions = []
+      for (const transactionData of transactionValues) {
+        const transaction = await TransactionHelper.add({
+          billableDays: transactionData.billableDays,
+          billLicenceId: billLicence.id,
+          chargeCategoryCode: null,
+          chargeReferenceId: chargeReference.id,
+          createdAt: transactionData.createdAt,
+          description: transactionData.description,
+          grossValuesCalculated: transactionData.grossValuesCalculated
+        })
+        transactions.push(transaction)
+      }
     })
 
-    it('returns the linked bill', async () => {
-      const result = await FetchBillLicenceService.go(testBillLicence.id)
-      const { bill: returnedBill } = result
+    it('returns the matching bill licence and associated data', async () => {
+      const result = await FetchBillLicenceService.go(billLicence.id)
 
-      expect(returnedBill.id).to.equal(linkedBill.id)
-      expect(returnedBill).to.be.an.instanceOf(BillModel)
-    })
-
-    it('returns the linked bill run', async () => {
-      const result = await FetchBillLicenceService.go(testBillLicence.id)
-      const { billRun: returnedBillRun } = result.bill
-
-      expect(returnedBillRun.id).to.equal(linkedBillRun.id)
-      expect(returnedBillRun).to.be.an.instanceOf(BillRunModel)
-    })
-
-    describe('and it is for an SROC bill run', () => {
-      beforeEach(async () => {
-        linkedChargeReference = await ChargeReferenceHelper.add()
-        linkedPurpose = PurposeHelper.select()
-
-        const { id: chargeReferenceId } = linkedChargeReference
-
-        await Promise.all([
-          ChargeElementHelper.add({ chargeReferenceId, purposeId: linkedPurpose.id }),
-          ChargeElementHelper.add({ chargeReferenceId, purposeId: linkedPurpose.id })
-        ])
-
-        const { id: billLicenceId } = testBillLicence
-
-        await Promise.all([
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '3',
-            chargeCategoryCode: '4.3.1',
-            billableDays: 10
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '1',
-            chargeCategoryCode: '4.3.2',
-            createdAt: new Date('2023-02-02')
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '2',
-            chargeCategoryCode: '4.3.1',
-            billableDays: 20
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '0',
-            chargeCategoryCode: '4.3.2',
-            createdAt: new Date('2023-02-01')
-          })
-        ])
-      })
-
-      it('returns the linked transactions correctly ordered', async () => {
-        const result = await FetchBillLicenceService.go(testBillLicence.id)
-        const { transactions: returnedTransactions } = result
-
-        expect(returnedTransactions).to.have.length(4)
-        expect(returnedTransactions[0]).to.be.an.instanceOf(TransactionModel)
-
-        for (let i = 0; i < returnedTransactions.length; i++) {
-          expect(returnedTransactions[i].description).to.equal(i.toString())
-          expect(returnedTransactions[i]).to.be.an.instanceOf(TransactionModel)
-        }
-      })
-
-      it('returns the linked transactions, their charge reference, its elements and their purpose', async () => {
-        const result = await FetchBillLicenceService.go(testBillLicence.id)
-        const { transactions: returnedTransactions } = result
-
-        expect(returnedTransactions).to.have.length(4)
-        expect(returnedTransactions[0]).to.be.an.instanceOf(TransactionModel)
-
-        for (let i = 0; i < returnedTransactions.length; i++) {
-          const { chargeReference: returnedChargeReference } = returnedTransactions[i]
-
-          expect(returnedChargeReference.id).to.equal(linkedChargeReference.id)
-          expect(returnedChargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-
-          const { chargeElements: returnedChargeElements } = returnedChargeReference
-
-          expect(returnedChargeElements).to.have.length(2)
-          expect(returnedChargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
-
-          const { purpose: returnedPurpose } = returnedChargeElements[0]
-
-          expect(returnedPurpose.id).to.equal(linkedPurpose.id)
-          expect(returnedPurpose).to.be.an.instanceOf(PurposeModel)
-        }
-      })
-    })
-
-    describe('and it is for a PRESROC bill run', () => {
-      beforeEach(async () => {
-        linkedPurpose = PurposeHelper.select()
-        linkedChargeReference = await ChargeReferenceHelper.add({ purposeId: linkedPurpose.id })
-
-        const { id: chargeReferenceId } = linkedChargeReference
-        const { id: billLicenceId } = testBillLicence
-
-        await Promise.all([
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '3',
-            chargeCategoryCode: null,
-            billableDays: 10
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '1',
-            chargeCategoryCode: null,
-            createdAt: new Date('2023-02-02')
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '2',
-            chargeCategoryCode: null,
-            billableDays: 20
-          }),
-          TransactionHelper.add({
-            billLicenceId,
-            chargeReferenceId,
-            description: '0',
-            chargeCategoryCode: null,
-            createdAt: new Date('2023-02-01')
-          })
-        ])
-      })
-
-      it('returns the linked transactions correctly ordered', async () => {
-        const result = await FetchBillLicenceService.go(testBillLicence.id)
-        const { transactions: returnedTransactions } = result
-
-        expect(returnedTransactions).to.have.length(4)
-        expect(returnedTransactions[0]).to.be.an.instanceOf(TransactionModel)
-
-        for (let i = 0; i < returnedTransactions.length; i++) {
-          expect(returnedTransactions[i].description).to.equal(i.toString())
-          expect(returnedTransactions[i]).to.be.an.instanceOf(TransactionModel)
-        }
-      })
-
-      it('returns the linked transactions, their charge reference and its purpose', async () => {
-        const result = await FetchBillLicenceService.go(testBillLicence.id)
-        const { transactions: returnedTransactions } = result
-
-        expect(returnedTransactions).to.have.length(4)
-        expect(returnedTransactions[0]).to.be.an.instanceOf(TransactionModel)
-
-        for (let i = 0; i < returnedTransactions.length; i++) {
-          const { chargeReference: returnedChargeReference } = returnedTransactions[i]
-
-          expect(returnedChargeReference.id).to.equal(linkedChargeReference.id)
-          expect(returnedChargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-
-          const { purpose: returnedPurpose } = returnedChargeReference
-
-          expect(returnedPurpose.id).to.equal(linkedPurpose.id)
-          expect(returnedPurpose).to.be.an.instanceOf(PurposeModel)
-
-          const { chargeElements: returnedChargeElements } = returnedChargeReference
-
-          expect(returnedChargeElements).to.be.empty()
-        }
+      expect(result).to.equal({
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
+        bill: {
+          id: bill.id,
+          accountNumber: bill.accountNumber,
+          billRun: {
+            id: billRun.id,
+            batchType: 'supplementary',
+            scheme: 'alcs',
+            source: 'wrls',
+            status: 'ready'
+          }
+        },
+        transactions: [
+          _transactionResult(transactions[3], chargeReference, null, purpose),
+          _transactionResult(transactions[1], chargeReference, null, purpose),
+          _transactionResult(transactions[2], chargeReference, null, purpose),
+          _transactionResult(transactions[0], chargeReference, null, purpose)
+        ]
       })
     })
   })
@@ -260,3 +234,77 @@ describe('Fetch Bill Licence service', () => {
     })
   })
 })
+
+function _transactionResult(transaction, chargeReference, chargeElements, purpose) {
+  const { baselineCharge, supportedSourceCharge, waterCompanyCharge } = transaction.grossValuesCalculated
+
+  const transactionResult = {
+    abstractionPeriodEndDay: null,
+    abstractionPeriodEndMonth: null,
+    abstractionPeriodStartDay: null,
+    abstractionPeriodStartMonth: null,
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
+    authorisedDays: 365,
+    baselineCharge: baselineCharge ? Number(baselineCharge) : null,
+    billableDays: transaction.billableDays,
+    chargeCategoryCode: transaction.chargeCategoryCode,
+    chargeCategoryDescription: transaction.chargeCategoryDescription,
+    chargeReference: { chargeElements: [], id: chargeReference.id, purpose: null },
+    chargeType: 'standard',
+    credit: false,
+    description: transaction.description,
+    endDate: new Date('2026-03-31'),
+    id: transaction.id,
+    loss: 'medium',
+    netAmount: null,
+    scheme: transaction.scheme,
+    season: 'all year',
+    section126Factor: 1,
+    section127Agreement: false,
+    section130Agreement: 'false',
+    source: 'non-tidal',
+    startDate: new Date('2025-04-01'),
+    supportedSourceChargeValue: supportedSourceCharge ? Number(supportedSourceCharge) : null,
+    supportedSourceName: null,
+    volume: 11,
+    waterCompanyCharge: false,
+    waterCompanyChargeValue: waterCompanyCharge ? Number(waterCompanyCharge) : null,
+    winterOnly: false
+  }
+
+  if (chargeElements) {
+    transactionResult.chargeReference.chargeElements = [
+      {
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        authorisedAnnualQuantity: 200,
+        id: chargeElements[0].id,
+        purpose: {
+          description: purpose.description,
+          id: purpose.id
+        }
+      },
+      {
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        authorisedAnnualQuantity: 200,
+        id: chargeElements[1].id,
+        purpose: {
+          description: purpose.description,
+          id: purpose.id
+        }
+      }
+    ]
+  }
+
+  if (chargeReference.purposeId) {
+    transactionResult.chargeReference.purpose = { description: purpose.description, id: purpose.id }
+  }
+
+  return transactionResult
+}

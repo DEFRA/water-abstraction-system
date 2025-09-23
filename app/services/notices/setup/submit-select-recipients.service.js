@@ -11,6 +11,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -40,11 +41,13 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
-  session.selectedRecipients = payload.recipients || []
+  const selectedRecipients = payload.recipients || []
+
+  _clearSelectedRecipients(session)
 
   const recipients = await FetchRecipientsService.go(session)
 
-  const pageData = SelectRecipientsPresenter.go(session, recipients)
+  const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
   return {
     error: validationResult,
@@ -64,18 +67,19 @@ async function _save(session, payload) {
   return session.$update()
 }
 
+/**
+ * Clear the 'selectedRecipients' from the session to fetch all the recipients
+ *
+ * @private
+ */
+function _clearSelectedRecipients(session) {
+  delete session.selectedRecipients
+}
+
 function _validate(payload) {
-  const validation = SelectRecipientsValidator.go(payload)
+  const validationResult = SelectRecipientsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

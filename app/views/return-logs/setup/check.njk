@@ -9,10 +9,7 @@
 {% block content %}
   {# Notification banner #}
   {% if notification %}
-    {{ govukNotificationBanner({
-      titleText: notification.title,
-      text: notification.text
-    }) }}
+    {{ govukNotificationBanner(notification) }}
   {% endif %}
 
   {# Main heading #}

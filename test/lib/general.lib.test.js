@@ -15,8 +15,15 @@ const TransactionHelper = require('../support/helpers/transaction.helper.js')
 const GeneralLib = require('../../app/lib/general.lib.js')
 
 describe('GeneralLib', () => {
+  let clock
+  let testDate
+
   afterEach(() => {
     Sinon.restore()
+
+    if (clock) {
+      clock.restore()
+    }
   })
 
   describe('#calculateAndLogTimeTaken', () => {
@@ -80,13 +87,6 @@ describe('GeneralLib', () => {
   })
 
   describe('#determineCurrentFinancialYear', () => {
-    let clock
-    let testDate
-
-    afterEach(() => {
-      clock.restore()
-    })
-
     describe('when the current financial year is 2023 to 2024', () => {
       describe('and the current date is between April and December', () => {
         beforeEach(() => {
@@ -127,22 +127,22 @@ describe('GeneralLib', () => {
       yarStub = { flash: Sinon.stub() }
     })
 
-    it('returns the standard notification { title: "Updated", text: "Changes made" }', () => {
+    it('returns the standard notification { titleText: "Updated", text: "Changes made" }', () => {
       GeneralLib.flashNotification(yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+      expect(notification).to.equal({ titleText: 'Updated', text: 'Changes made' })
     })
 
-    it('returns the overridden notification { title: "Fancy new title", text: "better text" }', () => {
+    it('returns the overridden notification { titleText: "Fancy new title", text: "better text" }', () => {
       GeneralLib.flashNotification(yarStub, 'Fancy new title', 'better text')
 
       const [flashType, notification] = yarStub.flash.args[0]
 
       expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Fancy new title', text: 'better text' })
+      expect(notification).to.equal({ titleText: 'Fancy new title', text: 'better text' })
     })
   })
 
@@ -311,23 +311,31 @@ describe('GeneralLib', () => {
   })
 
   describe('#timestampForPostgres', () => {
-    let clock
-    let testDate
-
     beforeEach(() => {
       testDate = new Date(2015, 9, 21, 20, 31, 57)
 
       clock = Sinon.useFakeTimers(testDate)
     })
 
-    afterEach(() => {
-      clock.restore()
-    })
-
     it('returns the current date and time as an ISO string', () => {
       const result = GeneralLib.timestampForPostgres()
 
       expect(result).to.equal('2015-10-21T20:31:57.000Z')
+    })
+  })
+
+  describe('#today', () => {
+    beforeEach(() => {
+      testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
+
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    it('returns the current date and time as date-only (time set to midnight)', () => {
+      const result = GeneralLib.today()
+
+      // We compare ISO strings as its a clearer way of ensuring the result is as expected
+      expect(result.toISOString()).to.equal('2025-10-19T00:00:00.000Z')
     })
   })
 

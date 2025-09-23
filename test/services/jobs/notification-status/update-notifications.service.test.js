@@ -57,6 +57,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         createdAt: new Date(notification.createdAt),
         eventId,
         id: notification.id,
+        licenceMonitoringStationId: null,
         licences: null,
         notifyError: null,
         messageRef: null,
@@ -66,6 +67,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnLogIds: null,
         status: 'sent'
       })
     })
@@ -103,6 +105,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         createdAt: new Date(notification.createdAt),
         eventId,
         id: notification.id,
+        licenceMonitoringStationId: null,
         licences: null,
         notifyError: null,
         messageRef: null,
@@ -112,6 +115,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnLogIds: null,
         status: 'sent'
       })
     })
@@ -125,6 +129,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         createdAt: new Date(notification2.createdAt),
         eventId,
         id: notification2.id,
+        licenceMonitoringStationId: null,
         licences: null,
         notifyError: null,
         messageRef: null,
@@ -134,6 +139,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnLogIds: null,
         status: 'sent'
       })
     })

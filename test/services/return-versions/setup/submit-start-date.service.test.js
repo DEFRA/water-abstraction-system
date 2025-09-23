@@ -227,7 +227,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             const [flashType, notification] = yarStub.flash.args[0]
 
             expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ title: 'Updated', text: 'Return version updated' })
+            expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {
@@ -271,7 +271,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             const [flashType, notification] = yarStub.flash.args[0]
 
             expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ title: 'Updated', text: 'Return version updated' })
+            expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {

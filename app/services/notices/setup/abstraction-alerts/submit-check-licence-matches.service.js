@@ -38,17 +38,6 @@ async function _save(session) {
   session.licenceRefs = Array.from(new Set(relevantLicenceRefs))
   session.relevantLicenceMonitoringStations = relevantLicenceMonitoringStations
 
-  // This is needed for users who have gone through the journey as far as the 'Check recipients' page, then clicked
-  // back and made a change that alters which recipients are applicable.
-  //
-  // When you hit the 'Check recipients' page, if `selectedRecipients` does not exist it will initialise it with all
-  // recipients. Certain journeys can then alter which recipients will receive a notification, which will change the
-  // content of `selectedRecipients`, and what gets displayed on the page.
-  //
-  // Should a user go back though, what was previously 'selected' becomes void because of changes made, hence we need
-  // to delete it so the 'Check recipients' page can re-initialise with all recipients.
-  delete session.selectedRecipients
-
   return session.$update()
 }
 

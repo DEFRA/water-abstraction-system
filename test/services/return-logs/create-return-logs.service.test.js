@@ -12,6 +12,7 @@ const { expect } = Code
 const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const { today } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
@@ -20,8 +21,8 @@ const GenerateReturnLogService = require('../../../app/services/return-logs/gene
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 
 describe('Return Logs - Create Return Logs service', () => {
-  const today = new Date()
-  const year = today.getFullYear()
+  const todaysDate = today()
+  const year = todaysDate.getFullYear()
 
   let clock
   let notifierStub

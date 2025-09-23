@@ -76,8 +76,8 @@ describe('Notices Setup - Preview - Check Alert service', () => {
               link: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/alert/${licenceMonitoringStations.two.id}`,
               text: 'Preview'
             },
-            alert: null,
-            alertDate: null,
+            alert: '',
+            alertDate: '',
             licenceId: licenceMonitoringStations.two.licence.id,
             licenceRef: licenceMonitoringStations.two.licence.licenceRef,
             restriction: 'Stop',

@@ -13,7 +13,7 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 // Thing under test
 const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter.js')
 
-describe('View Licence presenter', () => {
+describe('Licences - View Licence presenter', () => {
   let auth
   let licence
 

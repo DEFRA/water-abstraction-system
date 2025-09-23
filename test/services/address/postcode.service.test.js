@@ -3,61 +3,55 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../support/helpers/session.helper.js')
+// Things we need to stub
+const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
 const PostcodeService = require('../../../app/services/address/postcode.service.js')
 
 describe('Address - Postcode Service', () => {
-  let session
-  let sessionData
+  const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  describe('when called and there is no session data', () => {
-    beforeEach(async () => {
-      sessionData = {}
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
-    it('returns page data for the view', async () => {
-      const result = await PostcodeService.go(session.id)
-
-      expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/address/${session.id}/postcode`,
-        internationalLink: `/system/address/${session.id}/international`,
-        pageTitle: 'Enter a UK postcode',
-        postcode: null
+  beforeEach(async () => {
+    Sinon.stub(SessionModel, 'query').returns({
+      findById: Sinon.stub().resolves({
+        id: sessionId,
+        addressJourney: {
+          activeNavBar: 'manage',
+          address: {},
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/contact-type`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+        }
       })
     })
   })
 
-  describe('when called and there is session data', () => {
-    beforeEach(async () => {
-      sessionData = {
-        contactName: 'Fake Person',
-        address: {
-          postcode: 'SW1A 1AA'
-        }
-      }
+  afterEach(() => {
+    Sinon.restore()
+  })
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
-
+  describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await PostcodeService.go(session.id)
+      const result = await PostcodeService.go(sessionId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/contact-type`,
-        internationalLink: `/system/address/${session.id}/international`,
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        internationalLink: `/system/address/${sessionId}/international`,
         pageTitle: 'Enter a UK postcode',
-        postcode: 'SW1A 1AA'
+        pageTitleCaption: null,
+        postcode: null
       })
     })
   })

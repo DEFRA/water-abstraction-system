@@ -14,17 +14,18 @@ const NoticesFixture = require('../../fixtures/notices.fixture.js')
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
 describe('Notices - Index Notices presenter', () => {
-  let notice
   let notices
-  let numberOfNotices
+  let numberOfPages
+  let selectedPage
 
   beforeEach(() => {
     notices = NoticesFixture.notices()
-    numberOfNotices = notices.length
+    numberOfPages = 1
+    selectedPage = 1
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, numberOfNotices)
+    const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
 
     expect(result).to.equal({
       notices: [
@@ -101,38 +102,73 @@ describe('Notices - Index Notices presenter', () => {
           type: 'Returns reminder'
         }
       ],
-      numberOfNoticesDisplayed: numberOfNotices,
-      totalNumberOfNotices: numberOfNotices.toString()
+      pageTitle: 'Notices',
+      tableCaption: `Showing all ${notices.length} notices`
     })
   })
 
   describe('the "notices" property', () => {
-    describe('the "status" property', () => {
-      describe('when the notice has no errors', () => {
-        beforeEach(() => {
-          notice = notices[0]
-          numberOfNotices = 1
-        })
+    describe('the "type" property', () => {
+      describe('when the notice is for a water abstraction alert', () => {
+        it('returns the alert type', () => {
+          const results = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
 
-        it('returns "sent"', () => {
-          const result = IndexNoticesPresenter.go([notice], numberOfNotices)
-
-          expect(result.notices[0].status).to.equal('sent')
+          expect(results.notices[0].type).to.equal('Reduce alert')
+          expect(results.notices[1].type).to.equal('Resume alert')
+          expect(results.notices[2].type).to.equal('Stop alert')
+          expect(results.notices[3].type).to.equal('Warning alert')
         })
       })
 
-      describe('when the notice has errors', () => {
-        beforeEach(() => {
-          notice = notices[0]
-          notice.errorCount = 1
-          numberOfNotices = 1
-        })
+      describe('when the notice is not for a water abstraction alert', () => {
+        it('returns the notice type', () => {
+          const results = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
 
-        it('returns "error"', () => {
-          const result = IndexNoticesPresenter.go([notice], numberOfNotices)
-
-          expect(result.notices[0].status).to.equal('error')
+          expect(results.notices[4].type).to.equal('HOF warning')
+          expect(results.notices[5].type).to.equal('Returns invitation')
+          expect(results.notices[6].type).to.equal('Paper return')
+          expect(results.notices[7].type).to.equal('Returns reminder')
         })
+      })
+    })
+  })
+
+  describe('the ""pageTitle" property', () => {
+    describe('when there is only one page of results', () => {
+      it('the "pageTitle" without page info', () => {
+        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+
+        expect(result.pageTitle).to.equal('Notices')
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      beforeEach(() => {
+        numberOfPages = 3
+      })
+
+      it('the "pageTitle" with page info', () => {
+        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+
+        expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
+      })
+    })
+  })
+
+  describe('the "tableCaption" property', () => {
+    describe('when there is only one page of results', () => {
+      it('returns the "tableCaption" without page info', () => {
+        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+
+        expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      it('returns the "tableCaption" with page info', () => {
+        const result = IndexNoticesPresenter.go(notices, 50, selectedPage, numberOfPages)
+
+        expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)
       })
     })
   })

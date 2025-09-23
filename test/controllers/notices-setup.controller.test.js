@@ -30,6 +30,7 @@ const LicenceService = require('../../app/services/notices/setup/licence.service
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
 const PreviewReturnFormsService = require('../../app/services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
+const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
@@ -41,10 +42,12 @@ const SubmitAlertTypeService = require('../../app/services/notices/setup/abstrac
 const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
+const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
@@ -296,6 +299,21 @@ describe('Notices Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the notice type')
         })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(async () => {
+        postOptions = postRequestOptions(basePath + `/${session.id}/check-notice-type`, {})
+
+        Sinon.stub(SubmitCheckNoticeTypeService, 'go').resolves({ redirectUrl: 'check' })
+      })
+
+      it('redirects to the "check" page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
       })
     })
   })
@@ -751,8 +769,18 @@ describe('Notices Setup controller', () => {
           postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '' })
 
           Sinon.stub(SubmitLicenceService, 'go').resolves({
-            licenceRef: '01/115',
-            error: { text: 'Enter a Licence number' }
+            licenceRef: null,
+            error: {
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: 'Enter a licence number'
+                }
+              ],
+              licenceRef: {
+                text: 'Enter a licence number'
+              }
+            }
           })
         })
 
@@ -760,7 +788,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Enter a Licence number')
+          expect(response.payload).to.contain('Enter a licence number')
           expect(response.payload).to.contain('There is a problem')
         })
       })
@@ -983,6 +1011,71 @@ describe('Notices Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select the notice type')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/recipient-name', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/recipient-name`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(RecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Recipients name')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitRecipientNameService, 'go').returns({
+              error: 'Something went wrong'
+            })
+
+            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitRecipientNameService, 'go').returns({
+              pageTile: 'Select recipients'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/address/${session.id}/postcode`)
+          })
         })
       })
     })

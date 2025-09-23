@@ -96,6 +96,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             {
               eventId: event.id,
               id: notification.id,
+              licenceMonitoringStationId: null,
               licences: ['11/111'],
               notifyError: null,
               messageRef: 'returns_invitation_primary_user_email',
@@ -105,6 +106,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
+              returnLogIds: null,
               status: 'sent'
             },
             { skip: ['createdAt'] }
@@ -132,14 +134,16 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           notification = await NotificationHelper.add({
             eventId: event.id,
+            licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
             licences: '["11/111"]',
             messageRef: 'water_abstraction_alert_resume_email',
             messageType: 'email',
             notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
             notifyStatus: 'created',
             personalisation: {
-              alertType: 'resume',
-              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+              alertType: 'stop',
+              licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+              sending_alert_type: 'resume'
             },
             plaintext: 'Dear licence contact,\r\n',
             recipient: 'hello@example.com',
@@ -156,6 +160,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             {
               eventId: event.id,
               id: notification.id,
+              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
               licences: ['11/111'],
               messageRef: 'water_abstraction_alert_resume_email',
               messageType: 'email',
@@ -163,11 +168,71 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
               personalisation: {
-                alertType: 'resume',
-                licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621'
+                alertType: 'stop',
+                licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
+                sending_alert_type: 'resume'
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
+              returnLogIds: null,
+              status: 'sent'
+            },
+            { skip: ['createdAt'] }
+          )
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.count).to.exist()
+        })
+      })
+
+      describe('and an event id is provided', () => {
+        beforeEach(async () => {
+          event = await EventHelper.add({
+            metadata: {},
+            licences: '["11/111"]',
+            referenceCode: 'RINV-LX4P57',
+            status: 'completed',
+            subtype: 'returnInvitation',
+            type: 'notification'
+          })
+
+          notification = await NotificationHelper.add({
+            eventId: event.id,
+            licences: '["11/111"]',
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
+            notifyStatus: 'created',
+            plaintext: 'Dear Clean Water Limited,\r\n',
+            recipient: 'hello@example.com',
+            status: 'pending'
+          })
+        })
+
+        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
+          await ProcessNotificationStatusService.go(event.id)
+
+          const refreshedNotification = await notification.$query()
+
+          expect(refreshedNotification).to.equal(
+            {
+              eventId: event.id,
+              id: notification.id,
+              licenceMonitoringStationId: null,
+              licences: ['11/111'],
+              notifyError: null,
+              messageRef: 'returns_invitation_primary_user_email',
+              messageType: 'email',
+              notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
+              notifyStatus: 'delivered',
+              personalisation: null,
+              plaintext: 'Dear Clean Water Limited,\r\n',
+              recipient: 'hello@example.com',
+              returnLogIds: null,
               status: 'sent'
             },
             { skip: ['createdAt'] }
@@ -228,6 +293,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           {
             eventId: event.id,
             id: notification.id,
+            licenceMonitoringStationId: null,
             licences: ['11/111'],
             notifyError: null,
             messageRef: 'returns_invitation_primary_user_email',
@@ -237,6 +303,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             personalisation: null,
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
+            returnLogIds: null,
             status: 'error'
           },
           { skip: ['createdAt'] }
@@ -314,6 +381,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           eventId: event.id,
           id: notification.id,
           licences: ['11/111'],
+          licenceMonitoringStationId: null,
           notifyError: null,
           messageRef: 'returns_invitation_primary_user_email',
           messageType: 'email',
@@ -322,6 +390,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           personalisation: null,
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
+          returnLogIds: null,
           status: 'pending'
         },
         { skip: ['createdAt'] }

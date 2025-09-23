@@ -29,6 +29,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
       licenceRef,
       metadata: {
         description: 'Water park',
+        isCurrent: 'true',
         nald: {
           areaCode: 'SE',
           regionCode: `${region.naldRegionId}`
@@ -64,8 +65,10 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
           endDate: new Date('2023-03-31'),
           naldAreaCode: 'SE',
           purpose: 'Potable Water Supply - Direct',
+          regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnId: returnLog.returnId,
+          returnLogId: returnLog.id,
           returnReference: returnLog.returnReference,
           returnsFrequency: 'month',
           siteDescription: 'Water park',

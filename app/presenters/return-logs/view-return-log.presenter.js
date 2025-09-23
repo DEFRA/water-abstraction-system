@@ -5,13 +5,19 @@
  * @module ViewReturnLogPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatNumber, formatPurposes } = require('../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatLongDate,
+  formatNumber,
+  formatPurposes,
+  formatReturnLogStatus
+} = require('../base.presenter.js')
 const {
   formatMeterDetails,
-  formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } = require('./base-return-logs.presenter.js')
+const { today } = require('../../lib/general.lib.js')
 const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -44,12 +50,12 @@ function go(returnLog, auth) {
 
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
-  const formattedStatus = formatStatus(returnLog)
+  const formattedStatus = formatReturnLogStatus(returnLog)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
-    actionButton: _actionButton(latest, auth, returnLog.id, formattedStatus),
+    actionButton: _actionButton(latest, auth, returnLog, formattedStatus),
     backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
@@ -106,14 +112,16 @@ function _abstractionPeriod(returnLog) {
   return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 }
 
-function _actionButton(latest, auth, returnLogId, formattedStatus) {
+function _actionButton(latest, auth, returnLog, formattedStatus) {
+  const { endDate, id: returnLogId } = returnLog
+
   // You cannot edit a previous version
   if (!latest) {
     return null
   }
 
-  // You cannot edit a void return or a return not due yet
-  if (formattedStatus === 'void' || formattedStatus === 'not due yet') {
+  // You cannot edit a void return or a return that hasn't ended
+  if (formattedStatus === 'void' || today() <= endDate) {
     return null
   }
 

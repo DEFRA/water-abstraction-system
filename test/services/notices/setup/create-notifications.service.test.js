@@ -42,6 +42,7 @@ describe('Notices - Setup - Create notification service', () => {
         createdAt: createdResult.createdAt,
         eventId,
         id: result[0].id,
+        licenceMonitoringStationId: null,
         licences: null,
         notifyError: null,
         messageRef: null,
@@ -51,6 +52,7 @@ describe('Notices - Setup - Create notification service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnLogIds: null,
         status: null
       })
     })

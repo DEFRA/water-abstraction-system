@@ -117,6 +117,13 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(updatedReturnLog.receivedDate).to.equal(new Date('2024-01-01'))
     })
 
+    it('updates the return log updatedAt date', async () => {
+      await SubmitCheckService.go(session.id, user)
+
+      const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
+      expect(updatedReturnLog.updatedAt).to.not.equal(returnLog.updatedAt)
+    })
+
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
       it('deletes the session', async () => {
         await SubmitCheckService.go(session.id, user)
