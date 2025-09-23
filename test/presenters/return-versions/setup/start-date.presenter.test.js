@@ -67,7 +67,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
         const result = StartDatePresenter.go(session)
 
         expect(result.backLink).to.equal({
-          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
       })

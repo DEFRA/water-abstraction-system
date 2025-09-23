@@ -39,9 +39,7 @@ function _backLink(session) {
 
   if (checkPageVisited) {
     backLink = `/system/return-versions/setup/${id}/check`
-  }
-
-  if (FeatureFlagsConfig.enableSystemLicenceView) {
+  } else if (FeatureFlagsConfig.enableSystemLicenceView) {
     backLink = `/system/licences/${licence.id}/set-up`
   } else {
     backLink = `/licences/${licence.id}#charge`
