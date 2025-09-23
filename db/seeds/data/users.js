@@ -132,6 +132,30 @@ const data = [
     application: 'water_admin',
     resetGuidCreatedAt: null,
     enabled: true
+  },
+  {
+    id: 100011,
+    username: 'digitise.editor@wrls.gov.uk',
+    password: 'P@55word',
+    resetGuid: null,
+    resetRequired: 0,
+    lastLogin: null,
+    badLogins: 0,
+    application: 'water_admin',
+    resetGuidCreatedAt: null,
+    enabled: true
+  },
+  {
+    id: 100012,
+    username: 'digitise.approver@wrls.gov.uk',
+    password: 'P@55word',
+    resetGuid: null,
+    resetRequired: 0,
+    lastLogin: null,
+    badLogins: 0,
+    application: 'water_admin',
+    resetGuidCreatedAt: null,
+    enabled: true
   }
 ]
 
