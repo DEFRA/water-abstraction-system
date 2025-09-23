@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const { today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
@@ -29,6 +30,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     notification = await NotificationHelper.add({
       eventId: event.id,
       messageRef: 'returns_invitation_licence_holder_letter',
+      messageType: 'letter',
       status: 'pending'
     })
 
@@ -49,9 +51,9 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
       type: 'notification'
     })
 
-    const today = new Date()
-    const eightDaysAgo = new Date()
-    eightDaysAgo.setDate(today.getDate() - 8)
+    const todaysDate = today()
+    const eightDaysAgo = today()
+    eightDaysAgo.setDate(todaysDate.getDate() - 8)
 
     await NotificationHelper.add({
       eventId: olderThanRetentionEvent.id,
@@ -74,6 +76,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
         id: notification.id,
         licenceMonitoringStationId: null,
         messageRef: 'returns_invitation_licence_holder_letter',
+        messageType: 'letter',
         notifyError: null,
         notifyId: null,
         notifyStatus: null,

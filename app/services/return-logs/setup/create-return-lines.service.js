@@ -5,7 +5,7 @@
  * @module CreateReturnLinesService
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
@@ -13,55 +13,19 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 /**
  * Creates return lines by formatting the provided lines and inserting them into the database
  *
- * @param {object[]} lines - An array of line objects to be processed
  * @param {string} returnSubmissionId - The ID of the return submission
- * @param {string} returnsFrequency - The frequency of the returns (eg. 'day', 'week' etc.)
- * @param {string} units - The unit of measurement for the quantity (eg. 'cubic-metres' etc.)
- * @param {boolean} volumes - Indicates if lines contain volumes
- * @param {boolean} meterProvided - Indicates if a meter was provided (this is independent of whether lines contain
- * volumes or meter readings)
- * @param {number} startReading - The starting meter reading
- * @param {boolean} meter10TimesDisplay - Whether the meter is a 10x display
+ * @param {object} session - Session object containing the return submission data
+ * @param {Date} timestamp - The timestamp to use for the createdAt property
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if no lines were provided)
  */
-async function go(
-  lines,
-  returnSubmissionId,
-  returnsFrequency,
-  units,
-  volumes,
-  meterProvided,
-  startReading,
-  meter10TimesDisplay,
-  trx = null
-) {
-  if (!lines?.length) {
+async function go(returnSubmissionId, session, timestamp, trx = null) {
+  if (!session.lines?.length) {
     return []
   }
 
-  let previousReading = startReading ?? 0
-
-  const returnLines = lines.map((line) => {
-    const { rawQuantity, currentReading } = _calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay)
-
-    previousReading = currentReading
-
-    // We use destructuring to remove the reading property as this is not a valid column in the db
-    const { reading, ...restOfLine } = line
-
-    return {
-      ...restOfLine,
-      id: generateUUID(),
-      createdAt: timestampForPostgres(),
-      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, units) : undefined,
-      readingType: meterProvided ? 'measured' : 'estimated',
-      returnSubmissionId,
-      timePeriod: returnsFrequency,
-      userUnit: _getUserUnit(units)
-    }
-  })
+  const returnLines = _returnLines(returnSubmissionId, session, timestamp)
 
   return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
@@ -77,7 +41,7 @@ async function go(
  * @param {boolean} meter10TimesDisplay - Indicates if the meter is a 10x display
  * @returns {object} - An object containing the calculated quantity and the new previous reading
  */
-function _calculateLineQuantity(line, previousReading, volumes, meter10TimesDisplay) {
+function _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes) {
   const currentReading = line.reading ?? previousReading
 
   if (volumes) {
@@ -127,6 +91,33 @@ function _getUserUnit(unit) {
   })
 
   return foundEntry ? foundEntry[0] : undefined
+}
+
+function _returnLines(returnSubmissionId, session, timestamp) {
+  const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
+  const volumes = session.reported === 'abstraction-volumes'
+
+  let previousReading = session.startReading ?? 0
+
+  return session.lines.map((line) => {
+    const { rawQuantity, currentReading } = _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes)
+
+    previousReading = currentReading
+
+    // We use destructuring to remove the reading property as this is not a valid column in the db
+    const { reading, ...restOfLine } = line
+
+    return {
+      ...restOfLine,
+      id: generateUUID(),
+      createdAt: timestamp,
+      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : undefined,
+      readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
+      returnSubmissionId,
+      timePeriod: session.returnsFrequency,
+      userUnit: _getUserUnit(session.units)
+    }
+  })
 }
 
 module.exports = {

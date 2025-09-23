@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const { today } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -19,8 +20,8 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
 describe('Return Logs - Generate Return Log service', () => {
-  const today = new Date()
-  const year = today.getFullYear()
+  const todaysDate = today()
+  const year = todaysDate.getFullYear()
 
   let clock
   let testReturnCycle

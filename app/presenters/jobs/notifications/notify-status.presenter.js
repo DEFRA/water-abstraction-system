@@ -90,10 +90,9 @@ function _emailStatus(notifyStatus) {
  */
 function _letterStatus(notifyStatus) {
   const letterStatuses = {
-    accepted: NOTIFICATIONS_STATUS.sent,
+    accepted: NOTIFICATIONS_STATUS.pending,
     created: NOTIFICATIONS_STATUS.pending,
     sending: NOTIFICATIONS_STATUS.pending,
-    delivered: NOTIFICATIONS_STATUS.sent,
     received: NOTIFICATIONS_STATUS.sent,
     'permanent-failure': NOTIFICATIONS_STATUS.error,
     'technical-failure': NOTIFICATIONS_STATUS.error,

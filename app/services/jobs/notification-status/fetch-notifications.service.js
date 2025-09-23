@@ -6,6 +6,7 @@
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
+const { today } = require('../../../lib/general.lib.js')
 
 const SEVEN_DAYS = 7
 
@@ -19,9 +20,10 @@ const SEVEN_DAYS = 7
  * @returns {Promise<object[]>} - an array of 'notifications'
  */
 async function go() {
-  const today = new Date()
-  const sevenDaysAgo = new Date()
-  sevenDaysAgo.setDate(today.getDate() - SEVEN_DAYS)
+  const todaysDate = today()
+  const sevenDaysAgo = today()
+
+  sevenDaysAgo.setDate(todaysDate.getDate() - SEVEN_DAYS)
 
   return NotificationModel.query()
     .select([
@@ -30,6 +32,7 @@ async function go() {
       'id',
       'licenceMonitoringStationId',
       'messageRef',
+      'messageType',
       'notifyId',
       'notifyStatus',
       'notify_error',

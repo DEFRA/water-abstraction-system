@@ -5,7 +5,7 @@
  * @module CreateReturnSubmissionService
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
 
 /**
@@ -14,37 +14,33 @@ const ReturnSubmissionModel = require('../../../models/return-submission.model.j
  *
  * If a previous submission does exist then it will be marked as superseded by setting its `current` property to false
  *
- * @param {string} returnLogId - ID of the return log (typically something like v1:6:01/23:987654:2024-11-01:2025-10-31)
- * @param {string} userId - ID of the user creating the return submission (typically an email address)
  * @param {object} metadata - Metadata for the return submission
- * @param {boolean} nilReturn - Indicates if the return is a nil return
- * @param {string} notes - Text of any note added to the return submission
- * @param {number} createdBy - Numeric user ID of the user who created the note
+ * @param {object} session - Session object containing the return submission data
+ * @param {Date} timestamp - The timestamp to use for the createdAt property
+ * @param {module:UserModel} user - Instance representing the user that originated the request
  * @param {object} [trx=null] - Optional {@link https://vincit.github.io/objection.js/guide/transactions.html#transactions | transaction object}
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(returnLogId, userId, metadata, nilReturn, notes, createdBy, trx = null) {
-  const { version, previousVersion } = await _determineVersionNumbers(returnLogId, trx)
-
-  // We only set the notes and createdBy fields if note text has actually been provided
-  const note = notes ? { notes, createdBy } : {}
+async function go(metadata, session, timestamp, user, trx = null) {
+  const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
-    createdAt: timestampForPostgres(),
+    createdAt: timestamp,
+    createdBy: user.id,
     current: true,
-    nilReturn,
+    nilReturn: session.journey === 'nil-return',
     metadata,
-    returnLogId,
-    userId,
+    notes: session.note?.content,
+    returnLogId: session.returnLogId,
+    userId: user.username,
     userType: 'internal',
-    version,
-    ...note
+    version
   }
 
   if (previousVersion) {
-    await _markPreviousVersionAsSuperseded(returnLogId, previousVersion, trx)
+    await _markPreviousVersionAsSuperseded(session.returnLogId, previousVersion, trx)
   }
 
   return ReturnSubmissionModel.query(trx).insert(returnSubmission)

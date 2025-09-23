@@ -68,7 +68,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.one.id,
-        licences: `["${recipients.primaryUser.licence_refs}"]`,
+        licences: [recipients.primaryUser.licence_refs],
         messageRef: 'water_abstraction_alert_reduce_warning_email',
         messageType: 'email',
         personalisation: {
@@ -94,7 +94,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.two.id,
-        licences: `["${recipients.licenceHolder.licence_refs}"]`,
+        licences: [recipients.licenceHolder.licence_refs],
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
         personalisation: {
@@ -126,7 +126,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.three.id,
-        licences: `["${recipients.additionalContact.licence_refs}"]`,
+        licences: [recipients.additionalContact.licence_refs],
         messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
         messageType: 'email',
         personalisation: {
@@ -167,7 +167,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: `["${recipients.primaryUser.licence_refs}"]`,
+          licences: [recipients.primaryUser.licence_refs],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -193,7 +193,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.two.id,
-          licences: `["${recipients.primaryUser.licence_refs}"]`,
+          licences: [recipients.primaryUser.licence_refs],
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -234,7 +234,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.three.id,
-          licences: `["${recipients.additionalContact.licence_refs}"]`,
+          licences: [recipients.additionalContact.licence_refs],
           messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -278,7 +278,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: `["${recipients.additionalContact.licence_refs}"]`,
+          licences: [recipients.additionalContact.licence_refs],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -322,7 +322,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: `["${recipients.primaryUser.licence_refs}"]`,
+          licences: [recipients.primaryUser.licence_refs],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -364,7 +364,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: `["${recipients.licenceHolder.licence_refs}"]`,
+          licences: [recipients.licenceHolder.licence_refs],
           messageRef: 'water_abstraction_alert_reduce_warning',
           messageType: 'letter',
           personalisation: {
