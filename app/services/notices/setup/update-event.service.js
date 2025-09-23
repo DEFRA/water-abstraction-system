@@ -19,15 +19,21 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * 'error' key in that metadata. This is used to track the number of errors for the
  * related 'notifications'.
  *
+ * If an error count already exists then we increment the error count with the provided value
+ *
  * @param {string} id
- * @param {number} errorCount - The number of errors that occurred for the related 'notifications'.
+ * @param {number} increaseErrorCount - The number of errors that occurred for the related 'notifications'.
  *
  */
-async function go(id, errorCount) {
+async function go(id, increaseErrorCount = 0) {
   await EventModel.query()
     .findById(id)
     .patch({
-      metadata: EventModel.raw('jsonb_set(metadata, ?, ?)', [`{error}`, JSON.stringify(errorCount)]),
+      metadata: EventModel.raw("jsonb_set(metadata, ?, (COALESCE(metadata->>?, '0')::int + ?)::text::jsonb)", [
+        `{error}`,
+        'error',
+        increaseErrorCount
+      ]),
       updatedAt: timestampForPostgres()
     })
 }

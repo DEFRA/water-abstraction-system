@@ -86,7 +86,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     })
 
     describe('and an event id is provided', () => {
-      describe('and the there are email notifications', () => {
+      describe('and there are email notifications', () => {
         beforeEach(async () => {
           notification = await NotificationHelper.add({
             eventId: event.id,
