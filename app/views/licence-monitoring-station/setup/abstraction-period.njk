@@ -11,9 +11,8 @@
 
       {# From #}
       {{ govukDateInput({
-        id: "abstraction-period-start",
-        namePrefix: "abstraction-period-start",
-        errorMessage: error["abstraction-period-start"],
+        id: "abstractionPeriodStart",
+        errorMessage: error.abstractionPeriodStart,
         fieldset: {
           legend: {
             text: "Start date",
@@ -22,12 +21,16 @@
         },
         items: [
           {
-            name: "day",
+            id: 'abstractionPeriodStartDay',
+            name: 'abstractionPeriodStartDay',
+            label: 'Day',
             classes: "govuk-input--width-2",
             value: abstractionPeriodStartDay
           },
           {
-            name: "month",
+            id: 'abstractionPeriodStartMonth',
+            name: 'abstractionPeriodStartMonth',
+            label: 'Month',
             classes: "govuk-input--width-2",
             value: abstractionPeriodStartMonth
           }
@@ -36,9 +39,8 @@
 
       {# To #}
       {{ govukDateInput({
-        id: "abstraction-period-end",
-        namePrefix: "abstraction-period-end",
-        errorMessage: error["abstraction-period-end"],
+        id: "abstractionPeriodEnd",
+        errorMessage: error.abstractionPeriodEnd,
         fieldset: {
           legend: {
             text: "End date",
@@ -47,11 +49,16 @@
         },
         items: [
           {
-            name: "day",
+            id: 'abstractionPeriodEndDay',
+            name: 'abstractionPeriodEndDay',
+            label: 'Day',
             classes: "govuk-input--width-2",
             value: abstractionPeriodEndDay
           },
           {
+            id: 'abstractionPeriodEndMonth',
+            name: 'abstractionPeriodEndMonth',
+            label: 'Month',
             name: "month",
             classes: "govuk-input--width-2",
             value: abstractionPeriodEndMonth

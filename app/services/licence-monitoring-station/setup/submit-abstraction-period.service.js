@@ -41,19 +41,19 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.abstractionPeriodStartDay = payload['abstraction-period-start-day']
-  session.abstractionPeriodEndDay = payload['abstraction-period-end-day']
-  session.abstractionPeriodStartMonth = payload['abstraction-period-start-month']
-  session.abstractionPeriodEndMonth = payload['abstraction-period-end-month']
+  session.abstractionPeriodEndDay = payload.abstractionPeriodEndDay
+  session.abstractionPeriodEndMonth = payload.abstractionPeriodEndMonth
+  session.abstractionPeriodStartDay = payload.abstractionPeriodStartDay
+  session.abstractionPeriodStartMonth = payload.abstractionPeriodStartMonth
 
   return session.$update()
 }
 
 function _submittedSessionData(session, payload) {
-  session.abstractionPeriodStartDay = payload['abstraction-period-start-day'] ?? null
-  session.abstractionPeriodEndDay = payload['abstraction-period-end-day'] ?? null
-  session.abstractionPeriodStartMonth = payload['abstraction-period-start-month'] ?? null
-  session.abstractionPeriodEndMonth = payload['abstraction-period-end-month'] ?? null
+  session.abstractionPeriodEndDay = payload.abstractionPeriodEndDay ?? null
+  session.abstractionPeriodEndMonth = payload.abstractionPeriodEndMonth ?? null
+  session.abstractionPeriodStartDay = payload.abstractionPeriodStartDay ?? null
+  session.abstractionPeriodStartMonth = payload.abstractionPeriodStartMonth ?? null
 
   return AbstractionPeriodPresenter.go(session)
 }

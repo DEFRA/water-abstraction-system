@@ -14,10 +14,10 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  *
  * The payload is expected to contain the following properties, which can be either strings or numbers:
  *
- * - abstraction-period-start-day
- * - abstraction-period-start-month
- * - abstraction-period-end-day
- * - abstraction-period-end-month
+ * - abstractionPeriodStartDay
+ * - abstractionPeriodStartMonth
+ * - abstractionPeriodEndDay
+ * - abstractionPeriodEndMonth
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -26,19 +26,15 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  * property will be present, detailing the issue.
  */
 function go(payload) {
-  const {
-    'abstraction-period-start-day': startDay,
-    'abstraction-period-start-month': startMonth,
-    'abstraction-period-end-day': endDay,
-    'abstraction-period-end-month': endMonth
-  } = payload
+  const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
+    payload
 
-  const parsedStartDate = _parseDate(startDay, startMonth)
-  const parsedEndDate = _parseDate(endDay, endMonth)
+  const parsedStartDate = _parseDate(abstractionPeriodStartDay, abstractionPeriodStartMonth)
+  const parsedEndDate = _parseDate(abstractionPeriodEndDay, abstractionPeriodEndMonth)
 
   return _validateAbstractionDate({
-    'abstraction-period-start': parsedStartDate,
-    'abstraction-period-end': parsedEndDate
+    abstractionPeriodStart: parsedStartDate,
+    abstractionPeriodEnd: parsedEndDate
   })
 }
 
@@ -54,27 +50,17 @@ function _parseDate(day, month) {
 
 function _validateAbstractionDate(payload) {
   const schema = Joi.object({
-    'abstraction-period-start': Joi.date()
-      .format(['YYYY-MM-DD'])
-      .required()
-      .messages({
-        'date.base': `Select the start date of the abstraction period`,
-        'date.format': _validationMessage('start')
-      }),
-    'abstraction-period-end': Joi.date()
-      .format(['YYYY-MM-DD'])
-      .required()
-      .messages({
-        'date.base': `Select the end date of the abstraction period`,
-        'date.format': _validationMessage('end')
-      })
+    abstractionPeriodStart: Joi.date().format(['YYYY-MM-DD']).required().messages({
+      'date.base': `Select the start date of the abstraction period`,
+      'date.format': 'Enter a real start date'
+    }),
+    abstractionPeriodEnd: Joi.date().format(['YYYY-MM-DD']).required().messages({
+      'date.base': `Select the end date of the abstraction period`,
+      'date.format': 'Enter a real end date'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-function _validationMessage(type) {
-  return `Enter a real ${type} date`
 }
 
 module.exports = {

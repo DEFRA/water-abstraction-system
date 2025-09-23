@@ -20,10 +20,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
   beforeEach(async () => {
     payload = {
-      'abstraction-period-start-day': '1',
-      'abstraction-period-start-month': '2',
-      'abstraction-period-end-day': '3',
-      'abstraction-period-end-month': '4'
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '2',
+      abstractionPeriodEndDay: '3',
+      abstractionPeriodEndMonth: '4'
     }
 
     sessionData = {
@@ -85,18 +85,18 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       expect(result.error).to.equal({
         errorList: [
           {
-            href: '#abstraction-period-start',
+            href: '#abstractionPeriodStart',
             text: 'Select the start date of the abstraction period'
           },
           {
-            href: '#abstraction-period-end',
+            href: '#abstractionPeriodEnd',
             text: 'Select the end date of the abstraction period'
           }
         ],
-        'abstraction-period-start': {
+        abstractionPeriodStart: {
           text: 'Select the start date of the abstraction period'
         },
-        'abstraction-period-end': {
+        abstractionPeriodEnd: {
           text: 'Select the end date of the abstraction period'
         }
       })
@@ -109,18 +109,18 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#abstraction-period-start',
+              href: '#abstractionPeriodStart',
               text: 'Select the start date of the abstraction period'
             },
             {
-              href: '#abstraction-period-end',
+              href: '#abstractionPeriodEnd',
               text: 'Select the end date of the abstraction period'
             }
           ],
-          'abstraction-period-start': {
+          abstractionPeriodStart: {
             text: 'Select the start date of the abstraction period'
           },
-          'abstraction-period-end': {
+          abstractionPeriodEnd: {
             text: 'Select the end date of the abstraction period'
           }
         })
@@ -130,10 +130,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     describe('because the user has not submitted a start abstraction period', () => {
       beforeEach(() => {
         payload = {
-          'abstraction-period-start-day': null,
-          'abstraction-period-start-month': null,
-          'abstraction-period-end-day': '02',
-          'abstraction-period-end-month': '7'
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null,
+          abstractionPeriodEndDay: '02',
+          abstractionPeriodEndMonth: '7'
         }
       })
 
@@ -143,11 +143,11 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#abstraction-period-start',
+              href: '#abstractionPeriodStart',
               text: 'Select the start date of the abstraction period'
             }
           ],
-          'abstraction-period-start': {
+          abstractionPeriodStart: {
             text: 'Select the start date of the abstraction period'
           }
         })
@@ -171,10 +171,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     describe('because the user has not submitted an end abstraction period', () => {
       beforeEach(() => {
         payload = {
-          'abstraction-period-start-day': '08',
-          'abstraction-period-start-month': '12',
-          'abstraction-period-end-day': null,
-          'abstraction-period-end-month': null
+          abstractionPeriodStartDay: '08',
+          abstractionPeriodStartMonth: '12',
+          abstractionPeriodEndDay: null,
+          abstractionPeriodEndMonth: null
         }
       })
 
@@ -184,11 +184,11 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#abstraction-period-end',
+              href: '#abstractionPeriodEnd',
               text: 'Select the end date of the abstraction period'
             }
           ],
-          'abstraction-period-end': {
+          abstractionPeriodEnd: {
             text: 'Select the end date of the abstraction period'
           }
         })
@@ -212,10 +212,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     describe('because the user has submitted invalid values', () => {
       beforeEach(() => {
         payload = {
-          'abstraction-period-start-day': 'abc',
-          'abstraction-period-start-month': '123',
-          'abstraction-period-end-day': 'abc',
-          'abstraction-period-end-month': '123'
+          abstractionPeriodStartDay: 'abc',
+          abstractionPeriodStartMonth: '123',
+          abstractionPeriodEndDay: 'abc',
+          abstractionPeriodEndMonth: '123'
         }
       })
 
@@ -225,18 +225,18 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#abstraction-period-start',
+              href: '#abstractionPeriodStart',
               text: 'Enter a real start date'
             },
             {
-              href: '#abstraction-period-end',
+              href: '#abstractionPeriodEnd',
               text: 'Enter a real end date'
             }
           ],
-          'abstraction-period-start': {
+          abstractionPeriodStart: {
             text: 'Enter a real start date'
           },
-          'abstraction-period-end': {
+          abstractionPeriodEnd: {
             text: 'Enter a real end date'
           }
         })

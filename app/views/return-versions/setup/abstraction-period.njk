@@ -12,9 +12,8 @@
 
     {# From #}
     {{ govukDateInput({
-      id: "abstraction-period-start",
-      namePrefix: "abstraction-period-start",
-      errorMessage: error["abstraction-period-start"],
+      id: "abstractionPeriodStart",
+      errorMessage: error.abstractionPeriodStart,
       fieldset: {
         legend: {
           text: "Start date",
@@ -23,23 +22,26 @@
       },
       items: [
         {
-          name: "day",
+          id: 'abstractionPeriodStartDay',
+          name: 'abstractionPeriodStartDay',
+          label: 'Day',
           classes: "govuk-input--width-2",
-          value: abstractionPeriod['abstraction-period-start-day']
+          value: abstractionPeriod.abstractionPeriodStartDay
         },
         {
-          name: "month",
+          id: 'abstractionPeriodStartMonth',
+          name: 'abstractionPeriodStartMonth',
+          label: 'Month',
           classes: "govuk-input--width-2",
-          value: abstractionPeriod['abstraction-period-start-month']
+          value: abstractionPeriod.abstractionPeriodStartMonth
         }
       ]
     }) }}
 
     {# To #}
     {{ govukDateInput({
-      id: "abstraction-period-end",
-      namePrefix: "abstraction-period-end",
-      errorMessage: error["abstraction-period-end"],
+      id: "abstractionPeriodEnd",
+      errorMessage: error.abstractionPeriodEnd,
       fieldset: {
         legend: {
           text: "End date",
@@ -48,14 +50,18 @@
       },
       items: [
         {
-          name: "day",
+          id: 'abstractionPeriodEndDay',
+          name: 'abstractionPeriodEndDay',
+          label: 'Day',
           classes: "govuk-input--width-2",
-          value: abstractionPeriod['abstraction-period-end-day']
+          value: abstractionPeriod.abstractionPeriodEndDay
         },
         {
-          name: "month",
+          id: 'abstractionPeriodEndMonth',
+          name: 'abstractionPeriodEndMonth',
+          label: 'Month',
           classes: "govuk-input--width-2",
-          value: abstractionPeriod['abstraction-period-end-month']
+          value: abstractionPeriod.abstractionPeriodEndMonth
         }
       ]
     }) }}
