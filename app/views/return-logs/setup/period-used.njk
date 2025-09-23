@@ -100,30 +100,6 @@
         }) }}
       {% endset %}
 
-      {% set defaultItem = {
-          value: "default",
-          text: "Default abstraction period",
-          hint: { text: abstractionPeriod },
-          checked: periodDateUsedOptions === 'default'
-        }
-      %}
-
-      {% set customItem = {
-          value: "custom-dates",
-          text: "Custom dates",
-          checked: periodDateUsedOptions === 'custom-dates',
-          conditional: { html: dateInputHTML }
-        }
-      %}
-
-      {% set radioItems = [] %}
-
-      {% if showDefaultAbstractionPeriod %}
-        {% set radioItems = (radioItems.push(defaultItem), radioItems) %}
-      {% endif %}
-
-      {% set radioItems = (radioItems.push(customItem), radioItems) %}
-
       {{ govukRadios({
         name: "periodDateUsedOptions",
         errorMessage: {
@@ -134,7 +110,22 @@
             classes: "govuk-fieldset__legend--l"
           }
         },
-        items: radioItems
+        items: [
+          {
+            value: "default",
+            text: "Default abstraction period",
+            hint: { text: abstractionPeriod },
+            checked: periodDateUsedOptions === 'default'
+          } if showDefaultAbstractionPeriod,
+          {
+            value: "custom-dates",
+            text: "Custom dates",
+            checked: periodDateUsedOptions === 'custom-dates',
+            conditional: {
+              html: dateInputHTML
+            }
+          }
+        ]
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
