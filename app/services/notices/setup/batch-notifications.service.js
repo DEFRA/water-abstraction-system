@@ -37,8 +37,10 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  * @param {object[]} notifications - The notifications for sending and saving
  * @param {string} eventId - the event UUID to link all the notifications to
+ * @param {string} referenceCode - the unique generated reference code
+ *
  */
-async function go(notifications, eventId) {
+async function go(notifications, eventId, referenceCode) {
   const { batchSize, delay } = NotifyConfig
 
   let totalErrorCount = 0
@@ -48,7 +50,7 @@ async function go(notifications, eventId) {
   for (let i = 0; i < notifications.length; i += batchSize) {
     const batchNotifications = notifications.slice(i, i + batchSize)
 
-    const errorCount = await _batch(batchNotifications)
+    const errorCount = await _batch(batchNotifications, referenceCode)
 
     await _delay(delay)
 
@@ -60,8 +62,8 @@ async function go(notifications, eventId) {
   await UpdateEventService.go(eventId, totalErrorCount)
 }
 
-async function _batch(notifications) {
-  const notificationsToSend = _notificationsToSend(notifications)
+async function _batch(notifications, referenceCode) {
+  const notificationsToSend = _notificationsToSend(notifications, referenceCode)
 
   const sentNotifications = await _sendNotifications(notificationsToSend)
 
@@ -114,47 +116,47 @@ function _errorCount(notifications) {
  *
  * @private
  */
-function _notificationsToSend(notifications) {
+function _notificationsToSend(notifications, referenceCode) {
   const sentNotifications = []
 
   for (const notification of notifications) {
     if (notification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(notification))
+      sentNotifications.push(_sendEmail(notification, referenceCode))
     } else if (notification.messageRef === 'pdf.return_form') {
-      sentNotifications.push(_sendReturnForm(notification))
+      sentNotifications.push(_sendReturnForm(notification, referenceCode))
     } else {
-      sentNotifications.push(_sendLetter(notification))
+      sentNotifications.push(_sendLetter(notification, referenceCode))
     }
   }
 
   return sentNotifications
 }
 
-async function _sendEmail(notification) {
+async function _sendEmail(notification, referenceCode) {
   const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
-    reference: notification.reference
+    reference: referenceCode
   })
 
   return _sentNotification(notification, notifyResult)
 }
 
-async function _sendLetter(notification) {
+async function _sendLetter(notification, referenceCode) {
   const notifyResult = await CreateLetterRequest.send(notification.templateId, {
     personalisation: notification.personalisation,
-    reference: notification.reference
+    reference: referenceCode
   })
 
   return _sentNotification(notification, notifyResult)
 }
 
-async function _sendReturnForm(notification) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, notification.reference)
+async function _sendReturnForm(notification, referenceCode) {
+  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, referenceCode)
 
   return _sentNotification(notification, notifyResult)
 }
 /**
- * This removes some properties added just for sending the notifications, and then combines the original notification
+ * This removes some properties added just for sending the notifications and then combines the original notification
  * with the result of the` NotifyUpdatePresenter`.
  *
  * The returned combination represents a 'notification' record, which the `CreateNotificationsService` can then insert
@@ -162,7 +164,6 @@ async function _sendReturnForm(notification) {
  * @private
  */
 function _sentNotification(notification, notifyResult) {
-  delete notification.reference
   delete notification.templateId
   delete notification.content
 

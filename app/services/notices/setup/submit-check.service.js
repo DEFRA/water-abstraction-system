@@ -36,7 +36,7 @@ async function go(sessionId, auth) {
 
   const notifications = await DetermineNotificationsService.go(sessionCopy, recipients, notice.id)
 
-  _processNotifications(notifications, notice)
+  _processNotifications(notifications, notice, sessionCopy.referenceCode)
 
   return notice.id
 }
@@ -47,11 +47,11 @@ async function _notice(session, recipients, auth) {
   return CreateNoticeService.go(event)
 }
 
-async function _processNotifications(notifications, notice) {
+async function _processNotifications(notifications, notice, referenceCode) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await BatchNotificationsService.go(notifications, notice.id)
+    await BatchNotificationsService.go(notifications, notice.id, referenceCode)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {

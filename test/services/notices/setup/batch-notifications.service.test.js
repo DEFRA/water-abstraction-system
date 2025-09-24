@@ -32,15 +32,15 @@ describe('Notices - Setup - Batch Notifications service', () => {
   let event
   let notifications
   let recipientsFixture
-  let reference
+  let referenceCode
   let testNotification
 
   beforeEach(async () => {
     recipientsFixture = RecipientsFixture.recipients()
 
-    reference = generateReferenceCode()
+    referenceCode = generateReferenceCode()
 
-    const notifyResponse = successfulNotifyResponses(reference)
+    const notifyResponse = successfulNotifyResponses(referenceCode)
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
@@ -64,13 +64,13 @@ describe('Notices - Setup - Batch Notifications service', () => {
       event = await EventHelper.add({
         metadata: {},
         licences: [recipientsFixture.primaryUser],
-        referenceCode: reference,
+        referenceCode,
         status: 'completed',
         subtype: 'returnInvitation',
         type: 'notification'
       })
 
-      const testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs], reference)
+      testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
 
       notifications = [testNotification.email]
     })
@@ -112,13 +112,13 @@ describe('Notices - Setup - Batch Notifications service', () => {
       event = await EventHelper.add({
         metadata: {},
         licences: [recipientsFixture.licenceHolder],
-        referenceCode: reference,
+        referenceCode,
         status: 'completed',
         subtype: 'returnInvitation',
         type: 'notification'
       })
 
-      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs], reference)
+      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs], referenceCode)
 
       notifications = [testNotification.letter]
     })
@@ -164,22 +164,22 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when sending PDFs', () => {
     beforeEach(async () => {
-      reference = generateReferenceCode('PRTF')
+      referenceCode = generateReferenceCode('PRTF')
 
       event = await EventHelper.add({
         metadata: {},
         licences: [recipientsFixture.licenceHolder],
-        referenceCode: reference,
+        referenceCode,
         status: 'completed',
         subtype: 'paperReturnForms',
         type: 'notification'
       })
 
-      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs], reference)
+      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
 
       notifications = [testNotification.pdf]
 
-      const notifyResponse = successfulNotifyResponses(reference)
+      const notifyResponse = successfulNotifyResponses(referenceCode)
 
       Sinon.stub(CreatePrecompiledFileRequest, 'send').onCall(0).resolves(notifyResponse.pdf)
     })
@@ -214,7 +214,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when a the batch process has finished', () => {
     beforeEach(() => {
-      const testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs], reference)
+      const testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
 
       notifications = [testNotification.email]
     })
@@ -224,7 +224,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
         event = await EventHelper.add({
           metadata: {},
           licences: [recipientsFixture.primaryUser],
-          referenceCode: reference,
+          referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification'
@@ -243,7 +243,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
           metadata: { error: 0 },
-          referenceCode: reference,
+          referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification',
@@ -257,7 +257,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
         event = await EventHelper.add({
           metadata: { error: 5 },
           licences: [recipientsFixture.primaryUser],
-          referenceCode: reference,
+          referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification'
@@ -276,7 +276,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
           metadata: { error: 5 },
-          referenceCode: reference,
+          referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification',
@@ -287,7 +287,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
   })
 })
 
-function successfulNotifyResponses(reference) {
+function successfulNotifyResponses(referenceCode) {
   return {
     email: {
       succeeded: true,
@@ -301,7 +301,7 @@ function successfulNotifyResponses(reference) {
             subject: 'Submit your water abstraction returns by 28th April 2025'
           },
           id: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
-          reference,
+          reference: referenceCode,
           scheduled_for: null,
           template: {
             id: notifyTemplates.standard.invitations.returnsAgentEmail,
@@ -322,7 +322,7 @@ function successfulNotifyResponses(reference) {
             subject: 'Submit your water abstraction returns by 28th April 2025'
           },
           id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference,
+          reference: referenceCode,
           scheduled_for: null,
           template: {
             id: notifyTemplates.standard.invitations.licenceHolderLetter,
@@ -339,14 +339,14 @@ function successfulNotifyResponses(reference) {
         statusCode: 200,
         body: {
           id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference
+          reference: referenceCode
         }
       }
     }
   }
 }
 
-function _notifications(eventId, licences, referenceCode) {
+function _notifications(eventId, licences) {
   const date = new Date('2024-01-01')
 
   return {
@@ -362,7 +362,6 @@ function _notifications(eventId, licences, referenceCode) {
         periodStartDate: '1 April 2022'
       },
       recipient: 'primary.user@important.com',
-      reference: referenceCode,
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     letter: {
@@ -384,7 +383,6 @@ function _notifications(eventId, licences, referenceCode) {
         periodStartDate: '1 April 2022'
       },
       recipient: null,
-      reference: referenceCode,
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     pdf: {
@@ -394,7 +392,6 @@ function _notifications(eventId, licences, referenceCode) {
       messageRef: 'pdf.return_form',
       messageType: 'letter',
       personalisation: { name: 'Red 5' },
-      reference: referenceCode,
       returnLogIds: [generateUUID()]
     }
   }

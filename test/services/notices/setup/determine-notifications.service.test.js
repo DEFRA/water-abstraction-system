@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
@@ -25,7 +24,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
   let event
   let recipients
   let recipientsFixture
-  let reference
   let session
   let testDate
 
@@ -42,8 +40,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
 
   describe('when sending return invitations or reminders', () => {
     beforeEach(async () => {
-      reference = generateReferenceCode()
-
       recipientsFixture = RecipientsFixture.recipients()
       recipients = [recipientsFixture.primaryUser]
 
@@ -61,8 +57,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
           startDate: '2022-04-01'
         },
         journey: 'standard',
-        noticeType: 'invitations',
-        referenceCode: reference
+        noticeType: 'invitations'
       }
     })
 
@@ -82,7 +77,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           recipient: 'primary.user@important.com',
-          reference,
           templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
         }
       ])
@@ -91,8 +85,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
 
   describe('when sending abstraction alerts', () => {
     beforeEach(async () => {
-      reference = generateReferenceCode('WAA')
-
       recipientsFixture = RecipientsFixture.alertsRecipients()
       recipients = [recipientsFixture.primaryUser]
 
@@ -141,7 +133,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
         name: 'Water abstraction alert',
         noticeType: 'abstractionAlerts',
         notificationType: 'Abstraction alert',
-        referenceCode: reference,
         relevantLicenceMonitoringStations: [...licenceMonitoringStations],
         removedThresholds: [],
         selectedRecipients: [],
@@ -176,7 +167,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
             thresholdValue: 500
           },
           recipient: 'primary.user@important.com',
-          reference,
           templateId: notifyTemplates.alerts.email.stopWarning
         }
       ])
@@ -188,8 +178,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
     let returnId
 
     beforeEach(async () => {
-      reference = generateReferenceCode('PRTF')
-
       returnId = generateUUID()
 
       recipientsFixture = RecipientsFixture.recipients()
@@ -201,8 +189,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
       }
 
       session = {
-        noticeType: 'returnForms',
-        referenceCode: reference
+        noticeType: 'returnForms'
       }
 
       buffer = new TextEncoder().encode('mock file').buffer
@@ -213,7 +200,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
         licences: [recipientsFixture.licenceHolder.licence_refs],
         messageRef: 'pdf.return_form',
         messageType: 'letter',
-        reference,
         returnLogIds: [returnId]
       }
 
@@ -238,7 +224,6 @@ describe('Notices - Setup - Determine Notifications service', () => {
           personalisation: {
             name: 'Red 5'
           },
-          reference,
           returnLogIds: [returnId]
         }
       ])

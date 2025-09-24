@@ -13,7 +13,6 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -30,15 +29,12 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
   let dueReturnLog
   let licenceRef
   let recipients
-  let referenceCode
   let session
   let sessionData
   let testRecipients
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
-
-    referenceCode = generateReferenceCode('PRTF')
 
     recipients = RecipientsFixture.recipients()
     testRecipients = [recipients.licenceHolder, recipients.returnsTo]
@@ -56,7 +52,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
     sessionData = {
       licenceRef,
       dueReturns: [dueReturnLog, additionalDueReturn],
-      referenceCode,
       selectedReturns: [dueReturnLog.returnId]
     }
 
@@ -104,7 +99,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [dueReturnLog.returnId]
           },
           {
@@ -134,7 +128,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [dueReturnLog.returnId]
           }
         ])
@@ -177,7 +170,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [dueReturnLog.returnId]
           },
           {
@@ -207,7 +199,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [dueReturnLog.returnId]
           },
           {
@@ -237,7 +228,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [additionalDueReturn.returnId]
           },
           {
@@ -267,7 +257,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            reference: referenceCode,
             returnLogIds: [additionalDueReturn.returnId]
           }
         ])
