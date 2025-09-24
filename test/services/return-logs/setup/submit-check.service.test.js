@@ -59,6 +59,8 @@ describe('Return Logs Setup - Submit Check service', () => {
       data: {
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
+        purposes: ['test purpose'],
+        reported: 'abstraction-volumes',
         returnReference: returnLog.returnReference,
         returnLogId: returnLog.id,
         returnSubmissionId: initialReturnSubmission.id,
@@ -85,7 +87,6 @@ describe('Return Logs Setup - Submit Check service', () => {
         meterProvided: false
       }
     }
-    session = await SessionHelper.add(sessionData)
 
     generateReturnSubmissionMetadataStub = Sinon.stub(GenerateReturnSubmissionMetadata, 'go').returns(
       mockGeneratedMetadata
@@ -103,6 +104,10 @@ describe('Return Logs Setup - Submit Check service', () => {
   })
 
   describe('when called with valid data', () => {
+    beforeEach(async () => {
+      session = await SessionHelper.add(sessionData)
+    })
+
     it('updates the return log status to completed', async () => {
       await SubmitCheckService.go(session.id, user)
 
@@ -164,6 +169,105 @@ describe('Return Logs Setup - Submit Check service', () => {
         const result = await SubmitCheckService.go(session.id, user)
 
         expect(result).to.equal(returnLog.id)
+      })
+    })
+  })
+
+  describe('when called with invalid data as the total quantity is 0', () => {
+    beforeEach(async () => {
+      sessionData.data.lines = [
+        {
+          startDate: '2023-01-01T00:00:00.000Z',
+          endDate: '2023-01-31T00:00:00.000Z',
+          quantity: 0,
+          reading: null
+        },
+        {
+          startDate: '2023-02-01T00:00:00.000Z',
+          endDate: '2023-02-28T00:00:00.000Z',
+          quantity: 0,
+          reading: null
+        }
+      ]
+
+      session = await SessionHelper.add(sessionData)
+    })
+
+    it('returns the page data including a validation error', async () => {
+      const result = await SubmitCheckService.go(session.id, user)
+
+      expect(result).to.equal({
+        abstractionPeriod: null,
+        activeNavBar: 'search',
+        displayReadings: false,
+        displayUnits: false,
+        enterMultipleLinkText: 'Enter multiple monthly volumes',
+        error: {
+          errorList: [
+            {
+              text: 'Returns with an abstraction volume of 0 should be recorded as a nil return.'
+            }
+          ]
+        },
+        links: {
+          cancel: `/system/return-logs/setup/${session.id}/cancel`,
+          meterDetails: `/system/return-logs/setup/${session.id}/meter-provided`,
+          multipleEntries: `/system/return-logs/setup/${session.id}/multiple-entries`,
+          nilReturn: `/system/return-logs/setup/${session.id}/submission`,
+          received: `/system/return-logs/setup/${session.id}/received`,
+          reported: `/system/return-logs/setup/${session.id}/reported`,
+          startReading: `/system/return-logs/setup/${session.id}/start-reading`,
+          units: `/system/return-logs/setup/${session.id}/units`
+        },
+        meter10TimesDisplay: undefined,
+        meterMake: undefined,
+        meterProvided: false,
+        meterSerialNumber: undefined,
+        nilReturn: 'No',
+        note: {
+          actions: [ { text: 'Add a note', href: 'note' } ],
+          text: 'No notes added'
+        },
+        pageTitle: 'Check details and enter new volumes or readings',
+        pageTitleCaption: `Return reference ${returnLog.returnReference}`,
+        purposes: 'test purpose',
+        reportingFigures: 'Volumes',
+        returnPeriod: '1 January 2023 to 31 December 2023',
+        returnReceivedDate: '1 January 2024',
+        siteDescription: undefined,
+        startReading: undefined,
+        summaryTableData: {
+          headers: [
+            { text: 'Month' },
+            { text: 'Cubic metres', format: 'numeric' },
+            { text: 'Details', format: 'numeric' }
+          ],
+          rows: [
+            {
+              link: {
+                href: `/system/return-logs/setup/${session.id}/volumes/2023-0`,
+                text: 'Enter monthly volumes'
+              },
+              month: 'January 2023',
+              monthlyTotal: '0',
+              unitTotal: '0'
+            },
+            {
+              link: {
+                href: `/system/return-logs/setup/${session.id}/volumes/2023-1`,
+                text: 'Enter monthly volumes'
+              },
+              month: 'February 2023',
+              monthlyTotal: '0',
+              unitTotal: '0'
+            }
+          ]
+        },
+        tableTitle: 'Summary of monthly volumes',
+        tariff: 'Standard',
+        totalCubicMetres: '0',
+        totalQuantity: '0',
+        units: 'Cubic metres'
       })
     })
   })
