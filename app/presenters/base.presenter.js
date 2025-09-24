@@ -304,8 +304,8 @@ function formatReturnLogStatus(returnLog) {
     return 'not due yet'
   }
 
-  // If we are here, the return log is due and has past its end date. If a due date has not been set then it is simply
-  // 'open' for return submissions
+  // If we are here, the return log has a status of 'due' and is past its end date. If a due date has not been set then
+  // it is simply 'open' for return submissions
   if (!dueDate) {
     return 'open'
   }
