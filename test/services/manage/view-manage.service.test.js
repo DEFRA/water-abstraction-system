@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
 
-describe('Manage - View service', () => {
+describe('Manage - View Manage service', () => {
   let userAuth
 
   describe('when called', () => {
@@ -21,10 +21,35 @@ describe('Manage - View service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewManageService.go(userAuth)
 
-      expect(result.pageTitle).to.equal('Manage reports and notices')
-      expect(result.activeNavBar).to.equal('manage')
-      expect(result.viewReports.show).to.be.true()
-      expect(result.viewReports.links.kpis).to.be.true()
+      expect(result).to.equal({
+        activeNavBar: 'manage',
+        flowNotices: {
+          show: false,
+          links: { restriction: false, handsOffFlow: false, resume: false }
+        },
+        licenceNotices: { show: false, links: { renewal: false } },
+        manageUsers: { show: false, links: { createAccount: false } },
+        pageTitle: 'Manage reports and notices',
+        returnNotices: {
+          show: false,
+          links: {
+            invitations: false,
+            paperForms: false,
+            reminders: false,
+            adHoc: false
+          }
+        },
+        viewReports: {
+          show: true,
+          links: {
+            notices: false,
+            returnsCycles: false,
+            digitise: false,
+            kpis: true
+          }
+        },
+        viewWorkflow: { show: false, links: { checkLicences: false } }
+      })
     })
   })
 })

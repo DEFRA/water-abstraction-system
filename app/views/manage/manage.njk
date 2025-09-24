@@ -1,10 +1,7 @@
 {% extends 'layout.njk' %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block content %}
-
-  {{ pageHeading(pageTitle) }}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   {% if viewReports.show %}
     <h2 class="govuk-heading-m">View reports</h2>
@@ -21,7 +18,7 @@
     <h2 class="govuk-heading-m">Send licence notices</h2>
 
     <ul class="govuk-list">
-      {% if licenceNotices.links.renewal %}<li><a class="govuk-link" href="notifications/2?start=1">Renewal</a></li>{% endif %}
+      {% if licenceNotices.links.renewal %}<li><a class="govuk-link" href="/notifications/2?start=1">Renewal</a></li>{% endif %}
     </ul>
   {% endif %}
 
@@ -40,9 +37,9 @@
     <h2 class="govuk-heading-m">Send flow notices</h2>
 
     <ul class="govuk-list">
-      {% if flowNotices.links.restriction %}<li><a class="govuk-link" href="notifications/1?start=1">Restriction</a></li>{% endif %}
-      {% if flowNotices.links.handsOffFlow %}<li><a class="govuk-link" href="notifications/3?start=1">Hands-off flow</a></li>{% endif %}
-      {% if flowNotices.links.resume %}<li><a class="govuk-link" href="notifications/4?start=1">Resume</a></li>{% endif %}
+      {% if flowNotices.links.restriction %}<li><a class="govuk-link" href="/notifications/1?start=1">Restriction</a></li>{% endif %}
+      {% if flowNotices.links.handsOffFlow %}<li><a class="govuk-link" href="/notifications/3?start=1">Hands-off flow</a></li>{% endif %}
+      {% if flowNotices.links.resume %}<li><a class="govuk-link" href="/notifications/4?start=1">Resume</a></li>{% endif %}
     </ul>
   {% endif %}
 
