@@ -25,7 +25,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
   describe('when this is a nil return', () => {
     beforeEach(() => {
-      sessionData.journey = 'nil-return'
+      sessionData.journey = 'nilReturn'
       sessionData.lines.push(
         {
           startDate: '2025-03-01T00:00:00.000Z',
@@ -47,7 +47,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
   describe('when this is not a nil return', () => {
     beforeEach(() => {
-      sessionData.journey = 'enter-return'
+      sessionData.journey = 'enterReturn'
       sessionData.lines.push(
         {
           startDate: '2025-03-01T00:00:00.000Z',

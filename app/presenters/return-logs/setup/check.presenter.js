@@ -27,7 +27,7 @@ const UNIT_NAMES = {
 function go(session) {
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return alwaysRequiredPageData
   }
 
@@ -95,7 +95,7 @@ function _alwaysRequiredPageData(session) {
       startReading: `/system/return-logs/setup/${sessionId}/start-reading`,
       units: `/system/return-logs/setup/${sessionId}/units`
     },
-    nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
+    nilReturn: journey === 'nilReturn' ? 'Yes' : 'No',
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
     pageTitleCaption: `Return reference ${returnReference}`,

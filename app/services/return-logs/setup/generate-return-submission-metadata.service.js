@@ -22,7 +22,7 @@ const REPORTED = {
  */
 function go(session) {
   // Metadata is not required for nil returns
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return {}
   }
 

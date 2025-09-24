@@ -116,7 +116,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('and the "Enter a nil return" route has been selected', () => {
       beforeEach(() => {
-        session.journey = 'nil-return'
+        session.journey = 'nilReturn'
       })
 
       it('correctly presents the data', () => {
@@ -1044,7 +1044,7 @@ function _sessionData() {
   return {
     endDate: '2024-03-31T00:00:00.000Z',
     id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
-    journey: 'enter-return',
+    journey: 'enterReturn',
     lines: [
       {
         endDate: '2023-04-30T00:00:00.000Z',

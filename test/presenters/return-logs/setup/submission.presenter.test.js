@@ -61,13 +61,13 @@ describe('Return Logs Setup - Submission presenter', () => {
     describe('the "journey" property', () => {
       describe('when an option has been selected and submitted', () => {
         beforeEach(() => {
-          session.journey = 'enter-return'
+          session.journey = 'enterReturn'
         })
 
         it('returns the selected option', () => {
           const result = SubmissionPresenter.go(session)
 
-          expect(result.journey).to.equal('enter-return')
+          expect(result.journey).to.equal('enterReturn')
         })
       })
     })

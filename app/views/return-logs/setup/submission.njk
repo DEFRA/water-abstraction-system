@@ -7,8 +7,9 @@
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
+      id: "journey",
       name: "journey",
-      errorMessage: error,
+      errorMessage: error.journey,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -16,19 +17,25 @@
       },
       items: [
         {
-          value: "enter-return",
+          id: "enterReturn",
+          name: "enterReturn",
+          value: "enterReturn",
           text: "Enter and submit",
-          checked: journey === "enter-return"
+          checked: journey === "enterReturn"
         },
         {
-          value: "nil-return",
+          id: "nilReturn",
+          name: "nilReturn",
+          value: "nilReturn",
           text: "Enter a nil return",
-          checked: journey === "nil-return"
+          checked: journey === "nilReturn"
         },
         {
-          value: "record-receipt",
+          id: "recordReceipt",
+          name: "recordReceipt",
+          value: "recordReceipt",
           text: "Record receipt",
-          checked: journey === "record-receipt"
+          checked: journey === "recordReceipt"
         } if beenReceived === false
       ]
     }) }}

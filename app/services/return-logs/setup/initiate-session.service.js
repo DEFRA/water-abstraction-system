@@ -190,7 +190,7 @@ function _submissionData(lines, returnLog) {
   const method = metadata?.method || null
 
   return {
-    journey: nilReturn ? 'nil-return' : 'enter-return',
+    journey: nilReturn ? 'nilReturn' : 'enterReturn',
     lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,

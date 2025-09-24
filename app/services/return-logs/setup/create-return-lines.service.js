@@ -21,7 +21,7 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if nil return)
  */
 async function go(returnSubmissionId, session, timestamp, trx = null) {
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return []
   }
 

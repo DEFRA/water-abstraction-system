@@ -65,7 +65,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         startDate: '2023-01-01',
         endDate: '2023-12-31',
         receivedDate: '2024-01-01',
-        journey: 'enter-return',
+        journey: 'enterReturn',
         lines: [
           {
             startDate: '2023-01-01T00:00:00.000Z',
@@ -146,7 +146,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         expect(callArgs[0]).to.equal(returnLog.id)
         expect(callArgs[1]).to.equal(user.username)
         expect(callArgs[2]).to.equal(mockGeneratedMetadata)
-        expect(callArgs[3]).to.equal(sessionData.data.journey === 'nil-return')
+        expect(callArgs[3]).to.equal(sessionData.data.journey === 'nilReturn')
       })
 
       it('calls CreateReturnLinesService with correct parameters', async () => {

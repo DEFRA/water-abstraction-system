@@ -600,7 +600,7 @@ describe('Return Logs - Setup - Controller', () => {
           })
 
           it('redirects to the "reported" page', async () => {
-            const response = await server.inject(_postOptions(path, { journey: 'enter-return' }))
+            const response = await server.inject(_postOptions(path, { journey: 'enterReturn' }))
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
@@ -613,7 +613,7 @@ describe('Return Logs - Setup - Controller', () => {
           })
 
           it('redirects to the "check" page', async () => {
-            const response = await server.inject(_postOptions(path, { journey: 'nil-return' }))
+            const response = await server.inject(_postOptions(path, { journey: 'nilReturn' }))
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
@@ -1283,7 +1283,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitSubmissionService, 'go').resolves({
-              error: { text: 'Select what you want to do with this return' }
+              error: {
+                errorList: [{ href: '#journey', text: 'Select what you want to do with this return' }],
+                journey: { text: 'Select what you want to do with this return' }
+              }
             })
           })
 

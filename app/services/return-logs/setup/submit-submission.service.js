@@ -56,11 +56,11 @@ async function _confirmReceipt(session) {
 }
 
 async function _redirect(journey, session) {
-  if (journey === 'nil-return') {
+  if (journey === 'nilReturn') {
     return 'check'
   }
 
-  if (journey === 'record-receipt') {
+  if (journey === 'recordReceipt') {
     await _confirmReceipt(session)
 
     return 'confirm-received'

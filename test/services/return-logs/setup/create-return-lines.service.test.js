@@ -131,7 +131,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
 
     describe('when called for a nil return', () => {
       beforeEach(() => {
-        session.journey = 'nil-return'
+        session.journey = 'nilReturn'
       })
 
       it('returns an empty array', async () => {

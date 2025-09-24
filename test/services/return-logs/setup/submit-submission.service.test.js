@@ -44,7 +44,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
     describe('with a valid payload', () => {
       describe('and the user has selected "Enter and submit"', () => {
         beforeEach(async () => {
-          payload = { journey: 'enter-return' }
+          payload = { journey: 'enterReturn' }
         })
 
         it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
@@ -52,14 +52,14 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.journey).to.equal('enter-return')
+          expect(refreshedSession.journey).to.equal('enterReturn')
           expect(result.redirect).to.equal('reported')
         })
       })
 
       describe('and the user has selected "Enter a nil return"', () => {
         beforeEach(async () => {
-          payload = { journey: 'nil-return' }
+          payload = { journey: 'nilReturn' }
         })
 
         it('saves the submitted option to the session and returns the redirect as "check"', async () => {
@@ -67,14 +67,14 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.journey).to.equal('nil-return')
+          expect(refreshedSession.journey).to.equal('nilReturn')
           expect(result.redirect).to.equal('check')
         })
       })
 
       describe('and the user has selected "Record receipt"', () => {
         beforeEach(async () => {
-          payload = { journey: 'record-receipt' }
+          payload = { journey: 'recordReceipt' }
 
           returnLog = await ReturnLogHelper.add({ id: returnLogId })
         })
@@ -105,7 +105,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
       describe('and the check page had been visited previously', () => {
         beforeEach(async () => {
-          payload = { journey: 'enter-return' }
+          payload = { journey: 'enterReturn' }
 
           session = await SessionHelper.add({
             data: { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }

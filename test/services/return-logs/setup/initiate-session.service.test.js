@@ -89,7 +89,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         beenReceived: true,
         dueDate: '2023-04-28T00:00:00.000Z',
         endDate: '2022-06-01T00:00:00.000Z',
-        journey: 'enter-return',
+        journey: 'enterReturn',
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         lines: [
@@ -242,7 +242,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.journey).to.equal('nil-return')
+        expect(matchingSession.data.journey).to.equal('nilReturn')
       })
 
       it('populates the lines array with placeholder data', async () => {
