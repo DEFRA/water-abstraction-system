@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const { ValidationError } = require('joi')
+const { today } = require('../../app/lib/general.lib.js')
+const { tomorrow, yesterday } = require('../support/general.js')
 
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
@@ -356,95 +358,120 @@ describe('Base presenter', () => {
   describe('#formatReturnLogStatus()', () => {
     let testReturnLog
 
-    describe('when status is completed', () => {
-      before(() => {
-        testReturnLog = { dueDate: null, status: 'completed' }
-      })
-
-      it('returns complete', () => {
-        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
-
-        expect(result).to.equal('complete')
-      })
-    })
-
-    describe('when the status is due', () => {
-      describe('and the due date is null', () => {
+    describe('when status is "due"', () => {
+      describe('and the end date is greater than or equal to the current date', () => {
         before(() => {
-          testReturnLog = { dueDate: null, status: 'due' }
+          testReturnLog = { endDate: today(), status: 'due' }
         })
 
-        it('returns not due yet', () => {
+        it('returns "not due yet"', () => {
           const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
           expect(result).to.equal('not due yet')
         })
       })
 
-      describe('and the due date is in the past', () => {
+      describe('and the end date is less than the current date', () => {
         before(() => {
-          const lastWeek = new Date()
-          lastWeek.setDate(lastWeek.getDate() - 7)
-
-          testReturnLog = { dueDate: lastWeek, status: 'due' }
+          testReturnLog = { endDate: yesterday(), status: 'due' }
         })
 
-        it('returns overdue', () => {
-          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+        describe('and the due date is null', () => {
+          before(() => {
+            testReturnLog.dueDate = null
+          })
 
-          expect(result).to.equal('overdue')
-        })
-      })
+          it('returns "open"', () => {
+            const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-      describe('and the due date is in the next 28 days', () => {
-        before(() => {
-          const nextWeek = new Date()
-          nextWeek.setDate(nextWeek.getDate() + 7)
-
-          testReturnLog = { dueDate: nextWeek, status: 'due' }
+            expect(result).to.equal('open')
+          })
         })
 
-        it('returns due', () => {
-          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+        describe('and the due date is more than 28 days in the future', () => {
+          before(() => {
+            const inFuture = today()
 
-          expect(result).to.equal('due')
+            inFuture.setDate(inFuture.getDate() + 29)
+
+            testReturnLog = { dueDate: inFuture, status: 'due' }
+          })
+
+          it('returns "open"', () => {
+            const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+            expect(result).to.equal('open')
+          })
         })
-      })
 
-      describe('and the due date is after the next 28 days', () => {
-        before(() => {
-          const fourWeeks = new Date()
-          fourWeeks.setDate(fourWeeks.getDate() + 27)
+        describe('and the due date is in the next 28 days', () => {
+          before(() => {
+            testReturnLog = { dueDate: tomorrow(), status: 'due' }
+          })
 
-          testReturnLog = { dueDate: fourWeeks, status: 'due' }
+          it('returns "due"', () => {
+            const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+            expect(result).to.equal('due')
+          })
         })
 
-        it('returns not due yet', () => {
-          const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+        describe('and the due date is equal to the current date', () => {
+          before(() => {
+            testReturnLog = { dueDate: today(), status: 'due' }
+          })
 
-          expect(result).to.equal('not due yet')
+          it('returns "due"', () => {
+            const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+            expect(result).to.equal('due')
+          })
+        })
+
+        describe('and the due date is less than the current date', () => {
+          before(() => {
+            testReturnLog = { dueDate: yesterday(), status: 'due' }
+          })
+
+          it('returns "due"', () => {
+            const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+            expect(result).to.equal('overdue')
+          })
         })
       })
     })
 
-    describe('when status is received', () => {
+    describe('when status is "received"', () => {
       before(() => {
         testReturnLog = { dueDate: null, status: 'received' }
       })
 
-      it('returns received', () => {
+      it('returns "received"', () => {
         const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
         expect(result).to.equal('received')
       })
     })
 
-    describe('when status is void', () => {
+    describe('when status is "completed"', () => {
+      before(() => {
+        testReturnLog = { dueDate: null, status: 'completed' }
+      })
+
+      it('returns "complete"', () => {
+        const result = BasePresenter.formatReturnLogStatus(testReturnLog)
+
+        expect(result).to.equal('complete')
+      })
+    })
+
+    describe('when status is "void"', () => {
       before(() => {
         testReturnLog = { dueDate: null, status: 'void' }
       })
 
-      it('returns void', () => {
+      it('returns "void"', () => {
         const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
         expect(result).to.equal('void')
