@@ -115,7 +115,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         receivedDateMonth: '3',
         receivedDateOptions: 'custom-date',
         receivedDateYear: '2025',
-        reported: 'abstraction-volumes',
+        reported: 'abstractionVolumes',
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
         returnsFrequency: 'month',
@@ -216,7 +216,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
         expect(matchingSession.data.meterSerialNumber).to.equal('METER_SERIAL_NUMBER')
         expect(matchingSession.data.meterProvided).to.equal('yes')
-        expect(matchingSession.reported).to.equal('meter-readings')
+        expect(matchingSession.reported).to.equal('meterReadings')
       })
     })
 

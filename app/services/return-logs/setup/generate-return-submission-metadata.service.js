@@ -9,8 +9,8 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 const REPORTED = {
-  VOLUMES: 'abstraction-volumes',
-  READINGS: 'meter-readings'
+  VOLUMES: 'abstractionVolumes',
+  READINGS: 'meterReadings'
 }
 
 /**

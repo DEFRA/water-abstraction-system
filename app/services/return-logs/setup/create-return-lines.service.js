@@ -95,7 +95,7 @@ function _getUserUnit(unit) {
 
 function _returnLines(returnSubmissionId, session, timestamp) {
   const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
-  const volumes = session.reported === 'abstraction-volumes'
+  const volumes = session.reported === 'abstractionVolumes'
 
   let previousReading = session.startReading ?? 0
 

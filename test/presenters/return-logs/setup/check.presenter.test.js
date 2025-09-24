@@ -159,7 +159,7 @@ describe('Return Logs Setup - Check presenter', () => {
   describe('the "displayReadings" property', () => {
     describe('when the user has used meter readings', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns "true"', () => {
@@ -171,7 +171,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('when the user has used volumes', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns "false"', () => {
@@ -219,9 +219,9 @@ describe('Return Logs Setup - Check presenter', () => {
       expect(result.enterMultipleLinkText).to.contain('monthly')
     })
 
-    describe('when the values are reported using "abstraction-volumes"', () => {
+    describe('when the values are reported using "abstractionVolumes"', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns "volumes" in the link text', () => {
@@ -231,9 +231,9 @@ describe('Return Logs Setup - Check presenter', () => {
       })
     })
 
-    describe('when the reporting method is not "abstraction-volumes"', () => {
+    describe('when the reporting method is not "abstractionVolumes"', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns "readings" in the link text', () => {
@@ -317,7 +317,7 @@ describe('Return Logs Setup - Check presenter', () => {
   describe('the "reportingFigures" property', () => {
     describe('when the user has used meter readings', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns the method of gathering the figures as "Meter readings"', () => {
@@ -329,7 +329,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('when the user has used volumes', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns the method of gathering the figures as "Volumes"', () => {
@@ -343,7 +343,7 @@ describe('Return Logs Setup - Check presenter', () => {
   describe('the "summaryTableData" property', () => {
     describe('when the reporting method is volumes', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       describe('and the frequency is monthly', () => {
@@ -562,7 +562,7 @@ describe('Return Logs Setup - Check presenter', () => {
     describe('when the reporting method is meter readings', () => {
       beforeEach(() => {
         session.meter10TimesDisplay = 'no'
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
         session.startReading = 100
       })
 
@@ -844,9 +844,9 @@ describe('Return Logs Setup - Check presenter', () => {
       expect(result.tableTitle).to.contain('monthly')
     })
 
-    describe('when the values are reported using "abstraction-volumes"', () => {
+    describe('when the values are reported using "abstractionVolumes"', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns "abstraction volumes" in the title', () => {
@@ -856,9 +856,9 @@ describe('Return Logs Setup - Check presenter', () => {
       })
     })
 
-    describe('when the reporting method is not "abstraction-volumes"', () => {
+    describe('when the reporting method is not "abstractionVolumes"', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns "meter readings" in the title', () => {
@@ -1069,7 +1069,7 @@ function _sessionData() {
     periodStartMonth: 1,
     purposes: ['Evaporative Cooling'],
     receivedDate: '2025-01-31T00:00:00.000Z',
-    reported: 'abstraction-volumes',
+    reported: 'abstractionVolumes',
     returnReference: '1234',
     returnsFrequency: 'month',
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',

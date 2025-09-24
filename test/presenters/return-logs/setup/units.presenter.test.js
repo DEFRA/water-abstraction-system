@@ -47,7 +47,7 @@ describe('Return Logs Setup - Units presenter', () => {
       })
     })
 
-    describe('when the user has come from the "abstraction-volumes" route', () => {
+    describe('when the user has come from the "abstractionVolumes" route', () => {
       it('returns a link back to the "Reported" page on', () => {
         const result = UnitsPresenter.go(session)
 
@@ -55,9 +55,9 @@ describe('Return Logs Setup - Units presenter', () => {
       })
     })
 
-    describe('when the user has come from the "meter-readings" route', () => {
+    describe('when the user has come from the "meterReadings" route', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns a link back to the "Start reading" page on', () => {

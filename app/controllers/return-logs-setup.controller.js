@@ -191,7 +191,7 @@ async function submitMeterDetails(request, h) {
     return h.view('return-logs/setup/meter-details.njk', pageData)
   }
 
-  if (pageData.reported === 'abstraction-volumes' && !pageData.checkPageVisited) {
+  if (pageData.reported === 'abstractionVolumes' && !pageData.checkPageVisited) {
     return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
   }
 
@@ -212,7 +212,7 @@ async function submitMeterProvided(request, h) {
   }
 
   if (pageData.meterProvided === 'no') {
-    if (pageData.checkPageVisited || pageData.reported === 'meter-readings') {
+    if (pageData.checkPageVisited || pageData.reported === 'meterReadings') {
       return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
     }
 
@@ -313,7 +313,7 @@ async function submitReported(request, h) {
   }
 
   // If the user has selected 'Meter readings' we always redirect to the start-reading page
-  if (pageData.reported === 'meter-readings') {
+  if (pageData.reported === 'meterReadings') {
     return h.redirect(`/system/return-logs/setup/${sessionId}/start-reading`)
   }
 

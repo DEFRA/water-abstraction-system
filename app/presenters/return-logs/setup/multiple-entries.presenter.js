@@ -18,7 +18,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 function go(session) {
   const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
 
-  const measurementType = reported === 'abstraction-volumes' ? 'volumes' : 'readings'
+  const measurementType = reported === 'abstractionVolumes' ? 'volumes' : 'readings'
   const frequency = returnRequirementFrequencies[returnsFrequency]
 
   return {

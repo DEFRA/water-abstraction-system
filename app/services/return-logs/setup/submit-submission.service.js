@@ -5,12 +5,13 @@
  * @module SubmitSubmissionService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
+
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page

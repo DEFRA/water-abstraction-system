@@ -15,7 +15,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
   beforeEach(() => {
     sessionData = {
-      reported: 'abstraction-volumes',
+      reported: 'abstractionVolumes',
       units: 'cubic-metres',
       singleVolume: false,
       meterProvided: 'no',
@@ -79,9 +79,9 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       expect(results).to.equal(['m³', 'l', 'Ml', 'gal'])
     })
 
-    describe('and session.reported is abstraction-volumes', () => {
+    describe('and session.reported is abstractionVolumes', () => {
       beforeEach(() => {
-        sessionData.reported = 'abstraction-volumes'
+        sessionData.reported = 'abstractionVolumes'
       })
 
       it('sets method as abstractionVolumes', () => {
@@ -221,9 +221,9 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       })
     })
 
-    describe('and session.reported is meter-readings', () => {
+    describe('and session.reported is meterReadings', () => {
       beforeEach(() => {
-        sessionData.reported = 'meter-readings'
+        sessionData.reported = 'meterReadings'
         sessionData.startReading = 250
         sessionData.lines[0].reading = 750
         sessionData.lines[1].reading = 3000

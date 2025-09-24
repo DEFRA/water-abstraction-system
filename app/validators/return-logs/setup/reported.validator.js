@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['meter-readings', 'abstraction-volumes']
+const VALID_VALUES = ['meterReadings', 'abstractionVolumes']
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/reported` page

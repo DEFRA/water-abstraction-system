@@ -9,7 +9,7 @@ const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = 
 const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
-const ABSTRACTION_VOLUMES_METHOD = 'abstraction-volumes'
+const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
 const UNIT_NAMES = {
   'cubic-metres': 'm³',
   litres: 'l',

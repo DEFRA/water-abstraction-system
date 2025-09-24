@@ -497,7 +497,7 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has not been visited previously', () => {
           describe('and "Meter readings" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meter-readings' })
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meterReadings' })
             })
 
             it('redirects to the "start-reading" page', async () => {
@@ -510,7 +510,7 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and "Abstraction Volumes" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'abstraction-volumes' })
+              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'abstractionVolumes' })
             })
 
             it('redirects to the "units" page', async () => {
@@ -525,7 +525,7 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has been visited previously', () => {
           describe('and "Meter readings" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true, reported: 'meter-readings' })
+              Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true, reported: 'meterReadings' })
             })
 
             it('redirects to the "start-reading" page', async () => {
@@ -540,7 +540,7 @@ describe('Return Logs - Setup - Controller', () => {
             beforeEach(() => {
               Sinon.stub(SubmitReportedService, 'go').resolves({
                 checkPageVisited: true,
-                reported: 'abstraction-volumes'
+                reported: 'abstractionVolumes'
               })
             })
 
@@ -556,7 +556,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReportedService, 'go').resolves({
-              error: { text: 'Select how this return was reported' },
+              error: {
+                errorList: [{ href: '#reported', text: 'Select how this return was reported' }],
+                reported: { text: 'Select how this return was reported' }
+              },
               pageTitle: 'How was this return reported?',
               sessionId
             })
@@ -774,9 +777,9 @@ describe('Return Logs - Setup - Controller', () => {
             })
           })
 
-          describe('and the reported type is "meter-readings"', () => {
+          describe('and the reported type is "meterReadings"', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no', reported: 'meter-readings' })
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no', reported: 'meterReadings' })
             })
 
             it('redirects to the "check" page', async () => {
@@ -872,10 +875,10 @@ describe('Return Logs - Setup - Controller', () => {
           })
         })
 
-        describe('and the reporting type is "abstraction-volumes"', () => {
+        describe('and the reporting type is "abstractionVolumes"', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-              reported: 'abstraction-volumes',
+              reported: 'abstractionVolumes',
               meterMake: 'Meter',
               meterSerialNumber: '1234',
               meter10TimesDisplay: 'no'

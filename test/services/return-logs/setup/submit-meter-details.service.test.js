@@ -24,7 +24,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
     sessionData = {
       data: {
         returnReference: '12345',
-        reported: 'meter-readings'
+        reported: 'meterReadings'
       }
     }
 
@@ -60,7 +60,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
         expect(result).to.equal({
           checkPageVisited: undefined,
-          reported: 'meter-readings'
+          reported: 'meterReadings'
         })
       })
     })
@@ -75,7 +75,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
         expect(result).to.equal({
           checkPageVisited: true,
-          reported: 'meter-readings'
+          reported: 'meterReadings'
         })
       })
 

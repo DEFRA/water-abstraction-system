@@ -5,11 +5,12 @@
  * @module SubmitReportedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
 const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page

@@ -29,7 +29,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const measurementType = session.reported === 'abstraction-volumes' ? 'volumes' : 'meter readings'
+  const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'
   const frequency = returnRequirementFrequencies[session.returnsFrequency]
 
   const validationResult = _validate(frequency, measurementType, payload, session)
@@ -56,7 +56,7 @@ async function go(sessionId, payload, yar) {
 
 async function _save(session, payload) {
   session.lines.forEach((line, index) => {
-    if (session.reported === 'abstraction-volumes') {
+    if (session.reported === 'abstractionVolumes') {
       line.quantity = payload.formattedEntries[index]
     } else {
       line.reading = payload.formattedEntries[index]

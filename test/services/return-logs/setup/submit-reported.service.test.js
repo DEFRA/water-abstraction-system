@@ -35,7 +35,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
-        payload = { reported: 'meter-readings' }
+        payload = { reported: 'meterReadings' }
       })
 
       it('saves the submitted option', async () => {
@@ -43,7 +43,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.reported).to.equal('meter-readings')
+        expect(refreshedSession.reported).to.equal('meterReadings')
       })
 
       describe('and the page has been not been visited', () => {
@@ -52,7 +52,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
           expect(result).to.equal({
             checkPageVisited: undefined,
-            reported: 'meter-readings'
+            reported: 'meterReadings'
           })
         })
       })
@@ -67,7 +67,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
           expect(result).to.equal({
             checkPageVisited: true,
-            reported: 'meter-readings'
+            reported: 'meterReadings'
           })
         })
 

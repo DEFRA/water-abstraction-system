@@ -8,8 +8,9 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
+      id: "reported",
       name: "reported",
-      errorMessage: error,
+      errorMessage: error.reported,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -17,14 +18,18 @@
       },
       items: [
         {
-          value: "meter-readings",
+          id: "meterReadings",
+          name: "meterReadings",
+          value: "meterReadings",
           text: "Meter Readings",
-          checked: "meter-readings" === reported
+          checked: "meterReadings" === reported
         },
         {
-          value: "abstraction-volumes",
+          id: "abstractionVolumes",
+          name: "abstractionVolumes",
+          value: "abstractionVolumes",
           text: "Abstraction Volumes",
-          checked: "abstraction-volumes" === reported
+          checked: "abstractionVolumes" === reported
         }
       ]
     }) }}

@@ -65,25 +65,25 @@ describe('Return Logs Setup - Reported presenter', () => {
   describe('the "reported" property', () => {
     describe('when the user has previously selected "Meter Readings" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('meter-readings')
+        expect(result.reported).to.equal('meterReadings')
       })
     })
 
     describe('when the user has previously selected "Abstraction Volumes" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('abstraction-volumes')
+        expect(result.reported).to.equal('abstractionVolumes')
       })
     })
   })

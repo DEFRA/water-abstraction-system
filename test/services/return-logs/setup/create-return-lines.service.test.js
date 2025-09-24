@@ -49,7 +49,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
         returnsFrequency: 'week',
         startReading: null,
         units: 'cubic-metres',
-        reported: 'abstraction-volumes'
+        reported: 'abstractionVolumes'
       }
     })
 
@@ -95,7 +95,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
 
     describe('when measured using meter readings', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
         session.startReading = 1000
       })
 

@@ -25,7 +25,7 @@ describe('Return Logs Setup - Multiple Entries service', () => {
           { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
         ],
         returnsFrequency: 'month',
-        reported: 'abstraction-volumes'
+        reported: 'abstractionVolumes'
       }
     })
   })
