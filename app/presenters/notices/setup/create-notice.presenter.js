@@ -48,19 +48,15 @@ function go(session, recipients, auth) {
 
 /**
  * All the licences associated with an event (licences that will receive notifications) are stored in
- * `water.events.licences`. It is not clear where these are used. But to be consistent we follow the established
+ * `water.events.licences`. It is not clear where these are used. But to be consistent, we follow the established
  * pattern.
- *
- * These licences are stored as 'jsonb' so we need to stringify the array to match the schema.
  *
  * @private
  */
 function _licences(recipients) {
-  const formattedRecipients = recipients.flatMap((recipient) => {
+  return recipients.flatMap((recipient) => {
     return transformStringOfLicencesToArray(recipient.licence_refs)
   })
-
-  return JSON.stringify(formattedRecipients)
 }
 
 /**
