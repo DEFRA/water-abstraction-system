@@ -225,7 +225,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         meterSerialNumber: undefined,
         nilReturn: 'No',
         note: {
-          actions: [ { text: 'Add a note', href: 'note' } ],
+          actions: [{ text: 'Add a note', href: 'note' }],
           text: 'No notes added'
         },
         pageTitle: 'Check details and enter new volumes or readings',
