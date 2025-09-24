@@ -12,8 +12,7 @@
 
     {% call govukFieldset({
       legend: {
-        html: 'Meter readings',
-        isPageHeading: false,
+        text: 'Meter readings',
         classes: "govuk-fieldset__legend--m"
       }
     }) %}
@@ -37,5 +36,4 @@
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
-
 {% endblock %}
