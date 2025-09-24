@@ -5,6 +5,8 @@
  * @module SubmitCheckService
  */
 
+const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
+const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
 const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -28,9 +30,21 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
 
-  await _save(session, user)
+  const validationResult = _validate(session)
 
-  return session.returnLogId
+  if (!validationResult) {
+    await _save(session, user)
+
+    return { returnLogId: session.returnLogId }
+  }
+
+  const formattedData = CheckPresenter.go(session)
+
+  return {
+    activeNavBar: 'search',
+    error: validationResult,
+    ...formattedData
+  }
 }
 
 async function _cleanupSession(sessionId, trx) {
@@ -56,6 +70,20 @@ async function _save(session, user) {
     await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
     await _cleanupSession(session.id, trx)
   })
+}
+
+function _validate(session) {
+  const validation = CheckValidator.go(session)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message } = validation.error.details[0]
+
+  return {
+    errorList: [{ text: message }]
+  }
 }
 
 module.exports = {
