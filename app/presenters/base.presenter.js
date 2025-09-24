@@ -297,8 +297,10 @@ function formatReturnLogStatus(returnLog) {
     return status
   }
 
+  const todaysDate = today()
+
   // If the return log has not yet ended then it is not yet due for submissions
-  if (today() <= endDate) {
+  if (todaysDate <= endDate) {
     return 'not due yet'
   }
 
@@ -309,8 +311,6 @@ function formatReturnLogStatus(returnLog) {
   }
 
   // If we are here, the return log has a due date. If todays date is greater than that, then we are overdue
-  const todaysDate = today()
-
   if (dueDate < todaysDate) {
     return 'overdue'
   }
