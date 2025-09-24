@@ -119,7 +119,15 @@ describe('Return Logs Setup - Submit Note service', () => {
           activeNavBar: 'search',
           backLink: `/system/return-logs/setup/${session.id}/check`,
           error: {
-            text: 'Enter details'
+            errorList: [
+              {
+                href: '#note',
+                text: 'Enter details'
+              }
+            ],
+            note: {
+              text: 'Enter details'
+            }
           },
           note: null,
           pageTitle: 'Add a note',
@@ -132,7 +140,17 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({ text: 'Enter details' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#note',
+                text: 'Enter details'
+              }
+            ],
+            note: {
+              text: 'Enter details'
+            }
+          })
         })
       })
 
@@ -156,7 +174,17 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({ text: 'Enter no more than 500 characters' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#note',
+                text: 'Enter no more than 500 characters'
+              }
+            ],
+            note: {
+              text: 'Enter no more than 500 characters'
+            }
+          })
         })
       })
     })
