@@ -26,7 +26,7 @@ function go(session) {
   } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLink(session), text: 'Back' },
     pageTitleCaption: `Return reference ${returnReference}`,
     pageTitle: 'When was the return received?',
     receivedDateDay: receivedDateDay ?? null,
@@ -41,18 +41,12 @@ function go(session) {
 
 function _backLink(session) {
   const { checkPageVisited, id, returnLogId } = session
-  let backLink
 
   if (checkPageVisited) {
-    backLink = `/system/return-logs/setup/${id}/check`
-  } else {
-    backLink = `/system/return-logs?id=${returnLogId}`
+    return `/system/return-logs/setup/${id}/check`
   }
 
-  return {
-    href: backLink,
-    text: 'Back'
-  }
+  return `/system/return-logs?id=${returnLogId}`
 }
 
 function _yesterdaysDate() {

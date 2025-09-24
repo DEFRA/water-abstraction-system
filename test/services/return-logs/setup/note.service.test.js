@@ -33,7 +33,10 @@ describe('Return Logs Setup - Note service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        backLink: `/system/return-logs/setup/${sessionId}/check`,
+        backLink: {
+          href: `/system/return-logs/setup/${sessionId}/check`,
+          text: 'Back'
+        },
         note: null,
         pageTitle: 'Add a note',
         caption: 'Return reference 1234',
