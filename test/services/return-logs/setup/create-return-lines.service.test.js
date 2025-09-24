@@ -48,7 +48,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
         meterProvided: 'no',
         returnsFrequency: 'week',
         startReading: null,
-        units: 'cubic-metres',
+        units: 'cubicMetres',
         reported: 'abstractionVolumes'
       }
     })

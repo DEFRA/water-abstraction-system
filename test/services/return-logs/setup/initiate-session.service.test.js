@@ -125,7 +125,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         submissionType: 'edit',
         twoPartTariff: returnLog.metadata.isTwoPartTariff,
         underQuery: returnLog.underQuery,
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       })
     })
 
@@ -167,14 +167,14 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
       })
 
-      it('defaults the unit to cubic-metres', async () => {
+      it('defaults the unit to cubicMetres', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.units).to.equal('cubic-metres')
+        expect(matchingSession.data.units).to.equal('cubicMetres')
       })
     })
 

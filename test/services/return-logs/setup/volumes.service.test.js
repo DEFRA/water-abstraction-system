@@ -34,7 +34,7 @@ describe('Return Logs Setup - Volumes service', () => {
         ],
         returnsFrequency: 'month',
         returnReference: '1234',
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       }
     })
   })

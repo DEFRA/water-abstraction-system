@@ -8,6 +8,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
+      id: "units",
       name: "units",
       errorMessage: error.units,
       fieldset: {
@@ -17,21 +18,25 @@
       },
       items: [
         {
-          value: "cubic-metres",
+          id: "cubicMetres",
+          value: "cubicMetres",
           text: "Cubic Metres",
-          checked: "cubic-metres" === units
+          checked: "cubicMetres" === units
         },
         {
+          id: "litres",
           value: "litres",
           text: "Litres",
           checked: "litres" === units
         },
         {
+          id: "megalitres",
           value: "megalitres",
           text: "Megalitres",
           checked: "megalitres" === units
         },
         {
+          id: "gallons",
           value: "gallons",
           text: "Gallons",
           checked: "gallons" === units

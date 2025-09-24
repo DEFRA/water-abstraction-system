@@ -183,9 +183,9 @@ describe('Return Logs Setup - Check presenter', () => {
   })
 
   describe('the "displayUnits" property', () => {
-    describe('when the unit of measurement used is "cubic-metres"', () => {
+    describe('when the unit of measurement used is "cubicMetres"', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns "false"', () => {
@@ -195,7 +195,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
     })
 
-    describe('when the unit of measurement used is not "cubic-metres"', () => {
+    describe('when the unit of measurement used is not "cubicMetres"', () => {
       beforeEach(() => {
         session.units = 'megalitres'
       })
@@ -370,7 +370,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubic-metres'
+            session.units = 'cubicMetres'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -494,7 +494,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubic-metres'
+            session.units = 'cubicMetres'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -589,7 +589,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubic-metres'
+            session.units = 'cubicMetres'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -763,7 +763,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubic-metres'
+            session.units = 'cubicMetres'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -908,7 +908,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('when the unit of measurement is cubic metres', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
@@ -992,7 +992,7 @@ describe('Return Logs Setup - Check presenter', () => {
   describe('the "units" property', () => {
     describe('when the user has used cubic metres', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns the unit of measurement as "Cubic metres"', () => {

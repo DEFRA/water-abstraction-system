@@ -73,13 +73,13 @@ describe('Return Logs Setup - Units presenter', () => {
   describe('the "units" property', () => {
     describe('when the user has previously selected "Cubic Metres" as the reported type', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('cubic-metres')
+        expect(result.units).to.equal('cubicMetres')
       })
     })
 

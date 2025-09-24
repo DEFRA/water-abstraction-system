@@ -16,7 +16,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
   beforeEach(() => {
     sessionData = {
       reported: 'abstractionVolumes',
-      units: 'cubic-metres',
+      units: 'cubicMetres',
       singleVolume: false,
       meterProvided: 'no',
       lines: []
@@ -66,7 +66,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
     it('correctly sets units', () => {
       const sessionDataToTest = [
-        { ...sessionData, units: 'cubic-metres' },
+        { ...sessionData, units: 'cubicMetres' },
         { ...sessionData, units: 'litres' },
         { ...sessionData, units: 'megalitres' },
         { ...sessionData, units: 'gallons' }

@@ -77,7 +77,7 @@ function _convertToCubicMetres(quantity, units) {
 }
 
 /**
- * Convert a unit name to the form we persist as `user_unit` ie. from `cubic-metres` to `m³`
+ * Convert a unit name to the form we persist as `user_unit` ie. from `cubicMetres` to `m³`
  *
  * @param {string} unit - The unit name to convert
  *

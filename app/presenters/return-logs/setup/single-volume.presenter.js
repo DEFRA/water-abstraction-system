@@ -22,7 +22,7 @@ function go(session) {
     sessionId,
     singleVolume: singleVolume ?? null,
     singleVolumeQuantity: singleVolumeQuantity ?? null,
-    units: units === 'cubic-metres' ? 'cubic metres' : units
+    units: units === 'cubicMetres' ? 'cubic metres' : units
   }
 }
 

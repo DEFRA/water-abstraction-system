@@ -31,7 +31,7 @@ function go(session, yearMonth) {
     caption: `Return reference ${returnReference}`,
     inputLines: _inputLines(requestedMonthLines, returnsFrequency),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
-    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
+    units: units === 'cubicMetres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 

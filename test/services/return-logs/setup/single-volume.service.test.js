@@ -20,7 +20,7 @@ describe('Return Logs Setup - Single Volume service', () => {
     session = await SessionHelper.add({
       data: {
         returnReference: '012345',
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       }
     })
   })

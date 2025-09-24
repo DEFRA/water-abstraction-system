@@ -11,7 +11,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 
 const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
 const UNIT_NAMES = {
-  'cubic-metres': 'm³',
+  cubicMetres: 'm³',
   litres: 'l',
   megalitres: 'Ml',
   gallons: 'gal'
@@ -49,7 +49,7 @@ function go(session) {
   return {
     ...alwaysRequiredPageData,
     displayReadings: reported !== ABSTRACTION_VOLUMES_METHOD,
-    displayUnits: units !== 'cubic-metres',
+    displayUnits: units !== 'cubicMetres',
     enterMultipleLinkText: _enterMultipleLinkText(reported, returnsFrequency),
     meter10TimesDisplay,
     meterMake,
@@ -61,7 +61,7 @@ function go(session) {
     tableTitle: _tableTitle(reported, returnsFrequency),
     totalCubicMetres: convertToCubicMetres(totalQuantity, unitName),
     totalQuantity: formatNumber(totalQuantity),
-    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
+    units: units === 'cubicMetres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 

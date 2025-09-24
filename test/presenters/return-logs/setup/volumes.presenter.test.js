@@ -131,7 +131,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
   describe('the "units" property', () => {
     describe('when the user has used cubic metres', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns the unit of measurement as "Cubic metres"', () => {
@@ -199,6 +199,6 @@ function _sessionData() {
     ],
     returnsFrequency: 'month',
     returnReference: '1234',
-    units: 'cubic-metres'
+    units: 'cubicMetres'
   }
 }

@@ -13,7 +13,7 @@ const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 const FeatureFlags = require('../../../../config/feature-flags.config.js')
 
 const UNITS = {
-  [unitNames.CUBIC_METRES]: 'cubic-metres',
+  [unitNames.CUBIC_METRES]: 'cubicMetres',
   [unitNames.LITRES]: 'litres',
   [unitNames.MEGALITRES]: 'megalitres',
   [unitNames.GALLONS]: 'gallons'

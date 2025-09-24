@@ -396,7 +396,7 @@ const unitNames = {
 }
 
 const returnUnits = {
-  [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres', name: 'cubic-metres' },
+  [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres', name: 'cubicMetres' },
   [unitNames.LITRES]: { multiplier: 1000, label: 'litres', name: 'litres' },
   [unitNames.MEGALITRES]: { multiplier: 0.001, label: 'megalitres', name: 'megalitres' },
   [unitNames.GALLONS]: { multiplier: 219.969248299, label: 'gallons', name: 'gallons' }
