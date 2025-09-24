@@ -26,7 +26,7 @@ async function go(session, recipients, eventId) {
   }
 
   if (noticeType === 'returnForms') {
-    return await DetermineReturnFormsService.go(session, recipients, eventId)
+    return DetermineReturnFormsService.go(session, recipients, eventId)
   }
 
   return NotificationsPresenter.go(recipients, session, eventId)

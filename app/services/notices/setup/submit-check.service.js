@@ -36,7 +36,7 @@ async function go(sessionId, auth) {
 
   const notifications = await DetermineNotificationsService.go(sessionCopy, recipients, notice.id)
 
-  _processNotifications(sessionCopy, notifications, notice)
+  _processNotifications(notifications, notice)
 
   return notice.id
 }
@@ -47,7 +47,7 @@ async function _notice(session, recipients, auth) {
   return CreateNoticeService.go(event)
 }
 
-async function _processNotifications(session, notifications, notice) {
+async function _processNotifications(notifications, notice) {
   try {
     const startTime = currentTimeInNanoseconds()
 
