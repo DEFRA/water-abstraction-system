@@ -21,7 +21,7 @@ function go(session) {
   const schema = Joi.object({
     abstractionValue: Joi.number()
       .greater(0)
-      .messages({'number.greater': 'Returns with an abstraction volume of 0 should be recorded as a nil return.' })
+      .messages({ 'number.greater': 'Returns with an abstraction volume of 0 should be recorded as a nil return.' })
   })
 
   return schema.validate({ abstractionValue }, { abortEarly: false })
@@ -41,9 +41,11 @@ function _abstractionValue(session) {
     }, 0)
   }
 
-  const maxMeterReading = Math.max(...session.lines.map(line => {
-    return line.reading || 0
-  }))
+  const maxMeterReading = Math.max(
+    ...session.lines.map((line) => {
+      return line.reading || 0
+    })
+  )
 
   // If any water has been abstracted this will return a positive value
   return maxMeterReading - session.startReading
