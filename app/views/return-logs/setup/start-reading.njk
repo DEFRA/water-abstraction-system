@@ -13,12 +13,10 @@
 
     {{ govukInput({
       classes: "govuk-input--width-10",
-      id: "start-reading",
+      id: "startReading",
       name: "startReading",
       value: startReading,
-      errorMessage: {
-          text: error.startReading.text
-        } if error.startReading.text
+      errorMessage: error.startReading
     }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
