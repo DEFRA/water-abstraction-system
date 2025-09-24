@@ -19,17 +19,17 @@ const NotificationsPresenter = require('../../../presenters/notices/setup/notifi
  * @returns {Promise<object[]>} An array of notification formatted to persist and send
  */
 async function go(session, recipients, eventId) {
-  let notifications
+  const { journey, noticeType } = session
 
-  if (session.journey === 'alerts') {
-    notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
-  } else if (session.noticeType === 'returnForms') {
-    notifications = await DetermineReturnFormsService.go(session, recipients, eventId)
-  } else {
-    notifications = NotificationsPresenter.go(recipients, session, eventId)
+  if (journey === 'alerts') {
+    return AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
   }
 
-  return notifications
+  if (noticeType === 'returnForms') {
+    return await DetermineReturnFormsService.go(session, recipients, eventId)
+  }
+
+  return NotificationsPresenter.go(recipients, session, eventId)
 }
 
 module.exports = {
