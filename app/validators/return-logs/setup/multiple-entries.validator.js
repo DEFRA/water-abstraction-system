@@ -28,32 +28,34 @@ function go(frequency, length, measurementType, payload, startReading) {
     payload.formattedEntries = formattedEntries
   }
 
-  const schema = Joi.array()
-    .length(length)
-    .items(
-      Joi.number()
-        .min(0)
-        .allow(null)
-        .messages({
-          'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
-          'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
-        })
-    )
-    .custom((value, helpers) => {
-      // If the measurement type is meter readings we need to check the values are in increasing order
-      if (measurementType === 'meter readings') {
-        return _meterReadingsInIncreasingOrder(value, helpers, startReading)
-      }
+  const schema = Joi.object({
+    multipleEntries: Joi.array()
+      .length(length)
+      .items(
+        Joi.number()
+          .min(0)
+          .allow(null)
+          .messages({
+            'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
+            'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
+          })
+      )
+      .custom((value, helpers) => {
+        // If the measurement type is meter readings we need to check the values are in increasing order
+        if (measurementType === 'meter readings') {
+          return _meterReadingsInIncreasingOrder(value, helpers, startReading)
+        }
 
-      return value
-    })
-    .required()
-    .messages({
-      'array.length': `Enter ${length} ${frequency} ${measurementType}`,
-      'any.required': `Enter ${length} ${frequency} ${measurementType}`
-    })
+        return value
+      })
+      .required()
+      .messages({
+        'array.length': `Enter ${length} ${frequency} ${measurementType}`,
+        'any.required': `Enter ${length} ${frequency} ${measurementType}`
+      })
+  })
 
-  return schema.validate(payload.formattedEntries, { abortEarly: false })
+  return schema.validate({ multipleEntries: payload.formattedEntries }, { abortEarly: false })
 }
 
 function _meterReadingsInIncreasingOrder(value, helpers, startReading) {

@@ -9,6 +9,7 @@ const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
@@ -45,12 +46,12 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...submittedSessionData
+    ...pageData
   }
 }
 
@@ -74,17 +75,9 @@ function _submittedSessionData(session, payload) {
 
 function _validate(frequency, measurementType, payload, session) {
   const { lines, startReading } = session
-  const validation = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
+  const validationResult = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

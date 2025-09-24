@@ -43,14 +43,14 @@ describe('Return Logs Setup - Multiple Entries service', () => {
       expect(result).to.equal(
         {
           activeNavBar: 'search',
-          backLink: `/system/return-logs/setup/${session.id}/check`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },
           endDate: '1 May 2023',
           frequency: 'monthly',
           lineCount: 2,
           measurementType: 'volumes',
           multipleEntries: null,
           pageTitle: 'Enter multiple monthly volumes',
-          caption: 'Return reference 012345',
+          pageTitleCaption: 'Return reference 012345',
           startDate: '1 April 2023'
         },
         { skip: ['sessionId'] }
