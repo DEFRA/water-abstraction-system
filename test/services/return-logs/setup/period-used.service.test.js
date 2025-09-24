@@ -51,7 +51,8 @@ describe('Return Logs Setup - Period used service', () => {
           periodUsedFromYear: null,
           periodUsedToDay: null,
           periodUsedToMonth: null,
-          periodUsedToYear: null
+          periodUsedToYear: null,
+          showDefaultAbstractionPeriod: true
         },
         { skip: ['sessionId'] }
       )

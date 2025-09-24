@@ -17,8 +17,6 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
 
 describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
@@ -159,7 +157,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         })
       })
 
-      it('correctly returns the "additional contact" and not the "primary user"', async () => {
+      it('correctly returns the "additional contact" and the "primary user"', async () => {
         const result = await FetchAbstractionAlertRecipientsService.go(session)
 
         expect(result).to.equal([
@@ -169,6 +167,13 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_type: 'Additional contact',
             email: 'Ron.Burgundy@news.com',
             licence_refs: recipients.primaryUser.licenceRef
+          },
+          {
+            licence_refs: recipients.primaryUser.licenceRef,
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            email: 'primary.user@important.com'
           }
         ])
       })
@@ -228,7 +233,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
         })
       })
 
-      it('correctly returns the "additional contact" and not the "licence holder"', async () => {
+      it('correctly returns the "additional contact" and the "licence holder"', async () => {
         const result = await FetchAbstractionAlertRecipientsService.go(session)
 
         expect(result).to.equal([
@@ -238,6 +243,28 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_type: 'Additional contact',
             email: 'Brian.Fantana@news.com',
             licence_refs: recipients.licenceHolder.licenceRef
+          },
+          {
+            licence_refs: recipients.licenceHolder.licenceRef,
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Licence holder only',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+            contact_type: 'Licence holder',
+            email: null
           }
         ])
       })
@@ -298,18 +325,57 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
       })
     })
   })
+
+  describe('and there are multiple licence document roles', () => {
+    let licenceDocument
+
+    beforeEach(async () => {
+      licenceDocument = await LicenceDocumentHelper.add()
+
+      session = {
+        licenceRefs: [licenceDocument.licenceRef]
+      }
+
+      await _additionalContact(licenceDocument, {
+        firstName: 'Brick',
+        lastName: 'Tamland',
+        email: 'Brick.Tamland@news.com'
+      })
+
+      const endDate = new Date('2023-01-01')
+
+      await _additionalContact(
+        licenceDocument,
+        {
+          firstName: 'Champ',
+          lastName: 'Kind',
+          email: 'Champ.Kind@news.com'
+        },
+        true,
+        endDate
+      )
+    })
+
+    it('fetches only the "current" "additional contact"', async () => {
+      const result = await FetchAbstractionAlertRecipientsService.go(session)
+
+      expect(result).to.equal([
+        {
+          contact: null,
+          contact_hash_id: '70d3d94dd27d8b65e96392a85147a4cc',
+          contact_type: 'Additional contact',
+          email: 'Brick.Tamland@news.com',
+          licence_refs: licenceDocument.licenceRef
+        }
+      ])
+    })
+  })
 })
 
-async function _additionalContact(licenceDocument, contact, abstractionAlerts = true) {
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-  await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceRef: licenceDocument.licenceRef
-  })
-
+async function _additionalContact(licenceDocument, contact, abstractionAlerts = true, endDate = null) {
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    licenceDocumentId: licenceDocument.id
+    licenceDocumentId: licenceDocument.id,
+    endDate
   })
 
   const licenceRole = await LicenceRoleHelper.select('additionalContact')

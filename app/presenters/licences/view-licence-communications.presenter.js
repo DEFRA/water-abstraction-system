@@ -26,12 +26,14 @@ function go(communications, documentId, licenceId) {
 
 function _communications(communications, documentId, licenceId) {
   return communications.map((communication) => {
+    const sent = formatLongDate(communication.createdAt)
+
     return {
       id: communication.id,
       link: _link(communication.id, documentId, licenceId),
-      type: _type(communication),
+      type: _type(communication, sent),
       sender: communication.event.issuer,
-      sent: _sent(communication),
+      sent,
       method: sentenceCase(communication.messageType)
     }
   })
@@ -45,16 +47,10 @@ function _link(communicationId, documentId, licenceId) {
   return `/licences/${documentId}/communications/${communicationId}`
 }
 
-function _sent(communication) {
-  return communication.sendAfter
-    ? formatLongDate(new Date(communication.sendAfter))
-    : formatLongDate(new Date(communication.createdAt))
-}
-
-function _type(communication) {
+function _type(communication, sent) {
   return {
     label: _typeLabel(communication),
-    sentVia: `sent ${_sent(communication)} via ${communication.messageType}`,
+    sentVia: `sent ${sent} via ${communication.messageType}`,
     pdf: communication.messageRef.includes('pdf')
   }
 }

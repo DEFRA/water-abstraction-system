@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
+const { today } = require('../../../lib/general.lib.js')
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/received` page
@@ -33,7 +34,7 @@ function go(session) {
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
     sessionId,
-    todaysDate: formatLongDate(new Date()),
+    todaysDate: formatLongDate(today()),
     yesterdaysDate: _yesterdaysDate()
   }
 }

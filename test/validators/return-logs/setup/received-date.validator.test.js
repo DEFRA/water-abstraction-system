@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { today } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const ReceivedDateValidator = require('../../../../app/validators/return-logs/setup/received-date.validator.js')
 
@@ -176,7 +179,7 @@ describe('Return Logs Setup - Received Date validator', () => {
       describe('but entered a future date', () => {
         beforeEach(() => {
           // Get today's date and add 1 day
-          const futureDate = new Date()
+          const futureDate = today()
           futureDate.setDate(futureDate.getDate() + 1) // Set to tomorrow
 
           // Update the payload with the future date values

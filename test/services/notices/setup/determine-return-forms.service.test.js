@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
@@ -43,31 +44,13 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
     testRecipients = [recipients.licenceHolder, recipients.returnsTo]
 
     dueReturnLog = {
-      dueDate: '2025-07-06',
-      endDate: '2025-06-06',
-      naldAreaCode: 'MIDLT',
-      purpose: 'A purpose',
-      regionName: 'North West',
-      returnId: '1234',
-      returnReference: '123456',
-      returnsFrequency: 'day',
-      siteDescription: 'Water park',
-      startDate: '2025-01-01',
-      twoPartTariff: false
+      ...ReturnLogFixture.dueReturn(),
+      licenceRef
     }
 
     additionalDueReturn = {
-      dueDate: '2025-07-06',
-      endDate: '2025-06-06',
-      naldAreaCode: 'MIDLT',
-      purpose: 'A purpose',
-      regionName: 'North West',
-      returnId: '5678',
-      returnReference: '568907',
-      returnsFrequency: 'day',
-      siteDescription: 'Water park',
-      startDate: '2025-01-01',
-      twoPartTariff: false
+      ...ReturnLogFixture.dueReturn(),
+      licenceRef
     }
 
     sessionData = {
@@ -97,62 +80,62 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Licence holder',
-                address_line_2: '1',
-                address_line_3: 'Privet Drive',
-                address_line_4: 'Little Whinging',
-                address_line_5: 'Surrey',
-                address_line_6: 'WD25 7LR'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[0].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '123456',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Licence holder',
+              address_line_2: '1',
+              address_line_3: 'Privet Drive',
+              address_line_4: 'Little Whinging',
+              address_line_5: 'Surrey',
+              address_line_6: 'WD25 7LR',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: dueReturnLog.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: dueReturnLog.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Returns to',
-                address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                address_line_3: '2',
-                address_line_4: 'Privet Drive',
-                address_line_5: 'Little Whinging',
-                address_line_6: 'Surrey'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[1].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '123456',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Returns to',
+              address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+              address_line_3: '2',
+              address_line_4: 'Privet Drive',
+              address_line_5: 'Little Whinging',
+              address_line_6: 'Surrey',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: dueReturnLog.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: dueReturnLog.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           }
         ])
       })
@@ -170,122 +153,122 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Licence holder',
-                address_line_2: '1',
-                address_line_3: 'Privet Drive',
-                address_line_4: 'Little Whinging',
-                address_line_5: 'Surrey',
-                address_line_6: 'WD25 7LR'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[0].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '123456',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Licence holder',
+              address_line_2: '1',
+              address_line_3: 'Privet Drive',
+              address_line_4: 'Little Whinging',
+              address_line_5: 'Surrey',
+              address_line_6: 'WD25 7LR',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: dueReturnLog.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: dueReturnLog.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Returns to',
-                address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                address_line_3: '2',
-                address_line_4: 'Privet Drive',
-                address_line_5: 'Little Whinging',
-                address_line_6: 'Surrey'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[1].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '123456',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Returns to',
+              address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+              address_line_3: '2',
+              address_line_4: 'Privet Drive',
+              address_line_5: 'Little Whinging',
+              address_line_6: 'Surrey',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: dueReturnLog.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: dueReturnLog.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [dueReturnLog.returnId]
           },
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Licence holder',
-                address_line_2: '1',
-                address_line_3: 'Privet Drive',
-                address_line_4: 'Little Whinging',
-                address_line_5: 'Surrey',
-                address_line_6: 'WD25 7LR'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[2].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '568907',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Licence holder',
+              address_line_2: '1',
+              address_line_3: 'Privet Drive',
+              address_line_4: 'Little Whinging',
+              address_line_5: 'Surrey',
+              address_line_6: 'WD25 7LR',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: additionalDueReturn.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: additionalDueReturn.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [additionalDueReturn.returnId]
           },
           {
             content: buffer,
             eventId,
-            licences: `["${licenceRef}"]`,
+            licences: [licenceRef],
             messageRef: 'pdf.return_form',
             messageType: 'letter',
             personalisation: {
-              address: {
-                address_line_1: 'Mr H J Returns to',
-                address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                address_line_3: '2',
-                address_line_4: 'Privet Drive',
-                address_line_5: 'Little Whinging',
-                address_line_6: 'Surrey'
-              },
-              dueDate: '6 July 2025',
-              endDate: '6 June 2025',
-              licenceRef,
-              pageEntries: result[3].personalisation.pageEntries,
-              pageTitle: 'Water abstraction daily return',
-              purpose: 'A purpose',
-              regionAndArea: 'North West / Lower Trent',
-              returnReference: '568907',
-              returnsFrequency: 'day',
-              siteDescription: 'Water park',
-              startDate: '1 January 2025',
-              twoPartTariff: false
+              address_line_1: 'Mr H J Returns to',
+              address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+              address_line_3: '2',
+              address_line_4: 'Privet Drive',
+              address_line_5: 'Little Whinging',
+              address_line_6: 'Surrey',
+              address_line_7: undefined,
+              due_date: '28 April 2023',
+              end_date: '31 March 2023',
+              format_id: additionalDueReturn.returnReference,
+              is_two_part_tariff: false,
+              licence_ref: licenceRef,
+              naldAreaCode: 'MIDLT',
+              purpose: 'Mineral Washing',
+              qr_url: additionalDueReturn.returnLogId,
+              region_code: '1',
+              returns_frequency: 'month',
+              site_description: 'BOREHOLE AT AVALON',
+              start_date: '1 April 2022'
             },
-            reference: referenceCode
+            reference: referenceCode,
+            returnLogIds: [additionalDueReturn.returnId]
           }
         ])
       })

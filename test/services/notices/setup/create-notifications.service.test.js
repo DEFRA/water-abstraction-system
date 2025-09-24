@@ -52,6 +52,7 @@ describe('Notices - Setup - Create notification service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnLogIds: null,
         status: null
       })
     })

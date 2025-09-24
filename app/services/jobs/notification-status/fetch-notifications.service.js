@@ -6,6 +6,7 @@
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
+const { today } = require('../../../lib/general.lib.js')
 
 const SEVEN_DAYS = 7
 
@@ -16,20 +17,24 @@ const SEVEN_DAYS = 7
  *
  * Notify has a retention period of 7 days, so we only want 'notifications' created within the last 7 days.
  *
+ * @param {string | null} eventId - When an event id is provided we check the status only for the event and only for emails.
+ *
  * @returns {Promise<object[]>} - an array of 'notifications'
  */
-async function go() {
-  const today = new Date()
-  const sevenDaysAgo = new Date()
-  sevenDaysAgo.setDate(today.getDate() - SEVEN_DAYS)
+async function go(eventId) {
+  const todaysDate = today()
+  const sevenDaysAgo = today()
 
-  return NotificationModel.query()
+  sevenDaysAgo.setDate(todaysDate.getDate() - SEVEN_DAYS)
+
+  const query = NotificationModel.query()
     .select([
       'createdAt',
       'eventId',
       'id',
       'licenceMonitoringStationId',
       'messageRef',
+      'messageType',
       'notifyId',
       'notifyStatus',
       'notify_error',
@@ -38,6 +43,13 @@ async function go() {
     ])
     .where('status', 'pending')
     .andWhere('createdAt', '>=', sevenDaysAgo)
+
+  if (eventId) {
+    query.andWhere('eventId', eventId)
+    query.andWhere('messageType', 'email')
+  }
+
+  return query
 }
 
 module.exports = {

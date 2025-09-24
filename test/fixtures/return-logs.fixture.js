@@ -196,8 +196,33 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
   })
 }
 
+/**
+ * This fixture would be the result of calling the 'FetchReturnsDueByLicenceRefService'
+ *
+ * We use these 'due' return logs in the adhoc notification journey for the 'returnForms' notice type.
+ *
+ * @returns {object} Returns an enhanced version of the module:ReturnLogModel in line with the fetch service
+ */
+function dueReturn() {
+  const dueReturn = returnLog()
+
+  applyFetchReturnLogFields(dueReturn)
+
+  dueReturn.purpose = dueReturn.purposes[0].tertiary.description
+  dueReturn.naldAreaCode = 'MIDLT'
+  dueReturn.regionName = 'North West'
+  dueReturn.regionCode = '1'
+  dueReturn.returnLogId = dueReturn.id
+
+  delete dueReturn.purposes
+  delete dueReturn.id
+
+  return dueReturn
+}
+
 module.exports = {
   applyFetchReturnLogFields,
+  dueReturn,
   returnLog,
   returnSubmission
 }

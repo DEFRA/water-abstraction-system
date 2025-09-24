@@ -172,14 +172,10 @@ describe('Notices - Setup - Submit Licence service', () => {
                 {
                   href: '#licenceRef',
                   text: 'Enter a valid licence number'
-                },
-                {
-                  href: '#licenceRef',
-                  text: `There are no returns due for licence ${licenceRef}`
                 }
               ],
               licenceRef: {
-                text: `There are no returns due for licence ${licenceRef}`
+                text: `Enter a valid licence number`
               }
             },
             licenceRef,

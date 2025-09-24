@@ -13,6 +13,7 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
@@ -21,6 +22,7 @@ const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/cr
 const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const NotifyLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
+const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
@@ -41,6 +43,8 @@ describe('Notices - Setup - Batch Notifications service', () => {
     // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
     // correctly, we do not want increase the timeout for the test as we want them to fail if a timeout occurs
     Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
+
+    Sinon.stub(ProcessNotificationStatusService, 'go')
   })
 
   afterEach(() => {
@@ -227,6 +231,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: 'primary.user@important.com',
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -249,6 +254,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
               notifyStatus: 'created',
               recipient: 'returns.agent@important.com',
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -278,6 +284,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -308,6 +315,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: null,
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -337,10 +345,19 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '997a76c7-7866-4bd3-b199-ca69eef31a41',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
           )
+        })
+
+        it('should call the ProcessNotificationStatusService with the event id', async () => {
+          await BatchNotificationsService.go(recipients, session, event.id)
+
+          const args = ProcessNotificationStatusService.go.getCall(0).args
+
+          expect(args[0]).to.equal(event.id)
         })
       })
     })
@@ -570,6 +587,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: null,
               notifyStatus: null,
               recipient: 'additional.contact@important.com',
+              returnLogIds: null,
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -609,6 +627,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: '797cfc1e-0699-4006-985d-10f4219a280a',
               notifyStatus: 'created',
               recipient: null,
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -641,6 +660,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               notifyId: 'a5488243-9c8d-4c2b-95df-d65f7c9a5f41',
               notifyStatus: 'created',
               recipient: 'primary.user@important.com',
+              returnLogIds: null,
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -651,9 +671,12 @@ describe('Notices - Setup - Batch Notifications service', () => {
   })
 
   describe('when sending return forms', () => {
+    let returnId
+
     beforeEach(async () => {
       reference = generateReferenceCode('PRTF')
 
+      returnId = generateUUID()
       recipientsFixture = RecipientsFixture.recipients()
       recipients = [recipientsFixture.licenceHolder]
 
@@ -679,7 +702,8 @@ describe('Notices - Setup - Batch Notifications service', () => {
         licences: JSON.stringify([recipientsFixture.licenceHolder.licence_refs]),
         messageRef: 'pdf.return_form',
         messageType: 'letter',
-        reference
+        reference,
+        returnLogIds: [returnId]
       }
 
       Sinon.stub(DetermineReturnFormsService, 'go').resolves([
@@ -783,6 +807,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: [returnId],
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
@@ -805,6 +830,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: [returnId],
               status: 'error'
             },
             { skip: ['id', 'createdAt'] }
@@ -826,6 +852,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
               },
               plaintext: null,
               recipient: null,
+              returnLogIds: [returnId],
               status: 'pending'
             },
             { skip: ['id', 'createdAt'] }
