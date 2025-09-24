@@ -5,11 +5,12 @@
  * @module SubmitMeterProvidedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
 const MeterProvidedValidator = require('../../../validators/return-logs/setup/meter-provided.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-provided` page
