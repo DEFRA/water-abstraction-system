@@ -368,12 +368,17 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReadingsService, 'go').resolves({
-              error: [
-                {
-                  href: '#2023-04-30T00:00:00.000Z',
-                  text: 'Meter readings must be a number or blank'
-                }
-              ],
+              error: {
+                '2023-04-30T00:00:00.000Z': {
+                  text: 'Reading must be a number or blank'
+                },
+                errorList: [
+                  {
+                    href: '#2023-04-30T00:00:00.000Z',
+                    text: 'Reading must be a number or blank'
+                  }
+                ]
+              },
               pageTitle: 'Water abstracted April 2023'
             })
           })
@@ -384,7 +389,7 @@ describe('Return Logs - Setup - Controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Water abstracted April 2023')
             expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Meter readings must be a number or blank')
+            expect(response.payload).to.contain('Reading must be a number or blank')
           })
         })
       })

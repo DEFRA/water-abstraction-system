@@ -143,13 +143,21 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
-          error: [
-            {
-              href: '#2023-04-30T00:00:00.000Z',
+          error: {
+            '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'
-            }
-          ],
-          backLink: `/system/return-logs/setup/${session.id}/check`,
+            },
+            errorList: [
+              {
+                href: '#2023-04-30T00:00:00.000Z',
+                text: 'Reading must be a number or blank'
+              }
+            ]
+          },
+          backLink: {
+            href: `/system/return-logs/setup/${session.id}/check`,
+            text: 'Back'
+          },
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
@@ -159,7 +167,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
             }
           ],
           pageTitle: 'Water abstracted April 2023',
-          caption: 'Return reference 1234'
+          pageTitleCaption: 'Return reference 1234'
         })
       })
 
@@ -167,12 +175,17 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(result.error).to.equal([
-            {
-              href: '#2023-04-30T00:00:00.000Z',
+          expect(result.error).to.equal({
+            '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'
-            }
-          ])
+            },
+            errorList: [
+              {
+                href: '#2023-04-30T00:00:00.000Z',
+                text: 'Reading must be a number or blank'
+              }
+            ]
+          })
         })
       })
     })

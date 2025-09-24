@@ -6,11 +6,11 @@
  */
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { flashNotification, today } = require('../../../lib/general.lib.js')
 
 const ReceivedDateValidator = require('../../../validators/return-logs/setup/received-date.validator.js')
 const ReceivedPresenter = require('../../../presenters/return-logs/setup/received.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const { flashNotification, today } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page

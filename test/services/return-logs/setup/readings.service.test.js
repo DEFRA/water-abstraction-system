@@ -44,7 +44,10 @@ describe('Return Logs Setup - Readings service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        backLink: `/system/return-logs/setup/${session.id}/check`,
+        backLink: {
+          href: `/system/return-logs/setup/${session.id}/check`,
+          text: 'Back'
+        },
         inputLines: [
           {
             endDate: '2023-04-30T00:00:00.000Z',
@@ -53,7 +56,7 @@ describe('Return Logs Setup - Readings service', () => {
           }
         ],
         pageTitle: 'Water abstracted April 2023',
-        caption: 'Return reference 1234'
+        pageTitleCaption: 'Return reference 1234'
       })
     })
   })

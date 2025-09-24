@@ -16,7 +16,7 @@ function go(session) {
   const { beenReceived, journey, returnReference } = session
 
   return {
-    backLink: { href: _backLink(session), text: 'Back' },
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     beenReceived,
     journey: journey ?? null,
     pageTitle: 'What do you want to do with this return?',
@@ -24,7 +24,7 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {
-    backLink: { href: _backLink(session), text: 'Back' },
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'Which units were used?',
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
@@ -24,7 +24,7 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

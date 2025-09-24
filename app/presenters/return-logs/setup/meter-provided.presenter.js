@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, returnReference, meterProvided } = session
 
   return {
-    backLink: { href: _backLink(session), text: 'Back' },
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     meterProvided: meterProvided ?? null,
     pageTitle: 'Have meter details been provided?',
     pageTitleCaption: `Return reference ${returnReference}`,
@@ -24,7 +24,7 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
