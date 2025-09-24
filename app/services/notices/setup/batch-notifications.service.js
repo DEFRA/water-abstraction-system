@@ -7,13 +7,10 @@
 
 const { setTimeout } = require('node:timers/promises')
 
-const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
-const DetermineReturnFormsService = require('./determine-return-forms.service.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const UpdateEventService = require('./update-event.service.js')
@@ -38,21 +35,20 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
- * @param {object[]} recipients - The recipients to create notifications for
- * @param {SessionModel} session - The session instance
+ * @param {object[]} notifications - The notifications for sending and saving
  * @param {string} eventId - the event UUID to link all the notifications to
  */
-async function go(recipients, session, eventId) {
+async function go(notifications, eventId) {
   const { batchSize, delay } = NotifyConfig
 
   let totalErrorCount = 0
 
   // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
   // to add a delay between each batch.
-  for (let i = 0; i < recipients.length; i += batchSize) {
-    const batchRecipients = recipients.slice(i, i + batchSize)
+  for (let i = 0; i < notifications.length; i += batchSize) {
+    const batchNotifications = notifications.slice(i, i + batchSize)
 
-    const errorCount = await _batch(batchRecipients, session, eventId)
+    const errorCount = await _batch(batchNotifications)
 
     await _delay(delay)
 
@@ -64,17 +60,7 @@ async function go(recipients, session, eventId) {
   await UpdateEventService.go(eventId, totalErrorCount)
 }
 
-async function _batch(recipients, session, eventId) {
-  let notifications
-
-  if (session.journey === 'alerts') {
-    notifications = AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
-  } else if (session.noticeType === 'returnForms') {
-    notifications = await DetermineReturnFormsService.go(session, recipients, eventId)
-  } else {
-    notifications = NotificationsPresenter.go(recipients, session, eventId)
-  }
-
+async function _batch(notifications) {
   const notificationsToSend = _notificationsToSend(notifications)
 
   const sentNotifications = await _sendNotifications(notificationsToSend)
