@@ -65,10 +65,14 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
       expect(result).to.equal({
         issuer: 'hello@world.com',
-        licences:
-          `["${recipients.primaryUser.licence_refs}","${recipients.returnsAgent.licence_refs}",` +
-          `"${recipients.licenceHolder.licence_refs}","${recipients.returnsTo.licence_refs}",` +
-          `"${firstMultiple}","${secondMultiple}"]`,
+        licences: [
+          recipients.primaryUser.licence_refs,
+          recipients.returnsAgent.licence_refs,
+          recipients.licenceHolder.licence_refs,
+          recipients.returnsTo.licence_refs,
+          firstMultiple,
+          secondMultiple
+        ],
         metadata: {
           name: 'Returns: invitation',
           options: {
@@ -102,11 +106,14 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
         const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
 
-        expect(result.licences).to.equal(
-          `["${recipients.primaryUser.licence_refs}","${recipients.returnsAgent.licence_refs}",` +
-            `"${recipients.licenceHolder.licence_refs}","${recipients.returnsTo.licence_refs}",` +
-            `"${firstMultiple}","${secondMultiple}"]`
-        )
+        expect(result.licences).to.equal([
+          recipients.primaryUser.licence_refs,
+          recipients.returnsAgent.licence_refs,
+          recipients.licenceHolder.licence_refs,
+          recipients.returnsTo.licence_refs,
+          firstMultiple,
+          secondMultiple
+        ])
       })
     })
 
@@ -227,9 +234,11 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
       expect(result).to.equal({
         issuer: 'hello@world.com',
-        licences:
-          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
-          `"${recipients.primaryUser.licence_refs}"]`,
+        licences: [
+          recipients.additionalContact.licence_refs,
+          recipients.licenceHolder.licence_refs,
+          recipients.primaryUser.licence_refs
+        ],
         metadata: {
           name: 'Water abstraction alert',
           options: {
@@ -248,10 +257,11 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
-        expect(result.licences).to.equal(
-          `["${recipients.additionalContact.licence_refs}","${recipients.licenceHolder.licence_refs}",` +
-            `"${recipients.primaryUser.licence_refs}"]`
-        )
+        expect(result.licences).to.equal([
+          recipients.additionalContact.licence_refs,
+          recipients.licenceHolder.licence_refs,
+          recipients.primaryUser.licence_refs
+        ])
       })
     })
 
