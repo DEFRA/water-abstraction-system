@@ -2,7 +2,7 @@
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
- * @module StartReadingValidator
+ * @module CheckValidator
  */
 
 const Joi = require('joi')
