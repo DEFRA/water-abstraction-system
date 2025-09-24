@@ -17,7 +17,7 @@ const GeneratePreviewRequest = require('../../../../../app/requests/notify/gener
 // Thing under test
 const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
 
-describe.only('Notices - Setup - Preview - Preview presenter', () => {
+describe('Notices - Setup - Preview - Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const licenceMonitoringStationId = 'a4d15f69-5005-4b6e-ab50-3fbae2deec9c'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
