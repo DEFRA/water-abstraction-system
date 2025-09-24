@@ -33,12 +33,15 @@ describe('Return Logs - Setup - Received presenter', () => {
       expect(result).to.equal({
         pageTitle: 'When was the return received?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        caption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 012345',
         receivedDateOption: null,
         receivedDateDay: null,
         receivedDateMonth: null,
         receivedDateYear: null,
-        backLink: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+        backLink: {
+          href: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+          text: 'Back'
+        },
         todaysDate: formatLongDate(today()),
         yesterdaysDate: _yesterdaysDate()
       })
@@ -54,7 +57,10 @@ describe('Return Logs - Setup - Received presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReceivedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -62,7 +68,10 @@ describe('Return Logs - Setup - Received presenter', () => {
       it('returns a link back to the view "Return Log" page', () => {
         const result = ReceivedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31')
+        expect(result.backLink).to.equal({
+          href: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+          text: 'Back'
+        })
       })
     })
   })

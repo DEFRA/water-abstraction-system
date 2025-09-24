@@ -5,6 +5,8 @@
  * @module SubmitReceivedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const ReceivedDateValidator = require('../../../validators/return-logs/setup/received-date.validator.js')
 const ReceivedPresenter = require('../../../presenters/return-logs/setup/received.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -54,7 +56,7 @@ async function go(sessionId, payload, yar) {
 }
 
 async function _save(session, payload) {
-  const selectedOption = payload['received-date-options']
+  const selectedOption = payload.receivedDateOptions
   const todaysDate = today()
 
   session.receivedDateOptions = selectedOption
@@ -68,11 +70,11 @@ async function _save(session, payload) {
     todaysDate.setDate(todaysDate.getDate() - 1)
     session.receivedDate = todaysDate
   } else {
-    session.receivedDateDay = payload['received-date-day']
-    session.receivedDateMonth = payload['received-date-month']
-    session.receivedDateYear = payload['received-date-year']
+    session.receivedDateDay = payload.receivedDateDay
+    session.receivedDateMonth = payload.receivedDateMonth
+    session.receivedDateYear = payload.receivedDateYear
     session.receivedDate = new Date(
-      `${payload['received-date-year']}-${payload['received-date-month']}-${payload['received-date-day']}`
+      `${payload.receivedDateYear}-${payload.receivedDateMonth}-${payload.receivedDateDay}`
     )
   }
 
@@ -80,10 +82,10 @@ async function _save(session, payload) {
 }
 
 function _submittedSessionData(session, payload) {
-  session.receivedDateDay = payload['received-date-day'] ?? null
-  session.receivedDateMonth = payload['received-date-month'] ?? null
-  session.receivedDateYear = payload['received-date-year'] ?? null
-  session.receivedDateOptions = payload['received-date-options'] ?? null
+  session.receivedDateDay = payload.receivedDateDay ?? null
+  session.receivedDateMonth = payload.receivedDateMonth ?? null
+  session.receivedDateYear = payload.receivedDateYear ?? null
+  session.receivedDateOptions = payload.receivedDateOptions ?? null
 
   const data = ReceivedPresenter.go(session)
   return data
@@ -92,21 +94,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload, startDate) {
   const validation = ReceivedDateValidator.go(payload, startDate)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message, type } = validation.error.details[0]
-
-  // There are only two possible error scenarios: either a radio button has not been selected, in which case the date
-  // isn't visible so there cannot be an "invalid date" error; or an invalid date has been entered, in which case the
-  // date *is* visible so there cannot be a "radio button not selected" error. We identify the former by checking if the
-  // error type is `any.required`; and so if an error is present which isn't of this type, it must be a date error.
-  return {
-    message,
-    radioFormElement: type === 'any.required' ? { text: message } : null,
-    dateInputFormElement: type === 'any.required' ? null : { text: message }
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

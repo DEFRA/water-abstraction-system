@@ -1,43 +1,18 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from 'govuk/components/date-input/macro.njk' import govukDateInput %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.message,
-          href: "#receivedDate-error"
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, caption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {% set dateInputHTML %}
       {{ govukDateInput({
         id: 'date',
-        namePrefix: 'received-date',
-        errorMessage: error.dateInputFormElement,
+        name: 'date',
+        errorMessage: error.date,
         fieldset: {
           legend: {
             text: 'When was the return received?'
@@ -45,34 +20,41 @@
         },
         items: [
           {
-            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-            name: 'day',
-            value: receivedDateDay
+            classes: 'govuk-input--width-2',
+            id: 'receivedDateDay',
+            name: 'receivedDateDay',
+            value: receivedDateDay,
+            label: 'Day'
           },
           {
-            classes: 'govuk-input--width-2' + (' govuk-input--error' if error),
-            name: 'month',
-            value: receivedDateMonth
+            classes: 'govuk-input--width-2',
+            id: 'receivedDateMonth',
+            name: 'receivedDateMonth',
+            value: receivedDateMonth,
+            label: 'Month'
           },
           {
-            classes: 'govuk-input--width-4' + (' govuk-input--error' if error),
-            name: 'year',
-            value: receivedDateYear
+            classes: 'govuk-input--width-4',
+            id: 'receivedDateYear',
+            name: 'receivedDateYear',
+            value: receivedDateYear,
+            label: 'Year'
           }
         ]
       }) }}
     {% endset %}
 
     {{ govukRadios({
-      name: "received-date-options",
-      errorMessage: error.radioFormElement,
+      name: "receivedDateOptions",
+      errorMessage: error.receivedDateOptions,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [
         {
+          id: 'today',
           value: "today",
           text: "Today",
           checked: receivedDateOption === 'today',
@@ -81,6 +63,7 @@
           }
         },
         {
+          id: 'yesterday',
           value: "yesterday",
           text: "Yesterday",
           checked: receivedDateOption === 'yesterday',
@@ -89,9 +72,10 @@
           }
         },
         {
-          value: "custom-date",
+          id: 'customDate',
+          value: "customDate",
           text: "Custom date",
-          checked: receivedDateOption === 'custom-date',
+          checked: receivedDateOption === 'customDate',
           conditional: {
             html: dateInputHTML
           }

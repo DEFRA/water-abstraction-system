@@ -42,7 +42,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       beforeEach(async () => {
         testDate = today()
         payload = {
-          'received-date-options': 'today'
+          receivedDateOptions: 'today'
         }
       })
 
@@ -94,7 +94,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         testDate = today()
         testDate.setDate(testDate.getDate() - 1)
         payload = {
-          'received-date-options': 'yesterday'
+          receivedDateOptions: 'yesterday'
         }
       })
 
@@ -111,10 +111,10 @@ describe('Return Logs - Setup - Submit Received service', () => {
     describe('with a valid payload (custom received date)', () => {
       beforeEach(async () => {
         payload = {
-          'received-date-options': 'custom-date',
-          'received-date-day': '26',
-          'received-date-month': '11',
-          'received-date-year': '2023'
+          receivedDateOptions: 'customDate',
+          receivedDateDay: '26',
+          receivedDateMonth: '11',
+          receivedDateYear: '2023'
         }
       })
 
@@ -123,7 +123,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.receivedDateOptions).to.equal('custom-date')
+        expect(refreshedSession.receivedDateOptions).to.equal('customDate')
         expect(refreshedSession.receivedDateDay).to.equal('26')
         expect(refreshedSession.receivedDateMonth).to.equal('11')
         expect(refreshedSession.receivedDateYear).to.equal('2023')
@@ -153,8 +153,11 @@ describe('Return Logs - Setup - Submit Received service', () => {
             receivedDateMonth: null,
             receivedDateYear: null,
             receivedDateOption: null,
-            backLink: `/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31`,
-            caption: 'Return reference 12345'
+            backLink: {
+              href: `/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31`,
+              text: 'Back'
+            },
+            pageTitleCaption: 'Return reference 12345'
           },
           { skip: ['sessionId', 'error', 'todaysDate', 'yesterdaysDate'] }
         )
@@ -165,9 +168,13 @@ describe('Return Logs - Setup - Submit Received service', () => {
           const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Select the return received date',
-            radioFormElement: { text: 'Select the return received date' },
-            dateInputFormElement: null
+            errorList: [
+              {
+                href: '#receivedDateOptions',
+                text: 'Select the return received date'
+              }
+            ],
+            receivedDateOptions: { text: 'Select the return received date' }
           })
         })
       })
@@ -175,10 +182,10 @@ describe('Return Logs - Setup - Submit Received service', () => {
       describe('because the user has selected custom received date and entered invalid data', () => {
         beforeEach(async () => {
           payload = {
-            'received-date-options': 'custom-date',
-            'received-date-day': 'a',
-            'received-date-month': 'b',
-            'received-date-year': 'c'
+            receivedDateOptions: 'customDate',
+            receivedDateDay: 'a',
+            receivedDateMonth: 'b',
+            receivedDateYear: 'c'
           }
         })
 
@@ -186,9 +193,13 @@ describe('Return Logs - Setup - Submit Received service', () => {
           const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Enter a real received date',
-            radioFormElement: null,
-            dateInputFormElement: { text: 'Enter a real received date' }
+            errorList: [
+              {
+                href: '#date',
+                text: 'Enter a real received date'
+              }
+            ],
+            date: { text: 'Enter a real received date' }
           })
         })
 
@@ -198,7 +209,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
           expect(result.receivedDateDay).to.equal('a')
           expect(result.receivedDateMonth).to.equal('b')
           expect(result.receivedDateYear).to.equal('c')
-          expect(result.receivedDateOption).to.equal('custom-date')
+          expect(result.receivedDateOption).to.equal('customDate')
         })
       })
     })

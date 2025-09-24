@@ -444,7 +444,15 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({
-              error: { message: 'Enter a real received date' },
+              error: {
+                errorList: [
+                  {
+                    href: '#receivedDateOptions',
+                    text: 'Select the return received date'
+                  }
+                ],
+                receivedDateOptions: { text: 'Select the return received date' }
+              },
               pageTitle: 'When was the return received?',
               sessionId
             })
@@ -454,7 +462,7 @@ describe('Return Logs - Setup - Controller', () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Enter a real received date')
+            expect(response.payload).to.contain('Select the return received date')
             expect(response.payload).to.contain('There is a problem')
           })
         })
