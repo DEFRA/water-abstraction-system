@@ -173,7 +173,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
   })
 
-  describe('when called with invalid data as the total quantity is 0', () => {
+  describe('when called with invalid data as the lines are blank', () => {
     beforeEach(async () => {
       sessionData.data.lines = [
         {
