@@ -120,7 +120,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
         startDate = new Date('2019-05-12')
       })
 
-      it.only('returns the licence version with the latest end date', async () => {
+      it('returns the licence version with the latest end date', async () => {
         const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
         expect(result).to.equal({
