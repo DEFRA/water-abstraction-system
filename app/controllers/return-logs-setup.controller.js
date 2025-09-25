@@ -173,9 +173,13 @@ async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const returnLogId = await SubmitCheckService.go(sessionId, user)
+  const pageData = await SubmitCheckService.go(sessionId, user)
 
-  return h.redirect(`/system/return-logs/setup/confirmed?id=${returnLogId}`)
+  if (pageData.error) {
+    return h.view('return-logs/setup/check.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/confirmed?id=${pageData.returnLogId}`)
 }
 
 async function submitMeterDetails(request, h) {

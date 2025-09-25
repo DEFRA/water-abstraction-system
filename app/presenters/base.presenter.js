@@ -441,19 +441,21 @@ function formatValidationResult(validationResult) {
     return null
   }
 
-  const formattedResult = {
-    errorList: []
-  }
+  const formattedResult = { errorList: [] }
 
   const processedFields = new Set()
 
   validationResult.error.details.forEach((detail) => {
     const path = detail.path[0]
 
-    if (!processedFields.has(path)) {
+    if (!path) {
+      formattedResult.errorList.push({ text: detail.message })
+    } else if (!processedFields.has(path)) {
       formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
       formattedResult[path] = { text: detail.message }
       processedFields.add(path)
+    } else {
+      // No action needed for already processed fields
     }
   })
 
