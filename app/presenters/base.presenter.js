@@ -435,7 +435,9 @@ function formatValidationResult(validationResult) {
   validationResult.error.details.forEach((detail) => {
     const path = detail.path[0]
 
-    if (!processedFields.has(path)) {
+    if (!path) {
+      formattedResult.errorList.push({ text: detail.message })
+    } else if (!processedFields.has(path)) {
       formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
       formattedResult[path] = { text: detail.message }
       processedFields.add(path)
