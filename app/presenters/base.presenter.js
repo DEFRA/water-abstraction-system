@@ -426,9 +426,7 @@ function formatValidationResult(validationResult) {
     return null
   }
 
-  const formattedResult = {
-    errorList: []
-  }
+  const formattedResult = { errorList: [] }
 
   const processedFields = new Set()
 
