@@ -18,13 +18,11 @@ const Joi = require('joi')
 function go(session) {
   const abstractionValue = _abstractionValue(session)
 
-  const schema = Joi.object({
-    abstractionValue: Joi.number()
+  const schema = Joi.number()
       .greater(0)
       .messages({ 'number.greater': 'Returns with an abstraction volume of 0 should be recorded as a nil return.' })
-  })
 
-  return schema.validate({ abstractionValue }, { abortEarly: false })
+  return schema.validate(abstractionValue, { abortEarly: false })
 }
 
 /**
