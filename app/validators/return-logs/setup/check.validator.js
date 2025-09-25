@@ -28,7 +28,7 @@ function go(session) {
 }
 
 /**
- * If the return is reported as abstraction volumes then sum up all the quantities from the lines. If it is reported as
+ * If the return is reported as abstraction volumes then find the maximum quantity from the lines. If it is reported as
  * meter readings then find the maximum reading from the lines and subtract the start reading to get the total amount
  * abstracted.
  *
@@ -36,9 +36,11 @@ function go(session) {
  */
 function _abstractionValue(session) {
   if (session.reported === 'abstraction-volumes') {
-    return session.lines.reduce((sum, line) => {
-      return sum + (line.quantity || 0)
-    }, 0)
+    return Math.max(
+      ...session.lines.map((line) => {
+        return line.quantity || 0
+      })
+    )
   }
 
   const maxMeterReading = Math.max(
