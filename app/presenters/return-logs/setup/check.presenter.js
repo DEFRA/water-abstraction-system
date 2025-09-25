@@ -138,7 +138,7 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
     } else {
       formattedLine.reading = line.reading ?? null
 
-      if (line.reading) {
+      if (typeof line.reading === 'number') {
         const multiplier = meter10TimesDisplay === 'yes' ? 10 : 1
 
         formattedLine.quantity = (line.reading - previousReading) * multiplier
