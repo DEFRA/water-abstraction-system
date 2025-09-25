@@ -325,7 +325,7 @@ function formatReturnLogStatus(returnLog) {
     return 'due'
   }
 
-  // If we get here then we the return log has a status of 'due', its end date is in the past, and its due date is more
+  // If we get here then the return log has a status of 'due', its end date is in the past, and its due date is more
   // than 28 days in the future. Once dynamic due dates becomes the norm, we are unlikely to get to this point.
   return 'open'
 }
