@@ -68,7 +68,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         plaintext: null,
         recipient: null,
         returnLogIds: null,
-        status: 'sent'
+        status: 'sent',
+        templateId: null
       })
     })
   })
@@ -116,7 +117,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         plaintext: null,
         recipient: null,
         returnLogIds: null,
-        status: 'sent'
+        status: 'sent',
+        templateId: null
       })
     })
 
@@ -140,7 +142,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         plaintext: null,
         recipient: null,
         returnLogIds: null,
-        status: 'sent'
+        status: 'sent',
+        templateId: null
       })
     })
   })
