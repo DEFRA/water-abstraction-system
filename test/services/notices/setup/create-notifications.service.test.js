@@ -53,7 +53,8 @@ describe('Notices - Setup - Create notification service', () => {
         plaintext: null,
         recipient: null,
         returnLogIds: null,
-        status: null
+        status: null,
+        templateId: null
       })
     })
   })
