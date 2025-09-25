@@ -6,7 +6,7 @@
  */
 
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -47,13 +47,11 @@ async function go(sessionId, payload) {
 }
 
 /**
- * Calculates the abstraction period dates based on the session details and
- * the submitted data.
+ * Calculates the abstraction period dates based on the session details and the submitted data.
  *
- * If the user has chosen to use the default abstraction period, the abstraction
- * period dates are calculated by calling the `DetermineAbstractionPeriodService`
- * with the session details. If the user has entered a custom abstraction period,
- * the abstraction period dates are set to the dates entered by the user.
+ * If the user has chosen to use the default abstraction period, the abstraction period dates are calculated by calling
+ * the `AbstractionPeriodLib#determineAbstractionPeriods` function with the session details. If the user has entered a
+ * custom abstraction period, the abstraction period dates are set to the dates entered by the user.
  *
  * The abstraction period dates are then saved to the session.
  *
@@ -66,7 +64,7 @@ function _determineAbstractionPeriodDates(session, payload) {
   if (payload.periodDateUsedOptions === 'default') {
     const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
 
-    const abstractionPeriods = DetermineAbstractionPeriodService.go(
+    const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
       returnPeriod,
       session.periodStartDay,
       session.periodStartMonth,

@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Determine real abstraction periods with years based on a reference period
- * @module DetermineAbstractionPeriodService
+ * Helper methods to deal with abstraction periods
+ * @module AbstractionPeriodLib
  */
 
 /**
@@ -13,7 +13,7 @@
  * them into real dates to do so.
  *
  * We use a reference period, typically a billing or charge period to determine what years to use. For example if the
- * `referencePeriod` is a billing period, it will be '1 April 2023 to 31 March 2024'. This service will then apply 2023
+ * `referencePeriod` is a billing period, it will be '1 April 2023 to 31 March 2024'. This function will then apply 2023
  * and 2024 to the provided abstraction period depending on whether it is an "in-year" or "out-year" abstraction period.
  *
  * ## In-year
@@ -49,7 +49,7 @@
  *
  * @returns {object[]} An array of abstraction periods each containing a start and end date
  */
-function go(referencePeriod, startDay, startMonth, endDay, endMonth) {
+function determineAbstractionPeriods(referencePeriod, startDay, startMonth, endDay, endMonth) {
   const abstractionPeriodsWithYears = _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth)
 
   return abstractionPeriodsWithYears.map((abstractionPeriod) => {
@@ -116,5 +116,5 @@ function _subtractOneYear(date) {
 }
 
 module.exports = {
-  go
+  determineAbstractionPeriods
 }

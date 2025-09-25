@@ -7,7 +7,7 @@
 
 const Big = require('big.js')
 
-const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../determine-abstraction-periods.service.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
@@ -40,7 +40,7 @@ async function _prepareReturnLogs(licence, billingPeriod) {
 function _prepReturnsForMatching(returnLogs, billingPeriod) {
   returnLogs.forEach((returnLog) => {
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, returnSubmissions } = returnLog
-    const abstractionPeriods = DetermineAbstractionPeriodService.go(
+    const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
       billingPeriod,
       periodStartDay,
       periodStartMonth,

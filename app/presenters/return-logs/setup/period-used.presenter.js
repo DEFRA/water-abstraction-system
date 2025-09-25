@@ -5,7 +5,7 @@
  * @module PeriodUsedPresenter
  */
 
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const { formatAbstractionPeriod } = require('../../base.presenter.js')
 
 /**
@@ -35,7 +35,7 @@ function go(session) {
   // Determine the valid abstraction periods that overlap with the return period - this will be used to decide whether
   // or not the "default return period" option will be displayed
   const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
-  const abstractionPeriods = DetermineAbstractionPeriodService.go(
+  const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
     returnPeriod,
     session.periodStartDay,
     session.periodStartMonth,

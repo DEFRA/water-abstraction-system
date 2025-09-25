@@ -3,7 +3,7 @@
 const Big = require('big.js')
 
 const { formatLongDate } = require('../../base.presenter.js')
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
@@ -142,9 +142,9 @@ function formatChargePeriod(reviewChargeVersion) {
  * contains a `reviewChargeReference` property that then contains a `reviewChargeVersion`. The charge period will be
  * determined by extracting the start and end date from it.
  *
- * With the abstraction details and charge period determined, it calls `DetermineAbstractionPeriodService` to calculate
- * the charge periods for the _element_. An element can have 1 or 2 charge periods, due to the way abstraction periods
- * and financial years cross-over.
+ * With the abstraction details and charge period determined, it calls
+ * `AbstractionPeriodLib#determineAbstractionPeriods` to calculate the charge periods for the _element_. An element can
+ * have 1 or 2 charge periods, due to the way abstraction periods and financial years cross-over.
  *
  * With these calculated, they are passed through `formatLongDate()` and return for display in the UI.
  *
@@ -165,7 +165,7 @@ function formatChargePeriods(reviewChargeElement, chargePeriod = null) {
     chargePeriod = _chargePeriod(reviewChargeReference.reviewChargeVersion)
   }
 
-  const abstractionPeriods = DetermineAbstractionPeriodService.go(
+  const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
     chargePeriod,
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,

@@ -6,7 +6,7 @@
  */
 
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
-const DetermineAbstractionPeriodService = require('./determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('./determine-abstraction-periods.service.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -71,10 +71,10 @@ function go(chargePeriod, billingPeriod, chargeReference) {
     } = chargeElement
 
     authorisedAbstractionPeriods.push(
-      ...DetermineAbstractionPeriodService.go(billingPeriod, startDay, startMonth, endDay, endMonth)
+      ...AbstractionPeriodLib.determineAbstractionPeriods(billingPeriod, startDay, startMonth, endDay, endMonth)
     )
     billableAbstractionPeriods.push(
-      ...DetermineAbstractionPeriodService.go(chargePeriod, startDay, startMonth, endDay, endMonth)
+      ...AbstractionPeriodLib.determineAbstractionPeriods(chargePeriod, startDay, startMonth, endDay, endMonth)
     )
   })
 

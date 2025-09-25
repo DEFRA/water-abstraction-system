@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const DetermineAbstractionPeriodService = require('../../../app/services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../app/services/bill-runs/determine-abstraction-periods.service.js')
 
 // NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
 // to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a
@@ -43,7 +43,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction periods', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -67,7 +73,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -87,7 +99,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction periods', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -111,7 +129,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -140,7 +164,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns no abstraction periods', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([])
       })
@@ -155,7 +185,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -175,7 +211,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -204,7 +246,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -224,7 +272,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -244,7 +298,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns the expected abstraction period', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([
           {
@@ -264,7 +324,13 @@ describe('Determine Abstraction Periods service', () => {
       })
 
       it('returns no abstraction periods', () => {
-        const result = DetermineAbstractionPeriodService.go(referencePeriod, startDay, startMonth, endDay, endMonth)
+        const result = AbstractionPeriodLib.determineAbstractionPeriods(
+          referencePeriod,
+          startDay,
+          startMonth,
+          endDay,
+          endMonth
+        )
 
         expect(result).to.equal([])
       })
