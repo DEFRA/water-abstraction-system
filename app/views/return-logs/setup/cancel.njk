@@ -1,17 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink })}}
-{% endblock %}
-
-{% block content %}
-  {{ pageHeading(pageTitle, caption) }}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   {{ govukSummaryList({
       classes: 'govuk-summary-list--no-border govuk-!-margin-bottom-9',
