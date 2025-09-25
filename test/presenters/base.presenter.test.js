@@ -433,7 +433,7 @@ describe('Base presenter', () => {
             testReturnLog = { dueDate: yesterday(), status: 'due' }
           })
 
-          it('returns "due"', () => {
+          it('returns "overdue"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
             expect(result).to.equal('overdue')
