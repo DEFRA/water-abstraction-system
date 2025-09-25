@@ -38,7 +38,7 @@ describe('Return Logs Setup - Check validator', () => {
 
     describe('and the amount abstracted has been recorded using volumes', () => {
       beforeEach(() => {
-        session = { lines, reported: 'abstraction-volumes' }
+        session = { lines, reported: 'abstractionVolumes' }
       })
 
       it('confirms the session data is valid', () => {
@@ -83,7 +83,7 @@ describe('Return Logs Setup - Check validator', () => {
 
     describe('and the amount abstracted has been recorded using volumes', () => {
       beforeEach(() => {
-        session = { lines, reported: 'abstraction-volumes' }
+        session = { lines, reported: 'abstractionVolumes' }
       })
 
       it('fails validation with the message "At least one return line must contain a value."', () => {

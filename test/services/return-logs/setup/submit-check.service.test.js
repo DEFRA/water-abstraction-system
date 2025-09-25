@@ -60,7 +60,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         purposes: ['test purpose'],
-        reported: 'abstraction-volumes',
+        reported: 'abstractionVolumes',
         returnReference: returnLog.returnReference,
         returnLogId: returnLog.id,
         returnSubmissionId: initialReturnSubmission.id,

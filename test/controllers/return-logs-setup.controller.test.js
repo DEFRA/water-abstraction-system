@@ -94,6 +94,25 @@ describe('Return Logs - Setup - Controller', () => {
   })
 
   describe('return-logs/setup/{sessionId}/check', () => {
+    beforeEach(() => {
+      path = 'check'
+    })
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(CheckService, 'go').resolves({ pageTitle: 'Check details and enter new volumes or readings' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check details and enter new volumes or readings')
+        })
+      })
+    })
+
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
@@ -238,42 +257,6 @@ describe('Return Logs - Setup - Controller', () => {
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal('/system/return-logs?id=v1:6:09/999:1003992:2022-04-01:2023-03-31')
         })
-      })
-    })
-  })
-
-  describe('return-logs/setup/{sessionId}/check', () => {
-    beforeEach(() => {
-      path = 'check'
-    })
-
-    describe('GET', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(CheckService, 'go').resolves({ pageTitle: 'Check details and enter new volumes or readings' })
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions(path))
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Check details and enter new volumes or readings')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        Sinon.stub(SubmitCheckService, 'go').resolves('TEST_RETURN_LOG_ID')
-      })
-
-      it('redirects to the confirmed page on success', async () => {
-        options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
-
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
       })
     })
   })
