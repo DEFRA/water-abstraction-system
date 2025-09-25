@@ -441,6 +441,8 @@ function formatValidationResult(validationResult) {
       formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
       formattedResult[path] = { text: detail.message }
       processedFields.add(path)
+    } else {
+      // No action needed for already processed fields
     }
   })
 
