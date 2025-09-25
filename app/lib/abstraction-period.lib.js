@@ -93,10 +93,7 @@ function _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth
     startDate: _subtractOneYear(firstPeriod.startDate),
     endDate: _subtractOneYear(firstPeriod.endDate)
   }
-  const nextPeriod = {
-    startDate: _addOneYear(firstPeriod.startDate),
-    endDate: _addOneYear(firstPeriod.endDate)
-  }
+  const nextPeriod = { startDate: _addOneYear(firstPeriod.startDate), endDate: _addOneYear(firstPeriod.endDate) }
 
   // Filter out any periods which don't overlap our reference period and return the ones which do
   return [previousPeriod, firstPeriod, nextPeriod].filter((abstractionPeriod) => {
