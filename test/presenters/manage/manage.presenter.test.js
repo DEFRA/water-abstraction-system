@@ -178,7 +178,7 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: false }, show: true },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
