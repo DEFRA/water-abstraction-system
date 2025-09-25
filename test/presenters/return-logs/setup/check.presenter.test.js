@@ -741,13 +741,13 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the meter reading is zero', () => {
           beforeEach(() => {
-          session.lines = [
-            {
-              endDate: '2023-04-30T00:00:00.000Z',
-              startDate: '2023-04-01T00:00:00.000Z',
-              reading: 0
-            }
-          ]
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z',
+                reading: 0
+              }
+            ]
             session.startReading = 0
           })
 
