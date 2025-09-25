@@ -179,14 +179,12 @@ describe('Return Logs Setup - Submit Check service', () => {
         {
           startDate: '2023-01-01T00:00:00.000Z',
           endDate: '2023-01-31T00:00:00.000Z',
-          quantity: 0,
+          quantity: null,
           reading: null
         },
         {
           startDate: '2023-02-01T00:00:00.000Z',
-          endDate: '2023-02-28T00:00:00.000Z',
-          quantity: 0,
-          reading: null
+          endDate: '2023-02-28T00:00:00.000Z'
         }
       ]
 
@@ -205,7 +203,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         error: {
           errorList: [
             {
-              text: 'Returns with an abstraction volume of 0 should be recorded as a nil return.'
+              text: 'At least one return line must contain a value.'
             }
           ]
         },
@@ -249,8 +247,8 @@ describe('Return Logs Setup - Submit Check service', () => {
                 text: 'Enter monthly volumes'
               },
               month: 'January 2023',
-              monthlyTotal: '0',
-              unitTotal: '0'
+              monthlyTotal: null,
+              unitTotal: null
             },
             {
               link: {
@@ -258,8 +256,8 @@ describe('Return Logs Setup - Submit Check service', () => {
                 text: 'Enter monthly volumes'
               },
               month: 'February 2023',
-              monthlyTotal: '0',
-              unitTotal: '0'
+              monthlyTotal: null,
+              unitTotal: null
             }
           ]
         },
