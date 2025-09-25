@@ -287,7 +287,7 @@ function formatReturnLogStatus(returnLog) {
   const { dueDate, endDate, status } = returnLog
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
-  // statues
+  // statuses
   if (status === 'completed') {
     return 'complete'
   }
