@@ -29,7 +29,7 @@ describe('Return Logs Setup - Check validator', () => {
         },
         {
           endDate: '2025-06-30T00:00:00.000Z',
-          quantity: 1000,
+          quantity: 0,
           reading: 456,
           startDate: '2025-06-01T00:00:00.000Z'
         }
@@ -66,8 +66,8 @@ describe('Return Logs Setup - Check validator', () => {
       lines = [
         {
           endDate: '2025-04-30T00:00:00.000Z',
-          quantity: 0,
-          reading: 10,
+          quantity: null,
+          reading: null,
           startDate: '2025-04-01T00:00:00.000Z'
         },
         {
@@ -76,8 +76,6 @@ describe('Return Logs Setup - Check validator', () => {
         },
         {
           endDate: '2025-06-30T00:00:00.000Z',
-          quantity: 0,
-          reading: 10,
           startDate: '2025-06-01T00:00:00.000Z'
         }
       ]
@@ -88,13 +86,11 @@ describe('Return Logs Setup - Check validator', () => {
         session = { lines, reported: 'abstraction-volumes' }
       })
 
-      it('fails validation with the message "Returns with an abstraction volume of 0 should be recorded as a nil return."', () => {
+      it('fails validation with the message "At least one return line must contain a value."', () => {
         const result = CheckValidator.go(session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
-          'Returns with an abstraction volume of 0 should be recorded as a nil return.'
-        )
+        expect(result.error.details[0].message).to.equal('At least one return line must contain a value.')
       })
     })
 
@@ -103,13 +99,11 @@ describe('Return Logs Setup - Check validator', () => {
         session = { lines, reported: 'meter-readings', startReading: 10 }
       })
 
-      it('fails validation with the message "Returns with an abstraction volume of 0 should be recorded as a nil return."', () => {
+      it('fails validation with the message "At least one return line must contain a value."', () => {
         const result = CheckValidator.go(session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
-          'Returns with an abstraction volume of 0 should be recorded as a nil return.'
-        )
+        expect(result.error.details[0].message).to.equal('At least one return line must contain a value.')
       })
     })
   })

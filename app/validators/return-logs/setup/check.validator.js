@@ -10,45 +10,31 @@ const Joi = require('joi')
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
  *
+ * If all return lines are empty (i.e. no quantities or readings have been entered) then an error is returned.
+ *
  * @param {object} session - Session object containing the return submission data
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(session) {
-  const abstractionValue = _abstractionValue(session)
+  const lineValuesExist = _lineValuesExist(session)
 
-  const schema = Joi.number()
-      .greater(0)
-      .messages({ 'number.greater': 'Returns with an abstraction volume of 0 should be recorded as a nil return.' })
+  const schema = Joi.valid(true).messages({ 'any.only': 'At least one return line must contain a value.' })
 
-  return schema.validate(abstractionValue, { abortEarly: false })
+  return schema.validate(lineValuesExist, { abortEarly: false })
 }
 
-/**
- * If the return is reported as abstraction volumes then find the maximum quantity from the lines. If it is reported as
- * meter readings then find the maximum reading from the lines and subtract the start reading to get the total amount
- * abstracted.
- *
- * @private
- */
-function _abstractionValue(session) {
+function _lineValuesExist(session) {
   if (session.reported === 'abstraction-volumes') {
-    return Math.max(
-      ...session.lines.map((line) => {
-        return line.quantity || 0
-      })
-    )
+    return session.lines.some((line) => {
+      return typeof line.quantity === 'number'
+    })
   }
 
-  const maxMeterReading = Math.max(
-    ...session.lines.map((line) => {
-      return line.reading || 0
-    })
-  )
-
-  // If any water has been abstracted this will return a positive value
-  return maxMeterReading - session.startReading
+  return session.lines.some((line) => {
+    return typeof line.reading === 'number'
+  })
 }
 
 module.exports = {
