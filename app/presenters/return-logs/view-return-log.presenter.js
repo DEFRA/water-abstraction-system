@@ -71,7 +71,7 @@ function go(returnLog, auth) {
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-    showUnderQuery: formattedStatus !== 'not due yet',
+    showUnderQuery: _showUnderQuery(returnLog),
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
@@ -194,6 +194,20 @@ function _selectedReturnSubmission(returnSubmissions) {
   }
 
   return returnSubmissions[0]
+}
+
+function _showUnderQuery(returnLog) {
+  const { endDate, status } = returnLog
+
+  if (status === 'void') {
+    return false
+  }
+
+  if (today() <= endDate) {
+    return false
+  }
+
+  return true
 }
 
 function _startReading(selectedReturnSubmission) {

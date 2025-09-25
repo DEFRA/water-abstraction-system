@@ -129,6 +129,33 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
     })
 
+    describe('and a zero quantity is specified', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({
+          licenceRef: licence.licenceRef,
+          metadata,
+          receivedDate: new Date('2025-03-06'),
+          endDate: new Date('2022-06-01')
+        })
+
+        returnSubmission = await ReturnSubmissionHelper.add({
+          returnLogId: returnLog.id,
+          metadata: { method: 'abstractionVolumes' }
+        })
+        await ReturnSubmissionLineHelper.add({ quantity: 0, returnSubmissionId: returnSubmission.id })
+      })
+
+      it('returns the quantity as expected', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const sessionId = _getSessionId(result)
+
+        const matchingSession = await SessionModel.query().findById(sessionId)
+
+        expect(matchingSession.data.lines[0].quantity).to.equal(0)
+      })
+    })
+
     describe('and a unit is specified', () => {
       before(async () => {
         returnLog = await ReturnLogHelper.add({

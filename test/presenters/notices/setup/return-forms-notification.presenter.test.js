@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -21,7 +20,6 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
 
   let licenceRef
   let pageData
-  let referenceCode
   let returnForm
   let returnId
   let returnLogId
@@ -32,8 +30,6 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
     returnId = generateUUID()
 
     returnLogId = generateReturnLogId()
-
-    referenceCode = generateReferenceCode('PRTF')
 
     returnForm = new TextEncoder().encode('mock file').buffer
 
@@ -67,7 +63,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
 
   describe('when called', () => {
     it('returns the data re-formatted as a notification', () => {
-      const result = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
+      const result = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
 
       expect(result).to.equal({
         content: returnForm,
@@ -96,7 +92,6 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
           site_description: 'Water park',
           start_date: '1 January 2025'
         },
-        reference: referenceCode,
         returnLogIds: [returnId]
       })
     })

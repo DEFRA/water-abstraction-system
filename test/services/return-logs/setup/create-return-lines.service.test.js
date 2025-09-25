@@ -35,13 +35,12 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
             startDate: '2024-11-02T00:00:00.000Z',
             endDate: '2024-11-08T00:00:00.000Z',
             reading: 2345,
-            quantity: 32
+            quantity: 0
           },
           {
             startDate: '2024-11-09T00:00:00.000Z',
             endDate: '2024-11-15T00:00:00.000Z',
-            reading: 3456,
-            quantity: 64
+            reading: 3456
           }
         ],
         meter10TimesDisplay: 'no',
@@ -56,16 +55,18 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
     it('inserts the lines', async () => {
       await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
 
-      const [result] = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
+      const result = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
-      expect(result.createdAt).to.equal(new Date(timestamp))
-      expect(result.endDate).to.equal(new Date('2024-11-01T00:00:00.000Z'))
-      expect(result.quantity).to.equal(16)
-      expect(result.readingType).to.equal('estimated')
-      expect(result.returnSubmissionId).to.equal(returnSubmissionId)
-      expect(result.startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
-      expect(result.timePeriod).to.equal('week')
-      expect(result.userUnit).to.equal('m³')
+      expect(result[0].createdAt).to.equal(new Date(timestamp))
+      expect(result[0].endDate).to.equal(new Date('2024-11-01T00:00:00.000Z'))
+      expect(result[0].quantity).to.equal(16)
+      expect(result[1].quantity).to.equal(0)
+      expect(result[2].quantity).to.be.null()
+      expect(result[0].readingType).to.equal('estimated')
+      expect(result[0].returnSubmissionId).to.equal(returnSubmissionId)
+      expect(result[0].startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
+      expect(result[0].timePeriod).to.equal('week')
+      expect(result[0].userUnit).to.equal('m³')
     })
 
     describe('when the unit of measurement is megalitres', () => {

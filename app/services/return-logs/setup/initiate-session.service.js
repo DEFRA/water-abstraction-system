@@ -211,7 +211,8 @@ function _submissionLines(returnSubmissionLines) {
   return returnSubmissionLines.map((returnSubmissionLine) => {
     const { endDate, quantity, reading, startDate, userUnit } = returnSubmissionLine
 
-    let convertedQuantity
+    let convertedQuantity = quantity
+
     if (quantity) {
       convertedQuantity = quantity * returnUnits[userUnit].multiplier
     }

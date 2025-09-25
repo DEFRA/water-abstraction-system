@@ -17,8 +17,9 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const UserRoleModel = require('../../app/models/user-role.model.js')
 
-const ROLE_RENEWAL_NOTIFICATIONS_INDEX = 5
-const USER_NPS_INDEX = 6
+const ROLE_AR_USER_INDEX = 6
+const USER_DIGITISE_EDITOR_INDEX = 11
+const USER_ROLE_AR_USER_INDEX = 0
 
 const { SKIP_COMPARE_LIST: skip } = UserHelper
 
@@ -27,10 +28,10 @@ describe('User Role model', () => {
   let testRole
   let testUser
 
-  before(async () => {
-    testRole = RoleHelper.select(ROLE_RENEWAL_NOTIFICATIONS_INDEX)
-    testUser = UserHelper.select(USER_NPS_INDEX)
-    testRecord = await UserRoleHelper.add({ roleId: testRole.id, userId: testUser.id })
+  before(() => {
+    testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
+    testUser = UserHelper.select(USER_DIGITISE_EDITOR_INDEX)
+    testRecord = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
   })
 
   describe('Basic query', () => {

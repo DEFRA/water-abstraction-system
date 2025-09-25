@@ -111,7 +111,7 @@ function _returnLines(returnSubmissionId, session, timestamp) {
       ...restOfLine,
       id: generateUUID(),
       createdAt: timestamp,
-      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : undefined,
+      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : rawQuantity,
       readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
       returnSubmissionId,
       timePeriod: session.returnsFrequency,

@@ -107,7 +107,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -175,7 +176,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -233,7 +235,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -304,7 +307,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
             returnLogIds: null,
-            status: 'error'
+            status: 'error',
+            templateId: null
           },
           { skip: ['createdAt'] }
         )
@@ -391,7 +395,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
           returnLogIds: null,
-          status: 'pending'
+          status: 'pending',
+          templateId: null
         },
         { skip: ['createdAt'] }
       )

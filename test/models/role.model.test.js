@@ -24,7 +24,8 @@ const RoleModel = require('../../app/models/role.model.js')
 const GROUP_ROLE_SUPER_AR_USER_INDEX = 16
 const GROUP_SUPER_INDEX = 5
 const ROLE_AR_USER_INDEX = 6
-const USER_SUPER_INDEX = 1
+const USER_DIGITISE_EDITOR_INDEX = 11
+const USER_ROLE_AR_USER_INDEX = 0
 
 const { SKIP_COMPARE_LIST: skip } = UserHelper
 
@@ -40,8 +41,8 @@ describe('Role model', () => {
     testRecord = RoleHelper.select(ROLE_AR_USER_INDEX)
     testGroup = GroupHelper.select(GROUP_SUPER_INDEX)
     testGroupRole = GroupRoleHelper.select(GROUP_ROLE_SUPER_AR_USER_INDEX)
-    testUser = UserHelper.select(USER_SUPER_INDEX)
-    testUserRole = await UserRoleHelper.add({ roleId: testRecord.id, userId: testUser.id })
+    testUser = UserHelper.select(USER_DIGITISE_EDITOR_INDEX)
+    testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
   })
 
   describe('Basic query', () => {
@@ -90,7 +91,7 @@ describe('Role model', () => {
         expect(result.userRoles).to.be.an.array()
         expect(result.userRoles).to.have.length(1)
         expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole)
+        expect(result.userRoles[0]).to.equal(testUserRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
