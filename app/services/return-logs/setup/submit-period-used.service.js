@@ -5,12 +5,13 @@
  * @module SubmitPeriodUsedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
@@ -89,12 +90,12 @@ function _determineAbstractionPeriodDates(session, payload) {
 
 async function _save(session, payload) {
   session.periodDateUsedOptions = payload.periodDateUsedOptions
-  session.periodUsedFromDay = payload['period-used-from-day']
-  session.periodUsedFromMonth = payload['period-used-from-month']
-  session.periodUsedFromYear = payload['period-used-from-year']
-  session.periodUsedToDay = payload['period-used-to-day']
-  session.periodUsedToMonth = payload['period-used-to-month']
-  session.periodUsedToYear = payload['period-used-to-year']
+  session.periodUsedFromDay = payload.periodUsedFromDay
+  session.periodUsedFromMonth = payload.periodUsedFromMonth
+  session.periodUsedFromYear = payload.periodUsedFromYear
+  session.periodUsedToDay = payload.periodUsedToDay
+  session.periodUsedToMonth = payload.periodUsedToMonth
+  session.periodUsedToYear = payload.periodUsedToYear
 
   _determineAbstractionPeriodDates(session, payload)
 
@@ -110,12 +111,12 @@ async function _save(session, payload) {
 
 function _submittedSessionData(session, payload) {
   session.periodDateUsedOptions = payload.periodDateUsedOptions ?? null
-  session.periodUsedFromDay = payload['period-used-from-day'] ?? null
-  session.periodUsedFromMonth = payload['period-used-from-month'] ?? null
-  session.periodUsedFromYear = payload['period-used-from-year'] ?? null
-  session.periodUsedToDay = payload['period-used-to-day'] ?? null
-  session.periodUsedToMonth = payload['period-used-to-month'] ?? null
-  session.periodUsedToYear = payload['period-used-to-year'] ?? null
+  session.periodUsedFromDay = payload.periodUsedFromDay ?? null
+  session.periodUsedFromMonth = payload.periodUsedFromMonth ?? null
+  session.periodUsedFromYear = payload.periodUsedFromYear ?? null
+  session.periodUsedToDay = payload.periodUsedToDay ?? null
+  session.periodUsedToMonth = payload.periodUsedToMonth ?? null
+  session.periodUsedToYear = payload.periodUsedToYear ?? null
 
   return PeriodUsedPresenter.go(session)
 }

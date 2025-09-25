@@ -89,13 +89,13 @@ describe('Return Logs Setup - Submit Period Used service', () => {
       describe('because the user entered a custom period', () => {
         beforeEach(async () => {
           payload = {
-            periodDateUsedOptions: 'custom-dates',
-            'period-used-from-day': '15',
-            'period-used-from-month': '08',
-            'period-used-from-year': '2023',
-            'period-used-to-day': '20',
-            'period-used-to-month': '01',
-            'period-used-to-year': '2024'
+            periodDateUsedOptions: 'customDates',
+            periodUsedFromDay: '15',
+            periodUsedFromMonth: '08',
+            periodUsedFromYear: '2023',
+            periodUsedToDay: '20',
+            periodUsedToMonth: '01',
+            periodUsedToYear: '2024'
           }
         })
 
@@ -104,7 +104,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.periodDateUsedOptions).to.equal('custom-dates')
+          expect(refreshedSession.periodDateUsedOptions).to.equal('customDates')
           expect(refreshedSession.periodUsedFromDay).to.equal('15')
           expect(refreshedSession.periodUsedFromMonth).to.equal('08')
           expect(refreshedSession.periodUsedFromYear).to.equal('2023')

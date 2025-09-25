@@ -56,7 +56,6 @@ function go(session) {
     periodUsedToMonth: periodUsedToMonth ?? null,
     periodUsedToYear: periodUsedToYear ?? null,
     sessionId,
-    returnReference,
     showDefaultAbstractionPeriod: abstractionPeriods.length > 0
   }
 }

@@ -29,16 +29,16 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected the "custom-dates" option', () => {
+    describe('because the user selected the "customDates" option', () => {
       beforeEach(() => {
         payload = {
-          periodDateUsedOptions: 'custom-dates',
-          'period-used-from-day': '01',
-          'period-used-from-month': '04',
-          'period-used-from-year': '2023',
-          'period-used-to-day': '31',
-          'period-used-to-month': '03',
-          'period-used-to-year': '2024'
+          periodDateUsedOptions: 'customDates',
+          periodUsedFromDay: '01',
+          periodUsedFromMonth: '04',
+          periodUsedFromYear: '2023',
+          periodUsedToDay: '31',
+          periodUsedToMonth: '03',
+          periodUsedToYear: '2024'
         }
       })
 
@@ -64,9 +64,9 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected "custom-dates" but did not enter anything', () => {
+    describe('because the user selected "customDates" but did not enter anything', () => {
       beforeEach(() => {
-        payload = { periodDateUsedOptions: 'custom-dates' }
+        payload = { periodDateUsedOptions: 'customDates' }
       })
 
       it('fails validation with the message "Enter a valid from date" and "Enter a valid to date"', () => {
@@ -78,16 +78,16 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected "custom-dates" and entered an invalid date', () => {
+    describe('because the user selected "customDates" and entered an invalid date', () => {
       beforeEach(() => {
         payload = {
-          periodDateUsedOptions: 'custom-dates',
-          'period-used-from-day': '99',
-          'period-used-from-month': '99',
-          'period-used-from-year': '9999',
-          'period-used-to-day': '00',
-          'period-used-to-month': '00',
-          'period-used-to-year': '0000'
+          periodDateUsedOptions: 'customDates',
+          periodUsedFromDay: '99',
+          periodUsedFromMonth: '99',
+          periodUsedFromYear: '9999',
+          periodUsedToDay: '00',
+          periodUsedToMonth: '00',
+          periodUsedToYear: '0000'
         }
       })
 
@@ -100,16 +100,16 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected "custom-dates" and entered a text', () => {
+    describe('because the user selected "customDates" and entered a text', () => {
       beforeEach(() => {
         payload = {
-          periodDateUsedOptions: 'custom-dates',
-          'period-used-from-day': 'hh',
-          'period-used-from-month': 'ii',
-          'period-used-from-year': 'abcd',
-          'period-used-to-day': 'ab',
-          'period-used-to-month': 'cd',
-          'period-used-to-year': 'efgh'
+          periodDateUsedOptions: 'customDates',
+          periodUsedFromDay: 'hh',
+          periodUsedFromMonth: 'ii',
+          periodUsedFromYear: 'abcd',
+          periodUsedToDay: 'ab',
+          periodUsedToMonth: 'cd',
+          periodUsedToYear: 'efgh'
         }
       })
 
@@ -122,16 +122,16 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected "custom-dates" and entered a date outside the return period', () => {
+    describe('because the user selected "customDates" and entered a date outside the return period', () => {
       beforeEach(() => {
         payload = {
-          periodDateUsedOptions: 'custom-dates',
-          'period-used-from-day': '01',
-          'period-used-from-month': '04',
-          'period-used-from-year': '2024',
-          'period-used-to-day': '31',
-          'period-used-to-month': '03',
-          'period-used-to-year': '2025'
+          periodDateUsedOptions: 'customDates',
+          periodUsedFromDay: '01',
+          periodUsedFromMonth: '04',
+          periodUsedFromYear: '2024',
+          periodUsedToDay: '31',
+          periodUsedToMonth: '03',
+          periodUsedToYear: '2025'
         }
       })
 
@@ -143,16 +143,16 @@ describe('Return Logs Setup - Period Used validator', () => {
       })
     })
 
-    describe('because the user selected "custom-dates" and entered the to and from date the wrong way round', () => {
+    describe('because the user selected "customDates" and entered the to and from date the wrong way round', () => {
       beforeEach(() => {
         payload = {
-          periodDateUsedOptions: 'custom-dates',
-          'period-used-from-day': '31',
-          'period-used-from-month': '03',
-          'period-used-from-year': '2024',
-          'period-used-to-day': '01',
-          'period-used-to-month': '03',
-          'period-used-to-year': '2023'
+          periodDateUsedOptions: 'customDates',
+          periodUsedFromDay: '31',
+          periodUsedFromMonth: '03',
+          periodUsedFromYear: '2024',
+          periodUsedToDay: '01',
+          periodUsedToMonth: '03',
+          periodUsedToYear: '2023'
         }
       })
 
