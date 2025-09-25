@@ -4,25 +4,27 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set panelContent %}
-  <div class="govuk-panel__body govuk-!-font-size-24">
+  <p class="govuk-panel--confirmation govuk-!-font-size-24">
       Licence number <strong>{{ licenceRef }}</strong>
-  </div>
-  <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+  </p>
+  <p class="govuk-panel--confirmation govuk-!-font-size-24 govuk-!-padding-top-4">
     Site description <strong>{{ siteDescription }}</strong>
-  </div>
-  <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+  </p>
+  <p class="govuk-panel--confirmation govuk-!-font-size-24 govuk-!-padding-top-4">
     {{ purposeDetails.label }} <strong> {{ purposeDetails.value }}</strong>
-  </div>
+  </p>
 {% endset %}
 
-{% block content %}
+{% block pageContent %}
   {{ govukPanel({ titleText: pageTitle, html: panelContent }) }}
 
   {% if status === 'received' %}
-    <p><a href="{{ viewReturnsLink }}">View returns for {{ licenceRef }}</a></p>
+    <a href="{{ viewReturnsLink }}" class="govuk-link govuk-!-font-size-19">View returns for {{ licenceRef }}</a>
   {% else %}
-    <p><a href="{{ viewThisReturnLink }}" class="govuk-link">View this return</a></p>
-    <p>or</p>
+    <a href="{{ viewThisReturnLink }}" class="govuk-link govuk-!-font-size-19">
+      View this return
+    </a>
+    <p class="govuk-!-margin-top-4">or</p>
 
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
