@@ -98,10 +98,10 @@ function _alwaysRequiredPageData(session) {
     nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
+    pageTitleCaption: `Return reference ${returnReference}`,
     purposes: purposes.join(', '),
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
-    returnReference,
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }
