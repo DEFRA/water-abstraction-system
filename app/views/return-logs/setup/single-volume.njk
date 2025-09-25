@@ -20,18 +20,14 @@
         suffix: {
           text: units
         },
-        errorMessage: {
-          text: error.singleVolumeQuantity.text
-        } if error.singleVolumeQuantity
+        errorMessage: error.singleVolumeQuantity
       }) }}
     {% endset %}
 
     {{ govukRadios({
       id: "singleVolume",
       name: "singleVolume",
-      errorMessage: {
-        text: error.singleVolume.text
-      } if error.singleVolume,
+      errorMessage: error.singleVolume,
       fieldset: {
         legend: {
           html: pageHeadingHtml
@@ -39,6 +35,7 @@
       },
       items: [
         {
+          id: "yes",
           value: "yes",
           text: "Yes",
           checked: singleVolume === 'yes',
@@ -47,6 +44,7 @@
           }
         },
         {
+          id: "no",
           value: "no",
           text: "No",
           checked: singleVolume === 'no'

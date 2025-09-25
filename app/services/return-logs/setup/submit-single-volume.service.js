@@ -5,10 +5,11 @@
  * @module SubmitSingleVolumeService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const SessionModel = require('../../../models/session.model.js')
 const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
 const SingleVolumeValidator = require('../../../validators/return-logs/setup/single-volume.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
