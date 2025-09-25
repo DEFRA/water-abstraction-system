@@ -5,7 +5,7 @@
  * @module PeriodUsedPresenter
  */
 
-const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const { formatAbstractionPeriod } = require('../../base.presenter.js')
 
 /**

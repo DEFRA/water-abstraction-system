@@ -3,7 +3,7 @@
 const Big = require('big.js')
 
 const { formatLongDate } = require('../../base.presenter.js')
-const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**

@@ -7,7 +7,7 @@
 
 const Big = require('big.js')
 
-const AbstractionPeriodLib = require('../determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 

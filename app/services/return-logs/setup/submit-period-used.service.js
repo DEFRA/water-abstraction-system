@@ -6,7 +6,7 @@
  */
 
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
-const AbstractionPeriodLib = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
 const SessionModel = require('../../../models/session.model.js')

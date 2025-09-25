@@ -5,7 +5,7 @@
  * @module PrepareChargeVersionService
  */
 
-const AbstractionPeriodLib = require('../determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 
 /**

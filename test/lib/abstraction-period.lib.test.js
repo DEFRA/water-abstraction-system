@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AbstractionPeriodLib = require('../../../app/services/bill-runs/determine-abstraction-periods.service.js')
+const AbstractionPeriodLib = require('../../app/lib/abstraction-period.lib.js')
 
 // NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
 // to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a
