@@ -73,8 +73,8 @@ describe('Return Logs Setup - Period Used validator', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid from date')
-        expect(result.error.details[1].message).to.equal('Enter a valid to date')
+        expect(result.error.details[0].message).to.equal('Enter a valid to date')
+        expect(result.error.details[1].message).to.equal('Enter a valid from date')
       })
     })
 
@@ -95,8 +95,8 @@ describe('Return Logs Setup - Period Used validator', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid from date')
-        expect(result.error.details[1].message).to.equal('Enter a valid to date')
+        expect(result.error.details[0].message).to.equal('Enter a valid to date')
+        expect(result.error.details[1].message).to.equal('Enter a valid from date')
       })
     })
 
@@ -117,8 +117,8 @@ describe('Return Logs Setup - Period Used validator', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid from date')
-        expect(result.error.details[1].message).to.equal('Enter a valid to date')
+        expect(result.error.details[0].message).to.equal('Enter a valid to date')
+        expect(result.error.details[1].message).to.equal('Enter a valid from date')
       })
     })
 

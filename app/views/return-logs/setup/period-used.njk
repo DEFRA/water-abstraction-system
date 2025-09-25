@@ -11,6 +11,7 @@
     {% set dateInputHTML %}
       {{ govukDateInput({
         id: 'fromFullDate',
+        name: 'fromFullDate',
         errorMessage: error.fromFullDate,
         fieldset: {
           legend: {
@@ -21,18 +22,21 @@
         items: [
           {
             id: 'periodUsedFromDay',
+            name: 'periodUsedFromDay',
             classes: 'govuk-input--width-2',
             label: 'Day',
             value: periodUsedFromDay
           },
           {
             id: 'periodUsedFromMonth',
+            name: 'periodUsedFromMonth',
             classes: 'govuk-input--width-2',
             label: 'Month',
             value: periodUsedFromMonth
           },
           {
             id: 'periodUsedFromYear',
+            name: 'periodUsedFromYear',
             classes: 'govuk-input--width-4',
             label: 'Year',
             value: periodUsedFromYear
@@ -42,6 +46,7 @@
 
       {{ govukDateInput({
         id: 'toFullDate',
+        name: 'toFullDate',
         errorMessage: error.toFullDate,
         fieldset: {
           legend: {
@@ -52,18 +57,21 @@
         items: [
           {
             id: 'periodUsedToDay',
+            name: 'periodUsedToDay',
             classes: 'govuk-input--width-2',
             label: 'Day',
             value: periodUsedToDay
           },
           {
             id: 'periodUsedToMonth',
+            name: 'periodUsedToMonth',
             classes: 'govuk-input--width-2',
             label: 'Month',
             value: periodUsedToMonth
           },
           {
             id: 'periodUsedToYear',
+            name: 'periodUsedToYear',
             classes: 'govuk-input--width-4',
             label: 'Year',
             value: periodUsedToYear

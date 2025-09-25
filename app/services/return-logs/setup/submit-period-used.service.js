@@ -83,8 +83,8 @@ function _determineAbstractionPeriodDates(session, payload) {
 
     session.fromFullDate = abstractionPeriods[0].startDate.toISOString()
   } else {
-    session.fromFullDate = payload.fromFullDate.toISOString()
-    session.toFullDate = payload.toFullDate.toISOString()
+    session.fromFullDate = new Date(payload.fromFullDate).toISOString()
+    session.toFullDate = new Date(payload.toFullDate).toISOString()
   }
 }
 
