@@ -47,7 +47,7 @@ function _inputLines(lines, returnsFrequency) {
     const lineData = {
       endDate,
       label: _lineLabel(endDate, returnsFrequency),
-      reading
+      reading: reading !== null ? reading.toString() : ''
     }
 
     if (line.error) {
