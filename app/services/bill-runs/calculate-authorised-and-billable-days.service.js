@@ -5,8 +5,8 @@
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
+const { determineAbstractionPeriods } = require('../../lib/abstraction-period.lib.js')
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
-const AbstractionPeriodLib = require('../../lib/abstraction-period.lib.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -71,10 +71,10 @@ function go(chargePeriod, billingPeriod, chargeReference) {
     } = chargeElement
 
     authorisedAbstractionPeriods.push(
-      ...AbstractionPeriodLib.determineAbstractionPeriods(billingPeriod, startDay, startMonth, endDay, endMonth)
+      ...determineAbstractionPeriods(billingPeriod, startDay, startMonth, endDay, endMonth)
     )
     billableAbstractionPeriods.push(
-      ...AbstractionPeriodLib.determineAbstractionPeriods(chargePeriod, startDay, startMonth, endDay, endMonth)
+      ...determineAbstractionPeriods(chargePeriod, startDay, startMonth, endDay, endMonth)
     )
   })
 

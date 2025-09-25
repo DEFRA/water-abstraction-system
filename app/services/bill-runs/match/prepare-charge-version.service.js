@@ -5,7 +5,7 @@
  * @module PrepareChargeVersionService
  */
 
-const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
+const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 
 /**
@@ -48,7 +48,7 @@ function _prepareChargeElementsForMatching(chargeElements, chargePeriod) {
       abstractionPeriodEndMonth
     } = chargeElement
 
-    const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
+    const abstractionPeriods = determineAbstractionPeriods(
       chargePeriod,
       abstractionPeriodStartDay,
       abstractionPeriodStartMonth,

@@ -2,8 +2,8 @@
 
 const Big = require('big.js')
 
+const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
-const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
@@ -165,7 +165,7 @@ function formatChargePeriods(reviewChargeElement, chargePeriod = null) {
     chargePeriod = _chargePeriod(reviewChargeReference.reviewChargeVersion)
   }
 
-  const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
+  const abstractionPeriods = determineAbstractionPeriods(
     chargePeriod,
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,

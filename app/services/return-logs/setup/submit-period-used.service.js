@@ -5,8 +5,8 @@
  * @module SubmitPeriodUsedService
  */
 
+const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
-const AbstractionPeriodLib = require('../../../lib/abstraction-period.lib.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -64,7 +64,7 @@ function _determineAbstractionPeriodDates(session, payload) {
   if (payload.periodDateUsedOptions === 'default') {
     const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
 
-    const abstractionPeriods = AbstractionPeriodLib.determineAbstractionPeriods(
+    const abstractionPeriods = determineAbstractionPeriods(
       returnPeriod,
       session.periodStartDay,
       session.periodStartMonth,
