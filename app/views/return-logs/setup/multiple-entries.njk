@@ -1,55 +1,29 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
+  <p>Enter {{lineCount}} {{frequency}} {{measurementType}} starting with {{ startDate }} and ending with {{ endDate }}.</p>
+  <p>Copy and paste the values into the empty box.</p>
+  <p>
+    <a href="/system/return-logs/setup/guidance" class="govuk-link" rel="noreferrer noopener" target="_blank">Help to enter multiple values (opens in a new tab)</a>
+  </p>
 
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.text,
-          href: '#multiple-entries'
-        }
-      ]
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukTextarea({
+      classes: "govuk-!-width-two-thirds",
+      name: "multipleEntries",
+      id: "multipleEntries",
+      value: multipleEntries,
+      rows: "5",
+      errorMessage: error.multipleEntries
     }) }}
-  {% endif %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      {{ pageHeading(pageTitle, caption) }}
-      <div class="govuk-hint">
-        <p>Enter {{lineCount}} {{frequency}} {{measurementType}} starting with {{ startDate }} and ending with {{ endDate }}.</p>
-        <p>Copy and paste the values into the empty box.</p>
-        <p>
-          <a href="/system/return-logs/setup/guidance" class="govuk-link" rel="noreferrer noopener" target="_blank">Help to enter multiple values (opens in a new tab)</a>
-        </p>
-      </div>
-
-      <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-        {{ govukTextarea({
-          name: "multipleEntries",
-          id: "multiple-entries",
-          value: multipleEntries,
-          rows: "5",
-          errorMessage: {
-            text: error.text
-          } if error
-        }) }}
-
-        {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
-      </form>
-    </div>
-  </div>
+    {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

@@ -118,14 +118,17 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         expect(result).to.equal(
           {
             activeNavBar: 'search',
-            backLink: `/system/return-logs/setup/${session.id}/check`,
+            backLink: {
+              href: `/system/return-logs/setup/${session.id}/check`,
+              text: 'Back'
+            },
             endDate: '1 May 2023',
             frequency: 'monthly',
             lineCount: 2,
             measurementType: 'volumes',
             multipleEntries: null,
             pageTitle: 'Enter multiple monthly volumes',
-            caption: 'Return reference 12345',
+            pageTitleCaption: 'Return reference 12345',
             startDate: '1 April 2023'
           },
           { skip: ['sessionId', 'error'] }
@@ -136,7 +139,17 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('includes an error for the input form element', async () => {
           const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Enter 2 monthly volumes' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#multipleEntries',
+                text: 'Enter 2 monthly volumes'
+              }
+            ],
+            multipleEntries: {
+              text: 'Enter 2 monthly volumes'
+            }
+          })
         })
       })
     })

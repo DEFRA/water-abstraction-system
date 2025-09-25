@@ -18,9 +18,13 @@
  *
  * @param {string} multipleEntries - The raw payload string containing multiple entries.
  *
- * @returns {number[]} The formatted array of numbers and null values.
+ * @returns {number[] | null} The formatted array of numbers and null values.
  */
 function go(multipleEntries) {
+  if (!multipleEntries) {
+    return null
+  }
+
   const splitEntriesWith = multipleEntries.includes('\r\n') ? /\r?\n/ : ','
 
   const splitEntries = multipleEntries.split(splitEntriesWith)

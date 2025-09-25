@@ -134,7 +134,7 @@ describe('Return Logs Setup - Submit Note service', () => {
           },
           note: null,
           pageTitle: 'Add a note',
-          caption: 'Return reference 1234',
+          pageTitleCaption: 'Return reference 1234',
           sessionId: session.id
         })
       })

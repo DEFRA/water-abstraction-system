@@ -17,7 +17,7 @@ function go(session) {
 
   return {
     backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
-    caption: `Return reference ${returnReference}`,
+    pageTitleCaption: `Return reference ${returnReference}`,
     note: note ? note.content : null,
     pageTitle: 'Add a note',
     sessionId

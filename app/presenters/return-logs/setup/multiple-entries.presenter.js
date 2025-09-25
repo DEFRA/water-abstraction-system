@@ -22,8 +22,8 @@ function go(session) {
   const frequency = returnRequirementFrequencies[returnsFrequency]
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
-    caption: `Return reference ${returnReference}`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
+    pageTitleCaption: `Return reference ${returnReference}`,
     endDate: formatLongDate(new Date(lines[lines.length - 1].startDate)),
     frequency,
     lineCount: lines.length,

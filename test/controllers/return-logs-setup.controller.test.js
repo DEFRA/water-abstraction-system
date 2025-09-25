@@ -964,7 +964,7 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({
-              error: { text: 'Enter 12 daily volumes' },
+              error: { errorList: [{ href: '#multipleEntries', text: 'Enter 12 daily volumes' }] },
               pageTitle: 'Enter multiple daily volumes',
               sessionId
             })
