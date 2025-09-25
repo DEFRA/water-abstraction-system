@@ -10,7 +10,7 @@ const Joi = require('joi')
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
  *
- * If all return lines are empty (i.e. no quantities or readings have been entered) then an error is returned.
+ * If all return lines are blank (i.e. no quantities or readings have been entered) then an error is returned.
  *
  * @param {object} session - Session object containing the return submission data
  *
