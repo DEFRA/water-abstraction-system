@@ -50,12 +50,12 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...submittedSessionData
+    ...pageData
   }
 }
 
@@ -79,10 +79,9 @@ function _submittedSessionData(session, payload) {
 
 function _validate(frequency, measurementType, payload, session) {
   const { lines, startReading } = session
+  const validationResult = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
 
-  const validation = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
-
-  return formatValidationResult(validation)
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
