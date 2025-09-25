@@ -5,6 +5,7 @@
  * @module SubmitCheckService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
 const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
 const CreateReturnLinesService = require('./create-return-lines.service.js')
@@ -30,9 +31,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(session)
+  const error = _validate(session)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, user)
 
     return { returnLogId: session.returnLogId }
@@ -42,7 +43,7 @@ async function go(sessionId, user) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...formattedData
   }
 }
@@ -73,17 +74,9 @@ async function _save(session, user) {
 }
 
 function _validate(session) {
-  const validation = CheckValidator.go(session)
+  const validationResult = CheckValidator.go(session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    errorList: [{ text: message }]
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
