@@ -11,6 +11,7 @@ const { expect } = Code
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
+const UserGroupHelper = require('../../support/helpers/user-group.helper.js')
 const UserRoleHelper = require('../../support/helpers/user-role.helper.js')
 
 // Thing under test
@@ -19,7 +20,6 @@ const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-
 const GROUP_ENV_OFFICER_INDEX = 0
 const ROLE_RETURNS_INDEX = 0
 const ROLE_HOF_NOTIFICATIONS_INDEX = 0
-const USER_ENV_OFFICER_INDEX = 2
 
 const { SKIP_COMPARE_LIST: skip } = UserHelper
 
@@ -30,7 +30,7 @@ describe('Fetch User Roles And Groups service', () => {
   let user
 
   before(async () => {
-    user = UserHelper.select(USER_ENV_OFFICER_INDEX)
+    user = await UserHelper.add({ application: 'water_admin', enabled: true, username: 'unit.test@wrls.gov.uk' })
 
     // Select a role and assign it directly to the user
     roleForUser = RoleHelper.select(ROLE_RETURNS_INDEX)
@@ -38,6 +38,7 @@ describe('Fetch User Roles And Groups service', () => {
 
     // Select a group and assign it to the user via a group
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
+    await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
@@ -61,7 +62,7 @@ describe('Fetch User Roles And Groups service', () => {
       // 1 via the user role
       expect(roles).to.include('returns')
 
-      // 2 via the user group (environment officer has 2 roles in group_roles)
+      // 2 via the user group
       expect(roles).to.include('hof_notifications')
       expect(roles).to.include('manage_gauging_station_licence_links')
     })

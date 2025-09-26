@@ -95,17 +95,44 @@ describe('Return Logs - Setup - Controller', () => {
 
   describe('return-logs/setup/{sessionId}/check', () => {
     describe('POST', () => {
-      beforeEach(() => {
-        Sinon.stub(SubmitCheckService, 'go').resolves('TEST_RETURN_LOG_ID')
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves({ returnLogId: 'TEST_RETURN_LOG_ID' })
+        })
+
+        it('redirects to the confirmed page on success', async () => {
+          options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
+
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
+        })
       })
 
-      it('redirects to the confirmed page on success', async () => {
-        options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves({
+            error: {
+              errorList: [{ text: 'Returns with an abstraction volume of 0 should be recorded as a nil return.' }]
+            },
+            pageTitle: 'Check details and enter new volumes or readings',
+            sessionId
+          })
+        })
 
-        const response = await server.inject(options)
+        it('re-renders the page with an error message', async () => {
+          options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
 
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check details and enter new volumes or readings')
+          expect(response.payload).to.contain('There is a problem')
+          expect(response.payload).to.contain(
+            'Returns with an abstraction volume of 0 should be recorded as a nil return.'
+          )
+        })
       })
     })
   })

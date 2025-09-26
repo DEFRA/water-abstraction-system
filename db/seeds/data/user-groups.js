@@ -66,6 +66,24 @@ const data = [
     userId: users.find((user) => {
       return user.username === 'national.permitting.service@wrls.gov.uk'
     }).id
+  },
+  {
+    id: 'beadcd21-1b2f-46c2-a220-625cc9d133c8',
+    groupId: groups.find((group) => {
+      return group.group === 'nps'
+    }).id,
+    userId: users.find((user) => {
+      return user.username === 'digitise.editor@wrls.gov.uk'
+    }).id
+  },
+  {
+    id: '068b3cce-56ca-4a5e-b371-194c9e47ecf5',
+    groupId: groups.find((group) => {
+      return group.group === 'nps'
+    }).id,
+    userId: users.find((user) => {
+      return user.username === 'digitise.approver@wrls.gov.uk'
+    }).id
   }
 ]
 

@@ -5,6 +5,9 @@
  * @module SubmitCheckService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
+const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
 const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -27,6 +30,35 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
+
+  const error = _validate(session)
+
+  if (!error) {
+    await _save(session, user)
+
+    return { returnLogId: session.returnLogId }
+  }
+
+  const formattedData = CheckPresenter.go(session)
+
+  return {
+    activeNavBar: 'search',
+    error,
+    ...formattedData
+  }
+}
+
+async function _cleanupSession(sessionId, trx) {
+  await SessionModel.query(trx).deleteById(sessionId)
+}
+
+async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, trx) {
+  await ReturnLogModel.query(trx)
+    .patch({ status: 'completed', receivedDate, updatedAt: timestamp })
+    .where({ id: returnLogId })
+}
+
+async function _save(session, user) {
   const timestamp = timestampForPostgres()
 
   const metadata = GenerateReturnSubmissionMetadata.go(session)
@@ -37,20 +69,14 @@ async function go(sessionId, user) {
     await CreateReturnLinesService.go(returnSubmission.id, session, timestamp, trx)
 
     await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
-    await _cleanupSession(sessionId, trx)
+    await _cleanupSession(session.id, trx)
   })
-
-  return session.returnLogId
 }
 
-async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, trx) {
-  await ReturnLogModel.query(trx)
-    .patch({ status: 'completed', receivedDate, updatedAt: timestamp })
-    .where({ id: returnLogId })
-}
+function _validate(session) {
+  const validationResult = CheckValidator.go(session)
 
-async function _cleanupSession(sessionId, trx) {
-  await SessionModel.query(trx).deleteById(sessionId)
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
