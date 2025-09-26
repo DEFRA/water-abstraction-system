@@ -22,7 +22,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
         { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
       ],
       returnsFrequency: 'month',
-      reported: 'abstraction-volumes'
+      reported: 'abstractionVolumes'
     }
   })
 
@@ -31,14 +31,14 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       const result = MultipleEntriesPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check', text: 'Back' },
         endDate: '1 May 2023',
         frequency: 'monthly',
         lineCount: 2,
         measurementType: 'volumes',
         multipleEntries: null,
         pageTitle: 'Enter multiple monthly volumes',
-        returnReference: '012345',
+        pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 April 2023'
       })
@@ -46,9 +46,9 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
   })
 
   describe('the "measurementType" property', () => {
-    describe('when the user has previously selected "abstraction-volumes" as the reported type', () => {
+    describe('when the user has previously selected "abstractionVolumes" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns "measurementType" back as "volumes"', () => {
@@ -58,9 +58,9 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
     })
 
-    describe('when the user has previously selected "meter-readings" as the reported type', () => {
+    describe('when the user has previously selected "meterReadings" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns "measurementType" back as "readings"', () => {

@@ -16,17 +16,17 @@ function go(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'Is it a single volume?',
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     singleVolume: singleVolume ?? null,
     singleVolumeQuantity: singleVolumeQuantity ?? null,
-    units: units === 'cubic-metres' ? 'cubic metres' : units
+    units: units === 'cubicMetres' ? 'cubic metres' : units
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { meterProvided, id } = session
 
   if (meterProvided === 'yes') {

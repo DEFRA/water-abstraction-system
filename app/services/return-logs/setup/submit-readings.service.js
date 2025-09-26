@@ -5,6 +5,8 @@
  * @module SubmitReadingsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
@@ -67,7 +69,7 @@ function _determineRequestedYearAndMonth(yearMonth) {
 }
 
 function _lineError(line, validationResult) {
-  const error = validationResult.find((validationError) => {
+  const error = validationResult.errorList.find((validationError) => {
     return validationError.href === `#${line.endDate}`
   })
 
@@ -107,16 +109,7 @@ function _validate(payload, requestedYear, requestedMonth, session) {
 
   const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  return validation.error.details.map((error) => {
-    return {
-      text: error.message,
-      href: `#${error.path[0]}`
-    }
-  })
+  return formatValidationResult(validation)
 }
 
 module.exports = {

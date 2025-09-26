@@ -5,6 +5,8 @@
  * @module SubmitMeterProvidedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
 const MeterProvidedValidator = require('../../../validators/return-logs/setup/meter-provided.validator.js')
@@ -44,12 +46,12 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = MeterProvidedPresenter.go(session)
+  const pageData = MeterProvidedPresenter.go(session)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -66,17 +68,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = MeterProvidedValidator.go(payload)
+  const validationResult = MeterProvidedValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

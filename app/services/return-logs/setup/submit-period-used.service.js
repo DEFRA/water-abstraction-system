@@ -5,6 +5,8 @@
  * @module SubmitPeriodUsedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
@@ -37,12 +39,12 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -81,19 +83,19 @@ function _determineAbstractionPeriodDates(session, payload) {
 
     session.fromFullDate = abstractionPeriods[0].startDate.toISOString()
   } else {
-    session.fromFullDate = payload.fromFullDate.toISOString()
-    session.toFullDate = payload.toFullDate.toISOString()
+    session.fromFullDate = new Date(payload.fromFullDate).toISOString()
+    session.toFullDate = new Date(payload.toFullDate).toISOString()
   }
 }
 
 async function _save(session, payload) {
   session.periodDateUsedOptions = payload.periodDateUsedOptions
-  session.periodUsedFromDay = payload['period-used-from-day']
-  session.periodUsedFromMonth = payload['period-used-from-month']
-  session.periodUsedFromYear = payload['period-used-from-year']
-  session.periodUsedToDay = payload['period-used-to-day']
-  session.periodUsedToMonth = payload['period-used-to-month']
-  session.periodUsedToYear = payload['period-used-to-year']
+  session.periodUsedFromDay = payload.periodUsedFromDay
+  session.periodUsedFromMonth = payload.periodUsedFromMonth
+  session.periodUsedFromYear = payload.periodUsedFromYear
+  session.periodUsedToDay = payload.periodUsedToDay
+  session.periodUsedToMonth = payload.periodUsedToMonth
+  session.periodUsedToYear = payload.periodUsedToYear
 
   _determineAbstractionPeriodDates(session, payload)
 
@@ -109,49 +111,20 @@ async function _save(session, payload) {
 
 function _submittedSessionData(session, payload) {
   session.periodDateUsedOptions = payload.periodDateUsedOptions ?? null
-  session.periodUsedFromDay = payload['period-used-from-day'] ?? null
-  session.periodUsedFromMonth = payload['period-used-from-month'] ?? null
-  session.periodUsedFromYear = payload['period-used-from-year'] ?? null
-  session.periodUsedToDay = payload['period-used-to-day'] ?? null
-  session.periodUsedToMonth = payload['period-used-to-month'] ?? null
-  session.periodUsedToYear = payload['period-used-to-year'] ?? null
+  session.periodUsedFromDay = payload.periodUsedFromDay ?? null
+  session.periodUsedFromMonth = payload.periodUsedFromMonth ?? null
+  session.periodUsedFromYear = payload.periodUsedFromYear ?? null
+  session.periodUsedToDay = payload.periodUsedToDay ?? null
+  session.periodUsedToMonth = payload.periodUsedToMonth ?? null
+  session.periodUsedToYear = payload.periodUsedToYear ?? null
 
   return PeriodUsedPresenter.go(session)
 }
 
 function _validate(payload, session) {
-  const { startDate, endDate } = session
+  const validationResult = PeriodUsedValidator.go(payload, session.startDate, session.endDate)
 
-  const validation = PeriodUsedValidator.go(payload, startDate, endDate)
-
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    let href
-
-    if (detail.context.key === 'fromFullDate') {
-      href = '#from-full-date'
-    } else if (detail.context.key === 'toFullDate') {
-      href = '#to-full-date'
-    } else {
-      href = '#period-date-used-options'
-    }
-
-    result.errorList.push({
-      href,
-      text: detail.message
-    })
-
-    result[detail.context.key] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

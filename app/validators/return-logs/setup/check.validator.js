@@ -26,7 +26,7 @@ function go(session) {
 }
 
 function _lineValuesExist(session) {
-  if (session.reported === 'abstraction-volumes') {
+  if (session.reported === 'abstractionVolumes') {
     return session.lines.some((line) => {
       return typeof line.quantity === 'number'
     })

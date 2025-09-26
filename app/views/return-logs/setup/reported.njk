@@ -1,66 +1,39 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-{% block content %}
-  {# Error summary #}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
+    {{ govukRadios({
+      id: "reported",
+      name: "reported",
+      errorMessage: error.reported,
+      fieldset: {
+        legend: {
+          html: pageHeadingHtml
+        }
+      },
+      items: [
         {
-          text: error.text,
-          href: "#reported-error"
+          id: "meterReadings",
+          name: "meterReadings",
+          value: "meterReadings",
+          text: "Meter Readings",
+          checked: "meterReadings" === reported
+        },
+        {
+          id: "abstractionVolumes",
+          name: "abstractionVolumes",
+          value: "abstractionVolumes",
+          text: "Abstraction Volumes",
+          checked: "abstractionVolumes" === reported
         }
       ]
     }) }}
-  {%endif%}
 
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
-  <div>
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-      {{ govukRadios({
-        name: "reported",
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        items: [
-          {
-            value: "meter-readings",
-            text: "Meter Readings",
-            checked: "meter-readings" === reported
-          },
-          {
-            value: "abstraction-volumes",
-            text: "Abstraction Volumes",
-            checked: "abstraction-volumes" === reported
-          }
-        ]
-      }) }}
-
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

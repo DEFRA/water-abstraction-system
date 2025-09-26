@@ -5,6 +5,8 @@
  * @module SubmitReportedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
 const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
@@ -43,12 +45,12 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReportedPresenter.go(session)
+  const pageData = ReportedPresenter.go(session)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
@@ -59,17 +61,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReportedValidator.go(payload)
+  const validationResult = ReportedValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

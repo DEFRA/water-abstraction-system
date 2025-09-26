@@ -42,7 +42,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         ],
         returnsFrequency: 'month',
         returnReference: '1234',
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       }
     }
 
@@ -160,7 +160,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             }
           ],
           pageTitle: 'Water abstracted April 2023',
-          returnReference: '1234',
+          caption: 'Return reference 1234',
           units: 'Cubic metres'
         })
       })

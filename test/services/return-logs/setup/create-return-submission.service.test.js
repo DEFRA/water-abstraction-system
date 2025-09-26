@@ -27,7 +27,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
   describe('when called with valid data', () => {
     beforeEach(() => {
       session = {
-        journey: 'enter-return',
+        journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
         returnLogId: ReturnLogHelper.generateReturnLogId()
       }
@@ -98,7 +98,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
 
     describe('and it is a nil return', () => {
       beforeEach(() => {
-        session.journey = 'nil-return'
+        session.journey = 'nilReturn'
       })
 
       it('sets the nillReturn field to true', async () => {
