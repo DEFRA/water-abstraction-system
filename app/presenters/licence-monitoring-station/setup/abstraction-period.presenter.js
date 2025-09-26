@@ -27,13 +27,13 @@ function go(session) {
     abstractionPeriodEndDay,
     abstractionPeriodStartMonth,
     abstractionPeriodEndMonth,
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

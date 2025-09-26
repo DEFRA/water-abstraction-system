@@ -14,15 +14,13 @@ const Joi = require('joi')
  * Users must select one or more points linked to the licence.
  * If these requirements are not met the validation will return an error.
  *
- * @param {object} options - The options extracted from payload taken from the request to be validated
+ * @param {object} payload - The payload taken from the request to be validated
  * @param {object} session - The session instance
  *
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go(options, session) {
-  const additionalSubmissionOptions = options.additionalSubmissionOptions
-
+function go(payload, session) {
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
@@ -37,7 +35,7 @@ function go(options, session) {
       'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
     })
 
-  return schema.validate({ additionalSubmissionOptions }, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {

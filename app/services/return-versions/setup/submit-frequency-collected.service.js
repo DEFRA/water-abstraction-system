@@ -5,6 +5,8 @@
  * @module SubmitFrequencyCollectedService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const FrequencyCollectedPresenter = require('../../../presenters/return-versions/setup/frequency-collected.presenter.js')
 const FrequencyCollectedValidator = require('../../../validators/return-versions/setup/frequency-collected.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
@@ -62,15 +64,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = FrequencyCollectedValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

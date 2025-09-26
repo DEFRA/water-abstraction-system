@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, licence, reason } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceRef: licence.licenceRef,
     reason: reason || null,
     pageTitle: 'Why are no returns required?',
@@ -25,7 +25,7 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
