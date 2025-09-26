@@ -13,6 +13,8 @@
     {% set color = 'govuk-tag--green' %}
   {% elif status === 'complete' %}
     {% set color = 'govuk-tag--green' %}
+  {% elif status === 'open' %}
+    {% set color = 'govuk-tag--blue' %}
   {% else %}
     {% set color = 'govuk-tag--blue' %}
   {% endif %}

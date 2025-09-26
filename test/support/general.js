@@ -5,7 +5,7 @@
  * @module GeneralHelper
  */
 
-const { generateRandomInteger } = require('../../app/lib/general.lib.js')
+const { generateRandomInteger, today } = require('../../app/lib/general.lib.js')
 
 /**
  * Generate the POST request options needed for `server.inject()`
@@ -92,6 +92,32 @@ function selectRandomEntry(data) {
 }
 
 /**
+ * Returns a date object representing tomorrow's date
+ *
+ * @returns {Date} tomorrow's date
+ */
+function tomorrow() {
+  const tomorrow = today()
+
+  tomorrow.setDate(tomorrow.getDate() + 1)
+
+  return tomorrow
+}
+
+/**
+ * Returns a date object representing yesterday's date
+ *
+ * @returns {Date} yesterday's date
+ */
+function yesterday() {
+  const yesterday = today()
+
+  yesterday.setDate(yesterday.getDate() - 1)
+
+  return yesterday
+}
+
+/**
  * Generates a random region code
  *
  * Region codes should be between 1 and 9 based on the fixed region reference data.
@@ -109,5 +135,7 @@ function randomRegionCode() {
 module.exports = {
   postRequestOptions,
   randomRegionCode,
-  selectRandomEntry
+  selectRandomEntry,
+  tomorrow,
+  yesterday
 }

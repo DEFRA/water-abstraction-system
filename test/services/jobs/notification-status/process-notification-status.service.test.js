@@ -103,11 +103,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
               messageType: 'email',
               notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -167,6 +169,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyError: null,
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: {
                 alertType: 'stop',
                 licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
@@ -175,7 +178,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -229,11 +233,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
               messageType: 'email',
               notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
-              status: 'sent'
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -300,11 +306,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
             messageType: 'email',
             notifyId: '9cf707f1-f4b0-466a-9879-f40953b8fecb8',
             notifyStatus: 'temporary-failure',
+            pdf: null,
             personalisation: null,
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
             returnLogIds: null,
-            status: 'error'
+            status: 'error',
+            templateId: null
           },
           { skip: ['createdAt'] }
         )
@@ -387,11 +395,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
           messageType: 'email',
           notifyId: '10076fd4-da11-43d9-b85a-f4564507d135',
           notifyStatus: 'created',
+          pdf: null,
           personalisation: null,
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
           returnLogIds: null,
-          status: 'pending'
+          status: 'pending',
+          templateId: null
         },
         { skip: ['createdAt'] }
       )

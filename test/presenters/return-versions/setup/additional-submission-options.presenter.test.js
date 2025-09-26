@@ -38,7 +38,10 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: `/system/return-versions/setup/${session.id}/check`,
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/check`,
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         multipleUpload: false,
@@ -56,7 +59,10 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     it('returns a link back to the "check" page', () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-      expect(result.backLink).to.equal(`/system/return-versions/setup/${session.id}/check`)
+      expect(result.backLink).to.equal({
+        href: `/system/return-versions/setup/${session.id}/check`,
+        text: 'Back'
+      })
     })
   })
 

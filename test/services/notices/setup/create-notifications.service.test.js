@@ -49,11 +49,13 @@ describe('Notices - Setup - Create notification service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: null,
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
         returnLogIds: null,
-        status: null
+        status: null,
+        templateId: null
       })
     })
   })

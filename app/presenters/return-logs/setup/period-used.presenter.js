@@ -5,6 +5,7 @@
  * @module PeriodUsedPresenter
  */
 
+const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const { formatAbstractionPeriod } = require('../../base.presenter.js')
 
 /**
@@ -31,6 +32,17 @@ function go(session) {
     periodUsedToYear
   } = session
 
+  // Determine the valid abstraction periods that overlap with the return period - this will be used to decide whether
+  // or not the "default return period" option will be displayed
+  const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
+  const abstractionPeriods = determineAbstractionPeriods(
+    returnPeriod,
+    session.periodStartDay,
+    session.periodStartMonth,
+    session.periodEndDay,
+    session.periodEndMonth
+  )
+
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     backLink: `/system/return-logs/setup/${sessionId}/single-volume`,
@@ -43,7 +55,8 @@ function go(session) {
     periodUsedToMonth: periodUsedToMonth ?? null,
     periodUsedToYear: periodUsedToYear ?? null,
     returnReference,
-    sessionId
+    sessionId,
+    showDefaultAbstractionPeriod: abstractionPeriods.length > 0
   }
 }
 

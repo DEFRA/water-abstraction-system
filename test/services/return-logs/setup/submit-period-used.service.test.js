@@ -157,7 +157,8 @@ describe('Return Logs Setup - Submit Period Used service', () => {
             periodUsedFromYear: null,
             periodUsedToDay: null,
             periodUsedToMonth: null,
-            periodUsedToYear: null
+            periodUsedToYear: null,
+            showDefaultAbstractionPeriod: true
           },
           { skip: ['sessionId', 'error'] }
         )

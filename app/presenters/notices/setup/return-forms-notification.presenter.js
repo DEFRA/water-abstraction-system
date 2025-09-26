@@ -16,12 +16,11 @@
  * @param {{ArrayBuffer}} returnForm - The return forms PDF file
  * @param {object} pageData - The data formatted for the return form
  * @param {string} licenceRef - The reference of the licence that the return log relates to
- * @param {string} referenceCode - the unique generated reference code
  * @param {string} eventId - The event if that joins all the notifications
  *
  * @returns {object} The data formatted persisting as a `notice` record
  */
-function go(returnForm, pageData, licenceRef, referenceCode, eventId) {
+function go(returnForm, pageData, licenceRef, eventId) {
   return {
     content: returnForm,
     eventId,
@@ -29,7 +28,6 @@ function go(returnForm, pageData, licenceRef, referenceCode, eventId) {
     messageRef: 'pdf.return_form',
     messageType: 'letter',
     personalisation: _personalisation(pageData),
-    reference: referenceCode,
     returnLogIds: [pageData.returnId]
   }
 }

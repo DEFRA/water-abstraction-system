@@ -29,10 +29,11 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 // Thing under test
 const UserModel = require('../../app/models/user.model.js')
 
-const GROUP_WIRS_INDEX = 2
-const ROLE_RETURNS_INDEX = 0
-const USER_GROUP_WIRS_INDEX = 3
-const USER_WIRS_INDEX = 3
+const GROUP_NPS_INDEX = 3
+const ROLE_AR_USER_INDEX = 6
+const USER_DIGITISE_EDITOR_INDEX = 11
+const USER_GROUP_NPS_INDEX = 7
+const USER_ROLE_AR_USER_INDEX = 0
 
 describe('User model', () => {
   let testChargeVersionNoteOne
@@ -44,15 +45,15 @@ describe('User model', () => {
   let testUserGroup
 
   before(async () => {
-    testRecord = UserHelper.select(USER_WIRS_INDEX)
+    testRecord = UserHelper.select(USER_DIGITISE_EDITOR_INDEX)
 
-    testRole = RoleHelper.select(ROLE_RETURNS_INDEX)
-    testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
-    testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+    testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
+    testGroup = GroupHelper.select(GROUP_NPS_INDEX)
+    testUserGroup = UserGroupHelper.select(USER_GROUP_NPS_INDEX)
 
     testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
     testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
-    testUserRole = await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+    testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
   })
 
   describe('Basic query', () => {
@@ -264,7 +265,7 @@ describe('User model', () => {
         expect(result.userRoles).to.be.an.array()
         expect(result.userRoles).to.have.length(1)
         expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole)
+        expect(result.userRoles[0]).to.equal(testUserRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })
