@@ -21,7 +21,7 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  * > {$link https://www.postgresql.org/docs/current/postgres-fdw.html#POSTGRES-FDW-OPTIONS-REMOTE-EXECUTION |limitation}
  * > on the batch size. However, we should never hit it, as we process notifications in batches of 125.
  *
- * @param {object[NotificationModel]} notifications - the notifications updated with their Notify sending result to be updated
+ * @param {object[]} notifications - the notifications updated with their Notify sending result to be updated
  */
 async function go(notifications) {
   await NotificationModel.query()
