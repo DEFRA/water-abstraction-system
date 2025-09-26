@@ -155,7 +155,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
               endDate: '2023-04-30T00:00:00.000Z',
               error: 'Reading must be a number or blank',
               label: 'April 2023',
-              reading: 'INVALID'
+              reading: ''
             }
           ],
           pageTitle: 'Water abstracted April 2023',
