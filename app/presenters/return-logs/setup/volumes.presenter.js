@@ -48,7 +48,7 @@ function _inputLines(lines, returnsFrequency) {
     const lineData = {
       endDate,
       label: _lineLabel(endDate, returnsFrequency),
-      quantity
+      quantity: typeof line.quantity === 'number' ? quantity.toString() : line.quantity
     }
 
     if (line.error) {

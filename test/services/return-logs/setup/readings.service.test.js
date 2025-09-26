@@ -49,7 +49,7 @@ describe('Return Logs Setup - Readings service', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            reading: 100
+            reading: '100'
           }
         ],
         pageTitle: 'Water abstracted April 2023',

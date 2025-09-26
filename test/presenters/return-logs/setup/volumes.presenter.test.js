@@ -52,7 +52,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            quantity: 100
+            quantity: '100'
           }
         ])
       })
@@ -105,7 +105,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
             {
               endDate: '2023-04-30T00:00:00.000Z',
               label: 'April 2023',
-              quantity: 100,
+              quantity: '100',
               error: 'There is an error on this line'
             }
           ])
