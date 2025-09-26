@@ -5,6 +5,8 @@
  * @module SubmitSetupService
  */
 
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
@@ -48,11 +50,11 @@ async function go(sessionId, payload) {
 }
 
 function _redirect(method) {
-  if (method === 'use-abstraction-data') {
+  if (method === 'useAbstractionData') {
     return 'check'
   }
 
-  if (method === 'use-existing-requirements') {
+  if (method === 'useExistingRequirements') {
     return 'existing'
   }
 
@@ -65,7 +67,7 @@ async function _save(session, payload) {
   // If the user selected the method 'Start by using abstraction data' to setup the return requirements we use
   // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
-  if (payload.method === 'use-abstraction-data') {
+  if (payload.method === 'useAbstractionData') {
     session.requirements = await GenerateFromAbstractionDataService.go(
       session.licence.id,
       session.licenceVersion.id,
@@ -79,15 +81,7 @@ async function _save(session, payload) {
 function _validate(payload) {
   const validation = MethodValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

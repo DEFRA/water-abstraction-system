@@ -13,7 +13,7 @@ const MethodValidator = require('../../../../app/validators/return-versions/setu
 describe('Return Versions Setup - Method validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = MethodValidator.go({ method: 'use-abstraction-data' })
+      const result = MethodValidator.go({ method: 'useAbstractionData' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()

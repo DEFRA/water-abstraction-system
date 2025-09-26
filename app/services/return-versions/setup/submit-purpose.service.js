@@ -5,6 +5,8 @@
  * @module SubmitPurposeService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const FetchPurposesService = require('./fetch-purposes.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
@@ -119,15 +121,7 @@ async function _validate(payload, purposesData) {
 
   const validation = PurposeValidation.go(payload, purposeIds)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {
