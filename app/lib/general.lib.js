@@ -168,8 +168,8 @@ function generateUUID() {
  * billing period. Then the only way to represent the abstract period in a usable way is as 2 separate periods. Hence
  * this service deals with arrays of periods.
  *
- * > See the comments for `DetermineAbstractionPeriodService` to better understand the complexity of going from
- * > abstract to concrete periods
+ * > See the comments for `AbstractionPeriodLib#determineAbstractionPeriods` to better understand the complexity of
+ * > going from abstract to concrete periods
  *
  * Then there are times we need to test if the periods of one thing overlap with another. In two-part tariff that's the
  * abstraction periods of a charge element with those of a return. If _any_ of the periods overlap then the return is
