@@ -10,15 +10,18 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
 /**
  * Update notifications
  *
- * This query uses postgresql's ability to insert/ upsert with batches. There is a limitation on the batch size
- * https://www.postgresql.org/docs/current/postgres-fdw.html#POSTGRES-FDW-OPTIONS-REMOTE-EXECUTION. The calling
- * service will handle the batch process.
+ * Our batch send process retrieves the notifications to be sent, then in batches of 125 sends them to Notify. The
+ * result for each is formatted in the 'NotifyUpdatePresenter' then applied to the notification object. When the batch
+ * is done the notifications are then passed to this service to record the results.
  *
- * This query updates notifications with the response from Notify. This is formatted in the 'NotifyUpdatePresenter'.
+ * Though we are using an INSERT query, no new records will be inserted. INSERT with ONCONFLICT and MERGE becomes an
+ * UPSERT query, which means we can batch update the notifications instead of processing them individually.
  *
- * @param {object} notifications
+ * > There is a
+ * > {$link https://www.postgresql.org/docs/current/postgres-fdw.html#POSTGRES-FDW-OPTIONS-REMOTE-EXECUTION |limitation}
+ * > on the batch size. However, we should never hit it, as we process notifications in batches of 125.
  *
- * @returns {object} - the updated notifications
+ * @param {object[]} updatedNotifications - the notifications updated with their Notify sending result to be updated
  */
 async function go(notifications) {
   return NotificationModel.query()
