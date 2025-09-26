@@ -63,7 +63,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         beforeEach(() => {
           // NOTE: Default to the user selected "licence start date", but override this for "another start date" tests
           payload = {
-            'start-date-options': 'licenceStartDate'
+            startDateOptions: 'licenceStartDate'
           }
 
           relevantLicenceVersion = {
@@ -84,7 +84,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('where the user selected "licence start date"', () => {
           beforeEach(async () => {
             payload = {
-              'start-date-options': 'licenceStartDate'
+              startDateOptions: 'licenceStartDate'
             }
           })
 
@@ -111,10 +111,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('and the user selected "another start date"', () => {
           beforeEach(async () => {
             payload = {
-              'start-date-options': 'anotherStartDate',
-              'start-date-day': '26',
-              'start-date-month': '11',
-              'start-date-year': '2023'
+              startDateOptions: 'anotherStartDate',
+              startDateDay: '26',
+              startDateMonth: '11',
+              startDateYear: '2023'
             }
           })
 
@@ -158,10 +158,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           describe('and the selected start date is on or after 1 April 2025', () => {
             beforeEach(() => {
               payload = {
-                'start-date-options': 'anotherStartDate',
-                'start-date-day': '01',
-                'start-date-month': '04',
-                'start-date-year': '2025'
+                startDateOptions: 'anotherStartDate',
+                startDateDay: '01',
+                startDateMonth: '04',
+                startDateYear: '2025'
               }
             })
 
@@ -207,7 +207,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('and the start date is not changed (user just clicks continue)', () => {
           beforeEach(() => {
             payload = {
-              'start-date-options': 'licenceStartDate'
+              startDateOptions: 'licenceStartDate'
             }
             Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(relevantLicenceVersion)
           })
@@ -247,10 +247,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('and the start date is changed but the same relevant licence version is found', () => {
           beforeEach(() => {
             payload = {
-              'start-date-options': 'anotherStartDate',
-              'start-date-day': '01',
-              'start-date-month': '04',
-              'start-date-year': '2024'
+              startDateOptions: 'anotherStartDate',
+              startDateDay: '01',
+              startDateMonth: '04',
+              startDateYear: '2024'
             }
 
             Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(relevantLicenceVersion)
@@ -300,10 +300,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             }
 
             payload = {
-              'start-date-options': 'anotherStartDate',
-              'start-date-day': '01',
-              'start-date-month': '04',
-              'start-date-year': '2021'
+              startDateOptions: 'anotherStartDate',
+              startDateDay: '01',
+              startDateMonth: '04',
+              startDateYear: '2021'
             }
 
             Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(newRelevantLicenceVersion)
@@ -356,10 +356,13 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             activeNavBar: 'search',
             pageTitle: 'Select the start date for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            anotherStartDateDay: null,
-            anotherStartDateMonth: null,
-            anotherStartDateYear: null,
-            backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+            startDateDay: null,
+            startDateMonth: null,
+            startDateYear: null,
+            backLink: {
+              href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceVersionStartDate: '1 January 2023',
@@ -374,9 +377,13 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Select the start date for the requirements for returns',
-            radioFormElement: { text: 'Select the start date for the requirements for returns' },
-            dateInputFormElement: null
+            errorList: [
+              {
+                href: '#startDateOptions',
+                text: 'Select the start date for the requirements for returns'
+              }
+            ],
+            startDateOptions: { text: 'Select the start date for the requirements for returns' }
           })
         })
       })
@@ -384,10 +391,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
       describe('because the user has selected another start date and entered invalid data', () => {
         beforeEach(async () => {
           payload = {
-            'start-date-options': 'anotherStartDate',
-            'start-date-day': 'a',
-            'start-date-month': 'b',
-            'start-date-year': 'c'
+            startDateOptions: 'anotherStartDate',
+            startDateDay: 'a',
+            startDateMonth: 'b',
+            startDateYear: 'c'
           }
         })
 
@@ -395,18 +402,22 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            message: 'Enter a real start date',
-            radioFormElement: null,
-            dateInputFormElement: { text: 'Enter a real start date' }
+            errorList: [
+              {
+                href: '#anotherStartDate',
+                text: 'Enter a real start date'
+              }
+            ],
+            anotherStartDate: { text: 'Enter a real start date' }
           })
         })
 
         it('includes what was submitted', async () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-          expect(result.anotherStartDateDay).to.equal('a')
-          expect(result.anotherStartDateMonth).to.equal('b')
-          expect(result.anotherStartDateYear).to.equal('c')
+          expect(result.startDateDay).to.equal('a')
+          expect(result.startDateMonth).to.equal('b')
+          expect(result.startDateYear).to.equal('c')
           expect(result.startDateOption).to.equal('anotherStartDate')
         })
       })

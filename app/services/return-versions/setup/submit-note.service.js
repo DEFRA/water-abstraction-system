@@ -5,6 +5,8 @@
  * @module SubmitNoteService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const NotePresenter = require('../../../presenters/return-versions/setup/note.presenter.js')
 const NoteValidator = require('../../../validators/return-versions/setup/note.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -91,15 +93,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload) {
   const validation = NoteValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {
