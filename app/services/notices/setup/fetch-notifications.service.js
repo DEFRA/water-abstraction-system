@@ -18,7 +18,9 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  * @returns {object} - the notifications for the event
  */
 async function go(eventId) {
-  return NotificationModel.query().where('event_id', eventId)
+  return NotificationModel.query()
+    .select(['id', 'messageRef', 'messageType', 'pdf', 'personalisation', 'recipient', 'templateId'])
+    .where('eventId', eventId)
 }
 
 module.exports = {

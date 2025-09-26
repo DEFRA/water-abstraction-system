@@ -34,41 +34,21 @@ describe('Notices - Setup - Fetch notifications service', () => {
 
     expect(result).equal([
       {
-        createdAt: result[0].createdAt,
-        eventId,
         id: result[0].id,
-        licenceMonitoringStationId: null,
-        licences: null,
         messageRef: null,
         messageType: null,
-        notifyError: null,
-        notifyId: null,
-        notifyStatus: null,
         pdf: null,
         personalisation: null,
-        plaintext: null,
         recipient: null,
-        returnLogIds: null,
-        status: null,
         templateId: null
       },
       {
-        createdAt: result[1].createdAt,
-        eventId,
         id: result[1].id,
-        licenceMonitoringStationId: null,
-        licences: null,
         messageRef: null,
         messageType: null,
-        notifyError: null,
-        notifyId: null,
-        notifyStatus: null,
         pdf: null,
         personalisation: null,
-        plaintext: null,
         recipient: null,
-        returnLogIds: null,
-        status: null,
         templateId: null
       }
     ])
