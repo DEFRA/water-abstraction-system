@@ -176,7 +176,7 @@ function _groupLinesByMonth(lines) {
       acc[key].quantity += quantity
     }
 
-    if (reading) {
+    if (typeof reading === 'number') {
       acc[key].reading = reading
     }
 
