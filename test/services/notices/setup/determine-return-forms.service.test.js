@@ -73,7 +73,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
 
         expect(result).to.equal([
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -102,7 +102,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
             returnLogIds: [dueReturnLog.returnId]
           },
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -144,7 +144,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
 
         expect(result).to.equal([
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -173,7 +173,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
             returnLogIds: [dueReturnLog.returnId]
           },
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -202,7 +202,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
             returnLogIds: [dueReturnLog.returnId]
           },
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -231,7 +231,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
             returnLogIds: [additionalDueReturn.returnId]
           },
           {
-            content: buffer,
+            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',

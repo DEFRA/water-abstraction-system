@@ -9,10 +9,10 @@ const { setTimeout } = require('node:timers/promises')
 
 const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
 const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
+const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -67,7 +67,7 @@ async function _batch(notifications, referenceCode) {
 
   const sentNotifications = await _sendNotifications(notificationsToSend)
 
-  await CreateNotificationsService.go(sentNotifications)
+  await RecordNotifySendResultsService.go(sentNotifications)
 
   return _errorCount(sentNotifications)
 }
@@ -138,7 +138,7 @@ async function _sendEmail(notification, referenceCode) {
     reference: referenceCode
   })
 
-  return _sentNotification(notification, notifyResult)
+  return _sentNotification(notification.id, notifyResult)
 }
 
 async function _sendLetter(notification, referenceCode) {
@@ -147,29 +147,25 @@ async function _sendLetter(notification, referenceCode) {
     reference: referenceCode
   })
 
-  return _sentNotification(notification, notifyResult)
+  return _sentNotification(notification.id, notifyResult)
 }
 
 async function _sendReturnForm(notification, referenceCode) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, referenceCode)
+  const notifyResult = await CreatePrecompiledFileRequest.send(notification.pdf, referenceCode)
 
-  return _sentNotification(notification, notifyResult)
+  return _sentNotification(notification.id, notifyResult)
 }
+
 /**
- * This removes some properties added just for sending the notifications and then combines the original notification
- * with the result of the` NotifyUpdatePresenter`.
+ * The returned combination represents a 'notification' record, which the `RecordNotifySendResultsService` can then
+ * update.
  *
- * The returned combination represents a 'notification' record, which the `CreateNotificationsService` can then insert
- * 'as is'.
  * @private
  */
-function _sentNotification(notification, notifyResult) {
-  delete notification.templateId
-  delete notification.content
-
+function _sentNotification(notificationId, notifyResult) {
   return {
-    ...notification,
-    ...NotifyUpdatePresenter.go(notifyResult)
+    ...NotifyUpdatePresenter.go(notifyResult),
+    id: notificationId
   }
 }
 

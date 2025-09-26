@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
@@ -42,9 +43,12 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     const notifyResponse = successfulNotifyResponses(referenceCode)
 
+    event = await EventHelper.add({
+      referenceCode
+    })
+
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
-
     Sinon.stub(ProcessNotificationStatusService, 'go')
 
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
@@ -61,31 +65,24 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when sending emails', () => {
     beforeEach(async () => {
-      event = await EventHelper.add({
-        metadata: {},
-        licences: [recipientsFixture.primaryUser],
-        referenceCode,
-        status: 'completed',
-        subtype: 'returnInvitation',
-        type: 'notification'
-      })
+      const notification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
 
-      testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
+      testNotification = await NotificationHelper.add(notification.email)
 
-      notifications = [testNotification.email]
+      notifications = [testNotification]
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id)
+      await BatchNotificationsService.go(notifications, event.id, referenceCode)
 
-      // Confirm the notifications are created and Notify request recorded as expected
-      const createdNotifications = await NotificationModel.query().where('eventId', event.id)
+      // Confirm the notifications are updated and Notify request recorded as expected
+      const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
 
-      expect(createdNotifications).to.equal([
+      expect(updatedNotifications).to.equal([
         {
-          createdAt: createdNotifications[0].createdAt,
+          createdAt: testNotification.createdAt,
           eventId: event.id,
-          id: createdNotifications[0].id,
+          id: testNotification.id,
           licenceMonitoringStationId: null,
           licences: [recipientsFixture.primaryUser.licence_refs],
           messageRef: 'returns_invitation_primary_user_email',
@@ -103,7 +100,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           recipient: 'primary.user@important.com',
           returnLogIds: null,
           status: 'pending',
-          templateId: null
+          templateId: testNotification.templateId
         }
       ])
     })
@@ -111,31 +108,24 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
   describe('when sending letters', () => {
     beforeEach(async () => {
-      event = await EventHelper.add({
-        metadata: {},
-        licences: [recipientsFixture.licenceHolder],
-        referenceCode,
-        status: 'completed',
-        subtype: 'returnInvitation',
-        type: 'notification'
-      })
+      const notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs], referenceCode)
 
-      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs], referenceCode)
+      testNotification = await NotificationHelper.add(notification.letter)
 
-      notifications = [testNotification.letter]
+      notifications = [testNotification]
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id)
+      await BatchNotificationsService.go(notifications, event.id, referenceCode)
 
-      // Confirm the notifications are created and Notify request recorded as expected
-      const createdNotifications = await NotificationModel.query().where('eventId', event.id)
+      // Confirm the notifications are updated and Notify request recorded as expected
+      const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
 
-      expect(createdNotifications).to.equal([
+      expect(updatedNotifications).to.equal([
         {
-          createdAt: createdNotifications[0].createdAt,
+          createdAt: testNotification.createdAt,
           eventId: event.id,
-          id: createdNotifications[0].id,
+          id: testNotification.id,
           licenceMonitoringStationId: null,
           licences: [recipientsFixture.licenceHolder.licence_refs],
           messageRef: 'returns_invitation_licence_holder_letter',
@@ -160,7 +150,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           recipient: null,
           returnLogIds: null,
           status: 'pending',
-          templateId: null
+          templateId: testNotification.templateId
         }
       ])
     })
@@ -170,18 +160,11 @@ describe('Notices - Setup - Batch Notifications service', () => {
     beforeEach(async () => {
       referenceCode = generateReferenceCode('PRTF')
 
-      event = await EventHelper.add({
-        metadata: {},
-        licences: [recipientsFixture.licenceHolder],
-        referenceCode,
-        status: 'completed',
-        subtype: 'paperReturnForms',
-        type: 'notification'
-      })
+      const notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
 
-      testNotification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
+      testNotification = await NotificationHelper.add(notification.pdf)
 
-      notifications = [testNotification.pdf]
+      notifications = [testNotification]
 
       const notifyResponse = successfulNotifyResponses(referenceCode)
 
@@ -189,16 +172,16 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id)
+      await BatchNotificationsService.go(notifications, event.id, referenceCode)
 
-      // Confirm the notifications are created and Notify request recorded as expected
-      const createdNotifications = await NotificationModel.query().where('eventId', event.id)
+      // Confirm the notifications are updated and Notify request recorded as expected
+      const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
 
-      expect(createdNotifications).to.equal([
+      expect(updatedNotifications).to.equal([
         {
-          createdAt: createdNotifications[0].createdAt,
+          createdAt: testNotification.createdAt,
           eventId: event.id,
-          id: createdNotifications[0].id,
+          id: testNotification.id,
           licenceMonitoringStationId: null,
           licences: [recipientsFixture.licenceHolder.licence_refs],
           messageRef: 'pdf.return_form',
@@ -208,9 +191,9 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
           notifyStatus: 'created',
-          pdf: null,
+          pdf: testNotification.pdf,
           recipient: null,
-          returnLogIds: testNotification.pdf.returnLogIds,
+          returnLogIds: testNotification.returnLogIds,
           status: 'pending',
           templateId: null
         }
@@ -219,10 +202,12 @@ describe('Notices - Setup - Batch Notifications service', () => {
   })
 
   describe('when a the batch process has finished', () => {
-    beforeEach(() => {
-      const testNotification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
+    beforeEach(async () => {
+      const notification = _notifications(event.id, [recipientsFixture.primaryUser.licence_refs])
 
-      notifications = [testNotification.email]
+      testNotification = await NotificationHelper.add(notification.email)
+
+      notifications = [testNotification]
     })
 
     describe('and there are no errors', () => {
@@ -238,7 +223,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should not affect the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id)
+        await BatchNotificationsService.go(notifications, event.id, referenceCode)
 
         const refreshedEvent = await event.$query()
 
@@ -271,7 +256,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should increment the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id)
+        await BatchNotificationsService.go(notifications, event.id, referenceCode)
 
         const refreshedEvent = await event.$query()
 
@@ -392,7 +377,7 @@ function _notifications(eventId, licences) {
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     pdf: {
-      content: new TextEncoder().encode('mock file').buffer,
+      pdf: new TextEncoder().encode('mock file').buffer,
       eventId,
       licences,
       messageRef: 'pdf.return_form',

@@ -22,7 +22,7 @@
  */
 function go(returnForm, pageData, licenceRef, eventId) {
   return {
-    content: returnForm,
+    pdf: returnForm,
     eventId,
     licences: [licenceRef],
     messageRef: 'pdf.return_form',
