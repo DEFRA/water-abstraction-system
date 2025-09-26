@@ -18,7 +18,7 @@ function go(session, requirementIndex) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: { href: _backLinkHref(session, requirementIndex), text: 'Back' },
     frequencyCollected: requirement?.frequencyCollected ? requirement.frequencyCollected : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,

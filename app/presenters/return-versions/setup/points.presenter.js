@@ -20,7 +20,7 @@ function go(session, requirementIndex, points) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: { href: _backLinkHref(session, requirementIndex), text: 'Back' },
     licenceId: licence.id,
     licencePoints: _licencePoints(points),
     licenceRef: licence.licenceRef,
