@@ -99,6 +99,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
           notifyStatus: 'created',
+          pdf: null,
           recipient: 'primary.user@important.com',
           returnLogIds: null,
           status: 'pending',
@@ -142,6 +143,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
           notifyStatus: 'created',
+          pdf: null,
           personalisation: {
             address_line_1: 'Mr H J Licence holder',
             address_line_2: '1',
@@ -206,6 +208,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
           notifyStatus: 'created',
+          pdf: null,
           recipient: null,
           returnLogIds: testNotification.pdf.returnLogIds,
           status: 'pending',
