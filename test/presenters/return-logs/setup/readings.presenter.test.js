@@ -29,7 +29,7 @@ describe('Return Logs Setup - Readings presenter', () => {
           {
             endDate: '2023-05-31T00:00:00.000Z',
             label: 'May 2023',
-            reading: ''
+            reading: undefined
           }
         ],
         pageTitle: 'Water abstracted May 2023',

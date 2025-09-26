@@ -29,7 +29,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
           {
             endDate: '2023-05-31T00:00:00.000Z',
             label: 'May 2023',
-            quantity: ''
+            quantity: undefined
           }
         ],
         pageTitle: 'Water abstracted May 2023',
