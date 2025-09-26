@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Update notifications
- * @module UpdateNotificationsService
+ * Record the response from notify for each notification
+ * @module RecordNotifySendResultsService
  */
 
 const NotificationModel = require('../../../../app/models/notification.model.js')
 
 /**
- * Update notifications
+ * Record the response from notify for each notification
  *
  * Our batch send process retrieves the notifications to be sent, then in batches of 125 sends them to Notify. The
  * result for each is formatted in the 'NotifyUpdatePresenter' then applied to the notification object. When the batch
@@ -21,10 +21,10 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  * > {$link https://www.postgresql.org/docs/current/postgres-fdw.html#POSTGRES-FDW-OPTIONS-REMOTE-EXECUTION |limitation}
  * > on the batch size. However, we should never hit it, as we process notifications in batches of 125.
  *
- * @param {object[]} updatedNotifications - the notifications updated with their Notify sending result to be updated
+ * @param {object[NotificationModel]} notifications - the notifications updated with their Notify sending result to be updated
  */
 async function go(notifications) {
-  return NotificationModel.query()
+  await NotificationModel.query()
     .insert(notifications)
     .onConflict('id')
     .merge(['notifyError', 'notifyId', 'notifyStatus', 'plaintext', 'status'])

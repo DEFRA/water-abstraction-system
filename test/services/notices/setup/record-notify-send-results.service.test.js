@@ -14,9 +14,9 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
 const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const UpdateNotificationsService = require('../../../../app/services/notices/setup/update-notifications.service.js')
+const RecordNotifySendResultsService = require('../../../../app/services/notices/setup/record-notify-send-results.service.js')
 
-describe('Notices - Setup - Update notification service', () => {
+describe('Notices - Setup - Record notify send results service', () => {
   let eventId
   let notUpdatedNotification
   let notification
@@ -64,7 +64,7 @@ describe('Notices - Setup - Update notification service', () => {
     })
 
     it('should update notifications (and only update the new values)', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await RecordNotifySendResultsService.go(notifications)
 
       const updatedResult = await NotificationModel.query().where('event_id', eventId)
 
@@ -129,7 +129,7 @@ describe('Notices - Setup - Update notification service', () => {
     })
 
     it('should update notifications (and only update the new values)', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await RecordNotifySendResultsService.go(notifications)
 
       const updatedResult = await NotificationModel.query().where('event_id', eventId)
 
