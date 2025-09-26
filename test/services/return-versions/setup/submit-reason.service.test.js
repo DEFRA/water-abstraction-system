@@ -118,7 +118,10 @@ describe('Return Versions Setup - Submit Reason service', () => {
             activeNavBar: 'search',
             pageTitle: 'Select the reason for the requirements for returns',
             pageTitleCaption: `Licence ${session.licence.licenceRef}`,
-            backLink: `/system/return-versions/setup/${session.id}/start-date`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/start-date`,
+              text: 'Back'
+            },
             licenceRef: '01/ABC',
             reason: null
           },
@@ -130,7 +133,17 @@ describe('Return Versions Setup - Submit Reason service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitReasonService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Select the reason for the requirements for returns' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#reason',
+                text: 'Select the reason for the requirements for returns'
+              }
+            ],
+            reason: {
+              text: 'Select the reason for the requirements for returns'
+            }
+          })
         })
       })
     })

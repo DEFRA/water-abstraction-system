@@ -1,108 +1,95 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({
-      text: 'Back',
-      href: backLink
-  }) }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#reason-error"
-        }
-      ]
-      }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: "reason",
-      errorMessage: error,
+      errorMessage: error.reason,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [
         {
+          id: "changeToReturnRequirements",
           text: 'Change to requirements for returns',
           value: 'change-to-return-requirements',
           checked: 'change-to-return-requirements' === reason
         },
         {
+          id: "changeToSpecialAgreement",
           text: 'Change to special agreement',
           value: 'change-to-special-agreement',
           checked: 'change-to-special-agreement' === reason
         },
         {
+          id: "errorCorrection",
           text: 'Error correction',
           value: 'error-correction',
           checked: 'error-correction' === reason
         },
         {
+          id: "nameOrAddressChange",
           text: 'Licence holder name or address change',
           value: 'name-or-address-change',
           checked: 'name-or-address-change' === reason
         },
         {
+          id: "transferAndNowChargeable",
           text: 'Licence transferred and now chargeable',
           value: 'transfer-and-now-chargeable',
           checked: 'transfer-and-now-chargeable' === reason
         },
         {
+          id: "extensionOfLicenceValidity",
           text: 'Limited extension of licence validity (LEV)',
           value: 'extension-of-licence-validity',
           checked: 'extension-of-licence-validity' === reason
         },
         {
+          id: "majorChange",
           text: 'Major change',
           value: 'major-change',
           checked: 'major-change' === reason
         },
         {
+          id: "minorChange",
           text: 'Minor change',
           value: 'minor-change',
           checked: 'minor-change' === reason
         },
         {
+          id: "newLicenceInPartSuccessionOrLicenceApportionment",
           text: 'New licence in part succession or licence apportionment',
           value: 'new-licence-in-part-succession-or-licence-apportionment',
           checked: 'new-licence-in-part-succession-or-licence-apportionment' === reason
         },
         {
+          id: "newLicence",
           text: 'New licence',
           value: 'new-licence',
           checked: 'new-licence' === reason
         },
         {
+          id: "newSpecialAgreement",
           text: 'New special agreement',
           value: 'new-special-agreement',
           checked: 'new-special-agreement' === reason
         },
         {
+          id: "successionOrTransferOfLicence",
           text: 'Succession or transfer of licence',
           value: 'succession-or-transfer-of-licence',
           checked: 'succession-or-transfer-of-licence' === reason
         },
         {
+          id: "successionToRemainderLicenceOrLicenceApportionment",
           text: 'Succession to remainder licence or licence apportionment',
           value: 'succession-to-remainder-licence-or-licence-apportionment',
           checked: 'succession-to-remainder-licence-or-licence-apportionment' === reason

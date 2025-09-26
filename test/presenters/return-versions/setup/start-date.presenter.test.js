@@ -39,10 +39,13 @@ describe('Return Versions Setup - Start Date presenter', () => {
       const result = StartDatePresenter.go(session)
 
       expect(result).to.equal({
-        anotherStartDateDay: null,
-        anotherStartDateMonth: null,
-        anotherStartDateYear: null,
-        backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+        startDateDay: null,
+        startDateMonth: null,
+        startDateYear: null,
+        backLink: {
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',
@@ -63,7 +66,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -71,7 +77,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it("returns a link back to the licence page's charge tab", () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up')
+        expect(result.backLink).to.equal({
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
+        })
       })
     })
   })
@@ -93,11 +102,11 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns the "startDateOption" property populated to re-select the option', () => {
         const result = StartDatePresenter.go(session)
 
-        const { anotherStartDateDay, anotherStartDateMonth, anotherStartDateYear, startDateOption } = result
+        const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(anotherStartDateDay).to.be.null()
-        expect(anotherStartDateMonth).to.be.null()
-        expect(anotherStartDateYear).to.be.null()
+        expect(startDateDay).to.be.null()
+        expect(startDateMonth).to.be.null()
+        expect(startDateYear).to.be.null()
         expect(startDateOption).to.equal('licenceStartDate')
       })
     })
@@ -113,11 +122,11 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns the properties needed to re-populate the fields', () => {
         const result = StartDatePresenter.go(session)
 
-        const { anotherStartDateDay, anotherStartDateMonth, anotherStartDateYear, startDateOption } = result
+        const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(anotherStartDateDay).to.equal('26')
-        expect(anotherStartDateMonth).to.equal('11')
-        expect(anotherStartDateYear).to.equal('2023')
+        expect(startDateDay).to.equal('26')
+        expect(startDateMonth).to.equal('11')
+        expect(startDateYear).to.equal('2023')
         expect(startDateOption).to.equal('anotherStartDate')
       })
     })

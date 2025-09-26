@@ -135,7 +135,10 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
           pageTitle: 'Select agreements and exceptions for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
           agreementsExceptions: null,
-          backLink: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
+            text: 'Back'
+          },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC'
         },
@@ -148,7 +151,15 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
         const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
         expect(result.error).to.equal({
-          text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
+          errorList: [
+            {
+              href: '#agreementsExceptions',
+              text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
+            }
+          ],
+          agreementsExceptions: {
+            text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
+          }
         })
       })
     })

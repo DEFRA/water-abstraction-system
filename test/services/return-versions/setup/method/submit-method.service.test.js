@@ -73,7 +73,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          method: 'use-abstraction-data'
+          method: 'useAbstractionData'
         }
 
         Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
@@ -84,7 +84,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.method).to.equal('use-abstraction-data')
+        expect(refreshedSession.method).to.equal('useAbstractionData')
       })
 
       describe('and the user has selected to use abstraction data', () => {
@@ -106,7 +106,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
       describe('and the user has selected to copy an existing requirement', () => {
         beforeEach(() => {
           payload = {
-            method: 'use-existing-requirements'
+            method: 'useExistingRequirements'
           }
         })
 
@@ -120,7 +120,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
       describe('and the user has selected to setup the requirement manually', () => {
         beforeEach(() => {
           payload = {
-            method: 'set-up-manually'
+            method: 'setUpManually'
           }
         })
 
@@ -145,7 +145,10 @@ describe('Return Versions - Setup - Submit Method service', () => {
             activeNavBar: 'search',
             pageTitle: 'How do you want to set up the requirements for returns?',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/reason`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/reason`,
+              text: 'Back'
+            },
             displayCopyExisting: true,
             licenceRef: '01/ABC',
             method: null
@@ -159,7 +162,13 @@ describe('Return Versions - Setup - Submit Method service', () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select how you want to set up the requirements for returns'
+            errorList: [
+              {
+                href: '#method',
+                text: 'Select how you want to set up the requirements for returns'
+              }
+            ],
+            method: { text: 'Select how you want to set up the requirements for returns' }
           })
         })
       })
