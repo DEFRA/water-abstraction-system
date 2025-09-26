@@ -11,7 +11,7 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
-const { timestampForPostgres, generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const UpdateNotificationsService = require('../../../../app/services/notices/setup/update-notifications.service.js')
