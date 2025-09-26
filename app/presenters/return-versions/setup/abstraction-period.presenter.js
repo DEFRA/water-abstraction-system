@@ -19,7 +19,7 @@ function go(session, requirementIndex) {
 
   return {
     abstractionPeriod: requirement?.abstractionPeriod ? requirement.abstractionPeriod : null,
-    backLink: _backLink(session, requirementIndex),
+    backLink: { href: _backLinkHref(session, requirementIndex), text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Enter the abstraction period for the requirements for returns',
@@ -28,20 +28,14 @@ function go(session, requirementIndex) {
   }
 }
 
-function _backLink(session, requirementIndex) {
+function _backLinkHref(session, requirementIndex) {
   const { checkPageVisited, id } = session
-  let backLink
 
   if (checkPageVisited) {
-    backLink = `/system/return-versions/setup/${id}/check`
-  } else {
-    backLink = `/system/return-versions/setup/${id}/points/${requirementIndex}`
+    return `/system/return-versions/setup/${id}/check`
   }
 
-  return {
-    href: backLink,
-    text: 'Back'
-  }
+  return `/system/return-versions/setup/${id}/points/${requirementIndex}`
 }
 
 module.exports = {
