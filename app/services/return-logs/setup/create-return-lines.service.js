@@ -48,7 +48,7 @@ function _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volu
     return { rawQuantity: line.quantity, currentReading }
   }
 
-  if (!line.reading) {
+  if (line.reading === null) {
     return { rawQuantity: null, currentReading }
   }
 
