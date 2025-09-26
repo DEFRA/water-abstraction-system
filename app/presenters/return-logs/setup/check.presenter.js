@@ -243,7 +243,7 @@ function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) 
     if (method !== 'abstractionVolumes') {
       rowData.reading = reading
     }
-console.log(rowData)
+
     return rowData
   })
 }
