@@ -19,7 +19,7 @@ function go(session, requirementIndex, licencePurposes) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the purpose for the requirements for returns',
@@ -29,9 +29,8 @@ function go(session, requirementIndex, licencePurposes) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id, requirements } = session
-  let backLink
 
   // NOTE: Purpose is the first page in the manual setup journey. So, when a user first comes through, we want to allow
   // them to go back to `/method`. Once they've got to the `/check` page they may return because they clicked the
@@ -43,15 +42,10 @@ function _backLink(session) {
   // scenario 'Back' also needs to take them back to `/check`. Hence, the logic is different in this presenter when
   // compared with the other setup pages.
   if (checkPageVisited || requirements.length > 1) {
-    backLink = `/system/return-versions/setup/${id}/check`
-  } else {
-    backLink = `/system/return-versions/setup/${id}/method`
+    return `/system/return-versions/setup/${id}/check`
   }
 
-  return {
-    href: backLink,
-    text: 'Back'
-  }
+  return `/system/return-versions/setup/${id}/method`
 }
 
 function _purposes(licencePurposes, requirementPurposes) {

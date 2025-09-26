@@ -18,7 +18,7 @@ function go(session, requirementIndex) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: _backLink(session, requirementIndex),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     agreementsExceptions: requirement?.agreementsExceptions ? requirement.agreementsExceptions : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
@@ -28,20 +28,14 @@ function go(session, requirementIndex) {
   }
 }
 
-function _backLink(session, requirementIndex) {
+function _backLinkHref(session, requirementIndex) {
   const { checkPageVisited, id } = session
-  let backLink
 
   if (checkPageVisited) {
-    backLink = `/system/return-versions/setup/${id}/check`
-  } else {
-    backLink = `/system/return-versions/setup/${id}/frequency-reported/${requirementIndex}`
+    return `/system/return-versions/setup/${id}/check`
   }
 
-  return {
-    href: backLink,
-    text: 'Back'
-  }
+  return `/system/return-versions/setup/${id}/frequency-reported/${requirementIndex}`
 }
 
 module.exports = {

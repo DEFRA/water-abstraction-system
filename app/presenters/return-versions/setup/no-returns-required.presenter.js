@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, licence, reason } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceRef: licence.licenceRef,
     reason: reason || null,
     pageTitle: 'Why are no returns required?',
@@ -25,20 +25,14 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
-  let backLink
 
   if (checkPageVisited) {
-    backLink = `/system/return-versions/setup/${id}/check`
-  } else {
-    backLink = `/system/return-versions/setup/${id}/start-date`
+    return `/system/return-versions/setup/${id}/check`
   }
 
-  return {
-    href: backLink,
-    text: 'Back'
-  }
+  return `/system/return-versions/setup/${id}/start-date`
 }
 
 module.exports = {
