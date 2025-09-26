@@ -19,7 +19,7 @@ const ReturnFormsNotificationPresenter = require('../../../presenters/notices/se
  * @returns {Promise<object[]>} - Resolves an array of return forms notifications
  */
 async function go(session, recipients, eventId) {
-  const { licenceRef, dueReturns, selectedReturns, referenceCode } = session
+  const { licenceRef, dueReturns, selectedReturns } = session
 
   const dueReturnLogs = _dueReturnLog(dueReturns, selectedReturns)
 
@@ -31,7 +31,7 @@ async function go(session, recipients, eventId) {
 
       const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturn, recipient)
 
-      const notification = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, referenceCode, eventId)
+      const notification = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
 
       notifications.push(notification)
     }

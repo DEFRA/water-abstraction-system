@@ -32,7 +32,8 @@ async function go(contactHashId, sessionId, licenceMonitoringStationId) {
     session.noticeType,
     notification,
     sessionId,
-    licenceMonitoringStationId
+    licenceMonitoringStationId,
+    session.referenceCode
   )
 
   return {

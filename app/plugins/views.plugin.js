@@ -17,7 +17,12 @@ const Vision = require('@hapi/vision')
 const { markdown } = require('../views/filters/markdown.filter.js')
 
 const ServerConfig = require('../../config/server.config.js')
-const { enableSystemLicenceView, enableSystemProfiles } = require('../../config/feature-flags.config.js')
+
+const {
+  enableSystemLicenceView,
+  enableSystemManageView,
+  enableSystemProfiles
+} = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -104,7 +109,8 @@ function context(request) {
       permission: request.auth.credentials?.permission
     },
     featureFlags: {
-      enableSystemLicenceView
+      enableSystemLicenceView,
+      enableSystemManageView
     },
     navigationLinks: _navigationLinks(request.auth)
   }
