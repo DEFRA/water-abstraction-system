@@ -5,6 +5,8 @@
  * @module StartDateService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/setup/no-returns-required.presenter.js')
 const NoReturnsRequiredValidator = require('../../../validators/return-versions/setup/no-returns-required.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -60,15 +62,7 @@ async function _save(session, payload) {
 function _validate(payload) {
   const validation = NoReturnsRequiredValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

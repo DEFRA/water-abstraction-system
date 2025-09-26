@@ -39,7 +39,10 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Select the returns cycle for the requirements for returns',
@@ -59,7 +62,10 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -67,9 +73,10 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns a link back to the "abstraction-period" page', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal(
-          '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0'
-        )
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
+          text: 'Back'
+        })
       })
     })
   })

@@ -1,65 +1,41 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#no-returns-required-error"
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: "reason",
-      errorMessage: error,
+      errorMessage: error.reason,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [
         {
+          id: 'abstractionBelow100CubicMetresPerDay',
           text: 'Abstraction amount below 100 cubic metres per day',
           value:  'abstraction-below-100-cubic-metres-per-day',
           checked: reason === 'abstraction-below-100-cubic-metres-per-day'
         },
         {
+          id: 'licenceConditionsDoNotRequireReturns',
           text: 'Licence conditions do not require returns',
           value: 'licence-conditions-do-not-require-returns',
           checked: reason === 'licence-conditions-do-not-require-returns'
         },
         {
+          id: 'returnsException',
           text: 'Returns exception',
           value: 'returns-exception',
           checked: reason === 'returns-exception'
         },
         {
+          id: 'temporaryTrade',
           text: 'Temporary trade',
           value: 'temporary-trade',
           checked: reason === 'temporary-trade'

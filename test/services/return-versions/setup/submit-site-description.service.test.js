@@ -122,7 +122,10 @@ describe('Return Versions Setup - Submit Site Description service', () => {
             activeNavBar: 'search',
             pageTitle: 'Enter a site description for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+              text: 'Back'
+            },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             siteDescription: null
@@ -136,7 +139,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Enter a description of the site'
+            errorList: [
+              {
+                href: '#siteDescription',
+                text: 'Enter a description of the site'
+              }
+            ],
+            siteDescription: { text: 'Enter a description of the site' }
           })
         })
       })
@@ -152,7 +161,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Site description must be 10 characters or more'
+            errorList: [
+              {
+                href: '#siteDescription',
+                text: 'Site description must be 10 characters or more'
+              }
+            ],
+            siteDescription: { text: 'Site description must be 10 characters or more' }
           })
         })
 
@@ -178,7 +193,13 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Site description must be 100 characters or less'
+            errorList: [
+              {
+                href: '#siteDescription',
+                text: 'Site description must be 100 characters or less'
+              }
+            ],
+            siteDescription: { text: 'Site description must be 100 characters or less' }
           })
         })
 
