@@ -229,8 +229,6 @@ function _summaryTableData(formattedLines, session, unitName) {
 
 function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) {
   const groups = returnsFrequency === 'month' ? formattedLines : _groupLinesByMonth(formattedLines)
-  console.log('🚀🚀🚀 ~ groups:')
-  console.dir(groups, { depth: null, colors: true })
 
   return groups.map((group) => {
     const { endDate, quantity, reading, unitName } = group
