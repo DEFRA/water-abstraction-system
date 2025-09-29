@@ -10,6 +10,7 @@ const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remov
 const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the notice setup remove licences page
@@ -28,12 +29,12 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, validLicences)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode)
+    const pageData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode)
 
     return {
       activeNavBar: 'manage',
       error: validationResult,
-      ...formattedData
+      ...pageData
     }
   }
 
@@ -61,17 +62,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, validLicences) {
-  const validation = RemoveLicencesValidator.go(payload, validLicences)
+  const validationResult = RemoveLicencesValidator.go(payload, validLicences)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
