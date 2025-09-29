@@ -90,7 +90,8 @@ describe('Return Logs - Generate Return Log service', () => {
         returnsFrequency: 'day',
         source: 'WRLS',
         startDate: new Date('2025-04-01'),
-        status: 'due'
+        status: 'due',
+        quarterly: true
       })
     })
 
@@ -113,6 +114,18 @@ describe('Return Logs - Generate Return Log service', () => {
         const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
         expect(result.id).to.equal(`v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31`)
+      })
+    })
+
+    describe('the "quarterly" property', () => {
+      beforeEach(() => {
+        testReturnRequirement.returnVersion.quarterlyReturns = false
+      })
+
+      it('returns false when the return versions quarterly-returns flag is false', () => {
+        const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
+
+        expect(result.quarterly).to.equal(false)
       })
     })
 

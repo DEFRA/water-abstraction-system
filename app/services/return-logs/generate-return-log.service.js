@@ -36,7 +36,8 @@ function go(returnRequirement, returnCycle) {
     returnReference: reference.toString(),
     source: 'WRLS',
     startDate,
-    status: 'due'
+    status: 'due',
+    quarterly: returnRequirement.returnVersion.quarterlyReturns
   }
 }
 
