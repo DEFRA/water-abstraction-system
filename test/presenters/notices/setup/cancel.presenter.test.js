@@ -32,9 +32,9 @@ describe('Notices - Setup - Cancel presenter', () => {
     const result = CancelPresenter.go(session)
 
     expect(result).to.equal({
-      backLink: `/system/notices/setup/${session.id}/check`,
-      caption: 'Notice RNIV-1234',
+      backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
       pageTitle: 'You are about to cancel this notice',
+      pageTitleCaption: 'Notice RNIV-1234',
       summaryList: {
         text: 'Licence number',
         value: licenceRef

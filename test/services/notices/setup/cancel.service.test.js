@@ -31,9 +31,12 @@ describe('Notices - Setup - Cancel service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice RNIV-1234',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         pageTitle: 'You are about to cancel this notice',
+        pageTitleCaption: 'Notice RNIV-1234',
         summaryList: {
           text: 'Licence number',
           value: '01/111'
