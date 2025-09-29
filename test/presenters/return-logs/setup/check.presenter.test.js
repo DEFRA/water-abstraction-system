@@ -51,11 +51,11 @@ describe('Return Logs Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check details and enter new volumes or readings',
+        pageTitleCaption: 'Return reference 1234',
         purposes: 'Evaporative Cooling',
         returnReceivedDate: '31 January 2025',
         reportingFigures: 'Volumes',
         returnPeriod: '1 April 2023 to 31 March 2024',
-        returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startReading: undefined,
         summaryTableData: {
@@ -145,10 +145,10 @@ describe('Return Logs Setup - Check presenter', () => {
             text: 'No notes added'
           },
           pageTitle: 'Check details and enter new volumes or readings',
+          pageTitleCaption: 'Return reference 1234',
           purposes: 'Evaporative Cooling',
           returnPeriod: '1 April 2023 to 31 March 2024',
           returnReceivedDate: '31 January 2025',
-          returnReference: '1234',
           siteDescription: 'POINT A, TEST SITE DESCRIPTION',
           tariff: 'Standard'
         })
@@ -734,6 +734,36 @@ describe('Return Logs Setup - Check presenter', () => {
                 monthlyTotal: '98,000',
                 unitTotal: '98',
                 reading: 200
+              }
+            ])
+          })
+        })
+
+        describe('and the meter reading is zero', () => {
+          beforeEach(() => {
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z',
+                reading: 0
+              }
+            ]
+            session.startReading = 0
+          })
+
+          it('returns the "summaryTableData" rows with the totals shown as zeros', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter monthly readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: '0',
+                unitTotal: '0',
+                reading: 0
               }
             ])
           })

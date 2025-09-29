@@ -23,10 +23,7 @@ const { db } = require('../../../../db/db.js')
  * - 'primary user' - an email address
  * - 'licence holder' - a letter
  *
- * Each licence can have multiple additional contacts, regardless of the total number if there is at least one
- * 'additional contact'. Then this is the recipient.
- *
- * Otherwise, we revert to the logic listed below, which is similar to how we get recipients for the returns journeys.
+ * Each licence can have multiple additional contacts.
  *
  * For each licence, we extract the contact information, if a licence is _registered_ (more details below), we only care
  * about the email addresses registered against it, all licences should have a 'licence holder' contact to fall back on.
@@ -74,15 +71,13 @@ function _query() {
   WITH additional_contacts AS (
     SELECT
       DISTINCT
-      ldh.licence_ref,
+      ld.licence_ref,
       'Additional contact' AS contact_type,
       con.email,
       NULL::jsonb AS contact,
       md5(LOWER(con.email)) AS contact_hash_id
     FROM
-      public.licence_document_headers ldh
-      INNER JOIN public.licence_documents ld
-        ON ld.licence_ref = ldh.licence_ref
+      public.licence_documents ld
       INNER JOIN public.licence_document_roles ldr
         ON ldr.licence_document_id = ld.id
       INNER JOIN public.company_contacts cct
@@ -92,7 +87,11 @@ function _query() {
       INNER JOIN public.licence_roles lr
         ON lr.id = cct.licence_role_id
     WHERE
-      ldh.licence_ref = ANY (?)
+      ld.licence_ref = ANY (?)
+      AND (
+      ldr.end_date IS NULL
+        OR ldr.end_date >= CURRENT_DATE
+      )
       AND cct.abstraction_alerts = true
   ),
 
@@ -144,34 +143,33 @@ function _query() {
       AND contacts ->> 'role' = 'Licence holder'
   ),
 
-  all_possible AS (
-    SELECT * FROM additional_contacts
+  primary_or_licence_holder AS (
+    SELECT
+      licence_ref,
+      contact_type,
+      email,
+      contact,
+      contact_hash_id
+    FROM primary_users
     UNION ALL
-    SELECT * FROM primary_users
-    UNION ALL
-    SELECT * FROM licence_holders
+    SELECT
+      lh.licence_ref,
+      lh.contact_type,
+      lh.email,
+      lh.contact,
+      lh.contact_hash_id
+    FROM licence_holders lh
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM primary_users pu
+      WHERE pu.licence_ref = lh.licence_ref
+    )
   ),
 
-  ranked AS (
-    SELECT
-      *,
-      ROW_NUMBER() OVER (
-        PARTITION BY licence_ref
-        ORDER BY
-          CASE
-            contact_type
-            WHEN 'Additional contact' THEN 1
-            WHEN 'Primary user' THEN 2
-            WHEN 'Licence holder' THEN 3
-          END
-      ) AS rn,
-      COUNT(*) FILTER (
-        WHERE contact_type = 'Additional contact'
-      ) OVER (
-        PARTITION BY licence_ref
-      ) AS additional_count
-    FROM
-      all_possible
+  final_contacts AS (
+    SELECT * FROM additional_contacts
+    UNION ALL
+    SELECT * FROM primary_or_licence_holder
   )
 
   SELECT
@@ -181,15 +179,7 @@ function _query() {
     contact,
     contact_hash_id
   FROM
-    ranked
-  WHERE
-    (
-      contact_type = 'Additional contact'
-    )
-    OR (
-      additional_count = 0
-      AND rn = 1
-    )
+    final_contacts
   ORDER BY
     licence_ref;
 `

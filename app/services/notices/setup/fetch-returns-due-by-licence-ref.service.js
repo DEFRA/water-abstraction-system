@@ -24,7 +24,7 @@ async function go(licenceRef) {
 async function _fetch(licenceRef) {
   const query = `
     SELECT
-      rl.id as id,
+      rl.id as "returnLogId",
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
       rl.return_id AS "returnId",
@@ -35,7 +35,8 @@ async function _fetch(licenceRef) {
       rl.metadata->'isTwoPartTariff' AS "twoPartTariff",
       rl.metadata->'description' AS "siteDescription",
       rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
-      r.display_name AS "regionName"
+      r.display_name AS "regionName",
+      r.nald_region_id AS "regionCode"
     FROM return_logs as rl
         INNER JOIN regions as r
                   ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer

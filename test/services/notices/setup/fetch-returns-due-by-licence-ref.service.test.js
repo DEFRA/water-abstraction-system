@@ -63,11 +63,12 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
         {
           dueDate: new Date('2023-04-28'),
           endDate: new Date('2023-03-31'),
-          id: returnLog.id,
           naldAreaCode: 'SE',
           purpose: 'Potable Water Supply - Direct',
+          regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnId: returnLog.returnId,
+          returnLogId: returnLog.id,
           returnReference: returnLog.returnReference,
           returnsFrequency: 'month',
           siteDescription: 'Water park',

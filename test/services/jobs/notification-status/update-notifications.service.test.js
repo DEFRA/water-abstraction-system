@@ -64,10 +64,13 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: 'received',
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        status: 'sent'
+        returnLogIds: null,
+        status: 'sent',
+        templateId: null
       })
     })
   })
@@ -111,10 +114,13 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: 'received',
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        status: 'sent'
+        returnLogIds: null,
+        status: 'sent',
+        templateId: null
       })
     })
 
@@ -134,10 +140,13 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: null,
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        status: 'sent'
+        returnLogIds: null,
+        status: 'sent',
+        templateId: null
       })
     })
   })

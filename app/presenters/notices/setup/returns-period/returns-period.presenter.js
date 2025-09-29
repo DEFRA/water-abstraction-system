@@ -5,8 +5,9 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
 const { formatLongDate } = require('../../../base.presenter.js')
+const { today } = require('../../../../lib/general.lib.js')
+const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -30,9 +31,7 @@ function go(session) {
 }
 
 function _returnsPeriod(savedReturnsPeriod) {
-  const today = new Date()
-
-  const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today)
+  const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today())
 
   const currentReturnPeriod = _formatReturnPeriod(firstReturnPeriod, savedReturnsPeriod)
   const nextReturnPeriod = _formatReturnPeriod(secondReturnPeriod, savedReturnsPeriod)

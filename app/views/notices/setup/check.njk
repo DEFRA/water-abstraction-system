@@ -81,10 +81,22 @@
     {% endif %}
   </div>
 
-  {% if pagination.numberOfPages > 1 %}
-    <p>Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients</p>
+        {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: links.cancel,
+          preventDoubleClick: true
+        }) }}
+      </form>
+    </div>
   {% else %}
-    <p>Showing all {{ recipientsAmount }} recipients</p>
+    {{ govukButton({
+      text: "Cancel",
+      href: links.cancel,
+      preventDoubleClick: true
+    }) }}
   {% endif %}
 
   {{ govukTable({

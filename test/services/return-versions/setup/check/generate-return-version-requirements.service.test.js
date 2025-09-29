@@ -50,18 +50,12 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
       // The data that will populate the "return_requirements" table
       expect(result).to.have.length(1)
-      expect(result[0].abstractionPeriodStartDay).to.equal(
-        requirements[0].abstractionPeriod['abstraction-period-start-day']
-      )
+      expect(result[0].abstractionPeriodStartDay).to.equal(requirements[0].abstractionPeriod.abstractionPeriodStartDay)
       expect(result[0].abstractionPeriodStartMonth).to.equal(
-        requirements[0].abstractionPeriod['abstraction-period-start-month']
+        requirements[0].abstractionPeriod.abstractionPeriodStartMonth
       )
-      expect(result[0].abstractionPeriodEndDay).to.equal(
-        requirements[0].abstractionPeriod['abstraction-period-end-day']
-      )
-      expect(result[0].abstractionPeriodEndMonth).to.equal(
-        requirements[0].abstractionPeriod['abstraction-period-end-month']
-      )
+      expect(result[0].abstractionPeriodEndDay).to.equal(requirements[0].abstractionPeriod.abstractionPeriodEndDay)
+      expect(result[0].abstractionPeriodEndMonth).to.equal(requirements[0].abstractionPeriod.abstractionPeriodEndMonth)
       expect(result[0].collectionFrequency).to.equal(requirements[0].frequencyCollected)
       expect(result[0].fiftySixException).to.be.false()
       expect(result[0].gravityFill).to.be.false()
@@ -120,18 +114,12 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
       // The data that will populate the "return_requirements" table
       expect(result).to.have.length(2)
-      expect(result[1].abstractionPeriodStartDay).to.equal(
-        requirements[1].abstractionPeriod['abstraction-period-start-day']
-      )
+      expect(result[1].abstractionPeriodStartDay).to.equal(requirements[1].abstractionPeriod.abstractionPeriodStartDay)
       expect(result[1].abstractionPeriodStartMonth).to.equal(
-        requirements[1].abstractionPeriod['abstraction-period-start-month']
+        requirements[1].abstractionPeriod.abstractionPeriodStartMonth
       )
-      expect(result[1].abstractionPeriodEndDay).to.equal(
-        requirements[1].abstractionPeriod['abstraction-period-end-day']
-      )
-      expect(result[1].abstractionPeriodEndMonth).to.equal(
-        requirements[1].abstractionPeriod['abstraction-period-end-month']
-      )
+      expect(result[1].abstractionPeriodEndDay).to.equal(requirements[1].abstractionPeriod.abstractionPeriodEndDay)
+      expect(result[1].abstractionPeriodEndMonth).to.equal(requirements[1].abstractionPeriod.abstractionPeriodEndMonth)
       expect(result[1].collectionFrequency).to.equal(requirements[1].frequencyCollected)
       expect(result[1].fiftySixException).to.be.true()
       expect(result[1].gravityFill).to.be.true()

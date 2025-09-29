@@ -54,8 +54,8 @@ function go(returnLog, auth) {
 
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
-    actionButton: _actionButton(latest, auth, returnLog.id, formattedStatus),
-    backLink: _backLink(returnLog.id, licence.id, latest),
+    actionButton: _actionButton(latest, auth, id, formattedStatus),
+    backLink: _backLink(id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
     displayTotal: !!selectedReturnSubmission,
@@ -70,7 +70,7 @@ function go(returnLog, auth) {
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-    showUnderQuery: formattedStatus !== 'not due yet',
+    showUnderQuery: _showUnderQuery(formattedStatus),
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
@@ -117,8 +117,8 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
     return null
   }
 
-  // You cannot edit a void return or a return not due yet
-  if (formattedStatus === 'void' || formattedStatus === 'not due yet') {
+  // You cannot edit a void return log or one that is not due yet
+  if (['not due yet', 'void'].includes(formattedStatus)) {
     return null
   }
 
@@ -191,6 +191,14 @@ function _selectedReturnSubmission(returnSubmissions) {
   }
 
   return returnSubmissions[0]
+}
+
+function _showUnderQuery(formattedStatus) {
+  if (['not due yet', 'void'].includes(formattedStatus)) {
+    return false
+  }
+
+  return true
 }
 
 function _startReading(selectedReturnSubmission) {

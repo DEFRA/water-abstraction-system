@@ -57,26 +57,25 @@ const MESSAGE_REFS = {
 function go(recipients, session, eventId) {
   const notifications = []
 
-  const { determinedReturnsPeriod, referenceCode, journey, noticeType } = session
+  const { determinedReturnsPeriod, journey, noticeType } = session
 
   for (const recipient of recipients) {
     if (recipient.email) {
-      notifications.push(_email(recipient, determinedReturnsPeriod, referenceCode, journey, eventId, noticeType))
+      notifications.push(_email(recipient, determinedReturnsPeriod, journey, eventId, noticeType))
     } else {
-      notifications.push(_letter(recipient, determinedReturnsPeriod, referenceCode, journey, eventId, noticeType))
+      notifications.push(_letter(recipient, determinedReturnsPeriod, journey, eventId, noticeType))
     }
   }
 
   return notifications
 }
 
-function _common(referenceCode, templateId, eventId) {
+function _common(templateId, eventId) {
   const createdAt = timestampForPostgres()
 
   return {
     createdAt,
     eventId,
-    reference: referenceCode,
     templateId
   }
 }
@@ -102,14 +101,14 @@ function _common(referenceCode, templateId, eventId) {
  *
  * @private
  */
-function _email(recipient, returnsPeriod, referenceCode, journey, eventId, noticeType) {
+function _email(recipient, returnsPeriod, journey, eventId, noticeType) {
   const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
 
   const messageType = 'email'
 
   return {
-    ..._common(referenceCode, templateId, eventId),
-    licences: _licences(recipient.licence_refs),
+    ..._common(templateId, eventId),
+    licences: transformStringOfLicencesToArray(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -155,14 +154,14 @@ function _emailTemplate(contactType, journey, noticeType) {
  *
  * @private
  */
-function _letter(recipient, returnsPeriod, referenceCode, journey, eventId, noticeType) {
+function _letter(recipient, returnsPeriod, journey, eventId, noticeType) {
   const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const messageType = 'letter'
   const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
-    ..._common(referenceCode, templateId, eventId),
-    licences: _licences(recipient.licence_refs),
+    ..._common(templateId, eventId),
+    licences: transformStringOfLicencesToArray(recipient.licence_refs),
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -185,19 +184,6 @@ function _letterTemplate(contactType, journey, noticeType) {
   }
 
   return notifyTemplates[journey][noticeType].licenceHolderLetter
-}
-
-/**
- * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
- *
- * These licences are stored as 'jsonb' so we need to stringify the array to match the legacy schema.
- *
- * @private
- */
-function _licences(licenceRefs) {
-  const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
-
-  return JSON.stringify(formattedRecipients)
 }
 
 /**

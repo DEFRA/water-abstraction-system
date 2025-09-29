@@ -168,8 +168,8 @@ function generateUUID() {
  * billing period. Then the only way to represent the abstract period in a usable way is as 2 separate periods. Hence
  * this service deals with arrays of periods.
  *
- * > See the comments for `DetermineAbstractionPeriodService` to better understand the complexity of going from
- * > abstract to concrete periods
+ * > See the comments for `AbstractionPeriodLib#determineAbstractionPeriods` to better understand the complexity of
+ * > going from abstract to concrete periods
  *
  * Then there are times we need to test if the periods of one thing overlap with another. In two-part tariff that's the
  * abstraction periods of a charge element with those of a return. If _any_ of the periods overlap then the return is
@@ -254,6 +254,27 @@ function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
  */
 function timestampForPostgres() {
   return new Date().toISOString()
+}
+
+/**
+ * Returns today's date with the time set to midnight, for example '2023-01-13T00:00:00.000Z'.
+ *
+ * A number of dates in our data are held as date-only, and we have to make decisions based on comparing them to
+ * today's date. If we don't strip the time when comparing, we get issues where a date is equal to the current date.
+ *
+ * For example, the return log 'due date' is held in the record as date-only. If we compare it against 'today' without
+ * stripping the time, then any return due 'today' would be flagged as overdue when it is still due (just!)
+ *
+ * This is a handy helper to return 'today' as a date-only value.
+ *
+ * @returns {Date}
+ */
+function today() {
+  const todaysDate = new Date()
+
+  todaysDate.setHours(0, 0, 0, 0)
+
+  return todaysDate
 }
 
 /**
@@ -366,6 +387,7 @@ module.exports = {
   periodsOverlap,
   splitArrayIntoGroups,
   timestampForPostgres,
+  today,
   transactionsMatch,
   transformStringOfLicencesToArray
 }

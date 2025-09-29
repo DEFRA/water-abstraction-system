@@ -26,60 +26,59 @@ describe('Notices - Setup - Create notification service', () => {
     })
 
     eventId = event.id
+
+    notifications = [
+      { eventId, createdAt: timestampForPostgres() },
+      { eventId, createdAt: timestampForPostgres() }
+    ]
   })
 
-  describe('when inserting a single notification', () => {
-    beforeEach(async () => {
-      notifications = [{ eventId, createdAt: timestampForPostgres() }]
+  it('should return the saved notifications', async () => {
+    const result = await CreateNotificationsService.go(notifications)
+
+    const createdNotifications = await NotificationModel.query().where({
+      event_id: eventId
     })
 
-    it('should create a single notification (and only set the required values)', async () => {
-      const result = await CreateNotificationsService.go(notifications)
-
-      const createdResult = await NotificationModel.query().findById(result[0].id)
-
-      expect(createdResult).equal({
-        createdAt: createdResult.createdAt,
+    expect(createdNotifications).equal([
+      {
+        createdAt: createdNotifications[0].createdAt,
         eventId,
         id: result[0].id,
         licenceMonitoringStationId: null,
         licences: null,
-        notifyError: null,
         messageRef: null,
         messageType: null,
+        notifyError: null,
         notifyId: null,
         notifyStatus: null,
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
-        status: null
-      })
-    })
-  })
-
-  describe('when inserting multiple notifications', () => {
-    beforeEach(() => {
-      notifications = [
-        { eventId, createdAt: timestampForPostgres() },
-        { eventId, createdAt: timestampForPostgres() }
-      ]
-    })
-
-    it('should return the saved notifications', async () => {
-      const result = await CreateNotificationsService.go(notifications)
-
-      expect(result).equal([
-        {
-          createdAt: result[0].createdAt,
-          eventId,
-          id: result[0].id
-        },
-        {
-          createdAt: result[1].createdAt,
-          eventId,
-          id: result[1].id
-        }
-      ])
-    })
+        returnLogIds: null,
+        status: null,
+        templateId: null
+      },
+      {
+        createdAt: createdNotifications[1].createdAt,
+        eventId,
+        id: result[1].id,
+        licenceMonitoringStationId: null,
+        licences: null,
+        messageRef: null,
+        messageType: null,
+        notifyError: null,
+        notifyId: null,
+        notifyStatus: null,
+        pdf: null,
+        personalisation: null,
+        plaintext: null,
+        recipient: null,
+        returnLogIds: null,
+        status: null,
+        templateId: null
+      }
+    ])
   })
 })

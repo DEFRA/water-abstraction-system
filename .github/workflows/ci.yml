@@ -47,6 +47,8 @@ jobs:
       ENVIRONMENT: dev
       COOKIE_SECRET: 1a1028df-a2af-468a-929b-e3a274be1208
       DEFAULT_USER_PASSWORD: P@55word
+      # Shut up dot env!
+      DOTENV_CONFIG_QUIET: true
 
     # Service containers to run with `runner-job`
     services:

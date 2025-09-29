@@ -5,6 +5,9 @@
  * @module SubmitCheckService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
+const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
 const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -28,46 +31,52 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const metadata = GenerateReturnSubmissionMetadata.go(session)
+  const error = _validate(session)
 
-  await ReturnLogModel.transaction(async (trx) => {
-    const returnSubmission = await CreateReturnSubmissionService.go(
-      session.returnLogId,
-      user.username,
-      metadata,
-      session.journey === 'nil-return',
-      session.note?.content,
-      user.id,
-      trx
-    )
+  if (!error) {
+    await _save(session, user)
 
-    await CreateReturnLinesService.go(
-      session.lines,
-      returnSubmission.id,
-      session.returnsFrequency,
-      session.units,
-      session.reported === 'abstraction-volumes',
-      session.meterProvided === 'yes',
-      session.startReading,
-      session.meter10TimesDisplay === 'yes',
-      trx
-    )
+    return { returnLogId: session.returnLogId }
+  }
 
-    await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, trx)
-    await _cleanupSession(sessionId, trx)
-  })
+  const formattedData = CheckPresenter.go(session)
 
-  return session.returnLogId
-}
-
-async function _markReturnLogAsSubmitted(returnLogId, receivedDate, trx) {
-  await ReturnLogModel.query(trx)
-    .patch({ status: 'completed', receivedDate, updatedAt: timestampForPostgres() })
-    .where({ id: returnLogId })
+  return {
+    activeNavBar: 'search',
+    error,
+    ...formattedData
+  }
 }
 
 async function _cleanupSession(sessionId, trx) {
   await SessionModel.query(trx).deleteById(sessionId)
+}
+
+async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, trx) {
+  await ReturnLogModel.query(trx)
+    .patch({ status: 'completed', receivedDate, updatedAt: timestamp })
+    .where({ id: returnLogId })
+}
+
+async function _save(session, user) {
+  const timestamp = timestampForPostgres()
+
+  const metadata = GenerateReturnSubmissionMetadata.go(session)
+
+  await ReturnLogModel.transaction(async (trx) => {
+    const returnSubmission = await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
+
+    await CreateReturnLinesService.go(returnSubmission.id, session, timestamp, trx)
+
+    await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
+    await _cleanupSession(session.id, trx)
+  })
+}
+
+function _validate(session) {
+  const validationResult = CheckValidator.go(session)
+
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

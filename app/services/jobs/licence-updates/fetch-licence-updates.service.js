@@ -6,6 +6,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
+const { today } = require('../../../lib/general.lib.js')
 
 /**
  * Fetches licence versions that were created in last two months that have no matching workflow record
@@ -60,11 +61,11 @@ async function go() {
 }
 
 function _twoMonthsAgo() {
-  const today = new Date()
+  const todaysDate = today()
 
-  today.setMonth(today.getMonth() - 2)
+  todaysDate.setMonth(todaysDate.getMonth() - 2)
 
-  return today
+  return todaysDate
 }
 
 module.exports = {

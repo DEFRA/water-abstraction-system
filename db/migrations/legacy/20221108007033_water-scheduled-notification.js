@@ -29,6 +29,9 @@ exports.up = function (knex) {
     table.decimal('notification_type')
     table.string('job_id')
     table.uuid('licence_gauging_station_id')
+    table.jsonb('return_log_ids')
+    table.uuid('template_id')
+    table.binary('pdf')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).defaultTo(knex.fn.now())

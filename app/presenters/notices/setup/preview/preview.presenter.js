@@ -18,11 +18,12 @@ const { sentenceCase } = require('../../../base.presenter.js')
  * @param {string} sessionId - The UUID for returns notices session record
  * @param {string} [licenceMonitoringStationId=null] - The UUID of the licence monitoring station record (This is only
  * populated for abstraction alerts)
+ * @param {string} referenceCode - the unique generated reference code
  *
  * @returns {Promise<object>} The data formatted for the preview page
  */
-async function go(contactHashId, noticeType, notification, sessionId, licenceMonitoringStationId) {
-  const { messageRef, messageType, personalisation, recipient, reference, templateId } = notification
+async function go(contactHashId, noticeType, notification, sessionId, licenceMonitoringStationId, referenceCode) {
+  const { messageRef, messageType, personalisation, recipient, templateId } = notification
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : recipient,
@@ -30,7 +31,7 @@ async function go(contactHashId, noticeType, notification, sessionId, licenceMon
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
     pageTitle: sentenceCase(messageRef.replace(/_/g, ' ')),
-    pageTitleCaption: `Notice ${reference}`,
+    pageTitleCaption: `Notice ${referenceCode}`,
     refreshPageLink: _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId)
   }
 }

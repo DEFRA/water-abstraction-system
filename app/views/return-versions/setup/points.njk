@@ -1,39 +1,9 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {# Error summary #}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#points"
-        }
-      ]
-    }) }}
-  {%endif%}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -47,18 +17,17 @@
       } %}
 
       {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
-
     {% endfor %}
 
     {{ govukCheckboxes({
       name: "points",
-      errorMessage: error,
+      errorMessage: error.points,
       hint: {
         text: "Select all that apply"
       },
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: checkBoxItems

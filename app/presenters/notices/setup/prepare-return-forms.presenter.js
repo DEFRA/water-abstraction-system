@@ -8,6 +8,7 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { futureDueDate } = require('../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
 
@@ -33,6 +34,9 @@ const RETURN_TYPE = {
  * Each page will be assigned a corresponding object to isolate the data to each page where possible. Those pages are:
  * - The "cover" page, this is the first page. The address is on this page.
  *
+ * This presenter is also used to supply the data for the saved notifications, this has its own presenter which maps
+ * some of these keys to 'snake case'. So there is additional data in the response which may not be in the PDF file.
+ *
  * @param {string} licenceRef - The reference of the licence that the return log relates to
  * @param {object} dueReturnLog - The return log to populate the form data
  * @param {object} recipient - A single recipient with the contact / address
@@ -45,9 +49,12 @@ function go(licenceRef, dueReturnLog, recipient) {
     endDate,
     naldAreaCode,
     purpose,
+    regionCode,
     regionName,
-    returnsFrequency,
+    returnId,
+    returnLogId,
     returnReference,
+    returnsFrequency,
     siteDescription,
     startDate,
     twoPartTariff
@@ -55,23 +62,33 @@ function go(licenceRef, dueReturnLog, recipient) {
 
   return {
     address: _address(recipient),
-    dueDate: formatLongDate(new Date(dueDate)),
-    endDate: formatLongDate(new Date(endDate)),
     licenceRef,
+    naldAreaCode,
     pageEntries: _entries(startDate, endDate, returnsFrequency),
     pageTitle: _pageTitle(returnsFrequency),
     purpose,
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
+    regionCode,
+    returnId,
+    returnLogId,
     returnReference,
     returnsFrequency,
     siteDescription,
-    startDate: formatLongDate(new Date(startDate)),
-    twoPartTariff
+    twoPartTariff,
+    ..._dates(dueDate, endDate, startDate)
   }
 }
 
 function _address(recipient) {
   return NotifyAddressPresenter.go(recipient.contact)
+}
+
+function _dates(dueDate, endDate, startDate) {
+  return {
+    dueDate: formatLongDate(dueDate) || formatLongDate(futureDueDate('letter')),
+    endDate: formatLongDate(endDate),
+    startDate: formatLongDate(startDate)
+  }
 }
 
 /**

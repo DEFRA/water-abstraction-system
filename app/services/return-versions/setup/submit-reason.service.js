@@ -5,6 +5,8 @@
  * @module SubmitReasonService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
 const ReasonValidator = require('../../../validators/return-versions/setup/reason.validator.js')
@@ -61,15 +63,7 @@ async function _save(session, payload) {
 function _validate(payload) {
   const validation = ReasonValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

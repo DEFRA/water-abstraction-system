@@ -98,10 +98,10 @@ function _alwaysRequiredPageData(session) {
     nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
+    pageTitleCaption: `Return reference ${returnReference}`,
     purposes: purposes.join(', '),
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
-    returnReference,
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }
@@ -138,7 +138,7 @@ function _formatLines(lines, meter10TimesDisplay, reported, startReading, unitNa
     } else {
       formattedLine.reading = line.reading ?? null
 
-      if (line.reading) {
+      if (typeof line.reading === 'number') {
         const multiplier = meter10TimesDisplay === 'yes' ? 10 : 1
 
         formattedLine.quantity = (line.reading - previousReading) * multiplier
@@ -177,7 +177,7 @@ function _groupLinesByMonth(formattedLines) {
     }
     monthlyLine[key].quantity += quantity
 
-    if (reading) {
+    if (typeof reading === 'number') {
       monthlyLine[key].reading = reading
     }
 

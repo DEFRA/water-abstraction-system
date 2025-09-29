@@ -19,10 +19,10 @@ function go(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
-    anotherStartDateDay: startDateDay ?? null,
-    anotherStartDateMonth: startDateMonth ?? null,
-    anotherStartDateYear: startDateYear ?? null,
-    backLink: _backLink(session),
+    startDateDay: startDateDay ?? null,
+    startDateMonth: startDateMonth ?? null,
+    startDateYear: startDateYear ?? null,
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     licenceVersionStartDate: _licenceVersionStartDate(licence),
@@ -33,18 +33,16 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id, licence } = session
 
   if (checkPageVisited) {
     return `/system/return-versions/setup/${id}/check`
+  } else if (FeatureFlagsConfig.enableSystemLicenceView) {
+    return `/system/licences/${licence.id}/set-up`
   }
 
-  if (FeatureFlagsConfig.enableSystemLicenceView) {
-    return `/system/licences/${licence.id}/set-up`
-  } else {
-    return `/licences/${licence.id}#charge`
-  }
+  return `/licences/${licence.id}#charge`
 }
 
 function _licenceVersionStartDate(licence) {

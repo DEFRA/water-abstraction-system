@@ -41,7 +41,6 @@ function go(recipients, session, eventId) {
     alertType,
     monitoringStationName,
     monitoringStationRiverName,
-    referenceCode,
     relevantLicenceMonitoringStations
   } = session
 
@@ -59,11 +58,11 @@ function go(recipients, session, eventId) {
     for (const matchingRecipient of matchingRecipients) {
       if (matchingRecipient.email) {
         notifications.push(
-          _email(matchingRecipient, referenceCode, eventId, commonPersonalisation, alertType, station.restrictionType)
+          _email(matchingRecipient, eventId, commonPersonalisation, alertType, station.restrictionType)
         )
       } else {
         notifications.push(
-          _letter(matchingRecipient, referenceCode, eventId, commonPersonalisation, alertType, station.restrictionType)
+          _letter(matchingRecipient, eventId, commonPersonalisation, alertType, station.restrictionType)
         )
       }
     }
@@ -157,7 +156,7 @@ function _conditionText(notes) {
  *
  * @private
  */
-function _email(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
+function _email(recipient, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
 
   const messageType = 'email'
@@ -166,12 +165,11 @@ function _email(recipient, referenceCode, eventId, commonPersonalisation, alertT
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: _licences(commonPersonalisation.licenceRef),
+    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
     recipient: recipient.email,
-    reference: referenceCode,
     templateId: _templateId(alertType, restrictionType, 'email')
   }
 }
@@ -203,7 +201,7 @@ function _emailMessageRef(alertType, restrictionType) {
  *
  * @private
  */
-function _letter(recipient, referenceCode, eventId, commonPersonalisation, alertType, restrictionType) {
+function _letter(recipient, eventId, commonPersonalisation, alertType, restrictionType) {
   const createdAt = timestampForPostgres()
   const messageType = 'letter'
   const address = NotifyAddressPresenter.go(recipient.contact)
@@ -212,7 +210,7 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: _licences(commonPersonalisation.licenceRef),
+    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
@@ -221,22 +219,8 @@ function _letter(recipient, referenceCode, eventId, commonPersonalisation, alert
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     },
-    reference: referenceCode,
     templateId: _templateId(alertType, restrictionType, 'letter')
   }
-}
-
-/**
- * All the 'licences' associated with a notification are stored in 'water.scheduled_notifications'
- *
- * These licences are stored as 'jsonb' so we need to stringify the array to match the legacy schema.
- *
- * @private
- */
-function _licences(licenceRefs) {
-  const formattedRecipients = transformStringOfLicencesToArray(licenceRefs)
-
-  return JSON.stringify(formattedRecipients)
 }
 
 /**

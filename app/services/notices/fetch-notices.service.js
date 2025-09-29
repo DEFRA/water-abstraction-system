@@ -24,7 +24,7 @@ async function go(filters, page) {
 
   _applyFilters(query, filters)
 
-  query.orderBy('createdAt', 'desc').page(page - 1, DatabaseConfig.defaultPageSize)
+  query.orderBy('events.createdAt', 'desc').page(page - 1, DatabaseConfig.defaultPageSize)
 
   return query
 }
@@ -45,19 +45,26 @@ function _applyFilters(query, filters) {
   const { fromDate, noticeTypes, reference, sentBy, toDate } = filters
 
   if (reference) {
-    query.whereILike('referenceCode', `%${reference}%`)
+    query.whereILike('events.referenceCode', `%${reference}%`)
   }
 
   if (sentBy) {
-    query.whereILike('issuer', `%${sentBy}%`)
+    query.whereILike('events.issuer', `%${sentBy}%`)
   }
 
   if (fromDate) {
-    query.where('createdAt', '>=', new Date(fromDate))
+    query.where('events.createdAt', '>=', new Date(fromDate))
   }
 
   if (toDate) {
-    query.where('createdAt', '<=', new Date(toDate))
+    // NOTE: createdAt is a timestamp, which means it will include a time element. For example, 2025-09-19 13:47:53.859.
+    // But `toDate` will just be the date part. This means when we create a date object from it, its time will be set
+    // to minute. This means if we don't shift toDate to 23:59:99 it will exclude any notices created on the toDate
+    // specified.
+    const toDateForQuery = new Date(toDate)
+
+    toDateForQuery.setHours(23, 59, 59, 999)
+    query.where('events.createdAt', '<=', toDateForQuery.toISOString())
   }
 
   _applyNoticeTypeFilters(query, noticeTypes)
@@ -72,7 +79,7 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
   // that match either the alert types or the standard notice types
   if (alertTypes.length > 0 && standardNoticeTypes.length > 0) {
     query.whereRaw(
-      `((metadata->'options'->>'sendingAlertType' = ANY (?) AND subtype = 'waterAbstractionAlerts') OR subtype = ANY (?))`,
+      `((events.metadata->'options'->>'sendingAlertType' = ANY (?) AND events.subtype = 'waterAbstractionAlerts') OR events.subtype = ANY (?))`,
       [alertTypes, standardNoticeTypes]
     )
 
@@ -80,14 +87,14 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
   }
 
   if (alertTypes.length > 0) {
-    query.whereRaw(`metadata->'options'->>'sendingAlertType' = ANY (?)`, [alertTypes])
-    query.where('subtype', 'waterAbstractionAlerts')
+    query.whereRaw(`events.metadata->'options'->>'sendingAlertType' = ANY (?)`, [alertTypes])
+    query.where('events.subtype', 'waterAbstractionAlerts')
 
     return
   }
 
   if (standardNoticeTypes.length > 0) {
-    query.whereIn('subtype', standardNoticeTypes)
+    query.whereIn('events.subtype', standardNoticeTypes)
   }
 }
 

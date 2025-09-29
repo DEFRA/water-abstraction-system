@@ -16,7 +16,10 @@ function go(session) {
   const { id: sessionId, licence, licenceVersion, method } = session
 
   return {
-    backLink: `/system/return-versions/setup/${sessionId}/reason`,
+    backLink: {
+      href: `/system/return-versions/setup/${sessionId}/reason`,
+      text: 'Back'
+    },
     displayCopyExisting: licenceVersion.copyableReturnVersions.length > 0,
     licenceRef: licence.licenceRef,
     method: method ?? null,

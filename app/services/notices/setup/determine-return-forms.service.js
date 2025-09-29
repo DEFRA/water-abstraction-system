@@ -7,6 +7,7 @@
 
 const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/prepare-return-forms.presenter.js')
 const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
+const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 
 /**
  * Determines the PDF return forms data to send to notify and save to the database
@@ -18,7 +19,7 @@ const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
  * @returns {Promise<object[]>} - Resolves an array of return forms notifications
  */
 async function go(session, recipients, eventId) {
-  const { licenceRef, dueReturns, selectedReturns, referenceCode } = session
+  const { licenceRef, dueReturns, selectedReturns } = session
 
   const dueReturnLogs = _dueReturnLog(dueReturns, selectedReturns)
 
@@ -30,15 +31,9 @@ async function go(session, recipients, eventId) {
 
       const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturn, recipient)
 
-      notifications.push({
-        content: returnForm,
-        eventId,
-        licences: JSON.stringify([licenceRef]),
-        messageRef: 'pdf.return_form',
-        messageType: 'letter',
-        personalisation: pageData,
-        reference: referenceCode
-      })
+      const notification = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
+
+      notifications.push(notification)
     }
   }
 

@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+
 // Things we need to stub
 const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
@@ -22,6 +25,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
   let noticeType
   let notification
   let response
+  let referenceCode
+
+  beforeEach(() => {
+    referenceCode = generateReferenceCode()
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -52,7 +60,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               periodStartDate: '1st January 2025',
               returnDueDate: '28th April 2025'
             },
-            reference: 'RINV-0Q7AD8',
             templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
           }
 
@@ -81,7 +88,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             noticeType,
             notification,
             sessionId,
-            licenceMonitoringStationId
+            licenceMonitoringStationId,
+            referenceCode
           )
 
           expect(result).to.equal({
@@ -116,7 +124,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               returnDueDate: '28th April 2025'
             },
             recipient: 'hello@example.com',
-            reference: 'RINV-H1EZR5',
             templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
           }
 
@@ -145,7 +152,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             noticeType,
             notification,
             sessionId,
-            licenceMonitoringStationId
+            licenceMonitoringStationId,
+            referenceCode
           )
 
           expect(result).to.equal({
@@ -164,6 +172,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
     describe('and the notice type is "abstractionAlerts"', () => {
       beforeEach(() => {
         noticeType = 'abstractionAlerts'
+
+        referenceCode = generateReferenceCode('WAA')
       })
 
       describe('and the notification is a letter', () => {
@@ -191,7 +201,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               threshold_unit: 'm3/s',
               threshold_value: 100
             },
-            reference: 'WAA-DLT1YN',
             templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
           }
 
@@ -220,7 +229,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             noticeType,
             notification,
             sessionId,
-            licenceMonitoringStationId
+            licenceMonitoringStationId,
+            referenceCode
           )
 
           expect(result).to.equal({
@@ -261,7 +271,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               threshold_value: 100
             },
             recipient: 'hello@example.com',
-            reference: 'WAA-WFB4LB',
             templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
           }
 
@@ -290,7 +299,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             noticeType,
             notification,
             sessionId,
-            licenceMonitoringStationId
+            licenceMonitoringStationId,
+            referenceCode
           )
 
           expect(result).to.equal({
@@ -321,7 +331,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           returnDueDate: '28th April 2025'
         },
         recipient: 'hello@example.com',
-        reference: 'RINV-H1EZR5',
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       }
 
@@ -350,7 +359,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         noticeType,
         notification,
         sessionId,
-        licenceMonitoringStationId
+        licenceMonitoringStationId,
+        referenceCode
       )
 
       expect(result).to.equal({

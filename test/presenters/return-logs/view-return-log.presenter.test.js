@@ -11,8 +11,9 @@ const { expect } = Code
 const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
 
 // Test helpers
-const { formatNumber } = require('../../../app/presenters/base.presenter.js')
 const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
+const { formatNumber } = require('../../../app/presenters/base.presenter.js')
+const { today } = require('../../../app/lib/general.lib.js')
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
 describe('Return Logs - View Return Log presenter', () => {
@@ -160,10 +161,11 @@ describe('Return Logs - View Return Log presenter', () => {
       })
     })
 
-    describe('when the return is "not due yet"', () => {
+    describe('when the return has not ended', () => {
       beforeEach(() => {
-        const notDueUntilDate = new Date()
-        returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        const endDate = today()
+
+        returnLog.endDate = new Date(endDate.setDate(endDate.getDate() + 1))
         returnLog.status = 'due'
       })
 
@@ -481,10 +483,23 @@ describe('Return Logs - View Return Log presenter', () => {
   })
 
   describe('the "showUnderQuery" property', () => {
-    describe('when the return is "not due yet"', () => {
+    describe('when the return log has a status of "void"', () => {
       beforeEach(() => {
-        const notDueUntilDate = new Date()
-        returnLog.dueDate = new Date(notDueUntilDate.setDate(notDueUntilDate.getDate() + 27))
+        returnLog.status = 'void'
+      })
+
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.showUnderQuery).to.be.false()
+      })
+    })
+
+    describe('when the return log has not ended', () => {
+      beforeEach(() => {
+        const endDate = today()
+
+        returnLog.endDate = new Date(endDate.setDate(endDate.getDate() + 1))
         returnLog.status = 'due'
       })
 
@@ -495,7 +510,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
     })
 
-    describe('when the return is past due, regardless of its status', () => {
+    describe('when the return log has ended', () => {
       it('returns true', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 

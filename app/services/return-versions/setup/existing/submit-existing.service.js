@@ -5,6 +5,8 @@
  * @module SubmitExistingService
  */
 
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+
 const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
 const ExistingValidator = require('../../../../validators/return-versions/setup/existing.validator.js')
 const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
@@ -65,15 +67,7 @@ function _validate(payload, session) {
 
   const validation = ExistingValidator.go(payload, returnVersions)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

@@ -103,10 +103,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
               messageType: 'email',
               notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
-              status: 'sent'
+              returnLogIds: null,
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -166,6 +169,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyError: null,
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: {
                 alertType: 'stop',
                 licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
@@ -173,7 +177,69 @@ describe('Job - Notifications - Process Notification Status service', () => {
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
-              status: 'sent'
+              returnLogIds: null,
+              status: 'sent',
+              templateId: null
+            },
+            { skip: ['createdAt'] }
+          )
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.count).to.exist()
+        })
+      })
+
+      describe('and an event id is provided', () => {
+        beforeEach(async () => {
+          event = await EventHelper.add({
+            metadata: {},
+            licences: '["11/111"]',
+            referenceCode: 'RINV-LX4P57',
+            status: 'completed',
+            subtype: 'returnInvitation',
+            type: 'notification'
+          })
+
+          notification = await NotificationHelper.add({
+            eventId: event.id,
+            licences: '["11/111"]',
+            messageRef: 'returns_invitation_primary_user_email',
+            messageType: 'email',
+            notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
+            notifyStatus: 'created',
+            plaintext: 'Dear Clean Water Limited,\r\n',
+            recipient: 'hello@example.com',
+            status: 'pending'
+          })
+        })
+
+        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
+          await ProcessNotificationStatusService.go(event.id)
+
+          const refreshedNotification = await notification.$query()
+
+          expect(refreshedNotification).to.equal(
+            {
+              eventId: event.id,
+              id: notification.id,
+              licenceMonitoringStationId: null,
+              licences: ['11/111'],
+              notifyError: null,
+              messageRef: 'returns_invitation_primary_user_email',
+              messageType: 'email',
+              notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
+              notifyStatus: 'delivered',
+              pdf: null,
+              personalisation: null,
+              plaintext: 'Dear Clean Water Limited,\r\n',
+              recipient: 'hello@example.com',
+              returnLogIds: null,
+              status: 'sent',
+              templateId: null
             },
             { skip: ['createdAt'] }
           )
@@ -240,10 +306,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
             messageType: 'email',
             notifyId: '9cf707f1-f4b0-466a-9879-f40953b8fecb8',
             notifyStatus: 'temporary-failure',
+            pdf: null,
             personalisation: null,
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
-            status: 'error'
+            returnLogIds: null,
+            status: 'error',
+            templateId: null
           },
           { skip: ['createdAt'] }
         )
@@ -326,10 +395,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
           messageType: 'email',
           notifyId: '10076fd4-da11-43d9-b85a-f4564507d135',
           notifyStatus: 'created',
+          pdf: null,
           personalisation: null,
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
-          status: 'pending'
+          returnLogIds: null,
+          status: 'pending',
+          templateId: null
         },
         { skip: ['createdAt'] }
       )

@@ -58,7 +58,10 @@ describe('Return Versions Setup - No Returns Required service', () => {
           activeNavBar: 'search',
           pageTitle: 'Why are no returns required?',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/start-date`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/start-date`,
+            text: 'Back'
+          },
           licenceRef: '01/ABC',
           reason: null
         },

@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReceivedPresenter = require('../../../../app/presenters/return-logs/setup/received.presenter.js')
@@ -38,7 +39,7 @@ describe('Return Logs - Setup - Received presenter', () => {
         receivedDateMonth: null,
         receivedDateYear: null,
         backLink: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
-        todaysDate: formatLongDate(new Date()),
+        todaysDate: formatLongDate(today()),
         yesterdaysDate: _yesterdaysDate()
       })
     })

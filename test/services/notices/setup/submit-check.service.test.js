@@ -10,13 +10,14 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
@@ -25,12 +26,11 @@ const SubmitCheckService = require('../../../../app/services/notices/setup/submi
 describe('Notices - Setup - Submit Check service', () => {
   let auth
   let notifierStub
-  let recipients
   let referenceCode
   let session
   let testRecipients
 
-  beforeEach(() => {
+  beforeEach(async () => {
     auth = {
       credentials: {
         user: {
@@ -39,7 +39,30 @@ describe('Notices - Setup - Submit Check service', () => {
       }
     }
 
-    Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+    const recipients = RecipientsFixture.recipients()
+
+    testRecipients = [recipients.primaryUser]
+
+    referenceCode = generateReferenceCode()
+
+    session = await SessionHelper.add({
+      data: {
+        journey: 'standard',
+        referenceCode,
+        returnsPeriod: 'quarterFour',
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate: '2025-04-28',
+          endDate: '2023-03-31',
+          summer: 'false',
+          startDate: '2022-04-01'
+        },
+        noticeType: 'invitations'
+      }
+    })
+
+    Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
+    Sinon.stub(FetchReturnsRecipientsService, 'go').resolves(testRecipients)
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -50,64 +73,47 @@ describe('Notices - Setup - Submit Check service', () => {
     delete global.GlobalNotifier
   })
 
-  describe('when the journey is a return journey', () => {
-    beforeEach(async () => {
-      referenceCode = `RINV-${Math.floor(1000 + Math.random() * 9000).toString()}`
+  describe('when a successful batch process has been triggered', () => {
+    beforeEach(() => {
+      Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+    })
 
-      session = await SessionHelper.add({
-        data: {
-          journey: 'invitations',
-          referenceCode,
-          returnsPeriod: 'quarterFour',
-          determinedReturnsPeriod: {
-            name: 'allYear',
-            dueDate: '2025-04-28',
-            endDate: '2023-03-31',
-            summer: 'false',
-            startDate: '2022-04-01'
-          }
-        }
+    it('should batch notifications', async () => {
+      const result = await SubmitCheckService.go(session.id, auth)
+
+      const notifications = await NotificationModel.query().where({
+        eventId: result
       })
 
-      recipients = RecipientsFixture.recipients()
+      const args = BatchNotificationsService.go.firstCall.args
 
-      testRecipients = [recipients.primaryUser]
+      expect(args[0]).to.equal([
+        {
+          id: notifications[0].id,
+          messageRef: 'returns_invitation_primary_user_email',
+          messageType: 'email',
+          pdf: null,
+          personalisation: {
+            periodEndDate: '31 March 2023',
+            returnDueDate: '28 April 2025',
+            periodStartDate: '1 April 2022'
+          },
+          recipient: 'primary.user@important.com',
+          templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
+        }
+      ])
 
-      Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchReturnsRecipientsService, 'go').resolves(testRecipients)
+      expect(args[1]).to.equal(result)
+
+      expect(args[2]).to.equal(referenceCode)
     })
 
     it('correctly returns the event id', async () => {
       const result = await SubmitCheckService.go(session.id, auth)
 
-      const event = await EventModel.query().where('reference_code', referenceCode).first()
+      const event = await EventModel.query().findById(result)
 
       expect(result).to.equal(event.id)
-    })
-
-    it('should call the batch notification service', async () => {
-      const result = await SubmitCheckService.go(session.id, auth)
-
-      expect(
-        BatchNotificationsService.go.calledWithMatch(
-          testRecipients,
-          Sinon.match({
-            id: session.id,
-            data: session.data,
-            journey: 'invitations',
-            referenceCode,
-            returnsPeriod: 'quarterFour',
-            determinedReturnsPeriod: {
-              name: 'allYear',
-              dueDate: '2025-04-28',
-              endDate: '2023-03-31',
-              summer: 'false',
-              startDate: '2022-04-01'
-            }
-          }),
-          result
-        )
-      ).to.be.true()
     })
 
     it('should not throw an error', async () => {
@@ -117,54 +123,19 @@ describe('Notices - Setup - Submit Check service', () => {
     })
   })
 
-  describe('when the journey is "alerts"', () => {
-    beforeEach(async () => {
-      referenceCode = `WAA-${Math.floor(1000 + Math.random() * 9000).toString()}`
+  describe('when a batch process fails', { timeout: 1000000 }, () => {
+    beforeEach(() => {
+      const specificError = new Error('Batch failed due to XYZ reason')
 
-      session = await SessionHelper.add({
-        data: {
-          journey: 'alerts',
-          referenceCode
-        }
-      })
-
-      recipients = RecipientsFixture.alertsRecipients()
-
-      testRecipients = [recipients.primaryUser]
-
-      Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-      Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(BatchNotificationsService, 'go').rejects(specificError)
     })
 
-    it('correctly returns the event id', async () => {
-      const result = await SubmitCheckService.go(session.id, auth)
-
-      const event = await EventModel.query().where('reference_code', referenceCode).first()
-
-      expect(result).to.equal(event.id)
-    })
-
-    it('should call the batch notification service', async () => {
-      const result = await SubmitCheckService.go(session.id, auth)
-
-      expect(
-        BatchNotificationsService.go.calledWithMatch(
-          testRecipients,
-          Sinon.match({
-            id: session.id,
-            data: session.data,
-            journey: 'alerts',
-            referenceCode
-          }),
-          result
-        )
-      ).to.be.true()
-    })
-
-    it('should not throw an error', async () => {
+    it('should throw an error', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(notifierStub.omfg.called).to.be.false()
+      expect(notifierStub.omfg.called).to.be.true()
+
+      expect(notifierStub.omfg.calledWith('Send notifications failed')).to.be.true()
     })
   })
 })
