@@ -15,14 +15,12 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
  * We return the 'pageData' to be used when sending the notification. The legacy code relies on setting the
  * personalisation in the database (mainly the address and due dates).
  *
- * @param {string} licenceRef - The reference of the licence that the return log relates to
- * @param {object} dueReturnLog - The return log to populate the form data
- * @param {object} recipient - A single recipient with the contact / address
+ * @param {object} notification - A return forms notification
  *
- * @returns {Promise<{ArrayBuffer}>} - Resolves with the generated form file as an ArrayBuffer
+ * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer
  */
-async function go(licenceRef, dueReturnLog, recipient) {
-  const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+async function go(notification) {
+  const pageData = PrepareReturnFormsPresenter.go(notification)
 
   const requestData = await GenerateReturnFormRequest.send(pageData)
 

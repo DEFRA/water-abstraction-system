@@ -11,6 +11,7 @@ const CreateEmailRequest = require('../../../requests/notify/create-email.reques
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
+const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const UpdateEventService = require('./update-event.service.js')
@@ -151,7 +152,9 @@ async function _sendLetter(notification, referenceCode) {
 }
 
 async function _sendReturnForm(notification, referenceCode) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.pdf, referenceCode)
+  const pdf = await PrepareReturnFormsService.go(notification)
+
+  const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
 
   return _sentNotification(notification.id, notifyResult)
 }

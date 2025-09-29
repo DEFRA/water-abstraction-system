@@ -99,6 +99,7 @@ describe('Notices - Setup - Submit Check service', () => {
             periodStartDate: '1 April 2022'
           },
           recipient: 'primary.user@important.com',
+          returnLogIds: null,
           templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
         }
       ])

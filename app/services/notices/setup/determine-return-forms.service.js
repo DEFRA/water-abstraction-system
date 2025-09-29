@@ -5,8 +5,6 @@
  * @module DetermineReturnFormsService
  */
 
-const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/prepare-return-forms.presenter.js')
-const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
 const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 
 /**
@@ -16,7 +14,7 @@ const ReturnFormsNotificationPresenter = require('../../../presenters/notices/se
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email / address.
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {Promise<object[]>} - Resolves an array of return forms notifications
+ * @returns {object[]} - Resolves an array of return forms notifications
  */
 async function go(session, recipients, eventId) {
   const { licenceRef, dueReturns, selectedReturns } = session
@@ -27,11 +25,7 @@ async function go(session, recipients, eventId) {
 
   for (const dueReturn of dueReturnLogs) {
     for (const recipient of recipients) {
-      const returnForm = await PrepareReturnFormsService.go(licenceRef, dueReturn, recipient)
-
-      const pageData = PrepareReturnFormsPresenter.go(licenceRef, dueReturn, recipient)
-
-      const notification = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
+      const notification = ReturnFormsNotificationPresenter.go(recipient, licenceRef, eventId, dueReturn)
 
       notifications.push(notification)
     }
