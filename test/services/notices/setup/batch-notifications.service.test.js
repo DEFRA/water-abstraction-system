@@ -44,7 +44,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     const notifyResponse = successfulNotifyResponses(referenceCode)
 
-    const buffer = new TextEncoder().encode('mock file').buffer
+    const buffer = Buffer.from('mock file')
 
     event = await EventHelper.add({
       referenceCode
@@ -161,12 +161,17 @@ describe('Notices - Setup - Batch Notifications service', () => {
   })
 
   describe('when sending PDFs', () => {
+    let notification
+
     beforeEach(async () => {
       referenceCode = generateReferenceCode('PRTF')
 
-      const notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
+      notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
 
-      testNotification = await NotificationHelper.add(notification.pdf)
+      testNotification = await NotificationHelper.add({
+        ...notification.pdf,
+        pdf: null
+      })
 
       notifications = [testNotification]
 
@@ -195,7 +200,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
           notifyStatus: 'created',
-          pdf: testNotification.pdf,
+          pdf: Buffer.from(notification.pdf.pdf),
           recipient: null,
           returnLogIds: testNotification.returnLogIds,
           status: 'pending',
@@ -381,11 +386,11 @@ function _notifications(eventId, licences) {
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     pdf: {
-      pdf: new TextEncoder().encode('mock file').buffer,
       eventId,
       licences,
       messageRef: 'pdf.return_form',
       messageType: 'letter',
+      pdf: Buffer.from('mock file'),
       personalisation: { name: 'Red 5' },
       returnLogIds: [generateUUID()]
     }

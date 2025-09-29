@@ -156,7 +156,7 @@ async function _sendReturnForm(notification, referenceCode) {
 
   const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
 
-  return _sentNotification(notification.id, notifyResult)
+  return _sentNotification(notification.id, notifyResult, pdf)
 }
 
 /**
@@ -165,10 +165,11 @@ async function _sendReturnForm(notification, referenceCode) {
  *
  * @private
  */
-function _sentNotification(notificationId, notifyResult) {
+function _sentNotification(notificationId, notifyResult, pdf = null) {
   return {
     ...NotifyUpdatePresenter.go(notifyResult),
-    id: notificationId
+    id: notificationId,
+    pdf
   }
 }
 
