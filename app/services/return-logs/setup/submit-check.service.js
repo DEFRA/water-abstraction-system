@@ -74,6 +74,10 @@ async function _save(session, user) {
 }
 
 function _validate(session) {
+  if (session.journey === 'nil-return') {
+    return null
+  }
+
   const validationResult = CheckValidator.go(session)
 
   return formatValidationResult(validationResult)
