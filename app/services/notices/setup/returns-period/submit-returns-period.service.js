@@ -9,6 +9,7 @@ const DetermineReturnsPeriodService = require('../determine-returns-period.servi
 const ReturnsPeriodPresenter = require('../../../../presenters/notices/setup/returns-period/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../../validators/notices/setup/returns-periods.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -25,12 +26,12 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (validationResult) {
-    const formattedData = ReturnsPeriodPresenter.go(session)
+    const pageData = ReturnsPeriodPresenter.go(session)
 
     return {
       activeNavBar: 'manage',
       error: validationResult,
-      ...formattedData
+      ...pageData
     }
   }
 
@@ -55,18 +56,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReturnsPeriodValidator.go(payload)
+  const validationResult = ReturnsPeriodValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    href: '#returnsPeriod-error',
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

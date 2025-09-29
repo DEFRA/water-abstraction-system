@@ -79,12 +79,19 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         expect(result).to.equal({
           activeNavBar: 'manage',
           backLink: { href: '/manage', text: 'Back' },
-          caption: 'Notice RINV-1234',
           error: {
-            href: '#returnsPeriod-error',
-            text: 'Select the returns periods for the invitations'
+            errorList: [
+              {
+                href: '#returnsPeriod',
+                text: 'Select the returns periods for the invitations'
+              }
+            ],
+            returnsPeriod: {
+              text: 'Select the returns periods for the invitations'
+            }
           },
           pageTitle: 'Select the returns periods for the invitations',
+          pageTitleCaption: 'Notice RINV-1234',
           returnsPeriod: [
             {
               checked: false,

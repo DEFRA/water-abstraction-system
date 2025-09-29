@@ -18,11 +18,11 @@ const SessionModel = require('../../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = ReturnsPeriodPresenter.go(session)
+  const pageData = ReturnsPeriodPresenter.go(session)
 
   return {
     activeNavBar: 'manage',
-    ...formattedData
+    ...pageData
   }
 }
 
