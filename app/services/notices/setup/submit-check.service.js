@@ -51,6 +51,8 @@ async function go(sessionId, auth) {
  * Return the saved notifications with the notification id (this will be used to update the status of the notification
  * during the batch process).
  *
+ * @returns {Promise<object>} an array of saved notifications
+ *
  * @private
  */
 async function _notifications(sessionCopy, recipients, eventId) {
