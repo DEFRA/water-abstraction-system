@@ -111,10 +111,10 @@ function _transformForSetup(returnVersion) {
       returnsCycle: summer ? 'summer' : 'winter-and-all-year',
       siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
-        'abstraction-period-end-day': abstractionPeriodEndDay,
-        'abstraction-period-end-month': abstractionPeriodEndMonth,
-        'abstraction-period-start-day': abstractionPeriodStartDay,
-        'abstraction-period-start-month': abstractionPeriodStartMonth
+        abstractionPeriodEndDay,
+        abstractionPeriodEndMonth,
+        abstractionPeriodStartDay,
+        abstractionPeriodStartMonth
       },
       frequencyReported: reportingFrequency,
       frequencyCollected: collectionFrequency,

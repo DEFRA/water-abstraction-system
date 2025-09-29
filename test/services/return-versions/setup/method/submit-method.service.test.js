@@ -184,10 +184,10 @@ function _generatedReturnRequirements() {
       returnsCycle: 'summer',
       siteDescription: 'BOREHOLE IN FIELD',
       abstractionPeriod: {
-        'abstraction-period-end-day': 31,
-        'abstraction-period-end-month': 12,
-        'abstraction-period-start-day': 1,
-        'abstraction-period-start-month': 4
+        abstractionPeriodEndDay: '31',
+        abstractionPeriodEndMonth: '12',
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodStartMonth: '4'
       },
       frequencyReported: 'month',
       frequencyCollected: 'week',
