@@ -106,7 +106,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             contents: 'Dear Clean Water Limited,\r\n',
             messageType: 'letter',
             pageTitle: 'Returns invitation licence holder letter',
-            pageTitleCaption: 'Notice RINV-0Q7AD8',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -162,7 +162,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             contents: 'Dear licence holder,\r\n',
             messageType: 'email',
             pageTitle: 'Returns invitation primary user email',
-            pageTitleCaption: 'Notice RINV-H1EZR5',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -246,7 +246,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             contents: 'Dear licence contact,\r\n',
             messageType: 'letter',
             pageTitle: 'Water abstraction alert stop warning',
-            pageTitleCaption: 'Notice WAA-DLT1YN',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -309,7 +309,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             contents: 'Dear licence contact,\r\n',
             messageType: 'email',
             pageTitle: 'Water abstraction alert reduce or stop warning email',
-            pageTitleCaption: 'Notice WAA-WFB4LB',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -369,7 +369,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         contents: 'error',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
-        pageTitleCaption: 'Notice RINV-H1EZR5',
+        pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
       })
     })
