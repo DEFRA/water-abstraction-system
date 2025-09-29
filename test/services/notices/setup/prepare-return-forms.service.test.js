@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
@@ -112,7 +113,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
           address_line_6: 'WD25 7LR',
           address_line_7: undefined
         },
-        dueDate: '28 April 2023',
+        dueDate: formatLongDate(dueReturnLog.dueDate),
         endDate: '31 March 2023',
         licenceRef,
         naldAreaCode: 'MIDLT',
