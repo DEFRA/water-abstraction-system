@@ -66,7 +66,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
       const result = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
 
       expect(result).to.equal({
-        content: returnForm,
+        pdf: returnForm,
         eventId,
         licences: [licenceRef],
         messageRef: 'pdf.return_form',
