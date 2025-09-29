@@ -8,17 +8,14 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-
         {{ govukInput({
-          fieldset: {
-            legend: {
-              html: pageHeadingHtml
-            }
+          label: {
+            html: pageHeadingHtml
           },
           value: licenceRef,
-          id: "licence-ref",
+          id: "licenceRef",
           name: "licenceRef",
-          errorMessage: error
+          errorMessage: error.licenceRef
         }) }}
 
         {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
