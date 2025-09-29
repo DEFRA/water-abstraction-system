@@ -365,6 +365,8 @@ async function _deleteAllTestData() {
     AND "lvp"."licence_version_id" = "lv"."licence_version_id"
     AND "lv"."licence_id" = "l"."licence_id";
 
+  DELETE FROM "water"."points" AS "p" WHERE "p"."external_id" IN ('9:9000031', '9:9000032', '9:9000090', '9:9000091');
+
   DELETE
   FROM
     "water"."licence_end_date_changes" AS "ledc"
