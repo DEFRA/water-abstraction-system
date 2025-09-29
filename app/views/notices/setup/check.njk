@@ -2,17 +2,15 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% set rows = [] %}
 
-{%for recipient in recipients %}
+{% for recipient in recipients %}
   {% set licenceNumbers %}
     {% if recipient.licences.length > 5 %}
       {{ govukDetails({
@@ -21,7 +19,7 @@
         html: newLineArrayItems(recipient.licences)
       }) }}
     {% else %}
-      {{ newLineArrayItems(recipient.licences)  }}
+      {{ newLineArrayItems(recipient.licences) }}
     {% endif %}
   {% endset %}
 
@@ -41,45 +39,74 @@
   ]), rows) %}
 {% endfor %}
 
+
 {% block pageContent %}
-  {% if notification %}
-    {{ govukNotificationBanner({ titleText: notification.title, text: notification.text }) }}
-  {% endif %}
-
-  {% if warning %}
-    {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
-  {% endif %}
-
   {{ pageHeadingHtml }}
 
-  <p>{{ readyToSend }}</p>
+  <p> {{ readyToSend }}</p>
 
-  <div class="govuk-button-group">
-    {{ govukButton({
-      text: "Download recipients",
-      classes: "govuk-button--secondary",
-      href: links.download,
-      preventDoubleClick: true
+  {% if recipients.length > 0 %}
+    <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Download recipients",
+        classes: "govuk-button--secondary",
+        href: links.download,
+        preventDoubleClick: true
+      }) }}
+
+      {% if links.removeLicences %}
+        {{ govukButton({
+          text: "Remove licences",
+          classes: "govuk-button--secondary",
+          href: links.removeLicences,
+          preventDoubleClick: true
+        }) }}
+      {% endif %}
+
+      {% if links.manage %}
+        {{ govukButton({
+          text: "Manage recipients",
+          classes: "govuk-button--secondary",
+          href: links.manage,
+          preventDoubleClick: true
+        }) }}
+      {% endif %}
+    </div>
+
+    {% if pagination.numberOfPages > 1 %}
+      <p data-test="recipients-count"> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients </p>
+    {% else %}
+      <p data-test="recipients-count"> Showing all {{ recipientsAmount }} recipients </p>
+    {% endif %}
+
+    {{ govukTable({
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Recipient"
+        },
+        {
+          text: "Licence number"
+        },
+        {
+          text: "Method"
+        },
+        {
+          text: "Action"
+        } if displayPreviewLink
+      ],
+      rows: rows
     }) }}
 
-    {% if links.removeLicences %}
-      {{ govukButton({
-        text: "Remove licences",
-        classes: "govuk-button--secondary",
-        href: links.removeLicences,
-        preventDoubleClick: true
-      }) }}
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
     {% endif %}
 
-    {% if links.manage %}
-      {{ govukButton({
-        text: "Manage recipients",
-        classes: "govuk-button--secondary",
-        href: links.manage,
-        preventDoubleClick: true
-      }) }}
-    {% endif %}
-  </div>
+    <div class="govuk-button-group">
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
         {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
 
@@ -98,43 +125,4 @@
       preventDoubleClick: true
     }) }}
   {% endif %}
-
-  {{ govukTable({
-    captionClasses: "govuk-table__caption--m",
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: "Recipient"
-      },
-      {
-        text: "Licence number"
-      },
-      {
-        text: "Method"
-      },
-      {
-        text: "Action"
-      } if displayPreviewLink
-    ],
-    rows: rows
-  }) }}
-
-  {% if pagination.numberOfPages > 1 %}
-    {{ govukPagination(pagination.component) }}
-  {% endif %}
-
-  <div class="govuk-button-group">
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
-
-      {{ govukButton({ text: 'Send', preventDoubleClick: true }) }}
-
-      {{ govukButton({
-        text: "Cancel",
-        classes: "govuk-button--secondary",
-        href: links.cancel,
-        preventDoubleClick: true
-      }) }}
-    </form>
-  </div>
 {% endblock %}
