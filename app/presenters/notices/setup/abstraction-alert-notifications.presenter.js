@@ -170,6 +170,7 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
     messageType,
     personalisation: commonPersonalisation,
     recipient: recipient.email,
+    status: 'pending',
     templateId: _templateId(alertType, restrictionType, 'email')
   }
 }
@@ -219,6 +220,7 @@ function _letter(recipient, eventId, commonPersonalisation, alertType, restricti
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     },
+    status: 'pending',
     templateId: _templateId(alertType, restrictionType, 'letter')
   }
 }
