@@ -9,7 +9,6 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 
 // Thing under test
@@ -20,16 +19,44 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   let clock
   let dueReturnLog
-  let recipient
+  let notification
 
   beforeEach(() => {
-    recipient = RecipientsFixture.recipients().licenceHolder
-
     dueReturnLog = ReturnLogFixture.dueReturn()
 
     dueReturnLog.dueDate = '2025-07-06'
     dueReturnLog.endDate = '2025-06-06'
     dueReturnLog.startDate = '2025-01-01'
+
+    notification = {
+      eventId: null,
+      licences: [licenceRef],
+      messageRef: 'pdf.return_form',
+      messageType: 'letter',
+      personalisation: {
+        address_line_1: 'Mr H J Licence holder',
+        address_line_2: '1',
+        address_line_3: 'Privet Drive',
+        address_line_4: 'Little Whinging',
+        address_line_5: 'Surrey',
+        address_line_6: 'WD25 7LR',
+        due_date: dueReturnLog.dueDate,
+        end_date: dueReturnLog.endDate,
+        format_id: dueReturnLog.returnReference,
+        is_two_part_tariff: false,
+        licence_ref: licenceRef,
+        naldAreaCode: 'MIDLT',
+        purpose: 'Mineral Washing',
+        qr_url: dueReturnLog.returnLogId,
+        region_code: '1',
+        region_name: 'North West',
+        returns_frequency: dueReturnLog.returnsFrequency,
+        site_description: 'BOREHOLE AT AVALON',
+        start_date: dueReturnLog.startDate
+      },
+      returnLogIds: [dueReturnLog.returnId]
+    }
+
     clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
   })
 
@@ -39,7 +66,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+      const result = PrepareReturnFormsPresenter.go(notification)
 
       expect(result).to.equal({
         address: {
@@ -48,7 +75,8 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
-          address_line_6: 'WD25 7LR'
+          address_line_6: 'WD25 7LR',
+          address_line_7: undefined
         },
         dueDate: '6 July 2025',
         endDate: '6 June 2025',
@@ -72,11 +100,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "regionAndArea" property', () => {
       describe('when there is a "naldAreaCode"', () => {
         beforeEach(() => {
-          dueReturnLog.naldAreaCode = 'MIDLT'
+          notification.personalisation.naldAreaCode = 'MIDLT'
         })
 
         it('should return the "regionName" and "naldAreaCode" in the text ', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.regionAndArea).to.equal('North West / Lower Trent')
         })
@@ -84,11 +112,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when there is no "naldAreaCode"', () => {
         beforeEach(() => {
-          dueReturnLog.naldAreaCode = null
+          notification.personalisation.naldAreaCode = null
         })
 
         it('should return the "regionName" in the text', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.regionAndArea).to.equal('North West')
         })
@@ -98,11 +126,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "pageTitle" property', () => {
       describe('when the "returnsFrequency" is "day"', () => {
         beforeEach(() => {
-          dueReturnLog.returnsFrequency = 'day'
+          notification.personalisation.returns_frequency = 'day'
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
@@ -115,7 +143,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageTitle).to.equal('Water abstraction monthly return')
           })
@@ -124,12 +152,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "week"', () => {
         beforeEach(() => {
-          dueReturnLog.returnsFrequency = 'week'
+          notification.personalisation.returns_frequency = 'week'
         })
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageTitle).to.equal('Water abstraction weekly return')
           })
@@ -140,11 +168,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "pageEntries" property', () => {
       describe('when the "returnsFrequency" is "day"', () => {
         beforeEach(() => {
-          dueReturnLog.returnsFrequency = 'day'
+          notification.personalisation.returns_frequency = 'day'
         })
 
         it('should return entries', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.pageEntries).to.equal([
             // Page
@@ -203,12 +231,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "month"', () => {
         beforeEach(() => {
-          dueReturnLog.returnsFrequency = 'month'
+          notification.personalisation.returns_frequency = 'month'
         })
 
         describe('and the start and end are 6 months apart', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -231,12 +259,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the start and end are 1 year apart', () => {
           beforeEach(() => {
-            dueReturnLog.startDate = '2021-01-01'
-            dueReturnLog.endDate = '2021-12-31'
+            notification.personalisation.end_date = '2021-12-31'
+            notification.personalisation.start_date = '2021-01-01'
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -266,12 +294,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when the "returnsFrequency" is "week"', () => {
         beforeEach(() => {
-          dueReturnLog.returnsFrequency = 'week'
+          notification.personalisation.returns_frequency = 'week'
         })
 
         describe('and the period fits onto one page', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageEntries.length).to.equal(1)
             expect(result.pageEntries).to.equal([
@@ -312,12 +340,12 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the period spans multiple pages', () => {
           beforeEach(() => {
-            dueReturnLog.startDate = '2021-01-01'
-            dueReturnLog.endDate = '2021-12-31'
+            notification.personalisation.end_date = '2021-12-31'
+            notification.personalisation.start_date = '2021-01-01'
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+            const result = PrepareReturnFormsPresenter.go(notification)
 
             expect(result.pageEntries.length).to.equal(2)
             expect(result.pageEntries.length).to.equal(2)
@@ -401,7 +429,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "dueDate"', () => {
       describe('when a due date is set', () => {
         it('should return the due date', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.dueDate).to.equal('6 July 2025')
         })
@@ -409,11 +437,11 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
       describe('when a due date is not set', () => {
         beforeEach(() => {
-          delete dueReturnLog.dueDate
+          delete notification.personalisation.due_date
         })
 
         it('should return the due date (29 days in the future)', () => {
-          const result = PrepareReturnFormsPresenter.go(licenceRef, dueReturnLog, recipient)
+          const result = PrepareReturnFormsPresenter.go(notification)
 
           expect(result.dueDate).to.equal('30 January 2025')
         })

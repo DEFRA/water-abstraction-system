@@ -27,7 +27,7 @@ async function go(notifications) {
   await NotificationModel.query()
     .insert(notifications)
     .onConflict('id')
-    .merge(['notifyError', 'notifyId', 'notifyStatus', 'plaintext', 'status'])
+    .merge(['notifyError', 'notifyId', 'notifyStatus', 'plaintext', 'status', 'pdf'])
 }
 
 module.exports = {

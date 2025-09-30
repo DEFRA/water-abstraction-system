@@ -96,7 +96,8 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
-          address_line_6: 'WD25 7LR'
+          address_line_6: 'WD25 7LR',
+          address_line_7: undefined
         },
         dueDate: '28 April 2023',
         endDate: '31 March 2023',

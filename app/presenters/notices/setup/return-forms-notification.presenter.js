@@ -5,6 +5,9 @@
  * @module ReturnFormsNotificationPresenter
  */
 
+const NotifyAddressPresenter = require('./notify-address.presenter.js')
+const { formatLongDate } = require('../../base.presenter.js')
+
 /**
  * Formats recipients into notifications for a return form
  *
@@ -13,52 +16,44 @@
  * from what the legacy code persisted and uses. So, we use this presenter to map that output to what is needed when
  * saving the notification.
  *
- * @param {{ArrayBuffer}} returnForm - The return forms PDF file
- * @param {object} pageData - The data formatted for the return form
+ * @param {object} recipient - A single recipient with the contact / address
  * @param {string} licenceRef - The reference of the licence that the return log relates to
  * @param {string} eventId - The event if that joins all the notifications
+ * @param {object} dueReturnLog - The return log to populate the form data
  *
  * @returns {object} The data formatted persisting as a `notice` record
  */
-function go(returnForm, pageData, licenceRef, eventId) {
+function go(recipient, licenceRef, eventId, dueReturnLog) {
   return {
-    pdf: returnForm,
     eventId,
     licences: [licenceRef],
     messageRef: 'pdf.return_form',
     messageType: 'letter',
-    personalisation: _personalisation(pageData),
-    returnLogIds: [pageData.returnId]
+    personalisation: _personalisation(dueReturnLog, recipient, licenceRef),
+    returnLogIds: [dueReturnLog.returnId]
   }
 }
 
-function _personalisation(pageData) {
+function _personalisation(dueReturnLog, recipient, licenceRef) {
   const {
-    address,
     dueDate,
     endDate,
-    licenceRef,
     naldAreaCode,
     purpose,
     regionCode,
+    regionName,
     returnLogId,
     returnReference,
     returnsFrequency,
     siteDescription,
     startDate,
     twoPartTariff
-  } = pageData
+  } = dueReturnLog
 
   return {
-    address_line_1: address.address_line_1,
-    address_line_2: address.address_line_2,
-    address_line_3: address.address_line_3,
-    address_line_4: address.address_line_4,
-    address_line_5: address.address_line_5,
-    address_line_6: address.address_line_6,
-    address_line_7: address.address_line_7,
-    due_date: dueDate,
-    end_date: endDate,
+    ..._address(recipient),
+    due_date: formatLongDate(dueDate),
+    end_date: formatLongDate(endDate),
     format_id: returnReference,
     is_two_part_tariff: twoPartTariff,
     licence_ref: licenceRef,
@@ -66,10 +61,15 @@ function _personalisation(pageData) {
     purpose,
     qr_url: returnLogId,
     region_code: regionCode,
+    region_name: regionName,
     returns_frequency: returnsFrequency,
     site_description: siteDescription,
-    start_date: startDate
+    start_date: formatLongDate(startDate)
   }
+}
+
+function _address(recipient) {
+  return NotifyAddressPresenter.go(recipient.contact)
 }
 
 module.exports = {

@@ -9,8 +9,8 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
@@ -23,15 +23,42 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
 
   let dueReturnLog
   let licenceRef
+  let notification
   let notifierStub
-  let recipient
 
   beforeEach(async () => {
-    recipient = RecipientsFixture.recipients().licenceHolder
-
     dueReturnLog = ReturnLogFixture.dueReturn()
 
-    licenceRef = dueReturnLog.licenceRef
+    licenceRef = generateLicenceRef()
+
+    notification = {
+      eventId: null,
+      licences: [licenceRef],
+      messageRef: 'pdf.return_form',
+      messageType: 'letter',
+      personalisation: {
+        address_line_1: 'Mr H J Licence holder',
+        address_line_2: '1',
+        address_line_3: 'Privet Drive',
+        address_line_4: 'Little Whinging',
+        address_line_5: 'Surrey',
+        address_line_6: 'WD25 7LR',
+        due_date: dueReturnLog.dueDate,
+        end_date: dueReturnLog.endDate,
+        format_id: dueReturnLog.returnReference,
+        is_two_part_tariff: false,
+        licence_ref: licenceRef,
+        naldAreaCode: 'MIDLT',
+        purpose: 'Mineral Washing',
+        qr_url: dueReturnLog.returnLogId,
+        region_code: '1',
+        region_name: 'North West',
+        returns_frequency: dueReturnLog.returnsFrequency,
+        site_description: 'BOREHOLE AT AVALON',
+        start_date: dueReturnLog.startDate
+      },
+      returnLogIds: [dueReturnLog.returnId]
+    }
 
     Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
       response: {
@@ -50,7 +77,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
+      const result = await PrepareReturnFormsService.go(notification)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -58,7 +85,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
-      await PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
+      await PrepareReturnFormsService.go(notification)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 
@@ -70,7 +97,8 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
-          address_line_6: 'WD25 7LR'
+          address_line_6: 'WD25 7LR',
+          address_line_7: undefined
         },
         dueDate: '28 April 2023',
         endDate: '31 March 2023',
