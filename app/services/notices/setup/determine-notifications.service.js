@@ -16,9 +16,9 @@ const NotificationsPresenter = require('../../../presenters/notices/setup/notifi
  * @param {object[]} recipients - The recipients to create notifications for
  * @param {string} eventId - the event UUID to link all the notifications to
  *
- * @returns {Promise<object[]>} An array of notification formatted to persist and send
+ * @returns {object[]} An array of notification formatted to persist and send
  */
-async function go(session, recipients, eventId) {
+function go(session, recipients, eventId) {
   const { journey, noticeType } = session
 
   if (journey === 'alerts') {
