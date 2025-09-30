@@ -35,10 +35,10 @@ describe('Return Versions Setup - Remove presenter', () => {
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
-            'abstraction-period-end-day': '31',
-            'abstraction-period-end-month': '10',
-            'abstraction-period-start-day': '1',
-            'abstraction-period-start-month': '4'
+            abstractionPeriodEndDay: '31',
+            abstractionPeriodEndMonth: '10',
+            abstractionPeriodStartDay: '1',
+            abstractionPeriodStartMonth: '4'
           },
           frequencyReported: 'month',
           frequencyCollected: 'month',
@@ -90,10 +90,10 @@ describe('Return Versions Setup - Remove presenter', () => {
           returnsCycle: 'summer',
           siteDescription: 'This is a valid return requirements description',
           abstractionPeriod: {
-            'abstraction-period-end-day': '12',
-            'abstraction-period-end-month': '09',
-            'abstraction-period-start-day': '12',
-            'abstraction-period-start-month': '07'
+            abstractionPeriodEndDay: '12',
+            abstractionPeriodEndMonth: '09',
+            abstractionPeriodStartDay: '12',
+            abstractionPeriodStartMonth: '07'
           },
           frequencyReported: 'month',
           frequencyCollected: 'week',
