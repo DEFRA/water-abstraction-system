@@ -443,23 +443,33 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "water"."scheduled_notification"
-  WHERE
-    "message_ref" = 'test-ref';
-
-  DELETE
-  FROM
     "water"."scheduled_notification" AS "sn"
       USING "water"."events" AS "e"
   WHERE
-    "e"."issuer" LIKE 'acceptance-test%'
+    "e"."licences" <> '"[]"'
+    AND (
+      "e"."issuer" LIKE 'acceptance-test%'
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements_text("e"."licences") AS l
+        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+      )
+    )
     AND "sn"."event_id" = "e"."event_id";
 
   DELETE
   FROM
     "water"."events"
   WHERE
-    "issuer" LIKE 'acceptance-test%';
+    "licences" <> '"[]"'
+    AND (
+      "issuer" LIKE 'acceptance-test%'
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements_text("licences") AS l
+        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+      )
+  );
 
   DELETE
   FROM
