@@ -30,7 +30,8 @@ function go(recipient, licenceRef, eventId, dueReturnLog) {
     messageRef: 'pdf.return_form',
     messageType: 'letter',
     personalisation: _personalisation(dueReturnLog, recipient, licenceRef),
-    returnLogIds: [dueReturnLog.returnId]
+    returnLogIds: [dueReturnLog.returnId],
+    status: 'pending'
   }
 }
 

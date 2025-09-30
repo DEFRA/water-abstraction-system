@@ -61,7 +61,8 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturnLog.returnId]
+        returnLogIds: [dueReturnLog.returnId],
+        status: 'pending'
       })
     })
   })

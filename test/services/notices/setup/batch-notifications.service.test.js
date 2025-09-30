@@ -362,6 +362,7 @@ function _notifications(eventId, licences) {
         periodStartDate: '1 April 2022'
       },
       recipient: 'primary.user@important.com',
+      status: 'pending',
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     letter: {
@@ -383,6 +384,7 @@ function _notifications(eventId, licences) {
         periodStartDate: '1 April 2022'
       },
       recipient: null,
+      status: 'pending',
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     pdf: {
@@ -392,7 +394,8 @@ function _notifications(eventId, licences) {
       messageType: 'letter',
       pdf: Buffer.from('mock file'),
       personalisation: { name: 'Red 5' },
-      returnLogIds: [generateUUID()]
+      returnLogIds: [generateUUID()],
+      status: 'pending'
     }
   }
 }

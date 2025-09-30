@@ -85,7 +85,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
             eventId,
@@ -113,7 +114,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           }
         ])
       })
@@ -154,7 +156,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
             eventId,
@@ -182,7 +185,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
             eventId,
@@ -210,7 +214,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [additionalDueReturn.returnId]
+            returnLogIds: [additionalDueReturn.returnId],
+            status: 'pending'
           },
           {
             eventId,
@@ -238,7 +243,8 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [additionalDueReturn.returnId]
+            returnLogIds: [additionalDueReturn.returnId],
+            status: 'pending'
           }
         ])
       })
