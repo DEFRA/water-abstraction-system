@@ -29,7 +29,7 @@ describe('Notice Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/licence`,
+        backLink: { href: `/system/notices/setup/${session.id}/licence`, text: 'Back' },
         options: [
           {
             checked: false,
