@@ -102,6 +102,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyStatus: 'created',
           pdf: null,
           recipient: 'primary.user@important.com',
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: testNotification.templateId
@@ -152,6 +153,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           },
           plaintext: 'Dear Licence holder,\r\n',
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: testNotification.templateId
@@ -202,6 +204,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyStatus: 'created',
           pdf: Buffer.from(notification.pdf.pdf),
           recipient: null,
+          returnedAt: null,
           returnLogIds: testNotification.returnLogIds,
           status: 'pending',
           templateId: null
