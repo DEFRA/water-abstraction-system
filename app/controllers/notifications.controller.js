@@ -5,8 +5,8 @@
  * @module NotificationsController
  */
 
-const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
+const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 

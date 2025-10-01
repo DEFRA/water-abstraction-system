@@ -88,7 +88,7 @@ describe('View Notification presenter', () => {
         })
       })
 
-      describe('when there is no pdf data', () => {
+      describe('when there is pdf data', () => {
         beforeEach(() => {
           testNotification.notification.pdf = Buffer.from('mock file')
         })

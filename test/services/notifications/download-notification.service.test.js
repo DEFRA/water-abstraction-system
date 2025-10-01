@@ -26,7 +26,7 @@ describe('Notifications - Download Notification service', () => {
   })
 
   describe('when called', () => {
-    it('returns the page data for the view', async () => {
+    it('returns pdf data', async () => {
       const result = await DownloadNotificationService.go(notification.id)
 
       expect(result).to.equal(pdf)
