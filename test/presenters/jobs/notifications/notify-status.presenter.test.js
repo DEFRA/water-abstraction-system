@@ -198,6 +198,21 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
+    describe('then the "notifyStatus" is "pending-virus-check"', () => {
+      beforeEach(() => {
+        notifyStatus = 'pending-virus-check'
+      })
+
+      it('correctly returns status to update', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'pending-virus-check',
+          status: 'pending'
+        })
+      })
+    })
+
     describe('and notify has errored', () => {
       describe('then the "notifyStatus" is "permanent-failure"', () => {
         beforeEach(() => {
@@ -271,6 +286,21 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
             notifyStatus: 'error',
             status: 'error'
           })
+        })
+      })
+    })
+
+    describe('and the the status is not recognises', () => {
+      beforeEach(() => {
+        notifyStatus = 'fake'
+      })
+
+      it('correctly returns status to update', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'fake',
+          status: 'pending'
         })
       })
     })
