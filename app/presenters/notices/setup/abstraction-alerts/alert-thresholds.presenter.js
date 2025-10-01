@@ -18,9 +18,9 @@ const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
  */
 function go(session) {
   return {
-    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
-    caption: session.monitoringStationName,
+    backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
     pageTitle: 'Which thresholds do you need to send an alert for?',
+    pageTitleCaption: session.monitoringStationName,
     thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertType, session.alertThresholds)
   }
 }

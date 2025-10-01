@@ -36,9 +36,9 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
-        caption: 'Death star',
+        backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
         pageTitle: 'Which thresholds do you need to send an alert for?',
+        pageTitleCaption: 'Death star',
         thresholdOptions: [
           {
             checked: false,

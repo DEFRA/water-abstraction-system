@@ -1,42 +1,18 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% from 'macros/page-heading.njk' import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
-
-{% block content %}
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, caption) }}
-  {% endset %}
-
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: '#alert-thresholds'
-        }
-      ]
-    }) }}
-  {% endif %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
-      name: "alert-thresholds",
-      errorMessage: error,
+      name: "alertThresholds",
+      errorMessage: error.alertThresholds,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: thresholdOptions
