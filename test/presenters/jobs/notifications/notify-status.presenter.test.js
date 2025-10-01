@@ -290,7 +290,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the the status is not recognises', () => {
+    describe('and the status is not recognised', () => {
       beforeEach(() => {
         notifyStatus = 'fake'
       })
