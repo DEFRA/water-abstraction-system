@@ -16,9 +16,9 @@
 function go(session) {
   return {
     alertTypeOptions: _alertTypeOptions(session.alertType),
-    backLink: `/system/monitoring-stations/${session.monitoringStationId}`,
-    caption: session.monitoringStationName,
-    pageTitle: 'Select the type of alert you need to send'
+    backLink: { href: `/system/monitoring-stations/${session.monitoringStationId}`, text: 'Back' },
+    pageTitle: 'Select the type of alert you need to send',
+    pageTitleCaption: session.monitoringStationName
   }
 }
 
