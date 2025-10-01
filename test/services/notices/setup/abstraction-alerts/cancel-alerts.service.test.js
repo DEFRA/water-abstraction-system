@@ -33,9 +33,12 @@ describe('Cancel Alerts Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-        caption: 'Death star',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+          text: 'Back'
+        },
         pageTitle: 'You are about to cancel this alert',
+        pageTitleCaption: 'Death star',
         summaryList: {
           text: 'Alert type',
           value: 'Resume'
