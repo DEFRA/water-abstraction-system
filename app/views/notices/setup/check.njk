@@ -39,11 +39,10 @@
   ]), rows) %}
 {% endfor %}
 
-
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
-  <p> {{ readyToSend }}</p>
+  <p>{{ readyToSend }}</p>
 
   {% if recipients.length > 0 %}
     <div class="govuk-button-group">
