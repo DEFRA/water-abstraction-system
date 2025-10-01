@@ -41,10 +41,12 @@ describe('Alert Email Address Presenter', () => {
           otherUserEmailAddressInput: '',
           usernameChecked: false
         },
-        anchor: null,
-        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-        caption: 'Death star',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+          text: 'Back'
+        },
         pageTitle: 'Select an email address to include in the alerts',
+        pageTitleCaption: 'Death star',
         username: 'admin@defra.gov.uk'
       })
     })
@@ -126,48 +128,6 @@ describe('Alert Email Address Presenter', () => {
 
             expect(result.alertEmailAddressOptions.usernameChecked).to.be.false()
           })
-        })
-      })
-    })
-
-    describe('the "anchor" property', () => {
-      describe('when the validation result is null', () => {
-        it('returns null', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
-
-          expect(result.anchor).to.equal(null)
-        })
-      })
-
-      describe('when the validation result contains a radioFormError', () => {
-        beforeEach(() => {
-          validationResult = {
-            radioFormError: {
-              text: 'Enter an email address'
-            }
-          }
-        })
-
-        it('returns the ancho "#alertEmailAddress"', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
-
-          expect(result.anchor).to.equal('#alertEmailAddress')
-        })
-      })
-
-      describe('when the validation result contains a emailAddressInputFormError', () => {
-        beforeEach(() => {
-          validationResult = {
-            emailAddressInputFormError: {
-              text: 'Enter an email address'
-            }
-          }
-        })
-
-        it('returns the ancho "#otherUser"', () => {
-          const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
-
-          expect(result.anchor).to.equal('#otherUser')
         })
       })
     })

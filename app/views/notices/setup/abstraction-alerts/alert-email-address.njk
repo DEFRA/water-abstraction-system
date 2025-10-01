@@ -1,40 +1,16 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% from 'macros/page-heading.njk' import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({ text: 'Back', href: backLink }) }}
-{% endblock %}
-
-{% block content %}
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, caption) }}
-  {% endset %}
-
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: anchor
-        }
-      ]
-    }) }}
-  {% endif %}
-
+{% block pageContent %}
   {% set textHtml %}
     {{ govukInput({
-      id: "other-user",
+      id: "otherUser",
       name: "otherUser",
       classes: "govuk-!-width-one-third",
-      errorMessage: error.emailAddressInputFormError,
+      errorMessage: error.otherUser,
       label: {
         text: "Email address"
       },
@@ -50,10 +26,10 @@
 
     {{ govukRadios({
       name: 'alertEmailAddressType',
-      errorMessage: error.radioFormError,
+      errorMessage: error.alertEmailAddressType,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [

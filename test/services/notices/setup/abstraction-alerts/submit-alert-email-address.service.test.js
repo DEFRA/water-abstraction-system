@@ -112,16 +112,22 @@ describe('Submit Alert Email Address Service', () => {
             otherUserEmailAddressInput: '',
             usernameChecked: false
           },
-          anchor: '#alertEmailAddress',
-          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-          caption: 'Death star',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+            text: 'Back'
+          },
           pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           error: {
-            emailAddressInputFormError: null,
-            radioFormError: {
+            alertEmailAddressType: {
               text: 'Enter an email address'
             },
-            text: 'Enter an email address'
+            errorList: [
+              {
+                href: '#alertEmailAddressType',
+                text: 'Enter an email address'
+              }
+            ]
           },
           username: 'admin@defra.gov.uk'
         })
@@ -143,16 +149,22 @@ describe('Submit Alert Email Address Service', () => {
             otherUserEmailAddressInput: '',
             usernameChecked: false
           },
-          anchor: '#otherUser',
-          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-          caption: 'Death star',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+            text: 'Back'
+          },
           pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           error: {
-            emailAddressInputFormError: {
+            errorList: [
+              {
+                href: '#otherUser',
+                text: 'Enter an email address'
+              }
+            ],
+            otherUser: {
               text: 'Enter an email address'
-            },
-            radioFormError: null,
-            text: 'Enter an email address'
+            }
           },
           username: 'admin@defra.gov.uk'
         })
@@ -174,16 +186,22 @@ describe('Submit Alert Email Address Service', () => {
             otherUserEmailAddressInput: '123123123',
             usernameChecked: false
           },
-          anchor: '#otherUser',
-          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-          caption: 'Death star',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+            text: 'Back'
+          },
           pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           error: {
-            emailAddressInputFormError: {
+            errorList: [
+              {
+                href: '#otherUser',
+                text: 'Enter an email address in the correct format, like name@example.com'
+              }
+            ],
+            otherUser: {
               text: 'Enter an email address in the correct format, like name@example.com'
-            },
-            radioFormError: null,
-            text: 'Enter an email address in the correct format, like name@example.com'
+            }
           },
           username: 'admin@defra.gov.uk'
         })

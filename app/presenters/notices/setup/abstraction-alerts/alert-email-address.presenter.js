@@ -20,10 +20,9 @@ function go(session, auth, validationResult) {
 
   return {
     alertEmailAddressOptions: _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType),
-    anchor: _anchor(validationResult),
-    backLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`,
-    caption: monitoringStationName,
+    backLink: { href: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`, text: 'Back' },
     pageTitle: 'Select an email address to include in the alerts',
+    pageTitleCaption: monitoringStationName,
     username: auth.credentials.user.username
   }
 }
@@ -39,18 +38,6 @@ function _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType) {
     otherUserEmailAddressInput,
     usernameChecked
   }
-}
-
-function _anchor(validationResult) {
-  if (!validationResult) {
-    return null
-  }
-
-  if (validationResult.radioFormError) {
-    return '#alertEmailAddress'
-  }
-
-  return '#otherUser'
 }
 
 module.exports = {
