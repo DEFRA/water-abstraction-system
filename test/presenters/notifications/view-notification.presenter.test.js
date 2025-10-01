@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,7 @@ const ViewNotificationPresenter = require('../../../app/presenters/notifications
 describe('View Notification presenter', () => {
   let testNotification
 
-  before(() => {
+  beforeEach(() => {
     testNotification = NotificationsFixture.notification()
   })
 
@@ -40,6 +40,9 @@ describe('View Notification presenter', () => {
         licenceRef: '01/117',
         messageType: 'letter',
         pageTitle: 'Hands off flow: levels warning',
+        returnForm: {
+          text: 'No preview available'
+        },
         sentDate: '2 July 2024'
       })
     })
@@ -47,7 +50,7 @@ describe('View Notification presenter', () => {
     describe('the "address" property', () => {
       describe('when the "messageType" is "letter"', () => {
         describe('when only some of the address values in the "notifications.personalisation" property are filled', () => {
-          before(() => {
+          beforeEach(() => {
             testNotification.notification.personalisation.address_line_1 = ''
             testNotification.notification.personalisation.address_line_3 = ''
           })
@@ -61,7 +64,7 @@ describe('View Notification presenter', () => {
       })
 
       describe('when the "messageType" is "email"', () => {
-        before(() => {
+        beforeEach(() => {
           testNotification.notification.messageType = 'email'
           testNotification.notification.recipient = 'bob@bobbins.co.uk'
         })
@@ -70,6 +73,33 @@ describe('View Notification presenter', () => {
           const result = ViewNotificationPresenter.go(testNotification)
 
           expect(result.address).to.equal('bob@bobbins.co.uk')
+        })
+      })
+    })
+
+    describe('the "returnForm" property', () => {
+      describe('when there is no pdf data', () => {
+        it('correctly returns the text', () => {
+          const result = ViewNotificationPresenter.go(testNotification)
+
+          expect(result.returnForm).to.equal({
+            text: 'No preview available'
+          })
+        })
+      })
+
+      describe('when there is pdf data', () => {
+        beforeEach(() => {
+          testNotification.notification.pdf = Buffer.from('mock file')
+        })
+
+        it('correctly returns the text', () => {
+          const result = ViewNotificationPresenter.go(testNotification)
+
+          expect(result.returnForm).to.equal({
+            link: `/system/notifications/${testNotification.notification.id}/download`,
+            text: 'Preview paper return'
+          })
         })
       })
     })
@@ -84,7 +114,7 @@ describe('View Notification presenter', () => {
       })
 
       describe('when the "event.metadata.name" is "Water abstraction alert"', () => {
-        before(() => {
+        beforeEach(() => {
           testNotification.notification.event.metadata = {
             name: 'Water abstraction alert',
             options: { sendingAlertType: 'warning' }

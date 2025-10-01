@@ -50,8 +50,7 @@ function _link(communicationId, documentId, licenceId) {
 function _type(communication, sent) {
   return {
     label: _typeLabel(communication),
-    sentVia: `sent ${sent} via ${communication.messageType}`,
-    pdf: communication.messageRef.includes('pdf')
+    sentVia: `sent ${sent} via ${communication.messageType}`
   }
 }
 
