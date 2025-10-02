@@ -46,9 +46,9 @@ describe('Notices Setup - Preview - Check Alert Presenter', () => {
       const result = CheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice WAA-XM0WMH',
+        backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: 'Notice WAA-XM0WMH',
         restrictionHeading: 'Flow and level restriction type and threshold',
         restrictions: [
           {

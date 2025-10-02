@@ -65,9 +65,9 @@ describe('Notices Setup - Preview - Check Alert service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice WAA-XM0WMH',
+        backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: 'Notice WAA-XM0WMH',
         restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
