@@ -101,7 +101,7 @@ describe('Return Log model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the return requirement', async () => {
+      it('can eager load the return requirements', async () => {
         const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnRequirement')
 
         expect(result).to.be.instanceOf(ReturnLogModel)
