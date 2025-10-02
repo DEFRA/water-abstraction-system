@@ -35,24 +35,51 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
     Sinon.stub(CreatePrecompiledFileRequest, 'send').onCall(0).resolves(notifyResponse)
 
     buffer = Buffer.from('mock file')
-
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves(buffer)
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  it('should return the notification notify response', async () => {
-    const result = await SendReturnFormService.go(notification, referenceCode)
+  describe('when the notification is successful', () => {
+    beforeEach(() => {
+      Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+        succeeded: true,
+        response: { body: buffer }
+      })
+    })
 
-    expect(result).to.equal({
-      id: notification.id,
-      notifyId: notifyResponse.response.body.id,
-      notifyStatus: 'created',
-      pdf: buffer,
-      plaintext: null,
-      status: 'pending'
+    it('should return the notification notify response', async () => {
+      const result = await SendReturnFormService.go(notification, referenceCode)
+
+      expect(result).to.equal({
+        id: notification.id,
+        notifyId: notifyResponse.response.body.id,
+        notifyStatus: 'created',
+        pdf: buffer,
+        plaintext: null,
+        status: 'pending'
+      })
+    })
+  })
+
+  describe('when generating the return form fails', () => {
+    beforeEach(() => {
+      Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+        succeeded: false,
+        response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' }
+      })
+    })
+
+    it('should return the notification notify response', async () => {
+      const result = await SendReturnFormService.go(notification, referenceCode)
+
+      expect(result).to.equal({
+        id: notification.id,
+        notifyError:
+          '{"status":"ENOTFOUND","message":"Failed to generate the return form PDF","errors":["getaddrinfo ENOTFOUND gotenberg"]}',
+        status: 'error'
+      })
     })
   })
 })
