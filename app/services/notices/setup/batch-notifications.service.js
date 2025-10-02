@@ -7,13 +7,11 @@
 
 const { setTimeout } = require('node:timers/promises')
 
-const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
-const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
-const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
-const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
-const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
+const SendEmailService = require('./batch/send-email.service.js')
+const SendLetterService = require('./batch/send-letter.service.js')
+const SendReturnFormService = require('./batch/send-rerturn-form.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -95,6 +93,18 @@ async function _delay(delay) {
   return setTimeout(delay)
 }
 
+function _determineNotificationToSend(notification, referenceCode) {
+  if (notification.messageType === 'email') {
+    return SendEmailService.go(notification, referenceCode)
+  }
+
+  if (notification.messageRef === 'pdf.return_form') {
+    return SendReturnFormService.go(notification, referenceCode)
+  }
+
+  return SendLetterService.go(notification, referenceCode)
+}
+
 /**
  * Notify returns the status code. Anything other the '201' 'CREATED' is considered an error.
  *
@@ -134,13 +144,7 @@ function _notificationsToSend(notifications, referenceCode) {
   const sentNotifications = []
 
   for (const notification of notifications) {
-    if (notification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(notification, referenceCode))
-    } else if (notification.messageRef === 'pdf.return_form') {
-      sentNotifications.push(_sendReturnForm(notification, referenceCode))
-    } else {
-      sentNotifications.push(_sendLetter(notification, referenceCode))
-    }
+    sentNotifications.push(_determineNotificationToSend(notification, referenceCode))
   }
 
   return sentNotifications
@@ -159,46 +163,6 @@ async function _processBatches(notifications, delay, batchSize, eventId, referen
     await ProcessNotificationStatusService.go(eventId)
 
     totalErrorCount += errorCount
-  }
-}
-
-async function _sendEmail(notification, referenceCode) {
-  const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
-
-  return _sentNotification(notification.id, notifyResult)
-}
-
-async function _sendLetter(notification, referenceCode) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
-
-  return _sentNotification(notification.id, notifyResult)
-}
-
-async function _sendReturnForm(notification, referenceCode) {
-  const pdf = await PrepareReturnFormsService.go(notification)
-
-  const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
-
-  return _sentNotification(notification.id, notifyResult, pdf)
-}
-
-/**
- * The returned combination represents a 'notification' record, which the `RecordNotifySendResultsService` can then
- * update.
- *
- * @private
- */
-function _sentNotification(notificationId, notifyResult, pdf = null) {
-  return {
-    ...NotifyUpdatePresenter.go(notifyResult),
-    id: notificationId,
-    pdf
   }
 }
 
