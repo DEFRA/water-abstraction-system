@@ -87,6 +87,7 @@ describe('Return Logs - Generate Return Log service', () => {
         },
         returnCycleId: '6889b98d-964f-4966-b6d6-bf511d6526a9',
         returnReference: '16999651',
+        returnRequirementId: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
         returnsFrequency: 'day',
         source: 'WRLS',
         startDate: new Date('2025-04-01'),
