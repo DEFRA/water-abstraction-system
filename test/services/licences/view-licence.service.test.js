@@ -40,6 +40,10 @@ describe('View Licence service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        backLink: {
+          href: '/licences',
+          text: 'Go back to search'
+        },
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         ends: null,

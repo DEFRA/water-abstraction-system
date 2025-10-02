@@ -23,6 +23,10 @@ function go(licence, auth) {
   const ends = licence.$ends()
 
   return {
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
@@ -104,14 +108,23 @@ function _warning(ends) {
   const formattedDate = formatLongDate(ends.date)
 
   if (ends.reason === 'revoked') {
-    return `This licence was revoked on ${formattedDate}`
+    return {
+      text: `This licence was revoked on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
   }
 
   if (ends.reason === 'lapsed') {
-    return `This licence lapsed on ${formattedDate}`
+    return {
+      text: `This licence lapsed on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
   }
 
-  return `This licence expired on ${formattedDate}`
+  return {
+    text: `This licence expired on ${formattedDate}`,
+    iconFallbackText: 'Warning'
+  }
 }
 
 function _workflowWarning(workflows) {

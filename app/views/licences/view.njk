@@ -1,37 +1,19 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Go back to search',
-    href: "/licences"
-  }) }}
-{% endblock %}
+{% if notification %}
+  {% set notification = {
+    html: '<strong>' + notification + '</strong>'
+  } %}
+{% endif %}
 
-{% block content %}
-  {% if warning %}
-    {{ govukWarningText({
-      text: warning,
-      iconFallbackText: "Warning"
-    }) }}
-  {% endif %}
-
-  {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles))%}
+{% block pageContent %}
+  {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles)) %}
     {{ govukWarningText({
       text: "This licence has changed and needs the set up reviewed before it can be billed.",
       iconFallbackText: "Warning"
     }) }}
-  {% endif %}
-
-  {% if notification %}
-    {% if notification %}
-      {{ govukNotificationBanner({
-        html: '<strong>' + notification + '</strong>'
-      }) }}
-    {% endif %}
   {% endif %}
 
   {% if licenceName %}
@@ -48,35 +30,43 @@
       Contents
     </h2>
     <ul class="govuk-tabs__list">
-      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_summary">
+      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}"
+          data-test="#tab_summary">
         <a class="govuk-tabs__tab" href="summary">
           Summary
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_contact">
+      <li
+        class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}"
+        data-test="#tab_contact">
         <a class="govuk-tabs__tab" href="contact-details">
           Contact details
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_returns">
+      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}"
+          data-test="#tab_returns">
         <a class="govuk-tabs__tab" href="returns">
           Returns
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_communications">
+      <li
+        class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}"
+        data-test="#tab_communications">
         <a class="govuk-tabs__tab" href="communications">
           Communications
         </a>
       </li>
       {% if 'billing' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_bills">
+        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}"
+            data-test="#tab_bills">
           <a class="govuk-tabs__tab" href="bills">
             Bills
           </a>
         </li>
       {% endif %}
       {% if 'view_charge_versions' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_licence_set_up">
+        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}"
+            data-test="#tab_licence_set_up">
           <a class="govuk-tabs__tab" href="set-up">
             Licence set up
           </a>
