@@ -2,7 +2,7 @@
 
 const EventModel = require('../../app/models/event.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
-const ScheduledNotificationsModel = require('../../app/models/scheduled-notification.model.js')
+const NotificationModel = require('../../app/models/notification.model.js')
 
 /**
  * Represents a complete response from `FetchNotificationsService`
@@ -29,7 +29,7 @@ function notification() {
     }
   })
 
-  const notification = ScheduledNotificationsModel.fromJson({
+  const notification = NotificationModel.fromJson({
     id: '4222e93e-6798-40ea-82d2-d5decbb01dac',
     messageType: 'letter',
     personalisation: {
@@ -50,7 +50,7 @@ function notification() {
       '\n' +
       '# Why you are receiving this notification\n' +
       '\n',
-    sendAfter: new Date('2024-07-02T16:52:17.000Z'),
+    createdAt: new Date('2024-07-02T16:52:17.000Z'),
     event
   })
 

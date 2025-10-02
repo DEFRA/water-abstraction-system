@@ -9,64 +9,33 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnFormsNotificationPresenter = require('../../../../app/presenters/notices/setup/return-forms-notification.presenter.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 
 describe('Notices - Setup - Return Forms Notification Presenter', () => {
   const eventId = generateUUID()
 
+  let dueReturnLog
   let licenceRef
-  let pageData
-  let returnForm
-  let returnId
-  let returnLogId
+  let recipient
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
 
-    returnId = generateUUID()
+    recipient = RecipientsFixture.recipients().licenceHolder
 
-    returnLogId = generateReturnLogId()
-
-    returnForm = new TextEncoder().encode('mock file').buffer
-
-    pageData = {
-      address: {
-        address_line_1: 'Mr H J Licence holder',
-        address_line_2: '1',
-        address_line_3: 'Privet Drive',
-        address_line_4: 'Little Whinging',
-        address_line_5: 'Surrey',
-        address_line_6: 'WD25 7LR'
-      },
-      dueDate: '6 July 2025',
-      endDate: '6 June 2025',
-      licenceRef,
-      naldAreaCode: 'KAEA',
-      pageEntries: [],
-      pageTitle: 'Water abstraction daily return',
-      purpose: 'A purpose',
-      regionAndArea: 'North West / Lower Trent',
-      regionCode: '6',
-      returnReference: '123456',
-      returnsFrequency: 'day',
-      siteDescription: 'Water park',
-      startDate: '1 January 2025',
-      twoPartTariff: false,
-      returnLogId,
-      returnId
-    }
+    dueReturnLog = ReturnLogFixture.dueReturn()
   })
 
   describe('when called', () => {
     it('returns the data re-formatted as a notification', () => {
-      const result = ReturnFormsNotificationPresenter.go(returnForm, pageData, licenceRef, eventId)
+      const result = ReturnFormsNotificationPresenter.go(recipient, licenceRef, eventId, dueReturnLog)
 
       expect(result).to.equal({
-        pdf: returnForm,
         eventId,
         licences: [licenceRef],
         messageRef: 'pdf.return_form',
@@ -78,21 +47,22 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          address_line_7: undefined,
-          due_date: '6 July 2025',
-          end_date: '6 June 2025',
-          format_id: '123456',
+          due_date: '28 April 2023',
+          end_date: '31 March 2023',
+          format_id: dueReturnLog.returnReference,
           is_two_part_tariff: false,
           licence_ref: licenceRef,
-          naldAreaCode: 'KAEA',
-          purpose: 'A purpose',
-          qr_url: returnLogId,
-          region_code: '6',
-          returns_frequency: 'day',
-          site_description: 'Water park',
-          start_date: '1 January 2025'
+          naldAreaCode: 'MIDLT',
+          purpose: 'Mineral Washing',
+          qr_url: dueReturnLog.returnLogId,
+          region_code: '1',
+          region_name: 'North West',
+          returns_frequency: 'month',
+          site_description: 'BOREHOLE AT AVALON',
+          start_date: '1 April 2022'
         },
-        returnLogIds: [returnId]
+        returnLogIds: [dueReturnLog.returnId],
+        status: 'pending'
       })
     })
   })

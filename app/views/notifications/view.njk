@@ -4,12 +4,10 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Go back to communications',
-      href: backLink
-    })
-  }}
+  {{ govukBackLink({
+    text: 'Go back to communications',
+    href: backLink
+  }) }}
 {% endblock %}
 
 {% block content %}
@@ -21,13 +19,23 @@
     text: "Sent " + sentDate
   }) }}
 
-  <div class="govuk-body message-preview">
-    {% if messageType === 'letter' %}
-      <p>{{ newLineArrayItems(address) }}</p>
-    {% else %}
-      <p>Sent to: {{ address }}</p>
-    {% endif %}
+  {% if contents %}
+    <div class="govuk-body message-preview">
+      {% if messageType === 'letter' %}
+        <p>{{ newLineArrayItems(address) }}</p>
+      {% else %}
+        <p>Sent to: {{ address }}</p>
+      {% endif %}
 
-    {{ contents | markdown | safe }}
-  </div>
+      {{ contents | markdown | safe }}
+
+    </div>
+
+  {% else %}
+    {% if returnForm.link %}
+      <a href="{{ returnForm.link }}" target="_blank" rel="noopener noreferrer"> {{ returnForm.text }} </a>
+    {% else %}
+      <p> {{ returnForm.text }} </p>
+    {% endif %}
+  {% endif %}
 {% endblock %}

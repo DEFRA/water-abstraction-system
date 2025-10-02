@@ -27,14 +27,18 @@ describe('Licences - View Licence presenter', () => {
       const result = ViewLicencePresenter.go(licence, auth)
 
       expect(result).to.equal({
+        backLink: {
+          href: '/licences',
+          text: 'Go back to search'
+        },
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
         ends: null,
         includeInPresrocBilling: 'no',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceName: 'Between two ferns',
         licenceRef: '01/123',
         notification: null,
-        pageTitle: 'Licence 01/123',
+        pageTitle: 'Licence number 01/123',
+        pageTitleCaption: 'Between two ferns',
         primaryUser: {
           id: 10036,
           username: 'grace.hopper@example.co.uk'
@@ -46,13 +50,13 @@ describe('Licences - View Licence presenter', () => {
     })
   })
 
-  describe('the "licenceName" property', () => {
+  describe('the "pageTitleCaption" property', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.licenceName).to.equal('Between two ferns')
+          expect(result.pageTitleCaption).to.equal('Between two ferns')
         })
       })
 
@@ -64,7 +68,7 @@ describe('Licences - View Licence presenter', () => {
         it('returns null', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.licenceName).to.be.null()
+          expect(result.pageTitleCaption).to.be.null()
         })
       })
     })
@@ -77,7 +81,7 @@ describe('Licences - View Licence presenter', () => {
       it('returns "Unregistered licence"', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.licenceName).to.equal('Unregistered licence')
+        expect(result.pageTitleCaption).to.equal('Unregistered licence')
       })
     })
   })
@@ -245,7 +249,10 @@ describe('Licences - View Licence presenter', () => {
         it('returns "This licence expired on 1 April 2019"', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.warning).to.equal('This licence expired on 1 April 2019')
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence expired on 1 April 2019'
+          })
         })
       })
 
@@ -257,7 +264,10 @@ describe('Licences - View Licence presenter', () => {
         it('returns "This licence lapsed on 1 April 2019"', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.warning).to.equal('This licence lapsed on 1 April 2019')
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence lapsed on 1 April 2019'
+          })
         })
       })
 
@@ -269,7 +279,10 @@ describe('Licences - View Licence presenter', () => {
         it('returns "This licence was revoked on 1 April 2019"', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence was revoked on 1 April 2019'
+          })
         })
       })
     })

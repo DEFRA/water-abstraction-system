@@ -22,6 +22,7 @@ const CreateEmailRequest = require('../../../../app/requests/notify/create-email
 const CreateLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/create-precompiled-file.request.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
+const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test
@@ -43,12 +44,15 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     const notifyResponse = successfulNotifyResponses(referenceCode)
 
+    const buffer = Buffer.from('mock file')
+
     event = await EventHelper.add({
       referenceCode
     })
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
+    Sinon.stub(PrepareReturnFormsService, 'go').resolves(buffer)
     Sinon.stub(ProcessNotificationStatusService, 'go')
 
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
@@ -73,7 +77,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -98,6 +102,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyStatus: 'created',
           pdf: null,
           recipient: 'primary.user@important.com',
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: testNotification.templateId
@@ -116,7 +121,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -148,6 +153,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           },
           plaintext: 'Dear Licence holder,\r\n',
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: testNotification.templateId
@@ -156,13 +162,23 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
   })
 
-  describe('when sending PDFs', () => {
+  describe('when sending PDFs', { timeout: 5000 }, () => {
+    let notification
+
     beforeEach(async () => {
+      event = await EventHelper.add({
+        referenceCode,
+        subtype: 'paperReturnForms'
+      })
+
       referenceCode = generateReferenceCode('PRTF')
 
-      const notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
+      notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
 
-      testNotification = await NotificationHelper.add(notification.pdf)
+      testNotification = await NotificationHelper.add({
+        ...notification.pdf,
+        pdf: null
+      })
 
       notifications = [testNotification]
 
@@ -172,7 +188,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -191,8 +207,9 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyError: null,
           notifyId: 'fff6c2a9-77fc-4553-8265-546109a45044',
           notifyStatus: 'created',
-          pdf: testNotification.pdf,
+          pdf: Buffer.from(notification.pdf.pdf),
           recipient: null,
+          returnedAt: null,
           returnLogIds: testNotification.returnLogIds,
           status: 'pending',
           templateId: null
@@ -223,7 +240,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should not affect the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id, referenceCode)
+        await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
 
@@ -256,7 +273,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should increment the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id, referenceCode)
+        await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
 
@@ -353,6 +370,7 @@ function _notifications(eventId, licences) {
         periodStartDate: '1 April 2022'
       },
       recipient: 'primary.user@important.com',
+      status: 'pending',
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     letter: {
@@ -374,16 +392,18 @@ function _notifications(eventId, licences) {
         periodStartDate: '1 April 2022'
       },
       recipient: null,
+      status: 'pending',
       templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
     },
     pdf: {
-      pdf: new TextEncoder().encode('mock file').buffer,
       eventId,
       licences,
       messageRef: 'pdf.return_form',
       messageType: 'letter',
+      pdf: Buffer.from('mock file'),
       personalisation: { name: 'Red 5' },
-      returnLogIds: [generateUUID()]
+      returnLogIds: [generateUUID()],
+      status: 'pending'
     }
   }
 }

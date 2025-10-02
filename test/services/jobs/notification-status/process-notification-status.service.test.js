@@ -107,6 +107,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
+              returnedAt: null,
               returnLogIds: null,
               status: 'sent',
               templateId: null
@@ -177,6 +178,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
+              returnedAt: null,
               returnLogIds: null,
               status: 'sent',
               templateId: null
@@ -238,6 +240,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
+              returnedAt: null,
               status: 'sent',
               templateId: null
             },
@@ -311,6 +314,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
             returnLogIds: null,
+            returnedAt: null,
             status: 'error',
             templateId: null
           },
@@ -400,6 +404,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
           returnLogIds: null,
+          returnedAt: null,
           status: 'pending',
           templateId: null
         },

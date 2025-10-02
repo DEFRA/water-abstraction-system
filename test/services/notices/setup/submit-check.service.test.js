@@ -57,7 +57,9 @@ describe('Notices - Setup - Submit Check service', () => {
           summer: 'false',
           startDate: '2022-04-01'
         },
-        noticeType: 'invitations'
+        noticeType: 'invitations',
+        subType: 'returnInvitation',
+        name: 'A person'
       }
     })
 
@@ -85,6 +87,9 @@ describe('Notices - Setup - Submit Check service', () => {
         eventId: result
       })
 
+      const event = await EventModel.query().findById(result)
+      delete event.entities
+
       const args = BatchNotificationsService.go.firstCall.args
 
       expect(args[0]).to.equal([
@@ -99,11 +104,12 @@ describe('Notices - Setup - Submit Check service', () => {
             periodStartDate: '1 April 2022'
           },
           recipient: 'primary.user@important.com',
+          returnLogIds: null,
           templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
         }
       ])
 
-      expect(args[1]).to.equal(result)
+      expect(args[1]).to.equal(event, { skip: ['createdAt', 'updatedAt'] })
 
       expect(args[2]).to.equal(referenceCode)
     })

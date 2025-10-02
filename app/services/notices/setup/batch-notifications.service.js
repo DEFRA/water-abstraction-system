@@ -11,6 +11,7 @@ const CreateEmailRequest = require('../../../requests/notify/create-email.reques
 const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
 const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
+const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const UpdateEventService = require('./update-event.service.js')
@@ -36,30 +37,18 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
  * @param {object[]} notifications - The notifications for sending and saving
- * @param {string} eventId - the event UUID to link all the notifications to
+ * @param {string} event - the event (notice) to link all the notifications to
  * @param {string} referenceCode - the unique generated reference code
  *
  */
-async function go(notifications, eventId, referenceCode) {
-  const { batchSize, delay } = NotifyConfig
+async function go(notifications, event, referenceCode) {
+  const totalErrorCount = 0
 
-  let totalErrorCount = 0
+  const { batchSize, delay } = _batchSize(event.subtype)
 
-  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
-  // to add a delay between each batch.
-  for (let i = 0; i < notifications.length; i += batchSize) {
-    const batchNotifications = notifications.slice(i, i + batchSize)
+  await _processBatches(notifications, delay, batchSize, event.id, referenceCode, totalErrorCount)
 
-    const errorCount = await _batch(batchNotifications, referenceCode)
-
-    await _delay(delay)
-
-    await ProcessNotificationStatusService.go(eventId)
-
-    totalErrorCount += errorCount
-  }
-
-  await UpdateEventService.go(eventId, totalErrorCount)
+  await UpdateEventService.go(event.id, totalErrorCount)
 }
 
 async function _batch(notifications, referenceCode) {
@@ -70,6 +59,31 @@ async function _batch(notifications, referenceCode) {
   await RecordNotifySendResultsService.go(sentNotifications)
 
   return _errorCount(sentNotifications)
+}
+
+/**
+ * When sending a PDF file (currently we only send return forms) we need to reduce the batch size to 1.
+ *
+ * This is to ease the burden on resources when generating the PDFs.
+ *
+ * Because we reduce the batch size to 1, we can reduce the delay to 2 seconds this will give us 30 requests per minute.
+ *
+ * @private
+ */
+function _batchSize(subtype) {
+  if (subtype === 'paperReturnForms') {
+    return {
+      batchSize: 1,
+      delay: 2000
+    }
+  }
+
+  const { batchSize, delay } = NotifyConfig
+
+  return {
+    batchSize,
+    delay
+  }
 }
 
 /**
@@ -132,6 +146,22 @@ function _notificationsToSend(notifications, referenceCode) {
   return sentNotifications
 }
 
+async function _processBatches(notifications, delay, batchSize, eventId, referenceCode, totalErrorCount) {
+  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
+  // to add a delay between each batch.
+  for (let i = 0; i < notifications.length; i += batchSize) {
+    const batchNotifications = notifications.slice(i, i + batchSize)
+
+    const errorCount = await _batch(batchNotifications, referenceCode)
+
+    await _delay(delay)
+
+    await ProcessNotificationStatusService.go(eventId)
+
+    totalErrorCount += errorCount
+  }
+}
+
 async function _sendEmail(notification, referenceCode) {
   const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
@@ -151,9 +181,11 @@ async function _sendLetter(notification, referenceCode) {
 }
 
 async function _sendReturnForm(notification, referenceCode) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.pdf, referenceCode)
+  const pdf = await PrepareReturnFormsService.go(notification)
 
-  return _sentNotification(notification.id, notifyResult)
+  const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
+
+  return _sentNotification(notification.id, notifyResult, pdf)
 }
 
 /**
@@ -162,10 +194,11 @@ async function _sendReturnForm(notification, referenceCode) {
  *
  * @private
  */
-function _sentNotification(notificationId, notifyResult) {
+function _sentNotification(notificationId, notifyResult, pdf = null) {
   return {
     ...NotifyUpdatePresenter.go(notifyResult),
-    id: notificationId
+    id: notificationId,
+    pdf
   }
 }
 

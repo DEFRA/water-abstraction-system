@@ -85,6 +85,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           personalisation: null,
           plaintext: 'some text',
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: null
@@ -104,6 +105,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           personalisation: null,
           plaintext: 'some text',
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'pending',
           templateId: null
@@ -150,6 +152,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           personalisation: null,
           plaintext: null,
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'error',
           templateId: null
@@ -169,6 +172,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           personalisation: null,
           plaintext: null,
           recipient: null,
+          returnedAt: null,
           returnLogIds: null,
           status: 'error',
           templateId: null

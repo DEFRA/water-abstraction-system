@@ -56,6 +56,7 @@ describe('Notices - Setup - Create notification service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnedAt: null,
         returnLogIds: null,
         status: null,
         templateId: null
@@ -75,6 +76,7 @@ describe('Notices - Setup - Create notification service', () => {
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnedAt: null,
         returnLogIds: null,
         status: null,
         templateId: null

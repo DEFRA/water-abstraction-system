@@ -8,6 +8,7 @@
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PrepareReturnFormsService = require('./prepare-return-forms.service.js')
+const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -29,7 +30,9 @@ async function go(sessionId, contactHashId, returnId) {
 
   const dueReturnLog = _dueReturnLog(dueReturns, returnId)
 
-  return PrepareReturnFormsService.go(licenceRef, dueReturnLog, recipient)
+  const notification = ReturnFormsNotificationPresenter.go(recipient, licenceRef, null, dueReturnLog)
+
+  return PrepareReturnFormsService.go(notification)
 }
 
 function _dueReturnLog(dueReturns, returnId) {

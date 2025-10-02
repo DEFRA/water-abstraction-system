@@ -77,6 +77,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
             periodStartDate: '1 April 2022'
           },
           recipient: 'primary.user@important.com',
+          status: 'pending',
           templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
         }
       ])
@@ -167,6 +168,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
             thresholdValue: 500
           },
           recipient: 'primary.user@important.com',
+          status: 'pending',
           templateId: notifyTemplates.alerts.email.stopWarning
         }
       ])
