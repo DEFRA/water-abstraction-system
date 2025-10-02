@@ -16,10 +16,7 @@
     }) }}
   {% endif %}
 
-  {% if licenceName %}
-    <span class="govuk-caption-l">{{ licenceName }}</span>
-  {% endif %}
-  <h1 class="govuk-heading-l">Licence number {{ licenceRef }}</h1>
+  {{ pageHeadingHtml }}
 
   {% if primaryUser %}
     <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>

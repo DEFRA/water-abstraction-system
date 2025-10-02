@@ -35,10 +35,10 @@ describe('Licences - View Licence presenter', () => {
         ends: null,
         includeInPresrocBilling: 'no',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceName: 'Between two ferns',
         licenceRef: '01/123',
         notification: null,
-        pageTitle: 'Licence 01/123',
+        pageTitle: 'Licence number 01/123',
+        pageTitleCaption: 'Between two ferns',
         primaryUser: {
           id: 10036,
           username: 'grace.hopper@example.co.uk'
@@ -50,13 +50,13 @@ describe('Licences - View Licence presenter', () => {
     })
   })
 
-  describe('the "licenceName" property', () => {
+  describe('the "pageTitleCaption" property', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.licenceName).to.equal('Between two ferns')
+          expect(result.pageTitleCaption).to.equal('Between two ferns')
         })
       })
 
@@ -68,7 +68,7 @@ describe('Licences - View Licence presenter', () => {
         it('returns null', () => {
           const result = ViewLicencePresenter.go(licence, auth)
 
-          expect(result.licenceName).to.be.null()
+          expect(result.pageTitleCaption).to.be.null()
         })
       })
     })
@@ -81,7 +81,7 @@ describe('Licences - View Licence presenter', () => {
       it('returns "Unregistered licence"', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.licenceName).to.equal('Unregistered licence')
+        expect(result.pageTitleCaption).to.equal('Unregistered licence')
       })
     })
   })
