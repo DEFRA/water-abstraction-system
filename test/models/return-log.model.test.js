@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, before } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,11 +24,11 @@ const ReturnLogModel = require('../../app/models/return-log.model.js')
 describe('Return Log model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await ReturnLogHelper.add()
-  })
-
   describe('Basic query', () => {
+    before(async () => {
+      testRecord = await ReturnLogHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ReturnLogModel.query().findById(testRecord.id)
 
@@ -41,7 +41,7 @@ describe('Return Log model', () => {
     describe('when linking to licence', () => {
       let testLicence
 
-      beforeEach(async () => {
+      before(async () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceRef } = testLicence
@@ -68,7 +68,6 @@ describe('Return Log model', () => {
 
     describe('when linking to return cycles', () => {
       let returnCycle
-      let testRecord
 
       before(async () => {
         returnCycle = await ReturnCycleHelper.select()
@@ -95,7 +94,7 @@ describe('Return Log model', () => {
     describe('when linking to return requirements', () => {
       let testReturnRequirements
 
-      beforeEach(async () => {
+      before(async () => {
         testReturnRequirements = await ReturnRequirementHelper.add()
 
         testRecord = await ReturnLogHelper.add({ returnRequirementId: testReturnRequirements.id })
@@ -121,7 +120,9 @@ describe('Return Log model', () => {
     describe('when linking to return submissions', () => {
       let returnSubmissions
 
-      beforeEach(async () => {
+      before(async () => {
+        testRecord = await ReturnLogHelper.add()
+
         const { id: returnLogId } = testRecord
 
         returnSubmissions = []
