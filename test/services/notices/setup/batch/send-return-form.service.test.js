@@ -18,7 +18,7 @@ const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify
 const PrepareReturnFormsService = require('../../../../../app/services/notices/setup/prepare-return-forms.service.js')
 
 // Thing under test
-const SendReturnFormService = require('../../../../../app/services/notices/setup/batch/send-rerturn-form.service.js')
+const SendReturnFormService = require('../../../../../app/services/notices/setup/batch/send-return-form.service.js')
 
 describe('Notices - Setup - Batch - Send Return form service', () => {
   let buffer
