@@ -26,7 +26,7 @@ function go(notifyResult) {
     return {
       notifyId: response.body.id,
       notifyStatus: 'created',
-      plaintext: response.body.content?.body,
+      plaintext: response.body.content?.body || null,
       status: 'pending'
     }
   }
