@@ -25,6 +25,7 @@ const ReturnRequirementModel = require('../../app/models/return-requirement.mode
 describe('Return Requirement model', () => {
   let testPoint
   let testRecord
+  let testReturnLogs
   let testReturnRequirementPurposes
   let testReturnVersion
 
@@ -44,6 +45,13 @@ describe('Return Requirement model', () => {
       })
 
       testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+
+    testReturnLogs = []
+    for (let i = 0; i < 2; i++) {
+      const returnLog = await ReturnLogHelper.add({ returnRequirementId: testRecord.id })
+
+      testReturnLogs.push(returnLog)
     }
   })
 
@@ -78,19 +86,6 @@ describe('Return Requirement model', () => {
     })
 
     describe('when linking to return logs', () => {
-      let returnLogs
-
-      before(async () => {
-        const { id: returnRequirementId } = testRecord
-
-        returnLogs = []
-        for (let i = 0; i < 2; i++) {
-          const returnLog = await ReturnLogHelper.add({ returnRequirementId })
-
-          returnLogs.push(returnLog)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query().innerJoinRelated('returnLogs')
 
@@ -105,8 +100,8 @@ describe('Return Requirement model', () => {
 
         expect(result.returnLogs).to.be.an.array()
         expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(returnLogs[0])
-        expect(result.returnLogs).to.include(returnLogs[1])
+        expect(result.returnLogs).to.include(testReturnLogs[0])
+        expect(result.returnLogs).to.include(testReturnLogs[1])
       })
     })
 
