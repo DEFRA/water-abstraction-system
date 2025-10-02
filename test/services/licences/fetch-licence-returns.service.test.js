@@ -73,6 +73,11 @@ describe('Licences - Fetch licence returns service', () => {
         total: 3
       })
       //  This should be ordered first by start date, then by return reference
+      //
+      // - 2020-05-01 - 123
+      // - 2020-02-01 - 10334004
+      // - 2020-02-01 - 9999990
+      //
       expect(result.returns).to.equal([
         {
           dueDate: returnLogs[2].dueDate,
