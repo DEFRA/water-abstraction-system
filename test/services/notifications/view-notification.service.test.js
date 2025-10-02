@@ -51,6 +51,9 @@ describe('View Notification service', () => {
         licenceRef: '01/117',
         messageType: 'letter',
         pageTitle: 'Hands off flow: levels warning',
+        returnForm: {
+          text: 'No preview available'
+        },
         sentDate: '2 July 2024'
       })
     })

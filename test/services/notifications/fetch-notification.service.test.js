@@ -11,7 +11,7 @@ const { expect } = Code
 const EventHelper = require('../../support/helpers/event.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
-const ScheduledNotificationsHelper = require('../../support/helpers/scheduled-notification.helper.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
 
 // Thing under test
 const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
@@ -27,7 +27,7 @@ describe('Fetch Notification service', () => {
     licence = await LicenceHelper.add()
     testNotification = NotificationsFixture.notification()
 
-    notification = await ScheduledNotificationsHelper.add({
+    notification = await NotificationHelper.add({
       ...testNotification.notification,
       eventId: event.id
     })
@@ -44,6 +44,19 @@ describe('Fetch Notification service', () => {
         },
         notification: {
           createdAt: notification.createdAt,
+          event: {
+            metadata: {
+              batch: {
+                id: event.metadata.batch.id,
+                region: {
+                  id: event.metadata.batch.region.id
+                },
+                scheme: event.metadata.batch.scheme,
+                type: event.metadata.batch.type
+              }
+            }
+          },
+          id: notification.id,
           messageType: 'letter',
           personalisation: {
             postcode: 'ME15 0NE',
@@ -64,19 +77,7 @@ describe('Fetch Notification service', () => {
             '# Why you are receiving this notification\n' +
             '\n',
           recipient: null,
-          sendAfter: new Date('2024-07-02T16:52:17.000Z'),
-          event: {
-            metadata: {
-              batch: {
-                id: event.metadata.batch.id,
-                region: {
-                  id: event.metadata.batch.region.id
-                },
-                scheme: event.metadata.batch.scheme,
-                type: event.metadata.batch.type
-              }
-            }
-          }
+          pdf: null
         }
       })
     })

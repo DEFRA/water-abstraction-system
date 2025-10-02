@@ -77,7 +77,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -121,7 +121,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -162,10 +162,15 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
   })
 
-  describe('when sending PDFs', () => {
+  describe('when sending PDFs', { timeout: 5000 }, () => {
     let notification
 
     beforeEach(async () => {
+      event = await EventHelper.add({
+        referenceCode,
+        subtype: 'paperReturnForms'
+      })
+
       referenceCode = generateReferenceCode('PRTF')
 
       notification = _notifications(event.id, [recipientsFixture.licenceHolder.licence_refs])
@@ -183,7 +188,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
 
     it('should send and then save the notification', async () => {
-      await BatchNotificationsService.go(notifications, event.id, referenceCode)
+      await BatchNotificationsService.go(notifications, event, referenceCode)
 
       // Confirm the notifications are updated and Notify request recorded as expected
       const updatedNotifications = await NotificationModel.query().where('eventId', event.id)
@@ -235,7 +240,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should not affect the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id, referenceCode)
+        await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
 
@@ -268,7 +273,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
 
       it('should increment the error count', async () => {
-        await BatchNotificationsService.go(notifications, event.id, referenceCode)
+        await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
 

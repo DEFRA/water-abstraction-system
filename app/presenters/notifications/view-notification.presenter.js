@@ -10,12 +10,12 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 /**
  * Formats notification data ready for presenting in the view notification page
  *
- * @param {module:ScheduledNotificationModel} notificationData - The scheduled notification and related licence data
+ * @param {module:NotificationModel} notificationData - The notification and related licence data
  *
  * @returns {object} The data formatted for the view template
  */
 function go(notificationData) {
-  const { createdAt, messageType, personalisation, plaintext, recipient, sendAfter } = notificationData.notification
+  const { createdAt, messageType, personalisation, plaintext, recipient, id, pdf } = notificationData.notification
   const { id: licenceId, licenceRef } = notificationData.licence
 
   return {
@@ -25,7 +25,8 @@ function go(notificationData) {
     licenceRef,
     messageType,
     pageTitle: _pageTitle(notificationData.notification),
-    sentDate: sendAfter ? formatLongDate(sendAfter) : formatLongDate(createdAt)
+    returnForm: _returnForm(id, pdf),
+    sentDate: formatLongDate(createdAt)
   }
 }
 
@@ -42,6 +43,19 @@ function _address(personalisation) {
   return addressLines.filter((addressLine) => {
     return addressLine
   })
+}
+
+function _returnForm(id, pdf) {
+  if (pdf) {
+    return {
+      link: `/system/notifications/${id}/download`,
+      text: 'Preview paper return'
+    }
+  }
+
+  return {
+    text: 'No preview available'
+  }
 }
 
 function _pageTitle(notification) {

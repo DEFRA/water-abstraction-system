@@ -71,7 +71,7 @@ async function _processNotifications(notifications, notice, referenceCode) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await BatchNotificationsService.go(notifications, notice.id, referenceCode)
+    await BatchNotificationsService.go(notifications, notice, referenceCode)
 
     calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
   } catch (error) {

@@ -58,7 +58,6 @@ describe('Licences - View Licence Communications presenter', () => {
             sent: '15 May 2024',
             type: {
               label: 'Returns: invitation',
-              pdf: false,
               sentVia: 'sent 15 May 2024 via letter'
             }
           }
@@ -93,31 +92,12 @@ describe('Licences - View Licence Communications presenter', () => {
     })
 
     describe('the "messageRef" property', () => {
-      describe('when the message ref contains pdf', () => {
-        beforeEach(() => {
-          communications[0].messageRef = 'pdf.return_form'
-        })
+      it('returns that communication type', () => {
+        const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
 
-        it('returns that communication type', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
-
-          expect(result.communications[0].type).to.equal({
-            label: 'Returns: invitation',
-            pdf: true,
-            sentVia: 'sent 15 May 2024 via letter'
-          })
-        })
-      })
-
-      describe('when the message ref does not contain pdf', () => {
-        it('returns that communication type', () => {
-          const result = ViewLicenceCommunicationsPresenter.go(communications, documentId, licenceId)
-
-          expect(result.communications[0].type).to.equal({
-            label: 'Returns: invitation',
-            pdf: false,
-            sentVia: 'sent 15 May 2024 via letter'
-          })
+        expect(result.communications[0].type).to.equal({
+          label: 'Returns: invitation',
+          sentVia: 'sent 15 May 2024 via letter'
         })
       })
     })
@@ -147,7 +127,6 @@ describe('Licences - View Licence Communications presenter', () => {
 
         expect(result.communications[0].type).to.equal({
           label: 'Test - Water abstraction alert',
-          pdf: false,
           sentVia: 'sent 15 May 2024 via letter'
         })
       })
