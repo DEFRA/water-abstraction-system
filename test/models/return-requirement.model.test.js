@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
@@ -23,6 +25,7 @@ const ReturnRequirementModel = require('../../app/models/return-requirement.mode
 describe('Return Requirement model', () => {
   let testPoint
   let testRecord
+  let testReturnLogs
   let testReturnRequirementPurposes
   let testReturnVersion
 
@@ -42,6 +45,13 @@ describe('Return Requirement model', () => {
       })
 
       testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+
+    testReturnLogs = []
+    for (let i = 0; i < 2; i++) {
+      const returnLog = await ReturnLogHelper.add({ returnRequirementId: testRecord.id })
+
+      testReturnLogs.push(returnLog)
     }
   })
 
@@ -72,6 +82,26 @@ describe('Return Requirement model', () => {
         expect(result.points).to.have.length(1)
         expect(result.points[0]).to.be.an.instanceOf(PointModel)
         expect(result.points[0]).to.equal(testPoint, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to return logs', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReturnRequirementModel.query().innerJoinRelated('returnLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return logs', async () => {
+        const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
+
+        expect(result).to.be.instanceOf(ReturnRequirementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnLogs).to.be.an.array()
+        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
+        expect(result.returnLogs).to.include(testReturnLogs[0])
+        expect(result.returnLogs).to.include(testReturnLogs[1])
       })
     })
 
