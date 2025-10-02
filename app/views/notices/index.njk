@@ -13,13 +13,11 @@
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
-  {# Filters #}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
     <form  method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {# Filter by licence issues #}
       {{ govukCheckboxes({
         classes: "govuk-checkboxes--small",
         fieldset: {
@@ -82,7 +80,6 @@
         name: "noticeTypes"
       }) }}
 
-      {# Filter by sent by #}
       {{ govukInput({
         classes: "govuk-input--width-20",
         hint: {
@@ -99,7 +96,6 @@
         errorMessage: error.sentBy
       }) }}
 
-      {# Filter by reference #}
       {{ govukInput({
         classes: "govuk-input--width-10",
         id: "reference",
@@ -115,7 +111,6 @@
 
       <p class="govuk-!-font-weight-bold">Sent Dates</p>
 
-      {# Filter by from date #}
       {{ govukDateInput({
         fieldset: {
           legend: {
@@ -126,19 +121,19 @@
         id: 'fromDate',
         items: [
           {
-            classes: 'govuk-input--width-2 ' + errorClass,
+            classes: "govuk-input--width-2" ~ (error.fromDate and " govuk-input--error" or ""),
             label: 'Day',
             name: 'sentFromDay',
             value: filters.sentFromDay
           },
           {
-            classes: 'govuk-input--width-2 ' + errorClass,
+            classes: "govuk-input--width-2" ~ (error.fromDate and " govuk-input--error" or ""),
             label: 'Month',
             name: 'sentFromMonth',
             value: filters.sentFromMonth
           },
           {
-            classes: 'govuk-input--width-4 ' + errorClass,
+            classes: "govuk-input--width-4" ~ (error.fromDate and " govuk-input--error" or ""),
             label: 'Year',
             name: 'sentFromYear',
             value:filters.sentFromYear
@@ -148,7 +143,6 @@
         errorMessage: error.fromDate
       }) }}
 
-      {# Filter by to date #}
       {{ govukDateInput({
         fieldset: {
           legend: {
@@ -159,19 +153,19 @@
         id: 'toDate',
         items: [
           {
-            classes: 'govuk-input--width-2 ' + errorClass,
+            classes: "govuk-input--width-2" ~ (error.toDate and " govuk-input--error" or ""),
             name: 'sentToDay',
             label: 'Day',
             value: filters.sentToDay
           },
           {
-            classes: 'govuk-input--width-2 ' + errorClass,
+            classes: "govuk-input--width-2" ~ (error.toDate and " govuk-input--error" or ""),
             name: 'sentToMonth',
             label: 'Month',
             value: filters.sentToMonth
           },
           {
-            classes: 'govuk-input--width-4 ' + errorClass,
+            classes: "govuk-input--width-4" ~ (error.toDate and " govuk-input--error" or ""),
             name: 'sentToYear',
             label: 'Year',
             value: filters.sentToYear
@@ -205,7 +199,6 @@
     summaryText: "Filters"
   }) }}
 
-  {# Results #}
   {% if notices|length === 0 %}
     <p>No notices found.</p>
   {% else %}
@@ -214,7 +207,6 @@
       {# Set an easier to use index #}
       {% set rowIndex = loop.index0 %}
 
-      {# Link to view the notice #}
       {% set viewLink %}
         <a class="govuk-link" href="{{ notice.link }}">{{ notice.createdDate }}</a>
       {% endset %}
@@ -252,7 +244,6 @@
         }
       ] %}
 
-      {# Push our row into the table rows array #}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
