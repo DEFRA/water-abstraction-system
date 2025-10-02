@@ -27,8 +27,19 @@ describe('Licences - Fetch licence returns service', () => {
       dueDate: new Date('2020-06-28'),
       endDate: new Date('2020-06-01'),
       licenceRef: licence.licenceRef,
-      metadata: { nald: { formatId: 32 } },
-      returnReference: '32',
+      metadata: { nald: { formatId: 9999990 } },
+      returnReference: '9999990',
+      startDate: new Date('2020-02-01'),
+      status: 'due'
+    })
+    returnLogs.push(returnLog)
+
+    returnLog = await ReturnLogHelper.add({
+      dueDate: new Date('2020-06-28'),
+      endDate: new Date('2020-06-01'),
+      licenceRef: licence.licenceRef,
+      metadata: { nald: { formatId: 10334004 } },
+      returnReference: '10334004',
       startDate: new Date('2020-02-01'),
       status: 'due'
     })
@@ -59,10 +70,19 @@ describe('Licences - Fetch licence returns service', () => {
       const result = await FetchLicenceReturnsService.go(licence.id, 1)
 
       expect(result.pagination).to.equal({
-        total: 2
+        total: 3
       })
       //  This should be ordered first by start date, then by return reference
       expect(result.returns).to.equal([
+        {
+          dueDate: returnLogs[2].dueDate,
+          endDate: returnLogs[2].endDate,
+          id: returnLogs[2].id,
+          metadata: returnLogs[2].metadata,
+          returnReference: returnLogs[2].returnReference,
+          startDate: returnLogs[2].startDate,
+          status: returnLogs[2].status
+        },
         {
           dueDate: returnLogs[1].dueDate,
           endDate: returnLogs[1].endDate,
