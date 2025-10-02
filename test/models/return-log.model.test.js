@@ -42,9 +42,9 @@ describe('Return Log model', () => {
     testReturnSubmissions = []
     for (let i = 0; i < 2; i++) {
       const version = i
-      const testReturnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.id, version })
+      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.id, version })
 
-      testReturnSubmissions.push(testReturnSubmission)
+      testReturnSubmissions.push(returnSubmission)
     }
   })
 
