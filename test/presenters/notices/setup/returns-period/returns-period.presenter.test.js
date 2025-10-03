@@ -19,10 +19,10 @@ describe('Notices - Setup - Returns Period presenter', () => {
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
-  let testDate
-  let referenceCode
   let clock
+  let referenceCode
   let session = {}
+  let testDate
 
   afterEach(() => {
     session = {}

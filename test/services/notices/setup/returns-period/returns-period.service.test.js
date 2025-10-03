@@ -22,6 +22,7 @@ describe('Notices - Setup - Returns Period service', () => {
 
   before(async () => {
     referenceCode = generateReferenceCode()
+
     session = await SessionHelper.add({ data: { referenceCode, journey: 'invitations' } })
 
     const testDate = new Date('2024-12-01')
