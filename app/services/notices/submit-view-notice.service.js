@@ -2,7 +2,7 @@
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
- * @module SubmitViewService
+ * @module SubmitViewNoticeService
  */
 
 const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
@@ -79,9 +79,9 @@ function _clearFilters(payload, yar) {
 
 function _save(payload, yar) {
   yar.set('noticeFilter', {
-    status: payload.status,
     licence: payload.licence ?? null,
-    recipient: payload.recipient ?? null
+    recipient: payload.recipient ?? null,
+    status: payload.status ?? null
   })
 }
 
