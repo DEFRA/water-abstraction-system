@@ -9,6 +9,7 @@ const DetermineReturnsPeriodService = require('../determine-returns-period.servi
 const ReturnsPeriodPresenter = require('../../../../presenters/notices/setup/returns-period/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../../validators/notices/setup/returns-periods.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -22,7 +23,7 @@ const SessionModel = require('../../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session.noticeType)
 
   if (validationResult) {
     const formattedData = ReturnsPeriodPresenter.go(session)
@@ -54,18 +55,10 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = ReturnsPeriodValidator.go(payload)
+function _validate(payload, noticeType) {
+  const validationResult = ReturnsPeriodValidator.go(payload, noticeType)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
