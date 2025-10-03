@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,10 +18,26 @@ const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 
 describe('Region model', () => {
+  let testBillRuns
+  let testLicences
   let testRecord
 
-  beforeEach(() => {
+  before(async () => {
     testRecord = RegionHelper.select()
+
+    testBillRuns = []
+    for (let i = 0; i < 2; i++) {
+      const billRun = await BillRunHelper.add({ regionId: testRecord.id })
+
+      testBillRuns.push(billRun)
+    }
+
+    testLicences = []
+    for (let i = 0; i < 2; i++) {
+      const licence = await LicenceHelper.add({ licenceRef: LicenceHelper.generateLicenceRef(), regionId: testRecord.id })
+
+      testLicences.push(licence)
+    }
   })
 
   describe('Basic query', () => {
@@ -35,19 +51,6 @@ describe('Region model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill runs', () => {
-      let testBillRuns
-
-      beforeEach(async () => {
-        const { id } = testRecord
-
-        testBillRuns = []
-        for (let i = 0; i < 2; i++) {
-          const billRun = await BillRunHelper.add({ regionId: id })
-
-          testBillRuns.push(billRun)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query().innerJoinRelated('billRuns')
 
@@ -68,19 +71,6 @@ describe('Region model', () => {
     })
 
     describe('when linking to licences', () => {
-      let testLicences
-
-      beforeEach(async () => {
-        const { id } = testRecord
-
-        testLicences = []
-        for (let i = 0; i < 2; i++) {
-          const licence = await LicenceHelper.add({ licenceRef: LicenceHelper.generateLicenceRef(), regionId: id })
-
-          testLicences.push(licence)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query().innerJoinRelated('licences')
 
