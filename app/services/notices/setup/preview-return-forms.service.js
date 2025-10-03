@@ -32,7 +32,9 @@ async function go(sessionId, contactHashId, returnId) {
 
   const notification = ReturnFormsNotificationPresenter.go(recipient, licenceRef, null, dueReturnLog)
 
-  return PrepareReturnFormsService.go(notification)
+  const returnFormRequest = await PrepareReturnFormsService.go(notification)
+
+  return returnFormRequest.response.body
 }
 
 function _dueReturnLog(dueReturns, returnId) {

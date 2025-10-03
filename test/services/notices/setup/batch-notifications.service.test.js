@@ -52,7 +52,10 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves(buffer)
+    Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+      succeeded: true,
+      response: { body: buffer }
+    })
     Sinon.stub(ProcessNotificationStatusService, 'go')
 
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications

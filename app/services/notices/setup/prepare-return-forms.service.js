@@ -17,14 +17,12 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
  *
  * @param {object} notification - A return forms notification
  *
- * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer
+ * @returns {Promise<object>} - Resolves the response from the Gotenberg request wrapper
  */
 async function go(notification) {
   const pageData = PrepareReturnFormsPresenter.go(notification)
 
-  const requestData = await GenerateReturnFormRequest.send(pageData)
-
-  return requestData.response.body
+  return GenerateReturnFormRequest.send(pageData)
 }
 
 module.exports = {
