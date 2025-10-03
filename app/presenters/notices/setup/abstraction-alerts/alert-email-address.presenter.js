@@ -10,12 +10,11 @@
  *
  * @param {module:SessionModel} session - The session instance
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {object} validationResult - The validation results from the payload
  * @param {object} payload - The submitted form data
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, auth, validationResult) {
+function go(session, auth) {
   const { alertEmailAddress, alertEmailAddressType, monitoringStationName, id: sessionId } = session
 
   return {
