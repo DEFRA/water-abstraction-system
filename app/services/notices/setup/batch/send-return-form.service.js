@@ -6,6 +6,7 @@
  */
 
 const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
+const NotificationErrorPresenter = require('../../../../presenters/notices/setup/notification-error.presenter.js')
 const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
 const PrepareReturnFormsService = require('../prepare-return-forms.service.js')
 
@@ -18,14 +19,29 @@ const PrepareReturnFormsService = require('../prepare-return-forms.service.js')
  * @returns {Promise<object>} - a notification with the Notify response
  */
 async function go(notification, referenceCode) {
-  const pdf = await PrepareReturnFormsService.go(notification)
+  const returnFormRequest = await PrepareReturnFormsService.go(notification)
 
-  const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
+  if (returnFormRequest.succeeded) {
+    const pdf = returnFormRequest.response.body
+
+    const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
+
+    return {
+      ...NotifyUpdatePresenter.go(notifyResult),
+      id: notification.id,
+      pdf
+    }
+  }
+
+  return _returnFromError(notification, returnFormRequest)
+}
+
+function _returnFromError(notification, returnFormRequest) {
+  const errors = [returnFormRequest.response.message]
 
   return {
-    ...NotifyUpdatePresenter.go(notifyResult),
-    id: notification.id,
-    pdf
+    ...NotificationErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the return form PDF`, errors),
+    id: notification.id
   }
 }
 

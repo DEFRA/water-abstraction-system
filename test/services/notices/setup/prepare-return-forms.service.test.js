@@ -61,6 +61,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     }
 
     Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
+      succeeded: true,
       response: {
         body: buffer
       }
@@ -76,12 +77,23 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
   })
 
   describe('when called', () => {
-    it('returns generated pdf as an array buffer', async () => {
+    it('returns the request object', async () => {
       const result = await PrepareReturnFormsService.go(notification)
 
-      expect(result).to.be.instanceOf(ArrayBuffer)
+      expect(result).to.equal({
+        response: {
+          body: buffer
+        },
+        succeeded: true
+      })
+    })
+
+    it('returns the generated pdf as an array buffer', async () => {
+      const result = await PrepareReturnFormsService.go(notification)
+
+      expect(result.response.body).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
-      expect(result.byteLength).to.equal(9)
+      expect(result.response.body.byteLength).to.equal(9)
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
