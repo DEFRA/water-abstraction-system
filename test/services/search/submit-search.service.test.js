@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const QuerySearchService = require('../../../app/services/search/query-search.service.js')
+const SubmitSearchService = require('../../../app/services/search/submit-search.service.js')
 
 const EXPECTED_ERROR = {
   errorList: [
@@ -20,7 +20,7 @@ const EXPECTED_ERROR = {
   query: 'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
 }
 
-describe('Search - Query Search service', () => {
+describe('Search - Submit search service', () => {
   let query
 
   describe('when called with a query', () => {
@@ -29,7 +29,7 @@ describe('Search - Query Search service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await QuerySearchService.go(query)
+      const result = await SubmitSearchService.go(query)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -45,7 +45,7 @@ describe('Search - Query Search service', () => {
     })
 
     it('returns page data with an error message', async () => {
-      const result = await QuerySearchService.go(query)
+      const result = await SubmitSearchService.go(query)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -62,7 +62,7 @@ describe('Search - Query Search service', () => {
     })
 
     it('returns page data with an error message', async () => {
-      const result = await QuerySearchService.go(query)
+      const result = await SubmitSearchService.go(query)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -79,7 +79,7 @@ describe('Search - Query Search service', () => {
     })
 
     it('returns page data with an error message', async () => {
-      const result = await QuerySearchService.go(query)
+      const result = await SubmitSearchService.go(query)
 
       expect(result).to.equal({
         activeNavBar: 'search',

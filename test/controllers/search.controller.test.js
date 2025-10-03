@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const QuerySearchService = require('../../app/services/search/query-search.service.js')
+const QuerySearchService = require('../../app/services/search/submit-search.service.js')
 const ViewSearchService = require('../../app/services/search/view-search.service.js')
 
 // For running our service
