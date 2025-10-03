@@ -39,7 +39,7 @@ function go(notices, totalNumber, selectedPage, numberOfPages) {
 }
 
 function _link(noticeId) {
-  if (featureFlagsConfig.enableNotificationsView) {
+  if (featureFlagsConfig.enableSystemNoticeView) {
     return `/system/notices/${noticeId}`
   }
 
