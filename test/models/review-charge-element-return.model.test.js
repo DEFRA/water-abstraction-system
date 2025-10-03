@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,11 +16,11 @@ const ReviewChargeElementReturnModel = require('../../app/models/review-charge-e
 describe('Review Charge Element Return model', () => {
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReviewChargeElementReturnHelper.add()
-    })
+  before(async () => {
+    testRecord = await ReviewChargeElementReturnHelper.add()
+  })
 
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReviewChargeElementReturnModel.query().findById(testRecord.id)
 

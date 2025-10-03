@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,13 +16,16 @@ const ScheduledNotificationHelper = require('../support/helpers/scheduled-notifi
 const ScheduledNotificationModel = require('../../app/models/scheduled-notification.model.js')
 
 describe('Scheduled Notification model', () => {
+  let testEvent
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ScheduledNotificationHelper.add()
-    })
+  before(async () => {
+    testEvent = await EventHelper.add()
 
+    testRecord = await ScheduledNotificationHelper.add({ eventId: testEvent.id })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await ScheduledNotificationModel.query().findById(testRecord.id)
 
@@ -33,14 +36,6 @@ describe('Scheduled Notification model', () => {
 
   describe('Relationships', () => {
     describe('when linking to event', () => {
-      let testEvent
-
-      beforeEach(async () => {
-        testEvent = await EventHelper.add()
-
-        testRecord = await ScheduledNotificationHelper.add({ eventId: testEvent.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ScheduledNotificationModel.query().innerJoinRelated('event')
 

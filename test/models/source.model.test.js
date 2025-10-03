@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,10 +16,18 @@ const SourceHelper = require('../support/helpers/source.helper.js')
 const SourceModel = require('../../app/models/source.model.js')
 
 describe('Source model', () => {
+  let testPoints
   let testRecord
 
-  beforeEach(() => {
+  before(async () => {
     testRecord = SourceHelper.select()
+
+    testPoints = []
+    for (let i = 0; i < 2; i++) {
+      const point = await PointHelper.add({ sourceId: testRecord.id })
+
+      testPoints.push(point)
+    }
   })
 
   describe('Basic query', () => {
@@ -33,19 +41,6 @@ describe('Source model', () => {
 
   describe('Relationships', () => {
     describe('when linking to points', () => {
-      let testPoints
-
-      beforeEach(async () => {
-        const { id } = testRecord
-
-        testPoints = []
-        for (let i = 0; i < 2; i++) {
-          const point = await PointHelper.add({ sourceId: id })
-
-          testPoints.push(point)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await SourceModel.query().innerJoinRelated('points')
 

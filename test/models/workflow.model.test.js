@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,10 +16,13 @@ const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
 describe('Workflow model', () => {
+  let testLicence
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await WorkflowHelper.add()
+  before(async () => {
+    testLicence = await LicenceHelper.add()
+
+    testRecord = await WorkflowHelper.add({ licenceId: testLicence.id })
   })
 
   describe('Basic query', () => {
@@ -33,16 +36,6 @@ describe('Workflow model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-
-        testRecord = await WorkflowHelper.add({ licenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await WorkflowModel.query().innerJoinRelated('licence')
 

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,10 +18,18 @@ const TransactionHelper = require('../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../app/models/transaction.model.js')
 
 describe('Transaction model', () => {
+  let testBillLicence
+  let testChargeReference
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await TransactionHelper.add()
+  before(async () => {
+    testBillLicence = await BillLicenceHelper.add()
+    testChargeReference = await ChargeReferenceHelper.add()
+
+    testRecord = await TransactionHelper.add({
+      billLicenceId: testBillLicence.id,
+      chargeReferenceId: testChargeReference.id
+    })
   })
 
   describe('Basic query', () => {
@@ -35,16 +43,6 @@ describe('Transaction model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill licence', () => {
-      let testBillLicence
-
-      beforeEach(async () => {
-        testBillLicence = await BillLicenceHelper.add()
-
-        const { id: billLicenceId } = testBillLicence
-
-        testRecord = await TransactionHelper.add({ billLicenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await TransactionModel.query().innerJoinRelated('billLicence')
 
@@ -63,16 +61,6 @@ describe('Transaction model', () => {
     })
 
     describe('when linking to charge reference', () => {
-      let testChargeReference
-
-      beforeEach(async () => {
-        testChargeReference = await ChargeReferenceHelper.add()
-
-        const { id: chargeReferenceId } = testChargeReference
-
-        testRecord = await TransactionHelper.add({ chargeReferenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await TransactionModel.query().innerJoinRelated('chargeReference')
 
