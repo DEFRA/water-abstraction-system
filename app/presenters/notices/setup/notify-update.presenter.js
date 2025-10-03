@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.scheduled_notifications'
+ * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.notifications'
  * @module NotifyUpdatePresenter
  */
 
 const NotificationErrorPresenter = require('./notification-error.presenter.js')
 
 /**
- * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.scheduled_notifications'
+ * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.notifications'
  *
  * When the request is made to notify we need to capture the response.
  *
@@ -19,7 +19,7 @@ const NotificationErrorPresenter = require('./notification-error.presenter.js')
  *
  * @param {object } notifyResult - the result of the send email or letter request to GOV.UK Notify
  *
- * @returns {object} the data from the result needed to save to 'water.scheduled_notifications'
+ * @returns {object} the data from the result needed to save to 'water.notifications'
  */
 function go(notifyResult) {
   const { response, succeeded } = notifyResult

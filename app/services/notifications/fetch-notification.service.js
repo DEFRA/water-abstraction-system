@@ -11,10 +11,10 @@ const NotificationModel = require('../../models/notification.model.js')
 /**
  * Fetches the matching notification and licence data needed for the view
  *
- * @param {string} notificationId - The UUID for the scheduledNotification
+ * @param {string} notificationId - The UUID for the Notification
  * @param {string} licenceId - The UUID for the related licence
  *
- * @returns {Promise<module:NotificationModel>} the matching `ScheduledNotificationsModel` instance and
+ * @returns {Promise<module:NotificationModel>} the matching `NotificationsModel` instance and
  * licence data
  */
 async function go(notificationId, licenceId) {

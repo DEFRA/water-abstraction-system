@@ -20,9 +20,9 @@ const NOTIFICATIONS_STATUS = {
  * - **pending** - when a notification is 'created' or 'sending'
  * - **sent** - when a notification is in any other state it is considered sent
  *
- * This 'display status' is stored in 'water.scheduled_notifications.status'
+ * This 'display status' is stored in 'water.notifications.status'
  *
- * We also store the raw 'notifyStatus' in 'water.scheduled_notifications.notifyStatus'
+ * We also store the raw 'notifyStatus' in 'water.notifications.notifyStatus'
  *
  * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
  * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  * @module BatchNotificationsService
  */
 
@@ -17,13 +17,13 @@ const UpdateEventService = require('./update-event.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  *
  * This service needs to perform the following actions on a recipient:
  *
  * - convert the recipients into notifications
  * - send the notifications to Notify
- * - save the notifications to `water.scheduled_notifications`
+ * - save the notifications to `water.notifications`
  * - update the linked event record with the count of notifications that failed to send to Notify
  *
  * This needs to be done in batches because Notify has a rate limit (3,000 messages per minute).

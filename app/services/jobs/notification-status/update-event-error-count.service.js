@@ -1,26 +1,26 @@
 'use strict'
 
 /**
- * Updates the error count for the provided events where scheduled notifications have errors.
+ * Updates the error count for the provided events where notifications have errors.
  * @module UpdateEventErrorCountService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Updates the error count for the provided events where scheduled notifications have encountered errors.
+ * Updates the error count for the provided events where notifications have encountered errors.
  *
  * This service updates the `event.metadata.error` field for each event in the provided `eventIds` array. The error
- * count will be set based on the number of related scheduled notifications that have errors.
+ * count will be set based on the number of related notifications that have errors.
  *
  * **Error Conditions**:
- * - Errors occurring during the initial creation of scheduled notifications (e.g., via Notify) will be counted as
+ * - Errors occurring during the initial creation of notifications (e.g., via Notify) will be counted as
  * errors.
  * - Errors are identified based on the `status` field in the response data from Notify. If the response status
- * indicates an error, it is included in the error count (the scheduled notification status will have been set to
+ * indicates an error, it is included in the error count (the notification status will have been set to
  * 'error').
  *
- * If a scheduled notification errors during a status update (e.g., receiving a 4xx or 5xx response), this is not
+ * If a notification errors during a status update (e.g., receiving a 4xx or 5xx response), this is not
  * considered an error and will not be included in the error count (the status will not be 'error'). Instead, this type
  * of error will be logged.
  *
@@ -47,7 +47,7 @@ function _query() {
   SELECT
     sn.event_id AS eventId,
   COUNT(sn.status) AS error_count
-  FROM public.scheduled_notifications sn
+  FROM public.notifications sn
   WHERE sn.status = 'error'
     AND sn.event_id = ANY(?)
   GROUP BY sn.event_id
