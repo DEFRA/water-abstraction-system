@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, before } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,6 +13,8 @@ const LicenceModel = require('../../app/models/licence.model.js')
 const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
+const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
 
@@ -20,10 +22,30 @@ const ReturnSubmissionModel = require('../../app/models/return-submission.model.
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 
 describe('Return Log model', () => {
+  let testLicence
   let testRecord
+  let testReturnCycle
+  let testReturnRequirements
+  let testReturnSubmissions
 
-  beforeEach(async () => {
-    testRecord = await ReturnLogHelper.add()
+  before(async () => {
+    testLicence = await LicenceHelper.add()
+    testReturnCycle = await ReturnCycleHelper.select()
+    testReturnRequirements = await ReturnRequirementHelper.add()
+
+    testRecord = await ReturnLogHelper.add({
+      licenceRef: testLicence.licenceRef,
+      returnCycleId: testReturnCycle.id,
+      returnRequirementId: testReturnRequirements.id
+    })
+
+    testReturnSubmissions = []
+    for (let i = 0; i < 2; i++) {
+      const version = i
+      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.id, version })
+
+      testReturnSubmissions.push(returnSubmission)
+    }
   })
 
   describe('Basic query', () => {
@@ -37,16 +59,6 @@ describe('Return Log model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { licenceRef } = testLicence
-
-        testRecord = await ReturnLogHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnLogModel.query().innerJoinRelated('licence')
 
@@ -64,21 +76,43 @@ describe('Return Log model', () => {
       })
     })
 
-    describe('when linking to return submissions', () => {
-      let returnSubmissions
+    describe('when linking to return cycles', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReturnLogModel.query().innerJoinRelated('returnCycle')
 
-      beforeEach(async () => {
-        const { id: returnLogId } = testRecord
-
-        returnSubmissions = []
-        for (let i = 0; i < 2; i++) {
-          const version = i
-          const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId, version })
-
-          returnSubmissions.push(returnSubmission)
-        }
+        expect(query).to.exist()
       })
 
+      it('can eager load the return submissions', async () => {
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnCycle')
+
+        expect(result).to.be.instanceOf(ReturnLogModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnCycle).to.be.an.instanceOf(ReturnCycleModel)
+        expect(result.returnCycle).to.equal(testReturnCycle, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to return requirements', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReturnLogModel.query().innerJoinRelated('returnRequirement')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return requirements', async () => {
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnRequirement')
+
+        expect(result).to.be.instanceOf(ReturnLogModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnRequirement).to.be.an.instanceOf(ReturnRequirementModel)
+        expect(result.returnRequirement).to.equal(testReturnRequirements)
+      })
+    })
+
+    describe('when linking to return submissions', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnLogModel.query().innerJoinRelated('returnSubmissions')
 
@@ -93,34 +127,8 @@ describe('Return Log model', () => {
 
         expect(result.returnSubmissions).to.be.an.array()
         expect(result.returnSubmissions[0]).to.be.an.instanceOf(ReturnSubmissionModel)
-        expect(result.returnSubmissions).to.include(returnSubmissions[0])
-        expect(result.returnSubmissions).to.include(returnSubmissions[1])
-      })
-    })
-
-    describe('when linking to return cycles', () => {
-      let testRecord
-      let returnCycle
-
-      before(async () => {
-        returnCycle = await ReturnCycleHelper.select()
-        testRecord = await ReturnLogHelper.add({ returnCycleId: returnCycle.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ReturnLogModel.query().innerJoinRelated('returnCycle')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the return submissions', async () => {
-        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnCycle')
-
-        expect(result).to.be.instanceOf(ReturnLogModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.returnCycle).to.be.an.instanceOf(ReturnCycleModel)
-        expect(result.returnCycle).to.equal(returnCycle, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.returnSubmissions).to.include(testReturnSubmissions[0])
+        expect(result.returnSubmissions).to.include(testReturnSubmissions[1])
       })
     })
   })
