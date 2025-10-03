@@ -8,7 +8,7 @@
 
 {% set rows = [] %}
 
-{%for recipient in recipients %}
+{% for recipient in recipients %}
   {% set rows = (rows.push(
     {
       value: recipient.contact_hash_id,
@@ -18,15 +18,13 @@
   ), rows) %}
 {% endfor %}
 
-
 {% block pageContent %}
   {% set innerHintHtml %}
     {{ govukHint({
       id: "recipients",
       classes: 'govuk-checkboxes__hint govuk-!-padding-left-0 govuk-!-margin-bottom-5',
       text: "Select all that apply"
-      })
-    }}
+    }) }}
     <a class="govuk-link" href="{{setupAddress.href}}">{{ setupAddress.text }}</a>
   {% endset %}
 

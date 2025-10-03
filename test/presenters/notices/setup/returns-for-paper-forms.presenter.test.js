@@ -37,7 +37,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
       const result = ReturnFormsPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/notices/setup/123/notice-type',
+        backLink: { href: '/system/notices/setup/123/notice-type', text: 'Back' },
         pageTitle: 'Select the returns for the paper forms',
         returns: [
           {
@@ -76,7 +76,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
         it('correctly set the back link to the check page', () => {
           const result = ReturnFormsPresenter.go(session)
 
-          expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+          expect(result.backLink.href).to.equal('/system/notices/setup/123/check-notice-type')
         })
       })
     })

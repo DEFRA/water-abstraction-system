@@ -145,8 +145,18 @@ describe('Notice Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/licence`,
-        error: { text: 'Select the notice type' },
+        backLink: { href: `/system/notices/setup/${session.id}/licence`, text: 'Back' },
+        error: {
+          errorList: [
+            {
+              href: '#noticeType',
+              text: 'Select the notice type'
+            }
+          ],
+          noticeType: {
+            text: 'Select the notice type'
+          }
+        },
         options: [
           {
             checked: false,

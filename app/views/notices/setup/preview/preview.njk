@@ -1,19 +1,9 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  <span class="govuk-caption-l">{{ caption }}</span>
-  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   {% if contents === 'error' %}
     <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>

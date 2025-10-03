@@ -11,6 +11,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/notice-type` page
@@ -75,17 +76,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = NoticeTypeValidator.go(payload)
+  const validationResult = NoticeTypeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

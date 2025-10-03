@@ -22,7 +22,7 @@ describe('Notice Type Presenter', () => {
       const result = NoticeTypePresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/notices/setup/123/licence',
+        backLink: { href: '/system/notices/setup/123/licence', text: 'Back' },
         options: [
           {
             checked: false,
@@ -94,7 +94,7 @@ describe('Notice Type Presenter', () => {
         it('correctly set the back link to the check page', () => {
           const result = NoticeTypePresenter.go(session)
 
-          expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+          expect(result.backLink.href).to.equal('/system/notices/setup/123/check-notice-type')
         })
       })
     })

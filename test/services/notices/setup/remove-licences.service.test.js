@@ -27,9 +27,10 @@ describe('Notices - Setup - Remove licences service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      backLink: { href: 'check', text: 'Back' },
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
-      referenceCode: 'RINV-1234',
+      pageTitleCaption: 'Notice RINV-1234',
       removeLicences: []
     })
   })

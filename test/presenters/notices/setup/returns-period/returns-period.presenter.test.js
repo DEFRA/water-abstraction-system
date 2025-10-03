@@ -37,9 +37,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
       expect(result).to.equal(
         {
-          backLink: '/manage',
+          backLink: { href: '/manage', text: 'Back' },
           pageTitle: 'Select the returns periods for the invitations',
-          referenceCode: 'RINV-123'
+          pageTitleCaption: 'Notice RINV-123'
         },
         { skip: ['returnsPeriod'] }
       )

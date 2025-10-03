@@ -45,9 +45,9 @@ describe('Notices - Setup - Preview - Check Return Forms Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice PRTF-WJUKBX',
+        backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: 'Notice PRTF-WJUKBX',
         returnLogs: [
           {
             action: {

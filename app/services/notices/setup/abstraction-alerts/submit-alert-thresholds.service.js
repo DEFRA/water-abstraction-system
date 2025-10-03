@@ -9,8 +9,7 @@
 const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
 const AlertThresholdsValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-thresholds.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
-
-const ALERT_THRESHOLDS_KEY = 'alert-thresholds'
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -51,29 +50,21 @@ async function go(sessionId, payload) {
  * @private
  */
 function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload[ALERT_THRESHOLDS_KEY])) {
-    payload[ALERT_THRESHOLDS_KEY] = [payload[ALERT_THRESHOLDS_KEY]]
+  if (!Array.isArray(payload.alertThresholds)) {
+    payload.alertThresholds = [payload.alertThresholds]
   }
 }
 
 async function _save(session, payload) {
-  session.alertThresholds = payload[ALERT_THRESHOLDS_KEY]
+  session.alertThresholds = payload.alertThresholds
 
   return session.$update()
 }
 
 function _validate(payload) {
-  const validation = AlertThresholdsValidator.go(payload)
+  const validationResult = AlertThresholdsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

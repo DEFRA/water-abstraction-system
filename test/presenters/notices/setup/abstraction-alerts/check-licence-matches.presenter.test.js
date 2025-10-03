@@ -37,10 +37,10 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches presenter',
       const result = CheckLicenceMatchesPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+        backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
-        caption: 'Death star',
         pageTitle: 'Check the licence matches for the selected thresholds',
+        pageTitleCaption: 'Death star',
         restrictionHeading: 'Flow and level restriction type and threshold',
         restrictions: [
           {

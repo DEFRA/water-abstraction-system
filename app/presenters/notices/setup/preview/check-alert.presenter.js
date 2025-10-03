@@ -21,9 +21,9 @@ function go(contactHashId, recipientLicenceRefs, session) {
   const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
 
   return {
-    backLink: `/system/notices/setup/${session.id}/check`,
-    caption: `Notice ${session.referenceCode}`,
+    backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
     pageTitle: 'Check the recipient previews',
+    pageTitleCaption: `Notice ${session.referenceCode}`,
     restrictionHeading: determineRestrictionHeading(recipientLicenceMonitoringStations),
     restrictions: _restrictions(contactHashId, recipientLicenceMonitoringStations, session.id)
   }
