@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../../../support/helpers/scheduled-notification.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const UpdateEventErrorCountService = require('../../../../app/services/jobs/notification-status/update-event-error-count.service.js')
@@ -24,7 +24,7 @@ describe('Job - Notification Status - Update Event service', () => {
       metadata: {}
     })
 
-    await ScheduledNotificationHelper.add({
+    await NotificationHelper.add({
       eventId: event.id,
       status: 'sending'
     })
@@ -32,13 +32,13 @@ describe('Job - Notification Status - Update Event service', () => {
 
   describe('when there are errors', () => {
     beforeEach(async () => {
-      await ScheduledNotificationHelper.add({
+      await NotificationHelper.add({
         eventId: event.id,
         status: 'error'
       })
     })
 
-    describe('and the "scheduledNotifications" have a single error', () => {
+    describe('and the "Notifications" have a single error', () => {
       it('updates the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
@@ -48,9 +48,9 @@ describe('Job - Notification Status - Update Event service', () => {
       })
     })
 
-    describe('and the "scheduledNotifications" have multiple errors', () => {
+    describe('and the "Notifications" have multiple errors', () => {
       beforeEach(async () => {
-        await ScheduledNotificationHelper.add({
+        await NotificationHelper.add({
           eventId: event.id,
           status: 'error'
         })
@@ -65,7 +65,7 @@ describe('Job - Notification Status - Update Event service', () => {
       })
     })
 
-    describe('and the "scheduledNotifications" have existing errors', () => {
+    describe('and the "Notifications" have existing errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
           type: 'notification',
@@ -73,7 +73,7 @@ describe('Job - Notification Status - Update Event service', () => {
           metadata: { errors: 3 }
         })
 
-        await ScheduledNotificationHelper.add({
+        await NotificationHelper.add({
           eventId: event.id,
           status: 'error'
         })
@@ -90,7 +90,7 @@ describe('Job - Notification Status - Update Event service', () => {
   })
 
   describe('when there are no errors', () => {
-    describe('and the "scheduledNotification" have no errors', () => {
+    describe('and the "Notification" have no errors', () => {
       it('should not update the error count"', async () => {
         await UpdateEventErrorCountService.go([event.id])
 
@@ -112,7 +112,7 @@ describe('Job - Notification Status - Update Event service', () => {
         metadata: {}
       })
 
-      await ScheduledNotificationHelper.add({
+      await NotificationHelper.add({
         eventId: additionalEvent.id,
         status: 'error'
       })

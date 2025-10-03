@@ -10,15 +10,15 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const EventModel = require('../../../app/models/event.model.js')
-const ScheduledNotificationHelper = require('../../support/helpers/scheduled-notification.helper.js')
-const ScheduledNotificationModel = require('../../../app/models/scheduled-notification.model.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const NotificationModel = require('../../../app/models/notification.model.js')
 
 // Thing under test
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
 describe('Notices - Fetch Notice service', () => {
   let testEvent
-  let testScheduledNotification
+  let testNotification
 
   describe('when a notice exists', () => {
     beforeEach(async () => {
@@ -34,19 +34,19 @@ describe('Notices - Fetch Notice service', () => {
           recipients: 1
         }
       })
-      testScheduledNotification = await ScheduledNotificationHelper.add({ eventId: testEvent.id })
+      testNotification = await NotificationHelper.add({ eventId: testEvent.id })
     })
 
     it('fetches the matching notice', async () => {
-      const result = await FetchNoticeService.go(testScheduledNotification.id)
+      const result = await FetchNoticeService.go(testNotification.id)
 
       expect(result.results).to.contain(
-        ScheduledNotificationModel.fromJson({
-          messageType: testScheduledNotification.messageType,
-          messageRef: testScheduledNotification.messageRef,
-          personalisation: testScheduledNotification.personalisation,
-          status: testScheduledNotification.status,
-          licences: testScheduledNotification.licences,
+        NotificationModel.fromJson({
+          messageType: testNotification.messageType,
+          messageRef: testNotification.messageRef,
+          personalisation: testNotification.personalisation,
+          status: testNotification.status,
+          licences: testNotification.licences,
           event: EventModel.fromJson({
             referenceCode: 'RREM-RD2KF4'
           })
