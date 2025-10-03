@@ -73,7 +73,7 @@ function _notice(journey, noticeType) {
 
 function _redirect(journey) {
   if (journey === 'standard') {
-    return 'returns-period'
+    return 'standard'
   }
 
   if (journey === 'alerts') {

@@ -41,7 +41,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
           expect(result).to.equal({
             sessionId: result.sessionId,
-            path: 'returns-period'
+            path: 'standard'
           })
 
           const matchingSession = await SessionModel.query().findById(result.sessionId)
@@ -73,7 +73,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
           expect(result).to.equal({
             sessionId: result.sessionId,
-            path: 'returns-period'
+            path: 'standard'
           })
 
           const matchingSession = await SessionModel.query().findById(result.sessionId)
