@@ -6,6 +6,7 @@
  */
 
 const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
+const SubmitReturnedLetterService = require('../services/notifications/submit-returned-letter.service.js')
 const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
@@ -30,6 +31,8 @@ async function returnedLetter(request, h) {
   const { notification_id: notificationId, reference } = request.payload
 
   global.GlobalNotifier.omg('Return letter callback triggered', { notificationId, reference })
+
+  await SubmitReturnedLetterService.go(notificationId)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
