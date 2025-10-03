@@ -25,7 +25,7 @@ describe('Notices - Setup - Licence presenter', () => {
 
     expect(result).to.equal({
       backLink: {
-        href: '/manage',
+        href: '/system/notices',
         text: 'Back'
       },
       licenceRef: null,
@@ -47,7 +47,7 @@ describe('Notices - Setup - Licence presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/manage',
+          href: '/system/notices',
           text: 'Back'
         },
         licenceRef,

@@ -78,7 +78,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: '/manage',
+          backLink: `/system/notices/setup/${session.id}/standard`,
           error: {
             text: 'Select the returns periods for the invitations'
           },

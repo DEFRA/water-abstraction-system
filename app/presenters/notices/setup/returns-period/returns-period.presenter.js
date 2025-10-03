@@ -18,12 +18,14 @@ const { determineUpcomingReturnPeriods } = require('../../../../lib/return-perio
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { referenceCode, journey } = session
+  const { referenceCode, journey, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null
 
   return {
-    backLink: '/manage',
+    // update this template standard
+    backLink: `/system/notices/setup/${sessionId}/standard`,
+    // This needs to be updated ?
     pageTitle: `Select the returns periods for the ${journey}`,
     referenceCode,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
