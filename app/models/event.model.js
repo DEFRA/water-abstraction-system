@@ -21,12 +21,12 @@ class EventModel extends BaseModel {
 
   static get relationMappings() {
     return {
-      scheduledNotifications: {
+      notifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'scheduled-notification.model',
+        modelClass: 'notification.model',
         join: {
           from: 'events.id',
-          to: 'scheduledNotifications.eventId'
+          to: 'notifications.eventId'
         }
       }
     }
