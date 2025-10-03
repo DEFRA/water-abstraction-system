@@ -48,6 +48,22 @@ describe('Data - Dates service', () => {
     expect(result.currentFinancialYear.endDate).to.be.instanceOf(Date)
   })
 
+  it('returns the current summer return cycle', () => {
+    const result = DatesService.go()
+
+    expect(result.currentSummerReturnCycle).to.exist()
+    expect(result.currentSummerReturnCycle.startDate).to.be.instanceOf(Date)
+    expect(result.currentSummerReturnCycle.endDate).to.be.instanceOf(Date)
+  })
+
+  it('returns the current winter return cycle', () => {
+    const result = DatesService.go()
+
+    expect(result.currentWinterReturnCycle).to.exist()
+    expect(result.currentWinterReturnCycle.startDate).to.be.instanceOf(Date)
+    expect(result.currentWinterReturnCycle.endDate).to.be.instanceOf(Date)
+  })
+
   it('returns the current returns periods', () => {
     const result = DatesService.go()
 

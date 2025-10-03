@@ -7,6 +7,11 @@
 
 const DetermineBillingPeriodsService = require('../../bill-runs/determine-billing-periods.service.js')
 const { determineCurrentFinancialYear, today } = require('../../../lib/general.lib.js')
+const {
+  determineCycleDueDate,
+  determineCycleEndDate,
+  determineCycleStartDate
+} = require('../../../lib/return-cycle-dates.lib.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
@@ -28,6 +33,16 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
  */
 function go() {
   const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today())
+  const currentSummerReturnCycle = {
+    startDate: determineCycleStartDate(true),
+    endDate: determineCycleEndDate(true),
+    dueDate: determineCycleDueDate(true)
+  }
+  const currentWinterReturnCycle = {
+    startDate: determineCycleStartDate(false),
+    endDate: determineCycleEndDate(false),
+    dueDate: determineCycleDueDate(false)
+  }
   const currentFinancialYear = determineCurrentFinancialYear()
   const billingPeriods = {
     annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
@@ -42,6 +57,8 @@ function go() {
   return {
     billingPeriods,
     currentFinancialYear,
+    currentSummerReturnCycle,
+    currentWinterReturnCycle,
     firstReturnPeriod,
     secondReturnPeriod
   }
