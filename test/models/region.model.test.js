@@ -34,7 +34,10 @@ describe('Region model', () => {
 
     testLicences = []
     for (let i = 0; i < 2; i++) {
-      const licence = await LicenceHelper.add({ licenceRef: LicenceHelper.generateLicenceRef(), regionId: testRecord.id })
+      const licence = await LicenceHelper.add({
+        licenceRef: LicenceHelper.generateLicenceRef(),
+        regionId: testRecord.id
+      })
 
       testLicences.push(licence)
     }
