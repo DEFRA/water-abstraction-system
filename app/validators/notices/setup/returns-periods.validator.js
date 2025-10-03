@@ -12,8 +12,8 @@ const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
  * Validates data submitted for the `/notices/setup/returns-period` page
  *
  * @param {object} payload - The payload from the request to be validated
+ * @param {string} noticeType - The notice type to display in the error message
  *
- * @param noticeType
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
