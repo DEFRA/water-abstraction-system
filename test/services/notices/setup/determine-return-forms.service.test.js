@@ -11,8 +11,9 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
@@ -71,7 +72,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -100,7 +101,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -142,7 +143,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -171,7 +172,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -200,7 +201,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(additionalDueReturn.dueDate),
               end_date: '31 March 2023',
               format_id: additionalDueReturn.returnReference,
               is_two_part_tariff: false,
@@ -229,7 +230,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              due_date: '28 April 2023',
+              due_date: formatLongDate(additionalDueReturn.dueDate),
               end_date: '31 March 2023',
               format_id: additionalDueReturn.returnReference,
               is_two_part_tariff: false,
