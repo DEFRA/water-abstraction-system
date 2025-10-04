@@ -9,6 +9,7 @@ const FetchNoticeService = require('../../services/notices/fetch-notice.service.
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
 const ViewValidator = require('../../validators/notices/view.validator.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -30,9 +31,9 @@ async function go(noticeId, payload, yar, page = 1) {
     return {}
   }
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     _save(payload, yar)
 
     return {}
@@ -41,8 +42,25 @@ async function go(noticeId, payload, yar, page = 1) {
   // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
   // number
   const selectedPageNumber = Number(page)
+
   const savedFilters = _savedFilters(yar)
 
+  return _replayView(noticeId, payload, error, selectedPageNumber, savedFilters)
+}
+
+function _clearFilters(payload, yar) {
+  const clearFilters = payload.clearFilters
+
+  if (clearFilters) {
+    yar.clear('noticeFilter')
+
+    return true
+  }
+
+  return false
+}
+
+async function _replayView(noticeId, payload, error, selectedPageNumber, savedFilters) {
   const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber, savedFilters)
 
   const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices/${notice.id}`)
@@ -56,25 +74,12 @@ async function go(noticeId, payload, yar, page = 1) {
 
   return {
     activeNavBar: 'manage',
-    error: validationResult,
-    errorList: validationResult.errorList,
+    error,
     filters: { ...savedFilters, ...payload },
     ...pageData,
     pagination,
     totalNumber
   }
-}
-
-function _clearFilters(payload, yar) {
-  const clearFilters = payload.clearFilters
-
-  if (clearFilters) {
-    yar.clear('noticeFilter')
-
-    return true
-  }
-
-  return false
 }
 
 function _save(payload, yar) {
@@ -98,25 +103,9 @@ function _savedFilters(payload) {
 }
 
 function _validate(payload) {
-  const validation = ViewValidator.go(payload)
+  const validationResult = ViewValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const result = {
-    errorList: []
-  }
-
-  validation.error.details.forEach((detail) => {
-    const path = detail.path[0]
-
-    result.errorList.push({ href: `#${path}`, text: detail.message })
-
-    result[path] = { message: detail.message }
-  })
-
-  return result
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
