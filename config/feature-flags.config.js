@@ -24,6 +24,7 @@ const config = {
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,
   enableSystemLicenceView: String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true' || false,
   enableSystemManageView: String(process.env.ENABLE_SYSTEM_MANAGE_VIEW) === 'true' || false,
+  enableSystemNoticeView: String(process.env.ENABLE_SYSTEM_NOTICE_VIEW) === 'true' || false,
   enableSystemReturnsSubmit: String(process.env.ENABLE_SYSTEM_RETURNS_SUBMIT) === 'true' || false,
   enableSystemReturnsView: String(process.env.ENABLE_SYSTEM_RETURNS_VIEW) === 'true' || false,
   enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,
