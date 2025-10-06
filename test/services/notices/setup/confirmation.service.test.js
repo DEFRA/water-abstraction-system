@@ -12,6 +12,9 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
+// Things we need to stub
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 // Thing under test
 const ConfirmationService = require('../../../../app/services/notices/setup/confirmation.service.js')
 
@@ -26,6 +29,8 @@ describe('Notices - Setup - Confirmation service', () => {
       subtype: 'returnInvitation',
       referenceCode
     })
+
+    Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
   afterEach(() => {
@@ -38,7 +43,7 @@ describe('Notices - Setup - Confirmation service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        forwardLink: `/notifications/report/${event.id}`,
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Returns invitations sent',
         referenceCode

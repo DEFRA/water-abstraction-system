@@ -8,8 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
@@ -47,7 +48,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          due_date: '28 April 2023',
+          due_date: formatLongDate(dueReturnLog.dueDate),
           end_date: '31 March 2023',
           format_id: dueReturnLog.returnReference,
           is_two_part_tariff: false,
