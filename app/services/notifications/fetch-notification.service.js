@@ -31,7 +31,7 @@ async function _fetchLicence(licenceId) {
 async function _fetchNotification(notificationId) {
   return NotificationModel.query()
     .findById(notificationId)
-    .select(['id', 'messageType', 'personalisation', 'plaintext', 'recipient', 'createdAt', 'createdAt', 'pdf'])
+    .select(['createdAt', 'id', 'messageType', 'pdf', 'personalisation', 'plaintext', 'recipient'])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select(['metadata'])
