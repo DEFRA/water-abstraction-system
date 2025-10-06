@@ -4,81 +4,111 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 
 // Thing under test
 const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
 
-describe('Fetch Notification service', () => {
-  let event
+describe('Notifications - Fetch Notification service', () => {
   let licence
+  let notice
   let notification
-  let testNotification
 
   before(async () => {
-    event = await EventHelper.add()
     licence = await LicenceHelper.add()
-    testNotification = NotificationsFixture.notification()
 
-    notification = await NotificationHelper.add({
-      ...testNotification.notification,
-      eventId: event.id
-    })
+    notice = await EventHelper.add(NoticesFixture.returnsPaperForm())
   })
 
   describe('when a matching notification exists', () => {
-    it('returns the matching notification with its related event and licence data', async () => {
-      const result = await FetchNotificationService.go(notification.id, licence.id)
+    describe('and the notification has a copy of its "pdf" saved', () => {
+      beforeEach(async () => {
+        notification = await NotificationHelper.add(NotificationsFixture.paperReturn(notice))
+      })
 
-      expect(result).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
-        notification: {
-          createdAt: notification.createdAt,
-          event: {
-            metadata: {
-              batch: {
-                id: event.metadata.batch.id,
-                region: {
-                  id: event.metadata.batch.region.id
-                },
-                scheme: event.metadata.batch.scheme,
-                type: event.metadata.batch.type
-              }
+      it('returns the matching notification with its related event and licence data', async () => {
+        const result = await FetchNotificationService.go(notification.id, licence.id)
+
+        expect(result).to.equal({
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          notification: {
+            createdAt: notification.createdAt,
+            id: notification.id,
+            messageType: 'letter',
+            personalisation: notification.personalisation,
+            plaintext: null,
+            recipient: null,
+            status: 'sent',
+            hasPdf: true,
+            event: {
+              createdAt: notice.createdAt,
+              id: notice.id,
+              issuer: 'admin-internal@wrls.gov.uk',
+              referenceCode: notice.referenceCode,
+              subtype: 'paperReturnForms',
+              alertType: null
             }
-          },
-          id: notification.id,
-          messageType: 'letter',
-          personalisation: {
-            postcode: 'ME15 0NE',
-            address_line_1: 'Ferns Surfacing Limited',
-            address_line_2: 'Tutsham Farm',
-            address_line_3: 'West Farleigh',
-            address_line_4: 'Maidstone',
-            address_line_5: 'Kent'
-          },
+          }
+        })
+      })
+    })
+
+    describe('and the notification does not have copy of its "pdf" saved (legacy)', () => {
+      beforeEach(async () => {
+        notification = await NotificationHelper.add({
+          ...NotificationsFixture.paperReturn(notice),
+          pdf: null,
           plaintext:
             'Water Resources Act 1991\n' +
-            'Our reference: HOF-UPMJ7G\n' +
+            `Our reference: ${notice.referenceCode}\n` +
             '\n' +
             'Dear licence holder,\n' +
             '\n' +
             '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n' +
             '\n' +
             '# Why you are receiving this notification\n' +
-            '\n',
-          recipient: null,
-          pdf: null
-        }
+            '\n'
+        })
+      })
+
+      it('returns the matching notification with its related event and licence data', async () => {
+        const result = await FetchNotificationService.go(notification.id, licence.id)
+
+        expect(result).to.equal({
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          notification: {
+            createdAt: notification.createdAt,
+            id: notification.id,
+            messageType: 'letter',
+            personalisation: notification.personalisation,
+            plaintext: notification.plaintext,
+            recipient: null,
+            status: 'sent',
+            hasPdf: false,
+            event: {
+              createdAt: notice.createdAt,
+              id: notice.id,
+              issuer: 'admin-internal@wrls.gov.uk',
+              referenceCode: notice.referenceCode,
+              subtype: 'paperReturnForms',
+              alertType: null
+            }
+          }
+        })
       })
     })
   })
