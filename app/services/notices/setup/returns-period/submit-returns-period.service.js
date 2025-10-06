@@ -23,7 +23,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload, session.noticeType)
 
   if (validationResult) {
     const pageData = ReturnsPeriodPresenter.go(session)

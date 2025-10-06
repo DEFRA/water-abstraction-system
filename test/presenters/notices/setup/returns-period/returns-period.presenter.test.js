@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../../app/presenters/notices/setup/returns-period/returns-period.presenter.js')
 
@@ -16,9 +19,10 @@ describe('Notices - Setup - Returns Period presenter', () => {
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
-  let testDate
   let clock
+  let referenceCode
   let session = {}
+  let testDate
 
   afterEach(() => {
     session = {}
@@ -27,7 +31,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   describe('the data', () => {
     beforeEach(() => {
-      session = { referenceCode: 'RINV-123', journey: 'invitations' }
+      referenceCode = generateReferenceCode()
+
+      session = { referenceCode, journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
@@ -37,9 +43,12 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
       expect(result).to.equal(
         {
-          backLink: { href: '/manage', text: 'Back' },
+          backLink: {
+            href: '/manage',
+            text: 'Back'
+          },
           pageTitle: 'Select the returns periods for the invitations',
-          pageTitleCaption: 'Notice RINV-123'
+          pageTitleCaption: `Notice ${referenceCode}`
         },
         { skip: ['returnsPeriod'] }
       )

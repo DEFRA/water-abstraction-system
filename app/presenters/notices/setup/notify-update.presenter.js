@@ -5,6 +5,8 @@
  * @module NotifyUpdatePresenter
  */
 
+const NotificationErrorPresenter = require('./notification-error.presenter.js')
+
 /**
  * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.scheduled_notifications'
  *
@@ -26,19 +28,16 @@ function go(notifyResult) {
     return {
       notifyId: response.body.id,
       notifyStatus: 'created',
-      plaintext: response.body.content?.body,
+      plaintext: response.body.content?.body || null,
       status: 'pending'
     }
   }
 
-  return {
-    notifyError: JSON.stringify({
-      status: response.statusCode,
-      message: `Request failed with status code ${response.statusCode}`,
-      errors: response.body.errors
-    }),
-    status: 'error'
-  }
+  return NotificationErrorPresenter.go(
+    response.statusCode,
+    `Request failed with status code ${response.statusCode}`,
+    response.body.errors
+  )
 }
 
 module.exports = {

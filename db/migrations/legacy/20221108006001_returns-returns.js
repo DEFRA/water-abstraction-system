@@ -20,6 +20,7 @@ exports.up = function (knex) {
     table.jsonb('metadata')
     table.date('received_date')
     table.string('return_requirement').notNullable()
+    table.uuid('return_requirement_id')
     table.date('due_date')
     table.boolean('under_query').notNullable().defaultTo(false)
     table.string('under_query_comment')

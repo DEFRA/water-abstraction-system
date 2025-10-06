@@ -8,7 +8,9 @@
     html: "Your reference number is <br><strong>" + referenceCode + "</strong>"
   }) }}
 
-  <p><a class="govuk-link" href="{{ forwardLink }}">View notifications report</a></p>
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ forwardLink }}">View notice</a>
+    </p>
 
   {% if monitoringStationLink %}
     <p>or</p>

@@ -12,10 +12,10 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
+const NotifyResponseFixture = require('../../../fixtures/notify-response.fixture.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
 const CreateEmailRequest = require('../../../../app/requests/notify/create-email.request.js')
@@ -42,7 +42,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     referenceCode = generateReferenceCode()
 
-    const notifyResponse = successfulNotifyResponses(referenceCode)
+    const notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode)
 
     const buffer = Buffer.from('mock file')
 
@@ -52,7 +52,10 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves(buffer)
+    Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+      succeeded: true,
+      response: { body: buffer }
+    })
     Sinon.stub(ProcessNotificationStatusService, 'go')
 
     // By setting the batch size to 1 we can prove that all the batches are run, as we should have all the notifications
@@ -182,7 +185,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
       notifications = [testNotification]
 
-      const notifyResponse = successfulNotifyResponses(referenceCode)
+      const notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode)
 
       Sinon.stub(CreatePrecompiledFileRequest, 'send').onCall(0).resolves(notifyResponse.pdf)
     })
@@ -294,65 +297,6 @@ describe('Notices - Setup - Batch Notifications service', () => {
     })
   })
 })
-
-function successfulNotifyResponses(referenceCode) {
-  return {
-    email: {
-      succeeded: true,
-      response: {
-        statusCode: 200,
-        body: {
-          content: {
-            body: 'Dear licence holder,\r\n',
-            from_email: 'environment.agency.water.resources.licensing.service@notifications.service.gov.uk',
-            one_click_unsubscribe_url: null,
-            subject: 'Submit your water abstraction returns by 28th April 2025'
-          },
-          id: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
-          reference: referenceCode,
-          scheduled_for: null,
-          template: {
-            id: notifyTemplates.standard.invitations.returnsAgentEmail,
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${notifyTemplates.standard.invitations.returnsAgentEmail}`,
-            version: 40
-          },
-          uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'
-        }
-      }
-    },
-    letter: {
-      succeeded: true,
-      response: {
-        statusCode: 200,
-        body: {
-          content: {
-            body: 'Dear Licence holder,\r\n',
-            subject: 'Submit your water abstraction returns by 28th April 2025'
-          },
-          id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference: referenceCode,
-          scheduled_for: null,
-          template: {
-            id: notifyTemplates.standard.invitations.licenceHolderLetter,
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${notifyTemplates.standard.invitations.licenceHolderLetter}`,
-            version: 32
-          },
-          uri: 'https://api.notifications.service.gov.uk/v2/notifications/fff6c2a9-77fc-4553-8265-546109a45044'
-        }
-      }
-    },
-    pdf: {
-      succeeded: true,
-      response: {
-        statusCode: 200,
-        body: {
-          id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference: referenceCode
-        }
-      }
-    }
-  }
-}
 
 function _notifications(eventId, licences) {
   const date = new Date('2024-01-01')

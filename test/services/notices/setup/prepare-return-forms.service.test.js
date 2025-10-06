@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
@@ -61,6 +62,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     }
 
     Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
+      succeeded: true,
       response: {
         body: buffer
       }
@@ -76,12 +78,23 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
   })
 
   describe('when called', () => {
-    it('returns generated pdf as an array buffer', async () => {
+    it('returns the request object', async () => {
       const result = await PrepareReturnFormsService.go(notification)
 
-      expect(result).to.be.instanceOf(ArrayBuffer)
+      expect(result).to.equal({
+        response: {
+          body: buffer
+        },
+        succeeded: true
+      })
+    })
+
+    it('returns the generated pdf as an array buffer', async () => {
+      const result = await PrepareReturnFormsService.go(notification)
+
+      expect(result.response.body).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
-      expect(result.byteLength).to.equal(9)
+      expect(result.response.body.byteLength).to.equal(9)
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
@@ -100,7 +113,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
           address_line_6: 'WD25 7LR',
           address_line_7: undefined
         },
-        dueDate: '28 April 2023',
+        dueDate: formatLongDate(dueReturnLog.dueDate),
         endDate: '31 March 2023',
         licenceRef,
         naldAreaCode: 'MIDLT',

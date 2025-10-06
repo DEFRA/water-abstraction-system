@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,13 +18,18 @@ const LicenceSupplementaryYearHelper = require('../support/helpers/licence-suppl
 const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
 
 describe('Licence Supplementary Year model', () => {
+  let testBillRun
+  let testLicence
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceSupplementaryYearHelper.add()
-    })
+  before(async () => {
+    testBillRun = await BillRunHelper.add()
+    testLicence = await LicenceHelper.add()
 
+    testRecord = await LicenceSupplementaryYearHelper.add({ billRunId: testBillRun.id, licenceId: testLicence.id })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id)
 
@@ -35,14 +40,6 @@ describe('Licence Supplementary Year model', () => {
 
   describe('Relationships', () => {
     describe('when linking to a licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        testRecord = await LicenceSupplementaryYearHelper.add({ licenceId: testLicence.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('licence')
 
@@ -61,14 +58,6 @@ describe('Licence Supplementary Year model', () => {
     })
 
     describe('when linking to a bill run', () => {
-      let testBillRun
-
-      beforeEach(async () => {
-        testBillRun = await BillRunHelper.add()
-
-        testRecord = await LicenceSupplementaryYearHelper.add({ billRunId: testBillRun.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('billRun')
 

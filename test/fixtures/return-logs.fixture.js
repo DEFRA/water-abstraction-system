@@ -1,5 +1,10 @@
 'use strict'
 
+const LicenceModel = require('../../app/models/licence.model.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+const ReturnLogModel = require('../../app/models/return-log.model.js')
+const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
+const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
 const {
   formatDateObjectToISO,
   daysFromPeriod,
@@ -7,11 +12,7 @@ const {
   monthsFromPeriod
 } = require('../../app/lib/dates.lib.js')
 const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
-const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
+const { relativeToToday } = require('../support/general.js')
 
 /**
  * Applies the fields that are returned by the FetchReturnLogService to a return log instance
@@ -29,6 +30,34 @@ function applyFetchReturnLogFields(returnLog) {
   returnLog.periodEndMonth = returnLog.metadata.nald.periodEndMonth
   returnLog.purposes = returnLog.metadata.purposes
   returnLog.twoPartTariff = returnLog.metadata.isTwoPartTariff
+}
+
+/**
+ * This fixture would be the result of calling the 'FetchReturnsDueByLicenceRefService'
+ *
+ * We use these 'due' return logs in the adhoc notification journey for the 'returnForms' notice type.
+ *
+ * @returns {object} Returns an enhanced version of the module:ReturnLogModel in line with the fetch service
+ */
+function dueReturn() {
+  const dueReturn = returnLog()
+
+  // NOTE: Due date is calculated 28 days after todays date. But when dealing with dates in code the addition is
+  // inclusive hence we have to specify 28 + 1
+  dueReturn.dueDate = relativeToToday(29)
+
+  applyFetchReturnLogFields(dueReturn)
+
+  dueReturn.purpose = dueReturn.purposes[0].tertiary.description
+  dueReturn.naldAreaCode = 'MIDLT'
+  dueReturn.regionName = 'North West'
+  dueReturn.regionCode = '1'
+  dueReturn.returnLogId = dueReturn.id
+
+  delete dueReturn.purposes
+  delete dueReturn.id
+
+  return dueReturn
 }
 
 /**
@@ -194,30 +223,6 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
       userUnit
     })
   })
-}
-
-/**
- * This fixture would be the result of calling the 'FetchReturnsDueByLicenceRefService'
- *
- * We use these 'due' return logs in the adhoc notification journey for the 'returnForms' notice type.
- *
- * @returns {object} Returns an enhanced version of the module:ReturnLogModel in line with the fetch service
- */
-function dueReturn() {
-  const dueReturn = returnLog()
-
-  applyFetchReturnLogFields(dueReturn)
-
-  dueReturn.purpose = dueReturn.purposes[0].tertiary.description
-  dueReturn.naldAreaCode = 'MIDLT'
-  dueReturn.regionName = 'North West'
-  dueReturn.regionCode = '1'
-  dueReturn.returnLogId = dueReturn.id
-
-  delete dueReturn.purposes
-  delete dueReturn.id
-
-  return dueReturn
 }
 
 module.exports = {
