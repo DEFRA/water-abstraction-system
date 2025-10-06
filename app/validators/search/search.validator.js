@@ -17,15 +17,17 @@ const Joi = require('joi')
  */
 function go(query) {
   const schema = Joi.object({
-    query: Joi.string().required().max(100).messages({
+    query: Joi.string().trim().required().max(100).messages({
       'any.required':
+        'Enter a licence number, customer name, returns ID, registered email address or monitoring station',
+      'string.empty':
         'Enter a licence number, customer name, returns ID, registered email address or monitoring station',
       'string.max': 'Search query must be 100 characters or less'
     }),
-    page: Joi.number().integer().positive().max(10).precision(0).messages({ '*': 'Provide a valid page number' })
+    page: Joi.number().integer().positive().max(10).default(1).messages({ '*': 'Provide a valid page number' })
   })
 
-  return schema.validate(query, { abortEarly: false })
+  return schema.validate(query, { abortEarly: true })
 }
 
 module.exports = {
