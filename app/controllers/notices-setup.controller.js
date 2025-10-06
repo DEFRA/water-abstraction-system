@@ -205,7 +205,7 @@ async function viewReturnsPeriod(request, h) {
 
   const pageData = await ReturnsPeriodService.go(sessionId)
 
-  return h.view(`notices/setup/view-returns-period.njk`, pageData)
+  return h.view(`notices/setup/returns-period.njk`, pageData)
 }
 
 async function viewCheck(request, h) {
@@ -467,7 +467,7 @@ async function submitReturnsPeriod(request, h) {
   const pageData = await SubmitReturnsPeriodService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/view-returns-period.njk`, pageData)
+    return h.view(`notices/setup/returns-period.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${pageData.redirect}`)

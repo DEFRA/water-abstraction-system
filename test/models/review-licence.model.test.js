@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,34 @@ const ReviewReturnModel = require('../../app/models/review-return.model.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 
 describe('Review Licence model', () => {
+  let testBillRun
+  let testLicence
   let testRecord
+  let testReviewChargeVersions
+  let testReviewReturns
+
+  before(async () => {
+    testBillRun = await BillRunHelper.add()
+    testLicence = await LicenceHelper.add()
+
+    testRecord = await ReviewLicenceHelper.add({ billRunId: testBillRun.id, licenceId: testLicence.id })
+
+    testReviewChargeVersions = []
+    for (let i = 0; i < 2; i++) {
+      const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: testRecord.id })
+
+      testReviewChargeVersions.push(reviewChargeVersion)
+    }
+
+    testReviewReturns = []
+    for (let i = 0; i < 2; i++) {
+      const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId: testRecord.id })
+
+      testReviewReturns.push(reviewReturn)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReviewLicenceHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReviewLicenceModel.query().findById(testRecord.id)
 
@@ -39,14 +60,6 @@ describe('Review Licence model', () => {
 
   describe('Relationships', () => {
     describe('when linking to a bill run', () => {
-      let testBillRun
-
-      beforeEach(async () => {
-        testBillRun = await BillRunHelper.add()
-
-        testRecord = await ReviewLicenceHelper.add({ billRunId: testBillRun.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewLicenceModel.query().innerJoinRelated('billRun')
 
@@ -65,14 +78,6 @@ describe('Review Licence model', () => {
     })
 
     describe('when linking to a licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        testRecord = await ReviewLicenceHelper.add({ licenceId: testLicence.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewLicenceModel.query().innerJoinRelated('licence')
 
@@ -91,20 +96,6 @@ describe('Review Licence model', () => {
     })
 
     describe('when linking to review charge versions', () => {
-      let reviewChargeVersions
-
-      beforeEach(async () => {
-        testRecord = await ReviewLicenceHelper.add()
-        const { id: reviewLicenceId } = testRecord
-
-        reviewChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId })
-
-          reviewChargeVersions.push(reviewChargeVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewLicenceModel.query().innerJoinRelated('reviewChargeVersions')
 
@@ -119,26 +110,12 @@ describe('Review Licence model', () => {
 
         expect(result.reviewChargeVersions).to.be.an.array()
         expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
-        expect(result.reviewChargeVersions).to.include(reviewChargeVersions[0])
-        expect(result.reviewChargeVersions).to.include(reviewChargeVersions[1])
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
       })
     })
 
     describe('when linking to review returns', () => {
-      let reviewReturns
-
-      beforeEach(async () => {
-        testRecord = await ReviewLicenceHelper.add()
-        const { id: reviewLicenceId } = testRecord
-
-        reviewReturns = []
-        for (let i = 0; i < 2; i++) {
-          const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId })
-
-          reviewReturns.push(reviewReturn)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewLicenceModel.query().innerJoinRelated('reviewReturns')
 
@@ -153,8 +130,8 @@ describe('Review Licence model', () => {
 
         expect(result.reviewReturns).to.be.an.array()
         expect(result.reviewReturns[0]).to.be.an.instanceOf(ReviewReturnModel)
-        expect(result.reviewReturns).to.include(reviewReturns[0])
-        expect(result.reviewReturns).to.include(reviewReturns[1])
+        expect(result.reviewReturns).to.include(testReviewReturns[0])
+        expect(result.reviewReturns).to.include(testReviewReturns[1])
       })
     })
   })

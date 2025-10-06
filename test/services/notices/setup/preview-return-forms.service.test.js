@@ -12,6 +12,7 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -99,7 +100,7 @@ describe('Notices - Setup - Preview Return Forms Service', () => {
           address_line_6: 'WD25 7LR',
           address_line_7: undefined
         },
-        dueDate: '28 April 2023',
+        dueDate: formatLongDate(dueReturnLog.dueDate),
         endDate: '31 March 2023',
         licenceRef,
         naldAreaCode: 'MIDLT',

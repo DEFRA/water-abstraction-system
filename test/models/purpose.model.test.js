@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,45 @@ const ReturnRequirementPurposeModel = require('../../app/models/return-requireme
 const PurposeModel = require('../../app/models/purpose.model.js')
 
 describe('Purpose model', () => {
+  let testChargeElements
+  let testChargeReferences
+  let testLicenceVersionPurposes
   let testRecord
+  let testReturnRequirementPurposes
+
+  before(async () => {
+    testRecord = PurposeHelper.select()
+
+    testChargeElements = []
+    for (let i = 0; i < 2; i++) {
+      const chargeElement = await ChargeElementHelper.add({ purposeId: testRecord.id })
+
+      testChargeElements.push(chargeElement)
+    }
+
+    testChargeReferences = []
+    for (let i = 0; i < 2; i++) {
+      const chargeReference = await ChargeReferenceHelper.add({ purposeId: testRecord.id })
+
+      testChargeReferences.push(chargeReference)
+    }
+
+    testLicenceVersionPurposes = []
+    for (let i = 0; i < 2; i++) {
+      const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ purposeId: testRecord.id })
+
+      testLicenceVersionPurposes.push(licenceVersionPurpose)
+    }
+
+    testReturnRequirementPurposes = []
+    for (let i = 0; i < 2; i++) {
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ purposeId: testRecord.id })
+
+      testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = PurposeHelper.select()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await PurposeModel.query().findById(testRecord.id)
 
@@ -39,19 +71,6 @@ describe('Purpose model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge elements', () => {
-      let testChargeElements
-
-      beforeEach(async () => {
-        testRecord = PurposeHelper.select()
-
-        testChargeElements = []
-        for (let i = 0; i < 2; i++) {
-          const chargeElement = await ChargeElementHelper.add({ purposeId: testRecord.id })
-
-          testChargeElements.push(chargeElement)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('chargeElements')
 
@@ -72,19 +91,6 @@ describe('Purpose model', () => {
     })
 
     describe('when linking to charge references', () => {
-      let testChargeReferences
-
-      beforeEach(async () => {
-        testRecord = PurposeHelper.select()
-
-        testChargeReferences = []
-        for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ purposeId: testRecord.id })
-
-          testChargeReferences.push(chargeReference)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('chargeReferences')
 
@@ -105,19 +111,6 @@ describe('Purpose model', () => {
     })
 
     describe('when linking to licence version purposes', () => {
-      let testLicenceVersionPurposes
-
-      beforeEach(async () => {
-        testRecord = PurposeHelper.select()
-
-        testLicenceVersionPurposes = []
-        for (let i = 0; i < 2; i++) {
-          const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ purposeId: testRecord.id })
-
-          testLicenceVersionPurposes.push(licenceVersionPurpose)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
@@ -138,19 +131,6 @@ describe('Purpose model', () => {
     })
 
     describe('when linking to return requirement purposes', () => {
-      let testReturnRequirementPurposes
-
-      beforeEach(async () => {
-        testRecord = PurposeHelper.select()
-
-        testReturnRequirementPurposes = []
-        for (let i = 0; i < 2; i++) {
-          const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ purposeId: testRecord.id })
-
-          testReturnRequirementPurposes.push(returnRequirementPurpose)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 

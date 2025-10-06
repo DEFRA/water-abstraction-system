@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,13 +21,34 @@ const ReviewReturnModel = require('../../app/models/review-return.model.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 
 describe('Review Charge Element model', () => {
+  let testChargeElement
   let testRecord
+  let testReviewChargeReference
+  let testReviewReturns
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReviewChargeElementHelper.add()
+  before(async () => {
+    testChargeElement = await ChargeElementHelper.add()
+    testReviewChargeReference = await ReviewChargeReferenceHelper.add()
+
+    testRecord = await ReviewChargeElementHelper.add({
+      chargeElementId: testChargeElement.id,
+      reviewChargeReferenceId: testReviewChargeReference.id
     })
 
+    testReviewReturns = []
+    for (let i = 0; i < 2; i++) {
+      const testReviewReturn = await ReviewReturnHelper.add()
+
+      testReviewReturns.push(testReviewReturn)
+
+      await ReviewChargeElementReturnHelper.add({
+        reviewChargeElementId: testRecord.id,
+        reviewReturnId: testReviewReturn.id
+      })
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReviewChargeElementModel.query().findById(testRecord.id)
 
@@ -37,17 +58,25 @@ describe('Review Charge Element model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge reference', () => {
-      let testReviewChargeReference
+    describe('when linking to a charge element', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('chargeElement')
 
-      beforeEach(async () => {
-        testReviewChargeReference = await ReviewChargeReferenceHelper.add()
-
-        const { id: reviewChargeReferenceId } = testReviewChargeReference
-
-        testRecord = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
+        expect(query).to.exist()
       })
 
+      it('can eager load the charge element', async () => {
+        const result = await ReviewChargeElementModel.query().findById(testRecord.id).withGraphFetched('chargeElement')
+
+        expect(result).to.be.instanceOf(ReviewChargeElementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
+        expect(result.chargeElement).to.equal(testChargeElement)
+      })
+    })
+
+    describe('when linking to review charge reference', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewChargeReference')
 
@@ -68,25 +97,6 @@ describe('Review Charge Element model', () => {
     })
 
     describe('when linking to review returns', () => {
-      let testReviewReturns
-
-      beforeEach(async () => {
-        testRecord = await ReviewChargeElementHelper.add()
-        const { id: reviewChargeElementId } = testRecord
-
-        testReviewReturns = []
-        for (let i = 0; i < 2; i++) {
-          const testReviewReturn = await ReviewReturnHelper.add()
-
-          testReviewReturns.push(testReviewReturn)
-
-          await ReviewChargeElementReturnHelper.add({
-            reviewChargeElementId,
-            reviewReturnId: testReviewReturn.id
-          })
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewReturns')
 
@@ -103,34 +113,6 @@ describe('Review Charge Element model', () => {
         expect(result.reviewReturns[0]).to.be.an.instanceOf(ReviewReturnModel)
         expect(result.reviewReturns).to.include(testReviewReturns[0])
         expect(result.reviewReturns).to.include(testReviewReturns[1])
-      })
-    })
-
-    describe('when linking to a charge element', () => {
-      let testChargeElement
-
-      beforeEach(async () => {
-        testChargeElement = await ChargeElementHelper.add()
-
-        const { id: chargeElementId } = testChargeElement
-
-        testRecord = await ReviewChargeElementHelper.add({ chargeElementId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ReviewChargeElementModel.query().innerJoinRelated('chargeElement')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the charge element', async () => {
-        const result = await ReviewChargeElementModel.query().findById(testRecord.id).withGraphFetched('chargeElement')
-
-        expect(result).to.be.instanceOf(ReviewChargeElementModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElement).to.equal(testChargeElement)
       })
     })
   })
