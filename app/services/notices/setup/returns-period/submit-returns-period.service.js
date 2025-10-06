@@ -55,8 +55,8 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _validate(payload) {
-  const validationResult = ReturnsPeriodValidator.go(payload)
+function _validate(payload, noticeType) {
+  const validationResult = ReturnsPeriodValidator.go(payload, noticeType)
 
   return formatValidationResult(validationResult)
 }
