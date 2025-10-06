@@ -13,11 +13,12 @@ const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 // Thing under test
 const ViewNotificationPresenter = require('../../../app/presenters/notifications/view-notification.presenter.js')
 
-describe('View Notification presenter', () => {
+describe('Notifications - View Notification presenter', () => {
   let testNotification
 
   beforeEach(() => {
     testNotification = NotificationsFixture.notification()
+    testNotification.notification.hasPdf = false
   })
 
   describe('when provided with a populated notification with related event and licence data', () => {
@@ -90,7 +91,7 @@ describe('View Notification presenter', () => {
 
       describe('when there is pdf data', () => {
         beforeEach(() => {
-          testNotification.notification.pdf = Buffer.from('mock file')
+          testNotification.notification.hasPdf = true
         })
 
         it('correctly returns the text', () => {

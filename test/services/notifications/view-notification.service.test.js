@@ -17,11 +17,12 @@ const FetchNotificationService = require('../../../app/services/notifications/fe
 // Thing under test
 const ViewNotificationService = require('../../../app/services/notifications/view-notification.service.js')
 
-describe('View Notification service', () => {
+describe('Notifications - View Notification service', () => {
   let testNotification
 
   before(() => {
     testNotification = NotificationsFixture.notification()
+    testNotification.hasPdf = false
 
     Sinon.stub(FetchNotificationService, 'go').resolves(testNotification)
   })

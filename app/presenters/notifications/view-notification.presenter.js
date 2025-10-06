@@ -15,7 +15,7 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(notificationData) {
-  const { createdAt, messageType, personalisation, plaintext, recipient, id, pdf } = notificationData.notification
+  const { createdAt, hasPdf, id, messageType, personalisation, plaintext, recipient } = notificationData.notification
   const { id: licenceId, licenceRef } = notificationData.licence
 
   return {
@@ -25,7 +25,7 @@ function go(notificationData) {
     licenceRef,
     messageType,
     pageTitle: _pageTitle(notificationData.notification),
-    returnForm: _returnForm(id, pdf),
+    returnForm: _returnForm(id, hasPdf),
     sentDate: formatLongDate(createdAt)
   }
 }
@@ -45,8 +45,8 @@ function _address(personalisation) {
   })
 }
 
-function _returnForm(id, pdf) {
-  if (pdf) {
+function _returnForm(id, hasPdf) {
+  if (hasPdf) {
     return {
       link: `/system/notifications/${id}/download`,
       text: 'Preview paper return'
