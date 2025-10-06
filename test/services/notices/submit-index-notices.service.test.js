@@ -244,11 +244,11 @@ describe('Notices - Submit Index Notices service', () => {
               links: {
                 adhoc: {
                   href: '/system/notices/setup/adhoc',
-                  text: 'Create adhoc notice'
+                  text: 'Create an ad-hoc notice'
                 },
                 notice: {
                   href: '/system/notices/setup/standard',
-                  text: 'Create notice'
+                  text: 'Create a standard notice'
                 }
               },
               notices: [
@@ -262,7 +262,8 @@ describe('Notices - Submit Index Notices service', () => {
                   type: 'Stop alert'
                 }
               ],
-              pageTitle: 'Notices (page 2 of 3)',
+              pageSubHeading: 'View a notice',
+              pageTitle: 'Notices',
               tableCaption: 'Showing 1 of 70 notices'
             },
             { skip: ['pagination'] }
@@ -302,11 +303,11 @@ describe('Notices - Submit Index Notices service', () => {
               links: {
                 adhoc: {
                   href: '/system/notices/setup/adhoc',
-                  text: 'Create adhoc notice'
+                  text: 'Create an ad-hoc notice'
                 },
                 notice: {
                   href: '/system/notices/setup/standard',
-                  text: 'Create notice'
+                  text: 'Create a standard notice'
                 }
               },
               notices: [
@@ -320,6 +321,7 @@ describe('Notices - Submit Index Notices service', () => {
                   type: 'Stop alert'
                 }
               ],
+              pageSubHeading: 'View a notice',
               pageTitle: 'Notices',
               tableCaption: 'Showing all 1 notices'
             },

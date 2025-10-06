@@ -41,11 +41,11 @@ describe('Notices - Index Notices presenter', () => {
       links: {
         adhoc: {
           href: '/system/notices/setup/adhoc',
-          text: 'Create adhoc notice'
+          text: 'Create an ad-hoc notice'
         },
         notice: {
           href: '/system/notices/setup/standard',
-          text: 'Create notice'
+          text: 'Create a standard notice'
         }
       },
       notices: [
@@ -122,6 +122,7 @@ describe('Notices - Index Notices presenter', () => {
           type: 'Returns reminder'
         }
       ],
+      pageSubHeading: 'View a notice',
       pageTitle: 'Notices',
       tableCaption: `Showing all ${notices.length} notices`
     })
@@ -149,28 +150,6 @@ describe('Notices - Index Notices presenter', () => {
           expect(results.notices[6].type).to.equal('Paper return')
           expect(results.notices[7].type).to.equal('Returns reminder')
         })
-      })
-    })
-  })
-
-  describe('the ""pageTitle" property', () => {
-    describe('when there is only one page of results', () => {
-      it('the "pageTitle" without page info', () => {
-        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
-
-        expect(result.pageTitle).to.equal('Notices')
-      })
-    })
-
-    describe('when there are multiple pages of results', () => {
-      beforeEach(() => {
-        numberOfPages = 3
-      })
-
-      it('the "pageTitle" with page info', () => {
-        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
-
-        expect(result.pageTitle).to.equal('Notices (page 1 of 3)')
       })
     })
   })

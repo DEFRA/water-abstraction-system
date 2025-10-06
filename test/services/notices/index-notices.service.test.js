@@ -67,11 +67,11 @@ describe('Notices - Index Notices service', () => {
         links: {
           adhoc: {
             href: '/system/notices/setup/adhoc',
-            text: 'Create adhoc notice'
+            text: 'Create an ad-hoc notice'
           },
           notice: {
             href: '/system/notices/setup/standard',
-            text: 'Create notice'
+            text: 'Create a standard notice'
           }
         },
         notices: [
@@ -85,6 +85,7 @@ describe('Notices - Index Notices service', () => {
             type: 'Reduce alert'
           }
         ],
+        pageSubHeading: 'View a notice',
         pageTitle: 'Notices',
         tableCaption: 'Showing all 1 notices',
         pagination: { numberOfPages: 1 }

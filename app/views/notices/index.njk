@@ -13,6 +13,8 @@
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
+  <p> Create a returns invitation, reminder or paper return notice</p>
+
   <div class="govuk-button-group">
     {{ govukButton({
       text: links.notice.text,
@@ -26,11 +28,15 @@
     }) }}
   </div>
 
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l"> {{ pageSubHeading }} </h2>
+
   {# Filters #}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
-    <form  method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
       {# Filter by licence issues #}
       {{ govukCheckboxes({

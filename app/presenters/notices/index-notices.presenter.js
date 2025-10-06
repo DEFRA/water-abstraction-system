@@ -34,7 +34,8 @@ function go(notices, totalNumber, selectedPage, numberOfPages) {
   return {
     links: _links(),
     notices: _noticeRowData(notices),
-    pageTitle: _pageTitle(selectedPage, numberOfPages),
+    pageSubHeading: 'View a notice',
+    pageTitle: 'Notices',
     tableCaption: _tableCaption(notices.length, totalNumber)
   }
 }
@@ -50,11 +51,11 @@ function _link(noticeId) {
 function _links() {
   return {
     notice: {
-      text: 'Create notice',
+      text: 'Create a standard notice',
       href: '/system/notices/setup/standard'
     },
     adhoc: {
-      text: 'Create adhoc notice',
+      text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'
     }
   }
@@ -74,14 +75,6 @@ function _noticeRowData(notices) {
       type: _type(notice)
     }
   })
-}
-
-function _pageTitle(selectedPage, numberOfPages) {
-  if (numberOfPages < 2) {
-    return 'Notices'
-  }
-
-  return `Notices (page ${selectedPage} of ${numberOfPages})`
 }
 
 function _tableCaption(numberDisplayed, totalNumber) {
