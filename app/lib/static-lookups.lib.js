@@ -428,6 +428,9 @@ const thresholdUnits = {
   MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day' }
 }
 
+/*
+ * NOTE: Though not in alphabetical order, flowUnits has to be declared here because it depends on thresholdUnits
+ */
 const flowUnits = [
   thresholdUnits.MEGALITRES_PER_DAY.value,
   thresholdUnits.CUBIC_METRES_PER_SECOND.value,
