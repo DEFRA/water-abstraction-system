@@ -38,6 +38,16 @@ describe('Notices - Index Notices presenter', () => {
     const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
 
     expect(result).to.equal({
+      links: {
+        adhoc: {
+          href: '/system/notices/setup/adhoc',
+          text: 'Create adhoc notice'
+        },
+        notice: {
+          href: '/system/notices/setup/standard',
+          text: 'Create notice'
+        }
+      },
       notices: [
         {
           createdDate: '25 March 2025',

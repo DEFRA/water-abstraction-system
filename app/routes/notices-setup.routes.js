@@ -497,6 +497,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/standard',
+    options: {
+      handler: NoticesSetupController.viewStandard,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/standard',
+    options: {
+      handler: NoticesSetupController.submitStandard,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/add-recipient',
     options: {
       handler: NoticesSetupController.addRecipient,

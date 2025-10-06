@@ -64,6 +64,16 @@ describe('Notices - Index Notices service', () => {
             sentToYear: null
           }
         },
+        links: {
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create adhoc notice'
+          },
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create notice'
+          }
+        },
         notices: [
           {
             createdDate: '25 March 2025',

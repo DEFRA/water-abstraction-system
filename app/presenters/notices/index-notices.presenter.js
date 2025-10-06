@@ -34,7 +34,21 @@ function go(notices, totalNumber, selectedPage, numberOfPages) {
   return {
     notices: _noticeRowData(notices),
     pageTitle: _pageTitle(selectedPage, numberOfPages),
-    tableCaption: _tableCaption(notices.length, totalNumber)
+    tableCaption: _tableCaption(notices.length, totalNumber),
+    links: _links()
+  }
+}
+
+function _links() {
+  return {
+    notice: {
+      text: 'Create notice',
+      href: '/system/notices/setup/standard'
+    },
+    adhoc: {
+      text: 'Create adhoc notice',
+      href: '/system/notices/setup/adhoc'
+    }
   }
 }
 
