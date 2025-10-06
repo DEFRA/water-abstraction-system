@@ -25,7 +25,8 @@ async function go(yar, page = 1) {
   const { results: notices, total: totalNumber } = await FetchNoticesService.go(filters, selectedPageNumber)
 
   const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
-  const pageData = NoticesIndexPresenter.go(notices, totalNumber, selectedPageNumber, pagination.numberOfPages)
+
+  const pageData = NoticesIndexPresenter.go(notices, totalNumber)
 
   return {
     activeNavBar: 'manage',

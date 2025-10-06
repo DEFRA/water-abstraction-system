@@ -19,13 +19,9 @@ const IndexNoticesPresenter = require('../../../app/presenters/notices/index-not
 
 describe('Notices - Index Notices presenter', () => {
   let notices
-  let numberOfPages
-  let selectedPage
 
   beforeEach(() => {
     notices = NoticesFixture.notices()
-    numberOfPages = 1
-    selectedPage = 1
 
     Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
@@ -35,7 +31,7 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+    const result = IndexNoticesPresenter.go(notices, notices.length)
 
     expect(result).to.equal({
       links: {
@@ -132,7 +128,7 @@ describe('Notices - Index Notices presenter', () => {
     describe('the "type" property', () => {
       describe('when the notice is for a water abstraction alert', () => {
         it('returns the alert type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+          const results = IndexNoticesPresenter.go(notices, notices.length)
 
           expect(results.notices[0].type).to.equal('Reduce alert')
           expect(results.notices[1].type).to.equal('Resume alert')
@@ -143,7 +139,7 @@ describe('Notices - Index Notices presenter', () => {
 
       describe('when the notice is not for a water abstraction alert', () => {
         it('returns the notice type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+          const results = IndexNoticesPresenter.go(notices, notices.length)
 
           expect(results.notices[4].type).to.equal('HOF warning')
           expect(results.notices[5].type).to.equal('Returns invitation')
@@ -157,7 +153,7 @@ describe('Notices - Index Notices presenter', () => {
   describe('the "tableCaption" property', () => {
     describe('when there is only one page of results', () => {
       it('returns the "tableCaption" without page info', () => {
-        const result = IndexNoticesPresenter.go(notices, notices.length, selectedPage, numberOfPages)
+        const result = IndexNoticesPresenter.go(notices, notices.length)
 
         expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
       })
@@ -165,7 +161,7 @@ describe('Notices - Index Notices presenter', () => {
 
     describe('when there are multiple pages of results', () => {
       it('returns the "tableCaption" with page info', () => {
-        const result = IndexNoticesPresenter.go(notices, 50, selectedPage, numberOfPages)
+        const result = IndexNoticesPresenter.go(notices, 50)
 
         expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)
       })

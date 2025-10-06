@@ -25,12 +25,10 @@ const NOTICE_MAPPINGS = {
  *
  * @param {module:NoticeModel[]} notices - An array of notices to display
  * @param {number} totalNumber - The total number of notices
- * @param {number} selectedPage - The selected page of results
- * @param {number} numberOfPages - The number of pages of results to paginate
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(notices, totalNumber, selectedPage, numberOfPages) {
+function go(notices, totalNumber) {
   return {
     links: _links(),
     notices: _noticeRowData(notices),
