@@ -241,6 +241,16 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToYear: null,
                 toDate: undefined
               },
+              links: {
+                adhoc: {
+                  href: '/system/notices/setup/adhoc',
+                  text: 'Create adhoc notice'
+                },
+                notice: {
+                  href: '/system/notices/setup/standard',
+                  text: 'Create notice'
+                }
+              },
               notices: [
                 {
                   createdDate: '25 March 2025',
@@ -288,6 +298,16 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToMonth: null,
                 sentToYear: null,
                 toDate: undefined
+              },
+              links: {
+                adhoc: {
+                  href: '/system/notices/setup/adhoc',
+                  text: 'Create adhoc notice'
+                },
+                notice: {
+                  href: '/system/notices/setup/standard',
+                  text: 'Create notice'
+                }
               },
               notices: [
                 {
