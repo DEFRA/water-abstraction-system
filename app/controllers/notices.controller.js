@@ -6,8 +6,9 @@
  */
 
 const IndexNoticesService = require('../services/notices/index-notices.service.js')
-const NoticesViewService = require('../services/notices/view.service.js')
 const SubmitIndexNoticesService = require('../services/notices/submit-index-notices.service.js')
+const SubmitViewNoticeService = require('../services/notices/submit-view-notice.service.js')
+const ViewNoticeService = require('../services/notices/view-notice.service.js')
 
 async function index(request, h) {
   const { page } = request.query
@@ -30,13 +31,28 @@ async function submitIndex(request, h) {
   return h.redirect('/system/notices')
 }
 
+async function submitView(request, h) {
+  const { payload, yar } = request
+  const { page } = request.query
+  const { id } = request.params
+
+  const pageData = await SubmitViewNoticeService.go(id, payload, yar, page)
+
+  if (pageData.error) {
+    return h.view('notices/view.njk', pageData)
+  }
+
+  return h.redirect(`/system/notices/${id}`)
+}
+
 async function view(request, h) {
   const {
     params: { id },
-    query: { page = 1 }
+    query: { page = 1 },
+    yar
   } = request
 
-  const pageData = await NoticesViewService.go(id, page)
+  const pageData = await ViewNoticeService.go(id, yar, page)
 
   return h.view('notices/view.njk', pageData)
 }
@@ -44,5 +60,6 @@ async function view(request, h) {
 module.exports = {
   index,
   submitIndex,
+  submitView,
   view
 }
