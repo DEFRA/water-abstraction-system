@@ -119,7 +119,7 @@ describe('Process licence return logs service', () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
           expect(createReturnLogsStub.callCount).to.equal(1)
-          expect(voidReturnLogsStub.callCount).to.equal(2)
+          expect(voidReturnLogsStub.callCount).to.equal(4)
         })
       })
     })
@@ -184,7 +184,7 @@ describe('Process licence return logs service', () => {
         createReturnLogsStub.resolves()
       })
 
-      describe('but the change date means only an "all-year" return cycle needs processing', () => {
+      describe('but an "all-year" return cycle needs processing', () => {
         beforeEach(() => {
           returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(false)])
         })
@@ -193,7 +193,7 @@ describe('Process licence return logs service', () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
           expect(createReturnLogsStub.called).to.be.false()
-          expect(voidReturnLogsStub.called).to.be.false()
+          expect(voidReturnLogsStub.called).to.be.true()
         })
       })
     })
@@ -204,7 +204,7 @@ describe('Process licence return logs service', () => {
         createReturnLogsStub.resolves()
       })
 
-      describe('but the change date means only a "summer" return cycle needs processing', () => {
+      describe('but a "summer" return cycle needs processing', () => {
         beforeEach(() => {
           returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(true)])
         })
@@ -213,7 +213,7 @@ describe('Process licence return logs service', () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
           expect(createReturnLogsStub.called).to.be.false()
-          expect(voidReturnLogsStub.called).to.be.false()
+          expect(voidReturnLogsStub.called).to.be.true()
         })
       })
     })
