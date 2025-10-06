@@ -86,10 +86,6 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     )
   })
 
-  if (requirementsToProcess.length === 0) {
-    return
-  }
-
   const generatedReturnLogIds = []
 
   // If there is no licenceEndDate or if there is a licenceEndDate and the return cycle starts before the licenceEndDate
