@@ -23,4 +23,78 @@
 
     {{ govukButton({ text: "Search", preventDoubleClick: true }) }}
   </form>
+
+  <!-- Licences -->
+  {% if licences %}
+    <h2 class="govuk-heading-m">Licences</h2>
+
+    {% for doc in licences %}
+      <div class="phone--show">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+          {% if doc.documentName %}
+            <span class="govuk-caption-m link--no-underline">{{ doc.licenceName }}</span>
+          {% endif %}
+          {% if doc.licence.id %}
+            {% if featureFlags.enableSystemLicenceView == true %}
+              <a href="/system/licences/{{ doc.licenceId }}/summary">
+                {{ doc.licenceRef }}
+              </a>
+            {% else %}
+              <a href="/licences/{{ doc.licenceId }}">
+                {{ doc.licenceRef }}
+              </a>
+            {% endif %}
+          {% else %}
+            {{ doc.licenceRef }}
+          {% endif %}
+        </h3>
+        <p>{{ doc.licenceHolderName }}</p>
+      </div>
+    {% endfor %}
+
+    <table class="govuk-table phone--hide">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Licence number</th>
+          <th class="govuk-table__header" scope="col">Licence name</th>
+          <th class="govuk-table__header" scope="col">Licence holder</th>
+          <th class="govuk-table__header" scope="col">End date</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for doc in licences %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% if doc.licence.id %}
+              {% if featureFlags.enableSystemLicenceView == true %}
+                <a href="/system/licences/{{ doc.licenceId }}/summary">
+                  {{ doc.licenceRef }}
+                </a>
+              {% else %}
+                <a href="/licences/{{ doc.licenceId }}">
+                  {{ doc.licenceRef }}
+                </a>
+              {% endif %}
+            {% else %}
+              {{ doc.licenceRef }}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">{{ doc.licenceName }}</td>
+          <td class="govuk-table__cell">{{ doc.licenceHolderName }}</td>
+          <td class="govuk-table__cell">
+            {% if not doc.isActive %}
+              {% if doc.licenceEndedText %}
+                  <strong class="govuk-tag govuk-tag--grey">{{ doc.licenceEndedText }}</strong>
+              {% endif %}
+            {% else %}
+              {{ doc.endDateText }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
 {% endblock %}

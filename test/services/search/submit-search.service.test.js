@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things to stub
+const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Thing under test
 const SubmitSearchService = require('../../../app/services/search/submit-search.service.js')
@@ -13,39 +17,60 @@ const SubmitSearchService = require('../../../app/services/search/submit-search.
 const EXPECTED_ERROR = {
   errorList: [
     {
-      href: '#$query',
+      href: '#query',
       text: 'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
     }
   ],
-  query: 'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
+  query: {
+    text: 'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
+  }
 }
 
 describe('Search - Submit search service', () => {
-  let query
+  let requestQuery
+
+  beforeEach(async () => {
+    const queryStub = Sinon.stub(LicenceModel, 'query')
+
+    queryStub.returns({
+      select: Sinon.stub().returnsThis(),
+      joinRelated: Sinon.stub().returnsThis(),
+      orderBy: Sinon.stub().returnsThis(),
+      orWhere: Sinon.stub().returnsThis(),
+      page: Sinon.stub().resolves({ results: [], total: 0 }),
+      where: Sinon.stub().returnsThis()
+    })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when called with a query', () => {
     beforeEach(() => {
-      query = 'searchthis'
+      requestQuery = { query: 'searchthis' }
     })
 
     it('returns page data for the view', async () => {
-      const result = await SubmitSearchService.go(query)
+      const result = await SubmitSearchService.go(requestQuery)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        licences: null,
+        page: 1,
         pageTitle: 'Search',
         query: 'searchthis'
       })
     })
   })
 
-  describe('when called with a missing query', () => {
+  describe('when called without a query', () => {
     beforeEach(() => {
-      query = null
+      requestQuery = {}
     })
 
-    it('returns page data with an error message', async () => {
-      const result = await SubmitSearchService.go(query)
+    it('returns an error message', async () => {
+      const result = await SubmitSearchService.go(requestQuery)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -58,11 +83,11 @@ describe('Search - Submit search service', () => {
 
   describe('when called with a blank query', () => {
     beforeEach(() => {
-      query = ''
+      requestQuery = { query: '' }
     })
 
-    it('returns page data with an error message', async () => {
-      const result = await SubmitSearchService.go(query)
+    it('returns an error message', async () => {
+      const result = await SubmitSearchService.go(requestQuery)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -75,11 +100,11 @@ describe('Search - Submit search service', () => {
 
   describe('when called with a whitespace query', () => {
     beforeEach(() => {
-      query = ' '
+      requestQuery = { query: ' ' }
     })
 
-    it('returns page data with an error message', async () => {
-      const result = await SubmitSearchService.go(query)
+    it('returns an error message', async () => {
+      const result = await SubmitSearchService.go(requestQuery)
 
       expect(result).to.equal({
         activeNavBar: 'search',
