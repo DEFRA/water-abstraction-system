@@ -5,6 +5,8 @@
  * @module ConfirmationPresenter
  */
 
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
  *
@@ -16,11 +18,19 @@ function go(event) {
   const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
-    forwardLink: `/notifications/report/${eventId}`,
+    forwardLink: _forwardLink(eventId),
     monitoringStationLink: _monitoringStationLink(metadata),
     pageTitle: _pageTitle(subtype),
     referenceCode
   }
+}
+
+function _forwardLink(eventId) {
+  if (featureFlagsConfig.enableSystemNoticeView) {
+    return `/system/notices/${eventId}`
+  }
+
+  return `/notifications/report/${eventId}`
 }
 
 function _monitoringStationLink(metadata) {
