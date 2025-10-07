@@ -9,8 +9,9 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const notifyConfig = require('../../config/notify.config.js')
+const DownloadNotificationService = require('../../app/services/notifications/download-notification.service.js')
 const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
+const notifyConfig = require('../../config/notify.config.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -65,6 +66,42 @@ describe('Notifications controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Licence 01/117')
             expect(response.payload).to.contain('Hands off flow: levels warning')
+          })
+        })
+      })
+    })
+
+    describe('/notifications/{notificationId}/download', () => {
+      let buffer
+
+      describe('GET', () => {
+        beforeEach(async () => {
+          options = {
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3/download',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          buffer = Buffer.from('mock file')
+        })
+
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            Sinon.stub(DownloadNotificationService, 'go').resolves(buffer)
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.headers['content-type']).to.equal('application/pdf')
+            expect(response.headers['content-disposition']).to.contain('inline; filename="letter.pdf"')
+
+            // Check that the payload matches the buffer we stubbed
+            expect(response.payload).to.equal(buffer.toString())
           })
         })
       })

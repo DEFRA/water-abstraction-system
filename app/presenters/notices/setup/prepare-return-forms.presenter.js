@@ -5,7 +5,6 @@
  * @module PrepareReturnFormsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
@@ -37,31 +36,49 @@ const RETURN_TYPE = {
  * This presenter is also used to supply the data for the saved notifications, this has its own presenter which maps
  * some of these keys to 'snake case'. So there is additional data in the response which may not be in the PDF file.
  *
- * @param {string} licenceRef - The reference of the licence that the return log relates to
- * @param {object} dueReturnLog - The return log to populate the form data
- * @param {object} recipient - A single recipient with the contact / address
+ * @param {object} notification - A return forms notification
  *
  * @returns {object} - The data formatted for the return form
  */
-function go(licenceRef, dueReturnLog, recipient) {
+function go(notification) {
   const {
-    dueDate,
-    endDate,
-    naldAreaCode,
-    purpose,
-    regionCode,
-    regionName,
-    returnId,
-    returnLogId,
-    returnReference,
-    returnsFrequency,
-    siteDescription,
-    startDate,
-    twoPartTariff
-  } = dueReturnLog
+    personalisation: {
+      address_line_1: addressLine1,
+      address_line_2: addressLine2,
+      address_line_3: addressLine3,
+      address_line_4: addressLine4,
+      address_line_5: addressLine5,
+      address_line_6: addressLine6,
+      address_line_7: addressLine7,
+      due_date: dueDate,
+      end_date: endDate,
+      format_id: returnReference,
+      is_two_part_tariff: twoPartTariff,
+      licence_ref: licenceRef,
+      naldAreaCode,
+      purpose,
+      qr_url: returnLogId,
+      region_code: regionCode,
+      region_name: regionName,
+      returns_frequency: returnsFrequency,
+      site_description: siteDescription,
+      start_date: startDate
+    },
+    returnLogIds
+  } = notification
+
+  const [returnId] = returnLogIds
 
   return {
-    address: _address(recipient),
+    address: {
+      address_line_1: addressLine1,
+      address_line_2: addressLine2,
+      address_line_3: addressLine3,
+      address_line_4: addressLine4,
+      address_line_5: addressLine5,
+      address_line_6: addressLine6,
+      address_line_7: addressLine7
+    },
     licenceRef,
     naldAreaCode,
     pageEntries: _entries(startDate, endDate, returnsFrequency),
@@ -77,10 +94,6 @@ function go(licenceRef, dueReturnLog, recipient) {
     twoPartTariff,
     ..._dates(dueDate, endDate, startDate)
   }
-}
-
-function _address(recipient) {
-  return NotifyAddressPresenter.go(recipient.contact)
 }
 
 function _dates(dueDate, endDate, startDate) {

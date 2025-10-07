@@ -74,6 +74,44 @@ function postRequestOptions(
 }
 
 /**
+ * Generates a random region code
+ *
+ * Region codes should be between 1 and 9 based on the fixed region reference data.
+ *
+ * We see issues with this small range when tables have unique constraints when building external id's.
+ *
+ * This function is here to encapsulate this issue and remove any need to explain the issue else where in the tests.
+ *
+ * @returns a random number
+ */
+function randomRegionCode() {
+  return generateRandomInteger(1, 999999)
+}
+
+/**
+ * Returns a date relative to today by the specified number of days.
+ *
+ * If the number of days is positive, it will add that number of days to today. If it is negative, it will subtract that
+ * number of days from today.
+ *
+ * @param {number} numberOfDays - the number of days to add to, or subtract from, today
+ *
+ * @returns {Date} a date relative to today
+ */
+function relativeToToday(numberOfDays) {
+  const relative = today()
+
+  // We lean into Math to make this work. Adding two positive numbers, results in a positive value, for example,
+  // 12 + +5 = 12 + 5 = 17.
+  //
+  // However, when you add a negative number to a positive, it will be treated as subtraction, for example,
+  // 12 + -5 = 12 - 5 = 7.
+  relative.setDate(relative.getDate() + numberOfDays)
+
+  return relative
+}
+
+/**
  * Select a random entry from an array of entries
  *
  * Was built when we started using real reference data within the unit tests, for example, regions and purposes.
@@ -117,24 +155,10 @@ function yesterday() {
   return yesterday
 }
 
-/**
- * Generates a random region code
- *
- * Region codes should be between 1 and 9 based on the fixed region reference data.
- *
- * We see issues with this small range when tables have unique constraints when building external id's.
- *
- * This function is here to encapsulate this issue and remove any need to explain the issue else where in the tests.
- *
- * @returns a random number
- */
-function randomRegionCode() {
-  return generateRandomInteger(1, 999999)
-}
-
 module.exports = {
   postRequestOptions,
   randomRegionCode,
+  relativeToToday,
   selectRandomEntry,
   tomorrow,
   yesterday

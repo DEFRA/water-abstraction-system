@@ -87,7 +87,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       expect(matchingSession.data).to.equal({
         beenReceived: true,
-        dueDate: '2023-04-28T00:00:00.000Z',
+        dueDate: null,
         endDate: '2022-06-01T00:00:00.000Z',
         journey: 'enter-return',
         licenceId: licence.id,

@@ -43,6 +43,7 @@ const LicenceVersionHelper = require('../../../../test/support/helpers/licence-v
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const ModLogHelper = require('../../../../test/support/helpers/mod-log.helper.js')
 const MonitoringStationHelper = require('../../../../test/support/helpers/monitoring-station.helper.js')
+const NotificationHelper = require('../../../../test/support/helpers/notification.helper.js')
 const PointHelper = require('../../../../test/support/helpers/point.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
 const ReturnCycleHelper = require('../../../../test/support/helpers/return-cycle.helper.js')
@@ -59,7 +60,6 @@ const ReviewChargeReferenceHelper = require('../../../../test/support/helpers/re
 const ReviewChargeVersionHelper = require('../../../../test/support/helpers/review-charge-version.helper.js')
 const ReviewLicenceHelper = require('../../../../test/support/helpers/review-licence.helper.js')
 const ReviewReturnHelper = require('../../../../test/support/helpers/review-return.helper.js')
-const ScheduledNotificationHelper = require('../../../../test/support/helpers/scheduled-notification.helper.js')
 const SessionHelper = require('../../../../test/support/helpers/session.helper.js')
 const TransactionHelper = require('../../../../test/support/helpers/transaction.helper.js')
 const UserGroupHelper = require('../../../../test/support/helpers/user-group.helper.js')
@@ -161,6 +161,7 @@ const LOAD_HELPERS = {
     test: true,
     legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' }
   },
+  notifications: { helper: NotificationHelper },
   points: { helper: PointHelper, test: false },
   permitLicences: { helper: PermitLicenceHelper, test: false },
   returnCycles: {
@@ -181,7 +182,6 @@ const LOAD_HELPERS = {
   reviewChargeVersions: { helper: ReviewChargeVersionHelper, test: false },
   reviewLicences: { helper: ReviewLicenceHelper, test: false },
   reviewReturns: { helper: ReviewReturnHelper, test: false },
-  scheduledNotifications: { helper: ScheduledNotificationHelper },
   sessions: { helper: SessionHelper, test: false },
   transactions: { helper: TransactionHelper, test: false },
   userGroups: { helper: UserGroupHelper, test: false },

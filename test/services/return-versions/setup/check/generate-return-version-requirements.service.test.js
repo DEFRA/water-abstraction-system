@@ -162,10 +162,10 @@ function _generateRequirements(purposeOneId, purposeTwoId) {
       returnsCycle: 'winter-and-all-year',
       siteDescription: 'Site Number One',
       abstractionPeriod: {
-        'abstraction-period-end-day': 31,
-        'abstraction-period-end-month': 3,
-        'abstraction-period-start-day': 1,
-        'abstraction-period-start-month': 4
+        abstractionPeriodEndDay: '31',
+        abstractionPeriodEndMonth: '3',
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodStartMonth: '4'
       },
       frequencyReported: 'month',
       frequencyCollected: 'week',
@@ -190,10 +190,10 @@ function _generateRequirements(purposeOneId, purposeTwoId) {
     // NOTE: When abstraction periods are manually entered they are saved in the session as strings rather than integers
     // The ORM isn't fussy and correctly converts the strings to integers when writing the data to the database
     abstractionPeriod: {
-      'abstraction-period-end-day': '31',
-      'abstraction-period-end-month': '8',
-      'abstraction-period-start-day': '1',
-      'abstraction-period-start-month': '6'
+      abstractionPeriodEndDay: '31',
+      abstractionPeriodEndMonth: '8',
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '6'
     },
     frequencyReported: 'day',
     frequencyCollected: 'day',

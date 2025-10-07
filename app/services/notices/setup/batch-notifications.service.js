@@ -1,30 +1,29 @@
 'use strict'
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  * @module BatchNotificationsService
  */
 
 const { setTimeout } = require('node:timers/promises')
 
-const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
-const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
-const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
-const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
+const SendEmailService = require('./batch/send-email.service.js')
+const SendLetterService = require('./batch/send-letter.service.js')
+const SendReturnFormService = require('./batch/send-return-form.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  *
  * This service needs to perform the following actions on a recipient:
  *
  * - convert the recipients into notifications
  * - send the notifications to Notify
- * - save the notifications to `water.scheduled_notifications`
+ * - save the notifications to `water.notifications`
  * - update the linked event record with the count of notifications that failed to send to Notify
  *
  * This needs to be done in batches because Notify has a rate limit (3,000 messages per minute).
@@ -36,30 +35,18 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
  * @param {object[]} notifications - The notifications for sending and saving
- * @param {string} eventId - the event UUID to link all the notifications to
+ * @param {string} event - the event (notice) to link all the notifications to
  * @param {string} referenceCode - the unique generated reference code
  *
  */
-async function go(notifications, eventId, referenceCode) {
-  const { batchSize, delay } = NotifyConfig
+async function go(notifications, event, referenceCode) {
+  const totalErrorCount = 0
 
-  let totalErrorCount = 0
+  const { batchSize, delay } = _batchSize(event.subtype)
 
-  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
-  // to add a delay between each batch.
-  for (let i = 0; i < notifications.length; i += batchSize) {
-    const batchNotifications = notifications.slice(i, i + batchSize)
+  await _processBatches(notifications, delay, batchSize, event.id, referenceCode, totalErrorCount)
 
-    const errorCount = await _batch(batchNotifications, referenceCode)
-
-    await _delay(delay)
-
-    await ProcessNotificationStatusService.go(eventId)
-
-    totalErrorCount += errorCount
-  }
-
-  await UpdateEventService.go(eventId, totalErrorCount)
+  await UpdateEventService.go(event.id, totalErrorCount)
 }
 
 async function _batch(notifications, referenceCode) {
@@ -73,12 +60,49 @@ async function _batch(notifications, referenceCode) {
 }
 
 /**
+ * When sending a PDF file (currently we only send return forms) we need to reduce the batch size to 1.
+ *
+ * This is to ease the burden on resources when generating the PDFs.
+ *
+ * Because we reduce the batch size to 1, we can reduce the delay to 2 seconds this will give us 30 requests per minute.
+ *
+ * @private
+ */
+function _batchSize(subtype) {
+  if (subtype === 'paperReturnForms') {
+    return {
+      batchSize: 1,
+      delay: 2000
+    }
+  }
+
+  const { batchSize, delay } = NotifyConfig
+
+  return {
+    batchSize,
+    delay
+  }
+}
+
+/**
  * This handles delaying sending the next batch by using a Node timeout.
  *
  * @private
  */
 async function _delay(delay) {
   return setTimeout(delay)
+}
+
+function _determineNotificationToSend(notification, referenceCode) {
+  if (notification.messageType === 'email') {
+    return SendEmailService.go(notification, referenceCode)
+  }
+
+  if (notification.messageRef === 'pdf.return_form') {
+    return SendReturnFormService.go(notification, referenceCode)
+  }
+
+  return SendLetterService.go(notification, referenceCode)
 }
 
 /**
@@ -120,52 +144,25 @@ function _notificationsToSend(notifications, referenceCode) {
   const sentNotifications = []
 
   for (const notification of notifications) {
-    if (notification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(notification, referenceCode))
-    } else if (notification.messageRef === 'pdf.return_form') {
-      sentNotifications.push(_sendReturnForm(notification, referenceCode))
-    } else {
-      sentNotifications.push(_sendLetter(notification, referenceCode))
-    }
+    sentNotifications.push(_determineNotificationToSend(notification, referenceCode))
   }
 
   return sentNotifications
 }
 
-async function _sendEmail(notification, referenceCode) {
-  const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
+async function _processBatches(notifications, delay, batchSize, eventId, referenceCode, totalErrorCount) {
+  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
+  // to add a delay between each batch.
+  for (let i = 0; i < notifications.length; i += batchSize) {
+    const batchNotifications = notifications.slice(i, i + batchSize)
 
-  return _sentNotification(notification.id, notifyResult)
-}
+    const errorCount = await _batch(batchNotifications, referenceCode)
 
-async function _sendLetter(notification, referenceCode) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
+    await _delay(delay)
 
-  return _sentNotification(notification.id, notifyResult)
-}
+    await ProcessNotificationStatusService.go(eventId)
 
-async function _sendReturnForm(notification, referenceCode) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.pdf, referenceCode)
-
-  return _sentNotification(notification.id, notifyResult)
-}
-
-/**
- * The returned combination represents a 'notification' record, which the `RecordNotifySendResultsService` can then
- * update.
- *
- * @private
- */
-function _sentNotification(notificationId, notifyResult) {
-  return {
-    ...NotifyUpdatePresenter.go(notifyResult),
-    id: notificationId
+    totalErrorCount += errorCount
   }
 }
 

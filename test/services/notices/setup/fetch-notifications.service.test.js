@@ -40,6 +40,7 @@ describe('Notices - Setup - Fetch notifications service', () => {
         pdf: null,
         personalisation: null,
         recipient: null,
+        returnLogIds: null,
         templateId: null
       },
       {
@@ -49,6 +50,7 @@ describe('Notices - Setup - Fetch notifications service', () => {
         pdf: null,
         personalisation: null,
         recipient: null,
+        returnLogIds: null,
         templateId: null
       }
     ])

@@ -19,7 +19,7 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  */
 async function go(eventId) {
   return NotificationModel.query()
-    .select(['id', 'messageRef', 'messageType', 'pdf', 'personalisation', 'recipient', 'templateId'])
+    .select(['id', 'messageRef', 'messageType', 'pdf', 'personalisation', 'recipient', 'return_log_ids', 'templateId'])
     .where('eventId', eventId)
 }
 

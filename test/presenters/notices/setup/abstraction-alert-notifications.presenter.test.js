@@ -84,6 +84,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdValue: 1000
         },
         recipient: 'primary.user@important.com',
+        status: 'pending',
         templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
       },
       {
@@ -115,6 +116,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdUnit: 'm3/s',
           thresholdValue: 100
         },
+        status: 'pending',
         templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
       },
       {
@@ -140,6 +142,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           thresholdValue: 100
         },
         recipient: 'additional.contact@important.com',
+        status: 'pending',
         templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
       }
     ])
@@ -180,6 +183,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 1000
           },
           recipient: 'primary.user@important.com',
+          status: 'pending',
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         },
         {
@@ -205,6 +209,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 100
           },
           recipient: 'primary.user@important.com',
+          status: 'pending',
           templateId: 'a51ace39-3224-4c18-bbb8-c803a6da9a21'
         }
       ])
@@ -245,6 +250,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 100
           },
           recipient: 'additional.contact@important.com',
+          status: 'pending',
           templateId: 'bf32327a-f170-4854-8abb-3068aee9cdec'
         }
       ])
@@ -288,6 +294,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 1000
           },
           recipient: 'additional.contact@important.com',
+          status: 'pending',
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         }
       ])
@@ -331,6 +338,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdValue: 1000
           },
           recipient: 'primary.user@important.com',
+          status: 'pending',
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         }
       ])
@@ -378,6 +386,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             thresholdUnit: 'm',
             thresholdValue: 1000
           },
+          status: 'pending',
           templateId: '27499bbd-e854-4f13-884e-30e0894526b6'
         }
       ])

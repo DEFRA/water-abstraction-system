@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const SubmitReturnsPeriodService = require('../../../../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
@@ -17,9 +18,12 @@ const SubmitReturnsPeriodService = require('../../../../../app/services/notices/
 describe('Notices - Setup - Submit Returns Period service', () => {
   let clock
   let payload
+  let referenceCode
   let session
 
   before(async () => {
+    referenceCode = generateReferenceCode()
+
     const testDate = new Date('2024-12-01')
 
     clock = Sinon.useFakeTimers(testDate)
@@ -28,10 +32,11 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   after(() => {
     clock.restore()
   })
+
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234' } })
+        session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
 
         payload = { returnsPeriod: 'quarterFour' }
       })
@@ -69,7 +74,9 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
     describe('fails validation', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234', journey: 'invitations' } })
+        session = await SessionHelper.add({
+          data: { referenceCode, journey: 'invitations', noticeType: 'invitations' }
+        })
         payload = {}
       })
 
@@ -78,12 +85,23 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: '/manage',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/notice-type`,
+            text: 'Back'
+          },
           error: {
-            text: 'Select the returns periods for the invitations'
+            errorList: [
+              {
+                href: '#returnsPeriod',
+                text: 'Select the returns periods for the invitations'
+              }
+            ],
+            returnsPeriod: {
+              text: 'Select the returns periods for the invitations'
+            }
           },
           pageTitle: 'Select the returns periods for the invitations',
-          referenceCode: 'RINV-1234',
+          pageTitleCaption: `Notice ${referenceCode}`,
           returnsPeriod: [
             {
               checked: false,

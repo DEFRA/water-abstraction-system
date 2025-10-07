@@ -365,6 +365,8 @@ async function _deleteAllTestData() {
     AND "lvp"."licence_version_id" = "lv"."licence_version_id"
     AND "lv"."licence_id" = "l"."licence_id";
 
+  DELETE FROM "water"."points" AS "p" WHERE "p"."external_id" IN ('9:9000031', '9:9000032', '9:9000090', '9:9000091');
+
   DELETE
   FROM
     "water"."licence_end_date_changes" AS "ledc"
@@ -382,6 +384,18 @@ async function _deleteAllTestData() {
   WHERE
     "l"."is_test" = TRUE
     AND "lvpp"."licence_version_purpose_id" = "lvp"."licence_version_purpose_id"
+    AND "lvp"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."licence_version_purpose_conditions" AS "lvpc"
+      USING "water"."licence_version_purposes" AS "lvp",
+    "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "lvpc"."licence_version_purpose_id" = "lvp"."licence_version_purpose_id"
     AND "lvp"."licence_version_id" = "lv"."licence_version_id"
     AND "lv"."licence_id" = "l"."licence_id";
 
@@ -441,23 +455,33 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "water"."scheduled_notification"
-  WHERE
-    "message_ref" = 'test-ref';
-
-  DELETE
-  FROM
     "water"."scheduled_notification" AS "sn"
       USING "water"."events" AS "e"
   WHERE
-    "e"."issuer" LIKE 'acceptance-test%'
+    "e"."licences" <> '"[]"'
+    AND (
+      "e"."issuer" LIKE 'acceptance-test%'
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements_text("e"."licences") AS l
+        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+      )
+    )
     AND "sn"."event_id" = "e"."event_id";
 
   DELETE
   FROM
     "water"."events"
   WHERE
-    "issuer" LIKE 'acceptance-test%';
+    "licences" <> '"[]"'
+    AND (
+      "issuer" LIKE 'acceptance-test%'
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements_text("licences") AS l
+        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+      )
+  );
 
   DELETE
   FROM

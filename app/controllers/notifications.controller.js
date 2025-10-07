@@ -5,9 +5,19 @@
  * @module NotificationsController
  */
 
+const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
+const ProcessReturnedLetterService = require('../services/notifications/process-returned-letter.service.js')
 const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
+
+async function download(request, h) {
+  const { id: notificationId } = request.params
+
+  const fileBuffer = await DownloadNotificationService.go(notificationId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="letter.pdf"')
+}
 
 /**
  * If a letter has been returned to notify this end point will be called
@@ -22,6 +32,8 @@ async function returnedLetter(request, h) {
 
   global.GlobalNotifier.omg('Return letter callback triggered', { notificationId, reference })
 
+  await ProcessReturnedLetterService.go(notificationId)
+
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
@@ -35,6 +47,7 @@ async function view(request, h) {
 }
 
 module.exports = {
+  download,
   returnedLetter,
   view
 }

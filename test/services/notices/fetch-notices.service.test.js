@@ -26,6 +26,7 @@ describe('Notices - Fetch Notices service', () => {
   let filters
   let legacyNotice
   let pageNumber
+  let returnedInvitationNotice
   let returnsInvitationNotice
 
   before(async () => {
@@ -91,6 +92,31 @@ describe('Notices - Fetch Notices service', () => {
     })
 
     await _addNotification(notifications, abstractionAlertNotice.id, 'pending')
+
+    returnedInvitationNotice = await EventHelper.add({
+      createdAt: new Date('2025-07-01T15:01:47.023Z'),
+      issuer: 'billing.data@wrls.gov.uk',
+      metadata: {
+        name: 'Returns: invitation',
+        error: 1,
+        options: { excludeLicences: [] },
+        recipients: 1,
+        returnCycle: {
+          dueDate: new Date('2025-07-28'),
+          endDate: new Date('2025-06-30'),
+          isSummer: false,
+          startDate: new Date('2025-04-01')
+        }
+      },
+      referenceCode: NotificationHelper.generateReferenceCode(),
+      status: 'completed',
+      subtype: 'returnInvitation',
+      type: 'notification'
+    })
+
+    await _addNotification(notifications, returnedInvitationNotice.id, 'returned')
+    await _addNotification(notifications, returnedInvitationNotice.id, 'pending')
+    await _addNotification(notifications, returnedInvitationNotice.id, 'sent')
   })
 
   beforeEach(() => {
@@ -109,6 +135,7 @@ describe('Notices - Fetch Notices service', () => {
     await abstractionAlertNotice.$query().delete()
     await legacyNotice.$query().delete()
     await returnsInvitationNotice.$query().delete()
+    await returnedInvitationNotice.$query().delete()
   })
 
   describe('when no filter is applied', () => {
@@ -128,6 +155,7 @@ describe('Notices - Fetch Notices service', () => {
       expect(result.total).to.exist()
 
       expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+      expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice, 'returned'))
       expect(result.results).contains(_transformNoticeToResult(legacyNotice, 'sent'))
       expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
     })

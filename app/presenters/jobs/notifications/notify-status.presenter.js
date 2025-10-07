@@ -20,9 +20,9 @@ const NOTIFICATIONS_STATUS = {
  * - **pending** - when a notification is 'created' or 'sending'
  * - **sent** - when a notification is in any other state it is considered sent
  *
- * This 'display status' is stored in 'water.scheduled_notifications.status'
+ * This 'display status' is stored in 'water.notifications.status'
  *
- * We also store the raw 'notifyStatus' in 'water.scheduled_notifications.notifyStatus'
+ * We also store the raw 'notifyStatus' in 'water.notifications.notifyStatus'
  *
  * When we make the initial call to notify we do not receive a status, but we do receive a 'statusCode' (201) and
  * 'statusText' ("CREATED"). This is inferred to mean the notifications is in the "created" state. This is the initial
@@ -85,24 +85,28 @@ function _emailStatus(notifyStatus) {
  * - **cancelled**: Sending cancelled. The letter will not be printed or dispatched.
  * - **technical-failure**: GOV.UK Notify had an unexpected error while sending the letter to our printing provider.
  * - **permanent-failure**: The provider cannot print the letter. Your letter will not be dispatched.
+ * - **pending-virus-check**: GOV.UK Notify has not completed a virus scan of the precompiled letter file.
  *
  * @private
  */
 function _letterStatus(notifyStatus) {
   const letterStatuses = {
-    accepted: NOTIFICATIONS_STATUS.pending,
-    created: NOTIFICATIONS_STATUS.pending,
-    sending: NOTIFICATIONS_STATUS.pending,
-    received: NOTIFICATIONS_STATUS.sent,
+    'pending-virus-check': NOTIFICATIONS_STATUS.pending,
     'permanent-failure': NOTIFICATIONS_STATUS.error,
     'technical-failure': NOTIFICATIONS_STATUS.error,
     'temporary-failure': NOTIFICATIONS_STATUS.error,
     'validation-failed': NOTIFICATIONS_STATUS.error,
-    error: NOTIFICATIONS_STATUS.error
+    accepted: NOTIFICATIONS_STATUS.pending,
+    created: NOTIFICATIONS_STATUS.pending,
+    error: NOTIFICATIONS_STATUS.error,
+    received: NOTIFICATIONS_STATUS.sent,
+    sending: NOTIFICATIONS_STATUS.pending
   }
 
+  const status = letterStatuses[notifyStatus] || NOTIFICATIONS_STATUS.pending
+
   return {
-    status: letterStatuses[notifyStatus],
+    status,
     notifyStatus
   }
 }

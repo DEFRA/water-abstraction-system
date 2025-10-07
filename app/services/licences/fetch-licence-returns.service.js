@@ -24,6 +24,8 @@ async function go(licenceId, page) {
 }
 
 async function _fetch(licenceId, page) {
+  // NOTE: Because the return references are held in a varchar field, we have to convert them to an integer in our
+  // order by for the results to be ordered as expected. Hence, we need to use orderByRaw()
   return ReturnLogModel.query()
     .select([
       'returnLogs.id',
@@ -36,10 +38,7 @@ async function _fetch(licenceId, page) {
     ])
     .innerJoinRelated('licence')
     .where('licence.id', licenceId)
-    .orderBy([
-      { column: 'startDate', order: 'desc' },
-      { column: 'returnReference', order: 'desc' }
-    ])
+    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc')
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

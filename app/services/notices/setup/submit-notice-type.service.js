@@ -35,7 +35,7 @@ async function go(sessionId, payload, yar) {
 
     await _save(session, payload)
 
-    return _redirect(payload.noticeType, session.checkPageVisited)
+    return _redirect(payload.noticeType, session.checkPageVisited, session.journey)
   }
 
   const pageData = NoticeTypePresenter.go(session)
@@ -47,10 +47,16 @@ async function go(sessionId, payload, yar) {
   }
 }
 
-function _redirect(noticeType, checkPageVisited) {
+function _redirect(noticeType, checkPageVisited, journey) {
   if (noticeType === 'returnForms' && !checkPageVisited) {
     return {
       redirectUrl: 'return-forms'
+    }
+  }
+
+  if (journey === 'standard') {
+    return {
+      redirectUrl: 'returns-period'
     }
   }
 

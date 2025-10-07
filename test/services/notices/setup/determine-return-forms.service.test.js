@@ -3,20 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
-// Things we need to stub
-const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
@@ -25,7 +22,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
   const eventId = generateUUID()
 
   let additionalDueReturn
-  let buffer
   let dueReturnLog
   let licenceRef
   let recipients
@@ -56,14 +52,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
-
-    buffer = new TextEncoder().encode('mock file').buffer
-
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves(buffer)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -73,7 +61,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
 
         expect(result).to.equal([
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -85,8 +72,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -95,14 +81,15 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: dueReturnLog.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -114,8 +101,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -124,11 +110,13 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: dueReturnLog.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           }
         ])
       })
@@ -144,7 +132,6 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
 
         expect(result).to.equal([
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -156,8 +143,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -166,14 +152,15 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: dueReturnLog.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -185,8 +172,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(dueReturnLog.dueDate),
               end_date: '31 March 2023',
               format_id: dueReturnLog.returnReference,
               is_two_part_tariff: false,
@@ -195,14 +181,15 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: dueReturnLog.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [dueReturnLog.returnId]
+            returnLogIds: [dueReturnLog.returnId],
+            status: 'pending'
           },
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -214,8 +201,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Little Whinging',
               address_line_5: 'Surrey',
               address_line_6: 'WD25 7LR',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(additionalDueReturn.dueDate),
               end_date: '31 March 2023',
               format_id: additionalDueReturn.returnReference,
               is_two_part_tariff: false,
@@ -224,14 +210,15 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: additionalDueReturn.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [additionalDueReturn.returnId]
+            returnLogIds: [additionalDueReturn.returnId],
+            status: 'pending'
           },
           {
-            pdf: buffer,
             eventId,
             licences: [licenceRef],
             messageRef: 'pdf.return_form',
@@ -243,8 +230,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               address_line_4: 'Privet Drive',
               address_line_5: 'Little Whinging',
               address_line_6: 'Surrey',
-              address_line_7: undefined,
-              due_date: '28 April 2023',
+              due_date: formatLongDate(additionalDueReturn.dueDate),
               end_date: '31 March 2023',
               format_id: additionalDueReturn.returnReference,
               is_two_part_tariff: false,
@@ -253,11 +239,13 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
               purpose: 'Mineral Washing',
               qr_url: additionalDueReturn.returnLogId,
               region_code: '1',
+              region_name: 'North West',
               returns_frequency: 'month',
               site_description: 'BOREHOLE AT AVALON',
               start_date: '1 April 2022'
             },
-            returnLogIds: [additionalDueReturn.returnId]
+            returnLogIds: [additionalDueReturn.returnId],
+            status: 'pending'
           }
         ])
       })

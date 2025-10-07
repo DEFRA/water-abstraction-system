@@ -5,6 +5,18 @@ const DataController = require('../controllers/data.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/data/dates',
+    options: {
+      handler: DataController.dates,
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false
+    }
+  },
+  {
+    method: 'GET',
     path: '/data/deduplicate',
     options: {
       handler: DataController.deduplicate,
