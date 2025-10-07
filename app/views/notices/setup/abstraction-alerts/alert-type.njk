@@ -7,16 +7,17 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        name: 'alertType',
-        errorMessage: error.alertType,
-        fieldset: {
-          legend: {
-            html: pageHeadingHtml
-          }
-        },
-        items: alertTypeOptions
-      }) }}
+    {{ govukRadios({
+      name: 'alertType',
+      errorMessage: error.alertType,
+      fieldset: {
+        legend: {
+          html: pageHeadingHtml,
+          isPageHeading: true
+        }
+      },
+      items: alertTypeOptions
+    }) }}
 
     {{govukButton({ text: 'Continue', preventDoubleClick: true }) }}
   </form>
