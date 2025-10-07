@@ -133,6 +133,34 @@ describe('Notice Type Service', () => {
         })
       })
     })
+
+    describe('and the journey is for "standard"', () => {
+      beforeEach(async () => {
+        sessionData.journey = 'standard'
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('should return', async () => {
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({ redirectUrl: 'returns-period' })
+      })
+    })
+
+    describe('and the journey is for "adhoc"', () => {
+      beforeEach(async () => {
+        sessionData.journey = 'adhoc'
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('should return', async () => {
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+      })
+    })
   })
 
   describe('when validation fails', () => {

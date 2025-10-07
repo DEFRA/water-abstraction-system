@@ -254,8 +254,10 @@ describe('Notices - Setup - Batch Notifications service', () => {
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
           metadata: { error: 0 },
+          overallStatus: null,
           referenceCode,
           status: 'completed',
+          statusCounts: null,
           subtype: 'returnInvitation',
           type: 'notification',
           updatedAt: refreshedEvent.updatedAt
@@ -287,8 +289,10 @@ describe('Notices - Setup - Batch Notifications service', () => {
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
           metadata: { error: 5 },
+          overallStatus: null,
           referenceCode,
           status: 'completed',
+          statusCounts: null,
           subtype: 'returnInvitation',
           type: 'notification',
           updatedAt: refreshedEvent.updatedAt

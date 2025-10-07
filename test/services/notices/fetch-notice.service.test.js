@@ -119,7 +119,8 @@ describe('Notices - Fetch Notice service', () => {
         subtype: 'waterAbstractionAlerts',
         alertType: 'warning',
         errorCount: 1,
-        pendingCount: 0
+        pendingCount: 0,
+        returnedCount: 0
       })
 
       expect(result.notifications).to.equal([

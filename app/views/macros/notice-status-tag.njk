@@ -6,6 +6,8 @@
 
   {% if status === 'error' %}
     {% set color = 'govuk-tag--red' %}
+  {% elif status === 'returned' %}
+    {% set color = 'govuk-tag--yellow' %}
   {% elif status === 'sent' %}
     {% set color = 'govuk-tag--green' %}
   {% else %}

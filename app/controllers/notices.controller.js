@@ -11,18 +11,26 @@ const SubmitViewNoticeService = require('../services/notices/submit-view-notice.
 const ViewNoticeService = require('../services/notices/view-notice.service.js')
 
 async function index(request, h) {
-  const { page } = request.query
+  const {
+    auth,
+    query: { page },
+    yar
+  } = request
 
-  const pageData = await IndexNoticesService.go(request.yar, page)
+  const pageData = await IndexNoticesService.go(yar, auth, page)
 
   return h.view('notices/index.njk', pageData)
 }
 
 async function submitIndex(request, h) {
-  const { payload, yar } = request
-  const { page } = request.query
+  const {
+    auth,
+    payload,
+    query: { page },
+    yar
+  } = request
 
-  const pageData = await SubmitIndexNoticesService.go(payload, yar, page)
+  const pageData = await SubmitIndexNoticesService.go(payload, yar, auth, page)
 
   if (pageData.error) {
     return h.view('notices/index.njk', pageData)

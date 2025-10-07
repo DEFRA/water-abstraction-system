@@ -13,10 +13,37 @@
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
+  {% if links.notice or links.adhoc %}
+    <p> Create a returns invitation, reminder or paper return notice</p>
+
+    <div class="govuk-button-group">
+      {% if links.notice %}
+        {{ govukButton({
+          href: links.notice.href,
+          preventDoubleClick: true,
+          text: links.notice.text
+        }) }}
+      {% endif %}
+      {% if links.adhoc %}
+        {{ govukButton({
+          classes: "govuk-button--secondary",
+          href: links.adhoc.href,
+          preventDoubleClick: true,
+          text: links.adhoc.text
+        }) }}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l"> {{ pageSubHeading }} </h2>
+
+  {# Filters #}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
-    <form  method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
       {{ govukCheckboxes({
         classes: "govuk-checkboxes--small",

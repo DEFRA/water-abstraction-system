@@ -73,7 +73,8 @@ async function _fetchNotice(noticeId) {
       'subtype',
       ref('metadata:options.sendingAlertType').castText().as('alertType'),
       'es.error_count',
-      'es.pending_count'
+      'es.pending_count',
+      'es.returned_count'
     ])
     .joinRaw(
       `
@@ -81,6 +82,7 @@ async function _fetchNotice(noticeId) {
         SELECT
           n.event_id,
           COUNT(*) FILTER (WHERE n.status = 'error') AS error_count,
+          COUNT(*) FILTER (WHERE n.status = 'returned') AS returned_count,
           COUNT(*) FILTER (WHERE n.status = 'pending') AS pending_count
         FROM
           public.notifications n

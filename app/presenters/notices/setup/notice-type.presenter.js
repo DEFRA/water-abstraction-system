@@ -13,16 +13,20 @@
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { checkPageVisited, id: sessionId, noticeType } = session
+  const { checkPageVisited, id: sessionId, noticeType, journey } = session
 
   return {
-    backLink: { href: _backLink(sessionId, checkPageVisited), text: 'Back' },
-    options: _options(noticeType),
+    backLink: { href: _backLink(sessionId, checkPageVisited, journey), text: 'Back' },
+    options: _options(noticeType, journey),
     pageTitle: 'Select the notice type'
   }
 }
 
-function _backLink(sessionId, checkPageVisited) {
+function _backLink(sessionId, checkPageVisited, journey) {
+  if (journey === 'standard') {
+    return `/system/notices`
+  }
+
   if (checkPageVisited) {
     return `/system/notices/setup/${sessionId}/check-notice-type`
   }
@@ -30,7 +34,22 @@ function _backLink(sessionId, checkPageVisited) {
   return `/system/notices/setup/${sessionId}/licence`
 }
 
-function _options(noticeType) {
+function _options(noticeType, journey) {
+  if (journey === 'standard') {
+    return [
+      {
+        checked: noticeType === 'invitations',
+        value: 'invitations',
+        text: 'Returns invitation'
+      },
+      {
+        checked: noticeType === 'reminders',
+        value: 'reminders',
+        text: 'Returns reminder'
+      }
+    ]
+  }
+
   return [
     {
       checked: noticeType === 'invitations',
