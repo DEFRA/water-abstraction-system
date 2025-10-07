@@ -103,7 +103,7 @@ function _showingDeclaration(numberDisplayed, totalNumber) {
 
 function _status(notice) {
   const { errorCount, pendingCount, returnedCount } = notice
-console.log(notice)
+
   if (errorCount > 0) {
     return 'error'
   }
