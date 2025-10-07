@@ -89,6 +89,8 @@ describe('Notices - Setup - Submit Check service', () => {
 
       const event = await EventModel.query().findById(result)
       delete event.entities
+      delete event.overallStatus
+      delete event.statusCounts
 
       const args = BatchNotificationsService.go.firstCall.args
 

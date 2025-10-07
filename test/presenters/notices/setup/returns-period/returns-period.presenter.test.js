@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../../app/presenters/notices/setup/returns-period/returns-period.presenter.js')
@@ -24,6 +25,11 @@ describe('Notices - Setup - Returns Period presenter', () => {
   let session = {}
   let testDate
 
+  beforeEach(() => {
+    referenceCode = generateReferenceCode()
+    session = { referenceCode, noticeType: 'invitations', id: generateUUID() }
+  })
+
   afterEach(() => {
     session = {}
     clock.restore()
@@ -31,9 +37,6 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   describe('the data', () => {
     beforeEach(() => {
-      referenceCode = generateReferenceCode()
-
-      session = { referenceCode, journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
@@ -44,7 +47,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       expect(result).to.equal(
         {
           backLink: {
-            href: '/manage',
+            href: `/system/notices/setup/${session.id}/notice-type`,
             text: 'Back'
           },
           pageTitle: 'Select the returns periods for the invitations',
@@ -57,12 +60,11 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   describe('the "pageTitle" property', () => {
     beforeEach(() => {
-      session = { referenceCode: 'RINV-123', journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
 
-    describe('when the journey is "invitations"', () => {
+    describe('when the noticeType is "invitations"', () => {
       it('correctly presents the data', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
@@ -70,9 +72,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('when the journey is "reminders"', () => {
+    describe('when the noticeType is "reminders"', () => {
       beforeEach(() => {
-        session.journey = 'reminders'
+        session.noticeType = 'reminders'
       })
 
       it('correctly presents the data', () => {
@@ -86,7 +88,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
   describe('the "returnsPeriod" property', () => {
     describe('when the "session" has a saved returns period', () => {
       beforeEach(() => {
-        session = { returnsPeriod: 'quarterOne' }
+        session.returnsPeriod = 'quarterOne'
 
         testDate = new Date(`${currentYear}-04-29`)
         clock = Sinon.useFakeTimers(testDate)

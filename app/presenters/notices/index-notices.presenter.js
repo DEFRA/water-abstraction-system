@@ -25,15 +25,20 @@ const NOTICE_MAPPINGS = {
  *
  * @param {module:NoticeModel[]} notices - An array of notices to display
  * @param {number} totalNumber - The total number of notices
- * @param {number} selectedPage - The selected page of results
- * @param {number} numberOfPages - The number of pages of results to paginate
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(notices, totalNumber, selectedPage, numberOfPages) {
+function go(notices, totalNumber, auth) {
+  const {
+    credentials: { scope }
+  } = auth
+
   return {
+    links: _links(scope),
     notices: _noticeRowData(notices),
-    pageTitle: _pageTitle(selectedPage, numberOfPages),
+    pageSubHeading: 'View a notice',
+    pageTitle: 'Notices',
     tableCaption: _tableCaption(notices.length, totalNumber)
   }
 }
@@ -44,6 +49,26 @@ function _link(noticeId) {
   }
 
   return `/notifications/report/${noticeId}`
+}
+
+function _links(scope) {
+  const links = {}
+
+  if (scope.includes('returns') || scope.includes('bulk_return_notifications')) {
+    links.adhoc = {
+      text: 'Create an ad-hoc notice',
+      href: '/system/notices/setup/adhoc'
+    }
+  }
+
+  if (scope.includes('bulk_return_notifications')) {
+    links.notice = {
+      text: 'Create a standard notice',
+      href: '/system/notices/setup/standard'
+    }
+  }
+
+  return links
 }
 
 function _noticeRowData(notices) {
@@ -60,14 +85,6 @@ function _noticeRowData(notices) {
       type: _type(notice)
     }
   })
-}
-
-function _pageTitle(selectedPage, numberOfPages) {
-  if (numberOfPages < 2) {
-    return 'Notices'
-  }
-
-  return `Notices (page ${selectedPage} of ${numberOfPages})`
 }
 
 function _tableCaption(numberDisplayed, totalNumber) {

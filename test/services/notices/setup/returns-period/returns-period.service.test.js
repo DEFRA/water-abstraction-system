@@ -23,7 +23,7 @@ describe('Notices - Setup - Returns Period service', () => {
   before(async () => {
     referenceCode = generateReferenceCode()
 
-    session = await SessionHelper.add({ data: { referenceCode, journey: 'invitations' } })
+    session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
 
     const testDate = new Date('2024-12-01')
 
@@ -41,7 +41,7 @@ describe('Notices - Setup - Returns Period service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: {
-          href: '/manage',
+          href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         },
         pageTitle: 'Select the returns periods for the invitations',
