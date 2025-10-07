@@ -41,7 +41,10 @@ function _mapLicences(licences) {
 
     const licenceEnded = licence.$ends()
     const isActive = _licenceIsActive(licence.startDate, licenceEnded?.date)
-    const licenceEndedText = licenceEnded ? `${licenceEnded.reason} in ${licenceEnded.date.getFullYear()}` : null
+    let licenceEndedText = null
+    if (licenceEnded && !isActive) {
+      licenceEndedText = `${licenceEnded.reason} in ${licenceEnded.date.getFullYear()}`
+    }
 
     const { endDate } = licence
     const endDateText = endDate ? formatDateMonthYear(endDate) : null
