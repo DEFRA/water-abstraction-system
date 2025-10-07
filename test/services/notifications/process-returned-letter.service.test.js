@@ -55,8 +55,8 @@ describe('Notifications - Process Returned Letter service', () => {
     })
   })
 
-  describe('when called with a valid notifyId', () => {
-    it('updates the returnedAt date for the provided notification id', async () => {
+  describe('when called with a UUID that finds no match', () => {
+    it('creates a log message', async () => {
       await ProcessReturnedLetterService.go(generateUUID())
 
       expect(notifierStub.omg.calledWith('No matching notification found for returned letter request')).to.be.true()
