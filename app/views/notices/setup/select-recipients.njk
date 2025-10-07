@@ -28,8 +28,6 @@
     <a class="govuk-link" href="{{setupAddress.href}}">{{ setupAddress.text }}</a>
   {% endset %}
 
-  <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
-
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -38,9 +36,8 @@
       errorMessage: error.recipients,
       fieldset: {
         legend: {
-          text: pageTitle,
+          html: pageHeadingHtml,
           isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
         }
       },
       hint: {
