@@ -86,7 +86,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         expect(result).to.equal({
           activeNavBar: 'manage',
           backLink: {
-            href: '/manage',
+            href: `/system/notices/setup/${session.id}/notice-type`,
             text: 'Back'
           },
           error: {

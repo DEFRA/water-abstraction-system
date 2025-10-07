@@ -19,12 +19,17 @@ const FetchNoticesService = require('../../../app/services/notices/fetch-notices
 const SubmitIndexNoticesService = require('../../../app/services/notices/submit-index-notices.service.js')
 
 describe('Notices - Submit Index Notices service', () => {
+  let auth
   let notice
   let payload
   let yarStub
 
   beforeEach(async () => {
     Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
+
+    auth = {
+      credentials: { scope: ['bulk_return_notifications', 'returns'] }
+    }
 
     yarStub = {
       clear: Sinon.stub().returns(),
@@ -46,13 +51,13 @@ describe('Notices - Submit Index Notices service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexNoticesService.go(payload, yarStub)
+        const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
         expect(result).to.equal({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
-        await SubmitIndexNoticesService.go(payload, yarStub)
+        await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
         expect(yarStub.clear.called).to.be.true()
       })
@@ -64,13 +69,13 @@ describe('Notices - Submit Index Notices service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexNoticesService.go(payload, yarStub)
+        const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
         expect(result).to.equal({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
-        await SubmitIndexNoticesService.go(payload, yarStub)
+        await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
         const setArgs = yarStub.set.args[0]
 
@@ -107,13 +112,13 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('but no notice types included', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -140,13 +145,13 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -173,13 +178,13 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           expect(result).to.equal({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub)
+          await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -218,7 +223,7 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, '2')
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth, '2')
 
           expect(result).to.equal(
             {
@@ -241,6 +246,16 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToYear: null,
                 toDate: undefined
               },
+              links: {
+                adhoc: {
+                  href: '/system/notices/setup/adhoc',
+                  text: 'Create an ad-hoc notice'
+                },
+                notice: {
+                  href: '/system/notices/setup/standard',
+                  text: 'Create a standard notice'
+                }
+              },
               notices: [
                 {
                   createdDate: '25 March 2025',
@@ -252,7 +267,8 @@ describe('Notices - Submit Index Notices service', () => {
                   type: 'Stop alert'
                 }
               ],
-              pageTitle: 'Notices (page 2 of 3)',
+              pageSubHeading: 'View a notice',
+              pageTitle: 'Notices',
               tableCaption: 'Showing 1 of 70 notices'
             },
             { skip: ['pagination'] }
@@ -266,7 +282,7 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub)
+          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
           expect(result).to.equal(
             {
@@ -289,6 +305,16 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToYear: null,
                 toDate: undefined
               },
+              links: {
+                adhoc: {
+                  href: '/system/notices/setup/adhoc',
+                  text: 'Create an ad-hoc notice'
+                },
+                notice: {
+                  href: '/system/notices/setup/standard',
+                  text: 'Create a standard notice'
+                }
+              },
               notices: [
                 {
                   createdDate: '25 March 2025',
@@ -300,6 +326,7 @@ describe('Notices - Submit Index Notices service', () => {
                   type: 'Stop alert'
                 }
               ],
+              pageSubHeading: 'View a notice',
               pageTitle: 'Notices',
               tableCaption: 'Showing all 1 notices'
             },
