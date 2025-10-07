@@ -28,7 +28,7 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
-const PreviewReturnFormsService = require('../../app/services/notices/setup/preview-return-forms.service.js')
+const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
 const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
@@ -934,7 +934,7 @@ describe('Notices Setup controller', () => {
 
         buffer = Buffer.from('mock file')
 
-        Sinon.stub(PreviewReturnFormsService, 'go').resolves(buffer)
+        Sinon.stub(PreviewPaperReturnService, 'go').resolves(buffer)
       })
 
       describe('when a request is valid', () => {

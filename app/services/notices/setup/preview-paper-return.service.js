@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}' page
  *
- * @module PreviewReturnFormsService
+ * @module PreviewPaperReturnService
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')

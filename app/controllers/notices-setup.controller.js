@@ -22,7 +22,7 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
-const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
+const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
@@ -231,7 +231,7 @@ async function viewNoticeType(request, h) {
 async function viewPreviewReturnForms(request, h) {
   const { contactHashId, sessionId, returnId } = request.params
 
-  const fileBuffer = await PreviewReturnFormsService.go(sessionId, contactHashId, returnId)
+  const fileBuffer = await PreviewPaperReturnService.go(sessionId, contactHashId, returnId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
