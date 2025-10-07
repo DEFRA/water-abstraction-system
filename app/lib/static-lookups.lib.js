@@ -273,6 +273,19 @@ const naldRegions = {
 
 const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
 
+const noticeMappings = {
+  'hof-resume': 'HOF resume',
+  'hof-stop': 'HOF stop',
+  'hof-warning': 'HOF warning',
+  'pdf.return_form': 'Paper return',
+  'pdf.return_reminder': 'Paper reminder',
+  paperReturnForms: 'Paper return',
+  renewal: 'Renewal',
+  returnInvitation: 'Returns invitation',
+  returnReminder: 'Returns reminder',
+  waterAbstractionAlerts: 'alert'
+}
+
 const NoticeType = Object.freeze({
   ABSTRACTION_ALERTS: 'abstractionAlerts',
   INVITATIONS: 'invitations',
@@ -466,6 +479,7 @@ module.exports = {
   naldAreaCodes,
   naldRegions,
   NoticeJourney,
+  noticeMappings,
   NoticeType,
   organisationTypes,
   returnCycleDates,
