@@ -129,7 +129,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'manage',
             backLink: {
-              href: '/manage',
+              href: '/system/notices',
               text: 'Back'
             },
             error: {
@@ -164,7 +164,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'manage',
             backLink: {
-              href: '/manage',
+              href: '/system/notices',
               text: 'Back'
             },
             error: {
@@ -201,7 +201,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'manage',
             backLink: {
-              href: '/manage',
+              href: '/system/notices',
               text: 'Back'
             },
             error: {

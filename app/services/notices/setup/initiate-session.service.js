@@ -23,14 +23,13 @@ const SessionModel = require('../../../models/session.model.js')
  * upstream services to use e.g. the prefix and code are used in the filename of a csv file.
  *
  * @param {string} journey - The notice journey to use; 'adhoc', 'standard' or 'alerts'
- * @param {string} [noticeType=null] - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - For abstraction alerts, the UUID of the monitoring station we are
  * creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(journey, noticeType = null, monitoringStationId = null) {
-  const notice = _notice(journey, noticeType)
+async function go(journey, monitoringStationId = null) {
+  const notice = _notice(journey)
 
   let additionalData = {}
 
@@ -55,17 +54,13 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
 }
 
 /**
- * The 'adhoc' journey does not have a noticeType set. This is set later in the journey.
+ * The alert journey requires a different notice type to be set
  *
  * @private
  */
-function _notice(journey, noticeType) {
+function _notice(journey) {
   if (journey === 'alerts') {
-    noticeType = 'abstractionAlerts'
-  }
-
-  if (noticeType) {
-    return DetermineNoticeTypeService.go(noticeType)
+    return DetermineNoticeTypeService.go('abstractionAlerts')
   }
 
   return null
@@ -73,7 +68,7 @@ function _notice(journey, noticeType) {
 
 function _redirect(journey) {
   if (journey === 'standard') {
-    return 'returns-period'
+    return 'notice-type'
   }
 
   if (journey === 'alerts') {
