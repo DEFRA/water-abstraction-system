@@ -332,6 +332,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
             metadata: { error: 1 },
             referenceCode: 'RINV-LX4P57',
             status: 'completed',
+            statusCounts: null,
+            overallStatus: null,
             subtype: 'returnInvitation',
             type: 'notification'
           },
@@ -420,8 +422,10 @@ describe('Job - Notifications - Process Notification Status service', () => {
           issuer: 'test.user@defra.gov.uk',
           licences: ['11/111'],
           metadata: {},
+          overallStatus: null,
           referenceCode: 'RINV-402AGB',
           status: 'completed',
+          statusCounts: null,
           subtype: 'returnInvitation',
           type: 'notification'
         },
