@@ -3,8 +3,10 @@
 /**
  * Processes a returned letter callback from GOV.UK Notify
  *
- * @module SubmitReturnedLetterService
+ * @module ProcessReturnedLetterService
  */
+
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 const NotificationModel = require('../../models/notification.model.js')
 
@@ -17,17 +19,16 @@ const NotificationModel = require('../../models/notification.model.js')
  * notification that has been returned, and update it accordingly.
  *
  * @param {string} notifyId - Notify's ID for the notification
- *
- * @returns {Promise<object>} - The returned database object
  */
 async function go(notifyId) {
   const notification = await NotificationModel.query()
-    .patch({ returnedAt: new Date(), status: 'returned' })
+    .patch({ returnedAt: timestampForPostgres(), status: 'returned' })
     .where('notifyId', notifyId)
     .returning('id')
 
   if (notification.length === 0) {
-    global.GlobalNotifier.omg('No matching notice found for returned letter request', { notifyId })
+    console.log('hello')
+    global.GlobalNotifier.omg('No matching notification found for returned letter request', { notifyId })
   }
 }
 
