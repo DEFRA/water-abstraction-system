@@ -48,8 +48,10 @@ describe('Notices - Setup - Update event service', () => {
           error: errorCount,
           name: 'some existing data'
         },
+        overallStatus: null,
         referenceCode: null,
         status: 'completed',
+        statusCounts: null,
         subtype: 'returnReminder',
         type: 'notification',
         updatedAt: updatedResult.updatedAt
@@ -87,8 +89,10 @@ describe('Notices - Setup - Update event service', () => {
           error: 10,
           name: 'some existing data'
         },
+        overallStatus: null,
         referenceCode: null,
         status: 'completed',
+        statusCounts: null,
         subtype: 'returnReminder',
         type: 'notification',
         updatedAt: updatedResult.updatedAt
