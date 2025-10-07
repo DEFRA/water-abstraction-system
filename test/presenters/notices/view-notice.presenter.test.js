@@ -34,7 +34,8 @@ describe('Notices - View Notice presenter', () => {
       subtype: 'waterAbstractionAlerts',
       alertType: 'warning',
       errorCount: 1,
-      pendingCount: 0
+      pendingCount: 0,
+      returnedCount: 0
     }
 
     notifications = [
@@ -260,8 +261,9 @@ describe('Notices - View Notice presenter', () => {
   describe('the "status" property', () => {
     describe('when the error count is greater than 0', () => {
       beforeEach(() => {
-        // NOTE: We set pending count to more than 0 to demonstrate that the error count takes precedence
+        // NOTE: We set pending and returned count to more than 0 to demonstrate that the error count takes precedence
         notice.pendingCount = 1
+        notice.returnedCount = 1
       })
 
       it('returns "error"', () => {
@@ -271,7 +273,21 @@ describe('Notices - View Notice presenter', () => {
       })
     })
 
-    describe('when the error count is 0 but the pending count is greater than 0', () => {
+    describe('when the error count is 0 but the returned count is greater than 0', () => {
+      beforeEach(() => {
+        notice.errorCount = 0
+        notice.returnedCount = 1
+        notice.pendingCount = 1
+      })
+
+      it('returns "returned"', () => {
+        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+
+        expect(result.status).to.equal('returned')
+      })
+    })
+
+    describe('when the error and returned count is 0 but the pending count is greater than 0', () => {
       beforeEach(() => {
         notice.errorCount = 0
         notice.pendingCount = 1
@@ -284,7 +300,7 @@ describe('Notices - View Notice presenter', () => {
       })
     })
 
-    describe('when both the error count and the pending count are 0', () => {
+    describe('when the error, returned and and pending count are 0', () => {
       beforeEach(() => {
         notice.errorCount = 0
       })

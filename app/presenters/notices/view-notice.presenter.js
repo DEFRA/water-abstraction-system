@@ -102,10 +102,14 @@ function _showingDeclaration(numberDisplayed, totalNumber) {
 }
 
 function _status(notice) {
-  const { errorCount, pendingCount } = notice
+  const { errorCount, pendingCount, returnedCount } = notice
 
   if (errorCount > 0) {
     return 'error'
+  }
+
+  if (returnedCount > 0) {
+    return 'returned'
   }
 
   if (pendingCount > 0) {
