@@ -10,7 +10,7 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   abstractionAlerts: 'Abstraction alerts',
-  returnForms: 'Return forms',
+  paperReturn: 'Return forms',
   invitations: 'Returns invitations',
   reminders: 'Returns reminders'
 }
@@ -115,7 +115,7 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
     return null
   }
 
-  if (noticeType === 'returnForms') {
+  if (noticeType === 'paperReturn') {
     return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-return-forms`
   }
 

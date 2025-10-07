@@ -17,7 +17,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
 
 // Thing under test
-const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
 
 describe('Notices - Setup - Prepare Return Forms Service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
@@ -79,7 +79,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns the request object', async () => {
-      const result = await PrepareReturnFormsService.go(notification)
+      const result = await PreparePaperReturnService.go(notification)
 
       expect(result).to.equal({
         response: {
@@ -90,7 +90,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     })
 
     it('returns the generated pdf as an array buffer', async () => {
-      const result = await PrepareReturnFormsService.go(notification)
+      const result = await PreparePaperReturnService.go(notification)
 
       expect(result.response.body).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -98,7 +98,7 @@ describe('Notices - Setup - Prepare Return Forms Service', () => {
     })
 
     it('should call "GenerateReturnFormRequest" with the page data for the provided "returnId"', async () => {
-      await PrepareReturnFormsService.go(notification)
+      await PreparePaperReturnService.go(notification)
 
       expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
 

@@ -48,7 +48,7 @@ async function go(sessionId, payload, yar) {
 }
 
 function _redirect(noticeType, checkPageVisited, journey) {
-  if (noticeType === 'returnForms' && !checkPageVisited) {
+  if (noticeType === 'paperReturn' && !checkPageVisited) {
     return {
       redirectUrl: 'return-forms'
     }

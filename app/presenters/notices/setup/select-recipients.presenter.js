@@ -32,7 +32,7 @@ function go(session, recipients, selectedRecipients) {
 }
 
 function _setupAddress(sessionId, noticeType) {
-  if (noticeType === 'returnForms') {
+  if (noticeType === 'paperReturn') {
     return {
       href: `/system/notices/setup/${sessionId}/recipient-name`,
       text: 'Set up a single use address'

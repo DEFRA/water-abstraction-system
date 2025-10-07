@@ -60,7 +60,7 @@ async function _batch(notifications, referenceCode) {
 }
 
 /**
- * When sending a PDF file (currently we only send return forms) we need to reduce the batch size to 1.
+ * When sending a PDF file (currently we only send paper from) we need to reduce the batch size to 1.
  *
  * This is to ease the burden on resources when generating the PDFs.
  *

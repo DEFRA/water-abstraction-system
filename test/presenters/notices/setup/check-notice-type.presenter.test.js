@@ -59,7 +59,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "paperReturn"', () => {
       let dueReturnOne
       let dueReturnTwo
 
@@ -80,7 +80,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           startDate: '2003-04-01'
         }
 
-        session.noticeType = 'returnForms'
+        session.noticeType = 'paperReturn'
 
         session.dueReturns = [dueReturnOne, dueReturnTwo]
 
@@ -92,7 +92,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
         expect(result).to.equal({
           licenceRef,
-          noticeType: 'returnForms',
+          noticeType: 'paperReturn',
           pageTitle: 'Check the notice type',
           returnNoticeType: 'Submit using a paper form invitation',
           selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],

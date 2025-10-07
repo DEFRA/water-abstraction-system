@@ -1,20 +1,20 @@
 'use strict'
 
 /**
- * Determines the PDF return forms data to send to notify and save to the database
+ * Determines the PDF paper from data to send to notify and save to the database
  * @module DetermineReturnFormsService
  */
 
 const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 
 /**
- * Determines the PDF return forms data to send to notify and save to the database
+ * Determines the PDF paper from data to send to notify and save to the database
  *
  * @param {object} session - The session instance
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email / address.
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {object[]} - Resolves an array of return forms notifications
+ * @returns {object[]} - Resolves an array of paper from notifications
  */
 function go(session, recipients, eventId) {
   const { licenceRef, dueReturns, selectedReturns } = session

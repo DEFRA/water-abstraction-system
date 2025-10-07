@@ -36,7 +36,7 @@ const RETURN_TYPE = {
  * This presenter is also used to supply the data for the saved notifications, this has its own presenter which maps
  * some of these keys to 'snake case'. So there is additional data in the response which may not be in the PDF file.
  *
- * @param {object} notification - A return forms notification
+ * @param {object} notification - A paper from notification
  *
  * @returns {object} - The data formatted for the return form
  */

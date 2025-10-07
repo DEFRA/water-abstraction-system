@@ -98,7 +98,7 @@ describe('Notices - Setup - Download Recipients service', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "paperReturn"', () => {
       const returnReference = '376439279'
 
       let dueReturn
@@ -122,7 +122,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             dueReturns: [dueReturn],
             journey: 'adhoc',
             licenceRef,
-            noticeType: 'returnForms',
+            noticeType: 'paperReturn',
             notificationType: 'Paper returns',
             referenceCode,
             selectedReturns: [dueReturn.returnId]
@@ -141,7 +141,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             // Headers
             'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             // Row - licence holder
-            `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
+            `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Paper return","letter","Licence holder","Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
           filename: `Paper returns - ${referenceCode}.csv`,
           type: 'text/csv'
         })

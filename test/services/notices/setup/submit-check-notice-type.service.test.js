@@ -30,7 +30,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
   })
 
   describe('when called', () => {
-    describe('and the notice type is not "returnForms"', () => {
+    describe('and the notice type is not "paperReturn"', () => {
       beforeEach(async () => {
         sessionData.name = 'Returns: invitation'
         sessionData.noticeType = 'invitations'
@@ -69,10 +69,10 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "paperReturn"', () => {
       beforeEach(async () => {
         sessionData.name = 'Paper returns'
-        sessionData.noticeType = 'returnForms'
+        sessionData.noticeType = 'paperReturn'
         sessionData.notificationType = 'Paper returns'
         sessionData.referenceCode = `PRTF-${Math.floor(1000 + Math.random() * 9000).toString()}`
         sessionData.subType = 'paperReturnForms'
@@ -90,7 +90,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           licenceRef: '01/123',
           journey: 'adhoc',
           name: 'Paper returns',
-          noticeType: 'returnForms',
+          noticeType: 'paperReturn',
           notificationType: 'Paper returns',
           referenceCode: sessionData.referenceCode,
           subType: 'paperReturnForms',

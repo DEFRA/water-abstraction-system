@@ -31,7 +31,7 @@ async function go(session) {
 async function _recipientsData(session) {
   if (session.journey === 'alerts') {
     return FetchAbstractionAlertRecipientsService.go(session)
-  } else if (session.noticeType === 'returnForms') {
+  } else if (session.noticeType === 'paperReturn') {
     return FetchLetterRecipientsService.go(session)
   } else {
     return FetchReturnsRecipientsService.go(session)

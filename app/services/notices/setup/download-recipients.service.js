@@ -51,7 +51,7 @@ async function _formattedData(session) {
     return _alerts(session)
   }
 
-  if (session.noticeType === 'returnForms') {
+  if (session.noticeType === 'paperReturn') {
     return _returnForms(session)
   }
 

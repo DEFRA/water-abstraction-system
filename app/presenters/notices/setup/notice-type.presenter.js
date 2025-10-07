@@ -57,8 +57,8 @@ function _options(noticeType, journey) {
       text: 'Standard returns invitation'
     },
     {
-      checked: noticeType === 'returnForms',
-      value: 'returnForms',
+      checked: noticeType === 'paperReturn',
+      value: 'paperReturn',
       text: 'Submit using a paper form invitation'
     }
   ]

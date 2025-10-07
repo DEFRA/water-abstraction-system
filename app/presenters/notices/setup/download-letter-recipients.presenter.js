@@ -86,7 +86,7 @@ function _transformToCsv(recipients, dueReturn, licenceRef) {
       new Date(dueReturn.startDate),
       new Date(dueReturn.endDate),
       new Date(dueReturn.dueDate),
-      'Return forms',
+      'Paper return',
       'letter',
       recipient.contact_type,
       ...addressToCSV(contact)

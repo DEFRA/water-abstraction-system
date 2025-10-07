@@ -39,7 +39,7 @@ describe('Notice Type Service', () => {
           {
             checked: false,
             text: 'Submit using a paper form invitation',
-            value: 'returnForms'
+            value: 'paperReturn'
           }
         ],
         pageTitle: 'Select the notice type'

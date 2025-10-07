@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the return form
+ * Orchestrates fetching and presenting the data for the paper form
  *
- * @module PrepareReturnFormsService
+ * @module PreparePaperReturnService
  */
 
 const GenerateReturnFormRequest = require('../../../requests/gotenberg/generate-return-form.request.js')
@@ -15,7 +15,7 @@ const PrepareReturnFormsPresenter = require('../../../presenters/notices/setup/p
  * We return the 'pageData' to be used when sending the notification. The legacy code relies on setting the
  * personalisation in the database (mainly the address and due dates).
  *
- * @param {object} notification - A return forms notification
+ * @param {object} notification - A paper from notification
  *
  * @returns {Promise<object>} - Resolves the response from the Gotenberg request wrapper
  */

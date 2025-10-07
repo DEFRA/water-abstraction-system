@@ -22,7 +22,7 @@ const CreateEmailRequest = require('../../../../app/requests/notify/create-email
 const CreateLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/create-precompiled-file.request.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
-const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test
@@ -52,7 +52,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+    Sinon.stub(PreparePaperReturnService, 'go').resolves({
       succeeded: true,
       response: { body: buffer }
     })

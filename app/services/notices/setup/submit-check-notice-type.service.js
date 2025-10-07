@@ -51,7 +51,7 @@ async function go(sessionId) {
  * @private
  */
 function _backLink(session) {
-  if (session.noticeType === 'returnForms') {
+  if (session.noticeType === 'paperReturn') {
     return { href: `/system/notices/setup/${session.id}/recipient-name`, text: 'Back' }
   }
 
