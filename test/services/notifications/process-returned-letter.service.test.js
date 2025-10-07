@@ -15,12 +15,13 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const NotificationModel = require('../../../app/models/notification.model.js')
 
 // Thing under test
-const SubmitReturnedLetterService = require('../../../app/services/notifications/submit-returned-letter.service.js')
+const ProcessReturnedLetterService = require('../../../app/services/notifications/process-returned-letter.service.js')
 
 describe('Submit Returned Letter Service', () => {
+  const todaysDate = today()
+
   let eventId
   let notifyId
-  const todaysDate = today()
 
   beforeEach(async () => {
     const event = await EventHelper.add({
@@ -36,7 +37,7 @@ describe('Submit Returned Letter Service', () => {
 
   describe('when called with a valid notifyId', () => {
     it('updates the returnedAt date for the provided notification id', async () => {
-      await SubmitReturnedLetterService.go(notifyId)
+      await ProcessReturnedLetterService.go(notifyId)
 
       const updatedResult = await NotificationModel.query().where('notifyId', notifyId)
 

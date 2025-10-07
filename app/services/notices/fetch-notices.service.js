@@ -114,6 +114,7 @@ function _fetchQuery() {
       EventModel.knex().raw(`
         CASE
           WHEN COUNT(*) FILTER (WHERE notifications.status = 'error') > 0 THEN 'error'
+          WHEN COUNT(*) FILTER (WHERE notifications.status = 'returned') > 0 THEN 'returned'
           WHEN COUNT(*) FILTER (WHERE notifications.status = 'pending') > 0 THEN 'pending'
           ELSE 'sent'
         END AS overall_status
