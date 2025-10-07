@@ -7,7 +7,7 @@
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
-const PreparePaperReturnService = require('./prepare-return-forms.service.js')
+const PreparePaperReturnService = require('./prepare-paper-return.service.js')
 const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 

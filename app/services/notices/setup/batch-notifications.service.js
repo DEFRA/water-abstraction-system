@@ -11,7 +11,7 @@ const ProcessNotificationStatusService = require('../../jobs/notification-status
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
-const SendReturnFormService = require('./batch/send-return-form.service.js')
+const SendPaperReturnService = require('./batch/send-return-form.service.js')
 const UpdateEventService = require('./update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -99,7 +99,7 @@ function _determineNotificationToSend(notification, referenceCode) {
   }
 
   if (notification.messageRef === 'pdf.return_form') {
-    return SendReturnFormService.go(notification, referenceCode)
+    return SendPaperReturnService.go(notification, referenceCode)
   }
 
   return SendLetterService.go(notification, referenceCode)

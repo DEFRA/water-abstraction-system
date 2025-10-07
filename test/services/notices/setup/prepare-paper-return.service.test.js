@@ -17,9 +17,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
 
 // Thing under test
-const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
 
-describe('Notices - Setup - Prepare Return Forms Service', () => {
+describe('Notices - Setup - Prepare Paper Return Service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
 
   let dueReturnLog

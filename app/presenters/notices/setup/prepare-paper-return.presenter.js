@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the return form
- * @module PrepareReturnFormsPresenter
+ * Formats data for the paper return
+ * @module PreparePaperReturnPresenter
  */
 
 const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
@@ -26,9 +26,9 @@ const RETURN_TYPE = {
 }
 
 /**
- * Formats data for the return form
+ * Formats data for the paper return
  *
- * The return form has multiple pages and some complex logic / data.
+ * The paper return has multiple pages and some complex logic / data.
  *
  * Each page will be assigned a corresponding object to isolate the data to each page where possible. Those pages are:
  * - The "cover" page, this is the first page. The address is on this page.

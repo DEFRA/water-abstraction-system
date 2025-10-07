@@ -22,7 +22,7 @@ const CreateEmailRequest = require('../../../../app/requests/notify/create-email
 const CreateLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/create-precompiled-file.request.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
-const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test

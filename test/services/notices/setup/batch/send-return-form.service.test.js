@@ -15,12 +15,12 @@ const { generateReferenceCode } = require('../../../../support/helpers/notificat
 
 // Things we need to stub
 const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify/create-precompiled-file.request.js')
-const PreparePaperReturnService = require('../../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
 
 // Thing under test
-const SendReturnFormService = require('../../../../../app/services/notices/setup/batch/send-return-form.service.js')
+const SendPaperReturnService = require('../../../../../app/services/notices/setup/batch/send-return-form.service.js')
 
-describe('Notices - Setup - Batch - Send Return form service', () => {
+describe('Notices - Setup - Batch - Send Paper Return service', () => {
   let buffer
   let notification
   let notifyResponse
@@ -50,7 +50,7 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendReturnFormService.go(notification, referenceCode)
+      const result = await SendPaperReturnService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,
@@ -72,7 +72,7 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendReturnFormService.go(notification, referenceCode)
+      const result = await SendPaperReturnService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,
