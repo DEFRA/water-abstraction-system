@@ -27,7 +27,6 @@ async function go(notifyId) {
     .returning('id')
 
   if (notification.length === 0) {
-    console.log('hello')
     global.GlobalNotifier.omg('No matching notification found for returned letter request', { notifyId })
   }
 }
