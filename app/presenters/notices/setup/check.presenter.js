@@ -31,7 +31,7 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLink(session), text: 'Back' },
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
@@ -46,17 +46,15 @@ function go(recipients, page, pagination, session) {
 function _backLink(session) {
   const { journey, id } = session
 
-  let href
-
   if (journey === 'adhoc') {
-    href = `/system/notices/setup/${id}/check-notice-type`
-  } else if (journey === 'alerts') {
-    href = `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
-  } else {
-    href = `/system/notices/setup/${id}/returns-period`
+    return `/system/notices/setup/${id}/check-notice-type`
   }
 
-  return { text: 'Back', href }
+  if (journey === 'alerts') {
+    return `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
+  }
+
+  return `/system/notices/setup/${id}/returns-period`
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
