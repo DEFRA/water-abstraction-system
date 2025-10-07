@@ -18,10 +18,15 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
 
 describe('Notices - Index Notices presenter', () => {
+  let auth
   let notices
 
   beforeEach(() => {
     notices = NoticesFixture.notices()
+
+    auth = {
+      credentials: { scope: ['bulk_return_notifications', 'returns'] }
+    }
 
     Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
@@ -31,7 +36,7 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, notices.length)
+    const result = IndexNoticesPresenter.go(notices, notices.length, auth)
 
     expect(result).to.equal({
       links: {
@@ -128,7 +133,7 @@ describe('Notices - Index Notices presenter', () => {
     describe('the "type" property', () => {
       describe('when the notice is for a water abstraction alert', () => {
         it('returns the alert type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length)
+          const results = IndexNoticesPresenter.go(notices, notices.length, auth)
 
           expect(results.notices[0].type).to.equal('Reduce alert')
           expect(results.notices[1].type).to.equal('Resume alert')
@@ -139,7 +144,7 @@ describe('Notices - Index Notices presenter', () => {
 
       describe('when the notice is not for a water abstraction alert', () => {
         it('returns the notice type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length)
+          const results = IndexNoticesPresenter.go(notices, notices.length, auth)
 
           expect(results.notices[4].type).to.equal('HOF warning')
           expect(results.notices[5].type).to.equal('Returns invitation')
@@ -153,7 +158,7 @@ describe('Notices - Index Notices presenter', () => {
   describe('the "tableCaption" property', () => {
     describe('when there is only one page of results', () => {
       it('returns the "tableCaption" without page info', () => {
-        const result = IndexNoticesPresenter.go(notices, notices.length)
+        const result = IndexNoticesPresenter.go(notices, notices.length, auth)
 
         expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
       })
@@ -161,9 +166,82 @@ describe('Notices - Index Notices presenter', () => {
 
     describe('when there are multiple pages of results', () => {
       it('returns the "tableCaption" with page info', () => {
-        const result = IndexNoticesPresenter.go(notices, 50)
+        const result = IndexNoticesPresenter.go(notices, 50, auth)
 
         expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)
+      })
+    })
+  })
+
+  describe('the "links" property', () => {
+    describe('when the user has both permissions', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+      })
+
+      it('returns all of the links', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create an ad-hoc notice'
+          },
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
+          }
+        })
+      })
+    })
+
+    describe('when the user has no permissions', () => {
+      beforeEach(() => {
+        auth.credentials.scope = []
+      })
+
+      it('returns none of the links', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({})
+      })
+    })
+
+    describe('when the user has the "bulk_return_notifications" permission', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['bulk_return_notifications']
+      })
+
+      it('returns all of the links', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create an ad-hoc notice'
+          },
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
+          }
+        })
+      })
+    })
+
+    describe('when the user has the "returns" permission', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['returns']
+      })
+
+      it('returns only the "adhoc" link', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create an ad-hoc notice'
+          }
+        })
       })
     })
   })

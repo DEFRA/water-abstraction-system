@@ -18,12 +18,13 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, page = 1) {
+async function go(payload, yar, auth, page = 1) {
   const clearFilters = _clearFilters(payload, yar)
 
   if (clearFilters) {
@@ -46,7 +47,7 @@ async function go(payload, yar, page = 1) {
 
   const savedFilters = _savedFilters(yar)
 
-  return _replayView(payload, error, selectedPageNumber, savedFilters)
+  return _replayView(payload, error, selectedPageNumber, savedFilters, auth)
 }
 
 function _clearFilters(payload, yar) {
@@ -81,11 +82,11 @@ function _handleOneOptionSelected(payload) {
   }
 }
 
-async function _replayView(payload, error, selectedPageNumber, savedFilters) {
+async function _replayView(payload, error, selectedPageNumber, savedFilters, auth) {
   const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
   const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
-  const pageData = NoticesIndexPresenter.go(notices, totalNumber, selectedPageNumber, pagination.numberOfPages)
+  const pageData = NoticesIndexPresenter.go(notices, totalNumber, auth)
 
   return {
     activeNavBar: 'manage',

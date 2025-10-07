@@ -19,11 +19,15 @@ const FetchNoticesService = require('../../../app/services/notices/fetch-notices
 const IndexNoticesService = require('../../../app/services/notices/index-notices.service.js')
 
 describe('Notices - Index Notices service', () => {
+  let auth
   let fetchResults
   let page
   let yarStub
 
   beforeEach(() => {
+    auth = {
+      credentials: { scope: ['bulk_return_notifications', 'returns'] }
+    }
     Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
@@ -41,7 +45,7 @@ describe('Notices - Index Notices service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await IndexNoticesService.go(yarStub, page)
+      const result = await IndexNoticesService.go(yarStub, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -106,7 +110,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -118,7 +122,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -133,7 +137,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.true()
       })

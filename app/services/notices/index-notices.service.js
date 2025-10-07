@@ -13,11 +13,12 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  * Orchestrates presenting the data for `/notices` page
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar, page = 1) {
+async function go(yar, auth, page = 1) {
   const filters = _filters(yar)
 
   const selectedPageNumber = Number(page)
@@ -26,7 +27,7 @@ async function go(yar, page = 1) {
 
   const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
 
-  const pageData = NoticesIndexPresenter.go(notices, totalNumber)
+  const pageData = NoticesIndexPresenter.go(notices, totalNumber, auth)
 
   return {
     activeNavBar: 'manage',
