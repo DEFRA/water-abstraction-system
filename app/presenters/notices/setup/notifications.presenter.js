@@ -42,7 +42,7 @@ const MESSAGE_REFS = {
  * Formats recipients into notifications for a returns invitation or reminder
  *
  * This function prepares data for both sending notifications via a notification service (e.g., Notify)
- * and storing notification records in a database (e.g., 'water.scheduled_notifications').
+ * and storing notification records in a database (e.g., 'water.notifications').
  * It aligns with legacy practices by including parts of the Notify payload and response directly
  * within the notification objects.
  *
