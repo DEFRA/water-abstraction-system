@@ -40,7 +40,6 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      id: 'contactType',
       name: 'contactType',
       value: contactType,
       fieldset: {
@@ -51,14 +50,12 @@
       },
       items: [
         {
-          id: 'email',
           value: 'email',
           text: 'Email',
           conditional: {
             html: emailHtml
           }
         },{
-          id: 'post',
           value: 'post',
           text: 'Post',
           conditional: {
