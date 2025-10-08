@@ -6,6 +6,7 @@
  */
 
 const { generateRandomInteger } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/notice.lib.js')
 
 /**
  * Defines the configuration for supported notice types.
@@ -20,25 +21,25 @@ const { generateRandomInteger } = require('../../../lib/general.lib.js')
  * @private
  */
 const NOTICE_TYPES = {
-  abstractionAlerts: {
+  [NoticeType.ABSTRACTION_ALERTS]: {
     name: 'Water abstraction alert',
     prefix: 'WAA-',
     subType: 'waterAbstractionAlerts',
     notificationType: 'Abstraction alert'
   },
-  invitations: {
+  [NoticeType.INVITATIONS]: {
     name: 'Returns: invitation',
     prefix: 'RINV-',
     subType: 'returnInvitation',
     notificationType: 'Returns invitation'
   },
-  returnForms: {
+  [NoticeType.PAPER_RETURN]: {
     name: 'Paper returns',
     prefix: 'PRTF-',
     subType: 'paperReturnForms',
     notificationType: 'Paper returns'
   },
-  reminders: {
+  [NoticeType.REMINDERS]: {
     name: 'Returns: reminder',
     prefix: 'RREM-',
     subType: 'returnReminder',
