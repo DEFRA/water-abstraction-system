@@ -5,6 +5,8 @@
  * @module NoticeTypePresenter
  */
 
+const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
  *
@@ -23,28 +25,37 @@ function go(session) {
 }
 
 function _backLink(sessionId, checkPageVisited, journey) {
-  if (journey === 'standard') {
-    return `/system/notices`
+  if (journey === NoticeJourney.STANDARD) {
+    return {
+      href: `/system/notices`,
+      text: 'Back'
+    }
   }
 
   if (checkPageVisited) {
-    return `/system/notices/setup/${sessionId}/check-notice-type`
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
   }
 
-  return `/system/notices/setup/${sessionId}/licence`
+  return {
+    href: `/system/notices/setup/${sessionId}/licence`,
+    text: 'Back'
+  }
 }
 
 function _options(noticeType, journey) {
-  if (journey === 'standard') {
+  if (journey === NoticeJourney.STANDARD) {
     return [
       {
-        checked: noticeType === 'invitations',
-        value: 'invitations',
+        checked: noticeType === NoticeType.INVITATIONS,
+        value: NoticeType.INVITATIONS,
         text: 'Returns invitation'
       },
       {
-        checked: noticeType === 'reminders',
-        value: 'reminders',
+        checked: noticeType === NoticeType.REMINDERS,
+        value: NoticeType.REMINDERS,
         text: 'Returns reminder'
       }
     ]
@@ -52,14 +63,14 @@ function _options(noticeType, journey) {
 
   return [
     {
-      checked: noticeType === 'invitations',
-      value: 'invitations',
-      text: 'Standard returns invitation'
+      checked: noticeType === NoticeType.INVITATIONS,
+      value: NoticeType.INVITATIONS,
+      text: 'Returns invitation'
     },
     {
-      checked: noticeType === 'returnForms',
-      value: 'returnForms',
-      text: 'Submit using a paper form invitation'
+      checked: noticeType === NoticeType.PAPER_RETURN,
+      value: NoticeType.PAPER_RETURN,
+      text: 'Paper return'
     }
   ]
 }

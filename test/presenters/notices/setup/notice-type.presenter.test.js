@@ -18,25 +18,24 @@ describe('Notice Type Presenter', () => {
   })
 
   describe('when called', () => {
-    describe('and the journey is for "adhoc"', () => {
-      beforeEach(() => {
-        session.journey = 'adhoc'
-      })
-
+    describe('and the journey is not "standard"', () => {
       it('returns page data for the view', () => {
         const result = NoticeTypePresenter.go(session)
 
         expect(result).to.equal({
-          backLink: '/system/notices/setup/123/licence',
+          backLink: {
+            href: '/system/notices/setup/123/licence',
+            text: 'Back'
+          },
           options: [
             {
               checked: false,
-              text: 'Standard returns invitation',
+              text: 'Returns invitation',
               value: 'invitations'
             },
             {
               checked: false,
-              text: 'Submit using a paper form invitation',
+              text: 'Paper return',
               value: 'returnForms'
             }
           ],
@@ -56,12 +55,12 @@ describe('Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: true,
-                text: 'Standard returns invitation',
+                text: 'Returns invitation',
                 value: 'invitations'
               },
               {
                 checked: false,
-                text: 'Submit using a paper form invitation',
+                text: 'Paper return',
                 value: 'returnForms'
               }
             ])
@@ -79,12 +78,12 @@ describe('Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: false,
-                text: 'Standard returns invitation',
+                text: 'Returns invitation',
                 value: 'invitations'
               },
               {
                 checked: true,
-                text: 'Submit using a paper form invitation',
+                text: 'Paper return',
                 value: 'returnForms'
               }
             ])
@@ -99,7 +98,10 @@ describe('Notice Type Presenter', () => {
           it('correctly set the back link to the check page', () => {
             const result = NoticeTypePresenter.go(session)
 
-            expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+            expect(result.backLink).to.equal({
+              href: '/system/notices/setup/123/check-notice-type',
+              text: 'Back'
+            })
           })
         })
       })
@@ -114,7 +116,10 @@ describe('Notice Type Presenter', () => {
         const result = NoticeTypePresenter.go(session)
 
         expect(result).to.equal({
-          backLink: '/system/notices',
+          backLink: {
+            href: '/system/notices',
+            text: 'Back'
+          },
           options: [
             {
               checked: false,

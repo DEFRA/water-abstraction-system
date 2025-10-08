@@ -29,16 +29,19 @@ describe('Notice Type Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/licence`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/licence`,
+          text: 'Back'
+        },
         options: [
           {
             checked: false,
-            text: 'Standard returns invitation',
+            text: 'Returns invitation',
             value: 'invitations'
           },
           {
             checked: false,
-            text: 'Submit using a paper form invitation',
+            text: 'Paper return',
             value: 'returnForms'
           }
         ],
