@@ -194,7 +194,7 @@ describe('Notice Type Service', () => {
           },
           {
             checked: false,
-            text: 'Submit using a paper form invitation',
+            text: 'Submit using a paper return invitation',
             value: 'returnForms'
           }
         ],

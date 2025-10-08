@@ -35,7 +35,7 @@ describe('Notice Type Presenter', () => {
             },
             {
               checked: false,
-              text: 'Submit using a paper form invitation',
+              text: 'Submit using a paper return invitation',
               value: 'returnForms'
             }
           ],
@@ -60,7 +60,7 @@ describe('Notice Type Presenter', () => {
               },
               {
                 checked: false,
-                text: 'Submit using a paper form invitation',
+                text: 'Submit using a paper return invitation',
                 value: 'returnForms'
               }
             ])
@@ -83,7 +83,7 @@ describe('Notice Type Presenter', () => {
               },
               {
                 checked: true,
-                text: 'Submit using a paper form invitation',
+                text: 'Submit using a paper return invitation',
                 value: 'returnForms'
               }
             ])
