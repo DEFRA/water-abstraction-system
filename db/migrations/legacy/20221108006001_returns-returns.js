@@ -26,6 +26,7 @@ exports.up = function (knex) {
     table.string('under_query_comment')
     table.boolean('is_test').notNullable().defaultTo(false)
     table.uuid('return_cycle_id')
+    table.boolean('quarterly').notNullable().defaultTo(false)
 
     // Legacy timestamps
     // NOTE: They are not automatically set
