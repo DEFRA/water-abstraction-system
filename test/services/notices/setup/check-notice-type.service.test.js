@@ -41,12 +41,17 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         licenceRef,
-        noticeType: 'invitations',
+        links: {
+          licenceNumber: `/system/notices/setup/${session.id}/licence`,
+          noticeType: `/system/notices/setup/${session.id}/notice-type`,
+          returns: `/system/notices/setup/${session.id}/paper-return`
+        },
         notification: undefined,
         pageTitle: 'Check the notice type',
-        returnNoticeType: 'Standard returns invitation',
+        returnNoticeType: 'Returns invitation',
         selectedDueReturns: [],
-        sessionId: session.id
+        sessionId: session.id,
+        showReturns: false
       })
     })
 

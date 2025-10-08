@@ -5,11 +5,12 @@
  * @module CheckNoticeTypePresenter
  */
 
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
-  invitations: 'Standard returns invitation',
-  returnForms: 'Submit using a paper form invitation'
+  [NoticeType.INVITATIONS]: 'Returns invitation',
+  [NoticeType.PAPER_RETURN]: 'Paper return'
 }
 
 /**
@@ -24,11 +25,20 @@ function go(session) {
 
   return {
     licenceRef,
-    noticeType,
-    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
+    links: _links(sessionId),
     pageTitle: 'Check the notice type',
+    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
     selectedDueReturns: _selectedDueReturns(selectedReturns, dueReturns),
-    sessionId
+    sessionId,
+    showReturns: noticeType === NoticeType.PAPER_RETURN
+  }
+}
+
+function _links(sessionId) {
+  return {
+    licenceNumber: `/system/notices/setup/${sessionId}/licence`,
+    noticeType: `/system/notices/setup/${sessionId}/notice-type`,
+    returns: `/system/notices/setup/${sessionId}/paper-return`
   }
 }
 
