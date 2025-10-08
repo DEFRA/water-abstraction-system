@@ -32,7 +32,11 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
       expect(result).to.equal({
         licenceRef,
-        noticeType: 'invitations',
+        links: {
+          licenceNumber: `/system/notices/setup/${session.id}/licence`,
+          noticeType: `/system/notices/setup/${session.id}/notice-type`,
+          returns: `/system/notices/setup/${session.id}/paper-return`
+        },
         pageTitle: 'Check the notice type',
         returnNoticeType: 'Standard returns invitation',
         selectedDueReturns: [],
@@ -51,7 +55,11 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
         expect(result).to.equal({
           licenceRef,
-          noticeType: 'invitations',
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`
+          },
           pageTitle: 'Check the notice type',
           returnNoticeType: 'Standard returns invitation',
           selectedDueReturns: [],
@@ -94,7 +102,11 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
 
         expect(result).to.equal({
           licenceRef,
-          noticeType: 'returnForms',
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`
+          },
           pageTitle: 'Check the notice type',
           returnNoticeType: 'Submit using a paper return invitation',
           selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],

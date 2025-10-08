@@ -25,12 +25,20 @@ function go(session) {
 
   return {
     licenceRef,
-    noticeType,
-    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
+    links: _links(sessionId),
     pageTitle: 'Check the notice type',
+    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
     selectedDueReturns: _selectedDueReturns(selectedReturns, dueReturns),
-    showReturns: noticeType === NoticeType.PAPER_RETURN,
-    sessionId
+    sessionId,
+    showReturns: noticeType === NoticeType.PAPER_RETURN
+  }
+}
+
+function _links(sessionId) {
+  return {
+    licenceNumber: `/system/notices/setup/${sessionId}/licence`,
+    noticeType: `/system/notices/setup/${sessionId}/notice-type`,
+    returns: `/system/notices/setup/${sessionId}/paper-return`
   }
 }
 
