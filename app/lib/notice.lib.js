@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Fixed data for the Notice journey
+ * @module NoticeLib
+ */
+
 const NoticeJourney = Object.freeze({ STANDARD: 'standard', ALERTS: 'alerts' })
 
 const NoticeType = Object.freeze({
