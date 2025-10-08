@@ -425,9 +425,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/return-forms',
+    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.viewReturnForms,
+      handler: NoticesSetupController.viewPaperReturn,
       auth: {
         access: {
           scope: ['returns']
@@ -437,9 +437,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/return-forms',
+    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.submitReturnForms,
+      handler: NoticesSetupController.submitPaperReturn,
       auth: {
         access: {
           scope: ['returns']

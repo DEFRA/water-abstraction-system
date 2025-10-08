@@ -22,12 +22,12 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
+const PaperReturnService = require('../services/notices/setup/paper-return.service.js')
 const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
@@ -43,9 +43,9 @@ const SubmitLicenceService = require('../services/notices/setup/submit-licence.s
 const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice-type.service.js')
 const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnFormsService = require('../services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
+const submitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -255,12 +255,12 @@ async function viewRemoveThreshold(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
-async function viewReturnForms(request, h) {
+async function viewPaperReturn(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ReturnFormsService.go(sessionId)
+  const pageData = await PaperReturnService.go(sessionId)
 
-  return h.view(`notices/setup/return-forms.njk`, pageData)
+  return h.view(`notices/setup/paper-return.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -473,17 +473,17 @@ async function submitReturnsPeriod(request, h) {
   return h.redirect(`/system/notices/setup/${pageData.redirect}`)
 }
 
-async function submitReturnForms(request, h) {
+async function submitPaperReturn(request, h) {
   const {
     payload,
     params: { sessionId },
     yar
   } = request
 
-  const pageData = await SubmitReturnFormsService.go(sessionId, payload, yar)
+  const pageData = await submitPaperReturnService.go(sessionId, payload, yar)
 
   if (pageData.error) {
-    return h.view(`notices/setup/return-forms.njk`, pageData)
+    return h.view(`notices/setup/paper-return.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
@@ -523,11 +523,11 @@ module.exports = {
   viewContactType,
   viewLicence,
   viewNoticeType,
+  viewPaperReturn,
   viewPreviewReturnForms,
   viewRecipientName,
   viewRemoveLicences,
   viewRemoveThreshold,
-  viewReturnForms,
   viewReturnsPeriod,
   viewSelectRecipients,
   setup,
@@ -542,9 +542,9 @@ module.exports = {
   submitContactType,
   submitLicence,
   submitNoticeType,
+  submitPaperReturn,
   submitRecipientName,
   submitRemoveLicences,
-  submitReturnForms,
   submitReturnsPeriod,
   submitSelectRecipients
 }

@@ -28,12 +28,12 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
+const PaperReturnService = require('../../app/services/notices/setup/paper-return.service.js')
 const PreviewReturnFormsService = require('../../app/services/notices/setup/preview-return-forms.service.js')
 const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
@@ -47,9 +47,9 @@ const SubmitCheckService = require('../../app/services/notices/setup/submit-chec
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
+const SubmitPaperReturnService = require('../../app/services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 
@@ -1216,12 +1216,12 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/return-forms', () => {
+  describe('notices/setup/paper-return', () => {
     describe('GET', () => {
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/return-forms`,
+          url: basePath + `/${session.id}/paper-return`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -1232,7 +1232,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          Sinon.stub(PaperReturnService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
         })
 
         it('returns the page successfully', async () => {
@@ -1249,10 +1249,10 @@ describe('Notices Setup controller', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnFormsService, 'go').returns({
+            Sinon.stub(SubmitPaperReturnService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1265,10 +1265,10 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnFormsService, 'go').returns({
+            Sinon.stub(SubmitPaperReturnService, 'go').returns({
               pageTile: 'Select the returns for the paper forms'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
           })
 
           it('redirects the to the next page', async () => {

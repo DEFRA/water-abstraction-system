@@ -50,7 +50,7 @@ async function go(sessionId, payload, yar) {
 function _redirect(noticeType, checkPageVisited, journey) {
   if (noticeType === 'returnForms' && !checkPageVisited) {
     return {
-      redirectUrl: 'return-forms'
+      redirectUrl: 'paper-return'
     }
   }
 

@@ -14,9 +14,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const SubmitReturnFormsService = require('../../../../app/services/notices/setup/submit-return-forms.service.js')
+const SubmitPaperReturnService = require('../../../../app/services/notices/setup/submit-paper-return.service.js')
 
-describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
+describe('Notices - Setup - Submit Paper Return service', () => {
   let dueReturn
   let licenceRef
   let payload
@@ -50,7 +50,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
 
   describe('when called', () => {
     it('saves the selected returns', async () => {
-      await SubmitReturnFormsService.go(session.id, payload, yarStub)
+      await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
       const refreshedSession = await session.$query()
 
@@ -58,7 +58,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitReturnFormsService.go(session.id, payload, yarStub)
+      const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({})
     })
@@ -72,7 +72,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
       })
 
       it('saves the selected returns', async () => {
-        await SubmitReturnFormsService.go(session.id, payload, yarStub)
+        await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -87,7 +87,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
         })
 
         it('sets a flash message', async () => {
-          await SubmitReturnFormsService.go(session.id, payload, yarStub)
+          await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -106,7 +106,7 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
         })
 
         it('does not set a flash message', async () => {
-          await SubmitReturnFormsService.go(session.id, payload, yarStub)
+          await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
           expect(yarStub.flash.args[0]).to.be.undefined()
         })
@@ -124,15 +124,15 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitReturnFormsService.go(session.id, payload, yarStub)
+      const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: `/system/notices/setup/${session.id}/notice-type`,
         error: {
-          text: 'Select the returns for the paper forms'
+          text: 'Select the returns for the paper return'
         },
-        pageTitle: 'Select the returns for the paper forms',
+        pageTitle: 'Select the returns for the paper return',
         returns: [
           {
             checked: false,
@@ -154,15 +154,15 @@ describe('Notices - Setup - Submit Returns For Paper Forms service', () => {
       })
 
       it('returns page data for the view, with errors, and no options selected', async () => {
-        const result = await SubmitReturnFormsService.go(session.id, payload, yarStub)
+        const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'manage',
           backLink: `/system/notices/setup/${session.id}/notice-type`,
           error: {
-            text: 'Select the returns for the paper forms'
+            text: 'Select the returns for the paper return'
           },
-          pageTitle: 'Select the returns for the paper forms',
+          pageTitle: 'Select the returns for the paper return',
           returns: [
             {
               checked: false,
