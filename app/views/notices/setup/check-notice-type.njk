@@ -1,16 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
-{% block content %}
-  {% if notification %}
-    {{ govukNotificationBanner(notification) }}
-  {% endif %}
-
+{% block pageContent %}
   <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
   {{ govukSummaryList({
@@ -61,11 +55,11 @@
             {
               href: '/system/notices/setup/'+ sessionId + '/paper-return',
               text: 'Change',
-              visuallyHiddenText: 'returns for paper forms'
+              visuallyHiddenText: 'returns for paper return'
             }
           ]
         }
-      } if noticeType === 'returnForms'
+      } if showReturns
     ]
   }) }}
 

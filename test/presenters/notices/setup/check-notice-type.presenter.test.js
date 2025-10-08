@@ -36,7 +36,8 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         pageTitle: 'Check the notice type',
         returnNoticeType: 'Standard returns invitation',
         selectedDueReturns: [],
-        sessionId: '123'
+        sessionId: '123',
+        showReturns: false
       })
     })
 
@@ -54,7 +55,8 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           pageTitle: 'Check the notice type',
           returnNoticeType: 'Standard returns invitation',
           selectedDueReturns: [],
-          sessionId: '123'
+          sessionId: '123',
+          showReturns: false
         })
       })
     })
@@ -94,9 +96,10 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           licenceRef,
           noticeType: 'returnForms',
           pageTitle: 'Check the notice type',
-          returnNoticeType: 'Submit using a paper form invitation',
+          returnNoticeType: 'Submit using a paper return invitation',
           selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],
-          sessionId: '123'
+          sessionId: '123',
+          showReturns: true
         })
       })
 
