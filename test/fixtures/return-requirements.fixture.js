@@ -54,7 +54,8 @@ function returnRequirements() {
             id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
             naldRegionId: 4
           }
-        }
+        },
+        quarterlyReturns: false
       },
       points: [
         {
@@ -195,7 +196,8 @@ function returnRequirementsAcrossReturnVersions() {
             id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
             naldRegionId: 4
           }
-        }
+        },
+        quarterlyReturns: false
       },
       points: [
         {
@@ -259,7 +261,8 @@ function returnRequirementsAcrossReturnVersions() {
             id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
             naldRegionId: 4
           }
-        }
+        },
+        quarterlyReturns: false
       },
       points: [
         {
