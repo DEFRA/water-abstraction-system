@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/return-forms` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
  *
- * @module ReturnFormsService
+ * @module PaperReturnService
  */
 
-const ReturnFormsPresenter = require('../../../presenters/notices/setup/return-forms.presenter.js')
+const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/return-forms` page
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @param {string} sessionId
  *
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = ReturnFormsPresenter.go(session)
+  const pageData = PaperReturnPresenter.go(session)
 
   return {
     activeNavBar: 'manage',
