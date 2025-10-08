@@ -9,8 +9,8 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
-  [NoticeType.INVITATIONS]: 'Standard returns invitation',
-  [NoticeType.PAPER_RETURN]: 'Submit using a paper return invitation'
+  [NoticeType.INVITATIONS]: 'Returns invitation',
+  [NoticeType.PAPER_RETURN]: 'Paper return'
 }
 
 /**

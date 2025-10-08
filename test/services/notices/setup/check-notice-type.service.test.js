@@ -48,7 +48,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
         },
         notification: undefined,
         pageTitle: 'Check the notice type',
-        returnNoticeType: 'Standard returns invitation',
+        returnNoticeType: 'Returns invitation',
         selectedDueReturns: [],
         sessionId: session.id,
         showReturns: false
