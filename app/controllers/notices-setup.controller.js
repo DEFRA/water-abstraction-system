@@ -480,7 +480,7 @@ async function submitPaperReturn(request, h) {
     yar
   } = request
 
-  const pageData = await submitPaperReturnService.go(sessionId, payload, yar)
+  const pageData = await SubmitPaperReturnService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/paper-return.njk`, pageData)
