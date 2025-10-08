@@ -189,12 +189,12 @@ describe('Notice Type Service', () => {
         options: [
           {
             checked: false,
-            text: 'Standard returns invitation',
+            text: 'Returns invitation',
             value: 'invitations'
           },
           {
             checked: false,
-            text: 'Submit using a paper return invitation',
+            text: 'Paper return',
             value: 'returnForms'
           }
         ],

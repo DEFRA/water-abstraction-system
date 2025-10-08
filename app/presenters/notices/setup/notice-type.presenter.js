@@ -65,12 +65,12 @@ function _options(noticeType, journey) {
     {
       checked: noticeType === NoticeType.INVITATIONS,
       value: NoticeType.INVITATIONS,
-      text: 'Standard returns invitation'
+      text: 'Returns invitation'
     },
     {
       checked: noticeType === NoticeType.PAPER_RETURN,
       value: NoticeType.PAPER_RETURN,
-      text: 'Submit using a paper return invitation'
+      text: 'Paper return'
     }
   ]
 }

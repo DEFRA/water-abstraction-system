@@ -30,12 +30,12 @@ describe('Notice Type Presenter', () => {
           options: [
             {
               checked: false,
-              text: 'Standard returns invitation',
+              text: 'Returns invitation',
               value: 'invitations'
             },
             {
               checked: false,
-              text: 'Submit using a paper return invitation',
+              text: 'Paper return',
               value: 'returnForms'
             }
           ],
@@ -55,12 +55,12 @@ describe('Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: true,
-                text: 'Standard returns invitation',
+                text: 'Returns invitation',
                 value: 'invitations'
               },
               {
                 checked: false,
-                text: 'Submit using a paper return invitation',
+                text: 'Paper return',
                 value: 'returnForms'
               }
             ])
@@ -78,12 +78,12 @@ describe('Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: false,
-                text: 'Standard returns invitation',
+                text: 'Returns invitation',
                 value: 'invitations'
               },
               {
                 checked: true,
-                text: 'Submit using a paper return invitation',
+                text: 'Paper return',
                 value: 'returnForms'
               }
             ])
