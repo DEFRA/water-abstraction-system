@@ -70,7 +70,7 @@ function _options(noticeType, journey) {
     {
       checked: noticeType === NoticeType.PAPER_RETURN,
       value: NoticeType.PAPER_RETURN,
-      text: 'Submit using a paper form invitation'
+      text: 'Submit using a paper return invitation'
     }
   ]
 }
