@@ -31,14 +31,14 @@ function go(returnRequirement, returnCycle) {
     id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
     metadata: _metadata(returnRequirement, endDate),
+    quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
     returnsFrequency: reportingFrequency,
     returnReference: reference.toString(),
     returnRequirementId,
     source: 'WRLS',
     startDate,
-    status: 'due',
-    quarterly: returnRequirement.returnVersion.quarterlyReturns
+    status: 'due'
   }
 }
 
