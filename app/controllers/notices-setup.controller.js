@@ -266,10 +266,10 @@ async function viewReturnForms(request, h) {
 async function setup(request, h) {
   const {
     params: { journey },
-    query: { monitoringStationId }
+    query: { monitoringStationId, noticeType }
   } = request
 
-  const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
+  const { sessionId, path } = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
