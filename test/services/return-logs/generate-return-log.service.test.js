@@ -85,6 +85,7 @@ describe('Return Logs - Generate Return Log service', () => {
           ],
           version: 1
         },
+        quarterly: true,
         returnCycleId: '6889b98d-964f-4966-b6d6-bf511d6526a9',
         returnReference: '16999651',
         returnRequirementId: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
@@ -114,6 +115,18 @@ describe('Return Logs - Generate Return Log service', () => {
         const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
 
         expect(result.id).to.equal(`v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31`)
+      })
+    })
+
+    describe('the "quarterly" property', () => {
+      beforeEach(() => {
+        testReturnRequirement.returnVersion.quarterlyReturns = false
+      })
+
+      it('returns false when the return versions quarterly-returns flag is false', () => {
+        const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
+
+        expect(result.quarterly).to.equal(false)
       })
     })
 
