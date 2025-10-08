@@ -22,7 +22,7 @@ const errorMessage = 'Select the type of alert you need to send'
  */
 function go(payload, licenceMonitoringStations) {
   const schema = Joi.object({
-    'alert-type': Joi.required()
+    alertType: Joi.required()
       .custom((value, helpers) => {
         return _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations)
       }, 'Custom Alert Type Validation')

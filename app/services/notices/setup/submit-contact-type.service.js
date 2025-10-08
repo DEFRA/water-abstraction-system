@@ -32,12 +32,13 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload, yar)
 
     return {
-      type: payload.type
+      contactType: payload.contactType
     }
   }
 
-  session.contactType = payload?.type ?? null
-  session.name = payload?.name ?? null
+  session.contactType = payload?.contactType ?? null
+  session.contactName = payload?.contactName ?? null
+  session.contactEmail = payload?.contactEmail ?? null
 
   const pageData = ContactTypePresenter.go(session)
 
@@ -72,34 +73,34 @@ function _createMD5Hash(email) {
 }
 
 async function _save(session, payload, yar) {
-  if (payload.type === 'email') {
-    const email = payload.email.toLowerCase()
-
-    const recipient = {
-      contact_hash_id: _createMD5Hash(email),
-      email,
-      licence_refs: session.licenceRef,
-      ..._addDownloadRecipientData(session.licenceRef)
-    }
-
-    if (Array.isArray(session.additionalRecipients)) {
-      session.additionalRecipients.push(recipient)
-    } else {
-      session.additionalRecipients = [recipient]
-    }
-
-    session.selectedRecipients = [...session.selectedRecipients, recipient.contact_hash_id]
-
-    delete session.contactName
-    delete session.contactType
-
-    GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
+  if (payload.contactType === 'post') {
+    session.contactName = payload.contactName
+    session.contactType = payload.contactType
 
     return session.$update()
   }
 
-  session.contactName = payload.name
-  session.contactType = payload.type
+  const email = payload.contactEmail.toLowerCase()
+
+  const recipient = {
+    contact_hash_id: _createMD5Hash(email),
+    email,
+    licence_refs: session.licenceRef,
+    ..._addDownloadRecipientData(session.licenceRef)
+  }
+
+  if (Array.isArray(session.additionalRecipients)) {
+    session.additionalRecipients.push(recipient)
+  } else {
+    session.additionalRecipients = [recipient]
+  }
+
+  session.selectedRecipients = [...session.selectedRecipients, recipient.contact_hash_id]
+
+  delete session.contactName
+  delete session.contactType
+
+  GeneralLib.flashNotification(yar, 'Updated', 'Additional recipient added')
 
   return session.$update()
 }

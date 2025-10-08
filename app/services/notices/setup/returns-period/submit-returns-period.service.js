@@ -26,12 +26,12 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, session.noticeType)
 
   if (validationResult) {
-    const formattedData = ReturnsPeriodPresenter.go(session)
+    const pageData = ReturnsPeriodPresenter.go(session)
 
     return {
       activeNavBar: 'manage',
       error: validationResult,
-      ...formattedData
+      ...pageData
     }
   }
 

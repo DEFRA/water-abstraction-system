@@ -42,9 +42,9 @@ describe('Notices - Setup - Preview - Check Return Forms Presenter', () => {
       const result = CheckReturnFormsPresenter.go(session, contactHashId)
 
       expect(result).to.equal({
-        backLink: `/system/notices/setup/${sessionId}/check`,
-        caption: 'Notice PRTF-WJUKBX',
+        backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: 'Notice PRTF-WJUKBX',
         returnLogs: [
           {
             action: {

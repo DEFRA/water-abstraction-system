@@ -26,11 +26,11 @@ describe('Contact Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'
         },
-        email: null,
-        name: null,
+        contactEmail: null,
+        contactName: null,
+        contactType: null,
         pageTitle: 'Select how to contact the recipient',
-        pageTitleCaption: 'Notice RINV-CPFRQ4',
-        type: null
+        pageTitleCaption: 'Notice RINV-CPFRQ4'
       })
     })
   })
@@ -38,7 +38,7 @@ describe('Contact Type Presenter', () => {
   describe('when called with an email address', () => {
     beforeEach(() => {
       session = {
-        email: 'test@test.gov.uk',
+        contactEmail: 'test@test.gov.uk',
         contactType: 'email',
         referenceCode: 'RINV-CPFRQ4'
       }
@@ -52,11 +52,11 @@ describe('Contact Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'
         },
-        email: 'test@test.gov.uk',
-        name: null,
+        contactEmail: 'test@test.gov.uk',
+        contactName: null,
+        contactType: 'email',
         pageTitle: 'Select how to contact the recipient',
-        pageTitleCaption: 'Notice RINV-CPFRQ4',
-        type: 'email'
+        pageTitleCaption: 'Notice RINV-CPFRQ4'
       })
     })
   })
@@ -78,11 +78,11 @@ describe('Contact Type Presenter', () => {
           href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'
         },
-        email: null,
-        name: 'Fake Person',
+        contactEmail: null,
+        contactName: 'Fake Person',
+        contactType: 'post',
         pageTitle: 'Select how to contact the recipient',
-        pageTitleCaption: 'Notice RINV-CPFRQ4',
-        type: 'post'
+        pageTitleCaption: 'Notice RINV-CPFRQ4'
       })
     })
   })

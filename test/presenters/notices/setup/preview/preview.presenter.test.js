@@ -102,11 +102,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               'CAMBRIDGESHIRE',
               'CB23 1ZZ'
             ],
-            backLink: `/system/notices/setup/${sessionId}/check`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear Clean Water Limited,\r\n',
             messageType: 'letter',
             pageTitle: 'Returns invitation licence holder letter',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -158,11 +158,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
           expect(result).to.equal({
             address: 'hello@example.com',
-            backLink: `/system/notices/setup/${sessionId}/check`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear licence holder,\r\n',
             messageType: 'email',
             pageTitle: 'Returns invitation primary user email',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -242,11 +242,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               'CAMBRIDGESHIRE',
               'CB23 1ZZ'
             ],
-            backLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'letter',
             pageTitle: 'Water abstraction alert stop warning',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -305,11 +305,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
           expect(result).to.equal({
             address: 'hello@example.com',
-            backLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'email',
             pageTitle: 'Water abstraction alert reduce or stop warning email',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -365,11 +365,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
       expect(result).to.equal({
         address: 'hello@example.com',
-        backLink: `/system/notices/setup/${sessionId}/check`,
-        caption: `Notice ${referenceCode}`,
+        backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         contents: 'error',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
+        pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
       })
     })

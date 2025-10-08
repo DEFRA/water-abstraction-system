@@ -16,7 +16,7 @@ function go(session) {
   const { checkPageVisited, id: sessionId, noticeType, journey } = session
 
   return {
-    backLink: _backLink(sessionId, checkPageVisited, journey),
+    backLink: { href: _backLink(sessionId, checkPageVisited, journey), text: 'Back' },
     options: _options(noticeType, journey),
     pageTitle: 'Select the notice type'
   }

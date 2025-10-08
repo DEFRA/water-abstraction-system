@@ -31,23 +31,30 @@ function go(recipients, page, pagination, session) {
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
 
   return {
+    backLink: { href: _backLink(session), text: 'Back' },
     defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
-    readyToSend: _readyToSend(recipients, noticeType),
+    readyToSend: `${NOTIFICATION_TYPES[noticeType]} are ready to send.`,
     recipients: formattedRecipients,
     recipientsAmount: recipients.length,
     warning: _warning(formattedRecipients)
   }
 }
 
-function _readyToSend(recipients, noticeType) {
-  if (recipients.length === 0) {
-    return 'No recipients with due returns'
+function _backLink(session) {
+  const { journey, id } = session
+
+  if (journey === 'adhoc') {
+    return `/system/notices/setup/${id}/check-notice-type`
   }
 
-  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
+  if (journey === 'alerts') {
+    return `/system/notices/setup/${id}/abstraction-alerts/alert-email-address`
+  }
+
+  return `/system/notices/setup/${id}/returns-period`
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
@@ -76,15 +83,13 @@ function _links(session) {
       ...links,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
-  }
-
-  if (journey === 'alerts') {
+  } else if (journey === 'alerts') {
     return links
-  }
-
-  return {
-    ...links,
-    removeLicences: `/system/notices/setup/${id}/remove-licences`
+  } else {
+    return {
+      ...links,
+      removeLicences: `/system/notices/setup/${id}/remove-licences`
+    }
   }
 }
 
@@ -179,20 +184,14 @@ function _warning(formattedRecipients) {
   }
 
   if (invalidRecipients.length === 1) {
-    return {
-      iconFallbackText: 'Warning',
-      text: `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
-    }
+    return `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
   }
 
   const contactNames = invalidRecipients.map((invalidRecipient) => {
     return invalidRecipient.contact[0]
   })
 
-  return {
-    iconFallbackText: 'Warning',
-    text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
-  }
+  return `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
 }
 
 module.exports = {

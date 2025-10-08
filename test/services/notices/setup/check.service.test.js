@@ -54,6 +54,7 @@ describe('Notices - Setup - Check service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      backLink: { href: `/system/notices/setup/${session.id}/returns-period`, text: 'Back' },
       defaultPageSize: 25,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -145,6 +146,7 @@ describe('Notices - Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
+        backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`, text: 'Back' },
         defaultPageSize: 25,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,

@@ -41,7 +41,8 @@ function go(payload) {
       otherwise: Joi.string().optional()
     })
   })
-  return schema.validate(payload, { abortEarly: false })
+
+  return schema.validate(payload)
 }
 
 module.exports = {

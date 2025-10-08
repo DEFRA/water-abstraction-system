@@ -30,7 +30,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds Service',
       }
 
       payload = {
-        'alert-thresholds': [licenceMonitoringStations.one.thresholdGroup, licenceMonitoringStations.two.thresholdGroup]
+        alertThresholds: [licenceMonitoringStations.one.thresholdGroup, licenceMonitoringStations.two.thresholdGroup]
       }
 
       session = await SessionHelper.add({ data: sessionData })
@@ -46,7 +46,7 @@ describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds Service',
       describe('and one threshold has been selected ', () => {
         beforeEach(() => {
           payload = {
-            'alert-thresholds': licenceMonitoringStations.one.thresholdGroup
+            alertThresholds: licenceMonitoringStations.one.thresholdGroup
           }
         })
 
@@ -94,9 +94,19 @@ describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds Service',
         const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
         expect(result).to.equal({
-          error: { text: 'Select applicable threshold(s)' },
-          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
-          caption: 'Death star',
+          error: {
+            alertThresholds: {
+              text: 'Select applicable threshold(s)'
+            },
+            errorList: [
+              {
+                href: '#alertThresholds',
+                text: 'Select applicable threshold(s)'
+              }
+            ]
+          },
+          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
+          pageTitleCaption: 'Death star',
           pageTitle: 'Which thresholds do you need to send an alert for?',
           thresholdOptions: [
             {
@@ -131,9 +141,19 @@ describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds Service',
         const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
         expect(result).to.equal({
-          error: { text: 'Select applicable threshold(s)' },
-          backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
-          caption: 'Death star',
+          error: {
+            alertThresholds: {
+              text: 'Select applicable threshold(s)'
+            },
+            errorList: [
+              {
+                href: '#alertThresholds',
+                text: 'Select applicable threshold(s)'
+              }
+            ]
+          },
+          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
+          pageTitleCaption: 'Death star',
           pageTitle: 'Which thresholds do you need to send an alert for?',
           thresholdOptions: [
             {

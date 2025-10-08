@@ -19,10 +19,10 @@ function go(session) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
 
   return {
-    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
+    backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
-    caption: session.monitoringStationName,
     pageTitle: 'Check the licence matches for the selected thresholds',
+    pageTitleCaption: session.monitoringStationName,
     restrictions: _restrictions(relevantLicenceMonitoringStations, session.id),
     restrictionHeading: determineRestrictionHeading(relevantLicenceMonitoringStations)
   }
