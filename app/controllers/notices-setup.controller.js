@@ -45,7 +45,7 @@ const SubmitRecipientNameService = require('../services/notices/setup/submit-rec
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
-const submitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
+const SubmitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
 
 async function addRecipient(request, h) {
   const {
