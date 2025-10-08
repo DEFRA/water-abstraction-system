@@ -6,7 +6,7 @@
  */
 
 const { generateRandomInteger } = require('../../../lib/general.lib.js')
-const { NoticeType } = require('../../../lib/notice.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Defines the configuration for supported notice types.

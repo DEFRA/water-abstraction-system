@@ -8,7 +8,7 @@
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/notice.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Initiates the session record used for setting up a new notice

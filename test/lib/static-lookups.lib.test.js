@@ -8,12 +8,12 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NoticeLib = require('../../app/lib/notice.lib.js')
+const StaticLookups = require('../../app/lib/static-lookups.lib.js')
 
-describe('Notice', () => {
+describe('Static Lookups', () => {
   describe('#NoticeJourney', () => {
     it('should return the frozen object', () => {
-      const result = NoticeLib.NoticeJourney
+      const result = StaticLookups.NoticeJourney
 
       expect(result).equal({
         ALERTS: 'alerts',
@@ -23,7 +23,7 @@ describe('Notice', () => {
 
     describe('when trying to mutate the object', () => {
       it('throws an error with the correct message', () => {
-        const result = NoticeLib.NoticeJourney
+        const result = StaticLookups.NoticeJourney
 
         expect(() => {
           result.ALERTS = 'broken'
@@ -34,7 +34,7 @@ describe('Notice', () => {
 
   describe('#NoticeType', () => {
     it('should return the frozen object', () => {
-      const result = NoticeLib.NoticeType
+      const result = StaticLookups.NoticeType
 
       expect(result).equal({
         ABSTRACTION_ALERTS: 'abstractionAlerts',
@@ -46,7 +46,7 @@ describe('Notice', () => {
 
     describe('when trying to mutate the object', () => {
       it('throws an error with the correct message', () => {
-        const result = NoticeLib.NoticeType
+        const result = StaticLookups.NoticeType
 
         expect(() => {
           result.ABSTRACTION_ALERTS = 'broken'
