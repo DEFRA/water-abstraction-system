@@ -1,41 +1,102 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+{% from "macros/notification-status-tag.njk" import statusTag %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Go back to communications',
-    href: backLink
+{% block pageContent %}
+  {{ pageHeadingHtml }}
+
+  <p>{{ statusTag(status, false) }}</p>
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    attributes: {
+      'data-test': 'meta-data'
+    },
+    rows: [
+      {
+        key: { text: 'Reference', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-reference">' + reference + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: 'Sent date', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-date">' + sentDate + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: 'Sent by', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-by">' + sentBy + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: 'Sent to', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-to">' + sentTo + '</span>', classes: "meta-data__value" }
+      }
+    ]
   }) }}
-{% endblock %}
 
-{% block content %}
-  <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
-  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  {% if alertDetails %}
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'alert-details'
+      },
+      rows: [
+        {
+          key: { text: 'Monitoring station', classes: "meta-data__label" },
+          value: { html: '<span data-test="alert-details-monitoring-station">' + alertDetails.monitoringStation + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: 'Threshold', classes: "meta-data__label" },
+          value: { html: '<span data-test="alert-details-threshold">' + alertDetails.threshold + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    }) }}
+  {% endif %}
 
-  {{ govukInsetText({
-    attributes: { 'data-test': 'sent-date' },
-    text: "Sent " + sentDate
-  }) }}
+  {% if paperForm %}
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'paper-return'
+      },
+      rows: [
+        {
+          key: { text: 'Return reference', classes: "meta-data__label" },
+          value: { html: '<span data-test="paper-return-return-reference">' + paperForm.reference + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: 'Site description', classes: "meta-data__label" },
+          value: { html: '<span data-test="paper-return-site-description">' + paperForm.siteDescription + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: 'Purpose', classes: "meta-data__label" },
+          value: { html: '<span data-test="paper-return-purpose">' + paperForm.purpose + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: 'Return period', classes: "meta-data__label" },
+          value: { html: '<span data-test="paper-return-return-period">' + paperForm.period + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    }) }}
+
+    <p><a href="{{ paperForm.link }}">View return</a></p>
+
+    {% if paperForm.downloadLink %}
+      <p><a href="{{ paperForm.downloadLink }}" target="_blank" rel="noopener noreferrer">View paper return</a></p>
+    {% else %}
+      <p>No PDF available.</p>
+    {% endif %}
+  {% endif %}
 
   {% if contents %}
     <div class="govuk-body message-preview">
       {% if messageType === 'letter' %}
         <p>{{ newLineArrayItems(address) }}</p>
-      {% else %}
-        <p>Sent to: {{ address }}</p>
       {% endif %}
 
       {{ contents | markdown | safe }}
 
     </div>
-
-  {% else %}
-    {% if returnForm.link %}
-      <a href="{{ returnForm.link }}" target="_blank" rel="noopener noreferrer"> {{ returnForm.text }} </a>
-    {% else %}
-      <p> {{ returnForm.text }} </p>
-    {% endif %}
   {% endif %}
 {% endblock %}
