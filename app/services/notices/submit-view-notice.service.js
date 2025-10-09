@@ -25,7 +25,8 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * else the data needed to re-render the page
  */
 async function go(noticeId, payload, yar, page = 1) {
-  const clearFilters = _clearFilters(payload, yar)
+  const filterKey = `noticeFilter-${noticeId}`
+  const clearFilters = _clearFilters(payload, yar, filterKey)
 
   if (clearFilters) {
     return {}
@@ -34,7 +35,7 @@ async function go(noticeId, payload, yar, page = 1) {
   const error = _validate(payload)
 
   if (!error) {
-    _save(payload, yar)
+    _save(payload, yar, filterKey)
 
     return {}
   }
@@ -43,16 +44,16 @@ async function go(noticeId, payload, yar, page = 1) {
   // number
   const selectedPageNumber = Number(page)
 
-  const savedFilters = _savedFilters(yar)
+  const savedFilters = _savedFilters(yar, filterKey)
 
   return _replayView(noticeId, payload, error, selectedPageNumber, savedFilters)
 }
 
-function _clearFilters(payload, yar) {
+function _clearFilters(payload, yar, filterKey) {
   const clearFilters = payload.clearFilters
 
   if (clearFilters) {
-    yar.clear('noticeFilter')
+    yar.clear(filterKey)
 
     return true
   }
@@ -82,23 +83,21 @@ async function _replayView(noticeId, payload, error, selectedPageNumber, savedFi
   }
 }
 
-function _save(payload, yar) {
-  yar.set('noticeFilter', {
+function _save(payload, yar, filterKey) {
+  yar.set(filterKey, {
     licence: payload.licence ?? null,
     recipient: payload.recipient ?? null,
     status: payload.status ?? null
   })
 }
 
-function _savedFilters(payload) {
-  const { clear, get, set, ...noticeFilter } = payload
-
+function _savedFilters(yar, filterKey) {
   return {
     licence: null,
     openFilter: true,
     recipient: null,
     status: null,
-    ...noticeFilter
+    ...yar.get(filterKey)
   }
 }
 
