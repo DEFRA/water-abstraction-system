@@ -116,7 +116,7 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
   }
 
   if (noticeType === 'returnForms') {
-    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-return-forms`
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-paper-return`
   }
 
   // Returns invitations and reminders can be previewed directly

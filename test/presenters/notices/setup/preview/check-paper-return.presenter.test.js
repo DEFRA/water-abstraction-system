@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CheckReturnFormsPresenter = require('../../../../../app/presenters/notices/setup/preview/check-return-forms.presenter.js')
+const CheckPaperReturnPresenter = require('../../../../../app/presenters/notices/setup/preview/check-paper-return.presenter.js')
 
-describe('Notices - Setup - Preview - Check Return Forms Presenter', () => {
+describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
 
@@ -39,7 +39,7 @@ describe('Notices - Setup - Preview - Check Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckReturnFormsPresenter.go(session, contactHashId)
+      const result = CheckPaperReturnPresenter.go(session, contactHashId)
 
       expect(result).to.equal({
         backLink: `/system/notices/setup/${sessionId}/check`,
@@ -80,7 +80,7 @@ describe('Notices - Setup - Preview - Check Return Forms Presenter', () => {
           })
 
           it('returns page data for the view', () => {
-            const result = CheckReturnFormsPresenter.go(session, contactHashId)
+            const result = CheckPaperReturnPresenter.go(session, contactHashId)
 
             expect(result.returnLogs).to.equal([
               {
@@ -112,7 +112,7 @@ describe('Notices - Setup - Preview - Check Return Forms Presenter', () => {
           })
 
           it('returns page data for the view - with only the selected returns', () => {
-            const result = CheckReturnFormsPresenter.go(session, contactHashId)
+            const result = CheckPaperReturnPresenter.go(session, contactHashId)
 
             expect(result.returnLogs).to.equal([
               {
