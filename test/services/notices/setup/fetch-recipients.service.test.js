@@ -212,11 +212,11 @@ describe('Notices - Setup - Fetch recipients service', () => {
     })
   })
 
-  describe('when the journey is "alerts"', () => {
+  describe('when the notice types is "abstractionAlerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: {
-          journey: 'alerts'
+          noticeType: 'abstractionAlerts'
         }
       })
 
