@@ -12,9 +12,9 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CheckReturnFormsService = require('../../../../../app/services/notices/setup/preview/check-return-forms.service.js')
+const CheckPaperReturnService = require('../../../../../app/services/notices/setup/preview/check-paper-return.service.js')
 
-describe('Notices - Setup - Preview - Check Return Forms Service', () => {
+describe('Notices - Setup - Preview - Check Paper Return Service', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
 
   let dueReturn
@@ -41,7 +41,7 @@ describe('Notices - Setup - Preview - Check Return Forms Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckReturnFormsService.go(session.id, contactHashId)
+      const result = await CheckPaperReturnService.go(session.id, contactHashId)
 
       expect(result).to.equal({
         activeNavBar: 'manage',

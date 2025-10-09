@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms` page
- * @module CheckReturnFormsPresenter
+ * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
+ * @module CheckPaperReturnPresenter
  */
 
 const { formatLongDate } = require('../../../base.presenter.js')
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms` page
+ * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
  *
  * @param {module:SessionModel} session - The session instance
  * @param {string} contactHashId - The recipients unique identifier
