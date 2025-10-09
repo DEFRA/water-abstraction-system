@@ -6,13 +6,14 @@
  */
 
 const ContactPresenter = require('./contact.presenter.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
-  abstractionAlerts: 'Abstraction alerts',
-  returnForms: 'Return forms',
-  invitations: 'Returns invitations',
-  reminders: 'Returns reminders'
+  [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
+  [NoticeType.PAPER_RETURN]: 'Return forms',
+  [NoticeType.INVITATIONS]: 'Returns invitations',
+  [NoticeType.REMINDERS]: 'Returns reminders'
 }
 
 /**
@@ -115,7 +116,7 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
     return null
   }
 
-  if (noticeType === 'returnForms') {
+  if (noticeType === NoticeType.PAPER_RETURN) {
     return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-paper-return`
   }
 
@@ -123,7 +124,7 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
   const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
 
   // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-  return noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
+  return noticeType === NoticeType.ABSTRACTION_ALERTS ? `${basePreviewLink}/check-alert` : basePreviewLink
 }
 
 /**

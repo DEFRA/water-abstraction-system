@@ -13,6 +13,7 @@ const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-aler
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const SessionModel = require('../../../models/session.model.js')
 
@@ -47,12 +48,12 @@ async function _alerts(session) {
 }
 
 async function _formattedData(session) {
-  if (session.journey === 'alerts') {
+  if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return _alerts(session)
   }
 
-  if (session.noticeType === 'returnForms') {
-    return _returnForms(session)
+  if (session.noticeType === NoticeType.PAPER_RETURN) {
+    return _paperReturn(session)
   }
 
   // Both standard return invitations and reminders, and ad-hoc return invitations fetch recipients in the same way
@@ -72,7 +73,7 @@ async function _recipients(session) {
   return RecipientsService.go(session, downloadRecipients)
 }
 
-async function _returnForms(session) {
+async function _paperReturn(session) {
   const letterRecipientsData = await FetchLetterRecipientsService.go(session)
 
   const letterRecipients = RecipientsService.go(session, letterRecipientsData)

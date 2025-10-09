@@ -10,6 +10,7 @@ const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-aler
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const FetchReturnsRecipientsService = require('./fetch-returns-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and determining recipients
@@ -29,9 +30,9 @@ async function go(session) {
 }
 
 async function _recipientsData(session) {
-  if (session.journey === 'alerts') {
+  if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return FetchAbstractionAlertRecipientsService.go(session)
-  } else if (session.noticeType === 'returnForms') {
+  } else if (session.noticeType === NoticeType.PAPER_RETURN) {
     return FetchLetterRecipientsService.go(session)
   } else {
     return FetchReturnsRecipientsService.go(session)
