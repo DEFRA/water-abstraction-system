@@ -5,11 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
@@ -18,13 +21,21 @@ const FetchNotificationService = require('../../../app/services/notifications/fe
 const ViewNotificationService = require('../../../app/services/notifications/view-notification.service.js')
 
 describe('Notifications - View Notification service', () => {
-  let testNotification
+  let licence
+  let notice
+  let notification
 
-  before(() => {
-    testNotification = NotificationsFixture.notification()
-    testNotification.hasPdf = false
+  beforeEach(() => {
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
 
-    Sinon.stub(FetchNotificationService, 'go').resolves(testNotification)
+    notice = NoticesFixture.returnsInvitation()
+    notification = NotificationsFixture.returnsInvitationEmail(notice)
+    notification.event = notice
+
+    Sinon.stub(FetchNotificationService, 'go').resolves({ licence, notification })
   })
 
   afterEach(() => {
@@ -33,29 +44,24 @@ describe('Notifications - View Notification service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewNotificationService.go(testNotification.notification.id, testNotification.licence.id)
+      const result = await ViewNotificationService.go(notification.id, licence.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        address: ['Ferns Surfacing Limited', 'Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'],
-        backLink: '/system/licences/136bfed6-7e14-4144-a06f-35a21ceb4aa2/communications',
-        contents:
-          'Water Resources Act 1991\n' +
-          'Our reference: HOF-UPMJ7G\n' +
-          '\n' +
-          'Dear licence holder,\n' +
-          '\n' +
-          '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n' +
-          '\n' +
-          '# Why you are receiving this notification\n' +
-          '\n',
-        licenceRef: '01/117',
-        messageType: 'letter',
-        pageTitle: 'Hands off flow: levels warning',
-        returnForm: {
-          text: 'No preview available'
-        },
-        sentDate: '2 July 2024'
+        address: [],
+        alertDetails: null,
+        backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
+        contents: notification.plaintext,
+        licenceRef: licence.licenceRef,
+        messageType: 'email',
+        pageTitle: 'Returns invitation',
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        paperForm: null,
+        reference: notice.referenceCode,
+        sentDate: '2 April 2025',
+        sentBy: notice.issuer,
+        sentTo: notification.recipient,
+        status: notification.status
       })
     })
   })
