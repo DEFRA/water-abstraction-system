@@ -48,7 +48,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
         returnLogs: [
           {
             action: {
-              link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
+              link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
               text: 'Preview'
             },
             returnPeriod: '1 April 2002 to 31 March 2003',
@@ -85,7 +85,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
             expect(result.returnLogs).to.equal([
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 31 March 2003',
@@ -94,7 +94,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
               },
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${additionalDueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${additionalDueReturn.returnId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 4 May 2003',
@@ -117,7 +117,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
             expect(result.returnLogs).to.equal([
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 31 March 2003',

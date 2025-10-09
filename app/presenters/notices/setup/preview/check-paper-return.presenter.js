@@ -34,7 +34,7 @@ function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
   return returnLogs.map((dueReturn) => {
     return {
       action: {
-        link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
+        link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
         text: 'Preview'
       },
       returnPeriod: `${formatLongDate(new Date(dueReturn.startDate))} to ${formatLongDate(new Date(dueReturn.endDate))}`,
