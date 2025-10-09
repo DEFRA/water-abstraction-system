@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}' page
+ * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}' page
  *
- * @module PreviewReturnFormsService
+ * @module PreviewPaperReturnService
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
@@ -12,7 +12,7 @@ const ReturnFormsNotificationPresenter = require('../../../presenters/notices/se
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}' page
+ * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}' page
  *
  * This service returns the file to be display in the browser. This will likely be the built-in pdf viewer.
  *
