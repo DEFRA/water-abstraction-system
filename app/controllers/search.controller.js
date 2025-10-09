@@ -22,6 +22,12 @@ async function search(request, h) {
   // If there is a query, process the search
   const pageData = await SubmitSearchService.go(query)
 
+  // If there is a single result that exactly matches the search query, the service may redirect straight to that
+  // matching record
+  if (pageData.redirect) {
+    return h.redirect(pageData.redirect)
+  }
+
   return h.view('search/search.njk', pageData)
 }
 

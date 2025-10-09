@@ -57,9 +57,11 @@ describe('Search - Submit search service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         licences: null,
+        noResults: true,
         page: 1,
         pageTitle: 'Search',
-        query: 'searchthis'
+        query: 'searchthis',
+        showResults: true
       })
     })
   })
