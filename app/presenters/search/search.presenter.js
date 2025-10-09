@@ -5,7 +5,6 @@
  * @module SearchPresenter
  */
 
-const { formatDateMonthYear } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
@@ -28,50 +27,40 @@ function go(query, page, licences) {
 
   return {
     licences: licences && _mapLicences(licences),
+    noResults: !licences || licences.length === 0,
     page,
     pageTitle: 'Search',
-    query: query ?? ''
+    query: query ?? '',
+    showResults: true
   }
 }
 
 function _mapLicences(licences) {
   return licences.map((licence) => {
-    const { Name, Forename, Initials, Salutation } = licence.metadata
-    const holderNameParts = [Salutation, Initials || Forename, Name].filter(Boolean)
+    const licenceEnd = licence.$ends()
+    const { Forename, Initials, Name, Salutation } = licence.metadata
+    const { id, licenceRef } = licence
 
-    const licenceEnded = licence.$ends()
-    const isActive = _licenceIsActive(licence.startDate, licenceEnded?.date)
-    let licenceEndedText = null
-    if (licenceEnded && !isActive) {
-      licenceEndedText = `${licenceEnded.reason} in ${licenceEnded.date.getFullYear()}`
+    // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
+    // Name that are populated, where Name provides the surname for a person.
+    // Licences that have ended don't seem to have this information populated, which makes their display a bit
+    // unhelpful.
+    const licenceHolderName = [Salutation, Initials || Forename, Name].filter(Boolean).join(' ')
+
+    // Licences that have ended are just displayed with the reason and year they ended (don't know why)
+    let licenceEndedText
+    if (licenceEnd) {
+      const { date, reason } = licenceEnd
+      licenceEndedText = date && date <= today() ? `${reason} in ${date.getFullYear()}` : null
     }
-
-    const { endDate } = licence
-    const endDateText = endDate ? formatDateMonthYear(endDate) : null
 
     return {
-      endDateText,
-      isActive,
+      id,
       licenceEndedText,
-      licenceHolderName: holderNameParts.join(' '),
-      licenceId: licence.id,
-      ...licence
+      licenceHolderName,
+      licenceRef
     }
   })
-}
-
-function _licenceIsActive(start, end) {
-  const todayInMilliseconds = today().valueOf()
-
-  if (start > todayInMilliseconds) {
-    return false
-  }
-
-  if (!end) {
-    return true
-  }
-
-  return todayInMilliseconds <= end
 }
 
 module.exports = {

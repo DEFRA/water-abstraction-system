@@ -28,44 +28,47 @@
     }) }}
   </form>
 
-  <!-- Licences -->
-  {% if licences %}
-    {% for licence in licences %}
-      <div>
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% if showResults %}
+    {% if noResults %}
+      <p>No results found.</p>
+    {% else %}
+      <h2 class="govuk-heading-l">Results</h2>
 
+      <!-- Licences -->
+      {% if licences %}
+        {% for licence in licences %}
+          <div>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-        <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
-          Licence:
-          {% if licence.id %}
-            {% if featureFlags.enableSystemLicenceView == true %}
-              <a href="/system/licences/{{ licence.licenceId }}/summary">{{ licence.licenceRef }}</a>
-            {% else %}
-              <a href="/licences/{{ licence.licenceId }}">{{ licence.licenceRef }}</a>
+            <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+              Licence:
+              {% if licence.id %}
+                {% if featureFlags.enableSystemLicenceView == true %}
+                  <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+                {% else %}
+                  <a href="/licences/{{ licence.id }}">{{ licence.licenceRef }}</a>
+                {% endif %}
+              {% else %}
+                {{ licence.licenceRef }}
+              {% endif %}
+
+              {% if licence.documentName %}
+                <span class="govuk-caption-m link--no-underline">{{ licence.licenceName }}</span>
+              {% endif %}
+
+              {% if licence.licenceEndedText %}
+                <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
+              {% endif %}
+            </h3>
+
+            {% if licence.licenceHolderName %}
+              <p>Holder: {{ licence.licenceHolderName }}</p>
             {% endif %}
-          {% else %}
-            {{ licence.licenceRef }}
-          {% endif %}
 
-          {% if licence.documentName %}
-            <span class="govuk-caption-m link--no-underline">{{ licence.licenceName }}</span>
-          {% endif %}
-
-          {% if licence.licenceEndedText %}
-            <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
-          {% endif %}
-        </h3>
-
-        {% if licence.licenceHolderName %}
-          <p>Holder: {{ licence.licenceHolderName }}</p>
-        {% endif %}
-
-        {% if licence.endDateText %}
-          <p>End date: {{ licence.endDateText }}</p>
-        {% endif %}
-
-      </div>
-    {% endfor %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endif %}
   {% endif %}
 
 {% endblock %}
