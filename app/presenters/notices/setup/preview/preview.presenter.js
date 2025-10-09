@@ -7,6 +7,7 @@
 
 const GeneratePreviewRequest = require('../../../../requests/notify/generate-preview.request.js')
 
+const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
 const { sentenceCase } = require('../../../base.presenter.js')
 
 /**
@@ -49,7 +50,7 @@ function _address(personalisation) {
 }
 
 function _backLink(contactHashId, noticeType, sessionId) {
-  if (noticeType === 'abstractionAlerts') {
+  if (noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`
   }
 
@@ -69,7 +70,7 @@ async function _notifyPreview(personalisation, templateId) {
 function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId) {
   const baseRefreshPageLink = `/system/notices/setup/${sessionId}/preview/${contactHashId}`
 
-  if (noticeType === 'abstractionAlerts') {
+  if (noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return `${baseRefreshPageLink}/alert/${licenceMonitoringStationId}`
   }
 
