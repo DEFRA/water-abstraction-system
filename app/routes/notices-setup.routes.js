@@ -293,9 +293,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
     options: {
-      handler: NoticesSetupController.viewCheckReturnForms,
+      handler: NoticesSetupController.viewCheckPaperReturn,
       auth: {
         access: {
           scope: ['returns']
@@ -305,9 +305,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}',
     options: {
-      handler: NoticesSetupController.viewPreviewReturnForms,
+      handler: NoticesSetupController.viewPreviewPaperReturn,
       auth: {
         access: {
           scope: ['returns']

@@ -7,6 +7,7 @@
  */
 
 const SessionModel = require('../../../models/session.model.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates the user confirming the notice type on the `/notices/setup/{sessionId}/check-notice-type` page
@@ -51,7 +52,7 @@ async function go(sessionId) {
  * @private
  */
 function _backLink(session) {
-  if (session.noticeType === 'returnForms') {
+  if (session.noticeType === NoticeType.PAPER_RETURN) {
     return { href: `/system/notices/setup/${session.id}/recipient-name`, text: 'Back' }
   }
 

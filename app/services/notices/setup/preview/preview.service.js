@@ -10,6 +10,7 @@ const FetchRecipientsService = require('../fetch-recipients.service.js')
 const NotificationsPresenter = require('../../../../presenters/notices/setup/notifications.presenter.js')
 const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
@@ -45,7 +46,7 @@ async function go(contactHashId, sessionId, licenceMonitoringStationId) {
 function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
-  if (session.noticeType === 'abstractionAlerts') {
+  if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(recipient, session)
 
     notification = unfilteredNotifications.filter((unfilteredNotification) => {
