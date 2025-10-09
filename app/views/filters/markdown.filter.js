@@ -26,8 +26,8 @@
  * @param {string} input - The markdown input to be processed.
  * @returns {string} The HTML output generated after replacing carets (`^`) with `>` and parsing the markdown.
  */
-function markdown(input = '') {
-  const marked = _importMarked()
+async function markdown(input = '') {
+  const marked = await _importMarked()
 
   const replacedCaret = input.replace(/\^/gm, '>')
 
@@ -44,8 +44,8 @@ function markdown(input = '') {
  *
  * @private
  */
-function _importMarked() {
-  const { marked } = import('marked')
+async function _importMarked() {
+  const { marked } = await import('marked')
 
   return marked
 }
