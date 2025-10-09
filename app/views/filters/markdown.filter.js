@@ -1,7 +1,5 @@
 'use strict'
 
-const { marked } = require('marked')
-
 /**
  * Converts Notify's custom flavour of markdown into valid HTML. Notify's flavour of markdown uses a caret (`^`)
  * character to represent blockquotes. This function replaces any carets (`^`) with the standard blockquote marker (`>`)
@@ -28,10 +26,28 @@ const { marked } = require('marked')
  * @param {string} input - The markdown input to be processed.
  * @returns {string} The HTML output generated after replacing carets (`^`) with `>` and parsing the markdown.
  */
-function markdown(input = '') {
+async function markdown(input = '') {
+  const marked = await _importMarked()
+
   const replacedCaret = input.replace(/\^/gm, '>')
 
   return marked.parse(replacedCaret)
+}
+
+/**
+ * Admittedly, we can't find any specific reference to the change in marked's release notes. But since we brought in
+ * v16.4.0 some team members have reported seeing the error `Error [ERR_REQUIRE_ESM]: require() of ES Module` when
+ * attempting to start the app locally.
+ *
+ * So, we follow a pattern we've used in `app/requests/base.request.js` for importing Got, another package we know
+ * shifted to only supporting ESM.
+ *
+ * @private
+ */
+async function _importMarked() {
+  const { marked } = await import('marked')
+
+  return marked
 }
 
 module.exports = {
