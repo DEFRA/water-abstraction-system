@@ -41,7 +41,7 @@ const { db } = require('../../../../db/db.js')
  * - For more information about error statuses from Notify, refer to the documentation:
  * [Get the status of multiple messages](https://docs.notifications.service.gov.uk/node.html#get-the-status-of-multiple-messages-response).
  *
- * @param {string[]} eventIds - an array of event ids to update the error count for
+ * @param {string[]} eventIds - an array of event ids to update
  *
  */
 async function go(eventIds) {
