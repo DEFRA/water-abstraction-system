@@ -101,7 +101,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
   })
 
-  describe('and the journey is "returnForms"', () => {
+  describe('and the notice type is "paperReturn"', () => {
     beforeEach(() => {
       event.subtype = 'paperReturnForms'
     })
