@@ -139,7 +139,7 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('noticeFilter')
+        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).to.equal({
           licence: null,
           recipient: null,
@@ -168,7 +168,7 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('noticeFilter')
+        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).to.equal({
           licence: '01/123',
           recipient: 'carol.shaw@atari.co.uk',

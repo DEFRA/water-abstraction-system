@@ -20,7 +20,8 @@ const ViewNoticePresenter = require('../../presenters/notices/view-notice.presen
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(noticeId, yar, page) {
-  const filters = _filters(yar)
+  const filterKey = `noticeFilter-${noticeId}`
+  const filters = _filters(yar, filterKey)
 
   const selectedPageNumber = page ? Number(page) : 1
 
@@ -45,10 +46,10 @@ async function go(noticeId, yar, page) {
   }
 }
 
-function _filters(yar) {
+function _filters(yar, filterKey) {
   let openFilter = false
 
-  const savedFilters = yar.get('noticeFilter')
+  const savedFilters = yar.get(filterKey)
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
