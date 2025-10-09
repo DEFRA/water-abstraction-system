@@ -51,7 +51,7 @@ describe('Notices - Setup - Preview - Check Paper Return Service', () => {
         returnLogs: [
           {
             action: {
-              link: `/system/notices/setup/${session.id}/preview/${contactHashId}/return-forms/${dueReturn.returnId}`,
+              link: `/system/notices/setup/${session.id}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
               text: 'Preview'
             },
             returnPeriod: '1 April 2002 to 31 March 2003',
