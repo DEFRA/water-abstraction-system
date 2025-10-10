@@ -21,7 +21,7 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   await SessionModel.query().delete().where('id', sessionId)
-  k
+
   if (session.journey === NoticeJourney.ALERTS) {
     return `/system/monitoring-stations/${session.monitoringStationId}`
   }
