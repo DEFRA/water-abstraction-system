@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
-const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
+const DeterminePaperReturnService = require('../../../../app/services/notices/setup/determine-paper-return.service.js')
 
 // Thing under test
 const DetermineNotificationsService = require('../../../../app/services/notices/setup/determine-notifications.service.js')
@@ -205,7 +205,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
         returnLogIds: [returnId]
       }
 
-      Sinon.stub(DetermineReturnFormsService, 'go').resolves([
+      Sinon.stub(DeterminePaperReturnService, 'go').resolves([
         {
           ...notification,
           personalisation: { name: 'Red 5' }

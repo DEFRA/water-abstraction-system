@@ -12,9 +12,9 @@ const { expect } = Code
 const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
 
 // Thing under test
-const GenerateReturnFormRequest = require('../../../app/requests/gotenberg/generate-return-form.request.js')
+const GeneratePaperReturnRequest = require('../../../app/requests/gotenberg/generate-paper-return.request.js')
 
-describe('Gotenberg - Generate Return Form Request', () => {
+describe('Gotenberg - Generate Paper return Request', () => {
   let gotenbergRequestStub
   let pageData
   let pdfBytes
@@ -47,13 +47,13 @@ describe('Gotenberg - Generate Return Form Request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await GenerateReturnFormRequest.send(pageData)
+      const result = await GeneratePaperReturnRequest.send(pageData)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the data', async () => {
-      const result = await GenerateReturnFormRequest.send(pageData)
+      const result = await GeneratePaperReturnRequest.send(pageData)
 
       expect(result.response).to.equal({
         statusCode: 204,
@@ -63,7 +63,7 @@ describe('Gotenberg - Generate Return Form Request', () => {
 
     describe('calls "GotenbergRequest.post" with FormData', () => {
       it('containing the expected fields', async () => {
-        await GenerateReturnFormRequest.send(pageData)
+        await GeneratePaperReturnRequest.send(pageData)
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
@@ -86,7 +86,7 @@ describe('Gotenberg - Generate Return Form Request', () => {
       })
 
       it('containing the html', async () => {
-        await GenerateReturnFormRequest.send(pageData)
+        await GeneratePaperReturnRequest.send(pageData)
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
@@ -111,7 +111,7 @@ describe('Gotenberg - Generate Return Form Request', () => {
       })
 
       it('containing the footer', async () => {
-        await GenerateReturnFormRequest.send(pageData)
+        await GeneratePaperReturnRequest.send(pageData)
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
