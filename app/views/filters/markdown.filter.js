@@ -26,28 +26,15 @@
  * @param {string} input - The markdown input to be processed.
  * @returns {string} The HTML output generated after replacing carets (`^`) with `>` and parsing the markdown.
  */
-async function markdown(input = '') {
-  const marked = await _importMarked()
-
+function markdown(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
-  return marked.parse(replacedCaret)
-}
+  // NOTE: See app/plugins/views.plugin.js for details why marked is in the global scope rather than just required().
+  if (!global.GlobalMarked) {
+    return input
+  }
 
-/**
- * Admittedly, we can't find any specific reference to the change in marked's release notes. But since we brought in
- * v16.4.0 some team members have reported seeing the error `Error [ERR_REQUIRE_ESM]: require() of ES Module` when
- * attempting to start the app locally.
- *
- * So, we follow a pattern we've used in `app/requests/base.request.js` for importing Got, another package we know
- * shifted to only supporting ESM.
- *
- * @private
- */
-async function _importMarked() {
-  const { marked } = await import('marked')
-
-  return marked
+  return global.GlobalMarked.parse(replacedCaret)
 }
 
 module.exports = {
