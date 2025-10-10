@@ -800,7 +800,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 },
                 recipient: 'primary.user@important.com',
                 status: 'pending',
-                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
+                templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
               }
             ])
           })
@@ -828,7 +828,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 },
                 recipient: 'returns.agent@important.com',
                 status: 'pending',
-                templateId: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94'
+                templateId: 'c8076bbd-7d93-4743-81b3-755a5c5f1d50'
               }
             ])
           })
@@ -856,7 +856,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                 },
                 recipient: 'primary.user@important.com',
                 status: 'pending',
-                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
+                templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
               }
             ])
           })
@@ -904,7 +904,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: null
                 },
                 status: 'pending',
-                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+                templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
               }
             ])
           })
@@ -938,7 +938,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: null
                 },
                 status: 'pending',
-                templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
+                templateId: 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5'
               }
             ])
           })
@@ -972,7 +972,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '30 January 2025'
                 },
                 status: 'pending',
-                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+                templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
               }
             ])
           })
