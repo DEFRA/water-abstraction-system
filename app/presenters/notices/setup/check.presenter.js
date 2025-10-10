@@ -72,7 +72,7 @@ function _links(session) {
     download: `/system/notices/setup/${id}/download`
   }
 
-  if (journey === 'adhoc') {
+  if (journey === NoticeJourney.ADHOC) {
     return {
       ...links,
       manage: `/system/notices/setup/${id}/select-recipients`

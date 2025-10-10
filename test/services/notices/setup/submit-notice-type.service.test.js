@@ -29,7 +29,7 @@ describe('Notices - Setup - Notice Type Service', () => {
 
     noticeType = 'invitations'
     payload = { noticeType }
-    sessionData = {}
+    sessionData = { journey: 'adhoc' }
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -49,6 +49,7 @@ describe('Notices - Setup - Notice Type Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
+          journey: 'adhoc',
           name: 'Returns: invitation',
           noticeType: 'invitations',
           notificationType: 'Returns invitation',
@@ -153,8 +154,10 @@ describe('Notices - Setup - Notice Type Service', () => {
       })
     })
 
-    describe('and the journey is not "standard"', () => {
+    describe('and the journey is "adhoc"', () => {
       beforeEach(async () => {
+        sessionData.journey = 'adhoc'
+
         session = await SessionHelper.add({ data: sessionData })
       })
 
