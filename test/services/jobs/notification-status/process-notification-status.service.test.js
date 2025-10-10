@@ -421,7 +421,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           id: event.id,
           issuer: 'test.user@defra.gov.uk',
           licences: ['11/111'],
-          metadata: { error: 0},
+          metadata: { error: 0 },
           overallStatus: 'pending',
           referenceCode: 'RINV-402AGB',
           status: 'completed',
