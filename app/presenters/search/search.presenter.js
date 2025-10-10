@@ -6,6 +6,7 @@
  */
 
 const ContactModel = require('../../models/contact.model.js')
+const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
@@ -52,13 +53,16 @@ function _mapLicences(licences) {
 
     // Licences that have ended are just displayed with the reason and year they ended (don't know why)
     let licenceEndedText
+    let licenceEndDate
     if (licenceEnd) {
       const { date, reason } = licenceEnd
       licenceEndedText = date <= today() ? `${reason} in ${date.getFullYear()}` : null
+      licenceEndDate = formatLongDate(date)
     }
 
     return {
       id,
+      licenceEndDate,
       licenceEndedText,
       licenceHolderName,
       licenceRef

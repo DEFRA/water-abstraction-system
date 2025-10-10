@@ -33,24 +33,17 @@
     {% if noResults %}
       <p>No results found.</p>
     {% else %}
+      <!-- Licences as a list -->
       <h2 class="govuk-heading-l">Results</h2>
 
-      <!-- Licences -->
       {% if licences %}
         {% for licence in licences %}
           <div>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
             <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
-              Licence:
+              Licence
               {% if licence.id %}
-                {# TODO: Check if this flag is still necessary - I don't think it is
-                {% if featureFlags.enableSystemLicenceView == true %}
-                  <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
-                {% else %}
-                  <a href="/licences/{{ licence.id }}">{{ licence.licenceRef }}</a>
-                {% endif %}
-                #}
                 <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
               {% else %}
                 {{ licence.licenceRef }}
@@ -69,26 +62,32 @@
               <p>Holder: {{ licence.licenceHolderName }}</p>
             {% endif %}
 
+            {% if licence.licenceEndDate and not licence.licenceEndedText %}
+              <p>End date: {{ licence.licenceEndDate }}</p>
+            {% endif %}
           </div>
         {% endfor %}
       {% endif %}
 
       <!-- Licences as cards -->
+      <h2 class="govuk-heading-l">Results</h2>
+
       {% if licences %}
         {% for licence in licences %}
 
           {% set cardTitleHtml %}
-            Licence:
             {% if licence.id %}
-              <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+              <a href="/system/licences/{{ licence.id }}/summary">Licence {{ licence.licenceRef }}</a>
             {% else %}
-              {{ licence.licenceRef }}
+              Licence {{ licence.licenceRef }}
             {% endif %}
           {% endset %}
 
-          {% set licenceEndedHtml %}
+          {% set endDateHtml %}
             {% if licence.licenceEndedText %}
               <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
+            {% else %}
+              {{ licence.licenceEndDate }}
             {% endif %}
           {% endset %}
 
@@ -98,6 +97,7 @@
                 html: cardTitleHtml
               }
             },
+            classes: "govuk-summary-list--no-border",
             rows: [
               {
                 key: {
@@ -112,7 +112,7 @@
                   text: "End date"
                 },
                 value: {
-                  html: licenceEndedHtml
+                  html: endDateHtml
                 }
               },
               {

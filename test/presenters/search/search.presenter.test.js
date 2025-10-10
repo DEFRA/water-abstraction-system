@@ -43,6 +43,7 @@ describe('Search - Search presenter', () => {
         licences: [
           {
             id: 'licence-1',
+            licenceEndDate: undefined,
             licenceEndedText: undefined,
             licenceHolderName: 'Mr F Surname',
             licenceRef: '01/123'
@@ -127,9 +128,10 @@ describe('Search - Search presenter', () => {
       ]
     })
 
-    it('displays the status and year', () => {
+    it('displays the status and the end date', () => {
       const result = SearchPresenter.go(query, page, licences)
 
+      expect(result.licences[0].licenceEndDate).to.equal('31 December 2020')
       expect(result.licences[0].licenceEndedText).to.equal('expired in 2020')
     })
   })
@@ -155,9 +157,10 @@ describe('Search - Search presenter', () => {
       ]
     })
 
-    it('does not display the status', () => {
+    it('displays the end date but not the status', () => {
       const result = SearchPresenter.go(query, page, licences)
 
+      expect(result.licences[0].licenceEndDate).to.exist()
       expect(result.licences[0].licenceEndedText).to.not.exist()
     })
   })
