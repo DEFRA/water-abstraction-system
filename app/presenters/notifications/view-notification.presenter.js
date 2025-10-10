@@ -5,7 +5,7 @@
  * @module ViewNotificationPresenter
  */
 
-const { formatLongDate, formatValueUnit, titleCase } = require('../base.presenter.js')
+const { formatLongDate, formatRestrictionType, formatValueUnit, titleCase } = require('../base.presenter.js')
 const { noticeMappings } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -62,9 +62,16 @@ function _alertDetails(notification) {
     return null
   }
 
-  const { label, monitoring_station_name: name, thresholdUnit, thresholdValue } = notification.personalisation
+  const {
+    alertType,
+    label,
+    monitoring_station_name: name,
+    thresholdUnit,
+    thresholdValue
+  } = notification.personalisation
 
   return {
+    alertType: alertType ? formatRestrictionType(alertType) : 'Not recorded',
     monitoringStation: label ?? name,
     threshold: formatValueUnit(thresholdValue, thresholdUnit)
   }

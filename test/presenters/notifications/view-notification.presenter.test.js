@@ -142,28 +142,65 @@ describe('Notifications - View Notification presenter', () => {
         notification.event = notice
       })
 
-      describe('and its an older notification where only "monitoring_station_name" is populated', () => {
+      describe('and its an older notification', () => {
         beforeEach(() => {
+          delete notification.personalisation.alertType
           delete notification.personalisation.label
         })
 
-        it('returns details for the alert, including the monitoring station name', () => {
-          const result = ViewNotificationPresenter.go(licence, notification)
+        describe('where "monitoring_station_name" is populated', () => {
+          it('returns details for the alert, including the monitoring station name', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
 
-          expect(result.alertDetails).to.equal({
-            monitoringStation: 'Death star',
-            threshold: '100m3/s'
+            expect(result.alertDetails).to.equal({
+              alertType: 'Not recorded',
+              monitoringStation: 'Death star',
+              threshold: '100m3/s'
+            })
+          })
+        })
+
+        describe('where "alertType" is not populated', () => {
+          it('returns details for the alert, though alert type is "Not recorded"', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
+
+            expect(result.alertDetails).to.equal({
+              alertType: 'Not recorded',
+              monitoringStation: 'Death star',
+              threshold: '100m3/s'
+            })
           })
         })
       })
 
-      describe('and its a newer notification where "label" is populated', () => {
-        it('returns details for the alert, including the monitoring station name', () => {
-          const result = ViewNotificationPresenter.go(licence, notification)
+      describe('and its a newer notification', () => {
+        describe('where "label" is populated', () => {
+          it('returns details for the alert, including the monitoring station name', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
 
-          expect(result.alertDetails).to.equal({
-            monitoringStation: 'Death star',
-            threshold: '100m3/s'
+            expect(result.alertDetails).to.equal({
+              alertType: 'Stop',
+              monitoringStation: 'Death star',
+              threshold: '100m3/s'
+            })
+          })
+        })
+
+        describe('where "alertType" is populated', () => {
+          beforeEach(() => {
+            // NOTE: The formatting is done by a helper. But we have this here to highlight there is some formatting
+            // taking place
+            notification.personalisation.alertType = 'stop_or_reduce'
+          })
+
+          it('returns details for the alert, including the alert type', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
+
+            expect(result.alertDetails).to.equal({
+              alertType: 'Stop or reduce',
+              monitoringStation: 'Death star',
+              threshold: '100m3/s'
+            })
           })
         })
       })
