@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const QuerySearchService = require('../../app/services/search/submit-search.service.js')
+const SubmitSearchService = require('../../app/services/search/submit-search.service.js')
 const ViewSearchService = require('../../app/services/search/view-search.service.js')
 
 // For running our service
@@ -60,7 +60,7 @@ describe('Search - Search controller', () => {
       describe('when the request is an empty query', () => {
         beforeEach(async () => {
           getOptions.url = '/search?query='
-          Sinon.stub(QuerySearchService, 'go').resolves({
+          Sinon.stub(SubmitSearchService, 'go').resolves({
             activeNavBar: 'search',
             error: {
               errorList: [
@@ -81,6 +81,20 @@ describe('Search - Search controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('There is a problem')
           expect(response.payload).to.contain('Query error')
+        })
+      })
+
+      describe('when the request results in a redirect', () => {
+        beforeEach(async () => {
+          getOptions.url = '/search?query=0123'
+          Sinon.stub(SubmitSearchService, 'go').resolves({ redirect: '/system/licences/licence-1/summary' })
+        })
+
+        it('redirects to the appropriate location', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/licences/licence-1/summary')
         })
       })
     })
