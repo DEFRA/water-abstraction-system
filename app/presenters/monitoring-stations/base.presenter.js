@@ -1,6 +1,12 @@
 'use strict'
 
-const { formatAbstractionPeriod, formatLongDate, formatValueUnit, sentenceCase } = require('../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatLongDate,
+  formatRestrictionType,
+  formatValueUnit,
+  sentenceCase
+} = require('../base.presenter.js')
 
 /**
  * Returns the heading for the "restrictions" column of the monitoring station page
@@ -99,27 +105,6 @@ function formatRestrictions(licenceMonitoringStations) {
   })
 }
 
-/**
- * Formats the restriction type
- *
- * This can be 'stop', 'reduce' or 'stop_and_reduce'.
- *
- * When the restriction type is 'stop_and_reduce', we want to show the user 'Stop and reduce'.
- *
- * When it is something else it just needs to be in sentence case
- *
- * @param {string} restrictionType
- *
- * @returns {string}
- */
-function formatRestrictionType(restrictionType) {
-  if (restrictionType === 'stop_or_reduce') {
-    return 'Stop or reduce'
-  }
-
-  return sentenceCase(restrictionType)
-}
-
 function _alertDate(latestNotification) {
   if (!latestNotification?.createdAt) {
     return ''
@@ -140,6 +125,5 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
 
 module.exports = {
   determineRestrictionHeading,
-  formatRestrictionType,
   formatRestrictions
 }

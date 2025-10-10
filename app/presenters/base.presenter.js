@@ -265,6 +265,27 @@ function formatQuantity(units, quantity) {
 }
 
 /**
+ * Formats the restriction type
+ *
+ * This can be 'stop', 'reduce' or 'stop_and_reduce'.
+ *
+ * When the restriction type is 'stop_and_reduce', we want to show the user 'Stop and reduce'.
+ *
+ * When it is something else it just needs to be in sentence case
+ *
+ * @param {string} restrictionType
+ *
+ * @returns {string}
+ */
+function formatRestrictionType(restrictionType) {
+  if (restrictionType === 'stop_or_reduce') {
+    return 'Stop or reduce'
+  }
+
+  return sentenceCase(restrictionType)
+}
+
+/**
  * Formats the status for a return log, adjusting for specific conditions.
  *
  * - NOT DUE YET - The return log end date is greater than or equal to the current date. Cannot be submitted or
@@ -543,6 +564,7 @@ module.exports = {
   formatPounds,
   formatPurposes,
   formatQuantity,
+  formatRestrictionType,
   formatReturnLogStatus,
   formatValidationResult,
   formatValueUnit,

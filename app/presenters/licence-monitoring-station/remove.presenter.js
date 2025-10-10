@@ -5,8 +5,7 @@
  * @module RemovePresenter
  */
 
-const { formatValueUnit } = require('../base.presenter.js')
-const { formatRestrictionType } = require('../monitoring-stations/base.presenter.js')
+const { formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
 
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
