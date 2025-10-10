@@ -2,7 +2,7 @@
 
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
- * @module GenerateReturnFormRequest
+ * @module GeneratePaperReturnRequest
  */
 
 const nunjucks = require('nunjucks')
@@ -16,7 +16,7 @@ const GotenbergRequest = require('../gotenberg.request.js')
  * > Important - 'preferCssPageSize' tells Goetnberg to rely on our styling and to not add any default margin / padding.
  * > This is required in conjunction with setting 'marginTop' etc.
  *
- * @param {object} pageData - The data needed to populate and generate the PDF return form
+ * @param {object} pageData - The data needed to populate and generate the PDF paper return
  *
  * @returns {Promise<object>} An object representing the result of the request, including an ArrayBuffer as the 'body'
  */

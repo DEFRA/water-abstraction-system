@@ -207,9 +207,9 @@ describe('Notices - Setup - Check presenter', () => {
           })
         })
 
-        describe('and the "noticeType" is "returnForms"', () => {
+        describe('and the "noticeType" is "paperReturn"', () => {
           beforeEach(() => {
-            session.noticeType = 'returnForms'
+            session.noticeType = 'paperReturn'
             session.referenceCode = generateReferenceCode('PRTF')
           })
 
@@ -350,9 +350,9 @@ describe('Notices - Setup - Check presenter', () => {
             })
           })
 
-          describe('and the "noticeType" is "returnForms"', () => {
+          describe('and the "noticeType" is "paperReturn"', () => {
             beforeEach(() => {
-              session.noticeType = 'returnForms'
+              session.noticeType = 'paperReturn'
               session.referenceCode = generateReferenceCode('PRTF')
             })
 

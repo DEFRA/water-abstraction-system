@@ -221,9 +221,12 @@ async function viewCheck(request, h) {
 }
 
 async function viewNoticeType(request, h) {
-  const { sessionId } = request.params
+  const {
+    auth,
+    params: { sessionId }
+  } = request
 
-  const pageData = await NoticeTypeService.go(sessionId)
+  const pageData = await NoticeTypeService.go(sessionId, auth)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
 }
@@ -414,12 +417,13 @@ async function submitLicence(request, h) {
 
 async function submitNoticeType(request, h) {
   const {
+    auth,
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar)
+  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar, auth)
 
   if (pageData.error) {
     return h.view(`notices/setup/notice-type.njk`, pageData)

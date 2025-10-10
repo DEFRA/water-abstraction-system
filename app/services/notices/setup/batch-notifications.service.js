@@ -11,7 +11,7 @@ const ProcessNotificationStatusService = require('../../jobs/notification-status
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
-const SendReturnFormService = require('./batch/send-return-form.service.js')
+const SendPaperReturnService = require('./batch/send-paper-return.service.js')
 const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
@@ -56,7 +56,7 @@ async function _batch(notifications, referenceCode) {
 }
 
 /**
- * When sending a PDF file (currently we only send return forms) we need to reduce the batch size to 1.
+ * When sending a PDF file (currently we only send paper return's) we need to reduce the batch size to 1.
  *
  * This is to ease the burden on resources when generating the PDFs.
  *
@@ -95,7 +95,7 @@ function _determineNotificationToSend(notification, referenceCode) {
   }
 
   if (notification.messageRef === 'pdf.return_form') {
-    return SendReturnFormService.go(notification, referenceCode)
+    return SendPaperReturnService.go(notification, referenceCode)
   }
 
   return SendLetterService.go(notification, referenceCode)

@@ -16,7 +16,7 @@ const { formatLongDate } = require('../../../../app/presenters/base.presenter.js
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const GenerateReturnFormRequest = require('../../../../app/requests/gotenberg/generate-return-form.request.js')
+const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
 
 // Thing under test
 const PreviewPaperReturnService = require('../../../../app/services/notices/setup/preview-paper-return.service.js')
@@ -50,7 +50,7 @@ describe('Notices - Setup - Preview Paper Return Service', () => {
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
-    Sinon.stub(GenerateReturnFormRequest, 'send').resolves({
+    Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
       response: {
         body: buffer
       }
@@ -83,12 +83,12 @@ describe('Notices - Setup - Preview Paper Return Service', () => {
       expect(result.byteLength).to.equal(9)
     })
 
-    it('should call "GenerateReturnFormRequest"', async () => {
+    it('should call "GeneratePaperReturnRequest"', async () => {
       await PreviewPaperReturnService.go(session.id, contactHashId, returnId)
 
-      expect(GenerateReturnFormRequest.send.calledOnce).to.be.true()
+      expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
 
-      const actualCallArgs = GenerateReturnFormRequest.send.getCall(0).args[0]
+      const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
 
       expect(actualCallArgs).to.equal({
         address: {

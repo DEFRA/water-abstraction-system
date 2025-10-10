@@ -69,7 +69,31 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "reminders"', () => {
+      beforeEach(() => {
+        session.noticeType = 'reminders'
+      })
+
+      it('returns page data', () => {
+        const result = CheckNoticeTypePresenter.go(session)
+
+        expect(result).to.equal({
+          licenceRef,
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`
+          },
+          pageTitle: 'Check the notice type',
+          returnNoticeType: 'Returns reminder',
+          selectedDueReturns: [],
+          sessionId: '123',
+          showReturns: false
+        })
+      })
+    })
+
+    describe('and the notice type is "paperReturn"', () => {
       let dueReturnOne
       let dueReturnTwo
 
@@ -90,7 +114,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           startDate: '2003-04-01'
         }
 
-        session.noticeType = 'returnForms'
+        session.noticeType = 'paperReturn'
 
         session.dueReturns = [dueReturnOne, dueReturnTwo]
 

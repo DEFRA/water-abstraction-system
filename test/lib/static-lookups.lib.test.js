@@ -16,6 +16,7 @@ describe('Static Lookups', () => {
       const result = StaticLookups.NoticeJourney
 
       expect(result).equal({
+        ADHOC: 'adhoc',
         ALERTS: 'alerts',
         STANDARD: 'standard'
       })
@@ -39,7 +40,7 @@ describe('Static Lookups', () => {
       expect(result).equal({
         ABSTRACTION_ALERTS: 'abstractionAlerts',
         INVITATIONS: 'invitations',
-        PAPER_RETURN: 'returnForms',
+        PAPER_RETURN: 'paperReturn',
         REMINDERS: 'reminders'
       })
     })

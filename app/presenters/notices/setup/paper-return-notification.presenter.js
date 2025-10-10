@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Formats recipients into notifications for a return form
- * @module ReturnFormsNotificationPresenter
+ * Formats recipients into notifications for a paper return
+ * @module PaperReturnNotificationPresenter
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats recipients into notifications for a return form
+ * Formats recipients into notifications for a paper return
  *
  * The 'pageData' is the result of the presenter used when creating the PDF file. It uses different keys, and returns
  * different values specific to creating the file. We cannot just save its 'personalisation' to the DB as it differs

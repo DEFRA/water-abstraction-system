@@ -15,10 +15,10 @@ const { generateReferenceCode } = require('../../../../support/helpers/notificat
 
 // Things we need to stub
 const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify/create-precompiled-file.request.js')
-const PrepareReturnFormsService = require('../../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
 
 // Thing under test
-const SendReturnFormService = require('../../../../../app/services/notices/setup/batch/send-return-form.service.js')
+const SendPaperReturnService = require('../../../../../app/services/notices/setup/batch/send-paper-return.service.js')
 
 describe('Notices - Setup - Batch - Send Return form service', () => {
   let buffer
@@ -43,14 +43,14 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
 
   describe('when the notification is successful', () => {
     beforeEach(() => {
-      Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+      Sinon.stub(PreparePaperReturnService, 'go').resolves({
         succeeded: true,
         response: { body: buffer }
       })
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendReturnFormService.go(notification, referenceCode)
+      const result = await SendPaperReturnService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,
@@ -65,14 +65,14 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
 
   describe('when generating the return form fails', () => {
     beforeEach(() => {
-      Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+      Sinon.stub(PreparePaperReturnService, 'go').resolves({
         succeeded: false,
         response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' }
       })
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendReturnFormService.go(notification, referenceCode)
+      const result = await SendPaperReturnService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,

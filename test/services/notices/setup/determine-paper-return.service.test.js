@@ -16,9 +16,9 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const DetermineReturnFormsService = require('../../../../app/services/notices/setup/determine-return-forms.service.js')
+const DeterminePaperReturnService = require('../../../../app/services/notices/setup/determine-paper-return.service.js')
 
-describe('Notices - Setup - Determine Return Forms Service', () => {
+describe('Notices - Setup - Determine Paper Return Service', () => {
   const eventId = generateUUID()
 
   let additionalDueReturn
@@ -57,7 +57,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
   describe('when called', () => {
     describe('and there is one due return log selected', () => {
       it('returns a notification for each combination of recipient and selected due return log', async () => {
-        const result = await DetermineReturnFormsService.go(session, testRecipients, eventId)
+        const result = await DeterminePaperReturnService.go(session, testRecipients, eventId)
 
         expect(result).to.equal([
           {
@@ -128,7 +128,7 @@ describe('Notices - Setup - Determine Return Forms Service', () => {
       })
 
       it('returns a notification for each combination of recipient and selected due return log', async () => {
-        const result = await DetermineReturnFormsService.go(session, testRecipients, eventId)
+        const result = await DeterminePaperReturnService.go(session, testRecipients, eventId)
 
         expect(result).to.equal([
           {

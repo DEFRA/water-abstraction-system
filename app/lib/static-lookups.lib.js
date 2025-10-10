@@ -271,12 +271,12 @@ const naldRegions = {
   YO: 'Yorkshire'
 }
 
-const NoticeJourney = Object.freeze({ STANDARD: 'standard', ALERTS: 'alerts' })
+const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
 
 const NoticeType = Object.freeze({
   ABSTRACTION_ALERTS: 'abstractionAlerts',
   INVITATIONS: 'invitations',
-  PAPER_RETURN: 'returnForms',
+  PAPER_RETURN: 'paperReturn',
   REMINDERS: 'reminders'
 })
 
