@@ -19,6 +19,7 @@ describe('Search - Search presenter', () => {
     beforeEach(() => {
       query = 'searchthis'
       page = 1
+
       licences = [
         {
           $ends: () => {
@@ -27,12 +28,10 @@ describe('Search - Search presenter', () => {
           id: 'licence-1',
           licenceRef: '01/123',
           metadata: {
-            Forename: 'Forename',
             Initials: 'F',
             Name: 'Surname',
             Salutation: 'Mr'
-          },
-          startDate: new Date('2020-01-01')
+          }
         }
       ]
     })
@@ -74,6 +73,22 @@ describe('Search - Search presenter', () => {
     })
   })
 
+  describe('when an unsearchable query, e.g. whitespace, is provided', () => {
+    beforeEach(() => {
+      query = ' '
+      page = undefined
+    })
+
+    it('returns the original query text', () => {
+      const result = SearchPresenter.go(query, page)
+
+      expect(result).to.equal({
+        pageTitle: 'Search',
+        query: ' '
+      })
+    })
+  })
+
   describe('when provided with a query but there are no results', () => {
     beforeEach(() => {
       query = 'searchthis'
@@ -92,6 +107,58 @@ describe('Search - Search presenter', () => {
         query: 'searchthis',
         showResults: true
       })
+    })
+  })
+
+  describe('when provided with an end date in the past', () => {
+    beforeEach(() => {
+      query = 'searchthis'
+      page = 1
+      licences = [
+        {
+          $ends: () => {
+            return {
+              date: new Date('2020-12-31'),
+              reason: 'expired'
+            }
+          },
+          metadata: {}
+        }
+      ]
+    })
+
+    it('displays the status and year', () => {
+      const result = SearchPresenter.go(query, page, licences)
+
+      expect(result.licences[0].licenceEndedText).to.equal('expired in 2020')
+    })
+  })
+
+  describe('when provided with an end date in the future', () => {
+    beforeEach(() => {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+
+      query = 'searchthis'
+      page = 1
+
+      licences = [
+        {
+          $ends: () => {
+            return {
+              date: tomorrow,
+              reason: 'revoked'
+            }
+          },
+          metadata: {}
+        }
+      ]
+    })
+
+    it('does not display the status', () => {
+      const result = SearchPresenter.go(query, page, licences)
+
+      expect(result.licences[0].licenceEndedText).to.not.exist()
     })
   })
 })
