@@ -5,9 +5,10 @@
  * @module CreateNoticePresenter
  */
 
+const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 const { futureDueDate } = require('../base.presenter.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -36,7 +37,7 @@ function go(session, recipients, auth) {
     subtype: subType
   }
 
-  if (session.journey === 'alerts') {
+  if (session.journey === NoticeJourney.ALERTS) {
     notice.metadata.options = { sendingAlertType: session.alertType, monitoringStationId: session.monitoringStationId }
   } else {
     notice.metadata.options = { excludeLicences: session.removeLicences ? session.removeLicences : [] }
