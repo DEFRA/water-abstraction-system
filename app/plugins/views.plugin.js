@@ -18,6 +18,24 @@ const { markdown } = require('../views/filters/markdown.filter.js')
 
 const ServerConfig = require('../../config/server.config.js')
 
+// This relates to our custom Nunjucks filter `app/views/filters/markdown.filter.js`. It uses the package **marked** to
+// convert the markdown returned by Notify and saved in our notifications to HTML, which we then display in some pages.
+//
+// Admittedly, we can't find any specific reference to the change in **marked's** release notes. But since we brought in
+// v16.4.0 some team members reported seeing the error `Error [ERR_REQUIRE_ESM]: require() of ES Module` when attempting
+// to start the app locally.
+//
+// We tried using a dynamic import in the custom filter itself. But that forces the filter to become async, and both
+// Nunjucks and Vision are synchronous by default. It was pot-luck whether the render completed before the Hapi relayed
+// the response to the browser.
+//
+// So, with credit to ChatGPT, the cleanest solution is to import **marked** dynamically at startup (in this case when
+// the plugin is loaded), and then make it available to the filter by storing it in the global scope. The filter can
+// remain synchronous and we avoid doing some gnarly stuff to Nunjucks and Vision.
+import('marked').then((mod) => {
+  global.GlobalMarked = mod.marked
+})
+
 const {
   enableSystemLicenceView,
   enableSystemManageView,
