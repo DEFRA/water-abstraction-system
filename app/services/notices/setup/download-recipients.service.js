@@ -13,7 +13,7 @@ const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-aler
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 const SessionModel = require('../../../models/session.model.js')
 
@@ -60,7 +60,7 @@ async function _formattedData(session) {
   const recipients = await _recipients(session)
 
   // They just present the same data differently!
-  if (session.journey === 'adhoc') {
+  if (session.journey === NoticeJourney.ADHOC) {
     return DownloadAdHocRecipientsPresenter.go(recipients, session)
   }
 

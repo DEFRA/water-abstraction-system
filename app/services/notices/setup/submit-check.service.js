@@ -53,8 +53,8 @@ async function go(sessionId, auth) {
  *
  * @private
  */
-async function _notifications(sessionCopy, recipients, eventId) {
-  const notifications = DetermineNotificationsService.go(sessionCopy, recipients, eventId)
+async function _notifications(session, recipients, eventId) {
+  const notifications = DetermineNotificationsService.go(session, recipients, eventId)
 
   await CreateNotificationsService.go(notifications)
 
