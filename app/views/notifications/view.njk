@@ -37,18 +37,22 @@
 
   {% if alertDetails %}
     {{ govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
+      card: {
+        title: {
+          text: 'Alert details'
+        }
+      },
       attributes: {
         'data-test': 'alert-details'
       },
       rows: [
         {
-          key: { text: 'Monitoring station', classes: "meta-data__label" },
-          value: { html: '<span data-test="alert-details-monitoring-station">' + alertDetails.monitoringStation + '</span>', classes: "meta-data__value" }
+          key: { text: 'Monitoring station' },
+          value: { html: '<span data-test="alert-details-monitoring-station">' + alertDetails.monitoringStation + '</span>' }
         },
         {
-          key: { text: 'Threshold', classes: "meta-data__label" },
-          value: { html: '<span data-test="alert-details-threshold">' + alertDetails.threshold + '</span>', classes: "meta-data__value" }
+          key: { text: 'Threshold' },
+          value: { html: '<span data-test="alert-details-threshold">' + alertDetails.threshold + '</span>' }
         }
       ]
     }) }}
@@ -56,26 +60,30 @@
 
   {% if paperForm %}
     {{ govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
+      card: {
+        title: {
+          text: 'Form details'
+        }
+      },
       attributes: {
         'data-test': 'paper-return'
       },
       rows: [
         {
-          key: { text: 'Return reference', classes: "meta-data__label" },
-          value: { html: '<span data-test="paper-return-return-reference">' + paperForm.reference + '</span>', classes: "meta-data__value" }
+          key: { text: 'Return reference' },
+          value: { html: '<span data-test="paper-return-return-reference">' + paperForm.reference + '</span>' }
         },
         {
-          key: { text: 'Site description', classes: "meta-data__label" },
-          value: { html: '<span data-test="paper-return-site-description">' + paperForm.siteDescription + '</span>', classes: "meta-data__value" }
+          key: { text: 'Site description' },
+          value: { html: '<span data-test="paper-return-site-description">' + paperForm.siteDescription + '</span>' }
         },
         {
-          key: { text: 'Purpose', classes: "meta-data__label" },
-          value: { html: '<span data-test="paper-return-purpose">' + paperForm.purpose + '</span>', classes: "meta-data__value" }
+          key: { text: 'Purpose' },
+          value: { html: '<span data-test="paper-return-purpose">' + paperForm.purpose + '</span>' }
         },
         {
-          key: { text: 'Return period', classes: "meta-data__label" },
-          value: { html: '<span data-test="paper-return-return-period">' + paperForm.period + '</span>', classes: "meta-data__value" }
+          key: { text: 'Return period' },
+          value: { html: '<span data-test="paper-return-return-period">' + paperForm.period + '</span>' }
         }
       ]
     }) }}
