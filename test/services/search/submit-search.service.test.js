@@ -94,12 +94,14 @@ describe('Search - Submit search service', () => {
         licences: [
           {
             id: 'licence-1',
+            licenceEndDate: undefined,
             licenceEndedText: undefined,
             licenceHolderName: 'Mr F Surname',
             licenceRef: '01/123'
           },
           {
             id: 'licence-2',
+            licenceEndDate: undefined,
             licenceEndedText: undefined,
             licenceHolderName: 'Mr F Surname',
             licenceRef: '45/678'
@@ -190,10 +192,8 @@ describe('Search - Submit search service', () => {
     })
   })
 
-  describe('when called with a query that returns a single result but the search term does not exactly match the licence number', () => {
+  describe('when called with a query that returns a single result', () => {
     beforeEach(() => {
-      requestQuery = { query: 'searchthis' }
-
       queryResults = {
         results: [
           {
@@ -201,7 +201,7 @@ describe('Search - Submit search service', () => {
               return null
             },
             id: 'licence-1',
-            licenceRef: '01/123',
+            licenceRef: 'this-is-the-licence-you-are-looking-for',
             metadata: {
               Initials: 'F',
               Name: 'Surname',
@@ -213,57 +213,28 @@ describe('Search - Submit search service', () => {
         total: 1
       }
     })
+    describe('but the search term does not exactly match the licence number', () => {
+      beforeEach(() => {
+        requestQuery = { query: 'not-the-licence-you-are-looking-for' }
+      })
 
-    it('returns page data to show the search results in the normal way', async () => {
-      const result = await SubmitSearchService.go(requestQuery)
+      it('returns page data in the normal way without a redirect', async () => {
+        const result = await SubmitSearchService.go(requestQuery)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        licences: [
-          {
-            id: 'licence-1',
-            licenceEndedText: undefined,
-            licenceHolderName: 'Mr F Surname',
-            licenceRef: '01/123'
-          }
-        ],
-        noResults: false,
-        page: 1,
-        pageTitle: 'Search',
-        query: 'searchthis',
-        showResults: true
+        expect(result.redirect).to.not.exist()
       })
     })
-  })
 
-  describe('when called with a query that returns a single result and the search term exactly matches the licence number', () => {
-    beforeEach(() => {
-      requestQuery = { query: '01/123' }
+    describe('and the search term exactly matches the licence number', () => {
+      beforeEach(() => {
+        requestQuery = { query: 'this-is-the-licence-you-are-looking-for' }
+      })
 
-      queryResults = {
-        results: [
-          {
-            $ends: () => {
-              return null
-            },
-            id: 'licence-1',
-            licenceRef: '01/123',
-            metadata: {
-              Initials: 'F',
-              Name: 'Surname',
-              Salutation: 'Mr'
-            },
-            startDate: new Date('2020-01-01')
-          }
-        ],
-        total: 1
-      }
-    })
+      it('returns a redirect link to the licence details page', async () => {
+        const result = await SubmitSearchService.go(requestQuery)
 
-    it('returns a redirect link to the licence details page', async () => {
-      const result = await SubmitSearchService.go(requestQuery)
-
-      expect(result).to.equal({ redirect: '/system/licences/licence-1/summary' })
+        expect(result).to.equal({ redirect: '/system/licences/licence-1/summary' })
+      })
     })
   })
 })

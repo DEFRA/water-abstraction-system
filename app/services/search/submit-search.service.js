@@ -77,19 +77,11 @@ async function go(requestQuery) {
 
 function _redirectForLicence(licenceSearchResult, queryForSearching) {
   // If there's exactly one result, and it exactly matches the search query, redirect straight to that licence
-  if (licenceSearchResult.total === 1) {
-    const licence = licenceSearchResult.results[0]
-    const { licenceRef } = licence
-
-    if (licenceRef.toLowerCase() === queryForSearching.toLowerCase()) {
-      // TODO: Check if this flag is still necessary - I don't think it is
-      // if (enableSystemLicenceView) {
-      //   return `/system/licences/${licence.id}/summary`
-      // } else {
-      //   return `/licences/${licence.id}`
-      // }
-      return `/system/licences/${licence.id}/summary`
-    }
+  if (
+    licenceSearchResult.total === 1 &&
+    licenceSearchResult.results[0].licenceRef.toLowerCase() === queryForSearching.toLowerCase()
+  ) {
+    return `/system/licences/${licenceSearchResult.results[0].id}/summary`
   }
 
   return null
