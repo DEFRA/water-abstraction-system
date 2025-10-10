@@ -21,7 +21,8 @@ describe('Job - Notification Status - Update Event service', () => {
     event = await EventHelper.add({
       type: 'notification',
       status: 'completed',
-      metadata: {}
+      metadata: {},
+      updatedAt: null
     })
   })
 
@@ -46,6 +47,7 @@ describe('Job - Notification Status - Update Event service', () => {
       expect(refreshEvent.metadata.error).to.equal(0)
       expect(refreshEvent.overallStatus).to.equal('sent')
       expect(refreshEvent.statusCounts).to.equal({ error: 0, pending: 0, returned: 0, sent: 2 })
+      expect(refreshEvent.updatedAt).to.be.a.date()
     })
 
     describe('and a notification has a status of "pending"', () => {

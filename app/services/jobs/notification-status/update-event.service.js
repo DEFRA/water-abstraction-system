@@ -6,6 +6,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Updates the status counts and determines the overall status for the provided events.
@@ -46,8 +47,9 @@ const { db } = require('../../../../db/db.js')
  */
 async function go(eventIds) {
   const query = _query()
+  const updatedAt = timestampForPostgres()
 
-  await db.raw(query, [eventIds])
+  await db.raw(query, [updatedAt, eventIds])
 }
 
 function _query() {
@@ -61,7 +63,8 @@ function _query() {
       true
       ),
     overall_status = os.overall_status,
-    status_counts = os.status_counts
+    status_counts = os.status_counts,
+    updated_at = ?
   FROM (
     SELECT
       n.event_id,
