@@ -2,7 +2,7 @@
 
 /**
  * Updates the status counts and determines the overall status for the provided events.
- * @module UpdateEventErrorCountService
+ * @module UpdateEventService
  */
 
 const { db } = require('../../../../db/db.js')
