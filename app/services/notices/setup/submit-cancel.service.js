@@ -6,6 +6,7 @@
  */
 
 const SessionModel = require('../../../models/session.model.js')
+const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates handling the data for `/notices/setup/{sessionId}/cancel` page
@@ -21,7 +22,7 @@ async function go(sessionId) {
 
   await SessionModel.query().delete().where('id', sessionId)
 
-  if (session.journey === 'alerts') {
+  if (session.journey === NoticeJourney.ALERTS) {
     return `/system/monitoring-stations/${session.monitoringStationId}`
   }
 

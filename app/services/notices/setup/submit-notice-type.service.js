@@ -20,10 +20,11 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @param {string} sessionId - The UUID for setup returns notice session record
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
+async function go(sessionId, payload, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -40,7 +41,7 @@ async function go(sessionId, payload, yar) {
     return _redirect(payload.noticeType, session.checkPageVisited, session.journey)
   }
 
-  const pageData = NoticeTypePresenter.go(session)
+  const pageData = NoticeTypePresenter.go(session, auth)
 
   return {
     activeNavBar: 'manage',
