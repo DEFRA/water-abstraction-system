@@ -19,7 +19,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
       credentials: { scope: ['bulk_return_notifications'] }
     }
 
-    session = { id: '123' }
+    session = { id: '123', journey: 'adhoc' }
   })
 
   describe('when called', () => {
@@ -217,7 +217,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
       })
     })
 
-    describe('when journey is not the "standard" journey', () => {
+    describe('when journey is the "adhoc" journey', () => {
       it('returns page data for the view', () => {
         const result = NoticeTypePresenter.go(session, auth)
 
