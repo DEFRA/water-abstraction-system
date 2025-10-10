@@ -47,7 +47,7 @@ describe('Notice Type Presenter', () => {
               {
                 checked: false,
                 text: 'Paper return',
-                value: 'returnForms'
+                value: 'paperReturn'
               }
             ])
           })
@@ -75,15 +75,15 @@ describe('Notice Type Presenter', () => {
               {
                 checked: false,
                 text: 'Paper return',
-                value: 'returnForms'
+                value: 'paperReturn'
               }
             ])
           })
         })
 
-        describe('and the selected notice type was "returnForms"', () => {
+        describe('and the selected notice type was "paperReturn"', () => {
           beforeEach(() => {
-            session.noticeType = 'returnForms'
+            session.noticeType = 'paperReturn'
           })
 
           it('returns the Return forms checked', () => {
@@ -103,7 +103,7 @@ describe('Notice Type Presenter', () => {
               {
                 checked: true,
                 text: 'Paper return',
-                value: 'returnForms'
+                value: 'paperReturn'
               }
             ])
           })

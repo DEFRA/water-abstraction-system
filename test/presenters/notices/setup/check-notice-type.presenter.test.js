@@ -93,7 +93,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "paperReturn"', () => {
       let dueReturnOne
       let dueReturnTwo
 
@@ -114,7 +114,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
           startDate: '2003-04-01'
         }
 
-        session.noticeType = 'returnForms'
+        session.noticeType = 'paperReturn'
 
         session.dueReturns = [dueReturnOne, dueReturnTwo]
 

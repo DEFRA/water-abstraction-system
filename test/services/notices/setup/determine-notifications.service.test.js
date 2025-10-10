@@ -191,7 +191,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
       }
 
       session = {
-        noticeType: 'returnForms'
+        noticeType: 'paperReturn'
       }
 
       buffer = new TextEncoder().encode('mock file').buffer
