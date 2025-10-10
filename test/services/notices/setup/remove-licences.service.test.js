@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const RemoveLicencesService = require('../../../../app/services/notices/setup/remove-licences.service.js')
@@ -16,10 +17,13 @@ const RemoveLicencesService = require('../../../../app/services/notices/setup/re
 describe('Notices - Setup - Remove licences service', () => {
   const licences = []
 
+  let referenceCode
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licences, referenceCode: 'RINV-1234' } })
+    referenceCode = generateUUID()
+
+    session = await SessionHelper.add({ data: { licences, referenceCode } })
   })
 
   it('correctly presents the data', async () => {
@@ -27,9 +31,13 @@ describe('Notices - Setup - Remove licences service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      backLink: {
+        href: `/system/notices/setup/${session.id}/check`,
+        text: 'Back'
+      },
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
-      referenceCode: 'RINV-1234',
+      pageTitleCaption: `Notice ${referenceCode}`,
       removeLicences: []
     })
   })

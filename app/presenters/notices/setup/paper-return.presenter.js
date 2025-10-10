@@ -26,10 +26,16 @@ function go(session) {
 
 function _backLink(sessionId, checkPageVisited) {
   if (checkPageVisited) {
-    return `/system/notices/setup/${sessionId}/check-notice-type`
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
   }
 
-  return `/system/notices/setup/${sessionId}/notice-type`
+  return {
+    href: `/system/notices/setup/${sessionId}/notice-type`,
+    text: 'Back'
+  }
 }
 
 function _returns(returns, selectedReturns = []) {

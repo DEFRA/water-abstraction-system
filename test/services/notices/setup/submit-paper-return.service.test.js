@@ -128,9 +128,20 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/notice-type`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        },
         error: {
-          text: 'Select the returns for the paper return'
+          errorList: [
+            {
+              href: '#returns',
+              text: 'Select the returns for the paper return'
+            }
+          ],
+          returns: {
+            text: 'Select the returns for the paper return'
+          }
         },
         pageTitle: 'Select the returns for the paper return',
         returns: [
@@ -158,10 +169,22 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
-          backLink: `/system/notices/setup/${session.id}/notice-type`,
-          error: {
-            text: 'Select the returns for the paper return'
+          backLink: {
+            href: `/system/notices/setup/${session.id}/notice-type`,
+            text: 'Back'
           },
+          error: {
+            errorList: [
+              {
+                href: '#returns',
+                text: 'Select the returns for the paper return'
+              }
+            ],
+            returns: {
+              text: 'Select the returns for the paper return'
+            }
+          },
+
           pageTitle: 'Select the returns for the paper return',
           returns: [
             {
