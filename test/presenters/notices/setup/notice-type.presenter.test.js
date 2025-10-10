@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const NoticeTypePresenter = require('../../../../app/presenters/notices/setup/notice-type.presenter.js')
 
-describe('Notice Type Presenter', () => {
+describe('Notice - Setup - Notice Type Presenter', () => {
   let auth
   let session
 
@@ -23,6 +23,35 @@ describe('Notice Type Presenter', () => {
   })
 
   describe('when called', () => {
+    it('returns page data for the view', () => {
+      const result = NoticeTypePresenter.go(session, auth)
+
+      expect(result).to.equal({
+        backLink: {
+          href: '/system/notices/setup/123/licence',
+          text: 'Back'
+        },
+        options: [
+          {
+            checked: false,
+            text: 'Returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Returns reminder',
+            value: 'reminders'
+          },
+          {
+            checked: false,
+            text: 'Paper return',
+            value: 'paperReturn'
+          }
+        ],
+        pageTitle: 'Select the notice type'
+      })
+    })
+
     describe('the "options" property', () => {
       describe('when a previous "noticeType" has been selected', () => {
         describe('and the selected notice type was "invitations"', () => {
