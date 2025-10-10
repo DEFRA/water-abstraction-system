@@ -23,7 +23,9 @@ describe('Notices - Setup - Notice Type Service', () => {
       credentials: { scope: ['bulk_return_notifications'] }
     }
 
-    sessionData = {}
+    sessionData = {
+      journey: 'adhoc'
+    }
 
     session = await SessionHelper.add({ data: sessionData })
   })

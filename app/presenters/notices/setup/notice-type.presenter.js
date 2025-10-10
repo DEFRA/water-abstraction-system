@@ -77,7 +77,7 @@ function _options(noticeType, journey, auth) {
     ]
   }
 
-  if (journey !== NoticeJourney.STANDARD) {
+  if (journey === NoticeJourney.ADHOC) {
     options = [
       ...options,
       {
