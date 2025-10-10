@@ -8,8 +8,7 @@
 
 const GeneralLib = require('../../../../lib/general.lib.js')
 const SessionModel = require('../../../../models/session.model.js')
-const { formatValueUnit } = require('../../../../presenters/base.presenter.js')
-const { formatRestrictionType } = require('../../../../presenters/monitoring-stations/base.presenter.js')
+const { formatRestrictionType, formatValueUnit } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates removing the licence monitoring station from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
