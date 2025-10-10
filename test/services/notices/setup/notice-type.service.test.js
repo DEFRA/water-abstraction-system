@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const NoticeTypeService = require('../../../../app/services/notices/setup/notice-type.service.js')
 
-describe('Notice Type Service', () => {
+describe('Notices - Setup - Notice Type Service', () => {
   let auth
   let session
   let sessionData

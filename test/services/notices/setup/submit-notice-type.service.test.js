@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitNoticeTypeService = require('../../../../app/services/notices/setup/submit-notice-type.service.js')
 
-describe('Notice Type Service', () => {
+describe('Notices - Setup - Notice Type Service', () => {
   let auth
   let payload
   let session
