@@ -10,6 +10,7 @@ const { formatLongDate } = require('../../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: 'Returns invitation',
+  [NoticeType.REMINDERS]: 'Returns reminder',
   [NoticeType.PAPER_RETURN]: 'Paper return'
 }
 
