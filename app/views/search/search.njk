@@ -1,0 +1,133 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block pageContent %}
+  <form method="get">
+    {{ govukInput({
+      classes: 'govuk-!-width-two-thirds govuk-!-display-inline',
+      label: {
+        html: pageHeadingHtml
+      },
+      hint: {
+        text: "Enter a licence number, customer name, returns ID, registered email address or monitoring station"
+      },
+      value: query,
+      id: 'query',
+      name: 'query',
+      errorMessage: error.query
+    }) }}
+
+    {{ govukButton({
+      classes: 'govuk-!-display-inline',
+      text: "Search", preventDoubleClick: true
+    }) }}
+  </form>
+
+  {% if showResults %}
+    {% if noResults %}
+      <p>No results found.</p>
+    {% else %}
+      <!-- Licences as a list -->
+      <h2 class="govuk-heading-l">Results</h2>
+
+      {% if licences %}
+        {% for licence in licences %}
+          <div>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+            <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+              Licence
+              {% if licence.id %}
+                <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+              {% else %}
+                {{ licence.licenceRef }}
+              {% endif %}
+
+              {% if licence.documentName %}
+                <span class="govuk-caption-m link--no-underline">{{ licence.licenceName }}</span>
+              {% endif %}
+
+              {% if licence.licenceEndedText %}
+                <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
+              {% endif %}
+            </h3>
+
+            {% if licence.licenceHolderName %}
+              <p>Holder: {{ licence.licenceHolderName }}</p>
+            {% endif %}
+
+            {% if licence.licenceEndDate and not licence.licenceEndedText %}
+              <p>End date: {{ licence.licenceEndDate }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Licences as cards -->
+      <h2 class="govuk-heading-l">Results</h2>
+
+      {% if licences %}
+        {% for licence in licences %}
+
+          {% set cardTitleHtml %}
+            {% if licence.id %}
+              <a href="/system/licences/{{ licence.id }}/summary">Licence {{ licence.licenceRef }}</a>
+            {% else %}
+              Licence {{ licence.licenceRef }}
+            {% endif %}
+          {% endset %}
+
+          {% set endDateHtml %}
+            {% if licence.licenceEndedText %}
+              <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
+            {% else %}
+              {{ licence.licenceEndDate }}
+            {% endif %}
+          {% endset %}
+
+          {{ govukSummaryList({
+            card: {
+              title: {
+                html: cardTitleHtml
+              }
+            },
+            classes: "govuk-summary-list--no-border",
+            rows: [
+              {
+                key: {
+                  text: "Name"
+                },
+                value: {
+                  text: licence.documentName
+                }
+              },
+              {
+                key: {
+                  text: "End date"
+                },
+                value: {
+                  html: endDateHtml
+                }
+              },
+              {
+                key: {
+                  text: "Holder"
+                },
+                value: {
+                  text: licence.licenceHolderName
+                }
+              }
+            ]
+          }) }}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
