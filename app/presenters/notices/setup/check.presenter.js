@@ -6,7 +6,7 @@
  */
 
 const ContactPresenter = require('./contact.presenter.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
@@ -72,14 +72,14 @@ function _links(session) {
     download: `/system/notices/setup/${id}/download`
   }
 
-  if (journey === 'adhoc') {
+  if (journey === NoticeJourney.ADHOC) {
     return {
       ...links,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
   }
 
-  if (journey === 'alerts') {
+  if (journey === NoticeJourney.ALERTS) {
     return links
   }
 

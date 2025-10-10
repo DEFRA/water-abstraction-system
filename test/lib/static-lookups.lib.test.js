@@ -16,6 +16,7 @@ describe('Static Lookups', () => {
       const result = StaticLookups.NoticeJourney
 
       expect(result).equal({
+        ADHOC: 'adhoc',
         ALERTS: 'alerts',
         STANDARD: 'standard'
       })
