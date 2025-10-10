@@ -43,7 +43,10 @@ describe('Notices - Setup - Paper Return service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/notice-type`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        },
         pageTitle: 'Select the returns for the paper return',
         returns: [
           {

@@ -20,7 +20,7 @@ async function go(sessionId) {
 
   const { removeLicences = [] } = session
 
-  const formattedData = RemoveLicencesPresenter.go(removeLicences, session.referenceCode)
+  const formattedData = RemoveLicencesPresenter.go(removeLicences, session)
 
   return {
     activeNavBar: 'manage',
