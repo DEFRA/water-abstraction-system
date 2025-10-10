@@ -156,9 +156,9 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
   })
 
   describe('the "setupAddress" property', () => {
-    describe('when the "noticeType" is "returnForms"', () => {
+    describe('when the "noticeType" is "paperReturn"', () => {
       beforeEach(() => {
-        session.noticeType = 'returnForms'
+        session.noticeType = 'paperReturn'
       })
 
       it('returns correct text and link', () => {
@@ -171,7 +171,7 @@ describe('Notices - Setup - Select Recipients Presenter', () => {
       })
     })
 
-    describe('when the "noticeType" is not "returnForms"', () => {
+    describe('when the "noticeType" is not "paperReturn"', () => {
       it('returns correct text and link', () => {
         const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 

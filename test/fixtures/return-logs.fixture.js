@@ -35,7 +35,7 @@ function applyFetchReturnLogFields(returnLog) {
 /**
  * This fixture would be the result of calling the 'FetchReturnsDueByLicenceRefService'
  *
- * We use these 'due' return logs in the adhoc notification journey for the 'returnForms' notice type.
+ * We use these 'due' return logs in the adhoc notification journey for the 'paper return' notice type.
  *
  * @returns {object} Returns an enhanced version of the module:ReturnLogModel in line with the fetch service
  */

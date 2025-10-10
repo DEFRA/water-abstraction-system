@@ -98,7 +98,7 @@ describe('Notices - Setup - Download Recipients service', () => {
       })
     })
 
-    describe('and the notice type is "returnForms"', () => {
+    describe('and the notice type is "paperReturn"', () => {
       const returnReference = '376439279'
 
       let dueReturn
@@ -122,7 +122,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             dueReturns: [dueReturn],
             journey: 'adhoc',
             licenceRef,
-            noticeType: 'returnForms',
+            noticeType: 'paperReturn',
             notificationType: 'Paper returns',
             referenceCode,
             selectedReturns: [dueReturn.returnId]
