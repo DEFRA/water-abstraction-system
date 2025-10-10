@@ -110,7 +110,7 @@ describe('Job - Notification Status - Update Event service', () => {
         event = await EventHelper.add({
           type: 'notification',
           status: 'completed',
-          metadata: { error: 3, name: 'Returns: reminder', }
+          metadata: { error: 3, name: 'Returns: reminder' }
         })
 
         await NotificationHelper.add({
@@ -124,7 +124,7 @@ describe('Job - Notification Status - Update Event service', () => {
 
         const refreshEvent = await event.$query()
 
-        expect(refreshEvent.metadata).to.equal({ error: 1, name: 'Returns: reminder', })
+        expect(refreshEvent.metadata).to.equal({ error: 1, name: 'Returns: reminder' })
       })
     })
   })
