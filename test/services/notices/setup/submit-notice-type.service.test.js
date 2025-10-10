@@ -15,6 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitNoticeTypeService = require('../../../../app/services/notices/setup/submit-notice-type.service.js')
 
 describe('Notice Type Service', () => {
+  let auth
   let payload
   let session
   let sessionData
@@ -22,6 +23,10 @@ describe('Notice Type Service', () => {
   let yarStub
 
   beforeEach(async () => {
+    auth = {
+      credentials: { scope: ['bulk_return_notifications'] }
+    }
+
     noticeType = 'invitations'
     payload = { noticeType }
     sessionData = {}
@@ -37,7 +42,7 @@ describe('Notice Type Service', () => {
 
   describe('when called', () => {
     it('saves the notice type session data', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       const refreshedSession = await session.$query()
 
@@ -59,7 +64,7 @@ describe('Notice Type Service', () => {
     })
 
     it('saves the submitted "noticeType"', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       const refreshedSession = await session.$query()
 
@@ -67,7 +72,7 @@ describe('Notice Type Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
     })
@@ -79,7 +84,7 @@ describe('Notice Type Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
         expect(result).to.equal({ redirectUrl: 'paper-return' })
       })
@@ -92,7 +97,7 @@ describe('Notice Type Service', () => {
         })
 
         it('updates the sessions "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           const refreshedSession = await session.$query()
 
@@ -100,7 +105,7 @@ describe('Notice Type Service', () => {
         })
 
         it('sets a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -119,7 +124,7 @@ describe('Notice Type Service', () => {
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           const refreshedSession = await session.$query()
 
@@ -127,7 +132,7 @@ describe('Notice Type Service', () => {
         })
 
         it('does not set a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(yarStub.flash.args[0]).to.be.undefined()
         })
@@ -142,7 +147,7 @@ describe('Notice Type Service', () => {
       })
 
       it('should return', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
         expect(result).to.equal({ redirectUrl: 'returns-period' })
       })
@@ -154,7 +159,7 @@ describe('Notice Type Service', () => {
       })
 
       it('should return', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
         expect(result).to.equal({ redirectUrl: 'check-notice-type' })
       })
@@ -167,7 +172,7 @@ describe('Notice Type Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -191,6 +196,11 @@ describe('Notice Type Service', () => {
             checked: false,
             text: 'Returns invitation',
             value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Returns reminder',
+            value: 'reminders'
           },
           {
             checked: false,
