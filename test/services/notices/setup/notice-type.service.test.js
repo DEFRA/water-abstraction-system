@@ -13,11 +13,16 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const NoticeTypeService = require('../../../../app/services/notices/setup/notice-type.service.js')
 
-describe('Notice Type Service', () => {
+describe('Notices - Setup - Notice Type Service', () => {
+  let auth
   let session
   let sessionData
 
   beforeEach(async () => {
+    auth = {
+      credentials: { scope: ['bulk_return_notifications'] }
+    }
+
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
@@ -25,7 +30,7 @@ describe('Notice Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await NoticeTypeService.go(session.id)
+      const result = await NoticeTypeService.go(session.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -38,6 +43,11 @@ describe('Notice Type Service', () => {
             checked: false,
             text: 'Returns invitation',
             value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Returns reminder',
+            value: 'reminders'
           },
           {
             checked: false,
