@@ -233,7 +233,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     describe('and there are no errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
-          metadata: {},
+          metadata: { error: 0 },
           licences: [recipientsFixture.primaryUser],
           referenceCode,
           status: 'completed',
@@ -265,19 +265,21 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
     })
 
-    describe('and there are existing errors', () => {
+    describe('and there are errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
-          metadata: { error: 5 },
+          metadata: { error: 0 },
           licences: [recipientsFixture.primaryUser],
           referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification'
         })
+
+        await NotificationHelper.add({ eventId: event.id, status: 'error' })
       })
 
-      it('should increment the error count', async () => {
+      it('should count the error', async () => {
         await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
@@ -288,11 +290,11 @@ describe('Notices - Setup - Batch Notifications service', () => {
           id: event.id,
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
-          metadata: { error: 5 },
-          overallStatus: null,
+          metadata: { error: 1 },
+          overallStatus: 'error',
           referenceCode,
           status: 'completed',
-          statusCounts: null,
+          statusCounts: { sent: 0, error: 1, pending: 0, returned: 0 },
           subtype: 'returnInvitation',
           type: 'notification',
           updatedAt: refreshedEvent.updatedAt
