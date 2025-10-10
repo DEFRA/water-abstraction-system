@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page
@@ -26,7 +27,7 @@ function go(session) {
 }
 
 function _summaryList(session) {
-  if (session.journey === 'alerts') {
+  if (session.journey === NoticeJourney.ALERTS) {
     return {
       text: 'Alert type',
       value: `${sentenceCase(session.alertType)}`
