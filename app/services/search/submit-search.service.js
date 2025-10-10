@@ -29,7 +29,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
-const { enableSystemLicenceView } = require('../../../config/feature-flags.config.js')
+//const { enableSystemLicenceView } = require('../../../config/feature-flags.config.js')
 
 /**
  * Handles queries submitted to the /search page
@@ -82,11 +82,13 @@ function _redirectForLicence(licenceSearchResult, queryForSearching) {
     const { licenceRef } = licence
 
     if (licenceRef.toLowerCase() === queryForSearching.toLowerCase()) {
-      if (enableSystemLicenceView) {
-        return `/system/licences/${licence.id}/summary`
-      } else {
-        return `/licences/${licence.id}`
-      }
+      // TODO: Check if this flag is still necessary - I don't think it is
+      // if (enableSystemLicenceView) {
+      //   return `/system/licences/${licence.id}/summary`
+      // } else {
+      //   return `/licences/${licence.id}`
+      // }
+      return `/system/licences/${licence.id}/summary`
     }
   }
 

@@ -43,11 +43,14 @@
             <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
               Licence:
               {% if licence.id %}
+                {# TODO: Check if this flag is still necessary - I don't think it is
                 {% if featureFlags.enableSystemLicenceView == true %}
                   <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
                 {% else %}
                   <a href="/licences/{{ licence.id }}">{{ licence.licenceRef }}</a>
                 {% endif %}
+                #}
+                <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
               {% else %}
                 {{ licence.licenceRef }}
               {% endif %}
