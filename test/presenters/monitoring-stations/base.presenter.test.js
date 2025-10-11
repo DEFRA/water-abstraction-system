@@ -171,22 +171,4 @@ describe('Monitoring Stations - Base presenter', () => {
       })
     })
   })
-
-  describe('#formatRestrictionType', () => {
-    describe('when the "RestrictionType" is "stop_or_reduce"', () => {
-      it('returns the restriction type in sentence case', () => {
-        const result = BasePresenter.formatRestrictionType('stop_or_reduce')
-
-        expect(result).to.equal('Stop or reduce')
-      })
-    })
-
-    describe('when the "RestrictionType" is not "stop_or_reduce"', () => {
-      it('returns the restriction type in sentence case', () => {
-        const result = BasePresenter.formatRestrictionType('stop')
-
-        expect(result).to.equal('Stop')
-      })
-    })
-  })
 })

@@ -17,9 +17,9 @@ const ViewNotificationPresenter = require('../../presenters/notifications/view-n
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
 async function go(notificationId, licenceId) {
-  const notificationData = await FetchNotificationService.go(notificationId, licenceId)
+  const { licence, notification } = await FetchNotificationService.go(notificationId, licenceId)
 
-  const pageData = ViewNotificationPresenter.go(notificationData)
+  const pageData = ViewNotificationPresenter.go(licence, notification)
 
   return {
     activeNavBar: 'search',

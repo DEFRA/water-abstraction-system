@@ -1,0 +1,29 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro statusTag(status, inline=false) %}
+  {# Default the text to the status as that covers most tags #}
+  {% set text = status %}
+
+  {% if status === 'error' %}
+    {% set color = 'govuk-tag--red' %}
+  {% elif status === 'returned' %}
+    {% set color = 'govuk-tag--yellow' %}
+  {% elif status === 'sent' %}
+    {% set color = 'govuk-tag--green' %}
+  {% else %}
+    {% set color = 'govuk-tag--blue' %}
+  {% endif %}
+
+  {% if inline %}
+    {% set fontSize = "" %}
+  {% else %}
+    {% set fontSize = "govuk-!-font-size-27" %}
+  {% endif %}
+
+  {{
+    govukTag({
+      text: text,
+      classes: color + ' ' + fontSize
+    })
+  }}
+{% endmacro %}

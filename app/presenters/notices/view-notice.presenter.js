@@ -6,17 +6,7 @@
  */
 
 const { formatLongDate, titleCase } = require('../base.presenter.js')
-
-const NOTICE_MAPPINGS = {
-  'hof-resume': 'HOF resume',
-  'hof-stop': 'HOF stop',
-  'hof-warning': 'HOF warning',
-  paperReturnForms: 'Paper return',
-  renewal: 'Renewal',
-  returnInvitation: 'Returns invitation',
-  returnReminder: 'Returns reminder',
-  waterAbstractionAlerts: 'alert'
-}
+const { noticeMappings } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -60,7 +50,7 @@ function _formatTableData(notifications) {
 function _pageTitle(notice, selectedPage, numberOfPages) {
   const { alertType, subtype } = notice
 
-  let title = NOTICE_MAPPINGS[subtype]
+  let title = noticeMappings[subtype]
 
   if (alertType) {
     title = `${titleCase(alertType)} alert`
