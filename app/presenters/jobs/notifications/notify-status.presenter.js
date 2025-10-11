@@ -6,6 +6,7 @@
  */
 
 const NOTIFICATIONS_STATUS = {
+  cancelled: 'cancelled',
   error: 'error',
   pending: 'pending',
   sent: 'sent'
@@ -14,8 +15,9 @@ const NOTIFICATIONS_STATUS = {
 /**
  * Determines the `status` and `notifyStatus` to apply to a notification after fetching the current status from Notify
  *
- * This is the status rendered in the UI. It has four possible states.
+ * This is the status rendered in the UI. It has five possible states.
  *
+ * - **cancelled** - The user has cancelled the letter via the Notify dashboard before it was sent to the provider
  * - **error** - An error has occurred (initial creation with Notify or a status update returns an error status)
  * - **pending** - When a notification is 'created', 'sending', 'accepted', or 'pending-virus-check'
  * - **sent** - When Notify responds with 'delivered' or 'received'
@@ -95,6 +97,7 @@ function _letterStatus(notifyStatus) {
     'temporary-failure': NOTIFICATIONS_STATUS.error,
     'validation-failed': NOTIFICATIONS_STATUS.error,
     accepted: NOTIFICATIONS_STATUS.pending,
+    cancelled: NOTIFICATIONS_STATUS.cancelled,
     created: NOTIFICATIONS_STATUS.pending,
     error: NOTIFICATIONS_STATUS.error,
     received: NOTIFICATIONS_STATUS.sent,

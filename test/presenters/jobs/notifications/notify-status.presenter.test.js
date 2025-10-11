@@ -226,6 +226,21 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
+    describe('and Notify status is "cancelled"', () => {
+      beforeEach(() => {
+        notifyStatus = 'cancelled'
+      })
+
+      it('correctly returns the statuses to update (cancelled)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'cancelled',
+          status: 'cancelled'
+        })
+      })
+    })
+
     describe('and Notify status is "permanent-failure"', () => {
       beforeEach(() => {
         notifyStatus = 'permanent-failure'
