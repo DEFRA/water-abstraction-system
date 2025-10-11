@@ -14,11 +14,14 @@ const NOTIFICATIONS_STATUS = {
 /**
  * Determines the `status` and `notifyStatus` to apply to a notification after fetching the current status from Notify
  *
- * This is the status rendered in the UI. It has three possible states.
+ * This is the status rendered in the UI. It has four possible states.
  *
  * - **error** - An error has occurred (initial creation with Notify or a status update returns an error status)
  * - **pending** - When a notification is 'created', 'sending', 'accepted', or 'pending-virus-check'
  * - **sent** - When Notify responds with 'delivered' or 'received'
+ *
+ * **returned** is another possible state but it is not determined by the Notify status. A notification's status is
+ * updated to this when Notify sends a returned letter callback, which is handled by `ProcessReturnedLetterService`.
  *
  * The status is stored in `public.notifications.status`, and 'notifyStatus' in 'public.notifications.notifyStatus'.
  *
