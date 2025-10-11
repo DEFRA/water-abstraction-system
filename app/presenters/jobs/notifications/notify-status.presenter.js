@@ -6,9 +6,9 @@
  */
 
 const NOTIFICATIONS_STATUS = {
+  error: 'error',
   pending: 'pending',
-  sent: 'sent',
-  error: 'error'
+  sent: 'sent'
 }
 
 /**
