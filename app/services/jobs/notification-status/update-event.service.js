@@ -76,9 +76,9 @@ function _query() {
         ELSE 'sent'
       END AS overall_status,
       jsonb_build_object(
-        'returned', COUNT(*) FILTER (WHERE n.status = 'returned'),
         'error', COUNT(*) FILTER (WHERE n.status = 'error'),
         'pending', COUNT(*) FILTER (WHERE n.status = 'pending'),
+        'returned', COUNT(*) FILTER (WHERE n.status = 'returned'),
         'sent', COUNT(*) FILTER (WHERE n.status = 'sent')
       ) AS status_counts
     FROM public.notifications n
