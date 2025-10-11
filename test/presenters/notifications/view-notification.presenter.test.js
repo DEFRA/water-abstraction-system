@@ -40,6 +40,7 @@ describe('Notifications - View Notification presenter', () => {
       alertDetails: null,
       backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
       contents: notification.plaintext,
+      errorDetails: null,
       licenceRef: licence.licenceRef,
       messageType: 'email',
       pageTitle: 'Returns invitation',
@@ -201,6 +202,70 @@ describe('Notifications - View Notification presenter', () => {
               monitoringStation: 'Death star',
               threshold: '100m3/s'
             })
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "errorDetails" property', () => {
+    describe('when the notification does not have a status of "ERROR"', () => {
+      it('returns null', () => {
+        const result = ViewNotificationPresenter.go(licence, notification)
+
+        expect(result.errorDetails).to.be.null()
+      })
+    })
+
+    describe('when the notification does have a status of "ERROR"', () => {
+      beforeEach(() => {
+        notification.status = 'error'
+      })
+
+      describe('and it is because of a "system" error', () => {
+        beforeEach(() => {
+          notification.notifyError =
+            '{"error":"Notify error","message":"StatusCodeError: 500 - {"errors":[{"error":"TimeoutError","message":"Internal server error"}],"status_code":500}"}'
+        })
+
+        describe('when we tried to send it', () => {
+          beforeEach(() => {
+            notification.notifyStatus = null
+          })
+
+          it('returns generic error details', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
+
+            expect(result.errorDetails).to.equal({
+              status: 'Not sent',
+              description: 'Internal system error'
+            })
+          })
+        })
+
+        describe('after it has been sent', () => {
+          it('returns the notify status and a generic error description details', () => {
+            const result = ViewNotificationPresenter.go(licence, notification)
+
+            expect(result.errorDetails).to.equal({
+              status: 'delivered',
+              description: 'Internal system error'
+            })
+          })
+        })
+      })
+
+      describe('and it is because of a "Notify" error (was sent to Notify but has failed to send from them)', () => {
+        beforeEach(() => {
+          notification.notifyStatus = 'permanent-failure'
+        })
+
+        it('returns the notify status and a generic error description details', () => {
+          const result = ViewNotificationPresenter.go(licence, notification)
+
+          expect(result.errorDetails).to.equal({
+            status: 'permanent-failure',
+            description: 'The provider could not deliver the message because the email address was wrong.'
           })
         })
       })

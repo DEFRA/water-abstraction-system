@@ -6,7 +6,7 @@
  */
 
 const { formatLongDate, formatRestrictionType, formatValueUnit, titleCase } = require('../base.presenter.js')
-const { noticeMappings } = require('../../lib/static-lookups.lib.js')
+const { notifyErrors, noticeMappings } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats notification data ready for presenting in the view notification page
@@ -25,6 +25,7 @@ function go(licence, notification) {
     alertDetails: _alertDetails(notification),
     backLink: { href: `/system/licences/${licenceId}/communications`, text: 'Go back to communications' },
     contents: plaintext,
+    errorDetails: _errorDetails(notification),
     licenceRef,
     messageType,
     pageTitle: _pageTitle(notification),
@@ -74,6 +75,37 @@ function _alertDetails(notification) {
     alertType: alertType ? formatRestrictionType(alertType) : 'Not recorded',
     monitoringStation: label ?? name,
     threshold: formatValueUnit(thresholdValue, thresholdUnit)
+  }
+}
+
+/**
+ * Generally the `notifyError` will get populated when a notification fails to send to Notify, for whatever reason
+ * (issue on our side or Notify rejects it).
+ *
+ * This means notifyStatus will not get populated. If we have managed to send it, then we are interested in what
+ * `notifyStatus` says, because we've marked the notification as errored because of it.
+ *
+ * We relay the description Notify provides in its docs when this is the case. We default to a generic message for
+ * system errors because we're dealing with old records that might have all sorts in those error messages!
+ * @private
+ */
+function _errorDetails(notification) {
+  const { messageType, notifyError, notifyStatus, status } = notification
+
+  if (status !== 'error') {
+    return null
+  }
+
+  if (notifyError) {
+    return {
+      status: notifyStatus ?? 'Not sent',
+      description: 'Internal system error'
+    }
+  }
+
+  return {
+    status: notifyStatus,
+    description: notifyErrors[messageType][notifyStatus]
   }
 }
 

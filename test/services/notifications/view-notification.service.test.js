@@ -52,6 +52,7 @@ describe('Notifications - View Notification service', () => {
         alertDetails: null,
         backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
         contents: notification.plaintext,
+        errorDetails: null,
         licenceRef: licence.licenceRef,
         messageType: 'email',
         pageTitle: 'Returns invitation',

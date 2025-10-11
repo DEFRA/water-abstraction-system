@@ -31,7 +31,15 @@
       {
         key: { text: 'Sent to', classes: "meta-data__label" },
         value: { html: '<span data-test="meta-data-sent-to">' + sentTo + '</span>', classes: "meta-data__value" }
-      }
+      },
+      {
+        key: { text: 'Notify status', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-notify-status">' + errorDetails.status + '</span>', classes: "meta-data__value" }
+      } if errorDetails,
+      {
+        key: { text: 'Error description', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-error-text">' + errorDetails.description + '</span>', classes: "meta-data__value" }
+      } if errorDetails
     ]
   }) }}
 
