@@ -46,6 +46,8 @@ describe('Notifications - Fetch Notification service', () => {
             createdAt: notification.createdAt,
             id: notification.id,
             messageType: 'letter',
+            notifyError: null,
+            notifyStatus: 'received',
             personalisation: notification.personalisation,
             plaintext: null,
             recipient: null,
@@ -94,11 +96,95 @@ describe('Notifications - Fetch Notification service', () => {
             createdAt: notification.createdAt,
             id: notification.id,
             messageType: 'letter',
+            notifyError: null,
+            notifyStatus: 'received',
             personalisation: notification.personalisation,
             plaintext: notification.plaintext,
             recipient: null,
             status: 'sent',
             hasPdf: false,
+            event: {
+              createdAt: notice.createdAt,
+              id: notice.id,
+              issuer: 'admin-internal@wrls.gov.uk',
+              referenceCode: notice.referenceCode,
+              subtype: 'paperReturnForms',
+              alertType: null
+            }
+          }
+        })
+      })
+    })
+
+    describe('and the notification has a system error recorded', () => {
+      beforeEach(async () => {
+        notification = await NotificationHelper.add({
+          ...NotificationsFixture.paperReturn(notice),
+          notifyError:
+            '{"error":"Notify error","message":"StatusCodeError: 500 - {"errors":[{"error":"TimeoutError","message":"Internal server error"}],"status_code":500}"}',
+          notifyStatus: null
+        })
+      })
+
+      it('returns the matching notification with its related event and licence data', async () => {
+        const result = await FetchNotificationService.go(notification.id, licence.id)
+
+        expect(result).to.equal({
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          notification: {
+            createdAt: notification.createdAt,
+            id: notification.id,
+            messageType: 'letter',
+            notifyError: notification.notifyError,
+            notifyStatus: null,
+            personalisation: notification.personalisation,
+            plaintext: null,
+            recipient: null,
+            status: 'sent',
+            hasPdf: true,
+            event: {
+              createdAt: notice.createdAt,
+              id: notice.id,
+              issuer: 'admin-internal@wrls.gov.uk',
+              referenceCode: notice.referenceCode,
+              subtype: 'paperReturnForms',
+              alertType: null
+            }
+          }
+        })
+      })
+    })
+
+    describe('and the notification has a notify error recorded', () => {
+      beforeEach(async () => {
+        notification = await NotificationHelper.add({
+          ...NotificationsFixture.paperReturn(notice),
+          notifyStatus: 'permanent-failure'
+        })
+      })
+
+      it('returns the matching notification with its related event and licence data', async () => {
+        const result = await FetchNotificationService.go(notification.id, licence.id)
+
+        expect(result).to.equal({
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          notification: {
+            createdAt: notification.createdAt,
+            id: notification.id,
+            messageType: 'letter',
+            notifyError: null,
+            notifyStatus: 'permanent-failure',
+            personalisation: notification.personalisation,
+            plaintext: null,
+            recipient: null,
+            status: 'sent',
+            hasPdf: true,
             event: {
               createdAt: notice.createdAt,
               id: notice.id,

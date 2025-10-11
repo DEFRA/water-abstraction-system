@@ -38,6 +38,8 @@ async function _fetchNotification(notificationId) {
       'createdAt',
       'id',
       'messageType',
+      'notifyError',
+      'notifyStatus',
       'personalisation',
       'plaintext',
       'recipient',
