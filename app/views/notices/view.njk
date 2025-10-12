@@ -23,12 +23,12 @@
     },
     rows: [
       {
-        key: { text: 'Sent date' },
-        value: { html: '<span data-test="meta-data-sent-date">' + sentDate + '</span>' }
+        key: { text: 'Sent date', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-date">' + sentDate + '</span>', classes: "meta-data__value" }
       },
       {
-        key: { text: 'Sent by' },
-        value: { html: '<span data-test="meta-data-sent-by">' + sentBy + '</span>' }
+        key: { text: 'Sent by', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-by">' + sentBy + '</span>', classes: "meta-data__value" }
       }
     ]
   }) }}
