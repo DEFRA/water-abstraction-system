@@ -23,17 +23,15 @@
     },
     rows: [
       {
-        key: { text: 'Created date' },
-        value: { html: '<span data-test="meta-data-created-date">' + dateCreated + '</span>' }
+        key: { text: 'Sent date', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-date">' + sentDate + '</span>', classes: "meta-data__value" }
       },
       {
-        key: { text: 'Created by' },
-        value: { html: '<span data-test="meta-data-created-by">' + createdBy + '</span>' }
+        key: { text: 'Sent by', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-by">' + sentBy + '</span>', classes: "meta-data__value" }
       }
     ]
   }) }}
-
-  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
 
   {# Filters #}
   {% set filtersForm %}

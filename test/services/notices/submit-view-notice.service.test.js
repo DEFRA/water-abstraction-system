@@ -204,8 +204,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -259,6 +257,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 3
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing 2 of 70 notifications',
             status: 'error',
             totalNumber: 70
@@ -287,8 +287,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -317,6 +315,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 1
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing all 2 notifications',
             status: 'error',
             totalNumber: 2

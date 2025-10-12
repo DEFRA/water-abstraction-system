@@ -107,8 +107,6 @@ describe('Notices - View Notice service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: { href: '/system/notices', text: 'Go back to notices' },
-        createdBy: 'test@wrls.gov.uk',
-        dateCreated: '21 February 2025',
         filters: {
           licence: null,
           openFilter: false,
@@ -140,6 +138,8 @@ describe('Notices - View Notice service', () => {
         pageTitle: 'Warning alert',
         pageTitleCaption: `Notice ${fetchResults.notice.referenceCode}`,
         reference: fetchResults.notice.referenceCode,
+        sentBy: 'test@wrls.gov.uk',
+        sentDate: '21 February 2025',
         showingDeclaration: 'Showing all 2 notifications',
         status: 'error',
         pagination: {
