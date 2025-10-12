@@ -371,7 +371,7 @@ function _transformNoticeToResult(eventInstance) {
     subtype: eventInstance.subtype,
     name: eventInstance.metadata.name,
     alertType: eventInstance.metadata.options?.sendingAlertType || null,
-    recipientCount: eventInstance.metadata.recipients,
+    recipientCount: eventInstance.metadata.recipients
   }
 
   return EventModel.fromJson(data)
