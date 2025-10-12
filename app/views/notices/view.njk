@@ -53,6 +53,12 @@
         },
         items: [
           {
+            attributes: { 'data-test': 'filter-status-cancelled' },
+            checked: 'cancelled' === filters.status,
+            text: "Cancelled",
+            value: "cancelled"
+          },
+          {
             attributes: { 'data-test': 'filter-status-error' },
             checked: 'error' === filters.status,
             text: "Error",
@@ -63,6 +69,12 @@
             checked: 'pending' === filters.status,
             text: "Pending",
             value: "pending"
+          },
+          {
+            attributes: { 'data-test': 'filter-status-returned' },
+            checked: 'returned' === filters.status,
+            text: "Returned",
+            value: "returned"
           },
           {
             attributes: { 'data-test': 'filter-status-sent' },
