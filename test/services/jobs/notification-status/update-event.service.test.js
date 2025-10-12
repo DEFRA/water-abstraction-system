@@ -96,6 +96,7 @@ describe('Job - Notification Status - Update Event service', () => {
     notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'error' }))
     notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'pending' }))
     notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'returned' }))
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'cancelled' }))
 
     eventIds = [
       notNotificationEvent.id,
@@ -167,7 +168,7 @@ describe('Job - Notification Status - Update Event service', () => {
 
       expect(refreshedEvent.metadata.error).to.equal(1)
       expect(refreshedEvent.overallStatus).to.equal('returned')
-      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 1, pending: 1, returned: 1, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 1, pending: 1, returned: 1, sent: 1 })
 
       // Check our event that is not a notification did not get updated
       refreshedEvent = await notNotificationEvent.$query()
