@@ -18,6 +18,7 @@ describe('Job - Notification Status - Update Event service', () => {
   let eventIds
   let notifications
 
+  let cancelledEvent
   let notIncludedEvent
   let notNotificationEvent
   let oneOfEachEvent
@@ -51,6 +52,12 @@ describe('Job - Notification Status - Update Event service', () => {
     notifications.push(await NotificationHelper.add({ eventId: notIncludedEvent.id, status: 'pending' }))
 
     notNotificationEvent = await EventHelper.add()
+
+    cancelledEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: cancelledEvent.id, status: 'cancelled' }))
 
     sentEvent = await EventHelper.add({
       ...eventData,
@@ -100,6 +107,7 @@ describe('Job - Notification Status - Update Event service', () => {
 
     eventIds = [
       notNotificationEvent.id,
+      cancelledEvent.id,
       sentEvent.id,
       sentAndPendingEvent.id,
       sentAndErroredEvent.id,
@@ -112,6 +120,7 @@ describe('Job - Notification Status - Update Event service', () => {
   after(async () => {
     notIncludedEvent.$query().delete()
     notNotificationEvent.$query().delete()
+    cancelledEvent.$query().delete()
     sentEvent.$query().delete()
     sentAndPendingEvent.$query().delete()
     sentAndErroredEvent.$query().delete()
@@ -134,6 +143,13 @@ describe('Job - Notification Status - Update Event service', () => {
       expect(refreshedEvent.metadata.error).to.equal(0)
       expect(refreshedEvent.overallStatus).to.equal('sent')
       expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 })
+
+      // Check event with only cancelled notifications - CANCELLED
+      refreshedEvent = await cancelledEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('cancelled')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 0 })
 
       // Check event with a sent and pending notification - PENDING
       refreshedEvent = await sentAndPendingEvent.$query()
