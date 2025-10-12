@@ -10,6 +10,8 @@
     {% set color = 'govuk-tag--yellow' %}
   {% elif status === 'sent' %}
     {% set color = 'govuk-tag--green' %}
+  {% elif status === 'cancelled' %}
+    {% set color = 'govuk-tag--grey' %}
   {% else %}
     {% set color = 'govuk-tag--blue' %}
   {% endif %}
