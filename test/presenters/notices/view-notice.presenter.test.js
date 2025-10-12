@@ -92,7 +92,6 @@ describe('Notices - View Notice presenter', () => {
 
     expect(result).to.equal({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
-      dateCreated: '21 February 2025',
       notifications: [
         {
           recipient: [
@@ -119,6 +118,7 @@ describe('Notices - View Notice presenter', () => {
       pageTitleCaption: `Notice ${notice.referenceCode}`,
       reference: notice.referenceCode,
       sentBy: 'test@wrls.gov.uk',
+      sentDate: '21 February 2025',
       showingDeclaration: 'Showing all 2 notifications',
       status: 'error'
     })
