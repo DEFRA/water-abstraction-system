@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Updates the status counts and determines the overall status for the provided events.
+ * Updates the status counts and determines the overall status for the provided events
  * @module UpdateEventService
  */
 
@@ -9,41 +9,43 @@ const { db } = require('../../../../db/db.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
- * Updates the status counts and determines the overall status for the provided events.
+ * Updates the status counts and determines the overall status for the provided events
  *
  * This service sets the `event.overall_status` based on the statuses of the associated notifications. The logic used to
- * determine the overall status is as follows:
- * - If one notification has a status of returned, then show "returned"
- * - If no notifications are returned, but one has a status of error, then show "error"
- * - If no notifications are returned or errored, but one has a status of pending, then show "pending"
- * - If no notifications are returned, errored, or pending, then show "sent"
+ * determine the overall status is as follows.
+ *
+ * - If all the notifications have a status of cancelled, then set to `cancelled`
+ * - If one notification has a status of returned, then set to `returned`
+ * - If no notifications are returned, but one has a status of error, then set to `error`
+ * - If no notifications are returned or errored, but one has a status of pending, then set to `pending`
+ * - If no notifications are returned, errored, or pending, then set to `sent`
  *
  * The `event.status_counts` field is updated to provide a breakdown of the counts of each notification status.
  *
- * This service also updates the `event.metadata.error` field for each event in the provided `eventIds` array. The error
- * count will be set based on the number of related notifications that have errors.
+ * ```json
+ * { "cancelled": 1, "error": 0, "pending": 1, "returned": 0, "sent": 1 }
+ * ```
  *
- * **Error Conditions**:
- * - Errors occurring during the initial creation of notifications (e.g., via Notify) will be counted as
- * errors.
- * - Errors are identified based on the `status` field in the response data from Notify. If the response status
- * indicates an error, it is included in the error count (the notification status will have been set to
- * 'error').
+ * This service also updates the legacy property `event.metadata.error` field. This will match `error` in
+ * `status_counts` and we keep it updated to avoid breaking anything in the legacy code.
  *
- * If a notification errors during a status update (e.g., receiving a 4xx or 5xx response), this is not
- * considered an error and will not be included in the error count (the status will not be 'error'). Instead, this type
- * of error will be logged.
+ * ## Import notes
  *
- * **Important Notes**:
- * - This function will override any existing error count in the `event.metadata.error` field.
- * - It only updates the error count for events whose `eventIds` are provided.
+ * This service will override any existing values in the fields `overall_status`, `status_counts` and the
+ * `metadata.error` property.
  *
- * **Reference**:
- * - For more information about error statuses from Notify, refer to the documentation:
- * [Get the status of multiple messages](https://docs.notifications.service.gov.uk/node.html#get-the-status-of-multiple-messages-response).
+ * It only updates the error count for events whose `eventIds` are provided.
  *
- * @param {string[]} eventIds - an array of event ids to update
+ * ## Error Conditions
  *
+ * A notification will have its status set to `error` because of an issue when sending it to Notify (the request timed
+ * out or Notify reject it). Or, the notification was successfully sent, but when subsequently checking with Notify its
+ * status, the response indicates a problem at Notify's end.
+ *
+ * > For more information about error statuses from Notify, refer to the
+ * > {@link https://docs.notifications.service.gov.uk/rest-api.html | documentation}
+ *
+ * @param {string[]} eventIds - the UUIDs of the events to update
  */
 async function go(eventIds) {
   const query = _query()
@@ -70,15 +72,17 @@ function _query() {
       n.event_id,
       COUNT(*) FILTER (WHERE n.status = 'error') AS error_count,
       CASE
+        WHEN COUNT(*) = COUNT(*) FILTER (WHERE n.status = 'cancelled') THEN 'cancelled'
         WHEN COUNT(*) FILTER (WHERE n.status = 'returned') > 0 THEN 'returned'
         WHEN COUNT(*) FILTER (WHERE n.status = 'error') > 0 THEN 'error'
         WHEN COUNT(*) FILTER (WHERE n.status = 'pending') > 0 THEN 'pending'
         ELSE 'sent'
       END AS overall_status,
       jsonb_build_object(
-        'returned', COUNT(*) FILTER (WHERE n.status = 'returned'),
+        'cancelled', COUNT(*) FILTER (WHERE n.status = 'cancelled'),
         'error', COUNT(*) FILTER (WHERE n.status = 'error'),
         'pending', COUNT(*) FILTER (WHERE n.status = 'pending'),
+        'returned', COUNT(*) FILTER (WHERE n.status = 'returned'),
         'sent', COUNT(*) FILTER (WHERE n.status = 'sent')
       ) AS status_counts
     FROM public.notifications n

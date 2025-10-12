@@ -22,12 +22,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       }
     })
 
-    describe('and the "notifyStatus" is "created"', () => {
+    describe('and Notify status is "created"', () => {
       beforeEach(() => {
         notifyStatus = 'created'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -37,12 +37,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the "notifyStatus" is "sending"', () => {
+    describe('and Notify status is "sending"', () => {
       beforeEach(() => {
         notifyStatus = 'sending'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -52,12 +52,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the "notifyStatus" is "delivered"', () => {
+    describe('and Notify status is "delivered"', () => {
       beforeEach(() => {
         notifyStatus = 'delivered'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (sent)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -67,64 +67,77 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and notify has errored', () => {
-      describe('then the "notifyStatus" is "permanent-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'permanent-failure'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
-        })
+    describe('and Notify status is "permanent-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'permanent-failure'
       })
 
-      describe('then the "notifyStatus" is "technical-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'technical-failure'
-        })
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'technical-failure',
-            status: 'error'
-          })
+        expect(result).to.equal({
+          notifyStatus: 'permanent-failure',
+          status: 'error'
         })
       })
+    })
 
-      describe('then the "notifyStatus" is "temporary-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'temporary-failure'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
-        })
+    describe('and Notify status is "technical-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'technical-failure'
       })
 
-      describe('then the "notifyStatus" is "error"', () => {
-        beforeEach(() => {
-          notifyStatus = 'error'
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'technical-failure',
+          status: 'error'
         })
+      })
+    })
 
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
+    describe('and Notify status is "temporary-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'temporary-failure'
+      })
 
-          expect(result).to.equal({
-            notifyStatus: 'error',
-            status: 'error'
-          })
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'temporary-failure',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and Notify status is error', () => {
+      beforeEach(() => {
+        notifyStatus = 'error'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'error',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and the Notify status is not recognised', () => {
+      beforeEach(() => {
+        notifyStatus = 'fake'
+      })
+
+      it('correctly returns the statuses to update (pending)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'fake',
+          status: 'pending'
         })
       })
     })
@@ -138,12 +151,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       }
     })
 
-    describe('and the "notifyStatus" is "accepted"', () => {
+    describe('and Notify status is "accepted"', () => {
       beforeEach(() => {
         notifyStatus = 'accepted'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -153,12 +166,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the "notifyStatus" is "created"', () => {
+    describe('and Notify status is "created"', () => {
       beforeEach(() => {
         notifyStatus = 'created'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -168,12 +181,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the "notifyStatus" is "sending"', () => {
+    describe('and Notify status is "sending"', () => {
       beforeEach(() => {
         notifyStatus = 'sending'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -183,27 +196,12 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and the "notifyStatus" is "received"', () => {
-      beforeEach(() => {
-        notifyStatus = 'received'
-      })
-
-      it('correctly returns status to update', () => {
-        const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-        expect(result).to.equal({
-          notifyStatus: 'received',
-          status: 'sent'
-        })
-      })
-    })
-
-    describe('then the "notifyStatus" is "pending-virus-check"', () => {
+    describe('and Notify status is "pending-virus-check"', () => {
       beforeEach(() => {
         notifyStatus = 'pending-virus-check'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({
@@ -213,89 +211,117 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       })
     })
 
-    describe('and notify has errored', () => {
-      describe('then the "notifyStatus" is "permanent-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'permanent-failure'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
-        })
+    describe('and Notify status is "received"', () => {
+      beforeEach(() => {
+        notifyStatus = 'received'
       })
 
-      describe('then the "notifyStatus" is "technical-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'technical-failure'
-        })
+      it('correctly returns the statuses to update (sent)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'technical-failure',
-            status: 'error'
-          })
-        })
-      })
-
-      describe('then the "notifyStatus" is "temporary-failure"', () => {
-        beforeEach(() => {
-          notifyStatus = 'temporary-failure'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
-        })
-      })
-
-      describe('then the "notifyStatus" is "validation-failed"', () => {
-        beforeEach(() => {
-          notifyStatus = 'validation-failed'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'validation-failed',
-            status: 'error'
-          })
-        })
-      })
-
-      describe('then the "notifyStatus" is "error"', () => {
-        beforeEach(() => {
-          notifyStatus = 'error'
-        })
-
-        it('correctly returns status to update', () => {
-          const result = NotifyStatusPresenter.go(notifyStatus, notification)
-
-          expect(result).to.equal({
-            notifyStatus: 'error',
-            status: 'error'
-          })
+        expect(result).to.equal({
+          notifyStatus: 'received',
+          status: 'sent'
         })
       })
     })
 
-    describe('and the status is not recognised', () => {
+    describe('and Notify status is "cancelled"', () => {
+      beforeEach(() => {
+        notifyStatus = 'cancelled'
+      })
+
+      it('correctly returns the statuses to update (cancelled)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'cancelled',
+          status: 'cancelled'
+        })
+      })
+    })
+
+    describe('and Notify status is "permanent-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'permanent-failure'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'permanent-failure',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and Notify status is "technical-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'technical-failure'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'technical-failure',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and Notify status is "temporary-failure"', () => {
+      beforeEach(() => {
+        notifyStatus = 'temporary-failure'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'temporary-failure',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and Notify status is "validation-failed"', () => {
+      beforeEach(() => {
+        notifyStatus = 'validation-failed'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'validation-failed',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and Notify status is "error"', () => {
+      beforeEach(() => {
+        notifyStatus = 'error'
+      })
+
+      it('correctly returns the statuses to update (error)', () => {
+        const result = NotifyStatusPresenter.go(notifyStatus, notification)
+
+        expect(result).to.equal({
+          notifyStatus: 'error',
+          status: 'error'
+        })
+      })
+    })
+
+    describe('and the Notify status is not recognised', () => {
       beforeEach(() => {
         notifyStatus = 'fake'
       })
 
-      it('correctly returns status to update', () => {
+      it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
         expect(result).to.equal({

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,144 +15,184 @@ const NotificationHelper = require('../../../support/helpers/notification.helper
 const UpdateEventService = require('../../../../app/services/jobs/notification-status/update-event.service.js')
 
 describe('Job - Notification Status - Update Event service', () => {
-  let event
+  let eventIds
+  let notifications
 
-  beforeEach(async () => {
-    event = await EventHelper.add({
-      type: 'notification',
+  let cancelledEvent
+  let notIncludedEvent
+  let notNotificationEvent
+  let oneOfEachEvent
+  let sentAndCancelledEvent
+  let sentAndErroredEvent
+  let sentAndPendingEvent
+  let sentAndReturnedEvent
+  let sentEvent
+
+  before(async () => {
+    const eventData = {
+      issuer: 'admin-internal@wrls.gov.uk',
+      licences: ['01/123'],
+      metadata: {
+        name: 'Returns: invitation',
+        error: 0,
+        options: { excludeLicences: [] },
+        recipients: 1,
+        returnCycle: { dueDate: '2025-04-28', endDate: '2025-03-31', isSummer: false, startDate: '2024-04-01' }
+      },
       status: 'completed',
+      subtype: 'returnInvitation',
+      type: 'notification'
+    }
+    notifications = []
+
+    notIncludedEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: notIncludedEvent.id, status: 'pending' }))
+
+    notNotificationEvent = await EventHelper.add()
+
+    cancelledEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: cancelledEvent.id, status: 'cancelled' }))
+
+    sentEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: sentEvent.id, status: 'sent' }))
+
+    // NOTE: We set a blank metadata data to demonstrate `metadata.errorCount` does not have to exist to be set
+    sentAndPendingEvent = await EventHelper.add({
+      ...eventData,
       metadata: {},
-      updatedAt: null
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
     })
+    notifications.push(await NotificationHelper.add({ eventId: sentAndPendingEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: sentAndPendingEvent.id, status: 'pending' }))
+
+    sentAndErroredEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: sentAndErroredEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: sentAndErroredEvent.id, status: 'error' }))
+
+    sentAndReturnedEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'returned' }))
+
+    sentAndCancelledEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'cancelled' }))
+
+    oneOfEachEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'error' }))
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'pending' }))
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'returned' }))
+    notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'cancelled' }))
+
+    eventIds = [
+      notNotificationEvent.id,
+      cancelledEvent.id,
+      sentEvent.id,
+      sentAndPendingEvent.id,
+      sentAndErroredEvent.id,
+      sentAndReturnedEvent.id,
+      sentAndCancelledEvent.id,
+      oneOfEachEvent.id
+    ]
   })
 
-  describe('when there are only "sent" notifications', () => {
-    beforeEach(async () => {
-      await NotificationHelper.add({
-        eventId: event.id,
-        status: 'sent'
-      })
+  after(async () => {
+    notIncludedEvent.$query().delete()
+    notNotificationEvent.$query().delete()
+    cancelledEvent.$query().delete()
+    sentEvent.$query().delete()
+    sentAndPendingEvent.$query().delete()
+    sentAndErroredEvent.$query().delete()
+    sentAndReturnedEvent.$query().delete()
+    sentAndCancelledEvent.$query().delete()
+    oneOfEachEvent.$query().delete()
 
-      await NotificationHelper.add({
-        eventId: event.id,
-        status: 'sent'
-      })
-    })
-
-    it('correctly updates the event', async () => {
-      await UpdateEventService.go([event.id])
-
-      const refreshEvent = await event.$query()
-
-      expect(refreshEvent.metadata.error).to.equal(0)
-      expect(refreshEvent.overallStatus).to.equal('sent')
-      expect(refreshEvent.statusCounts).to.equal({ error: 0, pending: 0, returned: 0, sent: 2 })
-      expect(refreshEvent.updatedAt).to.be.a.date()
-    })
-
-    describe('and a notification has a status of "pending"', () => {
-      beforeEach(async () => {
-        await NotificationHelper.add({
-          eventId: event.id,
-          status: 'pending'
-        })
-      })
-
-      it('correctly updates the event', async () => {
-        await UpdateEventService.go([event.id])
-
-        const refreshEvent = await event.$query()
-
-        expect(refreshEvent.metadata.error).to.equal(0)
-        expect(refreshEvent.overallStatus).to.equal('pending')
-        expect(refreshEvent.statusCounts).to.equal({ error: 0, pending: 1, returned: 0, sent: 2 })
-      })
-
-      describe('and a notification has a status of "error"', () => {
-        beforeEach(async () => {
-          await NotificationHelper.add({
-            eventId: event.id,
-            status: 'error'
-          })
-        })
-
-        it('correctly updates the event', async () => {
-          await UpdateEventService.go([event.id])
-
-          const refreshEvent = await event.$query()
-
-          expect(refreshEvent.metadata.error).to.equal(1)
-          expect(refreshEvent.overallStatus).to.equal('error')
-          expect(refreshEvent.statusCounts).to.equal({ error: 1, pending: 1, returned: 0, sent: 2 })
-        })
-
-        describe('and a notification has a status of "returned"', () => {
-          beforeEach(async () => {
-            await NotificationHelper.add({
-              eventId: event.id,
-              status: 'returned'
-            })
-          })
-
-          it('correctly updates the event', async () => {
-            await UpdateEventService.go([event.id])
-
-            const refreshEvent = await event.$query()
-
-            expect(refreshEvent.metadata.error).to.equal(1)
-            expect(refreshEvent.overallStatus).to.equal('returned')
-            expect(refreshEvent.statusCounts).to.equal({ error: 1, pending: 1, returned: 1, sent: 2 })
-          })
-        })
-      })
-    })
-
-    describe('and the "Event" has existing errors in the metadata', () => {
-      beforeEach(async () => {
-        event = await EventHelper.add({
-          type: 'notification',
-          status: 'completed',
-          metadata: { error: 3, name: 'Returns: reminder' }
-        })
-
-        await NotificationHelper.add({
-          eventId: event.id,
-          status: 'error'
-        })
-      })
-
-      it('should override the error count and leave the rest of the metadata unaltered', async () => {
-        await UpdateEventService.go([event.id])
-
-        const refreshEvent = await event.$query()
-
-        expect(refreshEvent.metadata).to.equal({ error: 1, name: 'Returns: reminder' })
-      })
-    })
+    for (const notification of notifications) {
+      notification.$query().delete()
+    }
   })
 
-  describe('when an event is not in the array', () => {
-    let additionalEvent
+  describe('when called with', () => {
+    it('correctly updates the ""overallStatus" and "statusCount" of each event that is a notification', async () => {
+      await UpdateEventService.go(eventIds)
 
-    beforeEach(async () => {
-      // This event contains errors but is not part of the events id's in the array to update the errors
-      additionalEvent = await EventHelper.add({
-        type: 'notification',
-        status: 'completed',
-        metadata: {}
-      })
+      // Check event with only sent notifications - SENT
+      let refreshedEvent = await sentEvent.$query()
 
-      await NotificationHelper.add({
-        eventId: additionalEvent.id,
-        status: 'error'
-      })
-    })
-    it('should not change other events', async () => {
-      await UpdateEventService.go([event.id])
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('sent')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 })
 
-      const refreshEvent = await additionalEvent.$query()
+      // Check event with only cancelled notifications - CANCELLED
+      refreshedEvent = await cancelledEvent.$query()
 
-      expect(refreshEvent).to.equal(additionalEvent)
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('cancelled')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 0 })
+
+      // Check event with a sent and pending notification - PENDING
+      refreshedEvent = await sentAndPendingEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('pending')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 1, returned: 0, sent: 1 })
+
+      // Check event with a sent and errored notification - ERROR
+      refreshedEvent = await sentAndErroredEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(1)
+      expect(refreshedEvent.overallStatus).to.equal('error')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 1, pending: 0, returned: 0, sent: 1 })
+
+      // Check event with a sent and returned notification - RETURNED
+      refreshedEvent = await sentAndReturnedEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('returned')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 1, sent: 1 })
+
+      // Check event with a sent and cancelled notification - SENT
+      refreshedEvent = await sentAndCancelledEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('sent')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 1 })
+
+      // Check event with one of each notification - RETURNED
+      refreshedEvent = await oneOfEachEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(1)
+      expect(refreshedEvent.overallStatus).to.equal('returned')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 1, pending: 1, returned: 1, sent: 1 })
+
+      // Check our event that is not a notification did not get updated
+      refreshedEvent = await notNotificationEvent.$query()
+      expect(refreshedEvent).to.equal(notNotificationEvent)
+
+      // Check our notification event that was not included did not get updated
+      refreshedEvent = await notIncludedEvent.$query()
+      expect(refreshedEvent).to.equal(notIncludedEvent)
     })
   })
 })

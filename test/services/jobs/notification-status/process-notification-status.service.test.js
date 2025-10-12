@@ -332,7 +332,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
             metadata: { error: 1 },
             referenceCode: 'RINV-LX4P57',
             status: 'completed',
-            statusCounts: { sent: 0, error: 1, pending: 0, returned: 0 },
+            statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 },
             overallStatus: 'error',
             subtype: 'returnInvitation',
             type: 'notification'
@@ -425,7 +425,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
           overallStatus: 'pending',
           referenceCode: 'RINV-402AGB',
           status: 'completed',
-          statusCounts: { sent: 0, error: 0, pending: 1, returned: 0 },
+          statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },
           subtype: 'returnInvitation',
           type: 'notification'
         },
