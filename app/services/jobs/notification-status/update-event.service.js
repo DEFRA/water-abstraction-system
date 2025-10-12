@@ -14,6 +14,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * This service sets the `event.overall_status` based on the statuses of the associated notifications. The logic used to
  * determine the overall status is as follows.
  *
+ * - If all the notifications have a status of cancelled, then set to `cancelled`
  * - If one notification has a status of returned, then set to `returned`
  * - If no notifications are returned, but one has a status of error, then set to `error`
  * - If no notifications are returned or errored, but one has a status of pending, then set to `pending`
@@ -22,7 +23,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * The `event.status_counts` field is updated to provide a breakdown of the counts of each notification status.
  *
  * ```json
- * { "error": 0, "pending": 1, "returned": 0, "sent": 1 }
+ * { "cancelled": 1, "error": 0, "pending": 1, "returned": 0, "sent": 1 }
  * ```
  *
  * This service also updates the legacy property `event.metadata.error` field. This will match `error` in
@@ -71,12 +72,14 @@ function _query() {
       n.event_id,
       COUNT(*) FILTER (WHERE n.status = 'error') AS error_count,
       CASE
+        WHEN COUNT(*) = COUNT(*) FILTER (WHERE n.status = 'cancelled') THEN 'cancelled'
         WHEN COUNT(*) FILTER (WHERE n.status = 'returned') > 0 THEN 'returned'
         WHEN COUNT(*) FILTER (WHERE n.status = 'error') > 0 THEN 'error'
         WHEN COUNT(*) FILTER (WHERE n.status = 'pending') > 0 THEN 'pending'
         ELSE 'sent'
       END AS overall_status,
       jsonb_build_object(
+        'cancelled', COUNT(*) FILTER (WHERE n.status = 'cancelled'),
         'error', COUNT(*) FILTER (WHERE n.status = 'error'),
         'pending', COUNT(*) FILTER (WHERE n.status = 'pending'),
         'returned', COUNT(*) FILTER (WHERE n.status = 'returned'),

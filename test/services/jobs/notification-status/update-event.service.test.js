@@ -21,6 +21,7 @@ describe('Job - Notification Status - Update Event service', () => {
   let notIncludedEvent
   let notNotificationEvent
   let oneOfEachEvent
+  let sentAndCancelledEvent
   let sentAndErroredEvent
   let sentAndPendingEvent
   let sentAndReturnedEvent
@@ -80,6 +81,13 @@ describe('Job - Notification Status - Update Event service', () => {
     notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'returned' }))
 
+    sentAndCancelledEvent = await EventHelper.add({
+      ...eventData,
+      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+    })
+    notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'sent' }))
+    notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'cancelled' }))
+
     oneOfEachEvent = await EventHelper.add({
       ...eventData,
       referenceCode: NotificationHelper.generateReferenceCode('RINV')
@@ -95,6 +103,7 @@ describe('Job - Notification Status - Update Event service', () => {
       sentAndPendingEvent.id,
       sentAndErroredEvent.id,
       sentAndReturnedEvent.id,
+      sentAndCancelledEvent.id,
       oneOfEachEvent.id
     ]
   })
@@ -106,6 +115,7 @@ describe('Job - Notification Status - Update Event service', () => {
     sentAndPendingEvent.$query().delete()
     sentAndErroredEvent.$query().delete()
     sentAndReturnedEvent.$query().delete()
+    sentAndCancelledEvent.$query().delete()
     oneOfEachEvent.$query().delete()
 
     for (const notification of notifications) {
@@ -122,35 +132,42 @@ describe('Job - Notification Status - Update Event service', () => {
 
       expect(refreshedEvent.metadata.error).to.equal(0)
       expect(refreshedEvent.overallStatus).to.equal('sent')
-      expect(refreshedEvent.statusCounts).to.equal({ error: 0, pending: 0, returned: 0, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 })
 
       // Check event with a sent and pending notification - PENDING
       refreshedEvent = await sentAndPendingEvent.$query()
 
       expect(refreshedEvent.metadata.error).to.equal(0)
       expect(refreshedEvent.overallStatus).to.equal('pending')
-      expect(refreshedEvent.statusCounts).to.equal({ error: 0, pending: 1, returned: 0, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 1, returned: 0, sent: 1 })
 
       // Check event with a sent and errored notification - ERROR
       refreshedEvent = await sentAndErroredEvent.$query()
 
       expect(refreshedEvent.metadata.error).to.equal(1)
       expect(refreshedEvent.overallStatus).to.equal('error')
-      expect(refreshedEvent.statusCounts).to.equal({ error: 1, pending: 0, returned: 0, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 1, pending: 0, returned: 0, sent: 1 })
 
       // Check event with a sent and returned notification - RETURNED
       refreshedEvent = await sentAndReturnedEvent.$query()
 
       expect(refreshedEvent.metadata.error).to.equal(0)
       expect(refreshedEvent.overallStatus).to.equal('returned')
-      expect(refreshedEvent.statusCounts).to.equal({ error: 0, pending: 0, returned: 1, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 1, sent: 1 })
+
+      // Check event with a sent and cancelled notification - SENT
+      refreshedEvent = await sentAndCancelledEvent.$query()
+
+      expect(refreshedEvent.metadata.error).to.equal(0)
+      expect(refreshedEvent.overallStatus).to.equal('sent')
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 1 })
 
       // Check event with one of each notification - RETURNED
       refreshedEvent = await oneOfEachEvent.$query()
 
       expect(refreshedEvent.metadata.error).to.equal(1)
       expect(refreshedEvent.overallStatus).to.equal('returned')
-      expect(refreshedEvent.statusCounts).to.equal({ error: 1, pending: 1, returned: 1, sent: 1 })
+      expect(refreshedEvent.statusCounts).to.equal({ cancelled: 0, error: 1, pending: 1, returned: 1, sent: 1 })
 
       // Check our event that is not a notification did not get updated
       refreshedEvent = await notNotificationEvent.$query()
