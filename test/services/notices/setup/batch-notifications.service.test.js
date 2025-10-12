@@ -294,7 +294,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
           overallStatus: 'error',
           referenceCode,
           status: 'completed',
-          statusCounts: { sent: 0, error: 1, pending: 0, returned: 0 },
+          statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 },
           subtype: 'returnInvitation',
           type: 'notification',
           updatedAt: refreshedEvent.updatedAt
