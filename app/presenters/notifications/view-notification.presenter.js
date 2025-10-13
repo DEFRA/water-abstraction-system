@@ -129,11 +129,13 @@ function _paperForm(notification) {
   }
 
   const { id, hasPdf, personalisation } = notification
+  const startDate = new Date(personalisation.start_date)
+  const endDate = new Date(personalisation.end_date)
 
   return {
     downloadLink: hasPdf ? `/system/notifications/${id}/download` : null,
     link: `/system/return-logs?id=${personalisation.qr_url}`,
-    period: `${personalisation.start_date} to ${personalisation.end_date}`,
+    period: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     purpose: personalisation.purpose,
     reference: personalisation.format_id,
     siteDescription: personalisation.site_description ?? ''
