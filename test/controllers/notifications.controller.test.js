@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const DownloadNotificationService = require('../../app/services/notifications/download-notification.service.js')
+const ProcessReturnedLetterService = require('../../app/services/notifications/process-returned-letter.service.js')
 const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
 const notifyConfig = require('../../config/notify.config.js')
 
@@ -17,7 +18,6 @@ const notifyConfig = require('../../config/notify.config.js')
 const { init } = require('../../app/server.js')
 
 describe('Notifications controller', () => {
-  let notifierStub
   let options
   let server
 
@@ -33,8 +33,6 @@ describe('Notifications controller', () => {
 
     // We silence sending a notification to our Errbit instance using Airbrake
     Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -111,6 +109,8 @@ describe('Notifications controller', () => {
       describe('POST', () => {
         beforeEach(() => {
           Sinon.stub(notifyConfig, 'callbackToken').value('valid')
+
+          Sinon.stub(ProcessReturnedLetterService, 'go').resolves()
         })
 
         describe('when the request has valid authorization', () => {
@@ -131,12 +131,7 @@ describe('Notifications controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            const logDataArg = notifierStub.omg.args[0][1]
-
             expect(response.statusCode).to.equal(204)
-            expect(notifierStub.omg.calledWith('Return letter callback triggered')).to.be.true()
-            expect(logDataArg.notificationId).to.equal('506c20c7-7741-4c95-85c1-de3fe87314f3')
-            expect(logDataArg.reference).to.equal('reference')
           })
         })
 

@@ -8,7 +8,7 @@
 
 const NotificationModel = require('../../models/notification.model.js')
 const UpdateEventService = require('../jobs/notification-status/update-event.service.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Processes a returned letter callback from GOV.UK Notify
@@ -18,22 +18,31 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * The request from Notify will contain the Notify ID of the notification. We can use that to identify the relevant
  * notification that has been returned, and update it accordingly.
  *
- * @param {string} notifyId - Notify's ID for the notification
+ * @param {string} payload - Payload from the Notify callback
  */
-async function go(notifyId) {
-  const updatedNotifications = await NotificationModel.query()
-    .patch({ returnedAt: timestampForPostgres(), status: 'returned' })
-    .where('notifyId', notifyId)
-    .returning(['eventId', 'id'])
+async function go(payload) {
+  try {
+    const startTime = currentTimeInNanoseconds()
 
-  if (updatedNotifications.length === 0) {
-    global.GlobalNotifier.omg('No matching notification found for returned letter request', { notifyId })
+    const { notification_id: notifyId } = payload
 
-    return
+    const updatedNotifications = await NotificationModel.query()
+      .patch({ returnedAt: timestampForPostgres(), status: 'returned' })
+      .where('notifyId', notifyId)
+      .returning(['eventId', 'id'])
+
+    if (updatedNotifications.length) {
+      // Recalculate the overall status and status counts on the linked notice.
+      await UpdateEventService.go([updatedNotifications[0].eventId])
+    }
+
+    calculateAndLogTimeTaken(startTime, 'Returned letter complete', {
+      payload,
+      notification: { ...updatedNotifications[0] }
+    })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Returned letter failed', payload, error)
   }
-
-  // Recalculate the overall status and status counts on the linked notice.
-  await UpdateEventService.go([updatedNotifications[0].eventId])
 }
 
 module.exports = {

@@ -8,12 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID, timestampForPostgres, today } = require('../../../app/lib/general.lib.js')
+const { generateUUID, today } = require('../../../app/lib/general.lib.js')
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationModel = require('../../../app/models/notification.model.js')
 
 // Things we need to stub
 const UpdateEventService = require('../../../app/services/jobs/notification-status/update-event.service.js')
@@ -24,51 +22,119 @@ const ProcessReturnedLetterService = require('../../../app/services/notification
 describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()
 
-  let eventId
-  let notifyId
+  let notification
   let notifierStub
+  let payload
   let updateEventStub
 
   beforeEach(async () => {
-    const event = await EventHelper.add({
-      type: 'notification',
-      subtype: 'returnsInvitation'
+    notification = await NotificationHelper.add({
+      eventId: generateUUID(),
+      messageType: 'letter',
+      messageRef: 'returns_reminder_licence_holder_letter',
+      notifyId: generateUUID(),
+      notifyStatus: 'sent',
+      recipient: null,
+      status: 'sent'
     })
 
-    eventId = event.id
-    notifyId = generateUUID()
-
-    await NotificationHelper.add({ eventId, notifyId, createdAt: timestampForPostgres() })
-
-    updateEventStub = Sinon.stub(UpdateEventService, 'go').resolves()
-
-    notifierStub = { omg: Sinon.stub() }
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-
     delete global.GlobalNotifier
+
+    if (notification) {
+      notification.$query().delete()
+    }
   })
 
   describe('when called with a matching "notifyId"', () => {
-    it('updates "status" to returned and sets "returnedAt" for the matching notification, and updates the notice', async () => {
-      await ProcessReturnedLetterService.go(notifyId)
+    beforeEach(async () => {
+      payload = {
+        notification_id: notification.notifyId,
+        reference: NotificationHelper.generateReferenceCode('RREM')
+      }
 
-      const updatedResult = await NotificationModel.query().where('notifyId', notifyId)
+      updateEventStub = Sinon.stub(UpdateEventService, 'go').resolves()
+    })
 
-      expect(updatedResult[0].returnedAt).to.equal(todaysDate)
-      expect(notifierStub.omg.called).to.be.false()
-      expect(updateEventStub.calledWith([eventId])).to.be.true()
+    it('updates "status" to returned and "returnedAt" to current date on the matching notification', async () => {
+      await ProcessReturnedLetterService.go(payload)
+
+      const refreshedNotification = await notification.$query()
+
+      expect(refreshedNotification.status).to.equal('returned')
+      expect(refreshedNotification.returnedAt).to.equal(todaysDate)
+    })
+
+    it('updates the linked notice to recalculate its overall status and status counts', async () => {
+      await ProcessReturnedLetterService.go(payload)
+
+      expect(updateEventStub.calledWith([notification.eventId])).to.be.true()
+    })
+
+    it('logs the time taken in milliseconds and seconds, plus the payload and matching notification', async () => {
+      await ProcessReturnedLetterService.go(payload)
+
+      const logDataArg = notifierStub.omg.firstCall.args[1]
+
+      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
+      expect(logDataArg.timeTakenMs).to.exist()
+      expect(logDataArg.timeTakenSs).to.exist()
+      expect(logDataArg.payload).to.equal(payload)
+      expect(logDataArg.notification).to.equal({
+        id: notification.id,
+        eventId: notification.eventId
+      })
     })
   })
 
   describe('when called with a "notifyId" that finds no match', () => {
-    it('logs that no match was found', async () => {
-      await ProcessReturnedLetterService.go(generateUUID())
+    beforeEach(async () => {
+      payload = {
+        notification_id: generateUUID(),
+        reference: NotificationHelper.generateReferenceCode('RREM')
+      }
+    })
 
-      expect(notifierStub.omg.calledWith('No matching notification found for returned letter request')).to.be.true()
+    it('logs the time taken in milliseconds and seconds, plus the payload and an empty notification', async () => {
+      await ProcessReturnedLetterService.go(payload)
+
+      const logDataArg = notifierStub.omg.firstCall.args[1]
+
+      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
+      expect(logDataArg.timeTakenMs).to.exist()
+      expect(logDataArg.timeTakenSs).to.exist()
+      expect(logDataArg.payload).to.equal(payload)
+      expect(logDataArg.notification).to.equal({})
+    })
+  })
+
+  describe('when the process errors', () => {
+    beforeEach(async () => {
+      payload = {
+        notification_id: notification.notifyId,
+        reference: NotificationHelper.generateReferenceCode('RREM')
+      }
+
+      Sinon.stub(UpdateEventService, 'go').rejects()
+    })
+
+    it('does not throw an error', async () => {
+      await expect(ProcessReturnedLetterService.go(payload)).not.to.reject()
+    })
+
+    it('logs the error', async () => {
+      await ProcessReturnedLetterService.go(payload)
+
+      const errorLogArgs = notifierStub.omfg.firstCall.args
+
+      expect(notifierStub.omfg.calledWith('Returned letter failed')).to.be.true()
+      expect(errorLogArgs[1]).to.equal(payload)
+      expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })
   })
 })
