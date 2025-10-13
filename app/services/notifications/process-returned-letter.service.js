@@ -20,12 +20,12 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {string} notifyId - Notify's ID for the notification
  */
 async function go(notifyId) {
-  const notification = await NotificationModel.query()
+  const updatedNotifications = await NotificationModel.query()
     .patch({ returnedAt: timestampForPostgres(), status: 'returned' })
     .where('notifyId', notifyId)
     .returning('id')
 
-  if (notification.length === 0) {
+  if (updatedNotifications.length === 0) {
     global.GlobalNotifier.omg('No matching notification found for returned letter request', { notifyId })
   }
 }
