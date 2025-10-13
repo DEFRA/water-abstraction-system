@@ -57,6 +57,7 @@ function abstractionAlertEmail(notice) {
       '\n' +
       'This means that you must stop taking water now. \n',
     recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -108,6 +109,7 @@ function abstractionAlertLetter(notice) {
       '\n' +
       'This means that you must stop taking water now.\n',
     recipient: null,
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -154,6 +156,7 @@ function legacyHandsOfFlow(notice) {
       '\n' +
       '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n',
     recipient: 'n/a',
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -200,6 +203,7 @@ function legacyRenewal(notice) {
       '\n' +
       '# All or part of the following abstraction licence will expire soon:\n',
     recipient: 'n/a',
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -298,6 +302,7 @@ function paperReturn(notice) {
       is_two_part_tariff: false
     },
     plaintext: null,
+    returnedAt: null,
     returnLogIds: [generateUUID()],
     status: 'sent'
   }
@@ -335,6 +340,7 @@ function returnsInvitationEmail(notice) {
       '\n' +
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -374,6 +380,7 @@ function returnsInvitationLetter(notice) {
       '\n' +
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: null,
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -411,6 +418,7 @@ function returnsReminderEmail(notice) {
       '\n' +
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }
@@ -452,6 +460,7 @@ function returnsReminderLetter(notice) {
       '\n' +
       'We asked you to submit your returns by 1 April 2025.\n',
     recipient: null,
+    returnedAt: null,
     returnLogIds: null,
     status: 'sent'
   }

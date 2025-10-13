@@ -47,6 +47,7 @@ describe('Notifications - View Notification presenter', () => {
       pageTitleCaption: `Licence ${licence.licenceRef}`,
       paperForm: null,
       reference: notice.referenceCode,
+      returnedDate: null,
       sentDate: '2 April 2025',
       sentBy: notice.issuer,
       sentTo: notification.recipient,
@@ -361,6 +362,28 @@ describe('Notifications - View Notification presenter', () => {
 
           expect(result.paperForm.siteDescription).to.be.empty()
         })
+      })
+    })
+  })
+
+  describe('the "returnedDate" property', () => {
+    describe('when the notification does not have a "returnedAt" value', () => {
+      it('returns null', () => {
+        const result = ViewNotificationPresenter.go(licence, notification)
+
+        expect(result.returnedDate).to.be.null()
+      })
+    })
+
+    describe('when the notification does have a "returnedAt" value', () => {
+      beforeEach(() => {
+        notification.returnedAt = new Date('2025-10-13')
+      })
+
+      it('returns the "returnedAt" date formatted for the page', () => {
+        const result = ViewNotificationPresenter.go(licence, notification)
+
+        expect(result.returnedDate).to.equal('13 October 2025')
       })
     })
   })

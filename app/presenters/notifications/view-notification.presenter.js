@@ -17,7 +17,7 @@ const { notifyErrors, noticeMappings } = require('../../lib/static-lookups.lib.j
  * @returns {object} The data formatted for the view template
  */
 function go(licence, notification) {
-  const { createdAt, event, messageType, plaintext } = notification
+  const { createdAt, event, messageType, plaintext, returnedAt } = notification
   const { id: licenceId, licenceRef } = licence
 
   return {
@@ -32,6 +32,7 @@ function go(licence, notification) {
     pageTitleCaption: `Licence ${licenceRef}`,
     paperForm: _paperForm(notification),
     reference: event.referenceCode,
+    returnedDate: returnedAt ? formatLongDate(returnedAt) : null,
     sentDate: formatLongDate(createdAt),
     sentBy: event.issuer,
     sentTo: _sentTo(notification),

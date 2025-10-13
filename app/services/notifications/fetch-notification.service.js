@@ -43,6 +43,7 @@ async function _fetchNotification(notificationId) {
       'personalisation',
       'plaintext',
       'recipient',
+      'returnedAt',
       'status',
       db.raw('(CASE WHEN pdf IS NOT NULL THEN TRUE ELSE FALSE END) AS has_pdf')
     ])

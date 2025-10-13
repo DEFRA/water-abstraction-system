@@ -33,6 +33,10 @@
         value: { html: '<span data-test="meta-data-sent-to">' + sentTo + '</span>', classes: "meta-data__value" }
       },
       {
+        key: { text: 'Returned date', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-returned-date">' + returnedDate + '</span>', classes: "meta-data__value" }
+      } if returnedDate,
+      {
         key: { text: 'Notify status', classes: "meta-data__label" },
         value: { html: '<span data-test="meta-data-notify-status">' + errorDetails.status + '</span>', classes: "meta-data__value" }
       } if errorDetails,

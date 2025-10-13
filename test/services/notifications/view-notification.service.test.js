@@ -59,6 +59,7 @@ describe('Notifications - View Notification service', () => {
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         paperForm: null,
         reference: notice.referenceCode,
+        returnedDate: null,
         sentDate: '2 April 2025',
         sentBy: notice.issuer,
         sentTo: notification.recipient,
