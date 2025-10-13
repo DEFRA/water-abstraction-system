@@ -21,8 +21,8 @@ exports.up = function (knex) {
     table.jsonb('status_counts')
 
     // Legacy timestamps
-    table.timestamp('created', { precision: 0, useTz: false })
-    table.timestamp('modified', { precision: 0, useTz: false })
+    table.timestamp('created', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
+    table.timestamp('modified', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
   })
 }
 

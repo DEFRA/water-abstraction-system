@@ -33,12 +33,11 @@ describe('Notices - Submit View Notice service', () => {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
+      overallStatus: 'error',
       referenceCode: generateReferenceCode('WAA'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
-      alertType: 'warning',
-      errorCount: 1,
-      pendingCount: 0
+      alertType: 'warning'
     }
 
     notifications = [
@@ -205,8 +204,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -260,6 +257,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 3
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing 2 of 70 notifications',
             status: 'error',
             totalNumber: 70
@@ -288,8 +287,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -318,6 +315,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 1
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing all 2 notifications',
             status: 'error',
             totalNumber: 2

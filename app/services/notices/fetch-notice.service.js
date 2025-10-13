@@ -68,30 +68,12 @@ async function _fetchNotice(noticeId) {
       'createdAt',
       'id',
       'issuer',
+      'overallStatus',
       'referenceCode',
       'status',
       'subtype',
-      ref('metadata:options.sendingAlertType').castText().as('alertType'),
-      'es.error_count',
-      'es.pending_count',
-      'es.returned_count'
+      ref('metadata:options.sendingAlertType').castText().as('alertType')
     ])
-    .joinRaw(
-      `
-      INNER JOIN (
-        SELECT
-          n.event_id,
-          COUNT(*) FILTER (WHERE n.status = 'error') AS error_count,
-          COUNT(*) FILTER (WHERE n.status = 'returned') AS returned_count,
-          COUNT(*) FILTER (WHERE n.status = 'pending') AS pending_count
-        FROM
-          public.notifications n
-        WHERE n.event_id = ?
-        GROUP BY n.event_id
-      ) es ON es.event_id = events.id
-      `,
-      [noticeId]
-    )
 }
 
 function _fetchNotificationsQuery(noticeId) {

@@ -104,33 +104,15 @@ function _fetchQuery() {
       'events.id',
       'events.createdAt',
       'events.issuer',
+      'events.overallStatus',
       'events.referenceCode',
       'events.subtype',
       ref('events.metadata:name').castText().as('name'),
       ref('events.metadata:options.sendingAlertType').castText().as('alertType'),
       ref('events.metadata:recipients').castInt().as('recipientCount')
     ])
-    .select(
-      EventModel.knex().raw(`
-        CASE
-          WHEN COUNT(*) FILTER (WHERE notifications.status = 'error') > 0 THEN 'error'
-          WHEN COUNT(*) FILTER (WHERE notifications.status = 'returned') > 0 THEN 'returned'
-          WHEN COUNT(*) FILTER (WHERE notifications.status = 'pending') > 0 THEN 'pending'
-          ELSE 'sent'
-        END AS overall_status
-      `)
-    )
-    .leftJoin('notifications', 'events.id', 'notifications.eventId')
     .where('events.type', 'notification')
     .whereIn('events.status', ['sent', 'completed', 'sending'])
-    .groupBy([
-      'events.id',
-      'events.createdAt',
-      'events.issuer',
-      'events.referenceCode',
-      'events.subtype',
-      'events.metadata'
-    ])
 }
 
 function _standardNoticeTypes(noticeTypes) {

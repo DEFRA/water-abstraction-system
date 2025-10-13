@@ -34,15 +34,15 @@ function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
 
   return {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
-    createdBy: notice.issuer,
-    dateCreated: formatLongDate(notice.createdAt),
     notifications: tableRows,
     numberShowing: notifications.length,
     pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
     reference: notice.referenceCode,
+    sentBy: notice.issuer,
+    sentDate: formatLongDate(notice.createdAt),
     showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
-    status: _status(notice)
+    status: notice.overallStatus
   }
 }
 
@@ -99,24 +99,6 @@ function _showingDeclaration(numberDisplayed, totalNumber) {
   }
 
   return `Showing all ${totalNumber} notifications`
-}
-
-function _status(notice) {
-  const { errorCount, pendingCount, returnedCount } = notice
-
-  if (errorCount > 0) {
-    return 'error'
-  }
-
-  if (returnedCount > 0) {
-    return 'returned'
-  }
-
-  if (pendingCount > 0) {
-    return 'pending'
-  }
-
-  return 'sent'
 }
 
 module.exports = {

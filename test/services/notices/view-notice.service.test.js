@@ -27,12 +27,11 @@ describe('Notices - View Notice service', () => {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
+      overallStatus: 'error',
       referenceCode: generateReferenceCode('WAA'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
-      alertType: 'warning',
-      errorCount: 1,
-      pendingCount: 0
+      alertType: 'warning'
     }
 
     const notifications = [
@@ -108,8 +107,6 @@ describe('Notices - View Notice service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: { href: '/system/notices', text: 'Go back to notices' },
-        createdBy: 'test@wrls.gov.uk',
-        dateCreated: '21 February 2025',
         filters: {
           licence: null,
           openFilter: false,
@@ -141,6 +138,8 @@ describe('Notices - View Notice service', () => {
         pageTitle: 'Warning alert',
         pageTitleCaption: `Notice ${fetchResults.notice.referenceCode}`,
         reference: fetchResults.notice.referenceCode,
+        sentBy: 'test@wrls.gov.uk',
+        sentDate: '21 February 2025',
         showingDeclaration: 'Showing all 2 notifications',
         status: 'error',
         pagination: {
