@@ -174,6 +174,25 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "links" property', () => {
+    describe('when the "enableAdHocNotifications" is false', () => {
+      beforeEach(() => {
+        Sinon.stub(featureFlagsConfig, 'enableAdHocNotifications').value(false)
+
+        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+      })
+
+      it('returns all of the links (except adhoc)', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
+          }
+        })
+      })
+    })
+
     describe('when the user has both permissions', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications', 'returns']
