@@ -5,8 +5,7 @@
  * @module ViewLicencePresenter
  */
 
-const { formatLongDate, formatValueUnit, sentenceCase } = require('../base.presenter.js')
-const { formatRestrictionType } = require('./base.presenter.js')
+const { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
