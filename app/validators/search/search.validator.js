@@ -24,7 +24,7 @@ function go(query) {
         'Enter a licence number, customer name, returns ID, registered email address or monitoring station',
       'string.max': 'Search query must be 100 characters or less'
     }),
-    page: Joi.number().integer().positive().max(10).default(1).messages({ '*': 'Provide a valid page number' })
+    page: Joi.number().integer().positive().max(10000).default(1).messages({ '*': 'Provide a valid page number' })
   })
 
   return schema.validate(query, { abortEarly: true })

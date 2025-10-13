@@ -14,11 +14,12 @@ const { today } = require('../../lib/general.lib.js')
  *
  * @param {string} query - The user-entered search query - falsey if no query has been entered
  * @param {string} page - The user-requested page, for paginated results
+ * @param {string} numberOfPages - The total number of pages available for the search results
  * @param {Array<object>} licences - The list of licences matching the search criteria
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, licences) {
+function go(query, page, numberOfPages, licences) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
@@ -32,7 +33,7 @@ function go(query, page, licences) {
     licences: licences && _mapLicences(licences),
     noResults: !licences || licences.length === 0,
     page,
-    pageTitle: 'Search',
+    pageTitle: _pageTitle(numberOfPages, page),
     query,
     showResults: true
   }
@@ -68,6 +69,14 @@ function _mapLicences(licences) {
       licenceRef
     }
   })
+}
+
+function _pageTitle(numberOfPages, selectedPageNumber) {
+  if (numberOfPages < 2) {
+    return 'Search results'
+  }
+
+  return `Search results (page ${selectedPageNumber} of ${numberOfPages})`
 }
 
 module.exports = {

@@ -27,9 +27,9 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
-//const { enableSystemLicenceView } = require('../../../config/feature-flags.config.js')
 
 /**
  * Handles queries submitted to the /search page
@@ -67,11 +67,14 @@ async function go(requestQuery) {
     return { redirect }
   }
 
-  const formattedData = SearchPresenter.go(originalQuery, page, licences)
+  const pagination = PaginatorPresenter.go(licenceSearchResult.total, page, `/system/search`, { query: originalQuery })
+
+  const formattedData = SearchPresenter.go(originalQuery, page, pagination.numberOfPages, licences)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...formattedData,
+    pagination
   }
 }
 

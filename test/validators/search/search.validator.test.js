@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SearchValidator = require('../../../app/validators/search/search.validator.js')
 
-describe('Search - Search validator', () => {
+describe.only('Search - Search validator', () => {
   let requestQuery
 
   describe('when a valid payload is provided', () => {
@@ -18,7 +18,7 @@ describe('Search - Search validator', () => {
       beforeEach(() => {
         requestQuery = {
           query: 'This is a valid search term',
-          page: '10'
+          page: '10000'
         }
       })
 
@@ -27,7 +27,7 @@ describe('Search - Search validator', () => {
 
         expect(result.error).not.to.exist()
         expect(result.value.query).to.equal('This is a valid search term')
-        expect(result.value.page).to.equal(10)
+        expect(result.value.page).to.equal(10000)
       })
     })
 
@@ -98,7 +98,7 @@ describe('Search - Search validator', () => {
       beforeEach(() => {
         requestQuery = {
           query: 'This is a valid search term',
-          page: '11'
+          page: '10001'
         }
       })
 

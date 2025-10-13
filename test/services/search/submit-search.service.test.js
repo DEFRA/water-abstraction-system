@@ -109,7 +109,10 @@ describe('Search - Submit search service', () => {
         ],
         noResults: false,
         page: 1,
-        pageTitle: 'Search',
+        pageTitle: 'Search results',
+        pagination: {
+          numberOfPages: 1
+        },
         query: 'searchthis',
         showResults: true
       })
@@ -185,7 +188,10 @@ describe('Search - Submit search service', () => {
         licences: null,
         noResults: true,
         page: 1,
-        pageTitle: 'Search',
+        pageTitle: 'Search results',
+        pagination: {
+          numberOfPages: 0
+        },
         query: 'searchthis',
         showResults: true
       })
