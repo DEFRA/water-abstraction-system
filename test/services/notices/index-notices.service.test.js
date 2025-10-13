@@ -28,6 +28,8 @@ describe('Notices - Index Notices service', () => {
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 

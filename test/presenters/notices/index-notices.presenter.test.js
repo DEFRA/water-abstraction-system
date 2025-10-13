@@ -12,7 +12,7 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things we need to stub
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
@@ -28,7 +28,8 @@ describe('Notices - Index Notices presenter', () => {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
 
-    Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
   afterEach(() => {
@@ -174,6 +175,25 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "links" property', () => {
+    describe('when the "enableAdHocNotifications" is false', () => {
+      beforeEach(() => {
+        Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(false)
+
+        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+      })
+
+      it('returns all of the links (except adhoc)', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
+          }
+        })
+      })
+    })
+
     describe('when the user has both permissions', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications', 'returns']
