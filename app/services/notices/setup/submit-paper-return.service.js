@@ -10,6 +10,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
 const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -94,17 +95,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = PaperReturnValidator.go(payload)
+  const validationResult = PaperReturnValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

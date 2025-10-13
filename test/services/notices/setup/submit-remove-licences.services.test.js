@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const FetchReturnsDueService = require('../../../../app/services/notices/setup/fetch-returns-due.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const SubmitRemoveLicencesService = require('../../../../app/services/notices/setup/submit-remove-licences.service.js')
@@ -18,14 +19,17 @@ const SubmitRemoveLicencesService = require('../../../../app/services/notices/se
 describe('Notices - Setup - Submit Remove licences service', () => {
   let fetchReturnsDueServiceStub
   let payload
+  let referenceCode
   let session
   let validLicences
 
   beforeEach(async () => {
+    referenceCode = generateReferenceCode()
+
     session = await SessionHelper.add({
       data: {
         returnsPeriod: 'allYear',
-        referenceCode: 'RINV-123',
+        referenceCode,
         determinedReturnsPeriod: {
           name: 'allYear',
           dueDate: '2024-04-28',
@@ -84,12 +88,24 @@ describe('Notices - Setup - Submit Remove licences service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'manage',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/check`,
+            text: 'Back'
+          },
           error: {
-            text: 'There are no returns due for licence 789'
+            errorList: [
+              {
+                href: '#removeLicences',
+                text: 'There are no returns due for licence 789'
+              }
+            ],
+            removeLicences: {
+              text: 'There are no returns due for licence 789'
+            }
           },
           hint: 'Separate the licences numbers with a comma or new line.',
           removeLicences: '789',
-          referenceCode: 'RINV-123',
+          pageTitleCaption: `Notice ${referenceCode}`,
           pageTitle: 'Enter the licence numbers to remove from the mailing list'
         })
       })
