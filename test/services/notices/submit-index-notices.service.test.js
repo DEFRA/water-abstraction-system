@@ -25,6 +25,7 @@ describe('Notices - Submit Index Notices service', () => {
   let yarStub
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
 
     auth = {
