@@ -7,6 +7,7 @@
  */
 
 const NotificationModel = require('../../models/notification.model.js')
+const UpdateEventService = require('../jobs/notification-status/update-event.service.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
@@ -23,11 +24,16 @@ async function go(notifyId) {
   const updatedNotifications = await NotificationModel.query()
     .patch({ returnedAt: timestampForPostgres(), status: 'returned' })
     .where('notifyId', notifyId)
-    .returning('id')
+    .returning(['eventId', 'id'])
 
   if (updatedNotifications.length === 0) {
     global.GlobalNotifier.omg('No matching notification found for returned letter request', { notifyId })
+
+    return
   }
+
+  // Recalculate the overall status and status counts on the linked notice.
+  await UpdateEventService.go([updatedNotifications[0].eventId])
 }
 
 module.exports = {
