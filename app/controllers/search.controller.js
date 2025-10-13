@@ -5,8 +5,8 @@
  * @module SearchController
  */
 
-const ViewSearchService = require('../services/search/view-search.service.js')
 const SubmitSearchService = require('../services/search/submit-search.service.js')
+const ViewSearchService = require('../services/search/view-search.service.js')
 
 async function search(request, h) {
   const { query } = request

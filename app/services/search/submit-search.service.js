@@ -24,7 +24,6 @@
 const { ref } = require('objection')
 
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
-
 const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
@@ -34,10 +33,12 @@ const SearchValidator = require('../../validators/search/search.validator.js')
 /**
  * Handles queries submitted to the /search page
  *
- * This service uses other services to search the different types of entities and collates the results for display on
- * the /search page.
+ * Any invalid search will result in the search page being re-displayed with an error message.
+ *
+ * Otherwise, database queries will be performed and the results displayed, or the user redirected to a matching record.
  *
  * @param {object} requestQuery - The query object from the request
+ *
  * @returns {Promise<object>} The view data for the search page
  */
 async function go(requestQuery) {
@@ -50,7 +51,7 @@ async function go(requestQuery) {
     return _handleInvalidSearch(originalQuery, validationResult)
   }
 
-  // We use the cleaned, validated values for searching
+  // We use the cleaned, validated values return from the validator for searching
   const { query: queryForSearching, page } = value
 
   return _handleValidSearch(originalQuery, queryForSearching, page)

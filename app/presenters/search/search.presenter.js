@@ -5,8 +5,8 @@
  * @module SearchPresenter
  */
 
-const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate } = require('../base.presenter.js')
+const ContactModel = require('../../models/contact.model.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**

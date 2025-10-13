@@ -8,7 +8,10 @@
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/search` page
+ * Validates data submitted for the `/search` page.
+ *
+ * The search query text is limited to 100 characters, page number to a maximum of 10,000. In both cases this is purely
+ * to prevent abuse of the search functionality, as it is not expected that a user would ever need to enter more.
  *
  * @param {object} query - The query from the request to be validated
  *
