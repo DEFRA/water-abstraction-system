@@ -6,9 +6,8 @@
  * @module ProcessReturnedLetterService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-
 const NotificationModel = require('../../models/notification.model.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Processes a returned letter callback from GOV.UK Notify
