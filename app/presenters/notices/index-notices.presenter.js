@@ -54,7 +54,10 @@ function _link(noticeId) {
 function _links(scope) {
   const links = {}
 
-  if (scope.includes('returns') || scope.includes('bulk_return_notifications')) {
+  if (
+    featureFlagsConfig.enableAdHocNotifications &&
+    (scope.includes('returns') || scope.includes('bulk_return_notifications'))
+  ) {
     links.adhoc = {
       text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'
