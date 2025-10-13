@@ -28,6 +28,7 @@ describe('Notices - Index Notices presenter', () => {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
 
+    Sinon.stub(featureFlagsConfig, 'enableAdHocNotifications').value(true)
     Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
