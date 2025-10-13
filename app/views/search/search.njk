@@ -1,67 +1,89 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% block pageContent %}
-  <form method="get">
-    {{ govukInput({
-      classes: 'govuk-!-width-two-thirds govuk-!-display-inline',
-      label: {
-        html: pageHeadingHtml
-      },
-      hint: {
-        text: "Enter a licence number, customer name, returns ID, registered email address or monitoring station"
-      },
-      value: query,
-      id: 'query',
-      name: 'query',
-      errorMessage: error.query
-    }) }}
 
-    {{ govukButton({
-      classes: 'govuk-!-display-inline',
-      text: "Search", preventDoubleClick: true
-    }) }}
+  <h1 class="govuk-heading-xl"> {{ pageTitle }}</h1>
+
+  <form method="get">
+    <div class="govuk-form-group {{ 'govuk-form-group--error' if error.query }}">
+      <label class="govuk-label" for="query">
+        Enter a licence number, customer name, returns ID, registered email address or monitoring station
+      </label>
+
+      {% if error.query %}
+      <p id="query-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{ error.query.text }}
+      </p>
+      {% endif %}
+      <input class="govuk-input govuk-!-width-two-thirds govuk-!-display-inline-block" id="query" name="query" type="text" value="{{ query }}" {{ 'aria-describedby="query-hint query-error"' if error.query }}>
+
+      {{ govukButton({
+        classes: 'govuk-!-display-inline-block govuk-!-padding-right-6 govuk-!-padding-left-6',
+        text: "Search", preventDoubleClick: true
+      }) }}
+    </div>
   </form>
 
   {% if showResults %}
     {% if noResults %}
       <p>No results found.</p>
     {% else %}
-      <h2 class="govuk-heading-l">Results</h2>
-
       {% if licences %}
         {% for licence in licences %}
-          <div>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          {% set resultType = "licence" %}
 
-            <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
-              Licence
-              {% if licence.id %}
-                <a href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
-              {% else %}
-                {{ licence.licenceRef }}
-              {% endif %}
+          <hr class="govuk-section-break govuk-section-break--visible">
 
-              {% if licence.documentName %}
-                <span class="govuk-caption-m link--no-underline">{{ licence.licenceName }}</span>
-              {% endif %}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-top-2 govuk-!-margin-bottom-0 "><a class=" govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="#">{{resultType|capitalize}}: {{licence.number}}</a></p>
 
-              {% if licence.licenceEndedText %}
-                <strong class="govuk-tag govuk-tag--grey">{{ licence.licenceEndedText }}</strong>
-              {% endif %}
-            </h3>
+          {% set key1 = "licence holder" %}
+          {% set key2 = "End date" %}
+          {% set value1 = "" %}
+          {% set value1 = licence.licenceHolderName if licence.licenceHolderName %}
+          {% set value2 = "" %}
+          {% set value2 = licence.licenceEndDate if licence.licenceEndDate %}
+          {% set value3 = "" %}
+          {% if licence.licenceEndedText %}
+            {% set value3 %}
+              {{govukTag({
+                  text: licence.licenceEndedText,
+                  classes: "govuk-tag--grey"
+              })}}
+            {% endset %}
+          {% endif %}
 
-            {% if licence.licenceHolderName %}
-              <p>Holder: {{ licence.licenceHolderName }}</p>
-            {% endif %}
+          {{ govukTable({
+            caption: "results",
+            captionClasses: "govuk-table__caption--m govuk-visually-hidden",
+            firstCellIsHeader: false,
 
-            {% if licence.licenceEndDate and not licence.licenceEndedText %}
-              <p>End date: {{ licence.licenceEndDate }}</p>
-            {% endif %}
-          </div>
+            classes: "govuk-!-margin-bottom-0",
+              head: [],
+            rows:[
+              [
+                {
+                  html: key1|capitalize + ": " + value1,
+                  classes: "border-bottom-none govuk-!-width-one-third"
+                },
+                {
+                  html: key2|capitalize + ": " + value2,
+                  classes: "border-bottom-none govuk-!-width-one-third"
+                },
+                {
+                  html: value3|safe,
+                  classes: "border-bottom-none govuk-!-width-one-third"
+                }
+              ]
+            ]
+          }) }}
+
+          <hr class="govuk-section-break govuk-section-break--visible">
         {% endfor %}
       {% endif %}
 
