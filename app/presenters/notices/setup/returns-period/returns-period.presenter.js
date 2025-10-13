@@ -5,9 +5,10 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
-const { today } = require('../../../../lib/general.lib.js')
 const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
+const { formatLongDate } = require('../../../base.presenter.js')
+const { returnsPeriodText } = require('../../base.presenter.js')
+const { today } = require('../../../../lib/general.lib.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -43,24 +44,13 @@ function _returnsPeriod(savedReturnsPeriod) {
 }
 
 function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
-  const textPrefix = _textPrefix(returnsPeriod)
   return {
     value: returnsPeriod.name,
-    text: `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`,
+    text: returnsPeriodText(returnsPeriod),
     hint: {
       text: `Due date ${formatLongDate(returnsPeriod.dueDate)}`
     },
     checked: returnsPeriod.name === savedReturnsPeriod
-  }
-}
-
-function _textPrefix(returnPeriod) {
-  if (returnPeriod.name === 'allYear') {
-    return 'Winter and all year annual'
-  } else if (returnPeriod.name === 'summer') {
-    return 'Summer annual'
-  } else {
-    return 'Quarterly'
   }
 }
 

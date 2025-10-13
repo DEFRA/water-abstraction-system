@@ -7,6 +7,7 @@
 
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { returnsPeriodText } = require('../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: 'Returns invitation',
@@ -22,24 +23,56 @@ const NOTICE_TYPE_TEXT = {
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { dueReturns = [], id: sessionId, licenceRef, noticeType, selectedReturns = [] } = session
+  const {
+    determinedReturnsPeriod = null,
+    dueReturns = [],
+    id: sessionId,
+    licenceRef = null,
+    noticeType,
+    selectedReturns = []
+  } = session
 
   return {
-    licenceRef,
     links: _links(sessionId),
     pageTitle: 'Check the notice type',
     returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
-    selectedDueReturns: _selectedDueReturns(selectedReturns, dueReturns),
     sessionId,
-    showReturns: noticeType === NoticeType.PAPER_RETURN
+    ..._returns(selectedReturns, dueReturns, noticeType),
+    ..._licence(licenceRef),
+    ..._returnsPeriod(determinedReturnsPeriod)
+  }
+}
+
+function _licence(licenceRef) {
+  if (licenceRef) {
+    return {
+      licenceRef
+    }
   }
 }
 
 function _links(sessionId) {
   return {
     licenceNumber: `/system/notices/setup/${sessionId}/licence`,
+    returnsPeriod: `/system/notices/setup/${sessionId}/returns-period`,
     noticeType: `/system/notices/setup/${sessionId}/notice-type`,
     returns: `/system/notices/setup/${sessionId}/paper-return`
+  }
+}
+
+function _returns(selectedReturns, dueReturns, noticeType) {
+  if (noticeType === NoticeType.PAPER_RETURN) {
+    return {
+      returns: _selectedDueReturns(selectedReturns, dueReturns)
+    }
+  }
+}
+
+function _returnsPeriod(determinedReturnsPeriod) {
+  if (determinedReturnsPeriod) {
+    return {
+      returnsPeriodText: returnsPeriodText(determinedReturnsPeriod)
+    }
   }
 }
 

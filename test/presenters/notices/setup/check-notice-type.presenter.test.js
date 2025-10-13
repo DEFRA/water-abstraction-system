@@ -23,7 +23,7 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
     licenceRef = generateLicenceRef()
     noticeType = 'invitations'
 
-    session = { id: '123', licenceRef, noticeType }
+    session = { id: generateUUID(), noticeType }
   })
 
   describe('when called', () => {
@@ -31,17 +31,15 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
       expect(result).to.equal({
-        licenceRef,
         links: {
           licenceNumber: `/system/notices/setup/${session.id}/licence`,
           noticeType: `/system/notices/setup/${session.id}/notice-type`,
-          returns: `/system/notices/setup/${session.id}/paper-return`
+          returns: `/system/notices/setup/${session.id}/paper-return`,
+          returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
         },
         pageTitle: 'Check the notice type',
         returnNoticeType: 'Returns invitation',
-        selectedDueReturns: [],
-        sessionId: '123',
-        showReturns: false
+        sessionId: session.id
       })
     })
 
@@ -50,21 +48,55 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         session.noticeType = 'invitations'
       })
 
-      it('returns page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+      describe('and it is for the "adhoc" journey', () => {
+        beforeEach(() => {
+          session.licenceRef = licenceRef
+        })
 
-        expect(result).to.equal({
-          licenceRef,
-          links: {
-            licenceNumber: `/system/notices/setup/${session.id}/licence`,
-            noticeType: `/system/notices/setup/${session.id}/notice-type`,
-            returns: `/system/notices/setup/${session.id}/paper-return`
-          },
-          pageTitle: 'Check the notice type',
-          returnNoticeType: 'Returns invitation',
-          selectedDueReturns: [],
-          sessionId: '123',
-          showReturns: false
+        it('returns page data', () => {
+          const result = CheckNoticeTypePresenter.go(session)
+
+          expect(result).to.equal({
+            licenceRef,
+            links: {
+              licenceNumber: `/system/notices/setup/${session.id}/licence`,
+              noticeType: `/system/notices/setup/${session.id}/notice-type`,
+              returns: `/system/notices/setup/${session.id}/paper-return`,
+              returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            },
+            pageTitle: 'Check the notice type',
+            returnNoticeType: 'Returns invitation',
+            sessionId: session.id
+          })
+        })
+      })
+
+      describe('and it is for the "standard" journey', () => {
+        beforeEach(() => {
+          session.determinedReturnsPeriod = {
+            name: 'summer',
+            summer: 'true',
+            dueDate: '2025-11-28T00:00:00.000Z',
+            endDate: '2025-10-31T00:00:00.000Z',
+            startDate: '2024-11-01T00:00:00.000Z'
+          }
+        })
+
+        it('returns page data', () => {
+          const result = CheckNoticeTypePresenter.go(session)
+
+          expect(result).to.equal({
+            links: {
+              licenceNumber: `/system/notices/setup/${session.id}/licence`,
+              noticeType: `/system/notices/setup/${session.id}/notice-type`,
+              returns: `/system/notices/setup/${session.id}/paper-return`,
+              returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            },
+            pageTitle: 'Check the notice type',
+            returnNoticeType: 'Returns invitation',
+            returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025',
+            sessionId: session.id
+          })
         })
       })
     })
@@ -74,83 +106,122 @@ describe('Notices - Setup - Check Notice Type Presenter', () => {
         session.noticeType = 'reminders'
       })
 
-      it('returns page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+      describe('and it is for the "adhoc" journey', () => {
+        beforeEach(() => {
+          session.licenceRef = licenceRef
+        })
 
-        expect(result).to.equal({
-          licenceRef,
-          links: {
-            licenceNumber: `/system/notices/setup/${session.id}/licence`,
-            noticeType: `/system/notices/setup/${session.id}/notice-type`,
-            returns: `/system/notices/setup/${session.id}/paper-return`
-          },
-          pageTitle: 'Check the notice type',
-          returnNoticeType: 'Returns reminder',
-          selectedDueReturns: [],
-          sessionId: '123',
-          showReturns: false
+        it('returns page data', () => {
+          const result = CheckNoticeTypePresenter.go(session)
+
+          expect(result).to.equal({
+            licenceRef,
+            links: {
+              licenceNumber: `/system/notices/setup/${session.id}/licence`,
+              noticeType: `/system/notices/setup/${session.id}/notice-type`,
+              returns: `/system/notices/setup/${session.id}/paper-return`,
+              returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            },
+            pageTitle: 'Check the notice type',
+            returnNoticeType: 'Returns reminder',
+            sessionId: session.id
+          })
+        })
+      })
+
+      describe('and it is for the "standard" journey', () => {
+        beforeEach(() => {
+          session.determinedReturnsPeriod = {
+            name: 'summer',
+            summer: 'true',
+            dueDate: '2025-11-28T00:00:00.000Z',
+            endDate: '2025-10-31T00:00:00.000Z',
+            startDate: '2024-11-01T00:00:00.000Z'
+          }
+        })
+
+        it('returns page data', () => {
+          const result = CheckNoticeTypePresenter.go(session)
+
+          expect(result).to.equal({
+            links: {
+              licenceNumber: `/system/notices/setup/${session.id}/licence`,
+              noticeType: `/system/notices/setup/${session.id}/notice-type`,
+              returns: `/system/notices/setup/${session.id}/paper-return`,
+              returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            },
+            pageTitle: 'Check the notice type',
+            returnNoticeType: 'Returns reminder',
+            returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025',
+            sessionId: session.id
+          })
         })
       })
     })
 
     describe('and the notice type is "paperReturn"', () => {
-      let dueReturnOne
-      let dueReturnTwo
-
       beforeEach(() => {
-        dueReturnOne = {
-          description: 'Potable Water Supply - Direct',
-          endDate: '2003-03-31',
-          returnId: generateUUID(),
-          returnReference: '3135',
-          startDate: '2002-04-01'
-        }
-
-        dueReturnTwo = {
-          description: 'Potable Water Supply - Direct',
-          endDate: '2004-03-31',
-          returnId: generateUUID(),
-          returnReference: '3135',
-          startDate: '2003-04-01'
-        }
-
+        session.licenceRef = licenceRef
         session.noticeType = 'paperReturn'
-
-        session.dueReturns = [dueReturnOne, dueReturnTwo]
-
-        session.selectedReturns = [dueReturnOne.returnId]
       })
 
-      it('returns the page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+      describe('and it is for the "adhoc" journey', () => {
+        let dueReturnOne
+        let dueReturnTwo
 
-        expect(result).to.equal({
-          licenceRef,
-          links: {
-            licenceNumber: `/system/notices/setup/${session.id}/licence`,
-            noticeType: `/system/notices/setup/${session.id}/notice-type`,
-            returns: `/system/notices/setup/${session.id}/paper-return`
-          },
-          pageTitle: 'Check the notice type',
-          returnNoticeType: 'Paper return',
-          selectedDueReturns: ['3135 - 1 April 2002 to 31 March 2003'],
-          sessionId: '123',
-          showReturns: true
-        })
-      })
-
-      describe('and there are more than one "selectedReturns"', () => {
         beforeEach(() => {
-          session.selectedReturns = [dueReturnOne.returnId, dueReturnTwo.returnId]
+          dueReturnOne = {
+            description: 'Potable Water Supply - Direct',
+            endDate: '2003-03-31',
+            returnId: generateUUID(),
+            returnReference: '3135',
+            startDate: '2002-04-01'
+          }
+
+          dueReturnTwo = {
+            description: 'Potable Water Supply - Direct',
+            endDate: '2004-03-31',
+            returnId: generateUUID(),
+            returnReference: '3135',
+            startDate: '2003-04-01'
+          }
+
+          session.dueReturns = [dueReturnOne, dueReturnTwo]
+
+          session.selectedReturns = [dueReturnOne.returnId]
         })
 
-        it('returns an array of "selectedDueReturns"', () => {
+        it('returns the page data', () => {
           const result = CheckNoticeTypePresenter.go(session)
 
-          expect(result.selectedDueReturns).to.equal([
-            '3135 - 1 April 2002 to 31 March 2003',
-            '3135 - 1 April 2003 to 31 March 2004'
-          ])
+          expect(result).to.equal({
+            licenceRef,
+            links: {
+              licenceNumber: `/system/notices/setup/${session.id}/licence`,
+              noticeType: `/system/notices/setup/${session.id}/notice-type`,
+              returns: `/system/notices/setup/${session.id}/paper-return`,
+              returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            },
+            pageTitle: 'Check the notice type',
+            returnNoticeType: 'Paper return',
+            returns: ['3135 - 1 April 2002 to 31 March 2003'],
+            sessionId: session.id
+          })
+        })
+
+        describe('and there are more than one "selectedReturns"', () => {
+          beforeEach(() => {
+            session.selectedReturns = [dueReturnOne.returnId, dueReturnTwo.returnId]
+          })
+
+          it('returns an array of "selectedDueReturns"', () => {
+            const result = CheckNoticeTypePresenter.go(session)
+
+            expect(result.returns).to.equal([
+              '3135 - 1 April 2002 to 31 March 2003',
+              '3135 - 1 April 2003 to 31 March 2004'
+            ])
+          })
         })
       })
     })

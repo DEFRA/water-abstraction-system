@@ -38,7 +38,7 @@ async function go(sessionId, payload) {
   await _save(session, payload)
 
   return {
-    redirect: `${sessionId}/check`
+    redirect: `${sessionId}/check-notice-type`
   }
 }
 

@@ -67,7 +67,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: `${session.id}/check`
+          redirect: `${session.id}/check-notice-type`
         })
       })
     })
