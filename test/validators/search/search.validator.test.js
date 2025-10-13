@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SearchValidator = require('../../../app/validators/search/search.validator.js')
 
-describe.only('Search - Search validator', () => {
+describe('Search - Search validator', () => {
   let requestQuery
 
   describe('when a valid payload is provided', () => {
