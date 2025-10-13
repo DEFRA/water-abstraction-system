@@ -83,7 +83,15 @@
       rows: [
         {
           key: { text: 'Return reference' },
-          value: { html: '<span data-test="paper-return-return-reference">' + paperForm.reference + '</span>' }
+          value: { html: '<span data-test="paper-return-return-reference">' + paperForm.reference + '</span>' },
+          actions: {
+            items: [
+              {
+                href: paperForm.link,
+                text: 'View return'
+              }
+            ]
+          }
         },
         {
           key: { text: 'Site description' },
@@ -99,8 +107,6 @@
         }
       ]
     }) }}
-
-    <p><a href="{{ paperForm.link }}">View return</a></p>
 
     {% if paperForm.downloadLink %}
       <p><a href="{{ paperForm.downloadLink }}" target="_blank" rel="noopener noreferrer">View paper return</a></p>
