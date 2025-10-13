@@ -14,9 +14,9 @@ async function search(request, h) {
   // All requests to the /search page are submitted as GET requests, so we need to check whether this is just an
   // initial request to display the page (i.e. no query parameter present) or whether it is a search request
   if (!('query' in query)) {
-    const pageData = await ViewSearchService.go()
+    const viewPageData = await ViewSearchService.go()
 
-    return h.view('search/search.njk', pageData)
+    return h.view('search/search.njk', viewPageData)
   }
 
   // If there is a query, process the search

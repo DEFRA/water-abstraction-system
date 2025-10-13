@@ -61,13 +61,7 @@ function _mapLicences(licences) {
       licenceEndDate = formatLongDate(date)
     }
 
-    return {
-      id,
-      licenceEndDate,
-      licenceEndedText,
-      licenceHolderName,
-      licenceRef
-    }
+    return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
   })
 }
 

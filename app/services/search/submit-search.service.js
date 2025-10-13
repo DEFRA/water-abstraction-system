@@ -46,22 +46,33 @@ async function go(requestQuery) {
   const validationResult = SearchValidator.go(requestQuery)
   const { error, value } = validationResult
 
-  // If the search is invalid, we just re-display what the user entered, along with the validation error
   if (error) {
-    return {
-      activeNavBar: 'search',
-      error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(originalQuery)
-    }
+    return _handleInvalidSearch(originalQuery, validationResult)
   }
 
   // We use the cleaned, validated values for searching
   const { query: queryForSearching, page } = value
 
+  return _handleValidSearch(originalQuery, queryForSearching, page)
+}
+
+function _handleInvalidSearch(originalQuery, validationResult) {
+  // If the search is invalid, we just re-display what the user entered, along with the validation error
+  return {
+    activeNavBar: 'search',
+    error: formatValidationResult(validationResult),
+    ...SearchPresenter.go(originalQuery)
+  }
+}
+
+async function _handleValidSearch(originalQuery, queryForSearching, page) {
   // Check for matching licences - at the moment these are the only things we're searching for, but more things will
   // be added over time, in order to migrate the full search functionality from the legacy system
   const licenceSearchResult = await _searchLicences(queryForSearching, page)
   const licences = licenceSearchResult.results.length !== 0 ? licenceSearchResult.results : null
+
+  // Where a user has entered criteria that exactly matches a single result, they may be redirected straight to that
+  // record
   const redirect = _redirectForLicence(licenceSearchResult, queryForSearching)
   if (redirect) {
     return { redirect }
