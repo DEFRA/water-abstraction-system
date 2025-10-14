@@ -95,6 +95,37 @@ describe('Notices - Fetch Notices service', () => {
       Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
     })
 
+    describe('and "From Date" has been set', () => {
+      beforeEach(() => {
+        filters.fromDate = new Date('2025-09-10')
+      })
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+      })
+
+      describe('and when "From Date" is the same as a notice "Created At"', () => {
+        beforeEach(() => {
+          filters.fromDate = new Date('2025-07-01')
+        })
+
+        it('returns the matching notice', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+        })
+      })
+    })
+
     describe('and "Notice Types" has been set', () => {
       describe('and its a "standard" notice type (not an alert)', () => {
         describe('and its "returnsInvitation"', () => {
@@ -176,26 +207,6 @@ describe('Notices - Fetch Notices service', () => {
       })
     })
 
-    describe('and "Sent By" has been set', () => {
-      beforeEach(() => {
-        // NOTE: We use an uppercase "DATA" here to test that the service is using case insensitive LIKE where clause
-        filters.sentBy = 'DATA'
-      })
-
-      it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
-
-        expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
-      })
-
-      it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
-
-        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
-        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
-      })
-    })
-
     describe('and "Reference" has been set', () => {
       beforeEach(() => {
         // NOTE: We convert it to lowercase to test that the service is using case insensitive LIKE where clause
@@ -216,34 +227,23 @@ describe('Notices - Fetch Notices service', () => {
       })
     })
 
-    describe('and "From Date" has been set', () => {
+    describe('and "Sent By" has been set', () => {
       beforeEach(() => {
-        filters.fromDate = new Date('2025-09-10')
+        // NOTE: We use an uppercase "DATA" here to test that the service is using case insensitive LIKE where clause
+        filters.sentBy = 'DATA'
       })
 
       it('returns the matching notices', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
+        expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
-      })
-
-      describe('and when "From Date" is the same as a notice "Created At"', () => {
-        beforeEach(() => {
-          filters.fromDate = new Date('2025-07-01')
-        })
-
-        it('returns the matching notice', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
-
-          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
-        })
+        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
       })
     })
 
