@@ -26,16 +26,9 @@ describe('Notifications - View Notification service', () => {
   let notification
 
   beforeEach(() => {
-    licence = {
-      id: generateUUID(),
-      licenceRef: generateLicenceRef()
-    }
-
     notice = NoticesFixture.returnsInvitation()
     notification = NotificationsFixture.returnsInvitationEmail(notice)
     notification.event = notice
-
-    Sinon.stub(FetchNotificationService, 'go').resolves({ licence, notification })
   })
 
   afterEach(() => {
@@ -43,27 +36,69 @@ describe('Notifications - View Notification service', () => {
   })
 
   describe('when called', () => {
-    it('returns the page data for the view', async () => {
-      const result = await ViewNotificationService.go(notification.id, licence.id)
+    describe('from the view licence communications page', () => {
+      beforeEach(() => {
+        licence = {
+          id: generateUUID(),
+          licenceRef: generateLicenceRef()
+        }
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        address: [],
-        alertDetails: null,
-        backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
-        contents: notification.plaintext,
-        errorDetails: null,
-        licenceRef: licence.licenceRef,
-        messageType: 'email',
-        pageTitle: 'Returns invitation',
-        pageTitleCaption: `Licence ${licence.licenceRef}`,
-        paperForm: null,
-        reference: notice.referenceCode,
-        returnedDate: null,
-        sentDate: '2 April 2025',
-        sentBy: notice.issuer,
-        sentTo: notification.recipient,
-        status: notification.status
+        Sinon.stub(FetchNotificationService, 'go').resolves({ licence, notification })
+      })
+
+      it('returns the page data for the view', async () => {
+        const result = await ViewNotificationService.go(notification.id, licence.id)
+
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          address: [],
+          alertDetails: null,
+          backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
+          contents: notification.plaintext,
+          errorDetails: null,
+          messageType: 'email',
+          pageTitle: 'Returns invitation',
+          pageTitleCaption: `Licence ${licence.licenceRef}`,
+          paperForm: null,
+          reference: notice.referenceCode,
+          returnedDate: null,
+          sentDate: '2 April 2025',
+          sentBy: notice.issuer,
+          sentTo: notification.recipient,
+          status: notification.status
+        })
+      })
+    })
+
+    describe('from the view notice page', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
+      })
+
+      it('returns the page data for the view', async () => {
+        const result = await ViewNotificationService.go(notification.id)
+
+        expect(result).to.equal({
+          activeNavBar: 'manage',
+          address: [],
+          alertDetails: null,
+          backLink: {
+            href: `/system/notices/${notice.id}`,
+            text: `Go back to notice ${notice.referenceCode}`
+          },
+          contents: notification.plaintext,
+          errorDetails: null,
+          messageType: 'email',
+          pageTitle: 'Returns invitation',
+          pageTitleCaption: `Notice ${notice.referenceCode}`,
+          paperForm: null,
+          reference: null,
+          returnedDate: null,
+          sentDate: '2 April 2025',
+          sentBy: notice.issuer,
+          sentTo: notification.recipient,
+          status: notification.status
+        })
       })
     })
   })
