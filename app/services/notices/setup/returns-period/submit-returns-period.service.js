@@ -6,6 +6,7 @@
  */
 
 const DetermineReturnsPeriodService = require('../determine-returns-period.service.js')
+const GeneralLib = require('../../../../lib/general.lib.js')
 const ReturnsPeriodPresenter = require('../../../../presenters/notices/setup/returns-period/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../../validators/notices/setup/returns-periods.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
@@ -16,29 +17,36 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {object} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload, session.noticeType)
 
-  if (validationResult) {
-    const formattedData = ReturnsPeriodPresenter.go(session)
+  if (!validationResult) {
+    if (session.checkPageVisited) {
+      GeneralLib.flashNotification(yar, 'Updated', 'Returns period updated')
+
+      session.checkPageVisited = false
+    }
+
+    await _save(session, payload)
 
     return {
-      activeNavBar: 'manage',
-      error: validationResult,
-      ...formattedData
+      redirect: `${sessionId}/check-notice-type`
     }
   }
 
-  await _save(session, payload)
+  const formattedData = ReturnsPeriodPresenter.go(session)
 
   return {
-    redirect: `${sessionId}/check-notice-type`
+    activeNavBar: 'manage',
+    error: validationResult,
+    ...formattedData
   }
 }
 

@@ -19,18 +19,29 @@ const { today } = require('../../../../lib/general.lib.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { referenceCode, noticeType, id: sessionId } = session
+  const { checkPageVisited, referenceCode, noticeType, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null
 
   return {
-    backLink: {
-      href: `/system/notices/setup/${sessionId}/notice-type`,
-      text: 'Back'
-    },
+    backLink: _backLink(sessionId, checkPageVisited),
     pageTitle: `Select the returns periods for the ${noticeType}`,
     pageTitleCaption: `Notice ${referenceCode}`,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
+  }
+}
+
+function _backLink(sessionId, checkPageVisited) {
+  if (checkPageVisited) {
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${sessionId}/notice-type`,
+    text: 'Back'
   }
 }
 
