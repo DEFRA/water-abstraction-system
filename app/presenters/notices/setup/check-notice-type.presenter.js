@@ -27,7 +27,7 @@ function go(session) {
     determinedReturnsPeriod = null,
     dueReturns = [],
     id: sessionId,
-    licenceRef = null,
+    licenceRef,
     noticeType,
     selectedReturns = []
   } = session
@@ -44,11 +44,7 @@ function go(session) {
 }
 
 function _licence(licenceRef) {
-  if (licenceRef) {
-    return {
-      licenceRef
-    }
-  }
+  return licenceRef ? { licenceRef } : {}
 }
 
 function _links(sessionId) {
@@ -61,19 +57,11 @@ function _links(sessionId) {
 }
 
 function _returns(selectedReturns, dueReturns, noticeType) {
-  if (noticeType === NoticeType.PAPER_RETURN) {
-    return {
-      returns: _selectedDueReturns(selectedReturns, dueReturns)
-    }
-  }
+  return noticeType === NoticeType.PAPER_RETURN ? { returns: _selectedDueReturns(selectedReturns, dueReturns) } : {}
 }
 
 function _returnsPeriod(determinedReturnsPeriod) {
-  if (determinedReturnsPeriod) {
-    return {
-      returnsPeriodText: returnsPeriodText(determinedReturnsPeriod)
-    }
-  }
+  return determinedReturnsPeriod ? { returnsPeriodText: returnsPeriodText(determinedReturnsPeriod) } : {}
 }
 
 function _selectedDueReturns(selectedReturns, dueReturns) {

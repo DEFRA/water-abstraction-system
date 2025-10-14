@@ -19,7 +19,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {object} An object containing where to redirect to if there are no errors else the page data for the view
+ * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
 async function go(sessionId, payload, yar) {
