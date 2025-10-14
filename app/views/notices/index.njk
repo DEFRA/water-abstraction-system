@@ -207,6 +207,51 @@
         errorMessage: error.sentBy
       }) }}
 
+      {# Filter by status #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            attributes: { 'data-test': 'status-cancelled' },
+            checked: filters.statuses.includes('cancelled'),
+            text: 'Cancelled',
+            value: 'cancelled'
+          },
+          {
+            attributes: { 'data-test': 'status-error' },
+            checked: filters.statuses.includes('error'),
+            text: 'Error',
+            value: 'error'
+          },
+          {
+            attributes: { 'data-test': 'status-pending' },
+            checked: filters.statuses.includes('pending'),
+            text: 'Pending',
+            value: 'pending'
+          },
+          {
+            attributes: { 'data-test': 'status-returned' },
+            checked: filters.statuses.includes('returned'),
+            text: 'Returned',
+            value: 'returned'
+          },
+          {
+            attributes: { 'data-test': 'status-sent' },
+            checked: filters.statuses.includes('sent'),
+            text: 'Sent',
+            value: 'sent'
+          }
+        ],
+        name: "statuses"
+      }) }}
+
       <div class="govuk-button-group">
         {{ govukButton({
           preventDoubleClick: true,
