@@ -87,10 +87,7 @@ describe('Notices - Setup - Submit Check service', () => {
         eventId: result
       })
 
-      const event = await EventModel.query().findById(result)
-      delete event.entities
-      delete event.overallStatus
-      delete event.statusCounts
+      const notice = await EventModel.query().findById(result)
 
       const args = BatchNotificationsService.go.firstCall.args
 
@@ -111,7 +108,31 @@ describe('Notices - Setup - Submit Check service', () => {
         }
       ])
 
-      expect(args[1]).to.equal(event, { skip: ['createdAt', 'updatedAt'] })
+      expect(args[1]).to.equal(
+        {
+          id: notice.id,
+          issuer: 'hello@world.com',
+          licences: notice.licences,
+          metadata: {
+            name: 'A person',
+            recipients: 1,
+            options: { excludeLicences: [] },
+            returnCycle: {
+              dueDate: '2025-04-28',
+              endDate: '2023-03-31',
+              startDate: '2022-04-01',
+              isSummer: false
+            }
+          },
+          overallStatus: 'pending',
+          referenceCode: notice.referenceCode,
+          status: 'completed',
+          statusCounts: { cancelled: 0, error: 0, pending: 1, sent: 0 },
+          subtype: 'returnInvitation',
+          type: 'notification'
+        },
+        { skip: ['createdAt', 'updatedAt'] }
+      )
 
       expect(args[2]).to.equal(referenceCode)
     })

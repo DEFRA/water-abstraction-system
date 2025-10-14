@@ -86,8 +86,10 @@ describe('Notices - Setup - Create Notice presenter', () => {
             startDate: '2025-04-01'
           }
         },
+        overallStatus: 'pending',
         referenceCode: 'RINV-123',
         status: 'completed',
+        statusCounts: { cancelled: 0, error: 0, pending: 5, sent: 0 },
         subtype: 'returnInvitation'
       })
     })
@@ -247,8 +249,10 @@ describe('Notices - Setup - Create Notice presenter', () => {
           },
           recipients: 3
         },
+        overallStatus: 'pending',
         referenceCode: 'WAA-123',
         status: 'completed',
+        statusCounts: { cancelled: 0, error: 0, pending: 3, sent: 0 },
         subtype: 'waterAbstractionAlerts'
       })
     })

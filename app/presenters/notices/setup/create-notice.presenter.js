@@ -32,8 +32,10 @@ function go(session, recipients, auth) {
       name,
       recipients: recipients.length
     },
+    overallStatus: 'pending',
     referenceCode,
     status: 'completed',
+    statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
     subtype: subType
   }
 
