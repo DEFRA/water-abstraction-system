@@ -10,9 +10,9 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
 
 // Thing under test
 const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
@@ -72,7 +72,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -123,7 +123,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -166,7 +166,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -207,7 +207,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -243,7 +243,7 @@ describe('Notifications - Fetch Notification service', () => {
               issuer: 'admin-internal@wrls.gov.uk',
               referenceCode: notice.referenceCode,
               subtype: 'paperReturnForms',
-              alertType: null
+              sendingAlertType: null
             }
           }
         })

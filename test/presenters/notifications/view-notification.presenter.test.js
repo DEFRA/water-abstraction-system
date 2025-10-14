@@ -327,6 +327,7 @@ describe('Notifications - View Notification presenter', () => {
     describe('when the notification is a water abstraction alert', () => {
       beforeEach(() => {
         notice = NoticesFixture.alertStop()
+        notice.sendingAlertType = notice.metadata.options.sendingAlertType
         notification = NotificationsFixture.abstractionAlertEmail(notice)
         notification.event = notice
       })

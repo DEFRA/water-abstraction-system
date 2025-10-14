@@ -42,7 +42,7 @@ function _alertNoticeTypes(noticeTypes) {
 }
 
 function _applyFilters(query, filters) {
-  const { fromDate, noticeTypes, reference, sentBy, toDate } = filters
+  const { fromDate, noticeTypes, reference, sentBy, statuses, toDate } = filters
 
   if (reference) {
     query.whereILike('events.referenceCode', `%${reference}%`)
@@ -68,6 +68,7 @@ function _applyFilters(query, filters) {
   }
 
   _applyNoticeTypeFilters(query, noticeTypes)
+  _applyStatusFilters(query, statuses)
 }
 
 function _applyNoticeTypeFilters(query, noticeTypes) {
@@ -95,6 +96,12 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
 
   if (standardNoticeTypes.length > 0) {
     query.whereIn('events.subtype', standardNoticeTypes)
+  }
+}
+
+function _applyStatusFilters(query, statuses) {
+  for (const status of statuses) {
+    query.whereRaw(`events.status_counts->>'${status}' <> '0'`)
   }
 }
 

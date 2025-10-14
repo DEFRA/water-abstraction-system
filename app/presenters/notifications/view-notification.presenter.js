@@ -71,9 +71,9 @@ function _alertDetails(notification) {
   }
 
   const {
-    alertType,
     label,
     monitoring_station_name: name,
+    alertType,
     thresholdUnit,
     thresholdValue
   } = notification.personalisation
@@ -127,12 +127,12 @@ function _errorDetails(notification) {
 }
 
 function _pageTitle(notification) {
-  const { alertType, subtype } = notification.event
+  const { sendingAlertType, subtype } = notification.event
 
   let title = noticeMappings[subtype]
 
-  if (alertType) {
-    title = `${titleCase(alertType)} alert`
+  if (sendingAlertType) {
+    title = `${titleCase(sendingAlertType)} alert`
   }
 
   return title

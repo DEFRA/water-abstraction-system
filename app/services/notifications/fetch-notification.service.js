@@ -60,7 +60,7 @@ async function _fetchNotification(notificationId) {
         'issuer',
         'referenceCode',
         'subtype',
-        ref('metadata:options.sendingAlertType').castText().as('alertType')
+        ref('metadata:options.sendingAlertType').castText().as('sendingAlertType')
       ])
     })
 }
