@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Fetches a list of licences and their addresses with missing postcodes and countries
+ * Fetches invalid addresses linked to 'Licence holder' and 'Returns to' contacts for non-ended licences
  * @module FetchInvalidAddressesService
  */
 
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetches a list of licences and their addresses with missing postcodes and countries
+ * Fetches invalid addresses linked to 'Licence holder' and 'Returns to' contacts for non-ended licences
  *
- * @returns {Promise<Array>} the matching addresses that are missing their postcodes and countries
+ * @returns {Promise<object[]>} the matching addresses that are missing their postcodes and countries
  * and licence data
  */
 async function go() {
@@ -43,7 +43,8 @@ async function _fetch() {
       lhc.contact_role IN ('Licence holder', 'Returns to')
       AND lhc.country IS NULL
       AND lhc.postcode IS NULL
-      AND (lhc.licence_ends IS NULL OR lhc.licence_ends > NOW()) order by lhc.licence_ref, lhc.contact_role, lhc.address_line_1;
+      AND (lhc.licence_ends IS NULL OR lhc.licence_ends > NOW())
+    order by lhc.licence_ref, lhc.contact_role, lhc.address_line_1;
   `)
 }
 

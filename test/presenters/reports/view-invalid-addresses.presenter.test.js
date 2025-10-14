@@ -20,7 +20,7 @@ describe('Reports - View invalid addresses presenter', () => {
       const result = await ViewInvalidAddressesPresenter.go([])
 
       expect(result).to.equal({
-        backLink: { href: '/system/manage', text: 'Back' },
+        backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [],
         pageTitle: 'Invalid addresses'
       })
@@ -32,7 +32,7 @@ describe('Reports - View invalid addresses presenter', () => {
       const result = await ViewInvalidAddressesPresenter.go(_invalidAddresses())
 
       expect(result).to.equal({
-        backLink: { href: '/system/manage', text: 'Back' },
+        backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [
           {
             licenceRef: '03/28/01/0165',

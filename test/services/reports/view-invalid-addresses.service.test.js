@@ -25,7 +25,7 @@ describe('Reports - View Invalid Addresses service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        backLink: { href: '/system/manage', text: 'Back' },
+        backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [
           {
             licenceRef: '03/28/01/0165',

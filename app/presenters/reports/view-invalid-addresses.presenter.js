@@ -10,13 +10,13 @@ const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
 /**
  * Formats return invalid addresses data ready for presenting in the view invalid addresses page
  *
- * @param {Array} invalidAddresses - The invalid addresses data
+ * @param {object[]} invalidAddresses - The invalid addresses data
  *
  * @returns {object} page data needed by the view template
  */
 function go(invalidAddresses) {
   return {
-    backLink: { href: '/system/manage', text: 'Back' },
+    backLink: { href: '/system/manage', text: 'Go back to manage' },
     invalidAddresses: _formatTableData(invalidAddresses),
     pageTitle: 'Invalid addresses'
   }
@@ -25,12 +25,12 @@ function go(invalidAddresses) {
 function _formatTableData(data) {
   return data.map((address) => {
     const addressLines = [
-      `Address Line 1: ${address.address_line_1 ? address.address_line_1 : ''}`,
-      `Address Line 2: ${address.address_line_2 ? address.address_line_2 : ''}`,
-      `Address Line 3: ${address.address_line_3 ? address.address_line_3 : ''}`,
-      `Address Line 4: ${address.address_line_4 ? address.address_line_4 : ''}`,
-      `County: ${address.county ? address.county : ''}`,
-      `Town: ${address.town ? address.town : ''}`
+      `Address Line 1: ${_line(address.address_line_1)}`,
+      `Address Line 2: ${_line(address.address_line_2)}`,
+      `Address Line 3: ${_line(address.address_line_3)}`,
+      `Address Line 4: ${_line(address.address_line_4)}`,
+      `County: ${_line(address.county)}`,
+      `Town: ${_line(address.town)}`
     ]
 
     return {
@@ -40,6 +40,10 @@ function _formatTableData(data) {
       addressLines
     }
   })
+}
+
+function _line(addressLine) {
+  return addressLine ?? ''
 }
 
 module.exports = {

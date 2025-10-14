@@ -11,7 +11,7 @@ const ViewInvalidAddressesPresenter = require('../../presenters/reports/view-inv
 /**
  * Orchestrates fetching and presenting the data needed for the view invalid addresses page
  *
- * @returns {Promise<object>} an object representing the `pageData` needed by the view return log template.
+ * @returns {Promise<object>} The view data for the invalid addresses page
  */
 async function go() {
   const invalidAddresses = await FetchInvalidAddressesService.go()

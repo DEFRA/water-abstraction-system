@@ -74,15 +74,16 @@ function _returnNotices(userScopes) {
 
 function _viewReports(userScopes) {
   const links = {
-    basicReports: _basicReports(userScopes),
+    digitise: _hasPermission(userScopes, ['ar_approver']),
+    invalidAddresses: _basicReports(userScopes),
+    kpis: _basicReports(userScopes),
     notices: _hasPermission(userScopes, [
       'bulk_return_notifications',
       'hof_notifications',
       'renewal_notifications',
       'returns'
     ]),
-    returnsCycles: _hasPermission(userScopes, ['returns']),
-    digitise: _hasPermission(userScopes, ['ar_approver'])
+    returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 
   return { show: Object.values(links).includes(true), links }
