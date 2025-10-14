@@ -45,7 +45,89 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
-      {# Filter by licence issues #}
+      <p class="govuk-!-font-weight-bold">Sent Dates</p>
+
+      {# Filter by from date #}
+      {{ govukDateInput({
+        fieldset: {
+          legend: {
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold",
+            text: "From"
+          }
+        },
+        id: 'fromDate',
+        items: [
+          {
+            classes: 'govuk-input--width-2 ' + errorClass,
+            label: 'Day',
+            name: 'sentFromDay',
+            value: filters.sentFromDay
+          },
+          {
+            classes: 'govuk-input--width-2 ' + errorClass,
+            label: 'Month',
+            name: 'sentFromMonth',
+            value: filters.sentFromMonth
+          },
+          {
+            classes: 'govuk-input--width-4 ' + errorClass,
+            label: 'Year',
+            name: 'sentFromYear',
+            value:filters.sentFromYear
+          }
+        ],
+        name: "fromDate",
+        errorMessage: error.fromDate
+      }) }}
+
+      {# Filter by to date #}
+      {{ govukDateInput({
+        fieldset: {
+          legend: {
+            text: "To",
+            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+          }
+        },
+        id: 'toDate',
+        items: [
+          {
+            classes: 'govuk-input--width-2 ' + errorClass,
+            name: 'sentToDay',
+            label: 'Day',
+            value: filters.sentToDay
+          },
+          {
+            classes: 'govuk-input--width-2 ' + errorClass,
+            name: 'sentToMonth',
+            label: 'Month',
+            value: filters.sentToMonth
+          },
+          {
+            classes: 'govuk-input--width-4 ' + errorClass,
+            name: 'sentToYear',
+            label: 'Year',
+            value: filters.sentToYear
+          }
+        ],
+        name: "toDate",
+        errorMessage: error.toDate
+      }) }}
+
+      {# Filter by reference #}
+      {{ govukInput({
+        classes: "govuk-input--width-10",
+        id: "reference",
+        label: {
+          classes: "govuk-label--s",
+          isPageHeading: false,
+          text: "Reference"
+        },
+        name: "reference",
+        value: filters.reference,
+        errorMessage: error.reference
+      }) }}
+
+      {# Filter by notice type #}
       {{ govukCheckboxes({
         classes: "govuk-checkboxes--small",
         fieldset: {
@@ -123,88 +205,6 @@
         name: "sentBy",
         value: filters.sentBy,
         errorMessage: error.sentBy
-      }) }}
-
-      {# Filter by reference #}
-      {{ govukInput({
-        classes: "govuk-input--width-10",
-        id: "reference",
-        label: {
-          classes: "govuk-label--s",
-          isPageHeading: false,
-          text: "Reference"
-        },
-        name: "reference",
-        value: filters.reference,
-        errorMessage: error.reference
-      }) }}
-
-      <p class="govuk-!-font-weight-bold">Sent Dates</p>
-
-      {# Filter by from date #}
-      {{ govukDateInput({
-        fieldset: {
-          legend: {
-            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold",
-            text: "From"
-          }
-        },
-        id: 'fromDate',
-        items: [
-          {
-            classes: 'govuk-input--width-2 ' + errorClass,
-            label: 'Day',
-            name: 'sentFromDay',
-            value: filters.sentFromDay
-          },
-          {
-            classes: 'govuk-input--width-2 ' + errorClass,
-            label: 'Month',
-            name: 'sentFromMonth',
-            value: filters.sentFromMonth
-          },
-          {
-            classes: 'govuk-input--width-4 ' + errorClass,
-            label: 'Year',
-            name: 'sentFromYear',
-            value:filters.sentFromYear
-          }
-        ],
-        name: "fromDate",
-        errorMessage: error.fromDate
-      }) }}
-
-      {# Filter by to date #}
-      {{ govukDateInput({
-        fieldset: {
-          legend: {
-            text: "To",
-            classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
-          }
-        },
-        id: 'toDate',
-        items: [
-          {
-            classes: 'govuk-input--width-2 ' + errorClass,
-            name: 'sentToDay',
-            label: 'Day',
-            value: filters.sentToDay
-          },
-          {
-            classes: 'govuk-input--width-2 ' + errorClass,
-            name: 'sentToMonth',
-            label: 'Month',
-            value: filters.sentToMonth
-          },
-          {
-            classes: 'govuk-input--width-4 ' + errorClass,
-            name: 'sentToYear',
-            label: 'Year',
-            value: filters.sentToYear
-          }
-        ],
-        name: "toDate",
-        errorMessage: error.toDate
       }) }}
 
       <div class="govuk-button-group">
