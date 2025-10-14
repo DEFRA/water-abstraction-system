@@ -11,27 +11,33 @@ const { notifyErrors, noticeMappings } = require('../../lib/static-lookups.lib.j
 /**
  * Formats notification data ready for presenting in the view notification page
  *
- * @param {module:LicenceModel} licence - The related licence
+ * If linked to from the view licence communications page, the ID of the licence will be included in the link and the
+ * page will display the notification from within that context, for example, `pageTitleCaption` will be the licence ref.
+ *
+ * If no licence ID is provided then it is assumed we are linked from the view notice page. Now the page will display
+ * in the context of just the notice, for example, `pageTitleCaption` will be the notice reference and we won't bother
+ * repeating it in the metadata.
+ *
  * @param {module:NotificationModel} notification - The selected notification with attached notice
+ * @param {module:LicenceModel} [licence=null] - The related licence if coming from the view licence communications page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence, notification) {
+function go(notification, licence = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
-  const { id: licenceId, licenceRef } = licence
 
   return {
+    activeNavBar: licence ? 'search' : 'manage',
     address: _address(notification),
     alertDetails: _alertDetails(notification),
-    backLink: { href: `/system/licences/${licenceId}/communications`, text: 'Go back to communications' },
+    backLink: _backLink(notification, licence),
     contents: plaintext,
     errorDetails: _errorDetails(notification),
-    licenceRef,
     messageType,
     pageTitle: _pageTitle(notification),
-    pageTitleCaption: `Licence ${licenceRef}`,
+    pageTitleCaption: _pageTitleCaption(notification, licence),
     paperForm: _paperForm(notification),
-    reference: event.referenceCode,
+    reference: licence ? event.referenceCode : null,
     returnedDate: returnedAt ? formatLongDate(returnedAt) : null,
     sentDate: formatLongDate(createdAt),
     sentBy: event.issuer,
@@ -79,6 +85,16 @@ function _alertDetails(notification) {
   }
 }
 
+function _backLink(notification, licence) {
+  if (licence) {
+    return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
+  }
+
+  const { event } = notification
+
+  return { href: `/system/notices/${event.id}`, text: `Go back to notice ${event.referenceCode}` }
+}
+
 /**
  * Generally the `notifyError` will get populated when a notification fails to send to Notify, for whatever reason
  * (issue on our side or Notify rejects it).
@@ -120,6 +136,14 @@ function _pageTitle(notification) {
   }
 
   return title
+}
+
+function _pageTitleCaption(notification, licence) {
+  if (licence) {
+    return `Licence ${licence.licenceRef}`
+  }
+
+  return `Notice ${notification.event.referenceCode}`
 }
 
 function _paperForm(notification) {

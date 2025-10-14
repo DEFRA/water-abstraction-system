@@ -38,9 +38,15 @@ function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
 
 function _formatTableData(notifications) {
   return notifications.map((notification) => {
+    const recipient = _recipient(notification)
+
     return {
-      recipient: _recipient(notification),
+      recipient,
       licenceRefs: notification.licences,
+      link: {
+        href: `/system/notifications/${notification.id}`,
+        hiddenText: `notification for recipient ${recipient[0]}`
+      },
       messageType: notification.messageType,
       status: notification.status
     }

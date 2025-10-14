@@ -103,12 +103,20 @@ describe('Notices - View Notice presenter', () => {
             'CB23 1ZZ'
           ],
           licenceRefs: ['01/123'],
+          link: {
+            href: `/system/notifications/${notifications[0].id}`,
+            hiddenText: 'notification for recipient Clean Water Limited'
+          },
           messageType: 'letter',
           status: 'sent'
         },
         {
           recipient: ['shaw.carol@atari.com'],
           licenceRefs: ['01/124'],
+          link: {
+            href: `/system/notifications/${notifications[1].id}`,
+            hiddenText: 'notification for recipient shaw.carol@atari.com'
+          },
           messageType: 'email',
           status: 'error'
         }
