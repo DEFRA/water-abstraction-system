@@ -19,6 +19,7 @@ const ViewNoticeService = require('../../../app/services/notices/view-notice.ser
 
 describe('Notices - View Notice service', () => {
   let fetchResults
+  let notifications
   let page
   let yarStub
 
@@ -34,7 +35,7 @@ describe('Notices - View Notice service', () => {
       alertType: 'warning'
     }
 
-    const notifications = [
+    notifications = [
       {
         id: '2384d26f-5acb-4e3b-ab31-532197db095f',
         licences: ['01/123'],
@@ -124,12 +125,20 @@ describe('Notices - View Notice service', () => {
               'CB23 1ZZ'
             ],
             licenceRefs: ['01/123'],
+            link: {
+              href: `/system/notifications/${notifications[0].id}`,
+              hiddenText: 'notification for recipient Clean Water Limited'
+            },
             messageType: 'letter',
             status: 'sent'
           },
           {
             recipient: ['shaw.carol@atari.com'],
             licenceRefs: ['01/124'],
+            link: {
+              href: `/system/notifications/${notifications[1].id}`,
+              hiddenText: 'notification for recipient shaw.carol@atari.com'
+            },
             messageType: 'email',
             status: 'error'
           }

@@ -30,7 +30,6 @@ describe('Notices - Index Notices service', () => {
     }
 
     Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
   afterEach(() => {
@@ -42,7 +41,9 @@ describe('Notices - Index Notices service', () => {
       // For the purposes of this tests the filter doesn't matter
       yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
 
-      fetchResults = { results: [NoticesFixture.alertReduce()], total: 1 }
+      const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
+
+      fetchResults = { results, total: 1 }
       Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
     })
 
@@ -86,7 +87,7 @@ describe('Notices - Index Notices service', () => {
             link: `/system/notices/${fetchResults.results[0].id}`,
             recipients: fetchResults.results[0].recipientCount,
             reference: fetchResults.results[0].referenceCode,
-            sentBy: 'billing.data@wrls.gov.uk',
+            sentBy: 'admin-internal@wrls.gov.uk',
             status: 'sent',
             type: 'Reduce alert'
           }

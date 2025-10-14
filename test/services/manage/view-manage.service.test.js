@@ -23,11 +23,6 @@ describe('Manage - View Manage service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        flowNotices: {
-          show: false,
-          links: { restriction: false, handsOffFlow: false, resume: false }
-        },
-        licenceNotices: { show: false, links: { renewal: false } },
         manageUsers: { show: false, links: { createAccount: false } },
         pageTitle: 'Manage reports and notices',
         returnNotices: {

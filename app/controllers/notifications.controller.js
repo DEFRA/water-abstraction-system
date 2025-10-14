@@ -19,20 +19,8 @@ async function download(request, h) {
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="letter.pdf"')
 }
 
-/**
- * If a letter has been returned to notify this end point will be called
- *
- * @param request - the hapi request object
- * @param h - the hapi response object
- *
- * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
- */
 async function returnedLetter(request, h) {
-  const { notification_id: notificationId, reference } = request.payload
-
-  global.GlobalNotifier.omg('Return letter callback triggered', { notificationId, reference })
-
-  await ProcessReturnedLetterService.go(notificationId)
+  await ProcessReturnedLetterService.go(request.payload)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }

@@ -3,17 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-
-// Things we need to stub
-const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const ConfirmationService = require('../../../../app/services/notices/setup/confirmation.service.js')
@@ -29,12 +25,6 @@ describe('Notices - Setup - Confirmation service', () => {
       subtype: 'returnInvitation',
       referenceCode
     })
-
-    Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when called', () => {
