@@ -21,6 +21,7 @@ describe('Notices - Index validator', () => {
       beforeEach(() => {
         payload = _payload()
         payload.noticeTypes = ['reduce', 'stop']
+        payload.statuses = ['error', 'sent']
       })
 
       it('confirms the data is valid', () => {
@@ -36,6 +37,7 @@ describe('Notices - Index validator', () => {
           sentToMonth: '4',
           sentToYear: '2024',
           fromDate: new Date('2024-04-01'),
+          statuses: ['error', 'sent'],
           toDate: new Date('2024-04-28')
         })
         expect(result.error).not.to.exist()
@@ -62,6 +64,7 @@ describe('Notices - Index validator', () => {
           sentFromDay: '1',
           sentFromMonth: '4',
           sentFromYear: '2024',
+          statuses: [],
           toDate: undefined
         })
         expect(result.error).not.to.exist()
@@ -262,6 +265,20 @@ describe('Notices - Index validator', () => {
         expect(result.error.details[0].path[0]).to.equal('noticeTypes')
       })
     })
+
+    describe('because "Statuses" contains an unknown option', () => {
+      beforeEach(() => {
+        payload.statuses.push('foo-bar')
+      })
+
+      it('fails validation', () => {
+        const result = IndexValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error.details[0].message).to.equal('Select a valid status')
+        expect(result.error.details[0].path[0]).to.equal('statuses')
+      })
+    })
   })
 })
 
@@ -274,6 +291,7 @@ function _payload() {
     sentFromYear: '2024',
     sentToDay: '28',
     sentToMonth: '4',
-    sentToYear: '2024'
+    sentToYear: '2024',
+    statuses: []
   }
 }
