@@ -14,7 +14,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Test helpers
 const EventModel = require('../../../app/models/event.model.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Thing under test
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
@@ -29,81 +29,26 @@ describe('Notices - Fetch Notices service', () => {
 
   before(async () => {
     returnsInvitationNotice = await EventHelper.add({
+      ...NoticesFixture.returnsInvitation(),
       createdAt: new Date('2025-07-01T15:01:47.023Z'),
-      issuer: 'billing.data@wrls.gov.uk',
-      metadata: {
-        name: 'Returns: invitation',
-        error: 1,
-        options: { excludeLicences: [] },
-        recipients: 1,
-        returnCycle: {
-          dueDate: new Date('2025-07-28'),
-          endDate: new Date('2025-06-30'),
-          isSummer: false,
-          startDate: new Date('2025-04-01')
-        }
-      },
-      overallStatus: 'error',
-      referenceCode: NotificationHelper.generateReferenceCode(),
-      status: 'completed',
-      subtype: 'returnInvitation',
-      type: 'notification'
+      issuer: 'billing.data@wrls.gov.uk'
     })
 
     legacyNotice = await EventHelper.add({
-      createdAt: new Date('2024-09-01T18:42:59.659Z'),
-      issuer: 'legacy.alerts@wrls.gov.uk',
-      metadata: {
-        name: 'Hands off flow: resume abstraction',
-        sent: 0,
-        error: 0,
-        pending: 1,
-        recipients: 1,
-        taskConfigId: 4
-      },
-      overallStatus: 'pending',
-      referenceCode: NotificationHelper.generateReferenceCode('HOF'),
-      status: 'completed',
-      subtype: 'hof-resume',
-      type: 'notification'
+      ...NoticesFixture.legacyHandsOffFlow(),
+      createdAt: new Date('2024-09-01T18:42:59.659Z')
     })
 
     abstractionAlertNotice = await EventHelper.add({
-      createdAt: new Date('2025-09-17T09:13:26.924Z'),
-      issuer: 'abstraction.alerts@wrls.gov.uk',
-      metadata: {
-        name: 'Water abstraction alert',
-        error: 0,
-        options: { sendingAlertType: 'stop', monitoringStationId: '464639dd-1c70-4107-94f1-575f07c434be' },
-        recipients: 1
-      },
-      overallStatus: 'sent',
-      referenceCode: NotificationHelper.generateReferenceCode('WAA'),
-      status: 'completed',
-      subtype: 'waterAbstractionAlerts',
-      type: 'notification'
+      ...NoticesFixture.alertStop(),
+      createdAt: new Date('2025-09-17T09:13:26.924Z')
     })
 
     returnedInvitationNotice = await EventHelper.add({
+      ...NoticesFixture.returnsInvitation(),
       createdAt: new Date('2025-07-01T15:01:47.023Z'),
-      issuer: 'billing.data@wrls.gov.uk',
-      metadata: {
-        name: 'Returns: invitation',
-        error: 1,
-        options: { excludeLicences: [] },
-        recipients: 1,
-        returnCycle: {
-          dueDate: new Date('2025-07-28'),
-          endDate: new Date('2025-06-30'),
-          isSummer: false,
-          startDate: new Date('2025-04-01')
-        }
-      },
       overallStatus: 'returned',
-      referenceCode: NotificationHelper.generateReferenceCode(),
-      status: 'completed',
-      subtype: 'returnInvitation',
-      type: 'notification'
+      statusCounts: { cancelled: 0, error: 0, pending: 0, returned: 1, sent: 0 }
     })
   })
 
@@ -357,6 +302,7 @@ function _filters() {
     populated: false,
     reference: null,
     sentBy: null,
+    statuses: [],
     toDate: null
   }
 }
