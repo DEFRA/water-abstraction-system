@@ -169,6 +169,11 @@
         {% endif %}
       {% endset %}
 
+      {# Link to view the notification #}
+      {% set viewLink %}
+        <a class="govuk-link" href="{{ notification.link.href }}">View <span class="govuk-visually-hidden">{{ notification.link.hiddenText }}</span></a>
+      {% endset %}
+
       {% set noticeStatusTag %}
         {{ statusTag(notification.status, true) }}
       {% endset %}
@@ -185,6 +190,11 @@
         {
           html: noticeStatusTag,
           attributes: { 'data-test': 'notification-status-' + rowIndex }
+        },
+        {
+          html: viewLink,
+          format: 'numeric',
+          attributes: { 'data-test': 'notification-action-' + rowIndex }
         }
       ] %}
 
@@ -197,7 +207,8 @@
       head: [
         { text: 'Recipient' },
         { text: 'Licence number' },
-        { text: 'Status' }
+        { text: 'Status' },
+        { text: 'Action' }
       ],
       rows: tableRows
     }) }}
