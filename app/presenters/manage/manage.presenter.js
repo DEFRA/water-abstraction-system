@@ -27,6 +27,18 @@ function go(userScopes) {
   }
 }
 
+function _basicReports(userScopes) {
+  return _hasPermission(userScopes, [
+    'ar_approver',
+    'billing',
+    'bulk_return_notifications',
+    'hof_notifications',
+    'manage_accounts',
+    'renewal_notifications',
+    'returns'
+  ])
+}
+
 /**
  * Checks if a user has any of the scopes required to view a management link
  *
@@ -39,20 +51,6 @@ function _hasPermission(userScopes, linkScopes) {
   return linkScopes.some((scope) => {
     return userScopes.includes(scope)
   })
-}
-
-// KPIs gets its own function as there are so many scopes that _viewReports breaches the maximum function line length
-// of 20 lines that is defined for this project
-function _kpis(userScopes) {
-  return _hasPermission(userScopes, [
-    'ar_approver',
-    'billing',
-    'bulk_return_notifications',
-    'hof_notifications',
-    'manage_accounts',
-    'renewal_notifications',
-    'returns'
-  ])
 }
 
 function _manageUsers(userScopes) {
@@ -76,15 +74,16 @@ function _returnNotices(userScopes) {
 
 function _viewReports(userScopes) {
   const links = {
+    digitise: _hasPermission(userScopes, ['ar_approver']),
+    invalidAddresses: _basicReports(userScopes),
+    kpis: _basicReports(userScopes),
     notices: _hasPermission(userScopes, [
       'bulk_return_notifications',
       'hof_notifications',
       'renewal_notifications',
       'returns'
     ]),
-    returnsCycles: _hasPermission(userScopes, ['returns']),
-    digitise: _hasPermission(userScopes, ['ar_approver']),
-    kpis: _kpis(userScopes) // split off into its own function to avoid breaching the 20-line function limit
+    returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 
   return { show: Object.values(links).includes(true), links }

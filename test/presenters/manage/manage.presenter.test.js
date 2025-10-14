@@ -41,7 +41,10 @@ describe('Manage - Manage presenter', () => {
         pageTitle: 'Manage reports and notices',
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
-        viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewReports: {
+          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: true }, show: true }
       })
     })
@@ -62,7 +65,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: false, notices: false, returnsCycles: false }, show: false },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: false, kpis: false, notices: false, returnsCycles: false },
+          show: false
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -80,7 +86,10 @@ describe('Manage - Manage presenter', () => {
         pageTitle: 'Manage reports and notices',
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: true }, show: true }
       })
     })
@@ -101,7 +110,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -122,7 +134,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -143,7 +158,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -164,7 +182,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -185,7 +206,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -206,7 +230,10 @@ describe('Manage - Manage presenter', () => {
           links: { adHoc: true, invitations: false, paperForms: true, reminders: false },
           show: true
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })

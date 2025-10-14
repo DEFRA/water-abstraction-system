@@ -1,0 +1,55 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+  {{ pageHeadingHtml }}
+
+  {{ govukInsetText({
+    text: "These addresses are missing both postcode and country. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD."
+  }) }}
+
+  {% set tableRows = [] %}
+  {% for invalidAddress in invalidAddresses %}
+    {% set row = [
+      {
+        text: invalidAddress.licenceRef
+      },
+      {
+        text: invalidAddress.licenceEnds
+      },
+      {
+        text: invalidAddress.contactRole
+      },
+      {
+        html: newLineArrayItems(invalidAddress.addressLines)
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(row), tableRows) %}
+  {% endfor %}
+
+  {{
+    govukTable({
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Licence"
+        },
+        {
+          text: "End Date"
+        },
+        {
+          text: "Role"
+        },
+        {
+          text: "Address"
+        }
+      ],
+      rows: tableRows
+    })
+  }}
+{% endblock %}
