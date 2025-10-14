@@ -92,6 +92,7 @@ describe('Notices - Submit Index Notices service', () => {
           sentToDay: null,
           sentToMonth: null,
           sentToYear: null,
+          statuses: [],
           toDate: undefined
         })
       })
@@ -135,6 +136,7 @@ describe('Notices - Submit Index Notices service', () => {
             sentToDay: payload.sentToDay,
             sentToMonth: payload.sentToMonth,
             sentToYear: payload.sentToYear,
+            statuses: [],
             toDate: '2024-03-31'
           })
         })
@@ -168,6 +170,7 @@ describe('Notices - Submit Index Notices service', () => {
             sentToDay: payload.sentToDay,
             sentToMonth: payload.sentToMonth,
             sentToYear: payload.sentToYear,
+            statuses: [],
             toDate: '2024-03-31'
           })
         })
@@ -201,6 +204,7 @@ describe('Notices - Submit Index Notices service', () => {
             sentToDay: payload.sentToDay,
             sentToMonth: payload.sentToMonth,
             sentToYear: payload.sentToYear,
+            statuses: [],
             toDate: '2024-03-31'
           })
         })
@@ -246,6 +250,7 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToDay: null,
                 sentToMonth: null,
                 sentToYear: null,
+                statuses: [],
                 toDate: undefined
               },
               links: {
@@ -305,6 +310,7 @@ describe('Notices - Submit Index Notices service', () => {
                 sentToDay: null,
                 sentToMonth: null,
                 sentToYear: null,
+                statuses: [],
                 toDate: undefined
               },
               links: {

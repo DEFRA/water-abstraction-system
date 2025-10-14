@@ -31,7 +31,8 @@ async function go(payload, yar, auth, page = 1) {
     return {}
   }
 
-  _handleOneOptionSelected(payload)
+  _handleOneOptionSelected(payload, 'noticeTypes')
+  _handleOneOptionSelected(payload, 'statuses')
 
   const error = _validate(payload)
 
@@ -70,15 +71,15 @@ function _clearFilters(payload, yar) {
  *
  * @private
  */
-function _handleOneOptionSelected(payload) {
-  if (!payload?.noticeTypes) {
-    payload.noticeTypes = []
+function _handleOneOptionSelected(payload, key) {
+  if (!payload?.[key]) {
+    payload[key] = []
 
     return
   }
 
-  if (!Array.isArray(payload?.noticeTypes)) {
-    payload.noticeTypes = [payload?.noticeTypes]
+  if (!Array.isArray(payload?.[key])) {
+    payload[key] = [payload?.[key]]
   }
 }
 
@@ -109,6 +110,7 @@ function _save(payload, yar) {
     sentToDay: payload.sentToDay ?? null,
     sentToMonth: payload.sentToMonth ?? null,
     sentToYear: payload.sentToYear ?? null,
+    statuses: payload.statuses,
     toDate: payload.toDate
   })
 }
@@ -127,6 +129,7 @@ function _savedFilters(payload) {
     openFilter: true,
     reference: null,
     sentBy: null,
+    statuses: [],
     ...noticesFilter
   }
 }
