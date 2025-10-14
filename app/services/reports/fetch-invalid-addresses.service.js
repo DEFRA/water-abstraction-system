@@ -44,7 +44,7 @@ async function _fetch() {
       AND lhc.country IS NULL
       AND lhc.postcode IS NULL
       AND (lhc.licence_ends IS NULL OR lhc.licence_ends > NOW())
-    order by lhc.licence_ref, lhc.contact_role, lhc.address_line_1;
+    ORDER BY lhc.licence_ref, lhc.contact_role, lhc.address_line_1;
   `)
 }
 

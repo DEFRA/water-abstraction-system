@@ -4,11 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { tomorrow } = require('../../support/general.js')
+const { tomorrow, yesterday } = require('../../support/general.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 
@@ -32,22 +32,59 @@ describe('Reports - Fetch Invalid Addresses service', () => {
     ]
   }
 
+  let currentLicenceHolder
+  let licenceHolderExpiresTomorrow
+  let licenceHolderExpiredYesterday
+  let noInvalidAddress
+  let returnsToLapsesTomorrow
+  let returnsToRevokedTomorrow
+
   before(async () => {
-    await LicenceDocumentHeaderHelper.add({ licenceRef: '03/28/01/0164' })
-    await LicenceHelper.add({ licenceRef: '03/28/01/0164' })
+    noInvalidAddress = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ licenceRef: '03/28/01/0164' }),
+      licence: await LicenceHelper.add({ licenceRef: '03/28/01/0164' })
+    }
 
-    await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0165' })
-    await LicenceHelper.add({ licenceRef: '03/28/01/0165' })
+    currentLicenceHolder = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0165' }),
+      licence: await LicenceHelper.add({ licenceRef: '03/28/01/0165' })
+    }
 
-    await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0166' })
-    await LicenceHelper.add({ expiredDate: tomorrow(), licenceRef: '03/28/01/0166' })
+    licenceHolderExpiresTomorrow = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0166' }),
+      licence: await LicenceHelper.add({ expiredDate: tomorrow(), licenceRef: '03/28/01/0166' })
+    }
+
+    licenceHolderExpiredYesterday = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0167' }),
+      licence: await LicenceHelper.add({ expiredDate: yesterday(), licenceRef: '03/28/01/0167' })
+    }
 
     metadata.contacts[0].role = 'Returns to'
-    await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0167' })
-    await LicenceHelper.add({ lapsedDate: tomorrow(), licenceRef: '03/28/01/0167' })
 
-    await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0168' })
-    await LicenceHelper.add({ revokedDate: tomorrow(), licenceRef: '03/28/01/0168' })
+    returnsToLapsesTomorrow = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0168' }),
+      licence: await LicenceHelper.add({ lapsedDate: tomorrow(), licenceRef: '03/28/01/0168' })
+    }
+    returnsToRevokedTomorrow = {
+      licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ metadata, licenceRef: '03/28/01/0169' }),
+      licence: await LicenceHelper.add({ revokedDate: tomorrow(), licenceRef: '03/28/01/0169' })
+    }
+  })
+
+  after(async () => {
+    await noInvalidAddress.licence.$query().delete()
+    await noInvalidAddress.licenceDocumentHeader.$query().delete()
+    await currentLicenceHolder.licence.$query().delete()
+    await currentLicenceHolder.licenceDocumentHeader.$query().delete()
+    await licenceHolderExpiresTomorrow.licence.$query().delete()
+    await licenceHolderExpiresTomorrow.licenceDocumentHeader.$query().delete()
+    await licenceHolderExpiredYesterday.licence.$query().delete()
+    await licenceHolderExpiredYesterday.licenceDocumentHeader.$query().delete()
+    await returnsToLapsesTomorrow.licence.$query().delete()
+    await returnsToLapsesTomorrow.licenceDocumentHeader.$query().delete()
+    await returnsToRevokedTomorrow.licence.$query().delete()
+    await returnsToRevokedTomorrow.licenceDocumentHeader.$query().delete()
   })
 
   describe('when called', () => {
@@ -83,7 +120,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
           country: null
         },
         {
-          licence_ref: '03/28/01/0167',
+          licence_ref: '03/28/01/0168',
           licence_ends: tomorrow(),
           contact_role: 'Returns to',
           address_line_1: metadata.contacts[0].addressLine1,
@@ -96,7 +133,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
           country: null
         },
         {
-          licence_ref: '03/28/01/0168',
+          licence_ref: '03/28/01/0169',
           licence_ends: tomorrow(),
           contact_role: 'Returns to',
           address_line_1: metadata.contacts[0].addressLine1,
