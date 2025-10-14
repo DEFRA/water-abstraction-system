@@ -72,7 +72,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -123,7 +123,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -166,7 +166,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -207,7 +207,7 @@ describe('Notifications - Fetch Notification service', () => {
                 issuer: 'admin-internal@wrls.gov.uk',
                 referenceCode: notice.referenceCode,
                 subtype: 'paperReturnForms',
-                alertType: null
+                sendingAlertType: null
               }
             }
           })
@@ -243,7 +243,7 @@ describe('Notifications - Fetch Notification service', () => {
               issuer: 'admin-internal@wrls.gov.uk',
               referenceCode: notice.referenceCode,
               subtype: 'paperReturnForms',
-              alertType: null
+              sendingAlertType: null
             }
           }
         })
