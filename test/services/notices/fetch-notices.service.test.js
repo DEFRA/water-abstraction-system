@@ -247,6 +247,26 @@ describe('Notices - Fetch Notices service', () => {
       })
     })
 
+    describe('and "Statuses" has been set', () => {
+      beforeEach(() => {
+        filters.statuses.push('returned')
+      })
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
+      })
+    })
+
     describe('and "To Date" has been set', () => {
       beforeEach(() => {
         filters.toDate = new Date('2024-10-01')
