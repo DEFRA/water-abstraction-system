@@ -18,7 +18,6 @@ const config = {
   enableLicencePointsView: String(process.env.ENABLE_LICENCE_POINTS_VIEW) === 'true' || false,
   enableLicencePurposesView: String(process.env.ENABLE_LICENCE_PURPOSES_VIEW) === 'true' || false,
   enableMonitoringStationsView: String(process.env.ENABLE_MONITORING_STATIONS_VIEW) === 'true' || false,
-  enableNotificationsView: String(process.env.ENABLE_NOTIFICATIONS_VIEW) === 'true' || false,
   enableNullDueDate: String(process.env.ENABLE_NULL_DUE_DATE) === 'true' || false,
   enableReissuingBillingBatches: String(process.env.ENABLE_REISSUING_BILLING_BATCHES) === 'true' || false,
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,

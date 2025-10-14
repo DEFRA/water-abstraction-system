@@ -7,8 +7,6 @@
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
@@ -30,21 +28,13 @@ function _communications(communications, documentId, licenceId) {
 
     return {
       id: communication.id,
-      link: _link(communication.id, documentId, licenceId),
+      link: `/system/notifications/${communication.id}?id=${licenceId}`,
       type: _type(communication, sent),
       sender: communication.event.issuer,
       sent,
       method: sentenceCase(communication.messageType)
     }
   })
-}
-
-function _link(communicationId, documentId, licenceId) {
-  if (FeatureFlagsConfig.enableNotificationsView) {
-    return `/system/notifications/${communicationId}?id=${licenceId}`
-  }
-
-  return `/licences/${documentId}/communications/${communicationId}`
 }
 
 function _type(communication, sent) {
