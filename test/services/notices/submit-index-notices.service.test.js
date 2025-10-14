@@ -27,7 +27,6 @@ describe('Notices - Submit Index Notices service', () => {
 
   beforeEach(async () => {
     Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
 
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }

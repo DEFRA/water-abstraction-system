@@ -30,7 +30,6 @@ describe('Notices - Index Notices presenter', () => {
     notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
 
     Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
   afterEach(() => {

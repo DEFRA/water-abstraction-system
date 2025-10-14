@@ -12,7 +12,6 @@ const { expect } = Code
 const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
 // Thing under test
@@ -27,8 +26,6 @@ describe('Notices - Submit View Notice service', () => {
   let yarStub
 
   beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
-
     notice = {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',

@@ -30,7 +30,6 @@ describe('Notices - Index Notices service', () => {
     }
 
     Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
   })
 
   afterEach(() => {
