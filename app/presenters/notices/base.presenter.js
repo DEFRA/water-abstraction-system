@@ -79,11 +79,13 @@ function returnsPeriodText(returnsPeriod) {
 function _returnsPeriodTextPrefix(returnPeriod) {
   if (returnPeriod.name === 'allYear') {
     return 'Winter and all year annual'
-  } else if (returnPeriod.name === 'summer') {
-    return 'Summer annual'
-  } else {
-    return 'Quarterly'
   }
+  
+  if (returnPeriod.name === 'summer') {
+    return 'Summer annual'
+  }
+  
+  return 'Quarterly'
 }
 
 module.exports = {
