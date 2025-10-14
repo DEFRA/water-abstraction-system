@@ -12,7 +12,6 @@ const { generateReferenceCode } = require('../support/helpers/notification.helpe
 function alertReduce() {
   const data = _defaults()
 
-  data.alertType = 'reduce'
   data.metadata = {
     name: 'Water abstraction alert',
     error: 0,
@@ -36,7 +35,6 @@ function alertReduce() {
 function alertResume() {
   const data = _defaults()
 
-  data.alertType = 'resume'
   data.metadata = {
     name: 'Water abstraction alert',
     error: 0,
@@ -60,7 +58,6 @@ function alertResume() {
 function alertStop() {
   const data = _defaults()
 
-  data.alertType = 'stop'
   data.metadata = {
     name: 'Water abstraction alert',
     error: 0,
@@ -84,7 +81,6 @@ function alertStop() {
 function alertWarning() {
   const data = _defaults()
 
-  data.alertType = 'warning'
   data.metadata = {
     name: 'Water abstraction alert',
     error: 0,
@@ -269,7 +265,10 @@ function _defaults() {
     createdAt: new Date('2025-03-25'),
     issuer: 'admin-internal@wrls.gov.uk',
     licences: [generateLicenceRef()],
-    status: 'completed'
+    overallStatus: 'pending',
+    status: 'completed',
+    statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },
+    type: 'notification'
   }
 }
 
