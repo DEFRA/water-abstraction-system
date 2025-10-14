@@ -44,7 +44,7 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      if (key === 'noticeTypes') {
+      if (['noticeTypes', 'statuses'].includes(key)) {
         openFilter = savedFilters[key].length > 0
       } else {
         openFilter = !!savedFilters[key]
@@ -59,11 +59,12 @@ function _filters(yar) {
   return {
     fromDate: null,
     noticeTypes: [],
-    openFilter,
     reference: null,
     sentBy: null,
+    statuses: [],
     toDate: null,
-    ...savedFilters
+    ...savedFilters,
+    openFilter
   }
 }
 

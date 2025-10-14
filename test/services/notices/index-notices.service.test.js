@@ -39,7 +39,7 @@ describe('Notices - Index Notices service', () => {
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
+      yarStub = { get: Sinon.stub().returns(null) }
 
       const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
 
@@ -55,21 +55,11 @@ describe('Notices - Index Notices service', () => {
         filters: {
           fromDate: null,
           noticeTypes: [],
-          openFilter: true,
+          openFilter: false,
           reference: null,
           sentBy: null,
-          toDate: null,
-          noticesFilter: {
-            noticeTypes: [],
-            reference: null,
-            sentBy: null,
-            sentFromDay: null,
-            sentFromMonth: null,
-            sentFromYear: null,
-            sentToDay: null,
-            sentToMonth: null,
-            sentToYear: null
-          }
+          statuses: [],
+          toDate: null
         },
         links: {
           adhoc: {
@@ -150,14 +140,27 @@ describe('Notices - Index Notices service', () => {
 
 function _noticeFilters() {
   return {
+    fromDate: null,
     noticeTypes: [],
+    openFilter: false,
     reference: null,
     sentBy: null,
-    sentFromDay: null,
-    sentFromMonth: null,
-    sentFromYear: null,
-    sentToDay: null,
-    sentToMonth: null,
-    sentToYear: null
+    statuses: [],
+    toDate: null
   }
 }
+
+// function _noticeFilters() {
+//   return {
+//     noticeTypes: [],
+//     reference: null,
+//     sentBy: null,
+//     sentFromDay: null,
+//     sentFromMonth: null,
+//     sentFromYear: null,
+//     sentToDay: null,
+//     sentToMonth: null,
+//     sentToYear: null,
+//     statuses: []
+//   }
+// }
