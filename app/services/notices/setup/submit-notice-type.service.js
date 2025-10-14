@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/notice-type` page
+ * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module SubmitNoticeTypeService
  */
@@ -11,17 +11,20 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/notice-type` page
+ * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID for setup returns notice session record
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
+async function go(sessionId, payload, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -38,7 +41,7 @@ async function go(sessionId, payload, yar) {
     return _redirect(payload.noticeType, session.checkPageVisited, session.journey)
   }
 
-  const pageData = NoticeTypePresenter.go(session)
+  const pageData = NoticeTypePresenter.go(session, auth)
 
   return {
     activeNavBar: 'manage',
@@ -48,13 +51,13 @@ async function go(sessionId, payload, yar) {
 }
 
 function _redirect(noticeType, checkPageVisited, journey) {
-  if (noticeType === 'returnForms' && !checkPageVisited) {
+  if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
     return {
-      redirectUrl: 'return-forms'
+      redirectUrl: 'paper-return'
     }
   }
 
-  if (journey === 'standard') {
+  if (journey === NoticeJourney.STANDARD) {
     return {
       redirectUrl: 'returns-period'
     }
@@ -81,17 +84,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = NoticeTypeValidator.go(payload)
+  const validationResult = NoticeTypeValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

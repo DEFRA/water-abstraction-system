@@ -1,20 +1,20 @@
 'use strict'
 
 /**
- * Determines the PDF return forms data to send to notify and save to the database
- * @module DetermineReturnFormsService
+ * Determines the PDF paper return data to send to notify and save to the database
+ * @module DeterminePaperReturnService
  */
 
-const ReturnFormsNotificationPresenter = require('../../../presenters/notices/setup/return-forms-notification.presenter.js')
+const PaperReturnNotificationPresenter = require('../../../presenters/notices/setup/paper-return-notification.presenter.js')
 
 /**
- * Determines the PDF return forms data to send to notify and save to the database
+ * Determines the PDF paper return data to send to notify and save to the database
  *
  * @param {object} session - The session instance
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email / address.
  * @param {string} eventId - the event id to link all the notifications to an event
  *
- * @returns {object[]} - Resolves an array of return forms notifications
+ * @returns {object[]} - Resolves an array of paper return notifications
  */
 function go(session, recipients, eventId) {
   const { licenceRef, dueReturns, selectedReturns } = session
@@ -25,7 +25,7 @@ function go(session, recipients, eventId) {
 
   for (const dueReturn of dueReturnLogs) {
     for (const recipient of recipients) {
-      const notification = ReturnFormsNotificationPresenter.go(recipient, licenceRef, eventId, dueReturn)
+      const notification = PaperReturnNotificationPresenter.go(recipient, licenceRef, eventId, dueReturn)
 
       notifications.push(notification)
     }

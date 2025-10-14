@@ -12,9 +12,9 @@ const { expect } = Code
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 
 // Thing under test
-const PrepareReturnFormsPresenter = require('../../../../app/presenters/notices/setup/prepare-return-forms.presenter.js')
+const PreparePaperReturnPresenter = require('../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js')
 
-describe('Notices - Setup - Prepare Return Forms Presenter', () => {
+describe('Notices - Setup - Prepare Paper Return Presenter', () => {
   const licenceRef = '01/123'
 
   let clock
@@ -66,7 +66,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PrepareReturnFormsPresenter.go(notification)
+      const result = PreparePaperReturnPresenter.go(notification)
 
       expect(result).to.equal({
         address: {
@@ -104,7 +104,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" and "naldAreaCode" in the text ', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.regionAndArea).to.equal('North West / Lower Trent')
         })
@@ -116,7 +116,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the "regionName" in the text', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.regionAndArea).to.equal('North West')
         })
@@ -130,7 +130,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the relevant title', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.pageTitle).to.equal('Water abstraction daily return')
         })
@@ -143,7 +143,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageTitle).to.equal('Water abstraction monthly return')
           })
@@ -157,7 +157,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('the "pageTitle" property', () => {
           it('should return the relevant title', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageTitle).to.equal('Water abstraction weekly return')
           })
@@ -172,7 +172,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return entries', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.pageEntries).to.equal([
             // Page
@@ -236,7 +236,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the start and end are 6 months apart', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -264,7 +264,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageEntries).to.equal([
               // Page
@@ -299,7 +299,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
 
         describe('and the period fits onto one page', () => {
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageEntries.length).to.equal(1)
             expect(result.pageEntries).to.equal([
@@ -345,7 +345,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
           })
 
           it('should return entries', () => {
-            const result = PrepareReturnFormsPresenter.go(notification)
+            const result = PreparePaperReturnPresenter.go(notification)
 
             expect(result.pageEntries.length).to.equal(2)
             expect(result.pageEntries.length).to.equal(2)
@@ -429,7 +429,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
     describe('the "dueDate"', () => {
       describe('when a due date is set', () => {
         it('should return the due date', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.dueDate).to.equal('6 July 2025')
         })
@@ -441,7 +441,7 @@ describe('Notices - Setup - Prepare Return Forms Presenter', () => {
         })
 
         it('should return the due date (29 days in the future)', () => {
-          const result = PrepareReturnFormsPresenter.go(notification)
+          const result = PreparePaperReturnPresenter.go(notification)
 
           expect(result.dueDate).to.equal('30 January 2025')
         })

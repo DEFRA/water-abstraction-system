@@ -29,13 +29,11 @@ describe('Notices - View Notice presenter', () => {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
+      overallStatus: 'error',
       referenceCode: generateReferenceCode('WAA'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
-      alertType: 'warning',
-      errorCount: 1,
-      pendingCount: 0,
-      returnedCount: 0
+      alertType: 'warning'
     }
 
     notifications = [
@@ -94,8 +92,6 @@ describe('Notices - View Notice presenter', () => {
 
     expect(result).to.equal({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
-      createdBy: 'test@wrls.gov.uk',
-      dateCreated: '21 February 2025',
       notifications: [
         {
           recipient: [
@@ -107,12 +103,20 @@ describe('Notices - View Notice presenter', () => {
             'CB23 1ZZ'
           ],
           licenceRefs: ['01/123'],
+          link: {
+            href: `/system/notifications/${notifications[0].id}`,
+            hiddenText: 'notification for recipient Clean Water Limited'
+          },
           messageType: 'letter',
           status: 'sent'
         },
         {
           recipient: ['shaw.carol@atari.com'],
           licenceRefs: ['01/124'],
+          link: {
+            href: `/system/notifications/${notifications[1].id}`,
+            hiddenText: 'notification for recipient shaw.carol@atari.com'
+          },
           messageType: 'email',
           status: 'error'
         }
@@ -121,6 +125,8 @@ describe('Notices - View Notice presenter', () => {
       pageTitle: 'Warning alert',
       pageTitleCaption: `Notice ${notice.referenceCode}`,
       reference: notice.referenceCode,
+      sentBy: 'test@wrls.gov.uk',
+      sentDate: '21 February 2025',
       showingDeclaration: 'Showing all 2 notifications',
       status: 'error'
     })
@@ -254,61 +260,6 @@ describe('Notices - View Notice presenter', () => {
         const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
 
         expect(result.showingDeclaration).to.equal('Showing 2 of 50 notifications')
-      })
-    })
-  })
-
-  describe('the "status" property', () => {
-    describe('when the error count is greater than 0', () => {
-      beforeEach(() => {
-        // NOTE: We set pending and returned count to more than 0 to demonstrate that the error count takes precedence
-        notice.pendingCount = 1
-        notice.returnedCount = 1
-      })
-
-      it('returns "error"', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.status).to.equal('error')
-      })
-    })
-
-    describe('when the error count is 0 but the returned count is greater than 0', () => {
-      beforeEach(() => {
-        notice.errorCount = 0
-        notice.returnedCount = 1
-        notice.pendingCount = 1
-      })
-
-      it('returns "returned"', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.status).to.equal('returned')
-      })
-    })
-
-    describe('when the error and returned count is 0 but the pending count is greater than 0', () => {
-      beforeEach(() => {
-        notice.errorCount = 0
-        notice.pendingCount = 1
-      })
-
-      it('returns "pending"', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.status).to.equal('pending')
-      })
-    })
-
-    describe('when the error, returned and and pending count are 0', () => {
-      beforeEach(() => {
-        notice.errorCount = 0
-      })
-
-      it('returns "sent"', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.status).to.equal('sent')
       })
     })
   })

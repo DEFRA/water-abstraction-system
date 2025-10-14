@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ReturnFormsValidator = require('../../../../app/validators/notices/setup/return-forms.validator.js')
+const PaperReturnValidator = require('../../../../app/validators/notices/setup/paper-return.validator.js')
 
-describe('Returns For Paper Forms Validator', () => {
+describe('Paper Return Validator', () => {
   let payload
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Returns For Paper Forms Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ReturnFormsValidator.go(payload)
+      const result = PaperReturnValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,11 +32,11 @@ describe('Returns For Paper Forms Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ReturnFormsValidator.go(payload)
+      const result = PaperReturnValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select the returns for the paper forms')
+      expect(result.error.details[0].message).to.equal('Select the returns for the paper return')
     })
   })
 })

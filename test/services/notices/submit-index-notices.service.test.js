@@ -22,10 +22,11 @@ describe('Notices - Submit Index Notices service', () => {
   let auth
   let notice
   let payload
+  let results
   let yarStub
 
   beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
 
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
@@ -211,15 +212,16 @@ describe('Notices - Submit Index Notices service', () => {
         payload = {
           sentFromDay: '1',
           sentFromMonth: '4',
-          sentBy: 'billing.data@wrls.gov.uk'
+          sentBy: 'admin-internal@wrls.gov.uk'
         }
 
-        notice = NoticesFixture.alertStop()
+        results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertStop()])
+        notice = results[0]
       })
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticesService, 'go').resolves({ results: [notice], total: 70 })
+          Sinon.stub(FetchNoticesService, 'go').resolves({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -237,7 +239,7 @@ describe('Notices - Submit Index Notices service', () => {
                 fromDate: '-04-01',
                 openFilter: true,
                 reference: null,
-                sentBy: 'billing.data@wrls.gov.uk',
+                sentBy: 'admin-internal@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,
                 sentFromYear: null,
@@ -262,7 +264,7 @@ describe('Notices - Submit Index Notices service', () => {
                   link: `/system/notices/${notice.id}`,
                   recipients: notice.recipientCount,
                   reference: notice.referenceCode,
-                  sentBy: 'billing.data@wrls.gov.uk',
+                  sentBy: 'admin-internal@wrls.gov.uk',
                   status: 'sent',
                   type: 'Stop alert'
                 }
@@ -278,7 +280,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticesService, 'go').resolves({ results: [notice], total: 1 })
+          Sinon.stub(FetchNoticesService, 'go').resolves({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -296,7 +298,7 @@ describe('Notices - Submit Index Notices service', () => {
                 fromDate: '-04-01',
                 openFilter: true,
                 reference: null,
-                sentBy: 'billing.data@wrls.gov.uk',
+                sentBy: 'admin-internal@wrls.gov.uk',
                 sentFromDay: payload.sentFromDay,
                 sentFromMonth: payload.sentFromMonth,
                 sentFromYear: null,
@@ -321,7 +323,7 @@ describe('Notices - Submit Index Notices service', () => {
                   link: `/system/notices/${notice.id}`,
                   recipients: notice.recipientCount,
                   reference: notice.referenceCode,
-                  sentBy: 'billing.data@wrls.gov.uk',
+                  sentBy: 'admin-internal@wrls.gov.uk',
                   status: 'sent',
                   type: 'Stop alert'
                 }

@@ -8,16 +8,16 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const ReturnFormsNotificationPresenter = require('../../../../app/presenters/notices/setup/return-forms-notification.presenter.js')
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const PaperReturnNotificationPresenter = require('../../../../app/presenters/notices/setup/paper-return-notification.presenter.js')
 
-describe('Notices - Setup - Return Forms Notification Presenter', () => {
+describe('Notices - Setup - Paper Return Notification Presenter', () => {
   const eventId = generateUUID()
 
   let dueReturnLog
@@ -34,7 +34,7 @@ describe('Notices - Setup - Return Forms Notification Presenter', () => {
 
   describe('when called', () => {
     it('returns the data re-formatted as a notification', () => {
-      const result = ReturnFormsNotificationPresenter.go(recipient, licenceRef, eventId, dueReturnLog)
+      const result = PaperReturnNotificationPresenter.go(recipient, licenceRef, eventId, dueReturnLog)
 
       expect(result).to.equal({
         eventId,

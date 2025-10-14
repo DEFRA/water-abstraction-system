@@ -14,7 +14,7 @@ const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
-const CheckReturnFormsService = require('../services/notices/setup/preview/check-return-forms.service.js')
+const CheckPaperReturnService = require('../services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
@@ -22,12 +22,12 @@ const DownloadRecipientsService = require('../services/notices/setup/download-re
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
-const PreviewReturnFormsService = require('../services/notices/setup/preview-return-forms.service.js')
+const PaperReturnService = require('../services/notices/setup/paper-return.service.js')
+const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
 const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnFormsService = require('../services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
@@ -41,9 +41,9 @@ const SubmitCheckService = require('../services/notices/setup/submit-check.servi
 const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice-type.service.js')
+const SubmitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnFormsService = require('../services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 
@@ -66,12 +66,12 @@ async function checkAlert(request, h) {
   return h.view('notices/setup/preview/check-alert.njk', pageData)
 }
 
-async function viewCheckReturnForms(request, h) {
+async function viewCheckPaperReturn(request, h) {
   const { contactHashId, sessionId } = request.params
 
-  const pageData = await CheckReturnFormsService.go(sessionId, contactHashId)
+  const pageData = await CheckPaperReturnService.go(sessionId, contactHashId)
 
-  return h.view(`notices/setup/preview/check-return-forms.njk`, pageData)
+  return h.view(`notices/setup/preview/check-paper-return.njk`, pageData)
 }
 
 async function downloadRecipients(request, h) {
@@ -221,17 +221,20 @@ async function viewCheck(request, h) {
 }
 
 async function viewNoticeType(request, h) {
-  const { sessionId } = request.params
+  const {
+    auth,
+    params: { sessionId }
+  } = request
 
-  const pageData = await NoticeTypeService.go(sessionId)
+  const pageData = await NoticeTypeService.go(sessionId, auth)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
 }
 
-async function viewPreviewReturnForms(request, h) {
+async function viewPreviewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnId } = request.params
 
-  const fileBuffer = await PreviewReturnFormsService.go(sessionId, contactHashId, returnId)
+  const fileBuffer = await PreviewPaperReturnService.go(sessionId, contactHashId, returnId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
@@ -255,12 +258,12 @@ async function viewRemoveThreshold(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
-async function viewReturnForms(request, h) {
+async function viewPaperReturn(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ReturnFormsService.go(sessionId)
+  const pageData = await PaperReturnService.go(sessionId)
 
-  return h.view(`notices/setup/return-forms.njk`, pageData)
+  return h.view(`notices/setup/paper-return.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -414,12 +417,13 @@ async function submitLicence(request, h) {
 
 async function submitNoticeType(request, h) {
   const {
+    auth,
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar)
+  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar, auth)
 
   if (pageData.error) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
@@ -473,17 +477,17 @@ async function submitReturnsPeriod(request, h) {
   return h.redirect(`/system/notices/setup/${pageData.redirect}`)
 }
 
-async function submitReturnForms(request, h) {
+async function submitPaperReturn(request, h) {
   const {
     payload,
     params: { sessionId },
     yar
   } = request
 
-  const pageData = await SubmitReturnFormsService.go(sessionId, payload, yar)
+  const pageData = await SubmitPaperReturnService.go(sessionId, payload, yar)
 
   if (pageData.error) {
-    return h.view(`notices/setup/return-forms.njk`, pageData)
+    return h.view(`notices/setup/paper-return.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
@@ -518,16 +522,16 @@ module.exports = {
   viewCheck,
   viewCheckLicenceMatches,
   viewCheckNoticeType,
-  viewCheckReturnForms,
+  viewCheckPaperReturn,
   viewConfirmation,
   viewContactType,
   viewLicence,
   viewNoticeType,
-  viewPreviewReturnForms,
+  viewPaperReturn,
+  viewPreviewPaperReturn,
   viewRecipientName,
   viewRemoveLicences,
   viewRemoveThreshold,
-  viewReturnForms,
   viewReturnsPeriod,
   viewSelectRecipients,
   setup,
@@ -542,9 +546,9 @@ module.exports = {
   submitContactType,
   submitLicence,
   submitNoticeType,
+  submitPaperReturn,
   submitRecipientName,
   submitRemoveLicences,
-  submitReturnForms,
   submitReturnsPeriod,
   submitSelectRecipients
 }

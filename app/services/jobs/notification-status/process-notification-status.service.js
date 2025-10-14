@@ -11,7 +11,7 @@ const FetchNotificationsService = require('./fetch-notifications.service.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
 const ViewMessageDataRequest = require('../../../requests/notify/view-message-data.request.js')
 const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
-const UpdateEventErrorCountService = require('./update-event-error-count.service.js')
+const UpdateEventService = require('./update-event.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -115,7 +115,7 @@ async function _updateEventErrorCount(notifications) {
 
   const dedupeEventIds = [...new Set(eventIds)]
 
-  await UpdateEventErrorCountService.go(dedupeEventIds)
+  await UpdateEventService.go(dedupeEventIds)
 }
 
 async function _updateNotifications(toSendNotifications) {

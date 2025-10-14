@@ -12,7 +12,7 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things we need to stub
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
@@ -22,13 +22,14 @@ describe('Notices - Index Notices presenter', () => {
   let notices
 
   beforeEach(() => {
-    notices = NoticesFixture.notices()
+    notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
 
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
+    notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
 
-    Sinon.stub(featureFlagsConfig, 'enableSystemNoticeView').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
   })
 
   afterEach(() => {
@@ -55,7 +56,7 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[0].id}`,
           recipients: notices[0].recipientCount,
           reference: notices[0].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Reduce alert'
         },
@@ -64,7 +65,7 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[1].id}`,
           recipients: notices[1].recipientCount,
           reference: notices[1].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Resume alert'
         },
@@ -73,7 +74,7 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[2].id}`,
           recipients: notices[2].recipientCount,
           reference: notices[2].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Stop alert'
         },
@@ -82,7 +83,7 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[3].id}`,
           recipients: notices[3].recipientCount,
           reference: notices[3].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Warning alert'
         },
@@ -91,7 +92,7 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[4].id}`,
           recipients: notices[4].recipientCount,
           reference: notices[4].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'HOF warning'
         },
@@ -100,25 +101,34 @@ describe('Notices - Index Notices presenter', () => {
           link: `/system/notices/${notices[5].id}`,
           recipients: notices[5].recipientCount,
           reference: notices[5].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
-          type: 'Returns invitation'
+          type: 'Renewal'
         },
         {
           createdDate: '25 March 2025',
           link: `/system/notices/${notices[6].id}`,
           recipients: notices[6].recipientCount,
           reference: notices[6].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
-          type: 'Paper return'
+          type: 'Returns invitation'
         },
         {
           createdDate: '25 March 2025',
           link: `/system/notices/${notices[7].id}`,
           recipients: notices[7].recipientCount,
           reference: notices[7].referenceCode,
-          sentBy: 'billing.data@wrls.gov.uk',
+          sentBy: 'admin-internal@wrls.gov.uk',
+          status: 'sent',
+          type: 'Paper return'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/system/notices/${notices[8].id}`,
+          recipients: notices[8].recipientCount,
+          reference: notices[8].referenceCode,
+          sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Returns reminder'
         }
@@ -147,9 +157,10 @@ describe('Notices - Index Notices presenter', () => {
           const results = IndexNoticesPresenter.go(notices, notices.length, auth)
 
           expect(results.notices[4].type).to.equal('HOF warning')
-          expect(results.notices[5].type).to.equal('Returns invitation')
-          expect(results.notices[6].type).to.equal('Paper return')
-          expect(results.notices[7].type).to.equal('Returns reminder')
+          expect(results.notices[5].type).to.equal('Renewal')
+          expect(results.notices[6].type).to.equal('Returns invitation')
+          expect(results.notices[7].type).to.equal('Paper return')
+          expect(results.notices[8].type).to.equal('Returns reminder')
         })
       })
     })
@@ -174,6 +185,25 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "links" property', () => {
+    describe('when the "enableAdHocNotifications" is false', () => {
+      beforeEach(() => {
+        Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(false)
+
+        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+      })
+
+      it('returns all of the links (except adhoc)', () => {
+        const result = IndexNoticesPresenter.go(notices, 0, auth)
+
+        expect(result.links).to.equal({
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
+          }
+        })
+      })
+    })
+
     describe('when the user has both permissions', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications', 'returns']

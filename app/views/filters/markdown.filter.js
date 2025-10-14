@@ -1,7 +1,5 @@
 'use strict'
 
-const { marked } = require('marked')
-
 /**
  * Converts Notify's custom flavour of markdown into valid HTML. Notify's flavour of markdown uses a caret (`^`)
  * character to represent blockquotes. This function replaces any carets (`^`) with the standard blockquote marker (`>`)
@@ -31,7 +29,12 @@ const { marked } = require('marked')
 function markdown(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
-  return marked.parse(replacedCaret)
+  // NOTE: See app/plugins/views.plugin.js for details why marked is in the global scope rather than just required().
+  if (!global.GlobalMarked) {
+    return input
+  }
+
+  return global.GlobalMarked.parse(replacedCaret)
 }
 
 module.exports = {

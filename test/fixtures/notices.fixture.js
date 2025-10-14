@@ -1,6 +1,7 @@
 'use strict'
 
 const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateReferenceCode } = require('../support/helpers/notification.helper.js')
 
 /**
@@ -12,7 +13,15 @@ function alertReduce() {
   const data = _defaults()
 
   data.alertType = 'reduce'
-  data.name = 'Water abstraction alert'
+  data.metadata = {
+    name: 'Water abstraction alert',
+    error: 0,
+    options: {
+      sendingAlertType: 'reduce',
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+    },
+    recipients: 1
+  }
   data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
@@ -28,7 +37,15 @@ function alertResume() {
   const data = _defaults()
 
   data.alertType = 'resume'
-  data.name = 'Water abstraction alert'
+  data.metadata = {
+    name: 'Water abstraction alert',
+    error: 0,
+    options: {
+      sendingAlertType: 'resume',
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+    },
+    recipients: 1
+  }
   data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
@@ -44,7 +61,15 @@ function alertStop() {
   const data = _defaults()
 
   data.alertType = 'stop'
-  data.name = 'Water abstraction alert'
+  data.metadata = {
+    name: 'Water abstraction alert',
+    error: 0,
+    options: {
+      sendingAlertType: 'stop',
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+    },
+    recipients: 1
+  }
   data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
@@ -60,7 +85,15 @@ function alertWarning() {
   const data = _defaults()
 
   data.alertType = 'warning'
-  data.name = 'Water abstraction alert'
+  data.metadata = {
+    name: 'Water abstraction alert',
+    error: 0,
+    options: {
+      sendingAlertType: 'warning',
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+    },
+    recipients: 1
+  }
   data.referenceCode = generateReferenceCode('WAA')
   data.subtype = 'waterAbstractionAlerts'
 
@@ -70,16 +103,74 @@ function alertWarning() {
 /**
  * Represents a notice of type 'legacy notifications'
  *
+ * Specifically a legacy hands off flow notice
+ *
  * @returns {object}
  */
-function legacyNotification() {
+function legacyHandsOffFlow() {
   const data = _defaults()
 
-  data.name = 'Hands off flow: levels warning'
+  data.metadata = {
+    name: 'Hands off flow: levels warning',
+    sent: 1,
+    error: 0,
+    pending: 0,
+    recipients: 1,
+    taskConfigId: 1
+  }
   data.referenceCode = generateReferenceCode('HOF')
   data.subtype = 'hof-warning'
 
   return data
+}
+
+/**
+ * Represents a notice of type 'legacy notifications'
+ *
+ * Specifically a renewal notice
+ *
+ * @returns {object}
+ */
+function legacyRenewal() {
+  const data = _defaults()
+
+  data.metadata = {
+    name: 'Expiring licence(s): invitation to renew',
+    sent: 1,
+    error: 0,
+    pending: 0,
+    recipients: 1,
+    taskConfigId: 2
+  }
+  data.referenceCode = generateReferenceCode('RENEW')
+  data.subtype = 'renewal'
+
+  return data
+}
+
+/**
+ * Maps an array of notice objects previously generated to `FetchNoticesService` result format
+ *
+ * @param {object[]} notices - The notice objects to map to `FetchNoticesService` result format
+ *
+ * @returns {object[]} Array of mapped notice objects.
+ */
+function mapToFetchNoticesResult(notices) {
+  return notices.map((notice) => {
+    const { createdAt, id, issuer, referenceCode, subtype, metadata } = notice
+
+    return {
+      id,
+      createdAt,
+      issuer,
+      referenceCode,
+      subtype,
+      name: metadata.name,
+      alertType: metadata.options?.sendingAlertType,
+      recipientCount: metadata.recipients,
+      overallStatus: 'sent'
+    }
+  })
 }
 
 /**
@@ -93,7 +184,8 @@ function notices() {
     alertResume(),
     alertStop(),
     alertWarning(),
-    legacyNotification(),
+    legacyHandsOffFlow(),
+    legacyRenewal(),
     returnsInvitation(),
     returnsPaperForm(),
     returnsReminder()
@@ -108,7 +200,15 @@ function notices() {
 function returnsInvitation() {
   const data = _defaults()
 
+  data.metadata = {
+    name: 'Returns: invitation',
+    error: 0,
+    options: { excludeLicences: [] },
+    recipients: generateRandomInteger(1, 5000),
+    returnCycle: { dueDate: '2025-04-28', endDate: '2025-03-31', isSummer: false, startDate: '2024-04-01' }
+  }
   data.referenceCode = generateReferenceCode('RINV')
+  data.subtype = 'returnInvitation'
 
   return data
 }
@@ -121,7 +221,13 @@ function returnsInvitation() {
 function returnsPaperForm() {
   const data = _defaults()
 
-  data.name = 'Paper returns'
+  data.metadata = {
+    name: 'Paper returns',
+    error: 0,
+    options: { excludeLicences: [] },
+    recipients: 1,
+    returnCycle: { dueDate: '2025-11-03', endDate: null, startDate: null }
+  }
   data.referenceCode = generateReferenceCode('PRTF')
   data.subtype = 'paperReturnForms'
 
@@ -136,7 +242,21 @@ function returnsPaperForm() {
 function returnsReminder() {
   const data = _defaults()
 
-  data.name = 'Returns: reminder'
+  data.metadata = {
+    name: 'Returns: reminder',
+    sent: 0,
+    error: 0,
+    options: {
+      excludeLicences: []
+    },
+    recipients: generateRandomInteger(1, 5000),
+    returnCycle: {
+      dueDate: '2025-04-28',
+      endDate: '2025-03-31',
+      isSummer: false,
+      startDate: '2024-04-01'
+    }
+  }
   data.referenceCode = generateReferenceCode('RREM')
   data.subtype = 'returnReminder'
 
@@ -145,14 +265,11 @@ function returnsReminder() {
 
 function _defaults() {
   return {
-    alertType: null,
     id: generateUUID(),
     createdAt: new Date('2025-03-25'),
-    issuer: 'billing.data@wrls.gov.uk',
-    name: 'Returns: invitation',
-    overallStatus: 'sent',
-    recipientCount: generateRandomInteger(1, 5000),
-    subtype: 'returnInvitation'
+    issuer: 'admin-internal@wrls.gov.uk',
+    licences: [generateLicenceRef()],
+    status: 'completed'
   }
 }
 
@@ -161,7 +278,9 @@ module.exports = {
   alertResume,
   alertStop,
   alertWarning,
-  legacyNotification,
+  legacyHandsOffFlow,
+  legacyRenewal,
+  mapToFetchNoticesResult,
   notices,
   returnsInvitation,
   returnsPaperForm,

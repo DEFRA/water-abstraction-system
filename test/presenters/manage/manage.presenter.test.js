@@ -39,8 +39,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: true, restriction: true, resume: true }, show: true },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
         viewReports: {
@@ -62,8 +60,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -88,8 +84,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
         viewReports: {
@@ -111,8 +105,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: true, restriction: true, resume: true }, show: true },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -137,8 +129,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -163,8 +153,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -189,8 +177,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -215,8 +201,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -241,8 +225,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: true, invitations: false, paperForms: true, reminders: false },

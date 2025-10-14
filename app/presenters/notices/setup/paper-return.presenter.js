@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/return-forms` page
- * @module ReturnFormsPresenter
+ * Formats data for the `/notices/setup/{sessionId}/paper-return` page
+ * @module PaperReturnPresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats data for the `/notices/setup/{sessionId}/return-forms` page
+ * Formats data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @param {module:SessionModel} session - The session instance
  *
@@ -19,17 +19,23 @@ function go(session) {
 
   return {
     backLink: _backLink(sessionId, checkPageVisited),
-    pageTitle: 'Select the returns for the paper forms',
+    pageTitle: 'Select the returns for the paper return',
     returns: _returns(dueReturns, selectedReturns)
   }
 }
 
 function _backLink(sessionId, checkPageVisited) {
   if (checkPageVisited) {
-    return `/system/notices/setup/${sessionId}/check-notice-type`
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
   }
 
-  return `/system/notices/setup/${sessionId}/notice-type`
+  return {
+    href: `/system/notices/setup/${sessionId}/notice-type`,
+    text: 'Back'
+  }
 }
 
 function _returns(returns, selectedReturns = []) {

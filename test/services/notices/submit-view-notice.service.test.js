@@ -12,7 +12,6 @@ const { expect } = Code
 const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
 // Thing under test
@@ -27,18 +26,15 @@ describe('Notices - Submit View Notice service', () => {
   let yarStub
 
   beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemNoticeView').value(true)
-
     notice = {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
+      overallStatus: 'error',
       referenceCode: generateReferenceCode('WAA'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
-      alertType: 'warning',
-      errorCount: 1,
-      pendingCount: 0
+      alertType: 'warning'
     }
 
     notifications = [
@@ -139,7 +135,7 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('noticeFilter')
+        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).to.equal({
           licence: null,
           recipient: null,
@@ -168,7 +164,7 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('noticeFilter')
+        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).to.equal({
           licence: '01/123',
           recipient: 'carol.shaw@atari.co.uk',
@@ -205,8 +201,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -218,12 +212,20 @@ describe('Notices - Submit View Notice service', () => {
                   'CB23 1ZZ'
                 ],
                 licenceRefs: ['01/123'],
+                link: {
+                  href: `/system/notifications/${notifications[0].id}`,
+                  hiddenText: 'notification for recipient Clean Water Limited'
+                },
                 messageType: 'letter',
                 status: 'sent'
               },
               {
                 recipient: ['shaw.carol@atari.com'],
                 licenceRefs: ['01/124'],
+                link: {
+                  href: `/system/notifications/${notifications[1].id}`,
+                  hiddenText: 'notification for recipient shaw.carol@atari.com'
+                },
                 messageType: 'email',
                 status: 'error'
               }
@@ -260,6 +262,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 3
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing 2 of 70 notifications',
             status: 'error',
             totalNumber: 70
@@ -288,8 +292,6 @@ describe('Notices - Submit View Notice service', () => {
               status: null
             },
             backLink: { href: '/system/notices', text: 'Go back to notices' },
-            createdBy: 'test@wrls.gov.uk',
-            dateCreated: '21 February 2025',
             notifications: [
               {
                 recipient: [
@@ -301,12 +303,20 @@ describe('Notices - Submit View Notice service', () => {
                   'CB23 1ZZ'
                 ],
                 licenceRefs: ['01/123'],
+                link: {
+                  href: `/system/notifications/${notifications[0].id}`,
+                  hiddenText: 'notification for recipient Clean Water Limited'
+                },
                 messageType: 'letter',
                 status: 'sent'
               },
               {
                 recipient: ['shaw.carol@atari.com'],
                 licenceRefs: ['01/124'],
+                link: {
+                  href: `/system/notifications/${notifications[1].id}`,
+                  hiddenText: 'notification for recipient shaw.carol@atari.com'
+                },
                 messageType: 'email',
                 status: 'error'
               }
@@ -318,6 +328,8 @@ describe('Notices - Submit View Notice service', () => {
               numberOfPages: 1
             },
             reference: notice.referenceCode,
+            sentBy: 'test@wrls.gov.uk',
+            sentDate: '21 February 2025',
             showingDeclaration: 'Showing all 2 notifications',
             status: 'error',
             totalNumber: 2

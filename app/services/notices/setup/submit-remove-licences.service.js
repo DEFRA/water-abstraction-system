@@ -9,6 +9,7 @@ const FetchReturnsDueService = require('./fetch-returns-due.service.js')
 const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
 const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
@@ -28,7 +29,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, validLicences)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session.referenceCode)
+    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session)
 
     return {
       activeNavBar: 'manage',
@@ -61,17 +62,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, validLicences) {
-  const validation = RemoveLicencesValidator.go(payload, validLicences)
+  const validationResult = RemoveLicencesValidator.go(payload, validLicences)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

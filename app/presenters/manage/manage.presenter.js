@@ -19,8 +19,6 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  */
 function go(userScopes) {
   return {
-    flowNotices: _flowNotices(userScopes),
-    licenceNotices: _licenceNotices(userScopes),
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage reports and notices',
     returnNotices: _returnNotices(userScopes),
@@ -41,19 +39,6 @@ function _basicReports(userScopes) {
   ])
 }
 
-function _flowNotices(userScopes) {
-  const links = {
-    restriction: _hasPermission(userScopes, ['hof_notifications']),
-    handsOffFlow: _hasPermission(userScopes, ['hof_notifications']),
-    resume: _hasPermission(userScopes, ['hof_notifications'])
-  }
-
-  return {
-    show: Object.values(links).includes(true),
-    links
-  }
-}
-
 /**
  * Checks if a user has any of the scopes required to view a management link
  *
@@ -66,14 +51,6 @@ function _hasPermission(userScopes, linkScopes) {
   return linkScopes.some((scope) => {
     return userScopes.includes(scope)
   })
-}
-
-function _licenceNotices(userScopes) {
-  const links = {
-    renewal: _hasPermission(userScopes, ['renewal_notifications'])
-  }
-
-  return { show: links.renewal, links }
 }
 
 function _manageUsers(userScopes) {

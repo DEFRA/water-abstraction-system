@@ -1,18 +1,19 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/return-forms` page
+ * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
  *
- * @module SubmitReturnFormsService
+ * @module SubmitPaperReturnService
  */
 
 const GeneralLib = require('../../../lib/general.lib.js')
-const ReturnFormsPresenter = require('../../../presenters/notices/setup/return-forms.presenter.js')
-const ReturnFormsValidator = require('../../../validators/notices/setup/return-forms.validator.js')
+const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
+const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for `/notices/setup/{sessionId}/return-forms` page
+ * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -39,7 +40,7 @@ async function go(sessionId, payload, yar) {
 
   session.selectedReturns = []
 
-  const pageData = ReturnFormsPresenter.go(session)
+  const pageData = PaperReturnPresenter.go(session)
 
   return {
     activeNavBar: 'manage',
@@ -94,17 +95,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReturnFormsValidator.go(payload)
+  const validationResult = PaperReturnValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

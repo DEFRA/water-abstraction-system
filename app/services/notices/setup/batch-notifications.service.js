@@ -11,8 +11,8 @@ const ProcessNotificationStatusService = require('../../jobs/notification-status
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
-const SendReturnFormService = require('./batch/send-return-form.service.js')
-const UpdateEventService = require('./update-event.service.js')
+const SendPaperReturnService = require('./batch/send-paper-return.service.js')
+const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
 
@@ -24,7 +24,7 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * - convert the recipients into notifications
  * - send the notifications to Notify
  * - save the notifications to `water.notifications`
- * - update the linked event record with the count of notifications that failed to send to Notify
+ * - update the linked event record with data derived from the notification statuses after attempting to send to Notify
  *
  * This needs to be done in batches because Notify has a rate limit (3,000 messages per minute).
  *
@@ -40,13 +40,11 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  */
 async function go(notifications, event, referenceCode) {
-  const totalErrorCount = 0
-
   const { batchSize, delay } = _batchSize(event.subtype)
 
-  await _processBatches(notifications, delay, batchSize, event.id, referenceCode, totalErrorCount)
+  await _processBatches(notifications, delay, batchSize, event.id, referenceCode)
 
-  await UpdateEventService.go(event.id, totalErrorCount)
+  await UpdateEventService.go([event.id])
 }
 
 async function _batch(notifications, referenceCode) {
@@ -55,12 +53,10 @@ async function _batch(notifications, referenceCode) {
   const sentNotifications = await _sendNotifications(notificationsToSend)
 
   await RecordNotifySendResultsService.go(sentNotifications)
-
-  return _errorCount(sentNotifications)
 }
 
 /**
- * When sending a PDF file (currently we only send return forms) we need to reduce the batch size to 1.
+ * When sending a PDF file (currently we only send paper return's) we need to reduce the batch size to 1.
  *
  * This is to ease the burden on resources when generating the PDFs.
  *
@@ -99,40 +95,10 @@ function _determineNotificationToSend(notification, referenceCode) {
   }
 
   if (notification.messageRef === 'pdf.return_form') {
-    return SendReturnFormService.go(notification, referenceCode)
+    return SendPaperReturnService.go(notification, referenceCode)
   }
 
   return SendLetterService.go(notification, referenceCode)
-}
-
-/**
- * Notify returns the status code. Anything other the '201' 'CREATED' is considered an error.
- *
- * We have a wrapper around Notify which will capture the error to allow multiple notifications to be sent without
- * failure.
- *
- * Our use of 'allSettled' result in the errors being classed as 'fulfilled'. This results in array of promises that
- * look like this:
- *
- * ```javascript
- * [
- *  {
- *    status: 'fulfilled',
- *    value: {}
- *  }
- * ]
- * ```
- *
- * We need to check the 'status' from notify to calculate if an error has occurred.
- *
- * @private
- */
-function _errorCount(notifications) {
-  const erroredNotifications = notifications.filter((notification) => {
-    return notification.notifyStatus !== 'created'
-  })
-
-  return erroredNotifications.length
 }
 
 /**
@@ -150,19 +116,17 @@ function _notificationsToSend(notifications, referenceCode) {
   return sentNotifications
 }
 
-async function _processBatches(notifications, delay, batchSize, eventId, referenceCode, totalErrorCount) {
+async function _processBatches(notifications, delay, batchSize, eventId, referenceCode) {
   // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
   // to add a delay between each batch.
   for (let i = 0; i < notifications.length; i += batchSize) {
     const batchNotifications = notifications.slice(i, i + batchSize)
 
-    const errorCount = await _batch(batchNotifications, referenceCode)
+    await _batch(batchNotifications, referenceCode)
 
     await _delay(delay)
 
     await ProcessNotificationStatusService.go(eventId)
-
-    totalErrorCount += errorCount
   }
 }
 

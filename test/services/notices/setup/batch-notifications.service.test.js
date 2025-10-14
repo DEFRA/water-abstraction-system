@@ -22,7 +22,7 @@ const CreateEmailRequest = require('../../../../app/requests/notify/create-email
 const CreateLetterRequest = require('../../../../app/requests/notify/create-letter.request.js')
 const CreatePrecompiledFileRequest = require('../../../../app/requests/notify/create-precompiled-file.request.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
-const PrepareReturnFormsService = require('../../../../app/services/notices/setup/prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 // Thing under test
@@ -52,7 +52,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
     Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse.email)
     Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse.letter)
-    Sinon.stub(PrepareReturnFormsService, 'go').resolves({
+    Sinon.stub(PreparePaperReturnService, 'go').resolves({
       succeeded: true,
       response: { body: buffer }
     })
@@ -233,7 +233,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
     describe('and there are no errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
-          metadata: {},
+          metadata: { error: 0 },
           licences: [recipientsFixture.primaryUser],
           referenceCode,
           status: 'completed',
@@ -265,19 +265,21 @@ describe('Notices - Setup - Batch Notifications service', () => {
       })
     })
 
-    describe('and there are existing errors', () => {
+    describe('and there are errors', () => {
       beforeEach(async () => {
         event = await EventHelper.add({
-          metadata: { error: 5 },
+          metadata: { error: 0 },
           licences: [recipientsFixture.primaryUser],
           referenceCode,
           status: 'completed',
           subtype: 'returnInvitation',
           type: 'notification'
         })
+
+        await NotificationHelper.add({ eventId: event.id, status: 'error' })
       })
 
-      it('should increment the error count', async () => {
+      it('should count the error', async () => {
         await BatchNotificationsService.go(notifications, event, referenceCode)
 
         const refreshedEvent = await event.$query()
@@ -288,11 +290,11 @@ describe('Notices - Setup - Batch Notifications service', () => {
           id: event.id,
           issuer: 'test.user@defra.gov.uk',
           licences: event.licences,
-          metadata: { error: 5 },
-          overallStatus: null,
+          metadata: { error: 1 },
+          overallStatus: 'error',
           referenceCode,
           status: 'completed',
-          statusCounts: null,
+          statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 },
           subtype: 'returnInvitation',
           type: 'notification',
           updatedAt: refreshedEvent.updatedAt

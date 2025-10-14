@@ -6,8 +6,9 @@
  */
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const DetermineReturnFormsService = require('./determine-return-forms.service.js')
+const DeterminePaperReturnService = require('./determine-paper-return.service.js')
 const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates creating the notifications for Notify and saving the notification to 'water.notifications'
@@ -19,14 +20,14 @@ const NotificationsPresenter = require('../../../presenters/notices/setup/notifi
  * @returns {object[]} An array of notification formatted to persist and send
  */
 function go(session, recipients, eventId) {
-  const { journey, noticeType } = session
+  const { noticeType } = session
 
-  if (journey === 'alerts') {
+  if (noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return AbstractionAlertNotificationsPresenter.go(recipients, session, eventId)
   }
 
-  if (noticeType === 'returnForms') {
-    return DetermineReturnFormsService.go(session, recipients, eventId)
+  if (noticeType === NoticeType.PAPER_RETURN) {
+    return DeterminePaperReturnService.go(session, recipients, eventId)
   }
 
   return NotificationsPresenter.go(recipients, session, eventId)

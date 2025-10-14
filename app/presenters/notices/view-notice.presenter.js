@@ -6,17 +6,7 @@
  */
 
 const { formatLongDate, titleCase } = require('../base.presenter.js')
-
-const NOTICE_MAPPINGS = {
-  'hof-resume': 'HOF resume',
-  'hof-stop': 'HOF stop',
-  'hof-warning': 'HOF warning',
-  paperReturnForms: 'Paper return',
-  renewal: 'Renewal',
-  returnInvitation: 'Returns invitation',
-  returnReminder: 'Returns reminder',
-  waterAbstractionAlerts: 'alert'
-}
+const { noticeMappings } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -34,23 +24,29 @@ function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
 
   return {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
-    createdBy: notice.issuer,
-    dateCreated: formatLongDate(notice.createdAt),
     notifications: tableRows,
     numberShowing: notifications.length,
     pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
     reference: notice.referenceCode,
+    sentBy: notice.issuer,
+    sentDate: formatLongDate(notice.createdAt),
     showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
-    status: _status(notice)
+    status: notice.overallStatus
   }
 }
 
 function _formatTableData(notifications) {
   return notifications.map((notification) => {
+    const recipient = _recipient(notification)
+
     return {
-      recipient: _recipient(notification),
+      recipient,
       licenceRefs: notification.licences,
+      link: {
+        href: `/system/notifications/${notification.id}`,
+        hiddenText: `notification for recipient ${recipient[0]}`
+      },
       messageType: notification.messageType,
       status: notification.status
     }
@@ -60,7 +56,7 @@ function _formatTableData(notifications) {
 function _pageTitle(notice, selectedPage, numberOfPages) {
   const { alertType, subtype } = notice
 
-  let title = NOTICE_MAPPINGS[subtype]
+  let title = noticeMappings[subtype]
 
   if (alertType) {
     title = `${titleCase(alertType)} alert`
@@ -99,24 +95,6 @@ function _showingDeclaration(numberDisplayed, totalNumber) {
   }
 
   return `Showing all ${totalNumber} notifications`
-}
-
-function _status(notice) {
-  const { errorCount, pendingCount, returnedCount } = notice
-
-  if (errorCount > 0) {
-    return 'error'
-  }
-
-  if (returnedCount > 0) {
-    return 'returned'
-  }
-
-  if (pendingCount > 0) {
-    return 'pending'
-  }
-
-  return 'sent'
 }
 
 module.exports = {

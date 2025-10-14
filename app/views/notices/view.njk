@@ -23,17 +23,15 @@
     },
     rows: [
       {
-        key: { text: 'Created date' },
-        value: { html: '<span data-test="meta-data-created-date">' + dateCreated + '</span>' }
+        key: { text: 'Sent date', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-date">' + sentDate + '</span>', classes: "meta-data__value" }
       },
       {
-        key: { text: 'Created by' },
-        value: { html: '<span data-test="meta-data-created-by">' + createdBy + '</span>' }
+        key: { text: 'Sent by', classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-sent-by">' + sentBy + '</span>', classes: "meta-data__value" }
       }
     ]
   }) }}
-
-  <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--visible">
 
   {# Filters #}
   {% set filtersForm %}
@@ -53,6 +51,12 @@
         },
         items: [
           {
+            attributes: { 'data-test': 'filter-status-cancelled' },
+            checked: 'cancelled' === filters.status,
+            text: "Cancelled",
+            value: "cancelled"
+          },
+          {
             attributes: { 'data-test': 'filter-status-error' },
             checked: 'error' === filters.status,
             text: "Error",
@@ -63,6 +67,12 @@
             checked: 'pending' === filters.status,
             text: "Pending",
             value: "pending"
+          },
+          {
+            attributes: { 'data-test': 'filter-status-returned' },
+            checked: 'returned' === filters.status,
+            text: "Returned",
+            value: "returned"
           },
           {
             attributes: { 'data-test': 'filter-status-sent' },
@@ -159,6 +169,11 @@
         {% endif %}
       {% endset %}
 
+      {# Link to view the notification #}
+      {% set viewLink %}
+        <a class="govuk-link" href="{{ notification.link.href }}">View <span class="govuk-visually-hidden">{{ notification.link.hiddenText }}</span></a>
+      {% endset %}
+
       {% set noticeStatusTag %}
         {{ statusTag(notification.status, true) }}
       {% endset %}
@@ -175,6 +190,11 @@
         {
           html: noticeStatusTag,
           attributes: { 'data-test': 'notification-status-' + rowIndex }
+        },
+        {
+          html: viewLink,
+          format: 'numeric',
+          attributes: { 'data-test': 'notification-action-' + rowIndex }
         }
       ] %}
 
@@ -187,7 +207,8 @@
       head: [
         { text: 'Recipient' },
         { text: 'Licence number' },
-        { text: 'Status' }
+        { text: 'Status' },
+        { text: 'Action', format: 'numeric' }
       ],
       rows: tableRows
     }) }}

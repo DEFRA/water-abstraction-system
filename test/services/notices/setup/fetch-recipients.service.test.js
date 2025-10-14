@@ -212,11 +212,11 @@ describe('Notices - Setup - Fetch recipients service', () => {
     })
   })
 
-  describe('when the journey is "alerts"', () => {
+  describe('when the notice types is "abstractionAlerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: {
-          journey: 'alerts'
+          noticeType: 'abstractionAlerts'
         }
       })
 
@@ -241,13 +241,13 @@ describe('Notices - Setup - Fetch recipients service', () => {
     })
   })
 
-  describe('and the "noticeType" is "returnForms"', () => {
+  describe('and the "noticeType" is "paperReturn"', () => {
     beforeEach(async () => {
       recipients = RecipientsFixture.recipients()
 
       session = await SessionHelper.add({
         data: {
-          noticeType: 'returnForms'
+          noticeType: 'paperReturn'
         }
       })
 

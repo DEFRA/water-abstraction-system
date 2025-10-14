@@ -29,12 +29,11 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
     testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, endDate)
   })
 
-  describe('when the "journey" is for notifications', () => {
+  describe('when there is no licence ref', () => {
     beforeEach(() => {
       removeLicences = ''
 
       session = {
-        journey: 'notifications',
         returnsPeriod: 'allYear',
         removeLicences,
         determinedReturnsPeriod: {
@@ -214,7 +213,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
     })
   })
 
-  describe('when a licence ref has been chosen', () => {
+  describe('when there is a licence ref', () => {
     describe('when there are recipients', () => {
       describe('when there is a "primary user"', () => {
         beforeEach(() => {

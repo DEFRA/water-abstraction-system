@@ -35,6 +35,7 @@ describe('Notices - Fetch Notice service', () => {
         },
         recipients: 2
       },
+      overallStatus: 'error',
       referenceCode: NotificationHelper.generateReferenceCode('WAA'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
@@ -115,12 +116,10 @@ describe('Notices - Fetch Notice service', () => {
         id: event.id,
         referenceCode: event.referenceCode,
         issuer: 'admin-internal@wrls.gov.uk',
+        overallStatus: 'error',
         status: 'completed',
         subtype: 'waterAbstractionAlerts',
-        alertType: 'warning',
-        errorCount: 1,
-        pendingCount: 0,
-        returnedCount: 0
+        alertType: 'warning'
       })
 
       expect(result.notifications).to.equal([

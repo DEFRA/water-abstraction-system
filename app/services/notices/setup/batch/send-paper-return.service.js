@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates sending a return form notification to Notify
- * @module SendReturnFormService
+ * Orchestrates sending a paper return notification to Notify
+ * @module SendPaperReturnService
  */
 
 const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
 const NotificationErrorPresenter = require('../../../../presenters/notices/setup/notification-error.presenter.js')
 const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
-const PrepareReturnFormsService = require('../prepare-return-forms.service.js')
+const PreparePaperReturnService = require('../prepare-paper-return.service.js')
 
 /**
- * Orchestrates sending a return form notification to Notify
+ * Orchestrates sending a paper return notification to Notify
  *
  * @param {object} notification - the notification to send to Notify
  * @param {string} referenceCode - the unique generated reference code
@@ -19,7 +19,7 @@ const PrepareReturnFormsService = require('../prepare-return-forms.service.js')
  * @returns {Promise<object>} - a notification with the Notify response
  */
 async function go(notification, referenceCode) {
-  const returnFormRequest = await PrepareReturnFormsService.go(notification)
+  const returnFormRequest = await PreparePaperReturnService.go(notification)
 
   if (returnFormRequest.succeeded) {
     const pdf = returnFormRequest.response.body

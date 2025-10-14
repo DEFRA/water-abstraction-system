@@ -6,19 +6,9 @@
  */
 
 const { formatLongDate, titleCase } = require('../base.presenter.js')
+const { noticeMappings } = require('../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../config/feature-flags.config.js')
-
-const NOTICE_MAPPINGS = {
-  'hof-resume': 'HOF resume',
-  'hof-stop': 'HOF stop',
-  'hof-warning': 'HOF warning',
-  paperReturnForms: 'Paper return',
-  renewal: 'Renewal',
-  returnInvitation: 'Returns invitation',
-  returnReminder: 'Returns reminder',
-  waterAbstractionAlerts: 'alert'
-}
 
 /**
  * Formats data for the `/notices` page
@@ -43,18 +33,13 @@ function go(notices, totalNumber, auth) {
   }
 }
 
-function _link(noticeId) {
-  if (featureFlagsConfig.enableSystemNoticeView) {
-    return `/system/notices/${noticeId}`
-  }
-
-  return `/notifications/report/${noticeId}`
-}
-
 function _links(scope) {
   const links = {}
 
-  if (scope.includes('returns') || scope.includes('bulk_return_notifications')) {
+  if (
+    featureFlagsConfig.enableAdHocNotifications &&
+    (scope.includes('returns') || scope.includes('bulk_return_notifications'))
+  ) {
     links.adhoc = {
       text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'
@@ -77,7 +62,7 @@ function _noticeRowData(notices) {
 
     return {
       createdDate: formatLongDate(createdAt),
-      link: _link(id),
+      link: `/system/notices/${id}`,
       recipients: recipientCount,
       reference: referenceCode,
       sentBy: issuer,
@@ -102,7 +87,7 @@ function _type(notice) {
     return `${titleCase(alertType)} alert`
   }
 
-  return NOTICE_MAPPINGS[subtype]
+  return noticeMappings[subtype]
 }
 
 module.exports = {

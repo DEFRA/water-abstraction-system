@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const ReturnFormsPresenter = require('../../../../app/presenters/notices/setup/return-forms.presenter.js')
+const PaperReturnPresenter = require('../../../../app/presenters/notices/setup/paper-return.presenter.js')
 
-describe('Notices - Setup - Returns For Paper Forms presenter', () => {
+describe('Notices - Setup - Paper Return presenter', () => {
   let dueReturn
   let session
 
@@ -27,18 +27,21 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
     }
 
     session = {
-      id: '123',
+      id: generateUUID(),
       dueReturns: [dueReturn]
     }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ReturnFormsPresenter.go(session)
+      const result = PaperReturnPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/notices/setup/123/notice-type',
-        pageTitle: 'Select the returns for the paper forms',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        },
+        pageTitle: 'Select the returns for the paper return',
         returns: [
           {
             checked: false,
@@ -56,7 +59,7 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
       })
 
       it('returns the "returns" previously selected as checked', () => {
-        const result = ReturnFormsPresenter.go(session)
+        const result = PaperReturnPresenter.go(session)
 
         expect(result.returns).to.equal([
           {
@@ -74,9 +77,12 @@ describe('Notices - Setup - Returns For Paper Forms presenter', () => {
         })
 
         it('correctly set the back link to the check page', () => {
-          const result = ReturnFormsPresenter.go(session)
+          const result = PaperReturnPresenter.go(session)
 
-          expect(result.backLink).to.equal('/system/notices/setup/123/check-notice-type')
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/check-notice-type`,
+            text: 'Back'
+          })
         })
       })
     })
