@@ -15,7 +15,7 @@ const { tomorrow, yesterday } = require('../support/general.js')
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
-describe.only('Base presenter', () => {
+describe('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
