@@ -71,7 +71,7 @@ describe('Notices - Setup - Notice Type Service', () => {
       expect(refreshedSession.noticeType).to.equal('invitations')
     })
 
-    it('continues the journey', async () => {
+    it('returns a redirect to the "/check-notice-type" page', async () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
@@ -171,7 +171,7 @@ describe('Notices - Setup - Notice Type Service', () => {
           session = await SessionHelper.add({ data: sessionData })
         })
 
-        it('should return', async () => {
+        it('returns a redirect to the "/check-notice-type" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(result).to.equal({ redirectUrl: 'check-notice-type' })
@@ -186,7 +186,7 @@ describe('Notices - Setup - Notice Type Service', () => {
           session = await SessionHelper.add({ data: sessionData })
         })
 
-        it('should return', async () => {
+        it('returns a redirect to the "/returns-period" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(result).to.equal({ redirectUrl: 'returns-period' })
@@ -203,7 +203,7 @@ describe('Notices - Setup - Notice Type Service', () => {
           session = await SessionHelper.add({ data: sessionData })
         })
 
-        it('should return', async () => {
+        it('returns a redirect to the "/check-notice-type" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(result).to.equal({ redirectUrl: 'check-notice-type' })
@@ -218,7 +218,7 @@ describe('Notices - Setup - Notice Type Service', () => {
           session = await SessionHelper.add({ data: sessionData })
         })
 
-        it('should return', async () => {
+        it('returns a redirect to the "/check-notice-type" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(result).to.equal({ redirectUrl: 'check-notice-type' })
