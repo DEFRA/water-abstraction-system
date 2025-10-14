@@ -58,6 +58,38 @@ describe('Notices - Setup - Returns Period presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the check page has been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('correctly returns the back link', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.backLink).to.equal({
+          href: `/system/notices/setup/${session.id}/check-notice-type`,
+          text: 'Back'
+        })
+      })
+    })
+
+    describe('when the check page has not been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = false
+      })
+
+      it('correctly returns the back link', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.backLink).to.equal({
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        })
+      })
+    })
+  })
+
   describe('the "pageTitle" property', () => {
     beforeEach(() => {
       testDate = new Date(`${currentYear}-01-15`)

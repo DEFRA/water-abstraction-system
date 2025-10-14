@@ -30,6 +30,8 @@ async function go(sessionId, payload, yar, auth) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    const hasBeenVisited = session.checkPageVisited
+
     if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
       GeneralLib.flashNotification(yar, 'Updated', 'Notice type updated')
 
@@ -38,7 +40,7 @@ async function go(sessionId, payload, yar, auth) {
 
     await _save(session, payload)
 
-    return _redirect(payload.noticeType, session.checkPageVisited, session.journey)
+    return _redirect(payload.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
   }
 
   const pageData = NoticeTypePresenter.go(session, auth)
@@ -50,14 +52,14 @@ async function go(sessionId, payload, yar, auth) {
   }
 }
 
-function _redirect(noticeType, checkPageVisited, journey) {
+function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
   if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
     return {
       redirectUrl: 'paper-return'
     }
   }
 
-  if (journey === NoticeJourney.STANDARD) {
+  if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
     return {
       redirectUrl: 'returns-period'
     }

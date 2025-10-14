@@ -465,10 +465,11 @@ async function submitRemoveLicences(request, h) {
 async function submitReturnsPeriod(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitReturnsPeriodService.go(sessionId, payload)
+  const pageData = await SubmitReturnsPeriodService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/returns-period.njk`, pageData)

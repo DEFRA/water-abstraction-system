@@ -44,14 +44,13 @@ describe('Notices - Setup - Check Notice Type Service', () => {
         links: {
           licenceNumber: `/system/notices/setup/${session.id}/licence`,
           noticeType: `/system/notices/setup/${session.id}/notice-type`,
-          returns: `/system/notices/setup/${session.id}/paper-return`
+          returns: `/system/notices/setup/${session.id}/paper-return`,
+          returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
         },
         notification: undefined,
         pageTitle: 'Check the notice type',
         returnNoticeType: 'Returns invitation',
-        selectedDueReturns: [],
-        sessionId: session.id,
-        showReturns: false
+        sessionId: session.id
       })
     })
 

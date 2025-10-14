@@ -29,7 +29,7 @@ describe('Notices - Setup - Notice Type Service', () => {
 
     noticeType = 'invitations'
     payload = { noticeType }
-    sessionData = { journey: 'adhoc' }
+    sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -49,7 +49,6 @@ describe('Notices - Setup - Notice Type Service', () => {
       expect(refreshedSession).to.equal({
         ...session,
         data: {
-          journey: 'adhoc',
           name: 'Returns: invitation',
           noticeType: 'invitations',
           notificationType: 'Returns invitation',
@@ -72,22 +71,45 @@ describe('Notices - Setup - Notice Type Service', () => {
       expect(refreshedSession.noticeType).to.equal('invitations')
     })
 
-    it('continues the journey', async () => {
+    it('returns a redirect to the "/check-notice-type" page', async () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
     })
 
     describe('and the notice types is "paperReturn"', () => {
-      beforeEach(() => {
-        noticeType = 'paperReturn'
-        payload = { noticeType }
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.checkPageVisited = true
+
+          noticeType = 'paperReturn'
+          payload = { noticeType }
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('continues the journey', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'paper-return' })
+        })
       })
 
-      it('continues the journey', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.checkPageVisited = false
 
-        expect(result).to.equal({ redirectUrl: 'paper-return' })
+          noticeType = 'paperReturn'
+          payload = { noticeType }
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('continues the journey', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'paper-return' })
+        })
       })
     })
 
@@ -141,30 +163,66 @@ describe('Notices - Setup - Notice Type Service', () => {
     })
 
     describe('and the journey is for "standard"', () => {
-      beforeEach(async () => {
-        sessionData.journey = 'standard'
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'standard'
+          sessionData.checkPageVisited = true
 
-        session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        })
       })
 
-      it('should return', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'standard'
+          sessionData.checkPageVisited = false
 
-        expect(result).to.equal({ redirectUrl: 'returns-period' })
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/returns-period" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'returns-period' })
+        })
       })
     })
 
     describe('and the journey is "adhoc"', () => {
-      beforeEach(async () => {
-        sessionData.journey = 'adhoc'
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'adhoc'
+          sessionData.checkPageVisited = true
 
-        session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        })
       })
 
-      it('should return', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'adhoc'
+          sessionData.checkPageVisited = false
 
-        expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        })
       })
     })
   })
@@ -204,11 +262,6 @@ describe('Notices - Setup - Notice Type Service', () => {
             checked: false,
             text: 'Returns reminder',
             value: 'reminders'
-          },
-          {
-            checked: false,
-            text: 'Paper return',
-            value: 'paperReturn'
           }
         ],
         pageTitle: 'Select the notice type'

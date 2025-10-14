@@ -5,9 +5,10 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
-const { today } = require('../../../../lib/general.lib.js')
 const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
+const { formatLongDate } = require('../../../base.presenter.js')
+const { returnsPeriodText } = require('../../base.presenter.js')
+const { today } = require('../../../../lib/general.lib.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -18,18 +19,29 @@ const { determineUpcomingReturnPeriods } = require('../../../../lib/return-perio
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { referenceCode, noticeType, id: sessionId } = session
+  const { checkPageVisited, referenceCode, noticeType, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null
 
   return {
-    backLink: {
-      href: `/system/notices/setup/${sessionId}/notice-type`,
-      text: 'Back'
-    },
+    backLink: _backLink(sessionId, checkPageVisited),
     pageTitle: `Select the returns periods for the ${noticeType}`,
     pageTitleCaption: `Notice ${referenceCode}`,
     returnsPeriod: _returnsPeriod(savedReturnsPeriod)
+  }
+}
+
+function _backLink(sessionId, checkPageVisited) {
+  if (checkPageVisited) {
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${sessionId}/notice-type`,
+    text: 'Back'
   }
 }
 
@@ -43,24 +55,13 @@ function _returnsPeriod(savedReturnsPeriod) {
 }
 
 function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
-  const textPrefix = _textPrefix(returnsPeriod)
   return {
     value: returnsPeriod.name,
-    text: `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`,
+    text: returnsPeriodText(returnsPeriod),
     hint: {
       text: `Due date ${formatLongDate(returnsPeriod.dueDate)}`
     },
     checked: returnsPeriod.name === savedReturnsPeriod
-  }
-}
-
-function _textPrefix(returnPeriod) {
-  if (returnPeriod.name === 'allYear') {
-    return 'Winter and all year annual'
-  } else if (returnPeriod.name === 'summer') {
-    return 'Summer annual'
-  } else {
-    return 'Quarterly'
   }
 }
 

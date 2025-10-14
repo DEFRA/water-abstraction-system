@@ -26,16 +26,16 @@ function go(session, auth) {
 }
 
 function _backLink(sessionId, checkPageVisited, journey) {
-  if (journey === NoticeJourney.STANDARD) {
+  if (checkPageVisited) {
     return {
-      href: `/system/notices`,
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
       text: 'Back'
     }
   }
 
-  if (checkPageVisited) {
+  if (journey === NoticeJourney.STANDARD) {
     return {
-      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      href: `/system/notices`,
       text: 'Back'
     }
   }

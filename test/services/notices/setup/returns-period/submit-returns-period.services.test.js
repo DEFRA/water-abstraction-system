@@ -20,6 +20,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   let payload
   let referenceCode
   let session
+  let yarStub
 
   before(async () => {
     referenceCode = generateReferenceCode()
@@ -27,6 +28,8 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     const testDate = new Date('2024-12-01')
 
     clock = Sinon.useFakeTimers(testDate)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   after(() => {
@@ -42,7 +45,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload)
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -50,7 +53,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('saves the determined returns period', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload)
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -64,10 +67,31 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('returns the redirect route', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          redirect: `${session.id}/check`
+          redirect: `${session.id}/check-notice-type`
+        })
+      })
+    })
+
+    describe('and the user comes from the check page', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          data: { referenceCode, noticeType: 'invitations', checkPageVisited: true }
+        })
+      })
+
+      it('sets a flash message', async () => {
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+
+        // Check we add the flash message
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({
+          text: 'Returns period updated',
+          titleText: 'Updated'
         })
       })
     })
@@ -81,7 +105,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('correctly presents the data with the error', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'manage',
