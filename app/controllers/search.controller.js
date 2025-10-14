@@ -9,13 +9,15 @@ const SubmitSearchService = require('../services/search/submit-search.service.js
 const ViewSearchResultsService = require('../services/search/view-search-results.service.js')
 const ViewSearchService = require('../services/search/view-search.service.js')
 
+const VIEW_PAGE = 'search/search.njk'
+
 async function submitSearch(request, h) {
   const { payload, yar } = request
 
   const pageData = await SubmitSearchService.go(payload, yar)
 
   if (pageData.error) {
-    return h.view('search/search.njk', pageData)
+    return h.view(VIEW_PAGE, pageData)
   }
 
   return h.redirect('/system/search?page=1', pageData)
@@ -35,7 +37,7 @@ async function viewSearch(request, h) {
   if (!page) {
     const viewPageData = await ViewSearchService.go()
 
-    return h.view('search/search.njk', viewPageData)
+    return h.view(VIEW_PAGE, viewPageData)
   }
 
   const pageData = await ViewSearchResultsService.go(searchQuery, page)
@@ -46,7 +48,7 @@ async function viewSearch(request, h) {
     return h.redirect(pageData.redirect)
   }
 
-  return h.view('search/search.njk', pageData)
+  return h.view(VIEW_PAGE, pageData)
 }
 
 module.exports = {
