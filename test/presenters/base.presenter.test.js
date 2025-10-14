@@ -15,7 +15,7 @@ const { tomorrow, yesterday } = require('../support/general.js')
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
-describe('Base presenter', () => {
+describe.only('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
@@ -237,6 +237,39 @@ describe('Base presenter', () => {
 
           expect(result).to.equal('-£1,149.50')
         })
+      })
+    })
+  })
+
+  describe('#formatNoticeType()', () => {
+    let alertType
+    let subtype
+
+    beforeEach(() => {
+      subtype = 'returnInvitation'
+    })
+
+    describe('when "alertType" is provided', () => {
+      beforeEach(() => {
+        alertType = 'stop'
+      })
+
+      it('returns the water abstraction alert notice type', () => {
+        const result = BasePresenter.formatNoticeType(subtype, alertType)
+
+        expect(result).to.equal('Stop alert')
+      })
+    })
+
+    describe('when "alertType" is not provided', () => {
+      beforeEach(() => {
+        alertType = null
+      })
+
+      it('returns the mapping for the notice subtype', () => {
+        const result = BasePresenter.formatNoticeType(subtype, alertType)
+
+        expect(result).to.equal('Returns invitation')
       })
     })
   })
