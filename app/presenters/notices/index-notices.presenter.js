@@ -33,14 +33,6 @@ function go(notices, totalNumber, auth) {
   }
 }
 
-function _link(noticeId) {
-  if (featureFlagsConfig.enableSystemNoticeView) {
-    return `/system/notices/${noticeId}`
-  }
-
-  return `/notifications/report/${noticeId}`
-}
-
 function _links(scope) {
   const links = {}
 
@@ -70,7 +62,7 @@ function _noticeRowData(notices) {
 
     return {
       createdDate: formatLongDate(createdAt),
-      link: _link(id),
+      link: `/system/notices/${id}`,
       recipients: recipientCount,
       reference: referenceCode,
       sentBy: issuer,
