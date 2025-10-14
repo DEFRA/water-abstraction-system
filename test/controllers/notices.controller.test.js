@@ -330,6 +330,7 @@ function _noticesPageData(error = false) {
     filters: {
       noticeTypes: [],
       openFilter: false,
+      statuses: [],
       toDate: undefined
     },
     notices: [
