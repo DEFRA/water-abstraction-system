@@ -5,8 +5,7 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, titleCase } = require('../base.presenter.js')
-const { noticeMappings } = require('../../lib/static-lookups.lib.js')
+const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
 
 const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -58,7 +57,7 @@ function _links(scope) {
 
 function _noticeRowData(notices) {
   return notices.map((notice) => {
-    const { createdAt, id, issuer, overallStatus, referenceCode, recipientCount } = notice
+    const { alertType, createdAt, id, issuer, overallStatus, referenceCode, recipientCount, subtype } = notice
 
     return {
       createdDate: formatLongDate(createdAt),
@@ -67,7 +66,7 @@ function _noticeRowData(notices) {
       reference: referenceCode,
       sentBy: issuer,
       status: overallStatus,
-      type: _type(notice)
+      type: formatNoticeType(subtype, alertType)
     }
   })
 }
@@ -78,16 +77,6 @@ function _tableCaption(numberDisplayed, totalNumber) {
   }
 
   return `Showing all ${totalNumber} notices`
-}
-
-function _type(notice) {
-  const { alertType, subtype } = notice
-
-  if (alertType) {
-    return `${titleCase(alertType)} alert`
-  }
-
-  return noticeMappings[subtype]
 }
 
 module.exports = {
