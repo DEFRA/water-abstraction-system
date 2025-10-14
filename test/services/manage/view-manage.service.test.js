@@ -37,10 +37,11 @@ describe('Manage - View Manage service', () => {
         viewReports: {
           show: true,
           links: {
-            notices: false,
-            returnsCycles: false,
             digitise: false,
-            kpis: true
+            invalidAddresses: true,
+            kpis: true,
+            notices: false,
+            returnsCycles: false
           }
         },
         viewWorkflow: { show: false, links: { checkLicences: false } }
