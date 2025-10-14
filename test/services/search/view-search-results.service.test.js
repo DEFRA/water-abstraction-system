@@ -56,8 +56,7 @@ describe('Search - View search results service', () => {
               Initials: 'F',
               Name: 'Surname',
               Salutation: 'Mr'
-            },
-            startDate: new Date('2020-01-01')
+            }
           },
           {
             $ends: () => {
@@ -69,8 +68,7 @@ describe('Search - View search results service', () => {
               Initials: 'F',
               Name: 'Surname',
               Salutation: 'Mr'
-            },
-            startDate: new Date('2020-01-01')
+            }
           }
         ],
         total: 2
@@ -152,8 +150,7 @@ describe('Search - View search results service', () => {
               Initials: 'F',
               Name: 'Surname',
               Salutation: 'Mr'
-            },
-            startDate: new Date('2020-01-01')
+            }
           }
         ],
         total: 1

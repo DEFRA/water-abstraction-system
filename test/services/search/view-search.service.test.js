@@ -18,7 +18,7 @@ describe('Search - View Search service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Search',
-        query: ''
+        query: undefined
       })
     })
   })

@@ -12,8 +12,8 @@ const { today } = require('../../lib/general.lib.js')
 /**
  * Formats data for the `/search` page
  *
- * @param {string} query - The user-entered search query - falsey if no query has been entered
- * @param {string} page - The user-requested page, for paginated results
+ * @param {string} query - The user-entered search query, if any
+ * @param {string} page - The requested page, when displaying search results
  * @param {string} numberOfPages - The total number of pages available for the search results
  * @param {Array<object>} licences - The list of licences matching the search criteria
  *
@@ -25,7 +25,7 @@ function go(query, page, numberOfPages, licences) {
   if (!page) {
     return {
       pageTitle: 'Search',
-      query: query ?? ''
+      query
     }
   }
 
@@ -52,12 +52,12 @@ function _mapLicences(licences) {
     const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
     const licenceHolderName = holderContactModel.$name()
 
-    // Licences that have ended are just displayed with the reason and year they ended (don't know why)
+    // Licences that have ended are displayed with a tag sowing the reason
     let licenceEndedText
     let licenceEndDate
     if (licenceEnd) {
       const { date, reason } = licenceEnd
-      licenceEndedText = date <= today() ? `${reason} in ${date.getFullYear()}` : null
+      licenceEndedText = date <= today() ? reason : null
       licenceEndDate = formatLongDate(date)
     }
 

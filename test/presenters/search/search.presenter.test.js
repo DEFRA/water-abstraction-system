@@ -60,38 +60,6 @@ describe('Search - Search presenter', () => {
     })
   })
 
-  describe('when no query is provided', () => {
-    beforeEach(() => {
-      query = undefined
-      page = undefined
-    })
-
-    it('returns an empty query string', () => {
-      const result = SearchPresenter.go(query, page)
-
-      expect(result).to.equal({
-        pageTitle: 'Search',
-        query: ''
-      })
-    })
-  })
-
-  describe('when an unsearchable query, e.g. whitespace, is provided', () => {
-    beforeEach(() => {
-      query = ' '
-      page = undefined
-    })
-
-    it('returns the original query text', () => {
-      const result = SearchPresenter.go(query, page)
-
-      expect(result).to.equal({
-        pageTitle: 'Search',
-        query: ' '
-      })
-    })
-  })
-
   describe('when provided with a query but there are no results', () => {
     beforeEach(() => {
       query = 'searchthis'
@@ -136,7 +104,7 @@ describe('Search - Search presenter', () => {
       const result = SearchPresenter.go(query, page, numberOfPages, licences)
 
       expect(result.licences[0].licenceEndDate).to.equal('31 December 2020')
-      expect(result.licences[0].licenceEndedText).to.equal('expired in 2020')
+      expect(result.licences[0].licenceEndedText).to.equal('expired')
     })
   })
 

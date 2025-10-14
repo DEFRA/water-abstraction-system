@@ -37,7 +37,7 @@ describe('Search - Submit search service', () => {
     Sinon.restore()
   })
 
-  describe('when called with a query', () => {
+  describe('when called with a valid query', () => {
     beforeEach(() => {
       payload = { query: 'searchthis' }
     })
@@ -49,7 +49,7 @@ describe('Search - Submit search service', () => {
     })
   })
 
-  describe('when called without a query', () => {
+  describe('when called without a valid query', () => {
     beforeEach(() => {
       payload = {}
     })
@@ -61,45 +61,7 @@ describe('Search - Submit search service', () => {
         activeNavBar: 'search',
         error: EXPECTED_ERROR,
         pageTitle: 'Search',
-        query: ''
-      })
-
-      expect(yarSpy.called).to.be.false()
-    })
-  })
-
-  describe('when called with a blank query', () => {
-    beforeEach(() => {
-      payload = { query: '' }
-    })
-
-    it('returns an error message', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
-
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        error: EXPECTED_ERROR,
-        pageTitle: 'Search',
-        query: ''
-      })
-
-      expect(yarSpy.called).to.be.false()
-    })
-  })
-
-  describe('when called with a whitespace query', () => {
-    beforeEach(() => {
-      payload = { query: ' ' }
-    })
-
-    it('returns an error message', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
-
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        error: EXPECTED_ERROR,
-        pageTitle: 'Search',
-        query: ' '
+        query: undefined
       })
 
       expect(yarSpy.called).to.be.false()

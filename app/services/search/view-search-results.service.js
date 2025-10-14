@@ -31,10 +31,6 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
 /**
  * Handles fetching and displaying search results on the /search page
  *
- * Any invalid search will result in the search page being re-displayed with an error message.
- *
- * Otherwise, database queries will be performed and the results displayed, or the user redirected to a matching record.
- *
  * @param {string} searchQuery - The value to search for, taken from the session
  * @param {string} page - The requested page
  *
@@ -87,7 +83,6 @@ async function _searchLicences(query, page) {
     .select([
       'licences.id',
       'licences.licenceRef',
-      'startDate',
       'revokedDate',
       'lapsedDate',
       'expiredDate',
