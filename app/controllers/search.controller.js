@@ -6,21 +6,39 @@
  */
 
 const SubmitSearchService = require('../services/search/submit-search.service.js')
+const ViewSearchResultsService = require('../services/search/view-search-results.service.js')
 const ViewSearchService = require('../services/search/view-search.service.js')
 
-async function search(request, h) {
-  const { query } = request
+async function submitSearch(request, h) {
+  const { payload, yar } = request
 
-  // All requests to the /search page are submitted as GET requests, so we need to check whether this is just an
-  // initial request to display the page (i.e. no query parameter present) or whether it is a search request
-  if (!('query' in query)) {
+  const pageData = await SubmitSearchService.go(payload, yar)
+
+  if (pageData.error) {
+    return h.view('search/search.njk', pageData)
+  }
+
+  return h.redirect('/system/search?page=1', pageData)
+}
+
+async function viewSearch(request, h) {
+  const {
+    query: { page },
+    yar
+  } = request
+
+  const searchQuery = yar.get('searchQuery')
+
+  // GET requests sent to the /search page might be either to just show the search page or to view search results, so we
+  // need to check whether this is just an initial request to display the page (i.e. no page parameter is present) or
+  // whether it is a request for a page of results
+  if (!page) {
     const viewPageData = await ViewSearchService.go()
 
     return h.view('search/search.njk', viewPageData)
   }
 
-  // If there is a query, process the search
-  const pageData = await SubmitSearchService.go(query)
+  const pageData = await ViewSearchResultsService.go(searchQuery, page)
 
   // If there is a single result that exactly matches the search query, the service may redirect straight to that
   // matching record
@@ -32,5 +50,6 @@ async function search(request, h) {
 }
 
 module.exports = {
-  search
+  submitSearch,
+  viewSearch
 }

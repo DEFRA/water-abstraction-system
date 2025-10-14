@@ -11,7 +11,9 @@
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl"> {{ pageTitle }}</h1>
 
-      <form method="get">
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         <div class="govuk-form-group {{ 'govuk-form-group--error' if error.query }}">
           <label class="govuk-label" for="query">
             Enter a licence number, customer name, returns ID, registered email address or monitoring station

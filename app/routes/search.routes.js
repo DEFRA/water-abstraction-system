@@ -7,7 +7,14 @@ const routes = [
     method: 'GET',
     path: '/search',
     options: {
-      handler: SearchController.search
+      handler: SearchController.viewSearch
+    }
+  },
+  {
+    method: 'POST',
+    path: '/search',
+    options: {
+      handler: SearchController.submitSearch
     }
   }
 ]
