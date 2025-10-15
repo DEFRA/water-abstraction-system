@@ -9,7 +9,7 @@ const Joi = require('joi').extend(require('@joi/date'))
 
 const STATUSES = ['cancelled', 'error', 'pending', 'returned', 'sent']
 
-const MAX_LICENCE_LENGTH = 11
+const MAX_LICENCE_LENGTH = 25
 const MAX_RECIPIENT_LENGTH = 25
 
 /**
