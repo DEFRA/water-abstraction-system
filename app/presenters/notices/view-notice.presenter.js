@@ -13,19 +13,17 @@ const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
  * @param {module:EventModel} notice - The notice object
  * @param {module:NotificationModel[]} notifications - The notifications linked to the notice
  * @param {number} totalNumber - The total number of notifications linked to the notice
- * @param {number} selectedPage - The selected page of results
- * @param {number} numberOfPages - The number of pages of results to paginate
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications, totalNumber, selectedPage, numberOfPages) {
+function go(notice, notifications, totalNumber) {
   const tableRows = _formatTableData(notifications)
 
   return {
     backLink: { href: '/system/notices', text: 'Go back to notices' },
     notifications: tableRows,
     numberShowing: notifications.length,
-    pageTitle: _pageTitle(notice, selectedPage, numberOfPages),
+    pageTitle: formatNoticeType(notice.subtype, notice.alertType),
     pageTitleCaption: `Notice ${notice.referenceCode}`,
     reference: notice.referenceCode,
     sentBy: notice.issuer,
@@ -50,17 +48,6 @@ function _formatTableData(notifications) {
       status: notification.status
     }
   })
-}
-
-function _pageTitle(notice, selectedPage, numberOfPages) {
-  const title = formatNoticeType(notice.subtype, notice.alertType)
-
-  // NOTE: when there are no results at all numberOfPages will be 0. Hence our test is `< 2` instead of `=== 1`
-  if (numberOfPages < 2) {
-    return title
-  }
-
-  return `${title} (page ${selectedPage} of ${numberOfPages})`
 }
 
 function _recipient(notification) {
