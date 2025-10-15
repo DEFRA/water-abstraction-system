@@ -8,6 +8,7 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { compareDates } = require('../lib/dates.lib.js')
 
 class LicenceModel extends BaseModel {
   static get tableName() {
@@ -317,8 +318,7 @@ class LicenceModel extends BaseModel {
 
     // Sort by ascending date; if 2 or more dates are the same then they maintain their relative order of priority
     filteredDates.sort((firstDate, secondDate) => {
-      // Subtracting two dates coerces them to their numeric timestamp values
-      return firstDate.date - secondDate.date
+      return compareDates(firstDate.date, secondDate.date)
     })
 
     return filteredDates[0]
