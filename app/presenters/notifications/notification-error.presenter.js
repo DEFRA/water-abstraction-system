@@ -5,7 +5,35 @@
  * @module NotificationErrorPresenter
  */
 
-const NOTIFY_ERRORS = {
+const KNOWN_ERRORS = [
+  {
+    match: 'is required',
+    description: 'The notification was sent missing some data needed for the template'
+  },
+  {
+    match: 'must not start',
+    description: 'Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\\\ / , < >'
+  },
+  {
+    match: 'real UK postcode',
+    description: 'The last line of address must be a real UK postcode or another country'
+  },
+  {
+    match: 'PDF',
+    description: 'There was an error when generating the paper return'
+  },
+  {
+    match: 'system clock',
+    description:
+      'Notify rejected the request because at the time the system clock was not accurate to within 30 seconds'
+  },
+  {
+    match: 'team-only API key',
+    description: 'This notification was sent with a team-only API key'
+  }
+]
+
+const NOTIFY_STATUS_DESCRIPTIONS = {
   email: {
     'permanent-failure': 'The provider could not deliver the message because the email address was wrong.',
     'technical-failure': 'The message was not sent because there was a problem between Notify and the provider.',
@@ -36,6 +64,9 @@ const NOTIFY_ERRORS = {
  * We relay the description Notify provides in its docs when this is the case. We default to a generic message for
  * system errors because we're dealing with old records that might have all sorts in those error messages!
  *
+ * > When compiling this presenter we did confirm there are no notifications with a `notifyStatus` of 'delivered' or
+ * > 'received' (which means it was successful) but a status of 'error'. Hence, that is not a scenario we cover.
+ *
  * @param {object} notification - The notification object to format error details for
  *
  * @returns {object|null} If the notification is not errored returns null, else an applicable 'status' and 'description'
@@ -47,17 +78,33 @@ function go(notification) {
     return null
   }
 
-  if (notifyError) {
+  if (notifyStatus) {
     return {
-      status: notifyStatus ?? 'Not sent',
-      description: 'Internal system error'
+      status: notifyStatus,
+      description: NOTIFY_STATUS_DESCRIPTIONS[messageType][notifyStatus]
     }
   }
 
   return {
-    status: notifyStatus,
-    description: NOTIFY_ERRORS[messageType][notifyStatus]
+    status: 'Failed to send to Notify',
+    description: _extractFromNotifyError(notifyError)
   }
+}
+
+function _extractFromNotifyError(notifyError) {
+  if (!notifyError || notifyError === '') {
+    return 'No error logged'
+  }
+
+  const matchedError = KNOWN_ERRORS.find((knownError) => {
+    return notifyError.includes(knownError.match)
+  })
+
+  if (matchedError) {
+    return matchedError.description
+  }
+
+  return 'Internal system error'
 }
 
 module.exports = {
