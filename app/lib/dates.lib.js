@@ -11,6 +11,42 @@ const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
 const LAST_DAY_OF_FEB_LEAP_YEAR = 29
 
 /**
+ * Compares two dates and returns:
+ *
+ * -1 if dateA is before dateB
+ * 1 if dateA is after dateB
+ * 0 if they are the same date
+ *
+ * This is useful as a helper for sorting dates, or for checking if two dates are the same (although the `datesMatch`
+ * function is more explicit for that purpose).
+ *
+ * @param {Date} dateA - First date to compare
+ * @param {Date} dateB - Second date to compare
+ *
+ * @returns {number} -1 if dateA is before dateB, 1 if dateA is after dateB, 0 if they are the same date
+ */
+function compareDates(dateA, dateB) {
+  // Math.sign() clamps the result of the subtraction to a minimum of -1 and a maximum of 1
+  return Math.sign(dateA - dateB)
+}
+
+/**
+ * Compares two dates and returns `true` if they are the same date or `false` if they aren't.
+ *
+ * We use this rather than directly comparing with `===` or `!==` as these only check that the exact same date objects
+ * are being compared (see https://stackoverflow.com/a/493018/6117745). This function uses the `compareDates` function
+ * which works with the underlying timestamp values of the dates.
+ *
+ * @param {Date} dateA - First date to compare
+ * @param {Date} dateB - Second date to compare
+ *
+ * @returns {boolean} `true` if they are the same date, otherwise `false`
+ */
+function datesMatch(dateA, dateB) {
+  return compareDates(dateA, dateB) === 0
+}
+
+/**
  * Creates an array of day objects, each representing a single day within the given period.
  *
  * This function iterates through each day between the period start and end date (inclusive), creating an object for
@@ -343,6 +379,8 @@ function _cloneDate(dateToClone) {
 }
 
 module.exports = {
+  compareDates,
+  datesMatch,
   daysFromPeriod,
   determineFinancialYearEnd,
   determineEarliestDate,
