@@ -212,7 +212,7 @@ async function _fetch(bindings, whereLicenceRef, whereReturnLogs) {
 function _query(whereLicenceRef, whereReturnLogs = '') {
   return `
     WITH
-      return_logs as (
+      due_return_logs as (
         SELECT
           rl.licence_ref,
           rl.status,
@@ -240,7 +240,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           rl.return_id
         FROM public.licence_document_headers ldh
                INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-               INNER JOIN return_logs rl
+               INNER JOIN due_return_logs rl
                           ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
@@ -261,7 +261,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           rl.return_id
         FROM public.licence_document_headers ldh
                INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-               INNER JOIN return_logs rl
+               INNER JOIN due_return_logs rl
                           ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
@@ -281,7 +281,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
                           ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
                INNER JOIN public.licence_entities le
                           ON le.id = ler.licence_entity_id
-               INNER JOIN return_logs rl
+               INNER JOIN due_return_logs rl
                           ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
@@ -300,7 +300,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
                           ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
                INNER JOIN public.licence_entities le
                           ON le.id = ler.licence_entity_id
-               INNER JOIN return_logs rl
+               INNER JOIN due_return_logs rl
                           ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
