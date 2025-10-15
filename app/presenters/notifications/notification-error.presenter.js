@@ -14,7 +14,7 @@ const NOTIFY_ERRORS = {
   letter: {
     'permanent-failure': 'The provider cannot print the letter. Your letter will not be dispatched.',
     'technical-failure': 'GOV.UK Notify had an unexpected error while sending the letter to our printing provider.',
-    'validation-failed': 'Content in the precompiled letter file is outside the printable area.',
+    'validation-failed': `The precompiled letter failed validation likely due to an invalid address, though it could be due to content outside the printable area.`,
     'virus-scan-failed': 'GOV.UK Notify found a potential virus in the precompiled letter file.'
   }
 }
