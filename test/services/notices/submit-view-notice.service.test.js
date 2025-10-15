@@ -231,7 +231,7 @@ describe('Notices - Submit View Notice service', () => {
               }
             ],
             numberShowing: 2,
-            pageTitle: 'Warning alert (page 1 of 3)',
+            pageTitle: 'Warning alert',
             pageTitleCaption: `Notice ${notice.referenceCode}`,
             pagination: {
               component: {
