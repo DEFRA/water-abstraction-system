@@ -176,7 +176,7 @@ describe('Notices - Submit View Notice service', () => {
     describe('with an invalid payload', () => {
       beforeEach(() => {
         payload = {
-          licence: '12345678909876543210'
+          licence: '12345678909876543210543212'
         }
       })
 
@@ -191,11 +191,11 @@ describe('Notices - Submit View Notice service', () => {
           expect(result).to.equal({
             activeNavBar: 'manage',
             error: {
-              errorList: [{ href: '#licence', text: 'Licence number must be 11 characters or less' }],
-              licence: { text: 'Licence number must be 11 characters or less' }
+              errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
+              licence: { text: 'Licence number must be 25 characters or less' }
             },
             filters: {
-              licence: '12345678909876543210',
+              licence: '12345678909876543210543212',
               openFilter: true,
               recipient: null,
               status: null
@@ -282,11 +282,11 @@ describe('Notices - Submit View Notice service', () => {
           expect(result).to.equal({
             activeNavBar: 'manage',
             error: {
-              errorList: [{ href: '#licence', text: 'Licence number must be 11 characters or less' }],
-              licence: { text: 'Licence number must be 11 characters or less' }
+              errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
+              licence: { text: 'Licence number must be 25 characters or less' }
             },
             filters: {
-              licence: '12345678909876543210',
+              licence: '12345678909876543210543212',
               openFilter: true,
               recipient: null,
               status: null
