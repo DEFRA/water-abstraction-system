@@ -5,8 +5,7 @@
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate, titleCase } = require('../base.presenter.js')
-const { noticeMappings } = require('../../lib/static-lookups.lib.js')
+const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -54,13 +53,7 @@ function _formatTableData(notifications) {
 }
 
 function _pageTitle(notice, selectedPage, numberOfPages) {
-  const { alertType, subtype } = notice
-
-  let title = noticeMappings[subtype]
-
-  if (alertType) {
-    title = `${titleCase(alertType)} alert`
-  }
+  const title = formatNoticeType(notice.subtype, notice.alertType)
 
   // NOTE: when there are no results at all numberOfPages will be 0. Hence our test is `< 2` instead of `=== 1`
   if (numberOfPages < 2) {

@@ -5,8 +5,8 @@
  * @module ViewNotificationPresenter
  */
 
-const { formatLongDate, formatRestrictionType, formatValueUnit, titleCase } = require('../base.presenter.js')
-const { notifyErrors, noticeMappings } = require('../../lib/static-lookups.lib.js')
+const { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
+const { notifyErrors } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats notification data ready for presenting in the view notification page
@@ -34,7 +34,7 @@ function go(notification, licence = null) {
     contents: plaintext,
     errorDetails: _errorDetails(notification),
     messageType,
-    pageTitle: _pageTitle(notification),
+    pageTitle: formatNoticeType(event.subtype, event.sendingAlertType),
     pageTitleCaption: _pageTitleCaption(notification, licence),
     paperForm: _paperForm(notification),
     reference: licence ? event.referenceCode : null,
@@ -124,18 +124,6 @@ function _errorDetails(notification) {
     status: notifyStatus,
     description: notifyErrors[messageType][notifyStatus]
   }
-}
-
-function _pageTitle(notification) {
-  const { sendingAlertType, subtype } = notification.event
-
-  let title = noticeMappings[subtype]
-
-  if (sendingAlertType) {
-    title = `${titleCase(sendingAlertType)} alert`
-  }
-
-  return title
 }
 
 function _pageTitleCaption(notification, licence) {

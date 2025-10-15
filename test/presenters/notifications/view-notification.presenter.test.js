@@ -315,31 +315,6 @@ describe('Notifications - View Notification presenter', () => {
     })
   })
 
-  describe('the "pageTitle" property', () => {
-    describe('when the notification is not a water abstraction alert', () => {
-      it('returns the "mapping" for the notice subtype as the title', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
-
-        expect(result.pageTitle).to.equal('Returns invitation')
-      })
-    })
-
-    describe('when the notification is a water abstraction alert', () => {
-      beforeEach(() => {
-        notice = NoticesFixture.alertStop()
-        notice.sendingAlertType = notice.metadata.options.sendingAlertType
-        notification = NotificationsFixture.abstractionAlertEmail(notice)
-        notification.event = notice
-      })
-
-      it('returns the "alert type" as the title', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
-
-        expect(result.pageTitle).to.equal('Stop alert')
-      })
-    })
-  })
-
   describe('the "pageTitleCaption" property', () => {
     describe('when a licence is provided', () => {
       it('returns a caption with the licence reference', () => {
