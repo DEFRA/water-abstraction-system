@@ -5,6 +5,7 @@
  * @module ReturnPeriodLib
  */
 
+const { compareDates, datesMatch } = require('./dates.lib.js')
 const { returnPeriodDates } = require('./static-lookups.lib.js')
 
 /**
@@ -274,7 +275,7 @@ function _newYearElapsedQuarterThree(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
+  if (compareDates(determinationDate, new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) <= 0) {
     return lastYear
   } else {
     return year
@@ -303,7 +304,7 @@ function _newYearElapsedQuarterThreeDueDate(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
+  if (compareDates(determinationDate, new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) <= 0) {
     return year
   } else {
     return nextYear
@@ -359,13 +360,14 @@ function _mapReturnsPeriods(returnPeriods) {
  */
 function _sortByDueDate(toSort) {
   return toSort.sort(function (a, b) {
-    if (a.dueDate.getTime() === b.dueDate.getTime()) {
+    if (datesMatch(a.dueDate, b.dueDate)) {
       const aMonthDay = a.startDate.getMonth() * 100 + a.startDate.getDate()
       const bMonthDay = b.startDate.getMonth() * 100 + b.startDate.getDate()
 
       return aMonthDay - bMonthDay
     }
-    return a.dueDate.getTime() - b.dueDate.getTime()
+
+    return compareDates(a.dueDate, b.dueDate)
   })
 }
 
