@@ -77,7 +77,7 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
       expect(result).to.equal({
         id: notification.id,
         notifyError:
-          '{"status":"ENOTFOUND","message":"Failed to generate the return form PDF","errors":["getaddrinfo ENOTFOUND gotenberg"]}',
+          '{"status":"ENOTFOUND","message":"Failed to generate the paper return PDF","errors":["getaddrinfo ENOTFOUND gotenberg"]}',
         status: 'error'
       })
     })

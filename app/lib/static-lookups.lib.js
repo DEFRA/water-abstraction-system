@@ -271,20 +271,6 @@ const naldRegions = {
   YO: 'Yorkshire'
 }
 
-const notifyErrors = {
-  email: {
-    'permanent-failure': 'The provider could not deliver the message because the email address was wrong.',
-    'technical-failure': 'The message was not sent because there was a problem between Notify and the provider.',
-    'temporary-failure': `The provider could not deliver the message. This can happen when the recipient's inbox is full or their anti-spam filter rejects the email.`
-  },
-  letter: {
-    'permanent-failure': 'The provider cannot print the letter. Your letter will not be dispatched.',
-    'technical-failure': 'GOV.UK Notify had an unexpected error while sending the letter to our printing provider.',
-    'validation-failed': 'Content in the precompiled letter file is outside the printable area.',
-    'virus-scan-failed': 'GOV.UK Notify found a potential virus in the precompiled letter file.'
-  }
-}
-
 const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
 
 const noticeMappings = {
@@ -492,7 +478,6 @@ module.exports = {
   flowUnits,
   naldAreaCodes,
   naldRegions,
-  notifyErrors,
   NoticeJourney,
   noticeMappings,
   NoticeType,
