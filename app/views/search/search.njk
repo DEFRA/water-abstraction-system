@@ -1,0 +1,82 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% block pageContent %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl"> {{ pageTitle }}</h1>
+
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        <div class="govuk-form-group {{ 'govuk-form-group--error' if error.query }}">
+          <label class="govuk-label" for="query">
+            Enter a licence number, customer name, returns ID, registered email address or monitoring station
+          </label>
+
+          {% if error.query %}
+          <p id="query-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ error.query.text }}
+          </p>
+          {% endif %}
+          <input class="govuk-input govuk-!-width-one-half govuk-!-display-inline-block" id="query" name="query" type="text" value="{{ query }}" {{ 'aria-describedby="query-hint query-error"' if error.query }}>
+
+          {{ govukButton({
+            classes: 'govuk-!-display-inline-block govuk-!-padding-right-6 govuk-!-padding-left-6',
+            text: "Search", preventDoubleClick: true
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if showResults %}
+    {% if noResults %}
+      <div class="govuk-grid-row govuk-!-margin-top-9">
+        <div class="govuk-grid-column-full">
+          <p>No results found.</p>
+        </div>
+      </div>
+    {% else %}
+      {% if licences %}
+        <hr class="govuk-section-break govuk-section-break--visible">
+
+        {% for licence in licences %}
+          <!--result card-->
+          <hr class="govuk-section-break govuk-section-break--visible">
+          <div class="govuk-grid-row govuk-!-margin-top-0">
+            <dl class="govuk-body govuk-!-margin-0">
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
+                <dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">Licence:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}<a/></dd>
+              </div>
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Licence holder:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceHolderName }}</dd>
+              </div>
+              <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">End date:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceEndDate }} {{ govukTag({ text: licence.licenceEndedText, classes: 'govuk-tag--grey' }) if licence.licenceEndedText }}</dd>
+              </div>
+            </dl>
+          </div>
+          <hr class="govuk-section-break govuk-section-break--visible">
+        {% endfor %}
+
+        <hr class="govuk-section-break govuk-section-break--visible">
+      {% endif %}
+
+      {% if pagination.numberOfPages > 1 %}
+        <div class="govuk-grid-row govuk-!-margin-top-9">
+          <div class="govuk-grid-column-full">
+            {{ govukPagination(pagination.component) }}
+          </div>
+        </div>
+      {% endif %}
+
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

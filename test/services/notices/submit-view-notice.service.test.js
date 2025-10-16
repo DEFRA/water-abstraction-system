@@ -238,7 +238,7 @@ describe('Notices - Submit View Notice service', () => {
                 items: [
                   {
                     current: true,
-                    href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057',
+                    href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057?page=1',
                     number: 1,
                     visuallyHiddenText: 'Page 1'
                   },
