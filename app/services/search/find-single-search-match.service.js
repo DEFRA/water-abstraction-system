@@ -33,9 +33,8 @@ async function go(searchQuery) {
 }
 
 async function _redirectForLicence(searchQuery) {
-  const licences = await LicenceModel.query()
-    .where('licenceRef', 'ilike', `%${searchQuery}%`)
-    .limit(2) // We only need to know if there's more than one potential match
+  // We only need to know if there's more than one potential match, so limit the results to two
+  const licences = await LicenceModel.query().where('licenceRef', 'ilike', `%${searchQuery}%`).limit(2)
 
   if (licences.length === 1 && licences[0].licenceRef.toLowerCase() === searchQuery.toLowerCase()) {
     return `/system/licences/${licences[0].id}/summary`
