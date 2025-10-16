@@ -30,8 +30,8 @@ function _formatTableData(invalidAddresses) {
       `Address Line 2: ${_line(invalidAddress.address_line_2)}`,
       `Address Line 3: ${_line(invalidAddress.address_line_3)}`,
       `Address Line 4: ${_line(invalidAddress.address_line_4)}`,
-      `County: ${_line(invalidAddress.county)}`,
-      `Town: ${_line(invalidAddress.town)}`
+      `Town: ${_line(invalidAddress.town)}`,
+      `County: ${_line(invalidAddress.county)}`
     ]
 
     if (invalidAddress.postcode) {

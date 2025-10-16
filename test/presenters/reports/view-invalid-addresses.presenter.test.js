@@ -44,8 +44,8 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 2: HORIZON HOUSE',
               'Address Line 3: DEANERY ROAD',
               'Address Line 4: ',
-              'County: AVON',
-              'Town: BRISTOL'
+              'Town: BRISTOL',
+              'County: AVON'
             ]
           },
           {
@@ -57,8 +57,8 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 2: HORIZON HOUSE',
               'Address Line 3: ',
               'Address Line 4: DEANERY ROAD',
-              'County: ',
-              'Town: BRISTOL'
+              'Town: BRISTOL',
+              'County: '
             ]
           },
           {
@@ -70,8 +70,8 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 2: ',
               'Address Line 3: HORIZON HOUSE',
               'Address Line 4: DEANERY ROAD',
-              'County: AVON',
-              'Town: '
+              'Town: ',
+              'County: AVON'
             ]
           },
           {
@@ -83,8 +83,8 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 2: ',
               'Address Line 3: ENVIRONMENT AGENCY',
               'Address Line 4: DEANERY ROAD',
-              'County: ',
-              'Town: '
+              'Town: ',
+              'County: '
             ]
           },
           {
@@ -96,8 +96,8 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 2: (Facilities) HORIZON HOUSE',
               'Address Line 3: DEANERY ROAD',
               'Address Line 4: ',
-              'County: AVON',
               'Town: BRISTOL',
+              'County: AVON',
               'Postcode: BS1 5AH',
               'Country: United Kingdom'
             ]
