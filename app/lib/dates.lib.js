@@ -275,7 +275,7 @@ function _isLeapYear(year) {
  * @private
  */
 function isQuarterlyReturnSubmissions(date) {
-  return new Date(date).getTime() >= new Date('2025-04-01').getTime()
+  return compareDates(new Date(date), new Date('2025-04-01')) >= 0
 }
 
 /**
