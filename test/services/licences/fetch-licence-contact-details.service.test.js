@@ -22,7 +22,7 @@ describe('Fetch Licence Contact Details service', () => {
 
   describe('when the licence has a licence document header', () => {
     before(async () => {
-      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed(false)
+      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seedPrimaryUser(false)
 
       licence = await LicenceHelper.add({
         licenceRef: licenceDocumentHeader.licenceRef
@@ -47,50 +47,10 @@ describe('Fetch Licence Contact Details service', () => {
               licenceEntity: {
                 name: 'primary.user@important.com'
               }
-            },
-            {
-              role: 'user_returns',
-              licenceEntity: {
-                name: 'returns.agent@important.com'
-              }
             }
           ],
           metadata: {
             Name: 'Primary User test',
-            contacts: [
-              {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Primary User test',
-                postcode: 'WD25 7LR',
-                role: 'Licence holder',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Primary User test',
-                postcode: 'WD25 7LR',
-                role: 'Returns to',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              }
-            ],
             isCurrent: true,
             isSummer: true
           }

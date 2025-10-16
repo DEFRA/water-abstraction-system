@@ -22,27 +22,82 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  */
 async function seed(enableReturnLog = true, returnLogDueDate = '2023-04-28', returnLogEndDate = '2023-01-31') {
   return {
-    licenceHolder: await _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate),
+    ...(await seedLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate)),
+    ...(await seedLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDueDate, returnLogEndDate)),
+    ...(await seedPrimaryUser(enableReturnLog, returnLogDueDate, returnLogEndDate))
+  }
+}
+
+/**
+ *
+ * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
+ * to be included in the recipients list
+ * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
+ * @param {string} returnLogEndDate - defaulted to the same end date set by the returnsLogHelper
+ *
+ * @returns {Promise<object>} an object containing different licence document header instances for the licence holder
+ */
+async function seedLicenceHolder(
+  enableReturnLog = true,
+  returnLogDueDate = '2023-04-28',
+  returnLogEndDate = '2023-01-31'
+) {
+  return {
+    licenceHolder: await _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate)
+  }
+}
+
+/**
+ *
+ * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
+ * to be included in the recipients list
+ * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
+ * @param {string} returnLogEndDate - defaulted to the same end date set by the returnsLogHelper
+ *
+ * @returns {Promise<object>} an object containing different licence document header instances and related entities
+ * representing different scenarios
+ */
+async function seedLicenceHolderAndReturnToSameRef(
+  enableReturnLog = true,
+  returnLogDueDate = '2023-04-28',
+  returnLogEndDate = '2023-01-31'
+) {
+  return {
     licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(
       enableReturnLog,
       returnLogDueDate,
       returnLogEndDate
-    ),
-    primaryUser: await _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate)
+    )
   }
 }
 
-async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate) {
+/**
+ *
+ * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
+ * to be included in the recipients list
+ * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
+ * @param {string} returnLogEndDate - defaulted to the same end date set by the returnsLogHelper
+ * @param {boolean} enableReturnsAgent - add a returns agent to the database
+ *
+ * @returns {Promise<object>} an object containing different licence document header instances for the primary user
+ * (and returns agent if enabled)
+ */
+async function seedPrimaryUser(
+  enableReturnLog = true,
+  returnLogDueDate = '2023-04-28',
+  returnLogEndDate = '2023-01-31',
+  enableReturnsAgent = false
+) {
+  return {
+    primaryUser: await _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate, enableReturnsAgent)
+  }
+}
+
+async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate, enableReturnsAgent) {
   const primaryUser = {
     name: 'Primary User test',
     email: 'primary.user@important.com',
     role: 'primary_user'
-  }
-
-  const userReturns = {
-    name: 'User Returns test',
-    email: 'returns.agent@important.com',
-    role: 'user_returns'
   }
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
@@ -50,17 +105,12 @@ async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnL
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.id,
     metadata: {
-      ..._metadata(primaryUser.name),
-      contacts: [_contact(primaryUser.name, 'Licence holder'), _contact(primaryUser.name, 'Returns to')]
+      ..._metadata(primaryUser.name)
     }
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
     name: primaryUser.email
-  })
-
-  const licenceEntityReturns = await LicenceEntityHelper.add({
-    name: userReturns.email
   })
 
   await LicenceEntityRoleHelper.add({
@@ -69,11 +119,23 @@ async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnL
     role: primaryUser.role
   })
 
-  await LicenceEntityRoleHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceEntityId: licenceEntityReturns.id,
-    role: userReturns.role
-  })
+  if (enableReturnsAgent) {
+    const userReturns = {
+      name: 'User Returns test',
+      email: 'returns.agent@important.com',
+      role: 'user_returns'
+    }
+
+    const licenceEntityReturns = await LicenceEntityHelper.add({
+      name: userReturns.email
+    })
+
+    await LicenceEntityRoleHelper.add({
+      companyEntityId: companyEntity.id,
+      licenceEntityId: licenceEntityReturns.id,
+      role: userReturns.role
+    })
+  }
 
   let returnLog
 
@@ -89,7 +151,7 @@ async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnL
 }
 
 async function _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate) {
-  const name = 'Licence holder only'
+  const name = 'Licence holder'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
       ..._metadata(name),
@@ -112,10 +174,11 @@ async function _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEnd
 
 async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDueDate, returnLogEndDate) {
   const name = 'Licence holder and returns to'
+
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
       ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+      contacts: [_contact('Licence holder', 'Licence holder'), _contact('Returns to', 'Returns to')]
     }
   })
 
@@ -171,5 +234,8 @@ function _address() {
 }
 
 module.exports = {
-  seed
+  seed,
+  seedLicenceHolder,
+  seedLicenceHolderAndReturnToSameRef,
+  seedPrimaryUser
 }

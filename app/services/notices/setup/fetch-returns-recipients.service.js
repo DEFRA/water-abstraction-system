@@ -101,9 +101,6 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * same primary user. Apart from the licence ref, all other fields will be the same. So, PostgreSQL can aggregate the
  * licence refs into a single value, and group the rest into a single row.
  *
- * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
- * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
- *
  * For the individual licence the end result is all the email, or letter contacts for that  licence with a 'due'
  * return for any period.
  *
@@ -174,7 +171,7 @@ async function _fetchRecipient(session) {
 
   const whereLicenceRef = `ldh.licence_ref = ?`
 
-  const bindings = [licenceRef, licenceRef, licenceRef]
+  const bindings = [licenceRef, licenceRef, licenceRef, licenceRef]
 
   const { rows } = await _fetch(bindings, whereLicenceRef)
 
@@ -196,7 +193,7 @@ async function _fetchRecipients(session) {
 
   const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
 
-  const bindings = [dueDate, summer, excludeLicences, excludeLicences, excludeLicences]
+  const bindings = [dueDate, summer, excludeLicences, excludeLicences, excludeLicences, excludeLicences]
 
   const { rows } = await _fetch(bindings, whereLicenceRef, where)
 
@@ -211,88 +208,141 @@ async function _fetch(bindings, whereLicenceRef, whereReturnLogs) {
 
 function _query(whereLicenceRef, whereReturnLogs = '') {
   return `
-  WITH return_logs as (
-      SELECT DISTINCT ON (rl.licence_ref)
-        rl.licence_ref,
-        rl.status,
-        rl.metadata,
-        rl.due_date
-      FROM public.return_logs rl
-      WHERE
-        rl.status = 'due'
-        AND rl.metadata->>'isCurrent' = 'true'
-        ${whereReturnLogs}
-    )
-  SELECT
-  string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
-  contact_type,
-  email,
-  contact,
-  contact_hash_id
-FROM (
-  SELECT DISTINCT
-    ldh.licence_ref,
-    (contacts->>'role') AS contact_type,
-    (NULL) AS email,
-    contacts as contact,
-    (md5(
-      LOWER(
-        concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+    WITH
+      due_return_logs as (
+        SELECT
+          rl.licence_ref,
+          rl.status,
+          rl.metadata,
+          rl.due_date
+        FROM public.return_logs rl
+        WHERE
+          rl.status = 'due'
+          AND rl.metadata->>'isCurrent' = 'true'
+          ${whereReturnLogs}
+      ),
+
+      licence_holder as (
+        SELECT
+          ldh.licence_ref,
+          ('Licence holder') AS contact_type,
+          (NULL) AS email,
+          contacts as contact,
+          (md5(
+            LOWER(
+              concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+            )
+           )) AS contact_hash_id
+        FROM public.licence_document_headers ldh
+               INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+               INNER JOIN due_return_logs rl
+                          ON rl.licence_ref = ldh.licence_ref
+        WHERE
+          ${whereLicenceRef}
+          AND contacts->>'role' = 'Licence holder'
+      ),
+
+      returns_to as (
+        SELECT
+          ldh.licence_ref,
+          ('Returns to') AS contact_type,
+          (NULL) AS email,
+          contacts as contact,
+          (md5(
+            LOWER(
+              concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+            )
+           )) AS contact_hash_id
+        FROM public.licence_document_headers ldh
+               INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+               INNER JOIN due_return_logs rl
+                          ON rl.licence_ref = ldh.licence_ref
+        WHERE
+          ${whereLicenceRef}
+          AND contacts->>'role' = 'Returns to'
+      ),
+
+      primary_user as (
+        SELECT
+          ldh.licence_ref,
+          ('Primary user') AS contact_type,
+          le."name" AS email,
+          NULL::jsonb AS contact,
+          md5(LOWER(le."name")) AS contact_hash_id
+        FROM public.licence_document_headers ldh
+               INNER JOIN public.licence_entity_roles ler
+                          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
+               INNER JOIN public.licence_entities le
+                          ON le.id = ler.licence_entity_id
+               INNER JOIN due_return_logs rl
+                          ON rl.licence_ref = ldh.licence_ref
+        WHERE
+          ${whereLicenceRef}
+      ),
+
+      returns_agent as (
+        SELECT
+          ldh.licence_ref,
+          ('Returns agent') AS contact_type,
+          le."name" AS email,
+          NULL::jsonb AS contact,
+          md5(LOWER(le."name")) AS contact_hash_id
+        FROM public.licence_document_headers ldh
+               INNER JOIN public.licence_entity_roles ler
+                          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
+               INNER JOIN public.licence_entities le
+                          ON le.id = ler.licence_entity_id
+               INNER JOIN due_return_logs rl
+                          ON rl.licence_ref = ldh.licence_ref
+        WHERE
+          ${whereLicenceRef}
+      ),
+
+      all_contacts AS (
+        SELECT *, 1 AS priority FROM primary_user
+        UNION ALL
+        SELECT *, 2 AS priority FROM returns_agent
+        UNION ALL
+        SELECT *, 3 AS priority FROM licence_holder
+        UNION ALL
+        SELECT *, 4 AS priority FROM returns_to
+      ),
+
+      best_contact_type AS (
+        SELECT DISTINCT ON (contact_hash_id)
+          contact_hash_id,
+          contact_type,
+          email,
+          contact,
+          priority
+        FROM all_contacts
+        ORDER BY contact_hash_id, priority
+      ),
+
+      -- Aggregate all licence_refs and return_ids per contact_hash_id
+      aggregated_contact_data AS (
+        SELECT
+          contact_hash_id,
+          string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs
+          -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+        FROM all_contacts
+        GROUP BY contact_hash_id
       )
-    )) AS contact_hash_id
-  FROM public.licence_document_headers ldh
-    INNER JOIN return_logs
-        ON return_logs.licence_ref = ldh.licence_ref
-    INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-  WHERE
-    ${whereLicenceRef}
-    AND contacts->>'role' IN ('Licence holder', 'Returns to')
-    AND NOT EXISTS (
-      SELECT
-        1
-      FROM public.licence_entity_roles ler
-      WHERE
-        ler.company_entity_id = ldh.company_entity_id
-        AND ler."role" IN ('primary_user', 'user_returns')
-    )
-  UNION ALL
-  SELECT
-    ldh.licence_ref,
-    ('Primary user') AS contact_type,
-    le."name" AS email,
-    (NULL) AS contact,
-    md5(LOWER(le."name")) AS contact_hash_id
-  FROM public.licence_document_headers ldh
-  INNER JOIN public.licence_entity_roles ler
-    ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
-  INNER JOIN public.licence_entities le
-    ON le.id = ler.licence_entity_id
-  INNER JOIN return_logs
-    ON return_logs.licence_ref = ldh.licence_ref
-  WHERE
-    ${whereLicenceRef}
-  UNION ALL
-  SELECT
-    ldh.licence_ref,
-    ('Returns agent') AS contact_type,
-    le."name" AS email,
-    (NULL) AS contact,
-    md5(LOWER(le."name")) AS contact_hash_id
-  FROM public.licence_document_headers ldh
-  INNER JOIN public.licence_entity_roles ler
-    ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
-  INNER JOIN public.licence_entities le
-    ON le.id = ler.licence_entity_id
-  INNER JOIN return_logs
-    ON return_logs.licence_ref = ldh.licence_ref
-    WHERE
-    ${whereLicenceRef}
-) contacts
-GROUP BY
-  contact_type,
-  email,
-  contact,
-  contact_hash_id;`
+
+    SELECT
+      a.licence_refs,
+      b.contact_type,
+      b.email,
+      b.contact,
+      b.contact_hash_id
+    FROM
+      aggregated_contact_data a
+        JOIN
+      best_contact_type b
+      USING (contact_hash_id)
+    ORDER BY
+      b.email NULLS LAST
+`
 }
 
 module.exports = {

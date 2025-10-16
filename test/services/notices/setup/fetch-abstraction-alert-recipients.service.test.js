@@ -10,21 +10,17 @@ const { expect } = Code
 // Test helpers
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
-const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 const LicenceDocumentHelper = require('../../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../../../support/helpers/licence-document-role.helper.js')
 const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
   let session
-
-  beforeEach(async () => {
-    recipients = await LicenceDocumentHeaderSeeder.seed(false)
-  })
 
   describe('when there is an "additional contact"', () => {
     let licenceDocument
@@ -120,7 +116,9 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   })
 
   describe('when there is a "primary user"', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
+      recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true)
+
       session = {
         licenceRefs: [recipients.primaryUser.licenceRef]
       }
@@ -142,6 +140,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
     describe('and there is an "additional contact"', () => {
       beforeEach(async () => {
+        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true)
+
         session = {
           licenceRefs: [recipients.primaryUser.licenceRef]
         }
@@ -181,7 +181,9 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   })
 
   describe('when there is no "primary user" ', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
+      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true)
+
       session = {
         licenceRefs: [recipients.licenceHolder.licenceRef]
       }
@@ -202,14 +204,14 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             county: 'Surrey',
             forename: 'Harry',
             initials: 'J',
-            name: 'Licence holder only',
+            name: 'Licence holder',
             postcode: 'WD25 7LR',
             role: 'Licence holder',
             salutation: null,
             town: 'Little Whinging',
             type: 'Person'
           },
-          contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+          contact_hash_id: '0cad692217f572faede404363b2625c9',
           contact_type: 'Licence holder',
           email: null
         }
@@ -255,14 +257,14 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
               county: 'Surrey',
               forename: 'Harry',
               initials: 'J',
-              name: 'Licence holder only',
+              name: 'Licence holder',
               postcode: 'WD25 7LR',
               role: 'Licence holder',
               salutation: null,
               town: 'Little Whinging',
               type: 'Person'
             },
-            contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+            contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null
           }
