@@ -54,6 +54,7 @@ describe('Notices - Setup - Check service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      canSendNotice: true,
       defaultPageSize: 25,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -124,6 +125,7 @@ describe('Notices - Setup - Check service', () => {
       })
     })
   })
+
   describe('when the journey is "alerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
@@ -145,6 +147,7 @@ describe('Notices - Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
+        canSendNotice: true,
         defaultPageSize: 25,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
