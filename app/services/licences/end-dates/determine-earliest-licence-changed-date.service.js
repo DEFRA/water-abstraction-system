@@ -5,7 +5,7 @@
  * @module DetermineEarliestLicenceChangedDateService
  */
 
-const { determineEarliestDate } = require('../../../lib/dates.lib.js')
+const { compareDates, datesMatch, determineEarliestDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Determines if a licence's 'end dates' have changed, and if more than one has, which was the earliest
@@ -48,15 +48,10 @@ function go(licence) {
 /**
  * Handles the complexity of comparing dates and then determining what the 'change date' is
  *
- * In JavaScript, comparing date objects directly can lead to incorrect results, as two date objects, even with the same
- * date and time, are treated as different objects. To avoid this, we convert the dates to strings for comparison.
- * Normally, you might use getTime() to compare dates, but since any of these values can be null, calling getTime() on a
- * null value would result in an error. Using strings safely handles null values.
- *
  * @private
  */
 function _changedDate(dateType, naldDate, wrlsDate) {
-  if (String(naldDate) === String(wrlsDate)) {
+  if (datesMatch(naldDate, wrlsDate)) {
     return null
   }
 
@@ -99,17 +94,8 @@ function _changedDates(licence) {
 
 function _earliestChangedDate(changedDates) {
   // NOTE: sort() sorts the elements 'in place'
-  //
-  // It should return a number where:
-  //
-  // - a negative number means `a` should come before `b`
-  // - a positive number means `a` should come after `b`
-  // - 0 means they are equal and the order should not change
-  //
-  // The MDN docs say to memorise this use `(a, b) => a - b` to sort in ascending order. Hence, we can simplify our
-  // date sort by converting the dates to milliseconds and then subtracting them to get the result sort() needs.
   changedDates.sort((changedDateA, changedDateB) => {
-    return changedDateA.changeDate.getTime() - changedDateB.changeDate.getTime()
+    return compareDates(changedDateA.changeDate, changedDateB.changeDate)
   })
 
   return changedDates[0]
