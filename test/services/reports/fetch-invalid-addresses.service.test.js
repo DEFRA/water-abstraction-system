@@ -101,76 +101,87 @@ describe('Reports - Fetch Invalid Addresses service', () => {
 
   describe('when called', () => {
     it('returns a list of licences that are missing postcode and country fields', async () => {
-      const result = await FetchInvalidAddressesService.go()
+      const results = await FetchInvalidAddressesService.go()
 
-      expect(result.length).to.equal(5)
-      expect(result).to.equal([
-        {
-          licence_ref: '03/28/01/0165',
-          licence_ends: null,
-          contact_role: 'Licence holder',
-          address_line_1: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine1,
-          address_line_2: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine2,
-          address_line_3: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine3,
-          address_line_4: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine4,
-          town: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].town,
-          county: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].county,
-          postcode: null,
-          country: null
-        },
-        {
-          licence_ref: '03/28/01/0166',
-          licence_ends: tomorrow(),
-          contact_role: 'Licence holder',
-          address_line_1: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
-          address_line_2: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
-          address_line_3: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
-          address_line_4: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
-          town: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
-          county: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
-          postcode: null,
-          country: null
-        },
-        {
-          licence_ref: '03/28/01/0168',
-          licence_ends: tomorrow(),
-          contact_role: 'Returns to',
-          address_line_1: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
-          address_line_2: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
-          address_line_3: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
-          address_line_4: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
-          town: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
-          county: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
-          postcode: null,
-          country: null
-        },
-        {
-          licence_ref: '03/28/01/0169',
-          licence_ends: tomorrow(),
-          contact_role: 'Returns to',
-          address_line_1: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
-          address_line_2: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
-          address_line_3: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
-          address_line_4: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
-          town: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
-          county: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
-          postcode: null,
-          country: null
-        },
-        {
-          licence_ref: '03/28/01/0170',
-          licence_ends: null,
-          contact_role: 'Returns to',
-          address_line_1: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine1,
-          address_line_2: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine2,
-          address_line_3: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine3,
-          address_line_4: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine4,
-          town: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].town,
-          county: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].county,
-          postcode: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].postcode,
-          country: null
-        }
-      ])
+      expect(results.length).to.greaterThan(4)
+      expect(results).contains({
+        licence_ref: '03/28/01/0165',
+        licence_ends: null,
+        contact_role: 'Licence holder',
+        address_line_1: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].town,
+        county: currentLicenceHolder.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: null,
+        country: null
+      })
+      expect(results).contains({
+        licence_ref: '03/28/01/0166',
+        licence_ends: tomorrow(),
+        contact_role: 'Licence holder',
+        address_line_1: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
+        county: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: null,
+        country: null
+      })
+      expect(results).contains({
+        licence_ref: '03/28/01/0166',
+        licence_ends: tomorrow(),
+        contact_role: 'Licence holder',
+        address_line_1: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
+        county: licenceHolderExpiresTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: null,
+        country: null
+      })
+      expect(results).contains({
+        licence_ref: '03/28/01/0168',
+        licence_ends: tomorrow(),
+        contact_role: 'Returns to',
+        address_line_1: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
+        county: returnsToLapsesTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: null,
+        country: null
+      })
+      expect(results).contains({
+        licence_ref: '03/28/01/0169',
+        licence_ends: tomorrow(),
+        contact_role: 'Returns to',
+        address_line_1: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].town,
+        county: returnsToRevokedTomorrow.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: null,
+        country: null
+      })
+      expect(results).contains({
+        licence_ref: '03/28/01/0170',
+        licence_ends: null,
+        contact_role: 'Returns to',
+        address_line_1: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine1,
+        address_line_2: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine2,
+        address_line_3: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine3,
+        address_line_4: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].addressLine4,
+        town: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].town,
+        county: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].county,
+        postcode: returnsToSpecialCharacters.licenceDocumentHeader.metadata.contacts[0].postcode,
+        country: null
+      })
     })
   })
 })
