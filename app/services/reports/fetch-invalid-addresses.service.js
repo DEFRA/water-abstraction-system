@@ -21,7 +21,7 @@ async function go() {
 
 async function _fetch() {
   return db.raw(`
-    WITH lhc AS (
+    WITH current_licence_contacts AS (
       SELECT DISTINCT
         dh.system_external_id AS licence_ref,
         (LEAST(l.expired_date, l.lapsed_date, l.revoked_date)) AS licence_ends,
@@ -38,13 +38,54 @@ async function _fetch() {
       INNER JOIN LATERAL jsonb_array_elements(dh.metadata -> 'contacts') AS contacts ON TRUE
       INNER JOIN water.licences l
         ON l.licence_ref = dh.system_external_id
+      WHERE
+        (
+          LEAST(l.expired_date, l.lapsed_date, l.revoked_date) IS NULL
+          OR LEAST(l.expired_date, l.lapsed_date, l.revoked_date) > NOW()
+        )
+    ),
+    relevant_roles AS (
+      SELECT
+        clc.*
+      FROM current_licence_contacts clc
+      WHERE
+        clc.contact_role IN ('Licence holder', 'Returns to')
+    ),
+    no_country_postcode AS (
+      SELECT
+        rl.*
+      FROM relevant_roles rl
+      WHERE
+        rl.country IS NULL
+        AND rl.postcode IS NULL
+    ),
+    starts_with_invalid AS (
+      SELECT
+        rl.*
+      FROM relevant_roles rl
+      WHERE
+        LEFT(address_line_1, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(address_line_2, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(address_line_3, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(address_line_4, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(town, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(county, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(postcode, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+        OR LEFT(country, 1) IN ('@', '(', ')', '=', '[', ']', '”', '\\', '/', ',', '<', '>')
+    ),
+    combined_results AS (
+      SELECT * FROM no_country_postcode
+      UNION ALL
+      SELECT * FROM starts_with_invalid
     )
-    SELECT * FROM lhc WHERE
-      lhc.contact_role IN ('Licence holder', 'Returns to')
-      AND lhc.country IS NULL
-      AND lhc.postcode IS NULL
-      AND (lhc.licence_ends IS NULL OR lhc.licence_ends > NOW())
-    ORDER BY lhc.licence_ref, lhc.contact_role, lhc.address_line_1;
+    SELECT
+      cr.*
+    FROM
+      combined_results cr
+    ORDER BY
+      cr.licence_ref,
+      cr.contact_role,
+      cr.address_line_1;
   `)
 }
 

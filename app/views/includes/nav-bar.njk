@@ -23,7 +23,7 @@
     {% endif %}
     {% if auth.permission.manage %}
       <li class="navbar__item">
-        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'manage' }}" href="{{ '/system' if featureFlags.enableSystemManageView }}/manage" id="nav-manage">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'manage' }}" href="/system/manage" id="nav-manage">
           Manage
         </a>
       </li>

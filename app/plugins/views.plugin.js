@@ -36,11 +36,7 @@ import('marked').then((mod) => {
   global.GlobalMarked = mod.marked
 })
 
-const {
-  enableSystemLicenceView,
-  enableSystemManageView,
-  enableSystemProfiles
-} = require('../../config/feature-flags.config.js')
+const { enableSystemLicenceView, enableSystemProfiles } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -127,8 +123,7 @@ function context(request) {
       permission: request.auth.credentials?.permission
     },
     featureFlags: {
-      enableSystemLicenceView,
-      enableSystemManageView
+      enableSystemLicenceView
     },
     navigationLinks: _navigationLinks(request.auth)
   }
