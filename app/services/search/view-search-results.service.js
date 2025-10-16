@@ -44,13 +44,6 @@ async function go(searchQuery, page) {
   const licenceSearchResult = await _searchLicences(searchQuery, pageNumber)
   const licences = licenceSearchResult.results.length !== 0 ? licenceSearchResult.results : null
 
-  // Where a user has entered criteria that exactly matches a single result, they may be redirected straight to that
-  // record
-  const redirect = _redirectForLicence(licenceSearchResult, searchQuery)
-  if (redirect) {
-    return { redirect }
-  }
-
   const pagination = PaginatorPresenter.go(licenceSearchResult.total, pageNumber, `/system/search`)
 
   const formattedData = SearchPresenter.go(searchQuery, pageNumber, pagination.numberOfPages, licences)
@@ -60,18 +53,6 @@ async function go(searchQuery, page) {
     ...formattedData,
     pagination
   }
-}
-
-function _redirectForLicence(licenceSearchResult, queryForSearching) {
-  // If there's exactly one result, and it exactly matches the search query, redirect straight to that licence
-  if (
-    licenceSearchResult.total === 1 &&
-    licenceSearchResult.results[0].licenceRef.toLowerCase() === queryForSearching.toLowerCase()
-  ) {
-    return `/system/licences/${licenceSearchResult.results[0].id}/summary`
-  }
-
-  return null
 }
 
 async function _searchLicences(query, page) {
