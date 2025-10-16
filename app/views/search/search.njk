@@ -44,26 +44,6 @@
       </div>
     {% else %}
       <hr class="govuk-section-break govuk-section-break--visible">
-      {% if licences %}
-        {% for licence in licences %}
-          <!--result card-->
-          <hr class="govuk-section-break govuk-section-break--visible">
-          <div class="govuk-grid-row govuk-!-margin-top-0">
-            <dl class="govuk-body govuk-!-margin-0">
-              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
-                <dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">Licence:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}<a/></dd>
-              </div>
-              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Licence holder:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceHolderName }}</dd>
-              </div>
-              <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">End date:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceEndDate }} {{ govukTag({ text: licence.licenceEndedText, classes: 'govuk-tag--grey' }) if licence.licenceEndedText }}</dd>
-              </div>
-            </dl>
-          </div>
-          <hr class="govuk-section-break govuk-section-break--visible">
-        {% endfor %}
-      {% endif %}
       {% if returnLogs %}
         {% for returnLog in returnLogs %}
           <!--result card-->
@@ -78,6 +58,26 @@
               </div>
               <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
                 <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Region:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.region }} {{ govukTag({ text: returnLog.status, classes: 'govuk-tag--grey' }) if returnLog.status }}</dd>
+              </div>
+            </dl>
+          </div>
+          <hr class="govuk-section-break govuk-section-break--visible">
+        {% endfor %}
+      {% endif %}
+      {% if licences %}
+        {% for licence in licences %}
+          <!--result card-->
+          <hr class="govuk-section-break govuk-section-break--visible">
+          <div class="govuk-grid-row govuk-!-margin-top-0">
+            <dl class="govuk-body govuk-!-margin-0">
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
+                <dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">Licence:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}<a/></dd>
+              </div>
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Licence holder:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceHolderName }}</dd>
+              </div>
+              <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">End date:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ licence.licenceEndDate }} {{ govukTag({ text: licence.licenceEndedText, classes: 'govuk-tag--grey' }) if licence.licenceEndedText }}</dd>
               </div>
             </dl>
           </div>

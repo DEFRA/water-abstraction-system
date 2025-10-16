@@ -82,8 +82,10 @@ async function _searchReturnLogs(query, page) {
   }
 
   return ReturnLogModel.query()
+    .select(['return_logs.*', 'regions.nald_region_id as region_id', 'regions.display_name as region'])
+    .join('regions', ref('return_logs.metadata:nald.regionCode').castInt(), 'regions.nald_region_id')
     .where('returnReference', '=', query)
-    .orderBy([{ column: 'returnReference', order: 'asc' }])
+    .orderBy([{ column: 'endDate', order: 'asc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

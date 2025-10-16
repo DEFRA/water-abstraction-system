@@ -68,36 +68,27 @@ function _mapLicences(licences) {
 }
 
 function _mapReturnLogs(returnLogs) {
-  return returnLogs.map((returnLog) => {
-    const { id, licenceRef, metadata, returnReference, status } = returnLog
+  const latestReturnLogByRegion = _latestReturnLogByRegion(returnLogs)
+
+  return latestReturnLogByRegion.map((returnLog) => {
+    const { id, licenceRef, metadata, region, returnReference, status } = returnLog
     return {
       id,
-      returnReference,
       licenceRef,
-      region: metadata?.nald?.region,
+      returnReference,
+      region,
       status
     }
   })
 }
 
-    // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
-    // Name that are populated, where Name provides the surname for a person.
-    // Licences that have ended don't seem to have this information populated, which makes their display a bit
-    // unhelpful.
-    const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
-    const licenceHolderName = holderContactModel.$name()
+function _latestReturnLogByRegion(returnLogs) {
+  const latestReturnLogByRegion = returnLogs.reduce((regions, returnLog) => {
+    regions[returnLog.regionId] = returnLog
+    return regions
+  }, {})
 
-    // Licences that have ended are displayed with a tag sowing the reason
-    let licenceEndedText
-    let licenceEndDate
-    if (licenceEnd) {
-      const { date, reason } = licenceEnd
-      licenceEndedText = date <= today() ? reason : null
-      licenceEndDate = formatLongDate(date)
-    }
-
-    return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
-  })
+  return Object.values(latestReturnLogByRegion)
 }
 
 function _pageTitle(numberOfPages, selectedPageNumber) {
