@@ -1,7 +1,7 @@
 'use strict'
 
 const { today } = require('../lib/general.lib.js')
-const { returnUnits } = require('../lib/static-lookups.lib.js')
+const { noticeMappings, returnUnits } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
 
@@ -175,6 +175,31 @@ function formatMoney(valueInPence, signed = false) {
   const sign = signed && valueInPence < 0 ? '-' : ''
 
   return `${sign}£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+/**
+ * Formats the notice type for display
+ *
+ * Used when displaying notices, for example, the view notices, view notice, and view licence communications pages.
+ *
+ * > It is assumed `subtype` and `alertType` have been extracted from an `EventModel` instance.
+ *
+ * If `alertType` is provided, then we are dealing with a water abstraction alert. The notice type is simply
+ * `alertType + alert`, for example, 'Warning alert'.
+ *
+ * Else, we map the notice type from the event's `subtype`.
+ *
+ * @param {string} subtype - The notice subtype.
+ * @param {string} [alertType=null] - The alert type (optional)
+ *
+ * @returns {string} The formatted notice type
+ */
+function formatNoticeType(subtype, alertType = null) {
+  if (alertType) {
+    return `${titleCase(alertType)} alert`
+  }
+
+  return noticeMappings[subtype]
 }
 
 /**
@@ -560,6 +585,7 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatMoney,
+  formatNoticeType,
   formatNumber,
   formatPounds,
   formatPurposes,

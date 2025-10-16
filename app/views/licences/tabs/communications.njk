@@ -1,38 +1,47 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro communicationType(communication) %}
-    <a href={{communication.link}} class="govuk-link">{{ communication.type.label }}
-      <span class="govuk-visually-hidden"> {{ communication.type.sentVia }}</span>
-    </a>
-{% endmacro %}
+{% from "macros/notification-status-tag.njk" import statusTag %}
 
 <h2 class="govuk-heading-l">Communications</h2>
 
-{% if communications.length === 0 %}
-  <p data-test='no-communications-msg'>No communications for this licence.</p>
+{% if notifications.length === 0 %}
+  <p data-test='no-notifications-msg'>No communications for this licence.</p>
 {% else %}
   {% set tableRows = [] %}
-  {% for communication in communications %}
+  {% for notification in notifications %}
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
     {% set rowIndex = loop.index0 %}
 
+    {# Link to view the notification #}
+    {% set viewLink %}
+      <a class="govuk-link" href="{{ notification.link.href }}">{{ notification.type }} <span class="govuk-visually-hidden">{{ notification.link.hiddenText }}</span></a>
+    {% endset %}
+
+    {% set noticeStatusTag %}
+      {{ statusTag(notification.status, true) }}
+    {% endset %}
+
     {% set row = [
       {
-        html: communicationType(communication),
-        attributes: { 'data-test': 'communication-type-' + rowIndex }
+        attributes: { 'data-test': 'notification-type-' + rowIndex },
+        html: viewLink
       },
       {
-        text: communication.sent,
-        attributes: { 'data-test': 'communication-sent-' + rowIndex }
+        attributes: { 'data-test': 'notification-sent-date' + rowIndex },
+        text: notification.sentDate
       },
       {
-        text: communication.sender,
-        attributes: { 'data-test': 'communication-sender-' + rowIndex }
+        attributes: { 'data-test': 'notification-sent-by-' + rowIndex },
+        text: notification.sentBy
       },
       {
-        text: communication.method,
-        attributes: { 'data-test': 'communication-method-' + rowIndex }
+        attributes: { 'data-test': 'notification-method-' + rowIndex },
+        text: notification.method
+      },
+      {
+        attributes: { 'data-test': 'notification-status-' + rowIndex },
+        html: noticeStatusTag
       }
     ] %}
 
@@ -40,13 +49,14 @@
   {% endfor %}
 
   {{ govukTable({
-    attributes: { 'data-test': 'communications-table' },
+    attributes: { 'data-test': 'notifications-table' },
     firstCellIsHeader: false,
     head: [
       { text: 'Type' },
-      { text: 'Sent' },
-      { text: 'Sender' },
-      { text: 'Method' }
+      { text: 'Sent date' },
+      { text: 'Sent by' },
+      { text: 'Method' },
+      { text: 'Status' }
     ],
     rows: tableRows
   }) }}

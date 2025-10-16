@@ -5,8 +5,8 @@
  * @module ViewNotificationPresenter
  */
 
-const { formatLongDate, formatRestrictionType, formatValueUnit, titleCase } = require('../base.presenter.js')
-const { notifyErrors, noticeMappings } = require('../../lib/static-lookups.lib.js')
+const NotificationErrorPresenter = require('./notification-error.presenter.js')
+const { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
 
 /**
  * Formats notification data ready for presenting in the view notification page
@@ -32,9 +32,9 @@ function go(notification, licence = null) {
     alertDetails: _alertDetails(notification),
     backLink: _backLink(notification, licence),
     contents: plaintext,
-    errorDetails: _errorDetails(notification),
+    errorDetails: NotificationErrorPresenter.go(notification),
     messageType,
-    pageTitle: _pageTitle(notification),
+    pageTitle: formatNoticeType(event.subtype, event.sendingAlertType),
     pageTitleCaption: _pageTitleCaption(notification, licence),
     paperForm: _paperForm(notification),
     reference: licence ? event.referenceCode : null,
@@ -93,49 +93,6 @@ function _backLink(notification, licence) {
   const { event } = notification
 
   return { href: `/system/notices/${event.id}`, text: `Go back to notice ${event.referenceCode}` }
-}
-
-/**
- * Generally the `notifyError` will get populated when a notification fails to send to Notify, for whatever reason
- * (issue on our side or Notify rejects it).
- *
- * This means notifyStatus will not get populated. If we have managed to send it, then we are interested in what
- * `notifyStatus` says, because we've marked the notification as errored because of it.
- *
- * We relay the description Notify provides in its docs when this is the case. We default to a generic message for
- * system errors because we're dealing with old records that might have all sorts in those error messages!
- * @private
- */
-function _errorDetails(notification) {
-  const { messageType, notifyError, notifyStatus, status } = notification
-
-  if (status !== 'error') {
-    return null
-  }
-
-  if (notifyError) {
-    return {
-      status: notifyStatus ?? 'Not sent',
-      description: 'Internal system error'
-    }
-  }
-
-  return {
-    status: notifyStatus,
-    description: notifyErrors[messageType][notifyStatus]
-  }
-}
-
-function _pageTitle(notification) {
-  const { sendingAlertType, subtype } = notification.event
-
-  let title = noticeMappings[subtype]
-
-  if (sendingAlertType) {
-    title = `${titleCase(sendingAlertType)} alert`
-  }
-
-  return title
 }
 
 function _pageTitleCaption(notification, licence) {

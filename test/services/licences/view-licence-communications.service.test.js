@@ -8,27 +8,43 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test Helpers
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+
 // Things we need to stub
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
 const ViewLicenceCommunicationsService = require('../../../app/services/licences/view-licence-communications.service.js')
 
-describe('View Licence Communications service', () => {
+describe('Licences - View Licence Communications service', () => {
   const auth = {}
+  const licenceId = 'e7aefa9b-b832-41c8-9add-4e3e03cc1331'
   const page = 1
-  const pagination = { page }
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+
+  let notification
 
   beforeEach(() => {
-    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
-    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
-    Sinon.stub(FetchCommunicationsService, 'go').resolves({
-      communications: [],
-      pagination: { total: 1 }
-    })
+    const notice = NoticesFixture.alertStop()
+    const { createdAt, id, messageType, status } = NotificationsFixture.abstractionAlertEmail(notice)
+
+    notification = {
+      createdAt,
+      id,
+      messageType,
+      status,
+      event: {
+        id: notice.id,
+        issuer: notice.issuer,
+        subtype: notice.subtype,
+        sendingAlertType: notice.metadata.options.sendingAlertType
+      }
+    }
+
+    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceRef: '01/123' })
+    Sinon.stub(FetchCommunicationsService, 'go').resolves({ notifications: [notification], totalNumber: 1 })
   })
 
   afterEach(() => {
@@ -37,14 +53,26 @@ describe('View Licence Communications service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceCommunicationsService.go(testId, auth, page)
+      const result = await ViewLicenceCommunicationsService.go(licenceId, auth, page)
 
       expect(result).to.equal({
         activeTab: 'communications',
-        communications: [],
-        licenceName: 'fake licence',
+        licenceRef: '01/123',
+        notifications: [
+          {
+            link: {
+              hiddenText: 'sent 9 October 2025 via email',
+              href: `/system/notifications/${notification.id}?id=${licenceId}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '9 October 2025',
+            status: notification.status,
+            type: 'Stop alert'
+          }
+        ],
         pagination: {
-          page: 1
+          numberOfPages: 1
         }
       })
     })

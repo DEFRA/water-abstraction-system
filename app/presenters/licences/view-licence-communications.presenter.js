@@ -5,64 +5,45 @@
  * @module ViewLicenceCommunicationsPresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../base.presenter.js')
-
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
- * @param {module:WorkflowModel[]} communications - All in-progress workflow records for the licence
- * @param {string} documentId - The UUID of the document
+ * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
  * @param {string} licenceId - The UUID of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(communications, documentId, licenceId) {
+function go(notifications, licenceId) {
   return {
-    communications: _communications(communications, documentId, licenceId)
+    notifications: _notifications(notifications, licenceId)
   }
 }
 
-function _communications(communications, documentId, licenceId) {
-  return communications.map((communication) => {
-    const sent = formatLongDate(communication.createdAt)
+function _link(notification, licenceId, sentDate) {
+  const { id: notificationId, messageType } = notification
+
+  return {
+    hiddenText: `sent ${sentDate} via ${messageType}`,
+    href: `/system/notifications/${notificationId}?id=${licenceId}`
+  }
+}
+
+function _notifications(notifications, licenceId) {
+  return notifications.map((notification) => {
+    const { createdAt, event, messageType, status } = notification
+    const sentDate = formatLongDate(createdAt)
 
     return {
-      id: communication.id,
-      link: _link(communication.id, documentId, licenceId),
-      type: _type(communication, sent),
-      sender: communication.event.issuer,
-      sent,
-      method: sentenceCase(communication.messageType)
+      link: _link(notification, licenceId, sentDate),
+      method: sentenceCase(messageType),
+      sentBy: event.issuer,
+      sentDate,
+      status,
+      type: formatNoticeType(event.subtype, event.sendingAlertType)
     }
   })
-}
-
-function _link(communicationId, documentId, licenceId) {
-  if (FeatureFlagsConfig.enableNotificationsView) {
-    return `/system/notifications/${communicationId}?id=${licenceId}`
-  }
-
-  return `/licences/${documentId}/communications/${communicationId}`
-}
-
-function _type(communication, sent) {
-  return {
-    label: _typeLabel(communication),
-    sentVia: `sent ${sent} via ${communication.messageType}`
-  }
-}
-
-function _typeLabel(communication) {
-  if (communication.event.metadata.name === 'Water abstraction alert') {
-    return (
-      `${sentenceCase(communication.event.metadata.options.sendingAlertType)}` +
-      ` - ${communication.event.metadata.name}`
-    )
-  }
-
-  return communication.event.metadata.name
 }
 
 module.exports = {

@@ -241,6 +241,39 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatNoticeType()', () => {
+    let alertType
+    let subtype
+
+    beforeEach(() => {
+      subtype = 'returnInvitation'
+    })
+
+    describe('when "alertType" is provided', () => {
+      beforeEach(() => {
+        alertType = 'stop'
+      })
+
+      it('returns the water abstraction alert notice type', () => {
+        const result = BasePresenter.formatNoticeType(subtype, alertType)
+
+        expect(result).to.equal('Stop alert')
+      })
+    })
+
+    describe('when "alertType" is not provided', () => {
+      beforeEach(() => {
+        alertType = null
+      })
+
+      it('returns the mapping for the notice subtype', () => {
+        const result = BasePresenter.formatNoticeType(subtype, alertType)
+
+        expect(result).to.equal('Returns invitation')
+      })
+    })
+  })
+
   describe('#formatNumber()', () => {
     it('formats a number for display', () => {
       const result = BasePresenter.formatNumber(12345.6789)
