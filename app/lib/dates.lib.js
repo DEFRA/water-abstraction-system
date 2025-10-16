@@ -17,6 +17,9 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
  * 1 if dateA is after dateB
  * 0 if they are the same date
  *
+ * So comparing result of this with `<= 0` is the same as saying "is dateA on or before dateB"; `>= 0` is the same as
+ * "is dateA on or after dateB"; etc.
+ *
  * This is useful as a helper for sorting dates, or for checking if two dates are the same (although the `datesMatch`
  * function is more explicit for that purpose).
  *
