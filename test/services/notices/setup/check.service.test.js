@@ -55,7 +55,6 @@ describe('Notices - Setup - Check service', () => {
     expect(result).to.equal({
       activeNavBar: 'manage',
       canSendNotice: true,
-      defaultPageSize: 25,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
@@ -80,7 +79,7 @@ describe('Notices - Setup - Check service', () => {
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
         }
       ],
-      recipientsAmount: 1,
+      tableCaption: 'Showing all 1 recipients',
       warning: null
     })
   })
@@ -148,7 +147,6 @@ describe('Notices - Setup - Check service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         canSendNotice: true,
-        defaultPageSize: 25,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`
@@ -172,7 +170,7 @@ describe('Notices - Setup - Check service', () => {
             previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}/check-alert`
           }
         ],
-        recipientsAmount: 1,
+        tableCaption: 'Showing all 1 recipients',
         warning: null
       })
     })

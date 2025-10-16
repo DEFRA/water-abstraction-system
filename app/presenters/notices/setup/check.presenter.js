@@ -34,13 +34,12 @@ function go(recipients, page, pagination, session) {
 
   return {
     canSendNotice,
-    defaultPageSize,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
     readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
     recipients: formattedRecipients,
-    recipientsAmount: recipients.length,
+    tableCaption: _tableCaption(defaultPageSize, recipients.length),
     warning: _warning(formattedRecipients)
   }
 }
@@ -168,6 +167,14 @@ function _recipients(noticeType, page, recipients, sessionId) {
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} recipients`
+  }
+
+  return `Showing all ${totalNumber} recipients`
 }
 
 /**

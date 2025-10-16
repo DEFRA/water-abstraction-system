@@ -60,7 +60,6 @@ describe('Notices - Setup - Check presenter', () => {
 
     expect(result).to.equal({
       canSendNotice: true,
-      defaultPageSize: 25,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
@@ -139,7 +138,7 @@ describe('Notices - Setup - Check presenter', () => {
           previewLink: `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateReturnsAgent.contact_hash_id}`
         }
       ],
-      recipientsAmount: 9,
+      tableCaption: 'Showing all 9 recipients',
       warning: {
         iconFallbackText: 'Warning',
         text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
@@ -526,6 +525,34 @@ describe('Notices - Setup - Check presenter', () => {
 
           expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
         })
+      })
+    })
+  })
+
+  describe('the "tableCaption" property', () => {
+    describe('when there is only one page of results', () => {
+      it('returns the "tableCaption" with the "Showing all" message', () => {
+        const result = CheckPresenter.go(recipients, page, pagination, session)
+
+        expect(result.tableCaption).to.equal(`Showing all ${recipients.length} recipients`)
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      beforeEach(() => {
+        for (let i = 0; i < 25; i++) {
+          const padding = recipients[0]
+
+          padding.email = `${generateUUID()}@example.com`
+
+          recipients.push({ ...padding })
+        }
+      })
+
+      it('returns the "tableCaption" with the "Showing x of y" message', () => {
+        const result = CheckPresenter.go(recipients, page, pagination, session)
+
+        expect(result.tableCaption).to.equal(`Showing 25 of ${recipients.length} recipients`)
       })
     })
   })
