@@ -18,7 +18,8 @@ function go(invalidAddresses) {
   return {
     backLink: { href: '/system/manage', text: 'Go back to manage' },
     invalidAddresses: _formatTableData(invalidAddresses),
-    pageTitle: 'Invalid addresses'
+    pageTitle: 'Invalid addresses',
+    tableCaption: `Showing ${invalidAddresses.length} invalid addresses`
   }
 }
 
