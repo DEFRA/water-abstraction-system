@@ -9,47 +9,52 @@
   {{ pageHeadingHtml }}
 
   {{ govukInsetText({
-    text: "These addresses are missing both postcode and country. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD."
+    html: '<span>These addresses will be rejected by Notify. They are either missing both postcode and country or have address lines that start with <code>@ ( ) = [ ] ” \\ / , < ></code>. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD.</span>'
   }) }}
 
-  {% set tableRows = [] %}
-  {% for invalidAddress in invalidAddresses %}
-    {% set row = [
-      {
-        text: invalidAddress.licenceRef
-      },
-      {
-        text: invalidAddress.licenceEnds
-      },
-      {
-        text: invalidAddress.contactRole
-      },
-      {
-        html: newLineArrayItems(invalidAddress.addressLines)
-      }
-    ] %}
-
-    {% set tableRows = (tableRows.push(row), tableRows) %}
-  {% endfor %}
-
-  {{
-    govukTable({
-      firstCellIsHeader: false,
-      head: [
+  {% if invalidAddresses.length === 0 %}
+    <p>No invalid addresses found.</p>
+  {% else %}
+    {% set tableRows = [] %}
+    {% for invalidAddress in invalidAddresses %}
+      {% set row = [
         {
-          text: "Licence"
+          text: invalidAddress.licenceRef
         },
         {
-          text: "End Date"
+          text: invalidAddress.licenceEnds
         },
         {
-          text: "Role"
+          text: invalidAddress.contactRole
         },
         {
-          text: "Address"
+          html: newLineArrayItems(invalidAddress.addressLines)
         }
-      ],
-      rows: tableRows
-    })
-  }}
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{
+      govukTable({
+        caption: tableCaption,
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Licence"
+          },
+          {
+            text: "End Date"
+          },
+          {
+            text: "Role"
+          },
+          {
+            text: "Address"
+          }
+        ],
+        rows: tableRows
+      })
+    }}
+  {% endif %}
 {% endblock %}

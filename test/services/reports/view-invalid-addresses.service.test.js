@@ -36,12 +36,13 @@ describe('Reports - View Invalid Addresses service', () => {
               'Address Line 2: HORIZON HOUSE',
               'Address Line 3: DEANERY ROAD',
               'Address Line 4: ',
-              'County: AVON',
-              'Town: BRISTOL'
+              'Town: BRISTOL',
+              'County: AVON'
             ]
           }
         ],
-        pageTitle: 'Invalid addresses'
+        pageTitle: 'Invalid addresses',
+        tableCaption: 'Showing 1 invalid addresses'
       })
     })
   })
