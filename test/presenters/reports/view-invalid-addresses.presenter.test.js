@@ -22,7 +22,8 @@ describe('Reports - View invalid addresses presenter', () => {
       expect(result).to.equal({
         backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [],
-        pageTitle: 'Invalid addresses'
+        pageTitle: 'Invalid addresses',
+        tableCaption: 'Showing 0 invalid addresses'
       })
     })
   })
@@ -85,9 +86,25 @@ describe('Reports - View invalid addresses presenter', () => {
               'County: ',
               'Town: '
             ]
+          },
+          {
+            licenceRef: '03/28/01/0170',
+            licenceEnds: null,
+            contactRole: 'Returns to',
+            addressLines: [
+              'Address Line 1: ENVIRONMENT AGENCY',
+              'Address Line 2: (Facilities) HORIZON HOUSE',
+              'Address Line 3: DEANERY ROAD',
+              'Address Line 4: ',
+              'County: AVON',
+              'Town: BRISTOL',
+              'Postcode: BS1 5AH',
+              'Country: United Kingdom'
+            ]
           }
         ],
-        pageTitle: 'Invalid addresses'
+        pageTitle: 'Invalid addresses',
+        tableCaption: 'Showing 5 invalid addresses'
       })
     })
   })
@@ -146,6 +163,19 @@ function _invalidAddresses() {
       county: null,
       postcode: null,
       country: null
+    },
+    {
+      licence_ref: '03/28/01/0170',
+      licence_ends: null,
+      contact_role: 'Returns to',
+      address_line_1: 'ENVIRONMENT AGENCY',
+      address_line_2: '(Facilities) HORIZON HOUSE',
+      address_line_3: 'DEANERY ROAD',
+      address_line_4: null,
+      town: 'BRISTOL',
+      county: 'AVON',
+      postcode: 'BS1 5AH',
+      country: 'United Kingdom'
     }
   ]
 }
