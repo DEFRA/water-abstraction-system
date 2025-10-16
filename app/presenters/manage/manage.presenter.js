@@ -64,7 +64,7 @@ function _manageUsers(userScopes) {
 function _returnNotices(userScopes) {
   const links = {
     invitations: _hasPermission(userScopes, ['bulk_return_notifications']),
-    paperForms: _hasPermission(userScopes, ['returns']),
+    paperForms: _hasPermission(userScopes, ['returns']) && !featureFlagsConfig.enableAdHocNotifications,
     reminders: _hasPermission(userScopes, ['bulk_return_notifications']),
     adHoc: _hasPermission(userScopes, ['returns']) && featureFlagsConfig.enableAdHocNotifications
   }
