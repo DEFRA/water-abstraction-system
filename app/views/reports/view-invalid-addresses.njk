@@ -9,7 +9,7 @@
   {{ pageHeadingHtml }}
 
   {{ govukInsetText({
-    text: "These addresses will be rejected by Notify. They are either missing both postcode and country or have address lines that start with @ ( ) = [ ] ” \\ / , < >. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD."
+    html: '<span>These addresses will be rejected by Notify. They are either missing both postcode and country or have address lines that start with <code>@ ( ) = [ ] ” \\ / , < ></code>. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD.</span>'
   }) }}
 
   {% if invalidAddresses.length === 0 %}
