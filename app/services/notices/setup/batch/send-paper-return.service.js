@@ -40,7 +40,11 @@ function _returnFromError(notification, returnFormRequest) {
   const errors = [returnFormRequest.response.message]
 
   return {
-    ...NotificationErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the return form PDF`, errors),
+    ...NotificationErrorPresenter.go(
+      returnFormRequest.response.code,
+      `Failed to generate the paper return PDF`,
+      errors
+    ),
     id: notification.id
   }
 }
