@@ -117,7 +117,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
   describe('when there is a "primary user"', () => {
     beforeEach(async () => {
-      recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true)
+      recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser()
 
       session = {
         licenceRefs: [recipients.primaryUser.licenceRef]
@@ -140,7 +140,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
     describe('and there is an "additional contact"', () => {
       beforeEach(async () => {
-        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true)
+        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser()
 
         session = {
           licenceRefs: [recipients.primaryUser.licenceRef]
@@ -182,7 +182,7 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
   describe('when there is no "primary user" ', () => {
     beforeEach(async () => {
-      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true)
+      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder()
 
       session = {
         licenceRefs: [recipients.licenceHolder.licenceRef]

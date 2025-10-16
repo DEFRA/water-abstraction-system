@@ -22,7 +22,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
     beforeEach(async () => {
       dueDate = '2025-04-29'
 
-      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true, dueDate)
+      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
       session = { licenceRef: recipients.licenceHolder.licenceRef }
     })
@@ -61,7 +61,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
     beforeEach(async () => {
       dueDate = '2025-05-08'
 
-      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(true, dueDate)
+      recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(dueDate)
 
       session = { licenceRef: recipients.licenceHolderAndReturnTo.licenceRef }
     })

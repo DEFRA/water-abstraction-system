@@ -47,12 +47,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = true
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(
-            true,
-            dueDate,
-            session.determinedReturnsPeriod.endDate,
-            enableReturnsAgent
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
           session.determinedReturnsPeriod.dueDate = dueDate
         })
@@ -103,11 +98,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = false
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(
-            true,
-            dueDate,
-            session.determinedReturnsPeriod.endDate
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
           session.determinedReturnsPeriod.dueDate = dueDate
         })
@@ -156,11 +147,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = false
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(
-            true,
-            dueDate,
-            session.determinedReturnsPeriod.endDate
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(dueDate)
 
           session.determinedReturnsPeriod.dueDate = dueDate
         })
@@ -233,21 +220,12 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = true
 
-          const primarySeed = await LicenceDocumentHeaderSeeder.seedPrimaryUser(
-            true,
-            dueDate,
-            session.determinedReturnsPeriod.endDate,
-            enableReturnsAgent
-          )
+          const primarySeed = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
           removeLicences = primarySeed.primaryUser.licenceRef
 
           // add a licence holder
-          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(
-            true,
-            dueDate,
-            session.determinedReturnsPeriod.endDate
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
           session.removeLicences = removeLicences
           session.determinedReturnsPeriod.dueDate = dueDate
@@ -297,12 +275,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = true
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(
-            true,
-            dueDate,
-            '2023-03-31',
-            enableReturnsAgent
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
           session = { licenceRef: testRecipients.primaryUser.licenceRef }
         })
@@ -351,7 +324,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = true
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true, dueDate, '2023-03-31')
+          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
           session = { licenceRef: testRecipients.licenceHolder.licenceRef }
         })
@@ -396,11 +369,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
           enableReturnsAgent = true
 
-          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(
-            true,
-            dueDate,
-            '2023-03-31'
-          )
+          testRecipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(dueDate)
 
           session = { licenceRef: testRecipients.licenceHolderAndReturnTo.licenceRef }
         })
@@ -462,20 +431,6 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               start_date: startDate
             }
           ])
-        })
-      })
-
-      describe('when the end date is greater than today', () => {
-        beforeEach(async () => {
-          testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true, dueDate, '3000-01-01')
-
-          session = { licenceRef: testRecipients.primaryUser.licenceRef }
-        })
-
-        it('correctly returns an empty array (no return logs found)', async () => {
-          const result = await FetchDownloadRecipientsService.go(session)
-
-          expect(result).to.equal([])
         })
       })
     })

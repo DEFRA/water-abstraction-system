@@ -44,7 +44,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = false
 
-        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true, dueDate, '2023-01-31', enableReturnsAgent)
+        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
         removeLicences = ''
 
@@ -71,12 +71,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
           enableReturnsAgent = true
 
-          recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(
-            true,
-            dueDate,
-            '2023-01-31',
-            enableReturnsAgent
-          )
+          recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
           removeLicences = ''
 
@@ -112,7 +107,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = false
 
-        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true, dueDate)
+        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
         session.determinedReturnsPeriod.dueDate = dueDate
       })
@@ -153,7 +148,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = false
 
-        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(true, dueDate)
+        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(dueDate)
 
         session.determinedReturnsPeriod.dueDate = dueDate
       })
@@ -216,7 +211,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = false
 
-        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true, dueDate, '2023-01-31', enableReturnsAgent)
+        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
         removeLicences = recipients.primaryUser.licenceRef
 
@@ -243,7 +238,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = false
 
-        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(true, dueDate, '2023-01-31', enableReturnsAgent)
+        recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
         session = { licenceRef: recipients.primaryUser.licenceRef }
       })
@@ -268,12 +263,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
           enableReturnsAgent = true
 
-          recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(
-            true,
-            dueDate,
-            '2023-01-31',
-            enableReturnsAgent
-          )
+          recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate, enableReturnsAgent)
 
           session = { licenceRef: recipients.primaryUser.licenceRef }
         })
@@ -307,7 +297,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = true
 
-        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(true, dueDate, '2023-01-31')
+        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolder(dueDate)
 
         session = { licenceRef: recipients.licenceHolder.licenceRef }
       })
@@ -348,7 +338,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         enableReturnsAgent = true
 
-        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(true, dueDate, '2023-01-31')
+        recipients = await LicenceDocumentHeaderSeeder.seedLicenceHolderAndReturnToSameRef(dueDate)
 
         session = { licenceRef: recipients.licenceHolderAndReturnTo.licenceRef }
       })
