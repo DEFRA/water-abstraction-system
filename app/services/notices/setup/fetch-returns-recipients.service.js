@@ -227,7 +227,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       ),
 
       licence_holder as (
-        SELECT DISTINCT ON (ldh.licence_ref)
+        SELECT
           ldh.licence_ref,
           ('Licence holder') AS contact_type,
           (NULL) AS email,
@@ -237,7 +237,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
            )) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Letter') as message_type
         FROM public.licence_document_headers ldh
                INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
                INNER JOIN due_return_logs rl
@@ -248,7 +249,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       ),
 
       returns_to as (
-        SELECT DISTINCT ON (ldh.licence_ref)
+        SELECT
           ldh.licence_ref,
           ('Returns to') AS contact_type,
           (NULL) AS email,
@@ -258,7 +259,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
            )) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Letter') as message_type
         FROM public.licence_document_headers ldh
                INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
                INNER JOIN due_return_logs rl
@@ -269,13 +271,14 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       ),
 
       primary_user as (
-        SELECT DISTINCT ON (contact_hash_id)
+        SELECT
           ldh.licence_ref,
           ('Primary user') AS contact_type,
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Email') as message_type
         FROM public.licence_document_headers ldh
                INNER JOIN public.licence_entity_roles ler
                           ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
@@ -288,13 +291,14 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       ),
 
       returns_agent as (
-        SELECT DISTINCT ON (contact_hash_id)
+        SELECT
           ldh.licence_ref,
           ('Returns agent') AS contact_type,
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Email') as message_type
         FROM public.licence_document_headers ldh
                INNER JOIN public.licence_entity_roles ler
                           ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
@@ -316,13 +320,13 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
         SELECT *, 4 AS priority FROM returns_to
       ),
 
-      -- Pick one “best” contact record per contact_hash_id (lowest priority number wins)
       best_contact_type AS (
         SELECT DISTINCT ON (contact_hash_id)
           contact_hash_id,
           contact_type,
           email,
           contact,
+          message_type,
           priority
         FROM all_contacts
         ORDER BY contact_hash_id, priority
@@ -344,7 +348,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       b.email,
       b.contact,
       b.contact_hash_id,
-      a.return_ids
+      a.return_ids,
+      b.message_type
     FROM
       aggregated_contact_data a
         JOIN

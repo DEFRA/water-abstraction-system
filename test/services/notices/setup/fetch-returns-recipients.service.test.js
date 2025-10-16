@@ -13,7 +13,7 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
-describe.only('Notices - Setup - Fetch returns recipients service', () => {
+describe('Notices - Setup - Fetch returns recipients service', () => {
   const dueDate = '2025-04-28'
 
   let recipients
@@ -56,6 +56,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
+          message_type: 'Email',
           return_ids: testRecipient.return_ids
         })
       })
@@ -74,6 +75,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
+            message_type: 'Email',
             return_ids: testRecipientReturnsAgent.return_ids
           })
         })
@@ -109,6 +111,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
           contact_type: 'Licence holder',
           email: null,
+          message_type: 'Letter',
           return_ids: testRecipient.return_ids
         })
       })
@@ -143,6 +146,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
           contact_type: 'Licence holder',
           email: null,
+          message_type: 'Letter',
           return_ids: licenceHolder.return_ids
         })
 
@@ -209,6 +213,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
+          message_type: 'Email',
           return_ids: testRecipient.return_ids
         })
       })
@@ -231,6 +236,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
+            message_type: 'Email',
             return_ids: testRecipientReturnsAgent.return_ids
           })
         })
@@ -270,6 +276,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
           contact_type: 'Licence holder',
           email: null,
+          message_type: 'Letter',
           return_ids: testRecipient.return_ids
         })
       })
@@ -308,6 +315,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
           contact_type: 'Licence holder',
           email: null,
+          message_type: 'Letter',
           return_ids: licenceHolder.return_ids
         })
 
