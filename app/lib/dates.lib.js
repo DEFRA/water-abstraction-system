@@ -17,11 +17,7 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
  * 1 if dateA is after dateB
  * 0 if they are the same date
  *
- * So comparing result of this with `<= 0` is the same as saying "is dateA on or before dateB"; `>= 0` is the same as
- * "is dateA on or after dateB"; etc.
- *
- * This is useful as a helper for sorting dates, or for checking if two dates are the same (although the `datesMatch`
- * function is more explicit for that purpose).
+ * This is useful as a helper for sorting dates.
  *
  * @param {Date} dateA - First date to compare
  * @param {Date} dateB - Second date to compare
@@ -30,7 +26,8 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
  */
 function compareDates(dateA, dateB) {
   // Math.sign() clamps the result of the subtraction to a minimum of -1 and a maximum of 1
-  return Math.sign(dateA - dateB)
+  // Note that `.getTime()` is not required but it makes it explicit that we're comparing timestamps
+  return Math.sign(dateA.getTime() - dateB.getTime())
 }
 
 /**
