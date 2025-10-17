@@ -13,6 +13,7 @@ const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const ReturnLogHelper = require('../helpers/return-log.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 const additionalContactOne = {
   firstName: 'Ron',
@@ -26,12 +27,6 @@ const additionalContactTwo = {
   email: 'Brick.Tamland@news.com'
 }
 
-const primaryUser = {
-  name: 'Primary User test',
-  email: 'primary.user@important.com',
-  role: 'primary_user'
-}
-
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
@@ -41,11 +36,15 @@ async function seed() {
   return {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(),
-    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog(),
+    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog('2025-06-02'),
+    licenceHolderAndReturnToLetterWithReturnLog: await _licenceHolderAndReturnToWithReturnLog('2025-06-22'),
     licenceHolderAndReturnToWithTheSameAddressWithReturnLog:
-      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog(),
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog('2025-06-03'),
+    licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog:
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog('2025-06-23'),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
-    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog(),
+    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog('2025-06-01'),
+    licenceHolderLetterWithReturnLog: await _licenceHolderWithReturnLog('2025-06-21'),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
@@ -204,7 +203,13 @@ async function _primaryUserAndReturnsAgentWithReturnLog() {
 async function _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog() {
   const dueDate = '2025-05-27'
 
-  const entityRole = await _addPrimaryUser()
+  const primaryUser = {
+    name: 'Primary User test',
+    email: `primary.user@${generateUUID()}.com`,
+    role: 'primary_user'
+  }
+
+  const entityRole = await _addPrimaryUser(primaryUser)
 
   // Add a duplicate email - the email is the same, but the role is different
   await _addLicenceEntityRole({ ...primaryUser, role: 'user_returns' }, entityRole.licenceRef)
@@ -225,9 +230,7 @@ async function _primaryUserWithAdditionalContact() {
   return primaryUser
 }
 
-async function _licenceHolderWithReturnLog() {
-  const dueDate = '2025-06-01'
-
+async function _licenceHolderWithReturnLog(dueDate) {
   const licenceHolder = await _addLicenceHolder()
 
   const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
@@ -238,9 +241,7 @@ async function _licenceHolderWithReturnLog() {
   }
 }
 
-async function _licenceHolderAndReturnToWithReturnLog() {
-  const dueDate = '2025-06-02'
-
+async function _licenceHolderAndReturnToWithReturnLog(dueDate) {
   const licenceHolder = await _addLicenceHolderAndReturnTo()
 
   const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
@@ -251,9 +252,7 @@ async function _licenceHolderAndReturnToWithReturnLog() {
   }
 }
 
-async function _licenceHolderAndReturnToWithTheSameAddressWithReturnLog() {
-  const dueDate = '2025-06-03'
-
+async function _licenceHolderAndReturnToWithTheSameAddressWithReturnLog(dueDate) {
   const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
 
   const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
@@ -266,9 +265,16 @@ async function _licenceHolderAndReturnToWithTheSameAddressWithReturnLog() {
 
 /**
  * We always add a licence holder and a primary user to prove the primary user has precedence over the licence holder
+ * @param primaryUser
  */
-async function _addPrimaryUser() {
-  const entityRole = await _addLicenceEntityRole(primaryUser)
+async function _addPrimaryUser(primaryUser = null) {
+  const user = primaryUser || {
+    name: 'Primary User test',
+    email: `primary.user@${generateUUID()}.com`,
+    role: 'primary_user'
+  }
+
+  const entityRole = await _addLicenceEntityRole(user)
 
   await _addLicenceHolder(entityRole.licenceRef)
 

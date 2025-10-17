@@ -26,7 +26,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
 
   describe('when there is a "licence holder"', () => {
     beforeEach(async () => {
-      session.licenceRef = seedData.licenceHolderWithReturnLog.licenceRef
+      session.licenceRef = seedData.licenceHolderLetterWithReturnLog.licenceRef
     })
 
     it('returns the "licence holder" ', async () => {
@@ -52,14 +52,14 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
           },
           contact_hash_id: '0cad692217f572faede404363b2625c9',
           contact_type: 'Licence holder',
-          licence_refs: seedData.licenceHolderWithReturnLog.licenceRef
+          licence_refs: seedData.licenceHolderLetterWithReturnLog.licenceRef
         }
       ])
     })
 
     describe('and a "returns to" with different contacts', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
       })
 
       it('returns the "licence holder" and "returns to"', async () => {
@@ -85,7 +85,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
-            licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
           },
           {
             contact: {
@@ -106,7 +106,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
             contact_type: 'Returns to',
-            licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
           }
         ])
       })
@@ -114,7 +114,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
 
     describe('and a "returns to" with the same contact', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog.licenceRef
       })
 
       it('returns the "licence holder"', async () => {
@@ -140,7 +140,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog.licenceRef
           }
         ])
       })

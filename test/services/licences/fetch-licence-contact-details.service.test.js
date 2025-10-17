@@ -22,7 +22,7 @@ describe('Fetch Licence Contact Details service', () => {
 
   describe('when the licence has a licence document header', () => {
     before(async () => {
-      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seedPrimaryUser(false)
+      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed()
 
       licence = await LicenceHelper.add({
         licenceRef: licenceDocumentHeader.licenceRef
@@ -50,7 +50,38 @@ describe('Fetch Licence Contact Details service', () => {
             }
           ],
           metadata: {
-            Name: 'Primary User test',
+            AddressLine1: 'ENVIRONMENT AGENCY',
+            AddressLine2: 'HORIZON HOUSE',
+            AddressLine3: 'DEANERY ROAD',
+            AddressLine4: '',
+            Country: '',
+            County: 'AVON',
+            Expires: null,
+            Forename: 'AMARA',
+            Initials: 'A',
+            Modified: '20080327',
+            Name: 'GUPTA',
+            Postcode: 'BS1 5AH',
+            Salutation: '',
+            Town: 'BRISTOL',
+            contacts: [
+              {
+                addressLine1: 'ENVIRONMENT AGENCY',
+                addressLine2: 'HORIZON HOUSE',
+                addressLine3: 'DEANERY ROAD',
+                addressLine4: null,
+                country: null,
+                county: 'AVON',
+                forename: 'AMARA',
+                initials: 'A',
+                name: 'GUPTA',
+                postcode: 'BS1 5AH',
+                role: 'Licence holder',
+                salutation: null,
+                town: 'BRISTOL',
+                type: 'Person'
+              }
+            ],
             isCurrent: true,
             isSummer: true
           }
