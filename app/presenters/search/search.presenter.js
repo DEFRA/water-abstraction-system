@@ -32,11 +32,11 @@ function go(query, page, numberOfPages, licences, returnLogs) {
 
   return {
     licences: licences && _mapLicences(licences),
-    noResults: (!licences || licences.length === 0) && (!returnLogs || returnLogs.length === 0),
+    noResults: !(licences || returnLogs),
     page,
     pageTitle: _pageTitle(numberOfPages, page),
-    returnLogs: returnLogs && _mapReturnLogs(returnLogs),
     query,
+    returnLogs: returnLogs && _mapReturnLogs(returnLogs),
     showResults: true
   }
 }

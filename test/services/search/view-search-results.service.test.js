@@ -10,17 +10,23 @@ const { expect } = Code
 
 // Things to stub
 const LicenceModel = require('../../../app/models/licence.model.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
 
 // Thing under test
 const ViewSearchResultsService = require('../../../app/services/search/view-search-results.service.js')
 
 describe('Search - View search results service', () => {
   let page
-  let queryResults
+  let licenceResults
+  let returnLogResults
   let searchQuery
 
-  async function returnResults() {
-    return queryResults
+  async function returnLicenceResults() {
+    return licenceResults
+  }
+
+  async function returnReturnLogResults() {
+    return returnLogResults
   }
 
   beforeEach(() => {
@@ -29,7 +35,15 @@ describe('Search - View search results service', () => {
       joinRelated: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
       orWhere: Sinon.stub().returnsThis(),
-      page: Sinon.stub().callsFake(returnResults),
+      page: Sinon.stub().callsFake(returnLicenceResults),
+      where: Sinon.stub().returnsThis()
+    })
+
+    Sinon.stub(ReturnLogModel, 'query').returns({
+      select: Sinon.stub().returnsThis(),
+      join: Sinon.stub().returnsThis(),
+      orderBy: Sinon.stub().returnsThis(),
+      page: Sinon.stub().callsFake(returnReturnLogResults),
       where: Sinon.stub().returnsThis()
     })
 
@@ -42,9 +56,9 @@ describe('Search - View search results service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      searchQuery = 'searchthis'
+      searchQuery = '123'
 
-      queryResults = {
+      licenceResults = {
         results: [
           {
             $ends: () => {
@@ -63,7 +77,7 @@ describe('Search - View search results service', () => {
               return null
             },
             id: 'licence-2',
-            licenceRef: '45/678',
+            licenceRef: '123/45/678',
             metadata: {
               Initials: 'F',
               Name: 'Surname',
@@ -72,6 +86,20 @@ describe('Search - View search results service', () => {
           }
         ],
         total: 2
+      }
+
+      returnLogResults = {
+        results: [
+          {
+            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+            licenceRef: '01/123',
+            returnReference: '123',
+            region: 'Region',
+            regionId: 1,
+            status: 'completed'
+          }
+        ],
+        total: 1
       }
     })
 
@@ -93,7 +121,7 @@ describe('Search - View search results service', () => {
             licenceEndDate: undefined,
             licenceEndedText: undefined,
             licenceHolderName: 'Mr F Surname',
-            licenceRef: '45/678'
+            licenceRef: '123/45/678'
           }
         ],
         noResults: false,
@@ -102,7 +130,16 @@ describe('Search - View search results service', () => {
         pagination: {
           numberOfPages: 1
         },
-        query: 'searchthis',
+        query: '123',
+        returnLogs: [
+          {
+            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+            licenceRef: '01/123',
+            returnReference: '123',
+            region: 'Region',
+            statusText: 'complete'
+          }
+        ],
         showResults: true
       })
     })
@@ -112,10 +149,8 @@ describe('Search - View search results service', () => {
     beforeEach(() => {
       searchQuery = 'searchthis'
 
-      queryResults = {
-        results: [],
-        total: 0
-      }
+      licenceResults = { results: [], total: 0 }
+      returnLogResults = { results: [], total: 0 }
     })
 
     it('returns page data showing that there are no results', async () => {
@@ -131,6 +166,7 @@ describe('Search - View search results service', () => {
           numberOfPages: 0
         },
         query: 'searchthis',
+        returnLogs: null,
         showResults: true
       })
     })
