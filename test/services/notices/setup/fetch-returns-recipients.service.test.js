@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,16 +15,14 @@ const FetchReturnsRecipientsService = require('../../../../app/services/notices/
 
 // TODO add the dedup check - licences should be squashed, primary user should override licence holder - only primary user returns
 describe.only('Notices - Setup - Fetch returns recipients service', () => {
-  let dueDate
-  let recipients
-  let session
   let seedData
+  let session
 
   before(async () => {
     seedData = await LicenceDocumentHeaderSeeder.seed()
   })
 
-  describe('when there is not licence ref', () => {
+  describe('when there is no licence ref', () => {
     let removeLicences
 
     beforeEach(() => {
@@ -66,8 +64,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
 
         describe('and there is a "primary user" and "returns agent" with different emails', () => {
           beforeEach(async () => {
-            dueDate = session.determinedReturnsPeriod.dueDate =
-              seedData.primaryUserAndReturnsAgentWithReturnLog.returnLog.dueDate
+            session.determinedReturnsPeriod.dueDate = seedData.primaryUserAndReturnsAgentWithReturnLog.returnLog.dueDate
           })
 
           it('returns both the "primary user" and "returns agent"', async () => {
@@ -151,7 +148,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
         })
       })
 
-      describe('and there is a "licence holder" and a "returns to" with different addresses', () => {
+      describe('and there is a "licence holder" and a "returns to" with different contacts', () => {
         beforeEach(async () => {
           session.determinedReturnsPeriod.dueDate = seedData.licenceHolderAndReturnToWithReturnLog.returnLog.dueDate
         })
@@ -208,8 +205,7 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
         })
       })
 
-      // TODO: this is not actually working - check adding an additonal
-      describe('and there is a "licence holder" and a "returns to" with the same address', () => {
+      describe('and there is a "licence holder" and a "returns to" with the same contact', () => {
         beforeEach(async () => {
           session.determinedReturnsPeriod.dueDate =
             seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.returnLog.dueDate
@@ -229,14 +225,14 @@ describe.only('Notices - Setup - Fetch returns recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
               licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef

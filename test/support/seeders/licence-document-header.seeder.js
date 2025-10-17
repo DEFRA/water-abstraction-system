@@ -180,16 +180,22 @@ async function _addLicenceHolder(licenceRef = null) {
 async function _addLicenceHolderAndReturnTo() {
   return await LicenceDocumentHeaderHelper.add({
     metadata: {
-      contacts: [_contact('Licence holder', 'Licence holder'), _contact('Returns to', 'Returns to')]
+      contacts: [
+        _contact('Licence holder', 'Licence holder'),
+        _contact('Returns to', 'Returns to'),
+        // This should not be returned in the query response
+        _contact('Not a role', 'Not a role')
+      ]
     }
   })
 }
 
-// TODO: this actully dodes nopthing
 async function _addLicenceHolderAndReturnToSameAddress() {
   return await LicenceDocumentHeaderHelper.add({
     metadata: {
-      contacts: [_contact('Licence holder', 'Licence holder'), _contact('Returns to', 'returns rto')]
+      // The role is used in the query should be correct, but the name is used in the contact hash, so the second contact
+      // should not be returned in the query response (As both have the same address and name)
+      contacts: [_contact('Potter', 'Licence holder'), _contact('Potter', 'Returns to')]
     }
   })
 }
