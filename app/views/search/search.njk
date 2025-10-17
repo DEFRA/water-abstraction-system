@@ -5,6 +5,8 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
+{% from "macros/return-status-tag.njk" import statusTag %}
+
 {% block pageContent %}
 
   <div class="govuk-grid-row">
@@ -57,7 +59,7 @@
                 <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Licence:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.licenceRef }}</dd>
               </div>
               <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Region:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.region }} {{ govukTag({ text: returnLog.status, classes: 'govuk-tag--grey' }) if returnLog.status }}</dd>
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Region:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.region }} {{ statusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
               </div>
             </dl>
           </div>

@@ -5,7 +5,7 @@
  * @module SearchPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
+const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const ContactModel = require('../../models/contact.model.js')
 const { today } = require('../../lib/general.lib.js')
 
@@ -54,7 +54,7 @@ function _mapLicences(licences) {
     const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
     const licenceHolderName = holderContactModel.$name()
 
-    // Licences that have ended are displayed with a tag sowing the reason
+    // Licences that have ended are displayed with a tag showing the reason
     let licenceEndedText
     let licenceEndDate
     if (licenceEnd) {
@@ -71,13 +71,16 @@ function _mapReturnLogs(returnLogs) {
   const latestReturnLogByRegion = _latestReturnLogByRegion(returnLogs)
 
   return latestReturnLogByRegion.map((returnLog) => {
-    const { id, licenceRef, metadata, region, returnReference, status } = returnLog
+    const { id, licenceRef, region, returnReference } = returnLog
+
+    const statusText = formatReturnLogStatus(returnLog)
+
     return {
       id,
       licenceRef,
       returnReference,
       region,
-      status
+      statusText
     }
   })
 }
