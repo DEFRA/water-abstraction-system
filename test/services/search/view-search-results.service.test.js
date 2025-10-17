@@ -16,8 +16,8 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ViewSearchResultsService = require('../../../app/services/search/view-search-results.service.js')
 
 describe('Search - View search results service', () => {
-  let page
   let licenceResults
+  let page
   let returnLogResults
   let searchQuery
 
@@ -31,19 +31,18 @@ describe('Search - View search results service', () => {
 
   beforeEach(() => {
     Sinon.stub(LicenceModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
       joinRelated: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
-      orWhere: Sinon.stub().returnsThis(),
       page: Sinon.stub().callsFake(returnLicenceResults),
+      select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis()
     })
 
     Sinon.stub(ReturnLogModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
       join: Sinon.stub().returnsThis(),
       orderBy: Sinon.stub().returnsThis(),
       page: Sinon.stub().callsFake(returnReturnLogResults),
+      select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis()
     })
 
@@ -111,15 +110,15 @@ describe('Search - View search results service', () => {
         licences: [
           {
             id: 'licence-1',
-            licenceEndDate: undefined,
-            licenceEndedText: undefined,
+            licenceEndDate: null,
+            licenceEndedText: null,
             licenceHolderName: 'Mr F Surname',
             licenceRef: '01/123'
           },
           {
             id: 'licence-2',
-            licenceEndDate: undefined,
-            licenceEndedText: undefined,
+            licenceEndDate: null,
+            licenceEndedText: null,
             licenceHolderName: 'Mr F Surname',
             licenceRef: '123/45/678'
           }

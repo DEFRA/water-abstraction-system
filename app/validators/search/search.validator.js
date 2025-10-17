@@ -2,7 +2,6 @@
 
 /**
  * Validates data submitted for the `/search` page
- *
  * @module SearchValidator
  */
 

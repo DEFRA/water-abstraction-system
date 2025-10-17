@@ -2,14 +2,13 @@
 
 /**
  * Handles queries submitted to the /search page
- *
  * @module SubmitSearchService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
 const FindSingleSearchMatchService = require('./find-single-search-match.service.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Handles queries submitted to the /search page
