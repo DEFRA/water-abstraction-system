@@ -27,7 +27,7 @@ async function go(contactHashId, sessionId) {
   const pageData = CheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...pageData
   }
 }

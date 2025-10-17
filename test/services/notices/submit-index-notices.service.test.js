@@ -12,7 +12,6 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
@@ -26,8 +25,6 @@ describe('Notices - Submit Index Notices service', () => {
   let yarStub
 
   beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
@@ -233,7 +230,7 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(result).to.equal(
             {
-              activeNavBar: 'manage',
+              activeNavBar: 'notices',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
                 fromDate: { text: 'Enter a valid from date' }
@@ -293,7 +290,7 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(result).to.equal(
             {
-              activeNavBar: 'manage',
+              activeNavBar: 'notices',
               error: {
                 errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
                 fromDate: { text: 'Enter a valid from date' }

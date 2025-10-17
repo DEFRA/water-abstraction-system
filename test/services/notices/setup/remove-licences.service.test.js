@@ -30,7 +30,7 @@ describe('Notices - Setup - Remove licences service', () => {
     const result = await RemoveLicencesService.go(session.id)
 
     expect(result).to.equal({
-      activeNavBar: 'manage',
+      activeNavBar: 'notices',
       backLink: {
         href: `/system/notices/setup/${session.id}/check`,
         text: 'Back'

@@ -1456,8 +1456,8 @@ describe('Notices Setup controller', () => {
 
 function _viewCancel() {
   return {
-    activeNavBar: 'manage',
-    pageTitle: 'You are about to cancel this notification',
+    activeNavBar: 'notices',
+    pageTitle: 'You are about to cancel this notice',
     referenceCode: '123',
     summaryList: {
       text: 'Licence number',
@@ -1470,7 +1470,7 @@ function _viewReturnsPeriod() {
   return {
     pageTitle: 'Select the returns periods for the invitations',
     backLink: '/system/manage',
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     returnsPeriod: []
   }
 }
@@ -1479,20 +1479,20 @@ function _viewRemoveLicence() {
   return {
     pageTitle: 'Remove licences',
     hint: 'hint to remove',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewCheck() {
   return {
     pageTitle: 'Check the recipients',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewConfirmation() {
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     forwardLink: '/notifications/report',
     pageTitle: `Returns invitations sent`,
     referenceCode: 'RINV-CPFRQ4'

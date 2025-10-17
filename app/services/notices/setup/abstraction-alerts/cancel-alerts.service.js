@@ -22,7 +22,7 @@ async function go(sessionId) {
   const pageData = CancelAlertsPresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...pageData
   }
 }

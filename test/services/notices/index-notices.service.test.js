@@ -12,7 +12,6 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
@@ -28,8 +27,6 @@ describe('Notices - Index Notices service', () => {
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
   })
 
   afterEach(() => {
@@ -51,7 +48,7 @@ describe('Notices - Index Notices service', () => {
       const result = await IndexNoticesService.go(yarStub, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         filters: {
           fromDate: null,
           noticeTypes: [],

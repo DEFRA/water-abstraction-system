@@ -65,10 +65,10 @@ describe('Notifications - View Notification presenter', () => {
     })
 
     describe('when no licence is provided', () => {
-      it('returns "manage"', () => {
+      it('returns "notices"', () => {
         const result = ViewNotificationPresenter.go(notification)
 
-        expect(result.activeNavBar).to.be.equal('manage')
+        expect(result.activeNavBar).to.be.equal('notices')
       })
     })
   })

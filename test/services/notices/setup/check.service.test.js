@@ -53,7 +53,7 @@ describe('Notices - Setup - Check service', () => {
     const result = await CheckService.go(session.id, yarStub)
 
     expect(result).to.equal({
-      activeNavBar: 'manage',
+      activeNavBar: 'notices',
       canSendNotice: true,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -145,7 +145,7 @@ describe('Notices - Setup - Check service', () => {
       const result = await CheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         canSendNotice: true,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
