@@ -7,6 +7,7 @@
  */
 
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
+const FindSingleSearchMatchService = require('./find-single-search-match.service.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
 
@@ -15,14 +16,14 @@ const SearchValidator = require('../../validators/search/search.validator.js')
  *
  * An invalid search value will result in the search page being re-displayed with an error message.
  *
- * Otherwise, the search value will be stored in the session and the user redirected to the results page.
+ * Otherwise, the search value will be stored in the session and the user redirected to the appropriate page.
  *
  * @param {object} payload - The request payload containing the search query
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller, where we will store the
  * search query
  *
- * @returns {Promise<object>} The view data for the search page if there are validation errors, otherwise an empty object as
- * the request will be redirected to the results page
+ * @returns {Promise<object>} The view data for the search page if there are validation errors or a redirect to the next
+ * page to display, which could be the search results or the display page for a specific record
  */
 async function go(payload, yar) {
   const validationResult = SearchValidator.go(payload)
@@ -37,7 +38,12 @@ async function go(payload, yar) {
 
   yar.set('searchQuery', validationResult.value.query)
 
-  return {}
+  let redirect = await FindSingleSearchMatchService.go(validationResult.value.query)
+  if (!redirect) {
+    redirect = '/system/search?page=1'
+  }
+
+  return { redirect }
 }
 
 module.exports = {

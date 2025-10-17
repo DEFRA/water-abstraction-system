@@ -15,6 +15,7 @@ describe('Search - Search presenter', () => {
   let numberOfPages
   let page
   let query
+  let returnLogs
 
   describe('when provided with a valid query that returns results', () => {
     beforeEach(() => {
@@ -36,10 +37,21 @@ describe('Search - Search presenter', () => {
           }
         }
       ]
+
+      returnLogs = [
+        {
+          id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+          licenceRef: '01/123',
+          returnReference: '123',
+          region: 'Region',
+          regionId: 1,
+          status: 'completed'
+        }
+      ]
     })
 
     it('correctly displays the results', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences)
+      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
       expect(result).to.equal({
         licences: [
@@ -55,6 +67,15 @@ describe('Search - Search presenter', () => {
         page: 1,
         pageTitle: 'Search results',
         query: 'searchthis',
+        returnLogs: [
+          {
+            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+            licenceRef: '01/123',
+            returnReference: '123',
+            region: 'Region',
+            statusText: 'complete'
+          }
+        ],
         showResults: true
       })
     })
@@ -65,28 +86,67 @@ describe('Search - Search presenter', () => {
       query = 'searchthis'
       numberOfPages = 1
       page = 1
-      licences = undefined
+
+      licences = null
+      returnLogs = null
     })
 
     it('reports that there are no results', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences)
+      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
       expect(result).to.equal({
-        licences: undefined,
+        licences: null,
         noResults: true,
         page: 1,
         pageTitle: 'Search results',
         query: 'searchthis',
+        returnLogs: null,
         showResults: true
       })
     })
   })
 
-  describe('when provided with an end date in the past', () => {
+  describe('when showing the blank search page', () => {
     beforeEach(() => {
       query = 'searchthis'
       numberOfPages = 1
       page = 1
+
+      licences = null
+      returnLogs = null
+    })
+
+    it('provides a title without results', () => {
+      const result = SearchPresenter.go()
+
+      expect(result).to.equal({
+        pageTitle: 'Search',
+        query: undefined
+      })
+    })
+  })
+
+  describe('when showing the search page with an error', () => {
+    beforeEach(() => {
+      query = 'searchthis'
+    })
+
+    it('provides just the title and the user-entered query', () => {
+      const result = SearchPresenter.go(query)
+
+      expect(result).to.equal({
+        pageTitle: 'Search',
+        query: 'searchthis'
+      })
+    })
+  })
+
+  describe('when provided with a licence with an end date in the past', () => {
+    beforeEach(() => {
+      query = 'searchthis'
+      numberOfPages = 1
+      page = 1
+
       licences = [
         {
           $ends: () => {
@@ -98,17 +158,19 @@ describe('Search - Search presenter', () => {
           metadata: {}
         }
       ]
+
+      returnLogs = null
     })
 
     it('displays the status and the end date', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences)
+      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
       expect(result.licences[0].licenceEndDate).to.equal('31 December 2020')
       expect(result.licences[0].licenceEndedText).to.equal('expired')
     })
   })
 
-  describe('when provided with an end date in the future', () => {
+  describe('when provided with a licence with an end date in the future', () => {
     beforeEach(() => {
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
@@ -128,10 +190,12 @@ describe('Search - Search presenter', () => {
           metadata: {}
         }
       ]
+
+      returnLogs = null
     })
 
     it('displays the end date but not the status', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences)
+      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
       expect(result.licences[0].licenceEndDate).to.exist()
       expect(result.licences[0].licenceEndedText).to.not.exist()
@@ -156,10 +220,12 @@ describe('Search - Search presenter', () => {
           metadata: {}
         }
       ]
+
+      returnLogs = null
     })
 
     it('provides page information in the title', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences)
+      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
       expect(result.pageTitle).to.equal('Search results (page 2 of 6)')
     })

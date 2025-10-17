@@ -65,20 +65,6 @@ describe('Search controller', () => {
           })
         })
 
-        describe('and results in a redirect', () => {
-          beforeEach(async () => {
-            getOptions.url = '/search?page=1'
-            Sinon.stub(ViewSearchResultsService, 'go').resolves({ redirect: '/system/licences/licence-1/summary' })
-          })
-
-          it('redirects to the appropriate location', async () => {
-            const response = await server.inject(getOptions)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/licences/licence-1/summary')
-          })
-        })
-
         describe('and shows search results', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
@@ -114,7 +100,7 @@ describe('Search controller', () => {
         beforeEach(async () => {
           postOptions.payload.query = 'searchthis'
 
-          Sinon.stub(SubmitSearchService, 'go').resolves({})
+          Sinon.stub(SubmitSearchService, 'go').resolves({ redirect: '/system/search?page=1' })
         })
 
         it('redirects to the first page of results', async () => {
