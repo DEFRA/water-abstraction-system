@@ -142,6 +142,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           }
         ])
       })
+
       describe('and a "returns to" with different contacts', () => {
         beforeEach(async () => {
           session.determinedReturnsPeriod.dueDate = seedData.licenceHolderAndReturnToWithReturnLog.returnLog.dueDate
