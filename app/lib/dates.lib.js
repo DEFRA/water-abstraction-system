@@ -30,22 +30,6 @@ function compareDates(dateA, dateB) {
 }
 
 /**
- * Compares two dates and returns `true` if they are the same date or `false` if they aren't.
- *
- * We use this rather than directly comparing with `===` or `!==` as these only check that the exact same date objects
- * are being compared (see https://stackoverflow.com/a/493018/6117745). This function uses the `compareDates` function
- * which works with the underlying timestamp values of the dates.
- *
- * @param {Date} dateA - First date to compare
- * @param {Date} dateB - Second date to compare
- *
- * @returns {boolean} `true` if they are the same date, otherwise `false`
- */
-function datesMatch(dateA, dateB) {
-  return compareDates(dateA, dateB) === 0
-}
-
-/**
  * Creates an array of day objects, each representing a single day within the given period.
  *
  * This function iterates through each day between the period start and end date (inclusive), creating an object for
@@ -316,6 +300,22 @@ function monthsFromPeriod(periodStartDate, periodEndDate) {
 }
 
 /**
+ * Compares two dates and returns `true` if they are the same date or `false` if they aren't.
+ *
+ * We use this rather than directly comparing with `===` or `!==` as these only check that the exact same date objects
+ * are being compared (see https://stackoverflow.com/a/493018/6117745). This function uses the `compareDates` function
+ * which works with the underlying timestamp values of the dates.
+ *
+ * @param {Date} dateA - First date to compare
+ * @param {Date} dateB - Second date to compare
+ *
+ * @returns {boolean} `true` if they are the same date, otherwise `false`
+ */
+function sameDate(dateA, dateB) {
+  return compareDates(dateA, dateB) === 0
+}
+
+/**
  * Creates an array of week objects, each representing a single week within the given period.
  *
  * A full week starts on Sunday and ends on the following Saturday. If the `periodStartDate` does not fall on a Sunday,
@@ -379,7 +379,6 @@ function _cloneDate(dateToClone) {
 
 module.exports = {
   compareDates,
-  datesMatch,
   daysFromPeriod,
   determineFinancialYearEnd,
   determineEarliestDate,
@@ -390,5 +389,6 @@ module.exports = {
   isQuarterlyReturnSubmissions,
   isValidDate,
   monthsFromPeriod,
+  sameDate,
   weeksFromPeriod
 }

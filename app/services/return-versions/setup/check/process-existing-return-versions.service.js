@@ -6,7 +6,7 @@
  */
 
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
-const { datesMatch } = require('../../../../lib/dates.lib.js')
+const { sameDate } = require('../../../../lib/dates.lib.js')
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
@@ -212,7 +212,7 @@ function _previousVersions(licenceId) {
  */
 async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return datesMatch(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate === null
+    return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate === null
   })
 
   if (!matchedReturnVersion) {
@@ -250,7 +250,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
  */
 async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return datesMatch(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate >= newVersionStartDate
+    return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate >= newVersionStartDate
   })
 
   if (!matchedReturnVersion) {

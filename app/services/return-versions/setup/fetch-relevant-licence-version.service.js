@@ -5,7 +5,7 @@
  * @module FetchRelevantLicenceVersionService
  */
 
-const { datesMatch } = require('../../../lib/dates.lib.js')
+const { sameDate } = require('../../../lib/dates.lib.js')
 
 const LicenceVersionModel = require('../../../models/licence-version.model.js')
 
@@ -123,7 +123,7 @@ function _manageSameStartDate(licenceVersions) {
   const firstStartDate = licenceVersions[0].startDate
 
   const withSameStartDate = licenceVersions.filter((licenceVersion) => {
-    return datesMatch(licenceVersion.startDate, firstStartDate)
+    return sameDate(licenceVersion.startDate, firstStartDate)
   })
 
   if (withSameStartDate.length === 1) {

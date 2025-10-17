@@ -5,7 +5,7 @@
  * @module StartDateService
  */
 
-const { datesMatch, isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+const { isQuarterlyReturnSubmissions, sameDate } = require('../../../lib/dates.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 const DetermineRelevantLicenceVersionService = require('./determine-relevant-licence-version.service.js')
@@ -91,7 +91,7 @@ function _defaultQuarterlyReturns(session) {
 }
 
 async function _relevantLicenceVersion(session, previousStartDate) {
-  if (previousStartDate && datesMatch(previousStartDate, session.returnVersionStartDate)) {
+  if (previousStartDate && sameDate(previousStartDate, session.returnVersionStartDate)) {
     // In this scenario we are handling where a user has come back to the start date page, but not change anything.
     // In this case there is no point fetching the licence version (it'll be the same result).
     return

@@ -5,7 +5,7 @@
  * @module DetermineMinimumChargeService
  */
 
-const { datesMatch } = require('../../lib/dates.lib.js')
+const { sameDate } = require('../../lib/dates.lib.js')
 
 /**
  * Checks if minimum charge applies to a charge version for the given billing period
@@ -21,7 +21,7 @@ const { datesMatch } = require('../../lib/dates.lib.js')
  * @returns {boolean} true if minimum charge applies else false
  */
 function go(chargeVersion, chargePeriod) {
-  const isSharedStartDate = datesMatch(chargePeriod.startDate, chargeVersion.startDate)
+  const isSharedStartDate = sameDate(chargePeriod.startDate, chargeVersion.startDate)
 
   const triggersMinimumCharge = chargeVersion.changeReason?.triggersMinimumCharge ?? false
   const isFirstChargeOnNewLicence = isSharedStartDate && triggersMinimumCharge

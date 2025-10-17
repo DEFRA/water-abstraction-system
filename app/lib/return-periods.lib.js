@@ -5,7 +5,7 @@
  * @module ReturnPeriodLib
  */
 
-const { compareDates, datesMatch } = require('./dates.lib.js')
+const { compareDates, sameDate } = require('./dates.lib.js')
 const { returnPeriodDates } = require('./static-lookups.lib.js')
 
 /**
@@ -360,7 +360,7 @@ function _mapReturnsPeriods(returnPeriods) {
  */
 function _sortByDueDate(toSort) {
   return toSort.sort(function (a, b) {
-    if (datesMatch(a.dueDate, b.dueDate)) {
+    if (sameDate(a.dueDate, b.dueDate)) {
       const aMonthDay = a.startDate.getMonth() * 100 + a.startDate.getDate()
       const bMonthDay = b.startDate.getMonth() * 100 + b.startDate.getDate()
 

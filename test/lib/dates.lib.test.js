@@ -55,37 +55,6 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('datesMatch', () => {
-    let firstDate
-    let secondDate
-
-    describe('when the first date is the same as the second date', () => {
-      before(async () => {
-        firstDate = new Date('2025-10-01')
-        secondDate = new Date('2025-10-01')
-      })
-
-      it('returns true', () => {
-        const result = DateLib.datesMatch(firstDate, secondDate)
-
-        expect(result).to.be.true()
-      })
-    })
-
-    describe('when the first date is not the same as the second date', () => {
-      before(async () => {
-        firstDate = new Date('2025-10-01')
-        secondDate = new Date('2025-10-15')
-      })
-
-      it('returns false', () => {
-        const result = DateLib.datesMatch(firstDate, secondDate)
-
-        expect(result).to.be.false()
-      })
-    })
-  })
-
   describe('daysFromPeriod', () => {
     let startDate
     let endDate
@@ -480,6 +449,37 @@ describe('Dates lib', () => {
           startDate: new Date('2025-04-01'),
           endDate: new Date('2025-04-30')
         })
+      })
+    })
+  })
+
+  describe('sameDate', () => {
+    let firstDate
+    let secondDate
+
+    describe('when the first date is the same as the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-01')
+        secondDate = new Date('2025-10-01')
+      })
+
+      it('returns true', () => {
+        const result = DateLib.sameDate(firstDate, secondDate)
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('when the first date is not the same as the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-01')
+        secondDate = new Date('2025-10-15')
+      })
+
+      it('returns false', () => {
+        const result = DateLib.sameDate(firstDate, secondDate)
+
+        expect(result).to.be.false()
       })
     })
   })

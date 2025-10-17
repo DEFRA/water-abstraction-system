@@ -5,7 +5,7 @@
  * @module DetermineEarliestLicenceChangedDateService
  */
 
-const { compareDates, datesMatch, determineEarliestDate } = require('../../../lib/dates.lib.js')
+const { compareDates, determineEarliestDate, sameDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Determines if a licence's 'end dates' have changed, and if more than one has, which was the earliest
@@ -51,7 +51,7 @@ function go(licence) {
  * @private
  */
 function _changedDate(dateType, naldDate, wrlsDate) {
-  if (datesMatch(naldDate, wrlsDate)) {
+  if (sameDate(naldDate, wrlsDate)) {
     return null
   }
 
