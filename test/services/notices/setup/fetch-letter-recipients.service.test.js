@@ -13,109 +13,136 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
 
+// TODO: add deupe test so expect multiple licence refs
 describe('Notices - Setup - Fetch letter recipients service', () => {
-  const dueDate = '2025-04-29'
-
-  let recipients
+  let seedData
   let session
 
   before(async () => {
-    recipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
+    session = {}
+
+    seedData = await LicenceDocumentHeaderSeeder.seed()
   })
 
-  describe('when the licence number only has one recipient which has the "licence holder" role', () => {
-    beforeEach(() => {
-      session = { licenceRef: recipients.licenceHolder.licenceRef }
+  describe('when there is a "licence holder"', () => {
+    beforeEach(async () => {
+      session.licenceRef = seedData.licenceHolderLetterWithReturnLog.licenceRef
     })
 
-    it('correctly returns the licence holder data', async () => {
+    it('returns the "licence holder" ', async () => {
       const result = await FetchLetterRecipientsService.go(session)
 
-      const [testRecipient] = result.filter((res) => {
-        return res.licence_refs.includes(recipients.licenceHolder.licenceRef)
-      })
-
-      expect(testRecipient).to.equal({
-        licence_refs: recipients.licenceHolder.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder only',
-          postcode: 'WD25 7LR',
-          role: 'Licence holder',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
-        contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-        contact_type: 'Licence holder',
-        email: null
-      })
-    })
-  })
-
-  describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
-    beforeEach(() => {
-      session = { licenceRef: recipients.licenceHolderAndReturnTo.licenceRef }
+      expect(result).to.equal([
+        {
+          contact: {
+            addressLine1: '4',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'J',
+            name: 'Licence holder',
+            postcode: 'WD25 7LR',
+            role: 'Licence holder',
+            salutation: null,
+            town: 'Little Whinging',
+            type: 'Person'
+          },
+          contact_hash_id: '0cad692217f572faede404363b2625c9',
+          contact_type: 'Licence holder',
+          licence_refs: seedData.licenceHolderLetterWithReturnLog.licenceRef
+        }
+      ])
     })
 
-    it('correctly returns the licence holder and returns to data', async () => {
-      const result = await FetchLetterRecipientsService.go(session)
-
-      const [licenceHolder, returnsTo] = result.filter((res) => {
-        return res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
+    describe('and a "returns to" with different contacts', () => {
+      beforeEach(async () => {
+        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
       })
 
-      expect(licenceHolder).to.equal({
-        licence_refs: recipients.licenceHolderAndReturnTo.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder and returns to',
-          postcode: 'WD25 7LR',
-          role: 'Licence holder',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
-        contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-        contact_type: 'Licence holder',
-        email: null
+      it('returns the "licence holder" and "returns to"', async () => {
+        const result = await FetchLetterRecipientsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Licence holder',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: '0cad692217f572faede404363b2625c9',
+            contact_type: 'Licence holder',
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
+          },
+          {
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Returns to',
+              postcode: 'WD25 7LR',
+              role: 'Returns to',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+            contact_type: 'Returns to',
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithReturnLog.licenceRef
+          }
+        ])
+      })
+    })
+
+    describe('and a "returns to" with the same contact', () => {
+      beforeEach(async () => {
+        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog.licenceRef
       })
 
-      expect(returnsTo).to.equal({
-        licence_refs: recipients.licenceHolderAndReturnTo.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder and returns to',
-          postcode: 'WD25 7LR',
-          role: 'Returns to',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
-        contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-        contact_type: 'Returns to',
-        email: null
+      it('returns the "licence holder"', async () => {
+        const result = await FetchLetterRecipientsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Potter',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+            contact_type: 'Licence holder',
+            licence_refs: seedData.licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog.licenceRef
+          }
+        ])
       })
     })
   })

@@ -4,157 +4,357 @@
  * @module LicenceDocumentHeaderSeeder
  */
 
+const CompanyContactHelper = require('../helpers/company-contact.helper.js')
+const ContactHelper = require('../helpers/contact.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
+const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
+const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
+const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const ReturnLogHelper = require('../helpers/return-log.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+const additionalContactOne = {
+  firstName: 'Ron',
+  lastName: 'Burgundy',
+  email: 'Ron.Burgundy@news.com'
+}
+
+const additionalContactTwo = {
+  firstName: 'Brick',
+  lastName: 'Tamland',
+  email: 'Brick.Tamland@news.com'
+}
 
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
- * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
- * to be included in the recipients list
- * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
- * @param {string} returnLogEndDate - defaulted to the same end date set by the returnsLogHelper
- *
- * @returns {Promise<object>} an object containing different licence document header instances and related entities
- * representing different scenarios
+ * @returns {Promise<object>} an object containing different licence document header instances for the licence holder
  */
-async function seed(enableReturnLog = true, returnLogDueDate = '2023-04-28', returnLogEndDate = '2023-01-31') {
+async function seed() {
   return {
-    licenceHolder: await _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate),
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(
-      enableReturnLog,
-      returnLogDueDate,
-      returnLogEndDate
-    ),
-    primaryUser: await _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate)
+    additionalContact: await _additionalContact(),
+    licenceHolder: await _licenceHolder(),
+    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog('2025-06-02'),
+    licenceHolderAndReturnToLetterWithReturnLog: await _licenceHolderAndReturnToWithReturnLog('2025-06-22'),
+    licenceHolderAndReturnToWithTheSameAddressWithReturnLog:
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog('2025-06-03'),
+    licenceHolderAndReturnToLetterWithTheSameAddressWithReturnLog:
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog('2025-06-23'),
+    licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
+    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog('2025-06-01'),
+    licenceHolderLetterWithReturnLog: await _licenceHolderWithReturnLog('2025-06-21'),
+    multipleAdditionalContact: await _multipleAdditionalContact(),
+    multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
+    multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
+    primaryUser: await _primaryUser(),
+    primaryUserAndReturnsAgentWithReturnLog: await _primaryUserAndReturnsAgentWithReturnLog(),
+    primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog:
+      await _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog(),
+    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
+    primaryUserWithReturnLog: await _primaryUserWithReturnLog()
   }
 }
 
-async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate, returnLogEndDate) {
+async function _additionalContact(licenceRef = null) {
+  const licenceDocument = await LicenceDocumentHelper.add({
+    ...(licenceRef && { licenceRef })
+  })
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
+async function _multipleAdditionalContact() {
+  const licenceDocument = await LicenceDocumentHelper.add()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactTwo, licenceDocument.id)
+
+  return licenceDocument
+}
+
+async function _multipleAdditionalContactDifferentLicenceRefs() {
+  const licenceDocument = await LicenceDocumentHelper.add()
+  const licenceDocumentTwo = await LicenceDocumentHelper.add()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactOne, licenceDocumentTwo.id)
+
+  return {
+    licenceDocument,
+    licenceDocumentTwo
+  }
+}
+
+async function _multipleAdditionalContactWithAndWithoutAlerts() {
+  const licenceDocument = await LicenceDocumentHelper.add()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactTwo, licenceDocument.id, false)
+
+  return licenceDocument
+}
+
+async function _addAdditionalContact(contact, licenceDocumentId, abstractionAlerts = true) {
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId,
+    endDate: null
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts
+  })
+
+  await ContactHelper.add({
+    id: companyContact.contactId,
+    ...contact
+  })
+
+  return licenceDocumentRole
+}
+
+/**
+ * Alerts have the concept of a 'current' 'additional contact'.
+ *
+ * The current additional contact is the one where the "endDate" is null.
+ *
+ * This helper adds 'expired' additional contacts to the licence document.
+ *
+ * This should not be found in the response from the query.
+ *
+ * @private
+ */
+async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId,
+    endDate: new Date('2023-01-01')
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts: true
+  })
+
+  await ContactHelper.add({
+    id: companyContact.contactId,
+    ...contact
+  })
+}
+
+async function _licenceHolder() {
+  return _addLicenceHolder()
+}
+
+async function _licenceHolderWithAdditionalContact() {
+  const licenceHolder = await _addLicenceHolder()
+
+  await _additionalContact(licenceHolder.licenceRef)
+
+  return licenceHolder
+}
+
+async function _primaryUser() {
+  return _addPrimaryUser()
+}
+
+async function _primaryUserWithReturnLog() {
+  const dueDate = '2025-04-28'
+
+  const entityRole = await _addPrimaryUser()
+
+  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserAndReturnsAgentWithReturnLog() {
+  const dueDate = '2025-05-26'
+
+  const entityRole = await _addPrimaryUser()
+
+  await _addReturnsAgent(entityRole.licenceRef)
+
+  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog() {
+  const dueDate = '2025-05-27'
+
   const primaryUser = {
     name: 'Primary User test',
-    email: 'primary.user@important.com',
+    email: `primary.user@${generateUUID()}.com`,
     role: 'primary_user'
   }
 
-  const userReturns = {
+  const entityRole = await _addPrimaryUser(primaryUser)
+
+  // Add a duplicate email - the email is the same, but the role is different
+  await _addLicenceEntityRole({ ...primaryUser, role: 'user_returns' }, entityRole.licenceRef)
+
+  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserWithAdditionalContact() {
+  const primaryUser = await _addPrimaryUser()
+
+  await _additionalContact(primaryUser.licenceRef)
+
+  return primaryUser
+}
+
+async function _licenceHolderWithReturnLog(dueDate) {
+  const licenceHolder = await _addLicenceHolder()
+
+  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
+  }
+}
+
+async function _licenceHolderAndReturnToWithReturnLog(dueDate) {
+  const licenceHolder = await _addLicenceHolderAndReturnTo()
+
+  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
+  }
+}
+
+async function _licenceHolderAndReturnToWithTheSameAddressWithReturnLog(dueDate) {
+  const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
+
+  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
+  }
+}
+
+/**
+ * We always add a licence holder and a primary user to prove the primary user has precedence over the licence holder
+ * @param primaryUser
+ */
+async function _addPrimaryUser(primaryUser = null) {
+  const user = primaryUser || {
+    name: 'Primary User test',
+    email: `primary.user@${generateUUID()}.com`,
+    role: 'primary_user'
+  }
+
+  const entityRole = await _addLicenceEntityRole(user)
+
+  await _addLicenceHolder(entityRole.licenceRef)
+
+  return entityRole
+}
+
+async function _addReturnsAgent(licenceRef = null) {
+  const returnsAgent = {
     name: 'User Returns test',
     email: 'returns.agent@important.com',
     role: 'user_returns'
   }
 
+  return await _addLicenceEntityRole(returnsAgent, licenceRef)
+}
+
+async function _addReturnLog(returnLogDueDate, licenceRef) {
+  return await ReturnLogHelper.add({
+    dueDate: returnLogDueDate,
+    licenceRef
+  })
+}
+
+async function _addLicenceEntityRole(entityRole, licenceRef = null) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    metadata: {
-      ..._metadata(primaryUser.name),
-      contacts: [_contact(primaryUser.name, 'Licence holder'), _contact(primaryUser.name, 'Returns to')]
-    }
+    ...(licenceRef && { licenceRef }),
+    companyEntityId: companyEntity.id
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
-    name: primaryUser.email
-  })
-
-  const licenceEntityReturns = await LicenceEntityHelper.add({
-    name: userReturns.email
+    name: entityRole.email
   })
 
   await LicenceEntityRoleHelper.add({
     companyEntityId: companyEntity.id,
     licenceEntityId: licenceEntity.id,
-    role: primaryUser.role
+    role: entityRole.role
   })
 
-  await LicenceEntityRoleHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceEntityId: licenceEntityReturns.id,
-    role: userReturns.role
-  })
-
-  let returnLog
-
-  if (enableReturnLog) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      endDate: returnLogEndDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
+  return licenceDocumentHeader
 }
 
-async function _addLicenceHolder(enableReturnLog, returnLogDueDate, returnLogEndDate) {
-  const name = 'Licence holder only'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+async function _addLicenceHolder(licenceRef = null) {
+  return await LicenceDocumentHeaderHelper.add({
+    ...(licenceRef && { licenceRef }),
     metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder')]
+      contacts: [_contact('Licence holder', 'Licence holder')]
     }
   })
-
-  let returnLog
-
-  if (enableReturnLog) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      endDate: returnLogEndDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
 }
 
-async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDueDate, returnLogEndDate) {
-  const name = 'Licence holder and returns to'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+async function _addLicenceHolderAndReturnTo() {
+  return await LicenceDocumentHeaderHelper.add({
     metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+      contacts: [
+        _contact('Licence holder', 'Licence holder'),
+        _contact('Returns to', 'Returns to'),
+        // This should not be returned in the query response
+        _contact('Not a role', 'Not a role')
+      ]
     }
   })
+}
 
-  let returnLog
-
-  if (enableReturnLog) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      endDate: returnLogEndDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
+async function _addLicenceHolderAndReturnToSameAddress() {
+  return await LicenceDocumentHeaderHelper.add({
+    metadata: {
+      // The role is used in the query should be correct, but the name is used in the contact hash, so the second contact
+      // should not be returned in the query response (As both have the same address and name)
+      contacts: [_contact('Potter', 'Licence holder'), _contact('Potter', 'Returns to')]
+    }
+  })
 }
 
 function _contact(name, role) {
   return {
     name,
     role,
-    ..._address()
-  }
-}
-
-function _metadata(name) {
-  return {
-    Name: name,
-    isCurrent: true,
-    isSummer: true
-  }
-}
-
-/**
- * The address for a contact
- *
- * @returns {object} a common address
- */
-function _address() {
-  return {
     addressLine1: '4',
     addressLine2: 'Privet Drive',
     addressLine3: null,
