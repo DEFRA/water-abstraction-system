@@ -119,8 +119,6 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
     beforeEach(async () => {
       recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser()
 
-      await LicenceDocumentHeaderSeeder.seedLicenceHolder()
-
       session = {
         licenceRefs: [recipients.primaryUser.licenceRef]
       }
