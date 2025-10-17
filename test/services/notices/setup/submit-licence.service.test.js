@@ -127,7 +127,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             backLink: {
               href: '/system/notices',
               text: 'Back'
@@ -162,7 +162,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             backLink: {
               href: '/system/notices',
               text: 'Back'
@@ -199,7 +199,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             backLink: {
               href: '/system/notices',
               text: 'Back'

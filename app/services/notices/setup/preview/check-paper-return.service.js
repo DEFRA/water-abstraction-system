@@ -23,7 +23,7 @@ async function go(sessionId, contactHashId) {
   const pageData = CheckPaperReturnPresenter.go(session, contactHashId)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...pageData
   }
 }

@@ -87,7 +87,7 @@ describe('Notices - Setup - Submit Remove licences service', () => {
         const result = await SubmitRemoveLicencesService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/check`,
             text: 'Back'

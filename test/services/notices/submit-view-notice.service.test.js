@@ -189,7 +189,7 @@ describe('Notices - Submit View Notice service', () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
               licence: { text: 'Licence number must be 25 characters or less' }
@@ -280,7 +280,7 @@ describe('Notices - Submit View Notice service', () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
               licence: { text: 'Licence number must be 25 characters or less' }

@@ -46,7 +46,7 @@ async function go(sessionId, payload, yar, auth) {
   const pageData = NoticeTypePresenter.go(session, auth)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error: validationResult,
     ...pageData
   }

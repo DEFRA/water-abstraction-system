@@ -42,7 +42,7 @@ describe('Notices - Setup - Paper Return service', () => {
       const result = await PaperReturnService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'

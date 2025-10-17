@@ -30,7 +30,7 @@ async function go(yar, auth, page = 1) {
   const pageData = NoticesIndexPresenter.go(notices, totalNumber, auth)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     filters,
     ...pageData,
     pagination

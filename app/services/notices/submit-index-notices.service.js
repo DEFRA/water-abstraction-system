@@ -90,7 +90,7 @@ async function _replayView(payload, error, selectedPageNumber, savedFilters, aut
   const pageData = NoticesIndexPresenter.go(notices, totalNumber, auth)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error,
     filters: { ...savedFilters, ...payload },
     ...pageData,

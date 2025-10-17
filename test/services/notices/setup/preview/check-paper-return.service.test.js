@@ -44,7 +44,7 @@ describe('Notices - Setup - Preview - Check Paper Return Service', () => {
       const result = await CheckPaperReturnService.go(session.id, contactHashId)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice PRTF-WJUKBX',
         pageTitle: 'Check the recipient previews',

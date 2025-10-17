@@ -44,7 +44,7 @@ async function go(sessionId, payload, yar) {
   const formattedData = ReturnsPeriodPresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error: validationResult,
     ...formattedData
   }

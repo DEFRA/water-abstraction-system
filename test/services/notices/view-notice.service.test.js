@@ -106,7 +106,7 @@ describe('Notices - View Notice service', () => {
       const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: { href: '/system/notices', text: 'Go back to notices' },
         filters: {
           licence: null,

@@ -25,7 +25,7 @@ async function go(sessionId, yar) {
   const notification = yar.flash('notification')[0]
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...pageData,
     notification
   }

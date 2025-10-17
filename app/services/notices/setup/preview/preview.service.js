@@ -38,7 +38,7 @@ async function go(contactHashId, sessionId, licenceMonitoringStationId) {
   )
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...formattedData
   }
 }

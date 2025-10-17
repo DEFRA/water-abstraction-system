@@ -80,7 +80,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice RINV-0Q7AD8',
@@ -162,7 +162,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       const result = await PreviewService.go(testRecipient.contact_hash_id, session.id, licenceMonitoringStationId)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
         caption: 'Notice WAA-6KN0KF',

@@ -74,7 +74,7 @@ async function _replayView(noticeId, payload, error, selectedPageNumber, savedFi
   )
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error,
     filters: { ...savedFilters, ...payload },
     ...pageData,

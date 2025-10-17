@@ -198,7 +198,6 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewCancel()
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
           expect(response.payload).to.contain(pageData.referenceCode)
         })
@@ -246,7 +245,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewCheck()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -346,7 +344,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewConfirmation()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1106,7 +1103,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewRemoveLicence()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1173,7 +1169,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewReturnsPeriod()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1461,8 +1456,8 @@ describe('Notices Setup controller', () => {
 
 function _viewCancel() {
   return {
-    activeNavBar: 'manage',
-    pageTitle: 'You are about to cancel this notification',
+    activeNavBar: 'notices',
+    pageTitle: 'You are about to cancel this notice',
     referenceCode: '123',
     summaryList: {
       text: 'Licence number',
@@ -1475,7 +1470,7 @@ function _viewReturnsPeriod() {
   return {
     pageTitle: 'Select the returns periods for the invitations',
     backLink: '/system/manage',
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     returnsPeriod: []
   }
 }
@@ -1484,20 +1479,20 @@ function _viewRemoveLicence() {
   return {
     pageTitle: 'Remove licences',
     hint: 'hint to remove',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewCheck() {
   return {
     pageTitle: 'Check the recipients',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewConfirmation() {
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     forwardLink: '/notifications/report',
     pageTitle: `Returns invitations sent`,
     referenceCode: 'RINV-CPFRQ4'

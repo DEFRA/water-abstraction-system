@@ -39,7 +39,7 @@ describe('Notices - Setup - Returns Period service', () => {
       const result = await ReturnsPeriodService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'

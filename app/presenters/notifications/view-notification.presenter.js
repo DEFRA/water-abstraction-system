@@ -27,7 +27,7 @@ function go(notification, licence = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
 
   return {
-    activeNavBar: licence ? 'search' : 'manage',
+    activeNavBar: licence ? 'search' : 'notices',
     address: _address(notification),
     alertDetails: _alertDetails(notification),
     backLink: _backLink(notification, licence),

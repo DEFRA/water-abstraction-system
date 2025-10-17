@@ -106,7 +106,7 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: false,
             otherUserEmailAddressInput: '',
@@ -137,7 +137,7 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: true,
             otherUserEmailAddressInput: '',
@@ -168,7 +168,7 @@ describe('Submit Alert Email Address Service', () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: true,
             otherUserEmailAddressInput: '123123123',
