@@ -2,7 +2,6 @@
 
 /**
  * Handles finding a single matching result for a search query from the /search page
- *
  * @module FindSingleSearchMatchService
  */
 
