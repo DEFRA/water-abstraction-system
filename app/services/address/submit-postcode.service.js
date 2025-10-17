@@ -35,7 +35,6 @@ async function go(sessionId, payload) {
   const pageData = PostcodePresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
     error,
     ...pageData
   }
