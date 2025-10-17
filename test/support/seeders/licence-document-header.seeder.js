@@ -22,14 +22,14 @@ const primaryUser = {
  */
 async function seed() {
   return {
-    primaryUserWithReturnLog: await _primaryUserWithReturnLog(),
+    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog(),
+    licenceHolderAndReturnToWithTheSameAddressWithReturnLog:
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog(),
+    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog(),
     primaryUserAndReturnsAgentWithReturnLog: await _primaryUserAndReturnsAgentWithReturnLog(),
     primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog:
       await _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog(),
-    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog(),
-    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog(),
-    licenceHolderAndReturnToWithTheSameAddressWithReturnLog:
-      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog()
+    primaryUserWithReturnLog: await _primaryUserWithReturnLog()
   }
 }
 
@@ -149,10 +149,7 @@ async function _addLicenceEntityRole(entityRole, licenceRef = null) {
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     ...(licenceRef && { licenceRef }),
-    companyEntityId: companyEntity.id,
-    metadata: {
-      ..._metadata(entityRole.name)
-    }
+    companyEntityId: companyEntity.id
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
@@ -204,25 +201,6 @@ function _contact(name, role) {
   return {
     name,
     role,
-    ..._address()
-  }
-}
-
-function _metadata(name) {
-  return {
-    Name: name,
-    isCurrent: true,
-    isSummer: true
-  }
-}
-
-/**
- * The address for a contact
- *
- * @returns {object} a common address
- */
-function _address() {
-  return {
     addressLine1: '4',
     addressLine2: 'Privet Drive',
     addressLine3: null,
