@@ -27,6 +27,7 @@ async function go(sessionId) {
   const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
   return {
+    activeNavBar: 'notices',
     ...pageData
   }
 }
