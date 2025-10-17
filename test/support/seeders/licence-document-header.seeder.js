@@ -9,146 +9,189 @@ const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const ReturnLogHelper = require('../helpers/return-log.helper.js')
 
+const primaryUser = {
+  name: 'Primary User test',
+  email: 'primary.user@important.com',
+  role: 'primary_user'
+}
+
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
- *
- * @param {string | null} [returnLogDueDate] - defaulted to the same due date set by the returnsLogHelper
  *
  * @returns {Promise<object>} an object containing different licence document header instances for the licence holder
  */
-async function seedLicenceHolder(returnLogDueDate = '2023-04-28') {
+async function seed() {
   return {
-    licenceHolder: await _addLicenceHolder(returnLogDueDate)
+    primaryUserWithReturnLog: await _primaryUserWithReturnLog(),
+    primaryUserAndReturnsAgentWithReturnLog: await _primaryUserAndReturnsAgentWithReturnLog(),
+    primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog:
+      await _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog(),
+    licenceHolderWithReturnLog: await _licenceHolderWithReturnLog(),
+    licenceHolderAndReturnToWithReturnLog: await _licenceHolderAndReturnToWithReturnLog(),
+    licenceHolderAndReturnToWithTheSameAddressWithReturnLog:
+      await _licenceHolderAndReturnToWithTheSameAddressWithReturnLog()
+  }
+}
+
+async function _primaryUserWithReturnLog() {
+  const dueDate = '2025-04-28'
+
+  const entityRole = await _addPrimaryUser()
+
+  const returnLog = await _seedReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserAndReturnsAgentWithReturnLog() {
+  const dueDate = '2025-05-26'
+
+  const entityRole = await _addPrimaryUser()
+
+  await _seedReturnsAgent(entityRole.licenceRef)
+
+  const returnLog = await _seedReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog() {
+  const dueDate = '2025-05-27'
+
+  const entityRole = await _addPrimaryUser()
+
+  // Add a duplicate email - the email is the same, but the role is different
+  await _addLicenceEntityRole({ ...primaryUser, role: 'user_returns' }, entityRole.licenceRef)
+
+  const returnLog = await _seedReturnLog(dueDate, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _licenceHolderWithReturnLog() {
+  const dueDate = '2025-06-01'
+
+  const licenceHolder = await _addLicenceHolder()
+
+  const returnLog = await _seedReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
+  }
+}
+
+async function _licenceHolderAndReturnToWithReturnLog() {
+  const dueDate = '2025-06-02'
+
+  const licenceHolder = await _addLicenceHolderAndReturnTo()
+
+  const returnLog = await _seedReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
+  }
+}
+
+async function _licenceHolderAndReturnToWithTheSameAddressWithReturnLog() {
+  const dueDate = '2025-06-03'
+
+  const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
+
+  const returnLog = await _seedReturnLog(dueDate, licenceHolder.licenceRef)
+
+  return {
+    ...licenceHolder,
+    returnLog
   }
 }
 
 /**
- * Adds licence document header and return log records to the database which are linked by licence ref
- *
- * @param {string | null} [returnLogDueDate] - defaulted to the same due date set by the returnsLogHelper
- *
- * @returns {Promise<object>} an object containing different licence document header instances and related entities
- * representing different scenarios
+ * We always add a licence holder and a primary user to prove the primary user has precedence over the licence holder
  */
-async function seedLicenceHolderAndReturnToSameRef(returnLogDueDate = null) {
-  return {
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogDueDate)
-  }
+async function _addPrimaryUser() {
+  const entityRole = await _addLicenceEntityRole(primaryUser)
+
+  await _addLicenceHolder(entityRole.licenceRef)
+
+  return entityRole
 }
 
-/**
- *
- * Adds licence document header and return log records to the database which are linked by licence ref
- *
- * @param {string | null} [returnLogDueDate] - defaulted to the same due date set by the returnsLogHelper
- * @param {boolean} [enableReturnsAgent] - add a returns agent to the database
- *
- * @returns {Promise<object>} an object containing different licence document header instances for the primary user
- * (and returns agent if enabled)
- */
-async function seedPrimaryUser(returnLogDueDate = null, enableReturnsAgent = false) {
-  return {
-    primaryUser: await _addLicenceEntityRoles(returnLogDueDate, enableReturnsAgent)
+async function _seedReturnsAgent(licenceRef = null) {
+  const returnsAgent = {
+    name: 'User Returns test',
+    email: 'returns.agent@important.com',
+    role: 'user_returns'
   }
+
+  return await _addLicenceEntityRole(returnsAgent, licenceRef)
 }
 
-async function _addLicenceEntityRoles(returnLogDueDate, enableReturnsAgent) {
-  const primaryUser = {
-    name: 'Primary User test',
-    email: 'primary.user@important.com',
-    role: 'primary_user'
-  }
+async function _seedReturnLog(returnLogDueDate, licenceRef) {
+  return await ReturnLogHelper.add({
+    dueDate: returnLogDueDate,
+    licenceRef
+  })
+}
 
+async function _addLicenceEntityRole(entityRole, licenceRef = null) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    ...(licenceRef && { licenceRef }),
     companyEntityId: companyEntity.id,
     metadata: {
-      ..._metadata(primaryUser.name)
+      ..._metadata(entityRole.name)
     }
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
-    name: primaryUser.email
+    name: entityRole.email
   })
 
   await LicenceEntityRoleHelper.add({
     companyEntityId: companyEntity.id,
     licenceEntityId: licenceEntity.id,
-    role: primaryUser.role
+    role: entityRole.role
   })
 
-  if (enableReturnsAgent) {
-    const userReturns = {
-      name: 'User Returns test',
-      email: 'returns.agent@important.com',
-      role: 'user_returns'
-    }
-
-    const licenceEntityReturns = await LicenceEntityHelper.add({
-      name: userReturns.email
-    })
-
-    await LicenceEntityRoleHelper.add({
-      companyEntityId: companyEntity.id,
-      licenceEntityId: licenceEntityReturns.id,
-      role: userReturns.role
-    })
-  }
-
-  let returnLog
-
-  if (returnLogDueDate) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
+  return licenceDocumentHeader
 }
 
-async function _addLicenceHolder(returnLogDueDate) {
-  const name = 'Licence holder'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+async function _addLicenceHolder(licenceRef = null) {
+  return await LicenceDocumentHeaderHelper.add({
+    ...(licenceRef && { licenceRef }),
     metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder')]
+      contacts: [_contact('Licence holder', 'Licence holder')]
     }
   })
-
-  let returnLog
-
-  if (returnLogDueDate) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
 }
 
-async function _addLicenceHolderAndReturnToSameRef(returnLogDueDate) {
-  const name = 'Licence holder and returns to'
-
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+async function _addLicenceHolderAndReturnTo() {
+  return await LicenceDocumentHeaderHelper.add({
     metadata: {
-      ..._metadata(name),
       contacts: [_contact('Licence holder', 'Licence holder'), _contact('Returns to', 'Returns to')]
     }
   })
+}
 
-  let returnLog
-
-  if (returnLogDueDate) {
-    returnLog = await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
-      licenceRef: licenceDocumentHeader.licenceRef
-    })
-  }
-
-  return { ...licenceDocumentHeader, returnLog }
+// TODO: this actully dodes nopthing
+async function _addLicenceHolderAndReturnToSameAddress() {
+  return await LicenceDocumentHeaderHelper.add({
+    metadata: {
+      contacts: [_contact('Licence holder', 'Licence holder'), _contact('Returns to', 'returns rto')]
+    }
+  })
 }
 
 function _contact(name, role) {
@@ -190,7 +233,5 @@ function _address() {
 }
 
 module.exports = {
-  seedLicenceHolder,
-  seedLicenceHolderAndReturnToSameRef,
-  seedPrimaryUser
+  seed
 }
