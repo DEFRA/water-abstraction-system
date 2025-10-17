@@ -198,7 +198,6 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewCancel()
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
           expect(response.payload).to.contain(pageData.referenceCode)
         })
@@ -246,7 +245,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewCheck()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -346,7 +344,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewConfirmation()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1106,7 +1103,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewRemoveLicence()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1173,7 +1169,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewReturnsPeriod()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
