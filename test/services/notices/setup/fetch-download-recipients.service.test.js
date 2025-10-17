@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 // Thing under test
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
@@ -432,6 +433,23 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             }
           ])
         })
+      })
+    })
+
+    describe('when the end date is greater than today', () => {
+      beforeEach(async () => {
+        testRecipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser(dueDate)
+
+        // Update the end date to be in the future
+        await ReturnLogModel.query().findById(testRecipients.primaryUser.returnLog.id).patch({ endDate: '3000-01-01' })
+
+        session = { licenceRef: testRecipients.primaryUser.licenceRef }
+      })
+
+      it('correctly returns an empty array (no return logs found)', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([])
       })
     })
   })

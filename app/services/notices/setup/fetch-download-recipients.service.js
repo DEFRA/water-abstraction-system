@@ -64,7 +64,6 @@ async function go(session) {
 async function _fetchRecipient(session) {
   const { licenceRef } = session
 
-  // TODO: why do we need this (end_date)?
   const where = `
     AND ldh.licence_ref = ?
     AND rl.end_date <= '${timestampForPostgres()}'
