@@ -5,7 +5,7 @@
  *
  * The search logic to date is:
  * - When a search is submitted, FindSingleSearchMatchService is called to see if there is a single exact match for the
- * query, either as a licence number or a return ID. If there is, the user is redirected straight to that record.
+ * query, currently just a licence number. If there is, the user is redirected straight to that record.
  * - Otherwise, the user is taken to the search results page, which calls this service. This then:
  * - Checks to see if the search text looks like a return reference and if it does, searches for return logs.
  * - Queries the licence document header table for any records where the licence number, licence name or metadata name
