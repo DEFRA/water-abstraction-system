@@ -5,8 +5,6 @@
  * @module DetermineRelevantLicenceVersionService
  */
 
-const { compareDates } = require('../../../lib/dates.lib.js')
-
 const FetchRelevantLicenceVersionService = require('./fetch-relevant-licence-version.service.js')
 
 /**
@@ -33,10 +31,12 @@ async function go(session) {
 function _canCopyFrom(licenceVersion, returnVersionStartDate) {
   const { endDate, startDate } = licenceVersion
 
+  const returnVersionStartDateTime = new Date(returnVersionStartDate).getTime()
+
   // The existing return version started before the relevant licence version (selected based on the start date entered
   // by the user for the _new_ return version). This means it may be based on abstraction data that is not in the
   // relevant licence version, so cannot be copied from for this period.
-  if (compareDates(returnVersionStartDate, startDate) < 0) {
+  if (returnVersionStartDateTime < startDate.getTime()) {
     return false
   }
 
@@ -48,7 +48,7 @@ function _canCopyFrom(licenceVersion, returnVersionStartDate) {
 
   // Return whether the return version starts before the relevant licence version ends. If it does, this means it will
   // be based on the same abstraction data, and can be copied from. Else it could be different so we cannot copy from it
-  return compareDates(returnVersionStartDate, endDate) <= 0
+  return returnVersionStartDateTime <= endDate.getTime()
 }
 
 function _copyableExistingReturnVersions(licenceVersion, returnVersions) {
@@ -58,7 +58,7 @@ function _copyableExistingReturnVersions(licenceVersion, returnVersions) {
     // NOTE: because the session data is stored in a JSONB field when we get the instance from the DB the date values
     // are in JS Date format (string). So, we have to convert them to a date before using them
     const dateObj = new Date(returnVersion.startDate)
-    const canCopyFrom = _canCopyFrom(licenceVersion, dateObj)
+    const canCopyFrom = _canCopyFrom(licenceVersion, dateObj.getTime())
 
     if (canCopyFrom) {
       copyableReturnVersions.push(returnVersion)

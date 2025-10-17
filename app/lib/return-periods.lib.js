@@ -275,7 +275,7 @@ function _newYearElapsedQuarterThree(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (compareDates(determinationDate, new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) <= 0) {
+  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
     return lastYear
   } else {
     return year
@@ -304,7 +304,7 @@ function _newYearElapsedQuarterThreeDueDate(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (compareDates(determinationDate, new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) <= 0) {
+  if (determinationDate <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
     return year
   } else {
     return nextYear

@@ -6,7 +6,7 @@
  */
 
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
-const { compareDates, datesMatch } = require('../../../../lib/dates.lib.js')
+const { datesMatch } = require('../../../../lib/dates.lib.js')
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
@@ -250,10 +250,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
  */
 async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return (
-      datesMatch(previousVersion.startDate, newVersionStartDate) &&
-      compareDates(previousVersion.endDate, newVersionStartDate) >= 0
-    )
+    return datesMatch(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate >= newVersionStartDate
   })
 
   if (!matchedReturnVersion) {

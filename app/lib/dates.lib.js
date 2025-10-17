@@ -26,8 +26,7 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
  */
 function compareDates(dateA, dateB) {
   // Math.sign() clamps the result of the subtraction to a minimum of -1 and a maximum of 1
-  // Note that `.getTime()` is not required but it makes it explicit that we're comparing timestamps
-  return Math.sign(dateA.getTime() - dateB.getTime())
+  return Math.sign(dateA - dateB)
 }
 
 /**
@@ -272,7 +271,7 @@ function _isLeapYear(year) {
  * @private
  */
 function isQuarterlyReturnSubmissions(date) {
-  return compareDates(new Date(date), new Date('2025-04-01')) >= 0
+  return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 
 /**
