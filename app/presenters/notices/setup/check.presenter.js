@@ -30,25 +30,28 @@ function go(recipients, page, pagination, session) {
   const { noticeType, referenceCode } = session
 
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+  const canSendNotice = _canSendNotice(formattedRecipients)
 
   return {
-    defaultPageSize,
+    canSendNotice,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
-    readyToSend: _readyToSend(recipients, noticeType),
+    readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
     recipients: formattedRecipients,
-    recipientsAmount: recipients.length,
+    tableCaption: _tableCaption(defaultPageSize, recipients.length),
     warning: _warning(formattedRecipients)
   }
 }
 
-function _readyToSend(recipients, noticeType) {
-  if (recipients.length === 0) {
-    return 'No recipients with due returns'
+function _canSendNotice(formattedRecipients) {
+  if (formattedRecipients.length === 0) {
+    return false
   }
 
-  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
+
+  return invalidRecipients.length !== formattedRecipients.length
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
@@ -61,6 +64,14 @@ function _formatRecipients(noticeType, recipients, sessionId) {
       method: `${recipient.message_type} - ${recipient.contact_type}`,
       previewLink: _previewLink(noticeType, recipient, sessionId, contact)
     }
+  })
+}
+
+function _invalidRecipients(formattedRecipients) {
+  return formattedRecipients.filter((formattedRecipient) => {
+    const { contact } = formattedRecipient
+
+    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
   })
 }
 
@@ -127,6 +138,18 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
   return noticeType === NoticeType.ABSTRACTION_ALERTS ? `${basePreviewLink}/check-alert` : basePreviewLink
 }
 
+function _readyToSend(formattedRecipients, noticeType, canSendNotice) {
+  if (formattedRecipients.length === 0) {
+    return 'No recipients with due returns.'
+  }
+
+  if (!canSendNotice) {
+    return 'No valid notifications to send.'
+  }
+
+  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
+}
+
 /**
  * Sorts, maps, and paginates the recipients list.
  *
@@ -144,6 +167,14 @@ function _recipients(noticeType, page, recipients, sessionId) {
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} recipients`
+  }
+
+  return `Showing all ${totalNumber} recipients`
 }
 
 /**
@@ -169,11 +200,7 @@ function _sortRecipients(recipients) {
 }
 
 function _warning(formattedRecipients) {
-  const invalidRecipients = formattedRecipients.filter((formattedRecipient) => {
-    const { contact } = formattedRecipient
-
-    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
-  })
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
 
   if (invalidRecipients.length === 0) {
     return null

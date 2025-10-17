@@ -73,28 +73,28 @@ describe('Notices - View validator', () => {
 
     describe('because "Licence" is too long', () => {
       beforeEach(() => {
-        payload.licence = 'a'.repeat(12)
+        payload.licence = 'a'.repeat(26)
       })
 
       it('fails validation', () => {
         const result = ViewValidator.go(payload)
 
         expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Licence number must be 11 characters or less')
+        expect(result.error.details[0].message).to.equal('Licence number must be 25 characters or less')
         expect(result.error.details[0].path[0]).to.equal('licence')
       })
     })
 
     describe('because "Recipient" is too long', () => {
       beforeEach(() => {
-        payload.recipient = 'a'.repeat(26)
+        payload.recipient = 'a'.repeat(256)
       })
 
       it('fails validation', () => {
         const result = ViewValidator.go(payload)
 
         expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Recipient must be 25 characters or less')
+        expect(result.error.details[0].message).to.equal('Recipient must be 255 characters or less')
         expect(result.error.details[0].path[0]).to.equal('recipient')
       })
     })

@@ -22,7 +22,6 @@ const config = {
   enableReissuingBillingBatches: String(process.env.ENABLE_REISSUING_BILLING_BATCHES) === 'true' || false,
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,
   enableSystemLicenceView: String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true' || false,
-  enableSystemManageView: String(process.env.ENABLE_SYSTEM_MANAGE_VIEW) === 'true' || false,
   enableSystemReturnsSubmit: String(process.env.ENABLE_SYSTEM_RETURNS_SUBMIT) === 'true' || false,
   enableSystemReturnsView: String(process.env.ENABLE_SYSTEM_RETURNS_VIEW) === 'true' || false,
   enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false,

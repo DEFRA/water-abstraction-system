@@ -209,8 +209,7 @@ describe('Notices - View Notice service', () => {
     beforeEach(() => {
       page = null
 
-      // NOTE: We up the total number to force the paginator to calculate that there is more than one page. We can
-      // then confirm page one was defaulted because it will appear in the title
+      // NOTE: We up the total number to force the paginator to calculate that there is more than one page.
       fetchResults.totalNumber = 150
 
       Sinon.stub(FetchNoticeService, 'go').resolves(fetchResults)
@@ -219,7 +218,7 @@ describe('Notices - View Notice service', () => {
     it('defaults to 1', async () => {
       const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-      expect(result.pageTitle).to.equal('Warning alert (page 1 of 6)')
+      expect(result.pageTitle).to.equal('Warning alert')
     })
   })
 })

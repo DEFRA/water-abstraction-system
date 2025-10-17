@@ -168,7 +168,7 @@ describe('Notices - Index Notices presenter', () => {
 
   describe('the "tableCaption" property', () => {
     describe('when there is only one page of results', () => {
-      it('returns the "tableCaption" without page info', () => {
+      it('returns the "tableCaption" with the "Showing all" message', () => {
         const result = IndexNoticesPresenter.go(notices, notices.length, auth)
 
         expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
@@ -176,7 +176,7 @@ describe('Notices - Index Notices presenter', () => {
     })
 
     describe('when there are multiple pages of results', () => {
-      it('returns the "tableCaption" with page info', () => {
+      it('returns the "tableCaption" with the "Showing x of y" message', () => {
         const result = IndexNoticesPresenter.go(notices, 50, auth)
 
         expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)

@@ -208,7 +208,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns('/manage')
+          Sinon.stub(SubmitCancelService, 'go').returns('/system/manage')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
         })
 
@@ -216,7 +216,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/manage')
+          expect(response.headers.location).to.equal('/system/manage')
         })
       })
     })
@@ -1474,7 +1474,7 @@ function _viewCancel() {
 function _viewReturnsPeriod() {
   return {
     pageTitle: 'Select the returns periods for the invitations',
-    backLink: '/manage',
+    backLink: '/system/manage',
     activeNavBar: 'manage',
     returnsPeriod: []
   }

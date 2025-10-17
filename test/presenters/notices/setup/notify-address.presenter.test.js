@@ -334,5 +334,28 @@ describe('Notices - Setup - Notify Address presenter', () => {
         })
       })
     })
+
+    describe('because the address contains a line that starts with a special character', () => {
+      beforeEach(() => {
+        contact.addressLine2 = '(Admin) 221b Baker Street'
+      })
+
+      it('returns all populated address parts plus an "INVALID" message', () => {
+        const result = NotifyAddressPresenter.go(contact)
+
+        expect(result).to.equal({
+          address_line_1: 'Mr J H Watson',
+          address_line_2: 'INVALID ADDRESS - A line starts with special character',
+          address_line_3: 'Sherlock Holmes Consulting Detective',
+          address_line_4: '(Admin) 221b Baker Street',
+          address_line_5: 'Regents Park',
+          address_line_6: 'Westminster',
+          address_line_7: 'London',
+          address_line_8: 'Central London',
+          address_line_9: 'NW1 6XE',
+          address_line_10: 'England'
+        })
+      })
+    })
   })
 })
