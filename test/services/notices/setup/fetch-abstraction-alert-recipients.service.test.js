@@ -10,13 +10,13 @@ const { expect } = Code
 // Test helpers
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
+const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 const LicenceDocumentHelper = require('../../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../../../support/helpers/licence-document-role.helper.js')
 const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   let recipients
@@ -118,6 +118,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
   describe('when there is a "primary user"', () => {
     beforeEach(async () => {
       recipients = await LicenceDocumentHeaderSeeder.seedPrimaryUser()
+
+      await LicenceDocumentHeaderSeeder.seedLicenceHolder()
 
       session = {
         licenceRefs: [recipients.primaryUser.licenceRef]
