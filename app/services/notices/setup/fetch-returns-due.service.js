@@ -31,7 +31,6 @@ async function _fetch(licenceRefs, dueDate, summer) {
     .whereIn('licenceRef', [...licenceRefs])
     .andWhere('status', 'due')
     .andWhere('dueDate', dueDate)
-    .whereJsonPath('metadata', '$.isCurrent', '=', 'true')
     .whereJsonPath('metadata', '$.isSummer', '=', summer)
     .distinctOn('licenceRef')
 }
