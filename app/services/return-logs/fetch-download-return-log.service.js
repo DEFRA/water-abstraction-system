@@ -35,7 +35,7 @@ async function _fetch(returnLogId, version) {
         .orderBy('version', 'desc')
         .withGraphFetched('returnSubmissionLines')
         .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
-          returnSubmissionLinesBuilder.select(['id', 'startDate', 'endDate', 'quantity']).orderBy('startDate', 'asc')
+          returnSubmissionLinesBuilder.select(['id', 'endDate', 'quantity']).orderBy('endDate', 'asc')
         })
     })
 }
