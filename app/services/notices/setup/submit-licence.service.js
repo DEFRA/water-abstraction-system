@@ -53,7 +53,7 @@ async function go(sessionId, payload, yar) {
   const pageData = LicencePresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error: validationResult,
     ...pageData
   }

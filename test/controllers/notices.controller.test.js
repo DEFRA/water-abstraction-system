@@ -284,7 +284,7 @@ function _noticePageData(error = false) {
   const reference = generateReferenceCode()
 
   const pageData = {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     backLink: { href: '/system/notices', text: 'Go back to notices' },
     createdBy: 'test@wrls.gov.uk',
     dateCreated: '21 February 2025',
@@ -326,7 +326,7 @@ function _noticePageData(error = false) {
 
 function _noticesPageData(error = false) {
   const pageData = {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     filters: {
       noticeTypes: [],
       openFilter: false,

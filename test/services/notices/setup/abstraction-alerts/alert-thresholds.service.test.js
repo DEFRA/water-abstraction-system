@@ -35,7 +35,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Service', () => 
       const result = await AlertThresholdsService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`,
         caption: 'Death star',
         pageTitle: 'Which thresholds do you need to send an alert for?',

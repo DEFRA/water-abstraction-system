@@ -34,7 +34,7 @@ async function go(sessionId, yar, page = 1) {
 
   return {
     ...formattedData,
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     notification,
     page,
     pagination

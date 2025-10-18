@@ -34,10 +34,10 @@ describe('Return Logs - Download Return Log Service', () => {
     const { endDate, returnReference, returnSubmissions, startDate } = returnLog
 
     const expectedData = returnSubmissions[0].returnSubmissionLines.reduce((acc, line) => {
-      const { quantity, startDate } = line
+      const { quantity, endDate } = line
 
-      return `${acc}${formatDateObjectToISO(startDate)},,${quantity}\n`
-    }, 'start date,reading,volume\n')
+      return `${acc}${formatDateObjectToISO(endDate)},,${quantity}\n`
+    }, 'end date,reading,volume\n')
 
     const expectedFilename = `${returnReference}_${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}_v${returnSubmissions[0].version}.csv`
 

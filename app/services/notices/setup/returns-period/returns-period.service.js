@@ -21,7 +21,7 @@ async function go(sessionId) {
   const formattedData = ReturnsPeriodPresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...formattedData
   }
 }

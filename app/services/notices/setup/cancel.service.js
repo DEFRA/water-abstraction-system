@@ -21,7 +21,7 @@ async function go(sessionId) {
   const formattedData = CancelPresenter.go(session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...formattedData
   }
 }

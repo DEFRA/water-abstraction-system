@@ -23,7 +23,7 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   session.addressJourney = {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     address: {},
     backLink: _backLink(session),
     pageTitleCaption: `Notice ${session.referenceCode}`,

@@ -33,7 +33,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
       const result = await AlertTypeService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         alertTypeOptions: [
           {
             checked: false,
