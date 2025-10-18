@@ -8,6 +8,7 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { compareDates } = require('../lib/dates.lib.js')
 
 class LicenceModel extends BaseModel {
   static get tableName() {
@@ -315,24 +316,9 @@ class LicenceModel extends BaseModel {
       return null
     }
 
-    // NOTE: For date comparisons you cannot use !== with just the date values. Using < or > will coerce the values into
-    // numbers for comparison. But equality operators are checking that the two operands are referring to the same
-    // Object. So, where we have matching dates and expect !== to return 'false' we get 'true' instead
-    // Thanks to https://stackoverflow.com/a/493018/6117745 for explaining the problem and providing the solution
+    // Sort by ascending date; if 2 or more dates are the same then they maintain their relative order of priority
     filteredDates.sort((firstDate, secondDate) => {
-      if (firstDate.date.getTime() !== secondDate.date.getTime()) {
-        if (firstDate.date.getTime() < secondDate.date.getTime()) {
-          return -1
-        }
-
-        return 1
-      }
-
-      if (firstDate.priority < secondDate.priority) {
-        return -1
-      }
-
-      return 1
+      return compareDates(firstDate.date, secondDate.date)
     })
 
     return filteredDates[0]
