@@ -102,7 +102,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       expect(result).to.equal({
         forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
         monitoringStationLink: null,
-        pageTitle: 'Paper return forms sent',
+        pageTitle: 'Paper returns sent',
         referenceCode
       })
     })
