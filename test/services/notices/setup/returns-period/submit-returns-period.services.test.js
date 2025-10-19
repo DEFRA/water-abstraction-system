@@ -125,7 +125,6 @@ describe('Notices - Setup - Submit Returns Period service', () => {
             }
           },
           pageTitle: 'Select the returns periods for the invitations',
-          pageTitleCaption: `Notice ${referenceCode}`,
           returnsPeriod: [
             {
               checked: false,

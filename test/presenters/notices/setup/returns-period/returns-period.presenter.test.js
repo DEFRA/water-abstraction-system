@@ -50,8 +50,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             href: `/system/notices/setup/${session.id}/notice-type`,
             text: 'Back'
           },
-          pageTitle: 'Select the returns periods for the invitations',
-          pageTitleCaption: `Notice ${referenceCode}`
+          pageTitle: 'Select the returns periods for the invitations'
         },
         { skip: ['returnsPeriod'] }
       )
