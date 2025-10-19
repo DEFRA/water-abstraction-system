@@ -45,7 +45,6 @@ describe('Notices - Setup - Returns Period service', () => {
           text: 'Back'
         },
         pageTitle: 'Select the returns periods for the invitations',
-        pageTitleCaption: `Notice ${referenceCode}`,
         returnsPeriod: [
           {
             checked: false,
