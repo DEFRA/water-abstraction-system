@@ -21,7 +21,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
   before(async () => {
     session = {}
 
-    seedData = await LicenceDocumentHeaderSeeder.seed()
+    seedData = await LicenceDocumentHeaderSeeder.seed('2025-01-')
   })
 
   describe('when the licence is registered ', () => {
@@ -41,7 +41,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
     describe('and there is a "primary user"', () => {
       beforeEach(async () => {
-        session.determinedReturnsPeriod.dueDate = seedData.primaryUserWithReturnLog.returnLog.dueDate
+        session.determinedReturnsPeriod.dueDate = seedData.primaryUser.returnLog.dueDate
       })
 
       it('returns the "primary user" ', async () => {
@@ -49,7 +49,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         expect(result).to.equal([
           {
-            licence_refs: seedData.primaryUserWithReturnLog.licenceRef,
+            licence_refs: seedData.primaryUser.licenceRef,
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
@@ -60,7 +60,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
       describe('and "returns agent" with different emails', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate = seedData.primaryUserAndReturnsAgentWithReturnLog.returnLog.dueDate
+          session.determinedReturnsPeriod.dueDate = seedData.primaryUserAndReturnsAgent.returnLog.dueDate
         })
 
         it('returns both the "primary user" and "returns agent"', async () => {
@@ -68,7 +68,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
           expect(result).to.equal([
             {
-              licence_refs: seedData.primaryUserAndReturnsAgentWithReturnLog.licenceRef,
+              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
               contact: null,
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
@@ -79,7 +79,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgentWithReturnLog.licenceRef
+              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef
             }
           ])
         })
@@ -88,7 +88,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
       describe('and "returns agent" with the same email', () => {
         beforeEach(async () => {
           session.determinedReturnsPeriod.dueDate =
-            seedData.primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog.returnLog.dueDate
+            seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate
         })
 
         it('returns the "primary user" ', async () => {
@@ -96,7 +96,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
           expect(result).to.equal([
             {
-              licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog.licenceRef,
+              licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
               contact: null,
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
@@ -111,7 +111,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
   describe('when the licence is unregistered', () => {
     describe('and there is a "licence holder"', () => {
       beforeEach(async () => {
-        session.determinedReturnsPeriod.dueDate = seedData.licenceHolderWithReturnLog.returnLog.dueDate
+        session.determinedReturnsPeriod.dueDate = seedData.licenceHolder.returnLog.dueDate
       })
 
       it('returns the "licence holder" ', async () => {
@@ -138,14 +138,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null,
-            licence_refs: seedData.licenceHolderWithReturnLog.licenceRef
+            licence_refs: seedData.licenceHolder.licenceRef
           }
         ])
       })
 
       describe('and a "returns to" with different contacts', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate = seedData.licenceHolderAndReturnToWithReturnLog.returnLog.dueDate
+          session.determinedReturnsPeriod.dueDate = seedData.licenceHolderAndReturnTo.returnLog.dueDate
         })
 
         it('returns the "licence holder" and "returns to"', async () => {
@@ -172,7 +172,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef
             },
             {
               contact: {
@@ -194,7 +194,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
               contact_type: 'Returns to',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef
             }
           ])
         })
@@ -203,7 +203,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
       describe('and a "returns to" with the same contact', () => {
         beforeEach(async () => {
           session.determinedReturnsPeriod.dueDate =
-            seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.returnLog.dueDate
+            seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate
         })
 
         it('returns the "licence holder" and "returns to"', async () => {
@@ -230,7 +230,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef
+              licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
             }
           ])
         })
@@ -240,9 +240,17 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
   describe('when there are licences to exclude from the recipients', () => {
     beforeEach(async () => {
-      session.removeLicences = seedData.primaryUserWithReturnLog.licenceRef
-
-      session.determinedReturnsPeriod.dueDate = seedData.primaryUserWithReturnLog.returnLog.dueDate
+      session = {
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {
+          name: 'allYear',
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: '2024-03-31',
+          summer: 'false',
+          startDate: '2023-04-01'
+        },
+        removeLicences: seedData.primaryUser.licenceRef
+      }
     })
 
     it('correctly returns recipients without the "removeLicences"', async () => {
@@ -256,7 +264,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     describe('and the licence is registered ', () => {
       describe('and there is a "primary user"', () => {
         beforeEach(async () => {
-          session.licenceRef = seedData.primaryUserWithReturnLog.licenceRef
+          session.licenceRef = seedData.primaryUser.licenceRef
         })
 
         it('returns the "primary user" ', async () => {
@@ -264,7 +272,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
           expect(result).to.equal([
             {
-              licence_refs: seedData.primaryUserWithReturnLog.licenceRef,
+              licence_refs: seedData.primaryUser.licenceRef,
               contact: null,
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
@@ -275,7 +283,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         describe('and "returns agent" with different emails', () => {
           beforeEach(async () => {
-            session.licenceRef = seedData.primaryUserAndReturnsAgentWithReturnLog.licenceRef
+            session.licenceRef = seedData.primaryUserAndReturnsAgent.licenceRef
           })
 
           it('returns both the "primary user" and "returns agent"', async () => {
@@ -283,7 +291,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
             expect(result).to.equal([
               {
-                licence_refs: seedData.primaryUserAndReturnsAgentWithReturnLog.licenceRef,
+                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
                 contact: null,
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
@@ -294,7 +302,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
                 contact_type: 'Returns agent',
                 email: 'returns.agent@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgentWithReturnLog.licenceRef
+                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef
               }
             ])
           })
@@ -302,7 +310,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         describe('and "returns agent" with the same email', () => {
           beforeEach(async () => {
-            session.licenceRef = seedData.primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog.licenceRef
+            session.licenceRef = seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef
           })
 
           it('returns the "primary user" ', async () => {
@@ -310,7 +318,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
             expect(result).to.equal([
               {
-                licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmailWithReturnLog.licenceRef,
+                licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
                 contact: null,
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
@@ -325,7 +333,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     describe('when the licence is unregistered', () => {
       describe('and there is a "licence holder"', () => {
         beforeEach(async () => {
-          session.licenceRef = seedData.licenceHolderWithReturnLog.licenceRef
+          session.licenceRef = seedData.licenceHolder.licenceRef
         })
 
         it('returns the "licence holder" ', async () => {
@@ -352,14 +360,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderWithReturnLog.licenceRef
+              licence_refs: seedData.licenceHolder.licenceRef
             }
           ])
         })
 
         describe('and a "returns to" with different contacts', () => {
           beforeEach(async () => {
-            session.licenceRef = seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+            session.licenceRef = seedData.licenceHolderAndReturnTo.licenceRef
           })
 
           it('returns the "licence holder" and "returns to"', async () => {
@@ -386,7 +394,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '0cad692217f572faede404363b2625c9',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef
               },
               {
                 contact: {
@@ -408,7 +416,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
                 contact_type: 'Returns to',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnToWithReturnLog.licenceRef
+                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef
               }
             ])
           })
@@ -416,7 +424,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
 
         describe('and a "returns to" with the same contact', () => {
           beforeEach(async () => {
-            session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef
+            session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
           })
 
           it('returns the "licence holder"', async () => {
@@ -443,7 +451,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddressWithReturnLog.licenceRef
+                licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
               }
             ])
           })
