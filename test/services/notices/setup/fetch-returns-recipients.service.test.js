@@ -13,7 +13,6 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
-// TODO add the dedup check - add more seed data to add duplcuiate recipeints but differnet return log / licence ref
 describe('Notices - Setup - Fetch returns recipients service', () => {
   let seedData
   let session

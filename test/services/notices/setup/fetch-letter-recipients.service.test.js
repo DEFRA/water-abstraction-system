@@ -13,7 +13,6 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
 
-// TODO: add deupe test so expect multiple licence refs
 describe('Notices - Setup - Fetch letter recipients service', () => {
   let seedData
   let session
