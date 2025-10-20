@@ -48,13 +48,15 @@ async function seed(returnLogDueDate) {
       six: `${returnLogDueDate}06`,
       seven: `${returnLogDueDate}07`,
       eight: `${returnLogDueDate}08`,
-      nine: `${returnLogDueDate}09`
+      nine: `${returnLogDueDate}09`,
+      ten: `${returnLogDueDate}10`
     }
   }
 
   return {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(returnLogDates.one),
+    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(returnLogDates.ten, '4000-01-01'),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(returnLogDates.two),
     licenceHolderAndReturnToLetter: await _licenceHolderAndReturnTo(returnLogDates.three),
     licenceHolderAndReturnToLetterWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(
@@ -166,10 +168,11 @@ async function _addReturnsAgent(licenceRef = null) {
   return await _addLicenceEntityRole(returnsAgent, licenceRef)
 }
 
-async function _addReturnLog(returnLogDueDate, licenceRef) {
-  if (returnLogDueDate) {
+async function _addReturnLog(dueDate, licenceRef, endDate = null) {
+  if (dueDate) {
     return await ReturnLogHelper.add({
-      dueDate: returnLogDueDate,
+      ...(endDate && { endDate }),
+      dueDate,
       licenceRef
     })
   }
@@ -283,10 +286,10 @@ async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
   })
 }
 
-async function _licenceHolder(dueDate) {
+async function _licenceHolder(dueDate, endDate = null) {
   const licenceHolder = await _addLicenceHolder()
 
-  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef, endDate)
 
   return {
     ...licenceHolder,
