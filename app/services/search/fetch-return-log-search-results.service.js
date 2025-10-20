@@ -12,6 +12,16 @@ const ReturnLogModel = require('../../models/return-log.model.js')
 
 const RETURN_REFERENCE_PATTERN = /^\d+$/
 
+const REQUIRED_FIELDS = [
+  'return_logs.id',
+  'licence_ref',
+  'end_date',
+  'status',
+  'return_reference',
+  'regions.nald_region_id',
+  'regions.display_name as region_display_name'
+]
+
 /**
  * Handles fetching search results for return logs on the /search page
  *
@@ -26,7 +36,7 @@ async function go(query, page) {
   }
 
   return ReturnLogModel.query()
-    .select(['return_logs.*', 'regions.nald_region_id as region_id', 'regions.display_name as region'])
+    .select(REQUIRED_FIELDS)
     .join('regions', ref('return_logs.metadata:nald.regionCode').castInt(), 'regions.nald_region_id')
     .where('returnReference', 'ilike', `%${query}%`)
     .orderBy([

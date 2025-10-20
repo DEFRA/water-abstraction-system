@@ -42,8 +42,8 @@ describe('Search - Search presenter', () => {
         id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
         licenceRef: '01/123',
         returnReference: '123',
-        region: 'Region',
-        regionId: 1,
+        regionDisplayName: 'Region',
+        naldRegionId: 1,
         status: 'completed'
       }
     ]
@@ -72,7 +72,7 @@ describe('Search - Search presenter', () => {
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
             returnReference: '123',
-            region: 'Region',
+            regionDisplayName: 'Region',
             statusText: 'complete'
           }
         ],

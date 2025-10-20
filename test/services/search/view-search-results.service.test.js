@@ -9,43 +9,17 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
-const LicenceModel = require('../../../app/models/licence.model.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
+const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
 
 // Thing under test
 const ViewSearchResultsService = require('../../../app/services/search/view-search-results.service.js')
 
 describe('Search - View search results service', () => {
-  let licenceResults
   let page
-  let returnLogResults
   let searchQuery
 
-  async function returnLicenceResults() {
-    return licenceResults
-  }
-
-  async function returnReturnLogResults() {
-    return returnLogResults
-  }
-
   beforeEach(() => {
-    Sinon.stub(LicenceModel, 'query').returns({
-      joinRelated: Sinon.stub().returnsThis(),
-      orderBy: Sinon.stub().returnsThis(),
-      page: Sinon.stub().callsFake(returnLicenceResults),
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis()
-    })
-
-    Sinon.stub(ReturnLogModel, 'query').returns({
-      join: Sinon.stub().returnsThis(),
-      orderBy: Sinon.stub().returnsThis(),
-      page: Sinon.stub().callsFake(returnReturnLogResults),
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis()
-    })
-
     page = 1
   })
 
@@ -57,7 +31,7 @@ describe('Search - View search results service', () => {
     beforeEach(() => {
       searchQuery = '123'
 
-      licenceResults = {
+      Sinon.stub(FetchLicenceSearchResultsService, 'go').resolves({
         results: [
           {
             $ends: () => {
@@ -85,21 +59,21 @@ describe('Search - View search results service', () => {
           }
         ],
         total: 2
-      }
+      })
 
-      returnLogResults = {
+      Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves({
         results: [
           {
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
             returnReference: '123',
-            region: 'Region',
-            regionId: 1,
+            naldRegionId: 1,
+            regionDisplayName: 'Region',
             status: 'completed'
           }
         ],
         total: 1
-      }
+      })
     })
 
     it('returns page data for the view', async () => {
@@ -134,8 +108,8 @@ describe('Search - View search results service', () => {
           {
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
+            regionDisplayName: 'Region',
             returnReference: '123',
-            region: 'Region',
             statusText: 'complete'
           }
         ],
@@ -148,8 +122,8 @@ describe('Search - View search results service', () => {
     beforeEach(() => {
       searchQuery = 'searchthis'
 
-      licenceResults = { results: [], total: 0 }
-      returnLogResults = { results: [], total: 0 }
+      Sinon.stub(FetchLicenceSearchResultsService, 'go').resolves({ results: [], total: 0 })
+      Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves({ results: [], total: 0 })
     })
 
     it('returns page data showing that there are no results', async () => {

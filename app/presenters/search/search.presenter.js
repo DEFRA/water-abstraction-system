@@ -91,7 +91,7 @@ function _returnLogs(returnLogs) {
   }
 
   return returnLogs.map((returnLog) => {
-    const { id, licenceRef, region, returnReference } = returnLog
+    const { id, licenceRef, regionDisplayName, returnReference } = returnLog
 
     const statusText = formatReturnLogStatus(returnLog)
 
@@ -99,7 +99,7 @@ function _returnLogs(returnLogs) {
       id,
       licenceRef,
       returnReference,
-      region,
+      regionDisplayName,
       statusText
     }
   })
