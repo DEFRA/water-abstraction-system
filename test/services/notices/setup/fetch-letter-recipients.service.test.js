@@ -14,13 +14,11 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
 
 describe('Notices - Setup - Fetch letter recipients service', () => {
-  const dueDate = '2025-04-29'
-
   let recipients
   let session
 
   before(async () => {
-    recipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
+    recipients = await LicenceDocumentHeaderSeeder.seed(true)
   })
 
   describe('when the licence number only has one recipient which has the "licence holder" role', () => {

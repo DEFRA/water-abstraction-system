@@ -15,12 +15,14 @@ const FetchReturnsRecipientsService = require('../../../../app/services/notices/
 
 describe('Notices - Setup - Fetch returns recipients service', () => {
   const dueDate = '2025-04-28'
+  const endDate = '2025-03-31'
+  const startDate = '2024-04-01'
 
   let recipients
   let session
 
   before(async () => {
-    recipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
+    recipients = await LicenceDocumentHeaderSeeder.seed(true, endDate, startDate)
   })
 
   describe('when the "journey" is for notifications', () => {
@@ -35,9 +37,10 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
         determinedReturnsPeriod: {
           name: 'allYear',
           dueDate,
-          endDate: '2024-03-31',
+          endDate,
           summer: 'false',
-          startDate: '2023-04-01'
+          startDate,
+          quarterly: false
         }
       }
     })

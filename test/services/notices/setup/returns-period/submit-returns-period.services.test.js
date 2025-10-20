@@ -62,7 +62,8 @@ describe('Notices - Setup - Submit Returns Period service', () => {
           endDate: '2025-03-31T00:00:00.000Z',
           name: 'quarterFour',
           startDate: '2025-01-01T00:00:00.000Z',
-          summer: 'false'
+          summer: 'false',
+          quarterly: true
         })
       })
 

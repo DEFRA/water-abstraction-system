@@ -16,17 +16,14 @@ const FetchDownloadRecipientsService = require('../../../../app/services/notices
 describe('Notices - Setup - Fetch Download Recipients service', () => {
   const endDate = new Date('2023-03-31')
   const startDate = new Date('2022-04-01')
-  const year = 2023
+  const dueDate = new Date('2023-04-28')
 
   let session
-  let dueDate
   let removeLicences
   let testRecipients
 
   before(async () => {
-    dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
-
-    testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, endDate)
+    testRecipients = await LicenceDocumentHeaderSeeder.seed(true, endDate, startDate)
   })
 
   describe('when there is no licence ref', () => {
@@ -39,9 +36,10 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
         determinedReturnsPeriod: {
           name: 'allYear',
           dueDate,
-          endDate: '2023-03-31',
+          endDate,
           summer: 'false',
-          startDate: '2022-04-01'
+          startDate,
+          quarterly: false
         }
       }
     })
@@ -62,7 +60,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
-            due_date: new Date(dueDate),
+            due_date: null,
             email: 'primary.user@important.com',
             end_date: endDate,
             licence_ref: testRecipients.primaryUser.licenceRef,
@@ -74,7 +72,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             contact: null,
             contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
-            due_date: new Date(dueDate),
+            due_date: null,
             email: 'returns.agent@important.com',
             end_date: endDate,
             licence_ref: testRecipients.primaryUser.licenceRef,
@@ -112,7 +110,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolder.licenceRef,
@@ -151,7 +149,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
@@ -177,7 +175,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Returns to',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
@@ -234,7 +232,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
-            due_date: new Date(dueDate),
+            due_date: null,
             email: 'primary.user@important.com',
             end_date: endDate,
             licence_ref: testRecipients.primaryUser.licenceRef,
@@ -246,7 +244,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             contact: null,
             contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
-            due_date: new Date(dueDate),
+            due_date: null,
             email: 'returns.agent@important.com',
             end_date: endDate,
             licence_ref: testRecipients.primaryUser.licenceRef,
@@ -288,7 +286,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolder.licenceRef,
@@ -331,7 +329,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
@@ -357,7 +355,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
               contact_type: 'Returns to',
-              due_date: new Date(dueDate),
+              due_date: null,
               email: null,
               end_date: endDate,
               licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
@@ -370,7 +368,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('when the end date is greater than today', () => {
         beforeEach(async () => {
-          testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, '3000-01-01')
+          testRecipients = await LicenceDocumentHeaderSeeder.seed(true, '3000-01-01')
 
           session = { licenceRef: testRecipients.primaryUser.licenceRef }
         })
