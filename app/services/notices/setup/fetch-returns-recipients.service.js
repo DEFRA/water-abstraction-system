@@ -191,28 +191,21 @@ async function _fetchRecipients(session) {
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
-  let latestDate = dueDate
-  let where = `
-    AND rl.due_date = ?
-    AND rl.start_date >= ?
-    AND rl.metadata->>'isSummer' = ?
-    AND rl.quarterly = ?
-  `
+  const bindings = [endDate, startDate, summer, quarterly, excludeLicences, excludeLicences, excludeLicences]
 
-  if (featureFlagsConfig.enableNullDueDate) {
-    latestDate = endDate
-    where = `
-      AND rl.due_date IS NULL
+  const where = `
+      AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '?'}
       AND rl.end_date <= ?
       AND rl.start_date >= ?
       AND rl.metadata->>'isSummer' = ?
       AND rl.quarterly = ?
     `
+
+  if (!featureFlagsConfig.enableNullDueDate) {
+    bindings.unshift(dueDate)
   }
 
   const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
-
-  const bindings = [latestDate, startDate, summer, quarterly, excludeLicences, excludeLicences, excludeLicences]
 
   const { rows } = await _fetch(bindings, whereLicenceRef, where)
 
