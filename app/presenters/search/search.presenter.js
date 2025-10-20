@@ -42,6 +42,23 @@ function go(query, page, numberOfPages, licences, returnLogs) {
   }
 }
 
+function _licenceEndDetails(licenceEnd) {
+  let licenceEndDate = null
+  let licenceEndedText = null
+
+  if (licenceEnd) {
+    const { date, reason } = licenceEnd
+
+    licenceEndDate = formatLongDate(date)
+
+    if (date <= today()) {
+      licenceEndedText = reason
+    }
+  }
+
+  return { licenceEndDate, licenceEndedText }
+}
+
 function _licences(licences) {
   if (!licences) {
     return null
@@ -60,18 +77,7 @@ function _licences(licences) {
     const licenceHolderName = holderContactModel.$name()
 
     // Licences that have ended are displayed with a tag showing the reason
-    let licenceEndDate = null
-    let licenceEndedText = null
-
-    if (licenceEnd) {
-      const { date, reason } = licenceEnd
-
-      licenceEndDate = formatLongDate(date)
-
-      if (date <= today()) {
-        licenceEndedText = reason
-      }
-    }
+    const { licenceEndDate, licenceEndedText } = _licenceEndDetails(licenceEnd)
 
     return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
   })
