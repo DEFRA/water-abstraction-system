@@ -176,7 +176,7 @@ describe('Notices - Submit View Notice service', () => {
     describe('with an invalid payload', () => {
       beforeEach(() => {
         payload = {
-          licence: '12345678909876543210'
+          licence: '12345678909876543210543212'
         }
       })
 
@@ -189,13 +189,13 @@ describe('Notices - Submit View Notice service', () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             error: {
-              errorList: [{ href: '#licence', text: 'Licence number must be 11 characters or less' }],
-              licence: { text: 'Licence number must be 11 characters or less' }
+              errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
+              licence: { text: 'Licence number must be 25 characters or less' }
             },
             filters: {
-              licence: '12345678909876543210',
+              licence: '12345678909876543210543212',
               openFilter: true,
               recipient: null,
               status: null
@@ -231,14 +231,14 @@ describe('Notices - Submit View Notice service', () => {
               }
             ],
             numberShowing: 2,
-            pageTitle: 'Warning alert (page 1 of 3)',
+            pageTitle: 'Warning alert',
             pageTitleCaption: `Notice ${notice.referenceCode}`,
             pagination: {
               component: {
                 items: [
                   {
                     current: true,
-                    href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057',
+                    href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057?page=1',
                     number: 1,
                     visuallyHiddenText: 'Page 1'
                   },
@@ -280,13 +280,13 @@ describe('Notices - Submit View Notice service', () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             error: {
-              errorList: [{ href: '#licence', text: 'Licence number must be 11 characters or less' }],
-              licence: { text: 'Licence number must be 11 characters or less' }
+              errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
+              licence: { text: 'Licence number must be 25 characters or less' }
             },
             filters: {
-              licence: '12345678909876543210',
+              licence: '12345678909876543210543212',
               openFilter: true,
               recipient: null,
               status: null

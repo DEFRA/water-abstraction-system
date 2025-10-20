@@ -37,7 +37,7 @@ describe('Notices - Setup - Add Recipient service', () => {
     describe('and it is a UK address', () => {
       beforeEach(() => {
         sessionData.addressJourney = {
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           address: {
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
@@ -160,7 +160,7 @@ describe('Notices - Setup - Add Recipient service', () => {
     describe('and it is an International address', () => {
       beforeEach(() => {
         sessionData.addressJourney = {
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           address: {
             addressLine1: '1 Faux Ferme',
             addressLine4: 'Faux Ville',

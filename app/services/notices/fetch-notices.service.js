@@ -100,9 +100,15 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
 }
 
 function _applyStatusFilters(query, statuses) {
-  for (const status of statuses) {
-    query.whereRaw(`events.status_counts->>'${status}' <> '0'`)
+  if (statuses.length === 0) {
+    return
   }
+
+  const clauses = statuses.map((status) => {
+    return `events.status_counts->>'${status}' <> '0'`
+  })
+
+  query.whereRaw(`(${clauses.join(' OR ')})`)
 }
 
 function _fetchQuery() {

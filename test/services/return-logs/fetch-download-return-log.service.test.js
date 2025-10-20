@@ -33,12 +33,12 @@ describe('Fetch Download Return Log service', () => {
     await Promise.all([
       ReturnSubmissionLineHelper.add({
         returnSubmissionId: returnSubmissions[0].id,
-        startDate: '2023-03-01',
+        endDate: '2023-03-31',
         quantity: 10
       }),
       ReturnSubmissionLineHelper.add({
         returnSubmissionId: returnSubmissions[0].id,
-        startDate: '2023-01-01',
+        endDate: '2023-01-31',
         quantity: 5
       })
     ])
@@ -80,8 +80,8 @@ describe('Fetch Download Return Log service', () => {
     const lines = result.returnSubmissions[0].returnSubmissionLines
 
     expect(lines).to.have.length(2)
-    expect(lines[0].startDate.toISOString()).to.equal('2023-01-01T00:00:00.000Z')
-    expect(lines[1].startDate.toISOString()).to.equal('2023-03-01T00:00:00.000Z')
+    expect(lines[0].endDate.toISOString()).to.equal('2023-01-31T00:00:00.000Z')
+    expect(lines[1].endDate.toISOString()).to.equal('2023-03-31T00:00:00.000Z')
   })
 
   it('applies readings to selected submission', async () => {

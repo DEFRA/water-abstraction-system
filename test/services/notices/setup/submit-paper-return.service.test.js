@@ -127,7 +127,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
@@ -168,7 +168,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
         const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/notice-type`,
             text: 'Back'

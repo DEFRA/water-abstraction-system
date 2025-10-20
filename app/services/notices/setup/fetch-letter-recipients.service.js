@@ -152,7 +152,6 @@ function _query() {
       FROM public.return_logs rl
       WHERE
         rl.status = 'due'
-        AND rl.metadata->>'isCurrent' = 'true'
     )
   SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,

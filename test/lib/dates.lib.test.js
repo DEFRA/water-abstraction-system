@@ -11,6 +11,50 @@ const { expect } = Code
 const DateLib = require('../../app/lib/dates.lib.js')
 
 describe('Dates lib', () => {
+  describe('compareDates', () => {
+    let firstDate
+    let secondDate
+
+    describe('when the first date is before the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-01')
+        secondDate = new Date('2025-10-15')
+      })
+
+      it('returns -1', () => {
+        const result = DateLib.compareDates(firstDate, secondDate)
+
+        expect(result).to.equal(-1)
+      })
+    })
+
+    describe('when the first date is after the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-15')
+        secondDate = new Date('2025-10-01')
+      })
+
+      it('returns 1', () => {
+        const result = DateLib.compareDates(firstDate, secondDate)
+
+        expect(result).to.equal(1)
+      })
+    })
+
+    describe('when the first date is the same as the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-15')
+        secondDate = new Date('2025-10-15')
+      })
+
+      it('returns 0', () => {
+        const result = DateLib.compareDates(firstDate, secondDate)
+
+        expect(result).to.equal(0)
+      })
+    })
+  })
+
   describe('daysFromPeriod', () => {
     let startDate
     let endDate
@@ -405,6 +449,37 @@ describe('Dates lib', () => {
           startDate: new Date('2025-04-01'),
           endDate: new Date('2025-04-30')
         })
+      })
+    })
+  })
+
+  describe('sameDate', () => {
+    let firstDate
+    let secondDate
+
+    describe('when the first date is the same as the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-01')
+        secondDate = new Date('2025-10-01')
+      })
+
+      it('returns true', () => {
+        const result = DateLib.sameDate(firstDate, secondDate)
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('when the first date is not the same as the second date', () => {
+      before(async () => {
+        firstDate = new Date('2025-10-01')
+        secondDate = new Date('2025-10-15')
+      })
+
+      it('returns false', () => {
+        const result = DateLib.sameDate(firstDate, secondDate)
+
+        expect(result).to.be.false()
       })
     })
   })

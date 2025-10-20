@@ -43,7 +43,7 @@ function _pageTitle(subType) {
   }
 
   if (subType === 'paperReturnForms') {
-    return 'Paper return forms sent'
+    return 'Paper returns sent'
   }
 
   const subTypes = {

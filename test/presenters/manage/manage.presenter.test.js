@@ -40,7 +40,7 @@ describe('Manage - Manage presenter', () => {
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
+        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
           links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
           show: true
@@ -85,7 +85,7 @@ describe('Manage - Manage presenter', () => {
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
+        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
           show: true
@@ -227,7 +227,7 @@ describe('Manage - Manage presenter', () => {
         pageTitle: 'Manage reports and notices',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
-          links: { adHoc: true, invitations: false, paperForms: true, reminders: false },
+          links: { adHoc: true, invitations: false, paperForms: false, reminders: false },
           show: true
         },
         viewReports: {

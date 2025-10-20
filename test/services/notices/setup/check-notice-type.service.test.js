@@ -39,7 +39,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       const result = await CheckNoticeTypeService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         licenceRef,
         links: {
           licenceNumber: `/system/notices/setup/${session.id}/licence`,

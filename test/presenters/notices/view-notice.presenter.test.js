@@ -191,57 +191,6 @@ describe('Notices - View Notice presenter', () => {
     })
   })
 
-  describe('the "pageTitle" property', () => {
-    describe('when the notice is an abstraction alert', () => {
-      describe('and there is only one page of results', () => {
-        it('returns the "pageTitle" without page info', () => {
-          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-          expect(result.pageTitle).to.equal('Warning alert')
-        })
-      })
-
-      describe('and there are multiple pages of results', () => {
-        beforeEach(() => {
-          numberOfPages = 3
-        })
-
-        it('returns the "pageTitle" with page info', () => {
-          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-          expect(result.pageTitle).to.equal('Warning alert (page 1 of 3)')
-        })
-      })
-    })
-
-    describe('when the notice is not an abstraction alert', () => {
-      beforeEach(() => {
-        notice.subtype = 'returnInvitation'
-        notice.alertType = null
-      })
-
-      describe('and there is only one page of results', () => {
-        it('returns the "pageTitle" without page info', () => {
-          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-          expect(result.pageTitle).to.equal('Returns invitation')
-        })
-      })
-
-      describe('and there are multiple pages of results', () => {
-        beforeEach(() => {
-          numberOfPages = 3
-        })
-
-        it('returns the "pageTitle" with page info', () => {
-          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-          expect(result.pageTitle).to.equal('Returns invitation (page 1 of 3)')
-        })
-      })
-    })
-  })
-
   describe('the "showingDeclaration" property', () => {
     describe('when there is only one page of results', () => {
       it('returns the "showingDeclaration" without page info', () => {

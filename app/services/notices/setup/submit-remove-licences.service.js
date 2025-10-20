@@ -32,7 +32,7 @@ async function go(sessionId, payload) {
     const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session)
 
     return {
-      activeNavBar: 'manage',
+      activeNavBar: 'notices',
       error: validationResult,
       ...formattedData
     }
