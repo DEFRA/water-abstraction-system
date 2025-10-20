@@ -159,12 +159,12 @@ function _query() {
     licence_holder as (
       SELECT
       ldh.licence_ref,
-       ('Licence holder') AS contact_type,
-       (NULL) AS email,
+      ('Licence holder') AS contact_type,
+      (NULL) AS email,
       contacts as contact,
-       (md5(
-      LOWER(
-      concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+      (md5(
+        LOWER(
+          concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
       )) AS contact_hash_id
       FROM public.licence_document_headers ldh
@@ -178,12 +178,12 @@ function _query() {
     returns_to as (
       SELECT
       ldh.licence_ref,
-       ('Returns to') AS contact_type,
-       (NULL) AS email,
+      ('Returns to') AS contact_type,
+      (NULL) AS email,
       contacts as contact,
-       (md5(
-      LOWER(
-      concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
+      (md5(
+        LOWER(
+          concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
       )) AS contact_hash_id
       FROM public.licence_document_headers ldh
@@ -194,13 +194,13 @@ function _query() {
         AND contacts->>'role' = 'Returns to'
     ),
 
-      all_contacts AS (
+    all_contacts AS (
         SELECT *, 1 AS priority FROM licence_holder
         UNION ALL
         SELECT *, 2 AS priority FROM returns_to
       ),
 
-     best_contact_type AS (
+    best_contact_type AS (
         SELECT DISTINCT ON (contact_hash_id)
           contact_hash_id,
           contact_type,
@@ -232,7 +232,7 @@ function _query() {
         JOIN
       best_contact_type b
       USING (contact_hash_id)
-     `
+    `
 }
 
 module.exports = {
