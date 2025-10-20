@@ -53,8 +53,8 @@ describe('Notices - Setup - Check service', () => {
     const result = await CheckService.go(session.id, yarStub)
 
     expect(result).to.equal({
-      activeNavBar: 'manage',
-      defaultPageSize: 25,
+      activeNavBar: 'notices',
+      canSendNotice: true,
       links: {
         cancel: `/system/notices/setup/${session.id}/cancel`,
         download: `/system/notices/setup/${session.id}/download`,
@@ -79,7 +79,7 @@ describe('Notices - Setup - Check service', () => {
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
         }
       ],
-      recipientsAmount: 1,
+      tableCaption: 'Showing all 1 recipients',
       warning: null
     })
   })
@@ -124,6 +124,7 @@ describe('Notices - Setup - Check service', () => {
       })
     })
   })
+
   describe('when the journey is "alerts"', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
@@ -144,8 +145,8 @@ describe('Notices - Setup - Check service', () => {
       const result = await CheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
-        defaultPageSize: 25,
+        activeNavBar: 'notices',
+        canSendNotice: true,
         links: {
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`
@@ -169,7 +170,7 @@ describe('Notices - Setup - Check service', () => {
             previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.additionalContact.contact_hash_id}/check-alert`
           }
         ],
-        recipientsAmount: 1,
+        tableCaption: 'Showing all 1 recipients',
         warning: null
       })
     })

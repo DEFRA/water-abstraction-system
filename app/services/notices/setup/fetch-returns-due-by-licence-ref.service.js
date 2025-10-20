@@ -43,7 +43,6 @@ async function _fetch(licenceRef) {
     WHERE rl.licence_ref = ?
     AND rl.status = 'due'
     AND rl.end_date <= ?
-    AND rl.metadata->>'isCurrent' = 'true'
     ORDER BY rl.start_date DESC, rl.return_reference ASC;
   `
 

@@ -21,6 +21,13 @@
         </a>
       </li>
     {% endif %}
+    {% if auth.permission.notices %}
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'notices' }}" href="/system/notices" id="nav-notices">
+          Notices
+        </a>
+      </li>
+    {% endif %}
     {% if auth.permission.manage %}
       <li class="navbar__item">
         <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'manage' }}" href="/system/manage" id="nav-manage">

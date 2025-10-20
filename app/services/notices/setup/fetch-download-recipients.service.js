@@ -136,7 +136,6 @@ FROM (
         ON rl.licence_ref = ldh.licence_ref
     WHERE
       rl.status = 'due'
-      AND rl.metadata->>'isCurrent' = 'true'
       ${additionalWhereClause}
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
       AND NOT EXISTS (
@@ -171,7 +170,6 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.metadata->>'isCurrent' = 'true'
     ${additionalWhereClause}
 ) contacts
 ORDER BY

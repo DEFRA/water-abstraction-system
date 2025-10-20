@@ -38,7 +38,7 @@ async function go(noticeId, yar, page) {
   )
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     filters,
     ...pageData,
     pagination,

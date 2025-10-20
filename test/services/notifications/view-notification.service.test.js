@@ -79,7 +79,7 @@ describe('Notifications - View Notification service', () => {
         const result = await ViewNotificationService.go(notification.id)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           address: [],
           alertDetails: null,
           backLink: {

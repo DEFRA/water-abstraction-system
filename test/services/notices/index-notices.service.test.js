@@ -51,7 +51,7 @@ describe('Notices - Index Notices service', () => {
       const result = await IndexNoticesService.go(yarStub, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         filters: {
           fromDate: null,
           noticeTypes: [],

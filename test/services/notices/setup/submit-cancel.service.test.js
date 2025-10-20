@@ -39,7 +39,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
       it('returns the redirect url', async () => {
         const result = await SubmitCancelService.go(session.id)
 
-        expect(result).to.equal('/manage')
+        expect(result).to.equal('/system/manage')
       })
     })
 

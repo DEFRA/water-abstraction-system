@@ -56,7 +56,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           referenceCode: sessionData.referenceCode,
           subType: 'returnInvitation',
           addressJourney: {
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             address: {},
             backLink: {
               href: `/system/notices/setup/${sessionId}/contact-type`,
@@ -95,7 +95,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
           referenceCode: sessionData.referenceCode,
           subType: 'paperReturnForms',
           addressJourney: {
-            activeNavBar: 'manage',
+            activeNavBar: 'notices',
             address: {},
             backLink: {
               href: `/system/notices/setup/${sessionId}/recipient-name`,

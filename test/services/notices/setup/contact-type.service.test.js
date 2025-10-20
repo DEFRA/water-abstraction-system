@@ -28,7 +28,7 @@ describe('Notices - Setup - Contact Type Service', () => {
       const result = await ContactTypeService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'
@@ -57,7 +57,7 @@ describe('Notices - Setup - Contact Type Service', () => {
       const result = await ContactTypeService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/select-recipients`,
           text: 'Back'

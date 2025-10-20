@@ -236,7 +236,7 @@ describe('Notices - Setup - Notice Type Service', () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/licence`,
           text: 'Back'

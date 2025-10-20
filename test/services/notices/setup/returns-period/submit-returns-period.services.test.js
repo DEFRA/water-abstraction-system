@@ -108,7 +108,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
+          activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/notice-type`,
             text: 'Back'
@@ -125,7 +125,6 @@ describe('Notices - Setup - Submit Returns Period service', () => {
             }
           },
           pageTitle: 'Select the returns periods for the invitations',
-          pageTitleCaption: `Notice ${referenceCode}`,
           returnsPeriod: [
             {
               checked: false,

@@ -5,7 +5,7 @@
  * @module StartDateService
  */
 
-const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+const { isQuarterlyReturnSubmissions, sameDate } = require('../../../lib/dates.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 const DetermineRelevantLicenceVersionService = require('./determine-relevant-licence-version.service.js')
@@ -91,11 +91,7 @@ function _defaultQuarterlyReturns(session) {
 }
 
 async function _relevantLicenceVersion(session, previousStartDate) {
-  // NOTE: For date comparisons you cannot use !== with just the date values. Using < or > will coerce the values into
-  // numbers for comparison. But equality operators are checking that the two operands are referring to the same Object.
-  // So, where we have matching dates and expect !== to return 'false' we get 'true' instead.
-  // Thanks to https://stackoverflow.com/a/493018/6117745 for explaining the problem and providing the solution
-  if (previousStartDate && previousStartDate.getTime() === session.returnVersionStartDate.getTime()) {
+  if (previousStartDate && sameDate(previousStartDate, session.returnVersionStartDate)) {
     // In this scenario we are handling where a user has come back to the start date page, but not change anything.
     // In this case there is no point fetching the licence version (it'll be the same result).
     return

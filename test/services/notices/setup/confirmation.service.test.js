@@ -32,7 +32,7 @@ describe('Notices - Setup - Confirmation service', () => {
       const result = await ConfirmationService.go(event.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Returns invitations sent',

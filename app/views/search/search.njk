@@ -5,6 +5,8 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
+{% from "macros/return-status-tag.njk" import statusTag %}
+
 {% block pageContent %}
 
   <div class="govuk-grid-row">
@@ -43,9 +45,28 @@
         </div>
       </div>
     {% else %}
+      <hr class="govuk-section-break govuk-section-break--visible">
+      {% if returnLogs %}
+        {% for returnLog in returnLogs %}
+          <!--result card-->
+          <hr class="govuk-section-break govuk-section-break--visible">
+          <div class="govuk-grid-row govuk-!-margin-top-0">
+            <dl class="govuk-body govuk-!-margin-0">
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
+                <dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">Return reference:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="/system/return-logs?id={{ returnLog.id }}">{{ returnLog.returnReference }}<a/></dd>
+              </div>
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Licence:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.licenceRef }}</dd>
+              </div>
+              <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Region:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ returnLog.region }} {{ statusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
+              </div>
+            </dl>
+          </div>
+          <hr class="govuk-section-break govuk-section-break--visible">
+        {% endfor %}
+      {% endif %}
       {% if licences %}
-        <hr class="govuk-section-break govuk-section-break--visible">
-
         {% for licence in licences %}
           <!--result card-->
           <hr class="govuk-section-break govuk-section-break--visible">
@@ -64,9 +85,8 @@
           </div>
           <hr class="govuk-section-break govuk-section-break--visible">
         {% endfor %}
-
-        <hr class="govuk-section-break govuk-section-break--visible">
       {% endif %}
+      <hr class="govuk-section-break govuk-section-break--visible">
 
       {% if pagination.numberOfPages > 1 %}
         <div class="govuk-grid-row govuk-!-margin-top-9">

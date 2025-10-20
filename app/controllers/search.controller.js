@@ -14,13 +14,15 @@ const VIEW_PAGE = 'search/search.njk'
 async function submitSearch(request, h) {
   const { payload, yar } = request
 
-  const pageData = await SubmitSearchService.go(payload, yar)
+  const submitResult = await SubmitSearchService.go(payload, yar)
 
-  if (pageData.error) {
-    return h.view(VIEW_PAGE, pageData)
+  if (submitResult.error) {
+    return h.view(VIEW_PAGE, submitResult)
   }
 
-  return h.redirect('/system/search?page=1', pageData)
+  const { redirect } = submitResult
+
+  return h.redirect(redirect)
 }
 
 async function viewSearch(request, h) {
@@ -41,12 +43,6 @@ async function viewSearch(request, h) {
   }
 
   const pageData = await ViewSearchResultsService.go(searchQuery, page)
-
-  // If there is a single result that exactly matches the search query, the service may redirect straight to that
-  // matching record
-  if (pageData.redirect) {
-    return h.redirect(pageData.redirect)
-  }
 
   return h.view(VIEW_PAGE, pageData)
 }

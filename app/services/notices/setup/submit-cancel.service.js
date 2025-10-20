@@ -26,7 +26,7 @@ async function go(sessionId) {
     return `/system/monitoring-stations/${session.monitoringStationId}`
   }
 
-  return '/manage'
+  return '/system/manage'
 }
 
 module.exports = {
