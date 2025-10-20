@@ -101,6 +101,9 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * same primary user. Apart from the licence ref, all other fields will be the same. So, PostgreSQL can aggregate the
  * licence refs into a single value, and group the rest into a single row.
  *
+ * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
+ * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
+ *
  * For the individual licence the end result is all the email, or letter contacts for that  licence with a 'due'
  * return for any period.
  *
