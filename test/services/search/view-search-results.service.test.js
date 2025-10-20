@@ -64,6 +64,7 @@ describe('Search - View search results service', () => {
       Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves({
         results: [
           {
+            endDate: new Date('2000-12-31'),
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
             returnReference: '123',
@@ -106,6 +107,7 @@ describe('Search - View search results service', () => {
         query: '123',
         returnLogs: [
           {
+            endDate: '31 December 2000',
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
             regionDisplayName: 'Region',

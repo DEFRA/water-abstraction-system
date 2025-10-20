@@ -96,6 +96,7 @@ function _returnLogs(returnLogs) {
     const statusText = formatReturnLogStatus(returnLog)
 
     return {
+      endDate: formatLongDate(returnLog.endDate),
       id,
       licenceRef,
       returnReference,

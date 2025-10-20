@@ -39,6 +39,7 @@ describe('Search - Search presenter', () => {
 
     returnLogs = [
       {
+        endDate: new Date('2000-12-31'),
         id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
         licenceRef: '01/123',
         returnReference: '123',
@@ -69,6 +70,7 @@ describe('Search - Search presenter', () => {
         query: 'searchthis',
         returnLogs: [
           {
+            endDate: '31 December 2000',
             id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
             licenceRef: '01/123',
             returnReference: '123',
