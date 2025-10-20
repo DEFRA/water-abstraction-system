@@ -177,6 +177,25 @@ async function _additionalContact(licenceRef = null) {
   return licenceDocument
 }
 
+function _contact(name, role) {
+  return {
+    name,
+    role,
+    addressLine1: '4',
+    addressLine2: 'Privet Drive',
+    addressLine3: null,
+    addressLine4: null,
+    country: null,
+    county: 'Surrey',
+    forename: 'Harry',
+    initials: 'J',
+    postcode: 'WD25 7LR',
+    salutation: null,
+    town: 'Little Whinging',
+    type: 'Person'
+  }
+}
+
 async function _multipleAdditionalContact() {
   const licenceDocument = await LicenceDocumentHelper.add()
 
@@ -355,25 +374,6 @@ async function _primaryUserWithAdditionalContact() {
   await _additionalContact(primaryUser.licenceRef)
 
   return primaryUser
-}
-
-function _contact(name, role) {
-  return {
-    name,
-    role,
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    postcode: 'WD25 7LR',
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
 }
 
 module.exports = {
