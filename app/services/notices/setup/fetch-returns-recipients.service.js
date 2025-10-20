@@ -233,12 +233,12 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id
         FROM public.licence_document_headers ldh
-               INNER JOIN public.licence_entity_roles ler
-                          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
-               INNER JOIN public.licence_entities le
-                          ON le.id = ler.licence_entity_id
-               INNER JOIN due_return_logs rl
-                          ON rl.licence_ref = ldh.licence_ref
+            INNER JOIN public.licence_entity_roles ler
+                ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
+            INNER JOIN public.licence_entities le
+                ON le.id = ler.licence_entity_id
+            INNER JOIN due_return_logs rl
+                ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
       ),
@@ -251,12 +251,12 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id
         FROM public.licence_document_headers ldh
-               INNER JOIN public.licence_entity_roles ler
-                          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
-               INNER JOIN public.licence_entities le
-                          ON le.id = ler.licence_entity_id
-               INNER JOIN due_return_logs rl
-                          ON rl.licence_ref = ldh.licence_ref
+            INNER JOIN public.licence_entity_roles ler
+                ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
+            INNER JOIN public.licence_entities le
+                ON le.id = ler.licence_entity_id
+            INNER JOIN due_return_logs rl
+                ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
       ),
@@ -276,11 +276,11 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
             LOWER(
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
-           )) AS contact_hash_id
+          )) AS contact_hash_id
         FROM public.licence_document_headers ldh
-               INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-               INNER JOIN due_return_logs rl
-                          ON rl.licence_ref = ldh.licence_ref
+          INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+          INNER JOIN due_return_logs rl
+            ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
           AND contacts->>'role' = 'Licence holder'
@@ -300,11 +300,11 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
             LOWER(
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
-           )) AS contact_hash_id
+          )) AS contact_hash_id
         FROM public.licence_document_headers ldh
-               INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-               INNER JOIN due_return_logs rl
-                          ON rl.licence_ref = ldh.licence_ref
+          INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+          INNER JOIN due_return_logs rl
+            ON rl.licence_ref = ldh.licence_ref
         WHERE
           ${whereLicenceRef}
           AND contacts->>'role' = 'Returns to'
