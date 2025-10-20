@@ -29,26 +29,26 @@ const additionalContactTwo = {
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
- * Provide a return log due date to add a return log record to the licence document header.
+ * If provided a return log due date the seed will add a return log record.
  *
- * @param {string} [returnLog] - a string representing the year and month ('2020-01') the seed will add the date.
+ * @param {string} [returnLogDueDate] - a string representing the year and month ('2020-01') the seed will add the date.
  *
  * @returns {Promise<object>} an object containing different licence document header instances for the licence holder
  */
-async function seed(returnLog) {
+async function seed(returnLogDueDate) {
   let returnLogDates = {}
 
-  if (returnLog) {
+  if (returnLogDueDate) {
     returnLogDates = {
-      one: `${returnLog}01`,
-      two: `${returnLog}02`,
-      three: `${returnLog}03`,
-      four: `${returnLog}04`,
-      five: `${returnLog}05`,
-      six: `${returnLog}06`,
-      seven: `${returnLog}07`,
-      eight: `${returnLog}08`,
-      nine: `${returnLog}09`
+      one: `${returnLogDueDate}01`,
+      two: `${returnLogDueDate}02`,
+      three: `${returnLogDueDate}03`,
+      four: `${returnLogDueDate}04`,
+      five: `${returnLogDueDate}05`,
+      six: `${returnLogDueDate}06`,
+      seven: `${returnLogDueDate}07`,
+      eight: `${returnLogDueDate}08`,
+      nine: `${returnLogDueDate}09`
     }
   }
 
@@ -94,6 +94,18 @@ async function _addLicenceEntityRole(entityRole, licenceRef = null) {
   return licenceDocumentHeader
 }
 
+async function _additionalContact(licenceRef = null) {
+  const licenceDocument = await LicenceDocumentHelper.add({
+    ...(licenceRef && { licenceRef })
+  })
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
 async function _addLicenceHolder(licenceRef = null) {
   return await LicenceDocumentHeaderHelper.add({
     ...(licenceRef && { licenceRef }),
@@ -112,6 +124,16 @@ async function _addLicenceHolderAndReturnTo() {
         // This should not be returned in the query response
         _contact('Not a role', 'Not a role')
       ]
+    }
+  })
+}
+
+async function _addLicenceHolderAndReturnToSameAddress() {
+  return await LicenceDocumentHeaderHelper.add({
+    metadata: {
+      // The role is used in the query should be correct, but the name is used in the contact hash, so the second contact
+      // should not be returned in the query response (As both have the same address and name)
+      contacts: [_contact('Potter', 'Licence holder'), _contact('Potter', 'Returns to')]
     }
   })
 }
@@ -153,28 +175,6 @@ async function _addReturnLog(returnLogDueDate, licenceRef) {
   }
 
   return null
-}
-
-async function _addLicenceHolderAndReturnToSameAddress() {
-  return await LicenceDocumentHeaderHelper.add({
-    metadata: {
-      // The role is used in the query should be correct, but the name is used in the contact hash, so the second contact
-      // should not be returned in the query response (As both have the same address and name)
-      contacts: [_contact('Potter', 'Licence holder'), _contact('Potter', 'Returns to')]
-    }
-  })
-}
-
-async function _additionalContact(licenceRef = null) {
-  const licenceDocument = await LicenceDocumentHelper.add({
-    ...(licenceRef && { licenceRef })
-  })
-
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
-
-  return licenceDocument
 }
 
 function _contact(name, role) {
