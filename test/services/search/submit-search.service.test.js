@@ -66,7 +66,8 @@ describe('Search - Submit search service', () => {
         activeNavBar: 'search',
         error: EXPECTED_ERROR,
         pageTitle: 'Search',
-        query: undefined
+        query: undefined,
+        showResults: false
       })
 
       expect(yarSpy.called).to.be.false()
