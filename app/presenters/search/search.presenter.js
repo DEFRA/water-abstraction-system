@@ -33,7 +33,7 @@ function go(query, page, numberOfPages, licences, returnLogs) {
 
   return {
     licences: _licences(licences),
-    noResults: !(licences || returnLogs),
+    noResults: _noResults(licences, returnLogs),
     page,
     pageTitle: _pageTitle(numberOfPages, page),
     query,
@@ -60,7 +60,7 @@ function _licenceEndDetails(licenceEnd) {
 }
 
 function _licences(licences) {
-  if (!licences) {
+  if (!licences || licences.length === 0) {
     return null
   }
 
@@ -83,6 +83,10 @@ function _licences(licences) {
   })
 }
 
+function _noResults(licences, returnLogs) {
+  return !((licences && licences.length > 0) || (returnLogs && returnLogs.length > 0))
+}
+
 function _pageTitle(numberOfPages, selectedPageNumber) {
   if (numberOfPages < 2) {
     return 'Search results'
@@ -92,7 +96,7 @@ function _pageTitle(numberOfPages, selectedPageNumber) {
 }
 
 function _returnLogs(returnLogs) {
-  if (!returnLogs) {
+  if (!returnLogs || returnLogs.length === 0) {
     return null
   }
 

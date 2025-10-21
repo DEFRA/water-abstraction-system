@@ -5,10 +5,9 @@
  * @module FetchLicenceSearchResultsService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
 
-const LICENCE_REF = 'licences.licenceRef'
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Handles fetching search results for licences on the /search page
@@ -21,9 +20,9 @@ const LICENCE_REF = 'licences.licenceRef'
 async function go(query, page) {
   return LicenceModel.query()
     .joinRelated('licenceDocumentHeader', { alias: 'doc' })
-    .where(LICENCE_REF, 'ilike', `%${query}%`)
-    .select(['licences.id', LICENCE_REF, 'revokedDate', 'lapsedDate', 'expiredDate', 'doc.metadata'])
-    .orderBy([{ column: LICENCE_REF, order: 'asc' }])
+    .where('licences.licenceRef', 'ilike', `%${query}%`)
+    .select(['licences.id', 'licences.licenceRef', 'revokedDate', 'lapsedDate', 'expiredDate', 'doc.metadata'])
+    .orderBy([{ column: 'licences.licenceRef', order: 'asc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

@@ -50,43 +50,53 @@ describe('Search - Search presenter', () => {
     ]
   })
 
-  describe('when provided with a valid query that returns results', () => {
-    it('correctly presents the data', () => {
-      const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
+  it('correctly presents the data', () => {
+    const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
 
-      expect(result).to.equal({
-        licences: [
-          {
-            id: 'licence-1',
-            licenceEndDate: null,
-            licenceEndedText: null,
-            licenceHolderName: 'Mr F Surname',
-            licenceRef: '01/123'
-          }
-        ],
-        noResults: false,
-        page: 1,
-        pageTitle: 'Search results',
-        query: 'searchthis',
-        returnLogs: [
-          {
-            endDate: '31 December 2000',
-            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-            licenceRef: '01/123',
-            returnReference: '123',
-            regionDisplayName: 'Region',
-            statusText: 'complete'
-          }
-        ],
-        showResults: true
-      })
+    expect(result).to.equal({
+      licences: [
+        {
+          id: 'licence-1',
+          licenceEndDate: null,
+          licenceEndedText: null,
+          licenceHolderName: 'Mr F Surname',
+          licenceRef: '01/123'
+        }
+      ],
+      noResults: false,
+      page: 1,
+      pageTitle: 'Search results',
+      query: 'searchthis',
+      returnLogs: [
+        {
+          endDate: '31 December 2000',
+          id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+          licenceRef: '01/123',
+          returnReference: '123',
+          regionDisplayName: 'Region',
+          statusText: 'complete'
+        }
+      ],
+      showResults: true
     })
   })
 
   describe('the "licences" property', () => {
+    describe('when no licence search has been performed', () => {
+      beforeEach(() => {
+        licences = undefined
+      })
+
+      it('returns "null"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
+
+        expect(result.licences).to.be.null()
+      })
+    })
+
     describe('when no matching licences have been found', () => {
       beforeEach(() => {
-        licences = null
+        licences = []
       })
 
       it('returns "null"', () => {
@@ -148,8 +158,21 @@ describe('Search - Search presenter', () => {
   describe('the "noResults" property', () => {
     describe('when neither licences nor return logs have results', () => {
       beforeEach(() => {
-        licences = null
-        returnLogs = null
+        licences = []
+        returnLogs = []
+      })
+
+      it('returns "true"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
+
+        expect(result.noResults).to.be.true()
+      })
+    })
+
+    describe('when no search has been performed', () => {
+      beforeEach(() => {
+        licences = undefined
+        returnLogs = undefined
       })
 
       it('returns "true"', () => {
@@ -161,7 +184,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there were only licence results', () => {
       beforeEach(() => {
-        returnLogs = null
+        returnLogs = []
       })
 
       it('returns "false"', () => {
@@ -173,7 +196,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there were only return log results', () => {
       beforeEach(() => {
-        licences = null
+        licences = []
       })
 
       it('returns "false"', () => {
@@ -232,9 +255,21 @@ describe('Search - Search presenter', () => {
   })
 
   describe('the "returnLogs" property', () => {
+    describe('when no return log search has been performed', () => {
+      beforeEach(() => {
+        returnLogs = undefined
+      })
+
+      it('returns "null"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
+
+        expect(result.returnLogs).to.be.null()
+      })
+    })
+
     describe('when no matching return logs have been found', () => {
       beforeEach(() => {
-        returnLogs = null
+        returnLogs = []
       })
 
       it('returns "null"', () => {

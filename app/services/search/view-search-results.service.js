@@ -30,13 +30,14 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
 async function go(searchQuery, page) {
   const pageNumber = Number(page)
 
-  const licenceSearchResult = await FetchLicenceSearchResultsService.go(searchQuery, pageNumber)
-  const licences = licenceSearchResult.results.length !== 0 ? licenceSearchResult.results : null
+  const { results: licences, total: licenceTotal } = await FetchLicenceSearchResultsService.go(searchQuery, pageNumber)
 
-  const returnLogSearchResult = await FetchReturnLogSearchResultsService.go(searchQuery, pageNumber)
-  const returnLogs = returnLogSearchResult.results.length !== 0 ? returnLogSearchResult.results : null
+  const { results: returnLogs, total: returnLogTotal } = await FetchReturnLogSearchResultsService.go(
+    searchQuery,
+    pageNumber
+  )
 
-  const mostResults = Math.max(licenceSearchResult.total, returnLogSearchResult.total)
+  const mostResults = Math.max(licenceTotal, returnLogTotal)
 
   const pagination = PaginatorPresenter.go(mostResults, pageNumber, `/system/search`)
 
