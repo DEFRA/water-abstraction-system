@@ -6,6 +6,7 @@
  */
 
 const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
+const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
@@ -37,11 +38,21 @@ async function go(searchQuery, page) {
     pageNumber
   )
 
-  const mostResults = Math.max(licenceTotal, returnLogTotal)
+  const { results: monitoringStations, total: monitoringStationTotal } =
+    await FetchMonitoringStationSearchResultsService.go(searchQuery, pageNumber)
+
+  const mostResults = Math.max(licenceTotal, returnLogTotal, monitoringStationTotal)
 
   const pagination = PaginatorPresenter.go(mostResults, pageNumber, `/system/search`)
 
-  const formattedData = SearchPresenter.go(searchQuery, pageNumber, pagination.numberOfPages, licences, returnLogs)
+  const formattedData = SearchPresenter.go(
+    searchQuery,
+    pageNumber,
+    pagination.numberOfPages,
+    licences,
+    returnLogs,
+    monitoringStations
+  )
 
   return {
     activeNavBar: 'search',
