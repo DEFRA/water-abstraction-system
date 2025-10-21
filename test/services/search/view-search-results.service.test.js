@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things to stub
 const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
+const FetchMonitoringStationSearchResultsService = require('../../../app/services/search/fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
 
 // Thing under test
@@ -61,6 +62,20 @@ describe('Search - View search results service', () => {
         total: 2
       })
 
+      Sinon.stub(FetchMonitoringStationSearchResultsService, 'go').resolves({
+        results: [
+          {
+            id: 'monitoring-station-1',
+            label: 'Monitoring Station 1',
+            stationReference: 'MS-REF-1',
+            wiskiId: 'WISKI-ID-1',
+            catchmentName: 'Catchment 1',
+            riverName: 'River 1'
+          }
+        ],
+        total: 1
+      })
+
       Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves({
         results: [
           {
@@ -98,6 +113,16 @@ describe('Search - View search results service', () => {
             licenceRef: '123/45/678'
           }
         ],
+        monitoringStations: [
+          {
+            id: 'monitoring-station-1',
+            label: 'Monitoring Station 1',
+            stationReference: 'MS-REF-1',
+            wiskiId: 'WISKI-ID-1',
+            catchmentName: 'Catchment 1',
+            riverName: 'River 1'
+          }
+        ],
         noResults: false,
         page: 1,
         pageTitle: 'Search results',
@@ -125,6 +150,7 @@ describe('Search - View search results service', () => {
       searchQuery = 'searchthis'
 
       Sinon.stub(FetchLicenceSearchResultsService, 'go').resolves({ results: [], total: 0 })
+      Sinon.stub(FetchMonitoringStationSearchResultsService, 'go').resolves({ results: [], total: 0 })
       Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves({ results: [], total: 0 })
     })
 
@@ -134,6 +160,7 @@ describe('Search - View search results service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         licences: null,
+        monitoringStations: null,
         noResults: true,
         page: 1,
         pageTitle: 'Search results',

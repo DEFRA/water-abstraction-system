@@ -17,10 +17,11 @@ const { today } = require('../../lib/general.lib.js')
  * @param {string} numberOfPages - The total number of pages available for the search results
  * @param {object[]} licences - The list of licences matching the search criteria
  * @param {object[]} returnLogs - The list of return logs matching the search criteria
+ * @param {object[]} monitoringStations - The list of monitoring stations matching the search criteria
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, numberOfPages, licences, returnLogs) {
+function go(query, page, numberOfPages, licences, returnLogs, monitoringStations) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
@@ -33,7 +34,8 @@ function go(query, page, numberOfPages, licences, returnLogs) {
 
   return {
     licences: _licences(licences),
-    noResults: licences.length === 0 && returnLogs.length === 0,
+    monitoringStations: _monitoringStations(monitoringStations),
+    noResults: licences.length === 0 && returnLogs.length === 0 && monitoringStations.length === 0,
     page,
     pageTitle: _pageTitle(numberOfPages, page),
     query,
@@ -81,6 +83,14 @@ function _licences(licences) {
 
     return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
   })
+}
+
+function _monitoringStations(monitoringStations) {
+  if (monitoringStations.length === 0) {
+    return null
+  }
+
+  return monitoringStations
 }
 
 function _pageTitle(numberOfPages, selectedPageNumber) {
