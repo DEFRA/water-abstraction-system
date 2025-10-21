@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
@@ -43,6 +47,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           quarterly: false
         }
       }
+      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
     })
 
     describe('when there is a "primary user"', () => {
