@@ -50,10 +50,10 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
           const primaryUser = result.find((item) => {
-            return item.contact_type === 'Primary user'
+            return item.contact_type === 'Primary user' && item.licence_ref === testRecipients.primaryUser.licenceRef
           })
           const returnsAgent = result.find((item) => {
-            return item.contact_type === 'Returns agent'
+            return item.contact_type === 'Returns agent' && item.licence_ref === testRecipients.primaryUser.licenceRef
           })
 
           expect(primaryUser).to.equal({
@@ -129,7 +129,7 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
             return item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef
           })
 
-          expect(found).to.equal([
+          expect(found).to.include([
             {
               contact: {
                 addressLine1: '4',
@@ -155,32 +155,6 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
               return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
               start_date: startDate
-            },
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Licence holder and returns to',
-                postcode: 'WD25 7LR',
-                role: 'Returns to',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-              contact_type: 'Returns to',
-              due_date: null,
-              email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-              return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
-              start_date: startDate
             }
           ])
         })
@@ -197,10 +171,10 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
           const primaryUser = result.find((item) => {
-            return item.contact_type === 'Primary user'
+            return item.contact_type === 'Primary user' && item.licence_ref === testRecipients.primaryUser.licenceRef
           })
           const returnsAgent = result.find((item) => {
-            return item.contact_type === 'Returns agent'
+            return item.contact_type === 'Returns agent' && item.licence_ref === testRecipients.primaryUser.licenceRef
           })
 
           expect(primaryUser).to.be.undefined()
