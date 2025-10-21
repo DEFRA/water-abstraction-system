@@ -87,7 +87,8 @@ describe('Return Period lib', () => {
         expect(result.allYear).to.equal({
           dueDate: dates.dueDate,
           endDate: dates.endDate,
-          startDate: dates.startDate
+          startDate: dates.startDate,
+          quarterly: false
         })
       })
     })
@@ -103,7 +104,8 @@ describe('Return Period lib', () => {
         expect(result.summer).to.equal({
           dueDate: dates.dueDate,
           endDate: dates.endDate,
-          startDate: dates.startDate
+          startDate: dates.startDate,
+          quarterly: false
         })
       })
     })
@@ -122,7 +124,8 @@ describe('Return Period lib', () => {
           expect(result.quarterFour).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -140,7 +143,8 @@ describe('Return Period lib', () => {
           expect(result.quarterFour).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -158,7 +162,8 @@ describe('Return Period lib', () => {
           expect(result.quarterFour).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -178,7 +183,8 @@ describe('Return Period lib', () => {
           expect(result.quarterOne).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -196,7 +202,8 @@ describe('Return Period lib', () => {
           expect(result.quarterOne).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -214,7 +221,8 @@ describe('Return Period lib', () => {
           expect(result.quarterOne).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -234,7 +242,8 @@ describe('Return Period lib', () => {
           expect(result.quarterTwo).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -252,7 +261,8 @@ describe('Return Period lib', () => {
           expect(result.quarterTwo).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -270,7 +280,8 @@ describe('Return Period lib', () => {
           expect(result.quarterTwo).to.equal({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -293,7 +304,8 @@ describe('Return Period lib', () => {
           expect(result.quarterThree).to.equal({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -317,7 +329,8 @@ describe('Return Period lib', () => {
           expect(result.quarterThree).to.equal({
             dueDate: dates.dueDate,
             endDate,
-            startDate
+            startDate,
+            quarterly: true
           })
         })
       })
@@ -338,7 +351,8 @@ describe('Return Period lib', () => {
           expect(result.quarterThree).to.equal({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -359,7 +373,8 @@ describe('Return Period lib', () => {
           expect(result.quarterThree).to.equal({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
-            startDate: dates.startDate
+            startDate: dates.startDate,
+            quarterly: true
           })
         })
       })
@@ -379,27 +394,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, year),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(year, lastYear),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, year),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             },
             {
               ..._getSummerDates(year, lastYear),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             },
             {
               ..._getPeriodDatesQuarterThree(year),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             }
           ])
         })
@@ -418,27 +439,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, year),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             },
             {
               ..._getSummerDates(year, lastYear),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             },
             {
               ..._getPeriodDatesQuarterThree(year),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, nextYear),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(nextYear, year),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             }
           ])
         })
@@ -457,27 +484,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             },
             {
               ..._getSummerDates(year, lastYear),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             },
             {
               ..._getPeriodDatesQuarterThree(year),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, nextYear),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(nextYear, year),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             }
           ])
         })
@@ -496,27 +529,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getSummerDates(year, lastYear),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             },
             {
               ..._getPeriodDatesQuarterThree(year),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, nextYear),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(nextYear, year),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             }
           ])
         })
@@ -535,27 +574,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getPeriodDatesQuarterThree(year),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, nextYear),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(nextYear, year),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             },
             {
               ..._getSummerDates(nextYear, year),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             }
           ])
         })
@@ -572,27 +617,33 @@ describe('Return Period lib', () => {
           expect(result).to.equal([
             {
               ..._getPeriodDatesQuarterThree(lastYear),
-              name: 'quarterThree'
+              name: 'quarterThree',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, year),
-              name: 'quarterFour'
+              name: 'quarterFour',
+              quarterly: true
             },
             {
               ..._getAllYearDates(year, lastYear),
-              name: 'allYear'
+              name: 'allYear',
+              quarterly: false
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, year),
-              name: 'quarterOne'
+              name: 'quarterOne',
+              quarterly: true
             },
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
-              name: 'quarterTwo'
+              name: 'quarterTwo',
+              quarterly: true
             },
             {
               ..._getSummerDates(year, lastYear),
-              name: 'summer'
+              name: 'summer',
+              quarterly: false
             }
           ])
         })
