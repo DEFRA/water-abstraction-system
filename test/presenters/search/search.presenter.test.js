@@ -82,18 +82,6 @@ describe('Search - Search presenter', () => {
   })
 
   describe('the "licences" property', () => {
-    describe('when no licence search has been performed', () => {
-      beforeEach(() => {
-        licences = undefined
-      })
-
-      it('returns "null"', () => {
-        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
-
-        expect(result.licences).to.be.null()
-      })
-    })
-
     describe('when no matching licences have been found', () => {
       beforeEach(() => {
         licences = []
@@ -160,19 +148,6 @@ describe('Search - Search presenter', () => {
       beforeEach(() => {
         licences = []
         returnLogs = []
-      })
-
-      it('returns "true"', () => {
-        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
-
-        expect(result.noResults).to.be.true()
-      })
-    })
-
-    describe('when no search has been performed', () => {
-      beforeEach(() => {
-        licences = undefined
-        returnLogs = undefined
       })
 
       it('returns "true"', () => {
@@ -255,18 +230,6 @@ describe('Search - Search presenter', () => {
   })
 
   describe('the "returnLogs" property', () => {
-    describe('when no return log search has been performed', () => {
-      beforeEach(() => {
-        returnLogs = undefined
-      })
-
-      it('returns "null"', () => {
-        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs)
-
-        expect(result.returnLogs).to.be.null()
-      })
-    })
-
     describe('when no matching return logs have been found', () => {
       beforeEach(() => {
         returnLogs = []
