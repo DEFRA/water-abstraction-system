@@ -29,9 +29,9 @@ function go(returnLogs, hasRequirements, auth) {
   }
 }
 
-function _link(status, returnLogId, canManageReturns) {
+function _link(status, returnId, returnLogId, canManageReturns) {
   if (FeatureFlagsConfig.enableSystemReturnsView) {
-    return `/system/return-logs?id=${returnLogId}`
+    return `/system/return-logs/${returnId}`
   }
 
   if (['completed', 'void'].includes(status)) {
@@ -59,16 +59,15 @@ function _noReturnsMessage(hasReturns, hasRequirements) {
 
 function _returns(returns, canManageReturns) {
   return returns.map((returnLog) => {
-    const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate, status } = returnLog
+    const { endDate, dueDate, id: returnLogId, metadata, returnId, returnReference, startDate, status } = returnLog
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
-      link: _link(status, returnLogId, canManageReturns),
+      link: _link(status, returnId, returnLogId, canManageReturns),
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
-      returnLogId,
       status: formatReturnLogStatus(returnLog)
     }
   })
