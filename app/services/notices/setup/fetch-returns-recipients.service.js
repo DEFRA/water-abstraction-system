@@ -8,6 +8,8 @@
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 /**
  * Fetches the returns recipients data for the `/notices/setup/check` page
  *
@@ -183,20 +185,35 @@ async function _fetchRecipient(session) {
 
 async function _fetchRecipients(session) {
   const {
-    determinedReturnsPeriod: { dueDate, summer },
+    determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
     removeLicences = ''
   } = session
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
   const where = `
-    AND rl.due_date = ?
+    AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+    AND rl.end_date <= ?
+    AND rl.start_date >= ?
     AND rl.metadata->>'isSummer' = ?
+    AND rl.quarterly = ?
   `
+  const bindings = [
+    endDate,
+    startDate,
+    summer,
+    quarterly,
+    excludeLicences,
+    excludeLicences,
+    excludeLicences,
+    excludeLicences
+  ]
+
+  if (!featureFlagsConfig.enableNullDueDate) {
+    bindings.unshift(dueDate)
+  }
 
   const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
-
-  const bindings = [dueDate, summer, excludeLicences, excludeLicences, excludeLicences, excludeLicences]
 
   const { rows } = await _fetch(bindings, whereLicenceRef, where)
 

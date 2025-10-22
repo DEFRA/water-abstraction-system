@@ -3,17 +3,18 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
 
-// TODO: All these test use 'include', other tests like this can check the whole result as the query has been update to remove duplicates. This will be updated
 describe('Notices - Setup - Fetch Download Recipients service', () => {
   let seedData
   let session
@@ -24,24 +25,32 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
     seedData = await LicenceDocumentHeaderSeeder.seed('2025-03-')
   })
 
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when the licence is registered ', () => {
     beforeEach(() => {
       session = {
         journey: 'invitations',
         returnsPeriod: 'allYear',
-        determinedReturnsPeriod: {
-          name: 'allYear',
-          dueDate: null,
-          endDate: '2024-03-31',
-          summer: 'false',
-          startDate: '2023-04-01'
-        }
+        determinedReturnsPeriod: {}
       }
     })
 
     describe('and there is a "primary user"', () => {
       beforeEach(async () => {
-        session.determinedReturnsPeriod.dueDate = seedData.primaryUser.returnLog.dueDate
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
+        }
       })
 
       it('returns the "primary user" ', async () => {
@@ -62,7 +71,13 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('and "returns agent" with different emails', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate = seedData.primaryUserAndReturnsAgent.returnLog.dueDate
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+            endDate: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
+            quarterly: seedData.primaryUserAndReturnsAgent.returnLog.quarterly,
+            startDate: seedData.primaryUserAndReturnsAgent.returnLog.startDate,
+            summer: seedData.primaryUserAndReturnsAgent.returnLog.metadata.isSummer
+          }
         })
 
         it('returns both the "primary user" and "returns agent"', async () => {
@@ -96,8 +111,13 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('and "returns agent" with the same email', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate =
-            seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+            endDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+            quarterly: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.quarterly,
+            startDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate,
+            summer: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.metadata.isSummer
+          }
         })
 
         it('returns the "primary user" ', async () => {
@@ -137,18 +157,19 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
       session = {
         journey: 'invitations',
         returnsPeriod: 'allYear',
-        determinedReturnsPeriod: {
-          name: 'allYear',
-          dueDate: null,
-          endDate: '2024-03-31',
-          summer: 'false',
-          startDate: '2023-04-01'
-        }
+        determinedReturnsPeriod: {}
       }
     })
+
     describe('and there is a "licence holder"', () => {
       beforeEach(async () => {
-        session.determinedReturnsPeriod.dueDate = seedData.licenceHolder.returnLog.dueDate
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.licenceHolder.returnLog.dueDate,
+          endDate: seedData.licenceHolder.returnLog.endDate,
+          quarterly: seedData.licenceHolder.returnLog.quarterly,
+          startDate: seedData.licenceHolder.returnLog.startDate,
+          summer: seedData.licenceHolder.returnLog.metadata.isSummer
+        }
       })
 
       it('returns the "licence holder" ', async () => {
@@ -186,7 +207,13 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('and a "returns to" with different contacts', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate = seedData.licenceHolderAndReturnTo.returnLog.dueDate
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
+            endDate: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+            quarterly: seedData.licenceHolderAndReturnTo.returnLog.quarterly,
+            startDate: seedData.licenceHolderAndReturnTo.returnLog.startDate,
+            summer: seedData.licenceHolderAndReturnTo.returnLog.metadata.isSummer
+          }
         })
 
         it('returns the "licence holder" and "returns to"', async () => {
@@ -251,8 +278,13 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
 
       describe('and a "returns to" with the same contact', () => {
         beforeEach(async () => {
-          session.determinedReturnsPeriod.dueDate =
-            seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+            endDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+            quarterly: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.quarterly,
+            startDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate,
+            summer: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.metadata.isSummer
+          }
         })
 
         it('returns the "licence holder" and "returns to"', async () => {
@@ -322,11 +354,11 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
       session = {
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {
-          name: 'allYear',
           dueDate: seedData.primaryUser.returnLog.dueDate,
-          endDate: '2024-03-31',
-          summer: 'false',
-          startDate: '2023-04-01'
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
         },
         removeLicences: seedData.primaryUser.licenceRef
       }
@@ -612,6 +644,77 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
         const result = await FetchDownloadRecipientsService.go(session)
 
         expect(result).to.equal([])
+      })
+    })
+  })
+
+  describe('and the due date is set', () => {
+    beforeEach(() => {
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and there is a "primary user"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns no results', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([])
+      })
+    })
+  })
+
+  describe('and "enableNullDueDate" is false', () => {
+    beforeEach(() => {
+      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
+
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and there is a "primary user"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns the "primary user" ', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        // Include required because the download does not dedupe
+        expect(result).to.include([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            due_date: seedData.primaryUserDueDate.returnLog.dueDate,
+            end_date: seedData.primaryUserDueDate.returnLog.endDate,
+            email: 'primary.user@important.com',
+            licence_ref: seedData.primaryUserDueDate.licenceRef,
+            return_reference: seedData.primaryUserDueDate.returnLog.returnReference,
+            start_date: seedData.primaryUserDueDate.returnLog.startDate
+          }
+        ])
       })
     })
   })

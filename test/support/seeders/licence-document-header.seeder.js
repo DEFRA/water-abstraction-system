@@ -31,47 +31,47 @@ const additionalContactTwo = {
  *
  * If provided a return log due date the seed will add a return log record.
  *
- * @param {string} [returnLogDueDate] - a string representing the year and month ('2020-01') the seed will add the date.
+ * @param {string} [date] - a string representing the year and month ('2020-01') the seed will add the date.
  *
  * @returns {Promise<object>} an object containing different licence document header instances for the licence holder
  */
-async function seed(returnLogDueDate) {
-  let returnLogDates = {}
+async function seed(date) {
+  let dates = {}
 
-  if (returnLogDueDate) {
-    returnLogDates = {
-      one: `${returnLogDueDate}01`,
-      two: `${returnLogDueDate}02`,
-      three: `${returnLogDueDate}03`,
-      four: `${returnLogDueDate}04`,
-      five: `${returnLogDueDate}05`,
-      six: `${returnLogDueDate}06`,
-      seven: `${returnLogDueDate}07`,
-      eight: `${returnLogDueDate}08`,
-      nine: `${returnLogDueDate}09`,
-      ten: `${returnLogDueDate}10`
+  if (date) {
+    dates = {
+      one: `${date}01`,
+      two: `${date}02`,
+      three: `${date}03`,
+      four: `${date}04`,
+      five: `${date}05`,
+      six: `${date}06`,
+      seven: `${date}07`,
+      eight: `${date}08`,
+      nine: `${date}09`,
+      ten: `${date}10`,
+      eleven: `${date}11`
     }
   }
 
   return {
     additionalContact: await _additionalContact(),
-    licenceHolder: await _licenceHolder(returnLogDates.one),
-    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(returnLogDates.ten, '4000-01-01'),
-    licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(returnLogDates.two),
-    licenceHolderAndReturnToLetter: await _licenceHolderAndReturnTo(returnLogDates.three),
-    licenceHolderAndReturnToLetterWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(
-      returnLogDates.four
-    ),
-    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(returnLogDates.five),
-    licenceHolderLetter: await _licenceHolder(returnLogDates.six),
+    licenceHolder: await _licenceHolder(dates.one),
+    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.ten, '4000-01-01'),
+    licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
+    licenceHolderAndReturnToLetter: await _licenceHolderAndReturnTo(dates.three),
+    licenceHolderAndReturnToLetterWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.four),
+    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.five),
+    licenceHolderLetter: await _licenceHolder(dates.six),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
-    primaryUser: await _primaryUser(returnLogDates.seven),
-    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(returnLogDates.eight),
-    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(returnLogDates.nine),
-    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact()
+    primaryUser: await _primaryUser(dates.seven),
+    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.eight),
+    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.nine),
+    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
+    primaryUserDueDate: await _primaryUserDueDate(dates.eleven)
   }
 }
 
@@ -168,12 +168,14 @@ async function _addReturnsAgent(licenceRef = null) {
   return await _addLicenceEntityRole(returnsAgent, licenceRef)
 }
 
-async function _addReturnLog(dueDate, licenceRef, endDate = null) {
-  if (dueDate) {
+async function _addReturnLog(date, licenceRef, endDate = null) {
+  if (date) {
     return await ReturnLogHelper.add({
-      ...(endDate && { endDate }),
-      dueDate,
-      licenceRef
+      startDate: date,
+      endDate: endDate || date,
+      dueDate: null,
+      licenceRef,
+      quarterly: false
     })
   }
 
@@ -286,10 +288,10 @@ async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
   })
 }
 
-async function _licenceHolder(dueDate, endDate = null) {
+async function _licenceHolder(date, endDate = null) {
   const licenceHolder = await _addLicenceHolder()
 
-  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef, endDate)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef, endDate)
 
   return {
     ...licenceHolder,
@@ -297,10 +299,10 @@ async function _licenceHolder(dueDate, endDate = null) {
   }
 }
 
-async function _licenceHolderAndReturnTo(dueDate) {
+async function _licenceHolderAndReturnTo(date) {
   const licenceHolder = await _addLicenceHolderAndReturnTo()
 
-  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
 
   return {
     ...licenceHolder,
@@ -308,10 +310,10 @@ async function _licenceHolderAndReturnTo(dueDate) {
   }
 }
 
-async function _licenceHolderAndReturnToWithTheSameAddress(dueDate) {
+async function _licenceHolderAndReturnToWithTheSameAddress(date) {
   const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
 
-  const returnLog = await _addReturnLog(dueDate, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
 
   return {
     ...licenceHolder,
@@ -327,10 +329,10 @@ async function _licenceHolderWithAdditionalContact() {
   return licenceHolder
 }
 
-async function _primaryUser(dueDate) {
+async function _primaryUser(date) {
   const entityRole = await _addPrimaryUser()
 
-  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+  const returnLog = await _addReturnLog(date, entityRole.licenceRef)
 
   return {
     ...entityRole,
@@ -338,12 +340,33 @@ async function _primaryUser(dueDate) {
   }
 }
 
-async function _primaryUserAndReturnsAgent(dueDate) {
+async function _primaryUserDueDate(date) {
+  const entityRole = await _addPrimaryUser()
+
+  let returnLog = {}
+
+  if (date) {
+    returnLog = await ReturnLogHelper.add({
+      startDate: date,
+      endDate: date,
+      dueDate: date,
+      licenceRef: entityRole.licenceRef,
+      quarterly: false
+    })
+  }
+
+  return {
+    ...entityRole,
+    returnLog
+  }
+}
+
+async function _primaryUserAndReturnsAgent(date) {
   const entityRole = await _addPrimaryUser()
 
   await _addReturnsAgent(entityRole.licenceRef)
 
-  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+  const returnLog = await _addReturnLog(date, entityRole.licenceRef)
 
   return {
     ...entityRole,
@@ -351,7 +374,7 @@ async function _primaryUserAndReturnsAgent(dueDate) {
   }
 }
 
-async function _primaryUserAndReturnsAgentWithTheSameEmail(dueDate) {
+async function _primaryUserAndReturnsAgentWithTheSameEmail(date) {
   const primaryUser = {
     name: 'Primary User test',
     email: `primary.user@important.com`,
@@ -363,7 +386,7 @@ async function _primaryUserAndReturnsAgentWithTheSameEmail(dueDate) {
   // Add a duplicate email - the email is the same, but the role is different
   await _addLicenceEntityRole({ ...primaryUser, role: 'user_returns' }, entityRole.licenceRef)
 
-  const returnLog = await _addReturnLog(dueDate, entityRole.licenceRef)
+  const returnLog = await _addReturnLog(date, entityRole.licenceRef)
 
   return {
     ...entityRole,
