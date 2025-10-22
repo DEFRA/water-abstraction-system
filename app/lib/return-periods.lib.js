@@ -68,32 +68,38 @@ function determineUpcomingReturnsPeriods(date = new Date()) {
     allYear: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.allYear),
       endDate: _endDate(determinationDate, returnPeriodDates.allYear),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.allYear)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.allYear),
+      quarterly: false
     },
     summer: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.summer),
       endDate: _endDate(determinationDate, returnPeriodDates.summer),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.summer)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.summer),
+      quarterly: false
     },
     quarterOne: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterOne),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterOne),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterOne)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterOne),
+      quarterly: true
     },
     quarterTwo: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterTwo),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterTwo),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterTwo)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterTwo),
+      quarterly: true
     },
     quarterThree: {
       startDate: _startDateQuarterThree(determinationDate, returnPeriodDates.quarterThree),
       endDate: _endDateQuarterThree(determinationDate, returnPeriodDates.quarterThree),
-      dueDate: _dueQuarterThree(determinationDate, returnPeriodDates.quarterThree)
+      dueDate: _dueQuarterThree(determinationDate, returnPeriodDates.quarterThree),
+      quarterly: true
     },
     quarterFour: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterFour),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterFour),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterFour)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterFour),
+      quarterly: true
     }
   }
 }

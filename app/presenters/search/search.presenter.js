@@ -5,8 +5,8 @@
  * @module SearchPresenter
  */
 
-const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const ContactModel = require('../../models/contact.model.js')
+const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
@@ -15,33 +15,57 @@ const { today } = require('../../lib/general.lib.js')
  * @param {string} query - The user-entered search query, if any
  * @param {string} page - The requested page, when displaying search results
  * @param {string} numberOfPages - The total number of pages available for the search results
- * @param {Array<object>} licences - The list of licences matching the search criteria
- * @param {Array<object>} returnLogs - The list of return logs matching the search criteria
+ * @param {object[]} licences - The list of licences matching the search criteria
+ * @param {object[]} returnLogs - The list of return logs matching the search criteria
+ * @param {object[]} monitoringStations - The list of monitoring stations matching the search criteria
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, numberOfPages, licences, returnLogs) {
+function go(query, page, numberOfPages, licences, returnLogs, monitoringStations) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
     return {
       pageTitle: 'Search',
-      query
+      query,
+      showResults: false
     }
   }
 
   return {
-    licences: licences && _mapLicences(licences),
-    noResults: !(licences || returnLogs),
+    licences: _licences(licences),
+    monitoringStations: _monitoringStations(monitoringStations),
+    noResults: licences.length === 0 && returnLogs.length === 0 && monitoringStations.length === 0,
     page,
     pageTitle: _pageTitle(numberOfPages, page),
     query,
-    returnLogs: returnLogs && _mapReturnLogs(returnLogs),
+    returnLogs: _returnLogs(returnLogs),
     showResults: true
   }
 }
 
-function _mapLicences(licences) {
+function _licenceEndDetails(licenceEnd) {
+  let licenceEndDate = null
+  let licenceEndedText = null
+
+  if (licenceEnd) {
+    const { date, reason } = licenceEnd
+
+    licenceEndDate = formatLongDate(date)
+
+    if (date <= today()) {
+      licenceEndedText = reason
+    }
+  }
+
+  return { licenceEndDate, licenceEndedText }
+}
+
+function _licences(licences) {
+  if (licences.length === 0) {
+    return null
+  }
+
   return licences.map((licence) => {
     const licenceEnd = licence.$ends()
     const { Forename: firstName, Initials: initials, Name: lastName, Salutation: salutation } = licence.metadata
@@ -55,43 +79,18 @@ function _mapLicences(licences) {
     const licenceHolderName = holderContactModel.$name()
 
     // Licences that have ended are displayed with a tag showing the reason
-    let licenceEndedText
-    let licenceEndDate
-    if (licenceEnd) {
-      const { date, reason } = licenceEnd
-      licenceEndedText = date <= today() ? reason : null
-      licenceEndDate = formatLongDate(date)
-    }
+    const { licenceEndDate, licenceEndedText } = _licenceEndDetails(licenceEnd)
 
     return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
   })
 }
 
-function _mapReturnLogs(returnLogs) {
-  const latestReturnLogByRegion = _latestReturnLogByRegion(returnLogs)
+function _monitoringStations(monitoringStations) {
+  if (monitoringStations.length === 0) {
+    return null
+  }
 
-  return latestReturnLogByRegion.map((returnLog) => {
-    const { id, licenceRef, region, returnReference } = returnLog
-
-    const statusText = formatReturnLogStatus(returnLog)
-
-    return {
-      id,
-      licenceRef,
-      returnReference,
-      region,
-      statusText
-    }
-  })
-}
-
-function _latestReturnLogByRegion(returnLogs) {
-  const latestReturnLogByRegion = returnLogs.reduce((regions, returnLog) => {
-    regions[returnLog.regionId] = returnLog
-    return regions
-  }, {})
-
-  return Object.values(latestReturnLogByRegion)
+  return monitoringStations
 }
 
 function _pageTitle(numberOfPages, selectedPageNumber) {
@@ -100,6 +99,27 @@ function _pageTitle(numberOfPages, selectedPageNumber) {
   }
 
   return `Search results (page ${selectedPageNumber} of ${numberOfPages})`
+}
+
+function _returnLogs(returnLogs) {
+  if (returnLogs.length === 0) {
+    return null
+  }
+
+  return returnLogs.map((returnLog) => {
+    const { id, licenceRef, regionDisplayName, returnReference } = returnLog
+
+    const statusText = formatReturnLogStatus(returnLog)
+
+    return {
+      endDate: formatLongDate(returnLog.endDate),
+      id,
+      licenceRef,
+      returnReference,
+      regionDisplayName,
+      statusText
+    }
+  })
 }
 
 module.exports = {
