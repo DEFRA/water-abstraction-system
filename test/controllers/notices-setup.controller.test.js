@@ -207,7 +207,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns('/system/manage')
+          Sinon.stub(SubmitCancelService, 'go').returns('/system/notices')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
         })
 
@@ -215,7 +215,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/manage')
+          expect(response.headers.location).to.equal('/system/notices')
         })
       })
     })

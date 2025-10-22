@@ -46,6 +46,30 @@
       </div>
     {% else %}
       <hr class="govuk-section-break govuk-section-break--visible">
+      {% if monitoringStations %}
+        {% for monitoringStation in monitoringStations %}
+          <!--result card-->
+          <hr class="govuk-section-break govuk-section-break--visible">
+          <div class="govuk-grid-row govuk-!-margin-top-0">
+            <dl class="govuk-body govuk-!-margin-0">
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
+                <dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">Monitoring station:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}<a/></dd>
+              </div>
+              <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Station reference:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ monitoringStation.stationReference }}</dd>
+                <br/>
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">WISKI ID:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ monitoringStation.wiskiId }}</dd>
+              </div>
+              <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">Catchment:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ monitoringStation.catchmentName }}</dd>
+                <br/>
+                <dt class="govuk-!-display-inline-block govuk-!-margin-right-3 govuk-!-font-size-16">River:</dt><dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ monitoringStation.riverName }}</dd>
+              </div>
+            </dl>
+          </div>
+          <hr class="govuk-section-break govuk-section-break--visible">
+        {% endfor %}
+      {% endif %}
       {% if returnLogs %}
         {% for returnLog in returnLogs %}
           <!--result card-->
