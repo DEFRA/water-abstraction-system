@@ -8,6 +8,8 @@
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
 
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 /**
  * Fetches the recipients data for the `/notices/setup/download` CSV file
  *
@@ -78,19 +80,52 @@ async function _fetchRecipient(session) {
 
 async function _fetchRecipients(session) {
   const {
-    determinedReturnsPeriod: { dueDate, summer },
+    determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
     removeLicences = ''
   } = session
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
   const where = `
-    AND rl.due_date = ?
-    AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
-  `
+      AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+      AND rl.end_date <= ?
+      AND rl.start_date >= ?
+      AND rl.metadata->>'isSummer' = ?
+      AND rl.quarterly = ?
+      AND NOT (ldh.licence_ref = ANY (?))
+    `
 
-  const bindings = [dueDate, summer, excludeLicences, dueDate, summer, excludeLicences]
+  let bindings
+
+  if (featureFlagsConfig.enableNullDueDate) {
+    bindings = [
+      endDate,
+      startDate,
+      summer,
+      quarterly,
+      excludeLicences,
+      endDate,
+      startDate,
+      summer,
+      quarterly,
+      excludeLicences
+    ]
+  } else {
+    bindings = [
+      dueDate,
+      endDate,
+      startDate,
+      summer,
+      quarterly,
+      excludeLicences,
+      dueDate,
+      endDate,
+      startDate,
+      summer,
+      quarterly,
+      excludeLicences
+    ]
+  }
 
   const { rows } = await _fetch(bindings, where)
 

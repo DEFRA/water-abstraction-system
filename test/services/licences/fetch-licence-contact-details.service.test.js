@@ -22,7 +22,7 @@ describe('Fetch Licence Contact Details service', () => {
 
   describe('when the licence has a licence document header', () => {
     before(async () => {
-      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed(false)
+      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed()
 
       licence = await LicenceHelper.add({
         licenceRef: licenceDocumentHeader.licenceRef
@@ -47,47 +47,38 @@ describe('Fetch Licence Contact Details service', () => {
               licenceEntity: {
                 name: 'primary.user@important.com'
               }
-            },
-            {
-              role: 'user_returns',
-              licenceEntity: {
-                name: 'returns.agent@important.com'
-              }
             }
           ],
           metadata: {
-            Name: 'Primary User test',
+            AddressLine1: 'ENVIRONMENT AGENCY',
+            AddressLine2: 'HORIZON HOUSE',
+            AddressLine3: 'DEANERY ROAD',
+            AddressLine4: '',
+            Country: '',
+            County: 'AVON',
+            Expires: null,
+            Forename: 'AMARA',
+            Initials: 'A',
+            Modified: '20080327',
+            Name: 'GUPTA',
+            Postcode: 'BS1 5AH',
+            Salutation: '',
+            Town: 'BRISTOL',
             contacts: [
               {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
+                addressLine1: 'ENVIRONMENT AGENCY',
+                addressLine2: 'HORIZON HOUSE',
+                addressLine3: 'DEANERY ROAD',
                 addressLine4: null,
                 country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Primary User test',
-                postcode: 'WD25 7LR',
+                county: 'AVON',
+                forename: 'AMARA',
+                initials: 'A',
+                name: 'GUPTA',
+                postcode: 'BS1 5AH',
                 role: 'Licence holder',
                 salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Primary User test',
-                postcode: 'WD25 7LR',
-                role: 'Returns to',
-                salutation: null,
-                town: 'Little Whinging',
+                town: 'BRISTOL',
                 type: 'Person'
               }
             ],
