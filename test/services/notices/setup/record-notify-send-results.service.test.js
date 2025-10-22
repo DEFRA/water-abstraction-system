@@ -71,6 +71,7 @@ describe('Notices - Setup - Record notify send results service', () => {
       expect(updatedResult).equal([
         notUpdatedNotification,
         {
+          alternateNotificationId: null,
           createdAt: notification.createdAt,
           eventId,
           id: notification.id,
@@ -91,6 +92,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           templateId: null
         },
         {
+          alternateNotificationId: null,
           createdAt: notificationTwo.createdAt,
           eventId,
           id: notificationTwo.id,
@@ -138,6 +140,7 @@ describe('Notices - Setup - Record notify send results service', () => {
       expect(updatedResult).equal([
         notUpdatedNotification,
         {
+          alternateNotificationId: null,
           createdAt: notification.createdAt,
           eventId,
           id: notification.id,
@@ -158,6 +161,7 @@ describe('Notices - Setup - Record notify send results service', () => {
           templateId: null
         },
         {
+          alternateNotificationId: null,
           createdAt: notificationTwo.createdAt,
           eventId,
           id: notificationTwo.id,
