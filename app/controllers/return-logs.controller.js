@@ -5,8 +5,6 @@
  * @module ReturnLogsController
  */
 
-const Boom = require('@hapi/boom')
-
 const DownloadReturnLogService = require('../services/return-logs/download-return-log.service.js')
 const SubmitViewReturnLogService = require('../services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
