@@ -3,96 +3,223 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
 
 describe('Notices - Setup - Fetch Download Recipients service', () => {
-  const endDate = new Date('2023-03-31')
-  const startDate = new Date('2022-04-01')
-  const year = 2023
-
+  let seedData
   let session
-  let dueDate
-  let removeLicences
-  let testRecipients
 
   before(async () => {
-    dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
+    session = {}
 
-    testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, endDate)
+    seedData = await LicenceDocumentHeaderSeeder.seed('2025-03-')
   })
 
-  describe('when there is no licence ref', () => {
-    beforeEach(() => {
-      removeLicences = ''
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+  })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when the licence is registered ', () => {
+    beforeEach(() => {
       session = {
+        journey: 'invitations',
         returnsPeriod: 'allYear',
-        removeLicences,
-        determinedReturnsPeriod: {
-          name: 'allYear',
-          dueDate,
-          endDate: '2023-03-31',
-          summer: 'false',
-          startDate: '2022-04-01'
-        }
+        determinedReturnsPeriod: {}
       }
     })
 
-    describe('when there are recipients', () => {
-      describe('when there is a "primary user"', () => {
-        it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
+    describe('and there is a "primary user"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns the "primary user" ', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.include({
+          contact: null,
+          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+          contact_type: 'Primary user',
+          due_date: seedData.primaryUser.returnLog.dueDate,
+          end_date: seedData.primaryUser.returnLog.endDate,
+          email: 'primary.user@important.com',
+          licence_ref: seedData.primaryUser.licenceRef,
+          return_reference: seedData.primaryUser.returnLog.returnReference,
+          start_date: seedData.primaryUser.returnLog.startDate
+        })
+      })
+
+      describe('and "returns agent" with different emails', () => {
+        beforeEach(async () => {
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+            endDate: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
+            quarterly: seedData.primaryUserAndReturnsAgent.returnLog.quarterly,
+            startDate: seedData.primaryUserAndReturnsAgent.returnLog.startDate,
+            summer: seedData.primaryUserAndReturnsAgent.returnLog.metadata.isSummer
+          }
+        })
+
+        it('returns both the "primary user" and "returns agent"', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => {
-            return item.contact_type === 'Primary user'
-          })
-          const returnsAgent = result.find((item) => {
-            return item.contact_type === 'Returns agent'
-          })
-
-          expect(primaryUser).to.equal({
+          expect(result).to.include({
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
-            due_date: new Date(dueDate),
+            due_date: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+            end_date: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
             email: 'primary.user@important.com',
-            end_date: endDate,
-            licence_ref: testRecipients.primaryUser.licenceRef,
-            return_reference: testRecipients.primaryUser.returnLog.returnReference,
-            start_date: startDate
+            licence_ref: seedData.primaryUserAndReturnsAgent.licenceRef,
+            return_reference: seedData.primaryUserAndReturnsAgent.returnLog.returnReference,
+            start_date: seedData.primaryUserAndReturnsAgent.returnLog.startDate
           })
 
-          expect(returnsAgent).to.equal({
+          expect(result).to.include({
             contact: null,
             contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
             contact_type: 'Returns agent',
-            due_date: new Date(dueDate),
+            due_date: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+            end_date: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
             email: 'returns.agent@important.com',
-            end_date: endDate,
-            licence_ref: testRecipients.primaryUser.licenceRef,
-            return_reference: testRecipients.primaryUser.returnLog.returnReference,
-            start_date: startDate
+            licence_ref: seedData.primaryUserAndReturnsAgent.licenceRef,
+            return_reference: seedData.primaryUserAndReturnsAgent.returnLog.returnReference,
+            start_date: seedData.primaryUserAndReturnsAgent.returnLog.startDate
           })
         })
       })
 
-      describe('when the licence number only has one recipient which has the "licence holder" role', () => {
-        it('correctly returns "Licence holder" contact', async () => {
+      describe('and "returns agent" with the same email', () => {
+        beforeEach(async () => {
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+            endDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+            quarterly: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.quarterly,
+            startDate: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate,
+            summer: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.metadata.isSummer
+          }
+        })
+
+        it('returns the "primary user" ', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const found = result.filter((item) => {
-            return item.licence_ref === testRecipients.licenceHolder.licenceRef
+          expect(result).to.include({
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+            end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+            email: 'primary.user@important.com',
+            licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+            return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+            start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
           })
 
-          expect(found).to.equal([
+          // Returns agent contact hash / email match the primary user
+          expect(result).to.include({
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Returns agent',
+            due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+            end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+            email: 'primary.user@important.com',
+            licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+            return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+            start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
+          })
+        })
+      })
+    })
+  })
+
+  describe('when the licence is unregistered', () => {
+    beforeEach(() => {
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and there is a "licence holder"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.licenceHolder.returnLog.dueDate,
+          endDate: seedData.licenceHolder.returnLog.endDate,
+          quarterly: seedData.licenceHolder.returnLog.quarterly,
+          startDate: seedData.licenceHolder.returnLog.startDate,
+          summer: seedData.licenceHolder.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns the "licence holder" ', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Licence holder',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: '0cad692217f572faede404363b2625c9',
+            contact_type: 'Licence holder',
+            due_date: seedData.licenceHolder.returnLog.dueDate,
+            email: null,
+            end_date: seedData.licenceHolder.returnLog.endDate,
+            licence_ref: seedData.licenceHolder.licenceRef,
+            return_reference: seedData.licenceHolder.returnLog.returnReference,
+            start_date: seedData.licenceHolder.returnLog.startDate
+          }
+        ])
+      })
+
+      describe('and a "returns to" with different contacts', () => {
+        beforeEach(async () => {
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
+            endDate: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+            quarterly: seedData.licenceHolderAndReturnTo.returnLog.quarterly,
+            startDate: seedData.licenceHolderAndReturnTo.returnLog.startDate,
+            summer: seedData.licenceHolderAndReturnTo.returnLog.metadata.isSummer
+          }
+        })
+
+        it('returns the "licence holder" and "returns to"', async () => {
+          const result = await FetchDownloadRecipientsService.go(session)
+
+          expect(result).to.equal([
             {
               contact: {
                 addressLine1: '4',
@@ -103,60 +230,21 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder only',
+                name: 'Licence holder',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+              contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
+              due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
               email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolder.licenceRef,
-              return_reference: testRecipients.licenceHolder.returnLog.returnReference,
-              start_date: startDate
-            }
-          ])
-        })
-      })
-
-      describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
-        it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
-          const result = await FetchDownloadRecipientsService.go(session)
-
-          const found = result.filter((item) => {
-            return item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef
-          })
-
-          expect(found).to.equal([
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Licence holder and returns to',
-                postcode: 'WD25 7LR',
-                role: 'Licence holder',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-              contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
-              email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-              return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
-              start_date: startDate
+              end_date: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+              licence_ref: seedData.licenceHolderAndReturnTo.licenceRef,
+              return_reference: seedData.licenceHolderAndReturnTo.returnLog.returnReference,
+              start_date: seedData.licenceHolderAndReturnTo.returnLog.startDate
             },
             {
               contact: {
@@ -168,218 +256,465 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder and returns to',
+                name: 'Returns to',
                 postcode: 'WD25 7LR',
                 role: 'Returns to',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
+              contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
               contact_type: 'Returns to',
-              due_date: new Date(dueDate),
+              due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
               email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-              return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
-              start_date: startDate
+              end_date: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+              licence_ref: seedData.licenceHolderAndReturnTo.licenceRef,
+              return_reference: seedData.licenceHolderAndReturnTo.returnLog.returnReference,
+              start_date: seedData.licenceHolderAndReturnTo.returnLog.startDate
             }
           ])
         })
       })
 
-      describe('and there are licence to exclude from the recipients', () => {
-        beforeEach(() => {
-          removeLicences = testRecipients.primaryUser.licenceRef
-
-          session.removeLicences = removeLicences
+      describe('and a "returns to" with the same contact', () => {
+        beforeEach(async () => {
+          session.determinedReturnsPeriod = {
+            dueDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+            endDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+            quarterly: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.quarterly,
+            startDate: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate,
+            summer: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.metadata.isSummer
+          }
         })
 
-        it('correctly returns recipients without the "removeLicences"', async () => {
+        it('returns the "licence holder" and "returns to"', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => {
-            return item.contact_type === 'Primary user'
-          })
-          const returnsAgent = result.find((item) => {
-            return item.contact_type === 'Returns agent'
-          })
-
-          expect(primaryUser).to.be.undefined()
-
-          expect(returnsAgent).to.be.undefined()
+          expect(result).to.equal([
+            {
+              contact: {
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
+                country: null,
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Potter',
+                postcode: 'WD25 7LR',
+                role: 'Licence holder',
+                salutation: null,
+                town: 'Little Whinging',
+                type: 'Person'
+              },
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+              contact_type: 'Licence holder',
+              due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+              email: null,
+              end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+              licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+              return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
+              start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
+            },
+            {
+              contact: {
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
+                country: null,
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Potter',
+                postcode: 'WD25 7LR',
+                role: 'Returns to',
+                salutation: null,
+                town: 'Little Whinging',
+                type: 'Person'
+              },
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+              contact_type: 'Returns to',
+              due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+              email: null,
+              end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+              licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+              return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
+              start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
+            }
+          ])
         })
       })
+    })
+  })
+
+  describe('when there are licences to exclude from the recipients', () => {
+    beforeEach(async () => {
+      session = {
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
+        },
+        removeLicences: seedData.primaryUser.licenceRef
+      }
+    })
+
+    it('correctly returns recipients without the "removeLicences"', async () => {
+      const result = await FetchDownloadRecipientsService.go(session)
+
+      expect(result).to.equal([])
     })
   })
 
   describe('when there is a licence ref', () => {
-    describe('when there are recipients', () => {
-      describe('when there is a "primary user"', () => {
-        beforeEach(() => {
-          session = { licenceRef: testRecipients.primaryUser.licenceRef }
+    describe('and the licence is registered ', () => {
+      describe('and there is a "primary user"', () => {
+        beforeEach(async () => {
+          session.licenceRef = seedData.primaryUser.licenceRef
         })
 
-        it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
+        it('returns the "primary user" ', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          const primaryUser = result.find((item) => {
-            return item.contact_type === 'Primary user'
-          })
-          const returnsAgent = result.find((item) => {
-            return item.contact_type === 'Returns agent'
-          })
-
-          expect(primaryUser).to.equal({
+          expect(result).to.include({
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
-            due_date: new Date(dueDate),
+            due_date: seedData.primaryUser.returnLog.dueDate,
+            end_date: seedData.primaryUser.returnLog.endDate,
             email: 'primary.user@important.com',
-            end_date: endDate,
-            licence_ref: testRecipients.primaryUser.licenceRef,
-            return_reference: testRecipients.primaryUser.returnLog.returnReference,
-            start_date: startDate
+            licence_ref: seedData.primaryUser.licenceRef,
+            return_reference: seedData.primaryUser.returnLog.returnReference,
+            start_date: seedData.primaryUser.returnLog.startDate
+          })
+        })
+
+        describe('and "returns agent" with different emails', () => {
+          beforeEach(async () => {
+            session.licenceRef = seedData.primaryUserAndReturnsAgent.licenceRef
           })
 
-          expect(returnsAgent).to.equal({
-            contact: null,
-            contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-            contact_type: 'Returns agent',
-            due_date: new Date(dueDate),
-            email: 'returns.agent@important.com',
-            end_date: endDate,
-            licence_ref: testRecipients.primaryUser.licenceRef,
-            return_reference: testRecipients.primaryUser.returnLog.returnReference,
-            start_date: startDate
+          it('returns both the "primary user" and "returns agent"', async () => {
+            const result = await FetchDownloadRecipientsService.go(session)
+
+            expect(result).to.include({
+              contact: null,
+              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+              contact_type: 'Primary user',
+              due_date: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+              end_date: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
+              email: 'primary.user@important.com',
+              licence_ref: seedData.primaryUserAndReturnsAgent.licenceRef,
+              return_reference: seedData.primaryUserAndReturnsAgent.returnLog.returnReference,
+              start_date: seedData.primaryUserAndReturnsAgent.returnLog.startDate
+            })
+
+            expect(result).to.include({
+              contact: null,
+              contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
+              contact_type: 'Returns agent',
+              due_date: seedData.primaryUserAndReturnsAgent.returnLog.dueDate,
+              end_date: seedData.primaryUserAndReturnsAgent.returnLog.endDate,
+              email: 'returns.agent@important.com',
+              licence_ref: seedData.primaryUserAndReturnsAgent.licenceRef,
+              return_reference: seedData.primaryUserAndReturnsAgent.returnLog.returnReference,
+              start_date: seedData.primaryUserAndReturnsAgent.returnLog.startDate
+            })
+          })
+        })
+
+        describe('and "returns agent" with the same email', () => {
+          beforeEach(async () => {
+            session.licenceRef = seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef
+          })
+
+          it('returns the "primary user"', async () => {
+            const result = await FetchDownloadRecipientsService.go(session)
+
+            expect(result).to.include({
+              contact: null,
+              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+              contact_type: 'Primary user',
+              due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+              end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+              email: 'primary.user@important.com',
+              licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+              return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+              start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
+            })
+
+            expect(result).to.include({
+              contact: null,
+              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+              contact_type: 'Returns agent',
+              due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+              end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+              email: 'primary.user@important.com',
+              licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+              return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+              start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
+            })
           })
         })
       })
+    })
 
-      describe('when the licence number only has one recipient which has the "licence holder" role', () => {
-        beforeEach(() => {
-          session = { licenceRef: testRecipients.licenceHolder.licenceRef }
-        })
-
-        it('correctly returns "Licence holder" contact', async () => {
-          const result = await FetchDownloadRecipientsService.go(session)
-
-          const found = result.filter((item) => {
-            return item.licence_ref === testRecipients.licenceHolder.licenceRef
-          })
-
-          expect(found).to.equal([
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Licence holder only',
-                postcode: 'WD25 7LR',
-                role: 'Licence holder',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-              contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
-              email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolder.licenceRef,
-              return_reference: testRecipients.licenceHolder.returnLog.returnReference,
-              start_date: startDate
-            }
-          ])
-        })
-      })
-
-      describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
-        beforeEach(() => {
-          session = { licenceRef: testRecipients.licenceHolderAndReturnTo.licenceRef }
-        })
-
-        it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
-          const result = await FetchDownloadRecipientsService.go(session)
-
-          const found = result.filter((item) => {
-            return item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef
-          })
-
-          expect(found).to.equal([
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Licence holder and returns to',
-                postcode: 'WD25 7LR',
-                role: 'Licence holder',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-              contact_type: 'Licence holder',
-              due_date: new Date(dueDate),
-              email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-              return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
-              start_date: startDate
-            },
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Licence holder and returns to',
-                postcode: 'WD25 7LR',
-                role: 'Returns to',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-              contact_type: 'Returns to',
-              due_date: new Date(dueDate),
-              email: null,
-              end_date: endDate,
-              licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-              return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
-              start_date: startDate
-            }
-          ])
-        })
-      })
-
-      describe('when the end date is greater than today', () => {
+    describe('when the licence is unregistered', () => {
+      describe('and there is a "licence holder"', () => {
         beforeEach(async () => {
-          testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate, '3000-01-01')
-
-          session = { licenceRef: testRecipients.primaryUser.licenceRef }
+          session.licenceRef = seedData.licenceHolder.licenceRef
         })
 
-        it('correctly returns an empty array (no return logs found)', async () => {
+        it('returns the "licence holder" ', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          expect(result).to.equal([])
+          expect(result).to.equal([
+            {
+              contact: {
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
+                country: null,
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Licence holder',
+                postcode: 'WD25 7LR',
+                role: 'Licence holder',
+                salutation: null,
+                town: 'Little Whinging',
+                type: 'Person'
+              },
+              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_type: 'Licence holder',
+              due_date: seedData.licenceHolder.returnLog.dueDate,
+              email: null,
+              end_date: seedData.licenceHolder.returnLog.endDate,
+              licence_ref: seedData.licenceHolder.licenceRef,
+              return_reference: seedData.licenceHolder.returnLog.returnReference,
+              start_date: seedData.licenceHolder.returnLog.startDate
+            }
+          ])
         })
+
+        describe('and a "returns to" with different contacts', () => {
+          beforeEach(async () => {
+            session.licenceRef = seedData.licenceHolderAndReturnTo.licenceRef
+          })
+
+          it('returns the "licence holder" and "returns to"', async () => {
+            const result = await FetchDownloadRecipientsService.go(session)
+
+            expect(result).to.equal([
+              {
+                contact: {
+                  addressLine1: '4',
+                  addressLine2: 'Privet Drive',
+                  addressLine3: null,
+                  addressLine4: null,
+                  country: null,
+                  county: 'Surrey',
+                  forename: 'Harry',
+                  initials: 'J',
+                  name: 'Licence holder',
+                  postcode: 'WD25 7LR',
+                  role: 'Licence holder',
+                  salutation: null,
+                  town: 'Little Whinging',
+                  type: 'Person'
+                },
+                contact_hash_id: '0cad692217f572faede404363b2625c9',
+                contact_type: 'Licence holder',
+                due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
+                email: null,
+                end_date: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+                licence_ref: seedData.licenceHolderAndReturnTo.licenceRef,
+                return_reference: seedData.licenceHolderAndReturnTo.returnLog.returnReference,
+                start_date: seedData.licenceHolderAndReturnTo.returnLog.startDate
+              },
+              {
+                contact: {
+                  addressLine1: '4',
+                  addressLine2: 'Privet Drive',
+                  addressLine3: null,
+                  addressLine4: null,
+                  country: null,
+                  county: 'Surrey',
+                  forename: 'Harry',
+                  initials: 'J',
+                  name: 'Returns to',
+                  postcode: 'WD25 7LR',
+                  role: 'Returns to',
+                  salutation: null,
+                  town: 'Little Whinging',
+                  type: 'Person'
+                },
+                contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+                contact_type: 'Returns to',
+                due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
+                email: null,
+                end_date: seedData.licenceHolderAndReturnTo.returnLog.endDate,
+                licence_ref: seedData.licenceHolderAndReturnTo.licenceRef,
+                return_reference: seedData.licenceHolderAndReturnTo.returnLog.returnReference,
+                start_date: seedData.licenceHolderAndReturnTo.returnLog.startDate
+              }
+            ])
+          })
+        })
+
+        describe('and a "returns to" with the same contact', () => {
+          beforeEach(async () => {
+            session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
+          })
+
+          it('returns the "licence holder"', async () => {
+            const result = await FetchDownloadRecipientsService.go(session)
+
+            expect(result).to.equal([
+              {
+                contact: {
+                  addressLine1: '4',
+                  addressLine2: 'Privet Drive',
+                  addressLine3: null,
+                  addressLine4: null,
+                  country: null,
+                  county: 'Surrey',
+                  forename: 'Harry',
+                  initials: 'J',
+                  name: 'Potter',
+                  postcode: 'WD25 7LR',
+                  role: 'Licence holder',
+                  salutation: null,
+                  town: 'Little Whinging',
+                  type: 'Person'
+                },
+                contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+                contact_type: 'Licence holder',
+                due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+                email: null,
+                end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+                licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+                return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
+                start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
+              },
+              {
+                contact: {
+                  addressLine1: '4',
+                  addressLine2: 'Privet Drive',
+                  addressLine3: null,
+                  addressLine4: null,
+                  country: null,
+                  county: 'Surrey',
+                  forename: 'Harry',
+                  initials: 'J',
+                  name: 'Potter',
+                  postcode: 'WD25 7LR',
+                  role: 'Returns to',
+                  salutation: null,
+                  town: 'Little Whinging',
+                  type: 'Person'
+                },
+                contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+                contact_type: 'Returns to',
+                due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
+                email: null,
+                end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
+                licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+                return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
+                start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
+              }
+            ])
+          })
+        })
+      })
+    })
+
+    describe('when the return logs end date is greater than today', () => {
+      beforeEach(async () => {
+        session.licenceRef = seedData.licenceHolderReturnLogGreaterThanToday.licenceRef
+      })
+
+      it('correctly returns an empty array (no return logs found)', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([])
+      })
+    })
+  })
+
+  describe('and the due date is set', () => {
+    beforeEach(() => {
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and there is a "primary user"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns no results', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([])
+      })
+    })
+  })
+
+  describe('and "enableNullDueDate" is false', () => {
+    beforeEach(() => {
+      Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
+
+      session = {
+        journey: 'invitations',
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and there is a "primary user"', () => {
+      beforeEach(async () => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns the "primary user" ', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        // Include required because the download does not dedupe
+        expect(result).to.include([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            due_date: seedData.primaryUserDueDate.returnLog.dueDate,
+            end_date: seedData.primaryUserDueDate.returnLog.endDate,
+            email: 'primary.user@important.com',
+            licence_ref: seedData.primaryUserDueDate.licenceRef,
+            return_reference: seedData.primaryUserDueDate.returnLog.returnReference,
+            start_date: seedData.primaryUserDueDate.returnLog.startDate
+          }
+        ])
       })
     })
   })
