@@ -513,7 +513,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('when a recipient has multiple return logs for the same licence reference', () => {
+  describe('when a recipient has multiple return logs for the same recipient', () => {
     beforeEach(() => {
       session = {
         journey: 'invitations',

@@ -38,7 +38,7 @@ async function go(sessionId, auth) {
 
   const notifications = await _notifications(sessionCopy, recipients, notice.id)
 
-  await _processNotifications(notifications, notice, sessionCopy.referenceCode)
+  _processNotifications(notifications, notice, sessionCopy.referenceCode)
 
   return notice.id
 }
