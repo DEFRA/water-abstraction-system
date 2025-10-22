@@ -50,7 +50,8 @@ async function seed(date) {
       eight: `${date}08`,
       nine: `${date}09`,
       ten: `${date}10`,
-      eleven: `${date}11`
+      eleven: `${date}11`,
+      twelve: `${date}12`
     }
   }
 
@@ -71,7 +72,8 @@ async function seed(date) {
     primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.eight),
     primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.nine),
     primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
-    primaryUserDueDate: await _primaryUserDueDate(dates.eleven)
+    primaryUserDueDate: await _primaryUserDueDate(dates.eleven),
+    primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.twelve)
   }
 }
 
@@ -337,6 +339,20 @@ async function _primaryUser(date) {
   return {
     ...entityRole,
     returnLog
+  }
+}
+
+async function _primaryUserMultipleReturnLogs(date) {
+  const entityRole = await _addPrimaryUser()
+
+  const returnLog = await _addReturnLog(date, entityRole.licenceRef)
+
+  const returnLogTwo = await _addReturnLog(date, entityRole.licenceRef)
+
+  return {
+    ...entityRole,
+    returnLog,
+    returnLogTwo
   }
 }
 

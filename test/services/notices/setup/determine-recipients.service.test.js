@@ -35,7 +35,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
           licence_refs: testRecipients.primaryUser.licence_refs,
-          message_type: 'Email'
+          message_type: 'Email',
+          return_log_ids: testRecipients.primaryUser.return_log_ids
         },
         {
           contact: null,
@@ -43,7 +44,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'Returns agent',
           email: 'returns.agent@important.com',
           licence_refs: testRecipients.returnsAgent.licence_refs,
-          message_type: 'Email'
+          message_type: 'Email',
+          return_log_ids: testRecipients.returnsAgent.return_log_ids
         },
         {
           contact: {
@@ -66,7 +68,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'Licence holder',
           email: null,
           licence_refs: testRecipients.licenceHolder.licence_refs,
-          message_type: 'Letter'
+          message_type: 'Letter',
+          return_log_ids: testRecipients.licenceHolder.return_log_ids
         },
         {
           contact: {
@@ -89,7 +92,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'Returns to',
           email: null,
           licence_refs: testRecipients.returnsTo.licence_refs,
-          message_type: 'Letter'
+          message_type: 'Letter',
+          return_log_ids: testRecipients.returnsTo.return_log_ids
         },
         {
           contact: {
@@ -112,7 +116,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'Licence holder',
           email: null,
           licence_refs: testRecipients.licenceHolderWithMultipleLicences.licence_refs,
-          message_type: 'Letter'
+          message_type: 'Letter',
+          return_log_ids: testRecipients.licenceHolderWithMultipleLicences.return_log_ids
         },
         {
           contact: {
@@ -135,7 +140,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'both',
           email: null,
           licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-          message_type: 'Letter'
+          message_type: 'Letter',
+          return_log_ids: testDuplicateRecipients.duplicateLicenceHolder.return_log_ids
         },
         {
           contact: null,
@@ -143,7 +149,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
           contact_type: 'both',
           email: 'primary.user@important.com',
           licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-          message_type: 'Email'
+          message_type: 'Email',
+          return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
         }
       ])
     })
@@ -162,7 +169,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
             contact_type: 'both',
             email: 'primary.user@important.com',
             licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-            message_type: 'Email'
+            message_type: 'Email',
+            return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
           }
         ])
       })
@@ -197,7 +205,8 @@ describe('Notices - Setup - Determine Recipients service', () => {
             contact_type: 'both',
             email: null,
             licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-            message_type: 'Letter'
+            message_type: 'Letter',
+            return_log_ids: testDuplicateRecipients.duplicateLicenceHolder.return_log_ids
           }
         ])
       })
