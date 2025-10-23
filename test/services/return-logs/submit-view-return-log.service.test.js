@@ -20,13 +20,13 @@ describe('Submit View Return Log Service', () => {
   let patchStub
   let mockReturnLog
 
-  beforeEach(async () => {
+  beforeEach(() => {
     mockReturnLog = ReturnLogModel.fromJson({ ...ReturnLogHelper.defaults() })
 
-    patchStub = Sinon.stub().resolves()
+    patchStub = Sinon.stub().returnsThis()
     Sinon.stub(ReturnLogModel, 'query').returns({
-      findById: Sinon.stub().withArgs(mockReturnLog.id).returnsThis(),
-      patch: patchStub
+      patch: patchStub,
+      where: Sinon.stub().withArgs(mockReturnLog.returnId).resolves()
     })
   })
 
@@ -41,7 +41,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to true', async () => {
-        await SubmitViewReturnLogService.go(mockReturnLog.id, payload)
+        await SubmitViewReturnLogService.go(mockReturnLog.returnId, payload)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
@@ -56,7 +56,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to false', async () => {
-        await SubmitViewReturnLogService.go(mockReturnLog.id, payload)
+        await SubmitViewReturnLogService.go(mockReturnLog.returnId, payload)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]

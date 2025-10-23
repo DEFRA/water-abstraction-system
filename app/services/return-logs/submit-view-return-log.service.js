@@ -19,13 +19,13 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  * If the return log was already marked as under query, when the request comes to this page it will update the the
  * return log to unmark it. When the user is redirected back to the view return log page the notification will be gone.
  *
- * @param {string} returnLogId - The id of the return log to update
+ * @param {string} returnId - The id of the return log to update
  * @param {object} payload - The submitted form data
  */
-async function go(returnLogId, payload) {
+async function go(returnId, payload) {
   const underQuery = payload['mark-query'] === 'mark'
 
-  await ReturnLogModel.query().findById(returnLogId).patch({ underQuery, updatedAt: timestampForPostgres() })
+  await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).where('returnId', returnId)
 }
 
 module.exports = {
