@@ -80,7 +80,7 @@ async function _fetchRecipient(session) {
 
 async function _fetchRecipients(session) {
   const {
-    determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
+    determinedReturnsPeriod: { dueDate, endDate, quarterly, summer },
     removeLicences = ''
   } = session
 
@@ -89,7 +89,6 @@ async function _fetchRecipients(session) {
   const where = `
       AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
       AND rl.end_date <= ?
-      AND rl.start_date >= ?
       AND rl.metadata->>'isSummer' = ?
       AND rl.quarterly = ?
       AND NOT (ldh.licence_ref = ANY (?))
@@ -98,29 +97,16 @@ async function _fetchRecipients(session) {
   let bindings
 
   if (featureFlagsConfig.enableNullDueDate) {
-    bindings = [
-      endDate,
-      startDate,
-      summer,
-      quarterly,
-      excludeLicences,
-      endDate,
-      startDate,
-      summer,
-      quarterly,
-      excludeLicences
-    ]
+    bindings = [endDate, summer, quarterly, excludeLicences, endDate, summer, quarterly, excludeLicences]
   } else {
     bindings = [
       dueDate,
       endDate,
-      startDate,
       summer,
       quarterly,
       excludeLicences,
       dueDate,
       endDate,
-      startDate,
       summer,
       quarterly,
       excludeLicences
