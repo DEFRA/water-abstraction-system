@@ -24,6 +24,8 @@ describe('Gotenberg Request', () => {
   let pdfBytes
 
   beforeEach(() => {
+    // Set delay to a value that won't cause the tests to timeout or run needlessly slow. By default it's 2 seconds.
+    Sinon.stub(gotenbergConfig, 'delay').value(25)
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
     Sinon.stub(gotenbergConfig, 'timeout').value(1234)
