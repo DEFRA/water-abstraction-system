@@ -278,8 +278,12 @@ function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStatio
 
   const lmsArray = [...Object.values(lms)]
 
-  for (let i = 0; i < licenceRefs.length; i++) {
-    lmsArray[i].licence.licenceRef = licenceRefs[i]
+  const lr = licenceRefs.flatMap((licenceRef) => {
+    return licenceRef
+  })
+
+  for (let i = 0; i < lr.length; i++) {
+    lmsArray[i].licence.licenceRef = lr[i]
   }
 
   return lmsArray

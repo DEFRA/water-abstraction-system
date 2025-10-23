@@ -145,12 +145,14 @@ describe('Notices - Setup - Determine Notifications service', () => {
     it('should return abstraction alerts notifications', async () => {
       const notifications = await DetermineNotificationsService.go(session, recipients, event.id)
 
+      const [licenceRef] = recipientsFixture.primaryUser.licence_refs
+
       expect(notifications).to.equal([
         {
           createdAt: testDate.toISOString(),
           eventId: event.id,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
-          licences: recipientsFixture.primaryUser.licence_refs,
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -161,7 +163,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
             label: 'FRENCHAY',
             licenceGaugingStationId: '4a87cf86-76ff-4059-9b74-924ab19c1367',
             licenceId: session.licenceMonitoringStations[0].licence.id,
-            licenceRef: recipientsFixture.primaryUser.licence_refs,
+            licenceRef,
             monitoring_station_name: 'FRENCHAY',
             sending_alert_type: 'warning',
             source: '',

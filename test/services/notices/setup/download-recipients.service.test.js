@@ -214,13 +214,13 @@ describe('Notices - Setup - Download Recipients service', () => {
           {
             ...licenceMonitoringStationTwo,
             licence: {
-              licenceRef: recipients.licenceHolder.licence_refs
+              licenceRef: recipients.licenceHolder.licence_refs[0]
             }
           },
           {
             ...licenceMonitoringStationTwo,
             licence: {
-              licenceRef: recipients.primaryUser.licence_refs
+              licenceRef: recipients.primaryUser.licence_refs[0]
             }
           }
         ]
