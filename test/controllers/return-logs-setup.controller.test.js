@@ -256,11 +256,11 @@ describe('Return Logs - Setup - Controller', () => {
 
         it('redirects to the "abstraction return" page', async () => {
           const response = await server.inject(
-            _postOptions(path, { returnLogId: 'v1:6:09/999:1003992:2022-04-01:2023-03-31' })
+            _postOptions(path, { returnId: '4ddbac0e-a176-420a-8176-4ce410327641' })
           )
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/return-logs?id=v1:6:09/999:1003992:2022-04-01:2023-03-31')
+          expect(response.headers.location).to.equal('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641')
         })
       })
     })
