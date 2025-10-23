@@ -28,6 +28,8 @@ describe('Notify Request', () => {
   })
 
   beforeEach(() => {
+    // Set rateLimitPause to a value that won't cause the tests to timeout. By default it's 90 seconds.
+    Sinon.stub(notifyConfig, 'rateLimitPause').value(500)
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
     Sinon.stub(notifyConfig, 'timeout').value(1234)
@@ -173,33 +175,82 @@ describe('Notify Request', () => {
     })
 
     describe('when the request fails', () => {
-      beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'post').resolves({
-          succeeded: false,
-          response: {
-            statusCode: 404,
-            statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
-          }
+      describe('because Notify rejects it (for example a validation error)', () => {
+        beforeEach(async () => {
+          Sinon.stub(BaseRequest, 'post').resolves({
+            succeeded: false,
+            response: {
+              statusCode: 400,
+              statusMessage: 'Bad Request',
+              body: {
+                errors: [{ error: 'BadRequestError', message: 'email_address Not a valid email address' }],
+                status_code: 400
+              }
+            }
+          })
+        })
+
+        it('returns a "false" success status', async () => {
+          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+
+          expect(result.succeeded).to.be.false()
+        })
+
+        it('returns the error response', async () => {
+          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+
+          expect(result.response.body.errors).to.equal([
+            { error: 'BadRequestError', message: 'email_address Not a valid email address' }
+          ])
+        })
+
+        it('returns the status code', async () => {
+          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+
+          expect(result.response.statusCode).to.equal(400)
         })
       })
 
-      it('returns a "false" success status', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+      describe('because we hit the Notify rate limit', () => {
+        let baseRequestStub
 
-        expect(result.succeeded).to.be.false()
-      })
+        beforeEach(async () => {
+          baseRequestStub = Sinon.stub(BaseRequest, 'post')
+            .onFirstCall()
+            .resolves({
+              succeeded: false,
+              response: {
+                statusCode: 429,
+                statusMessage: 'Too Many Requests',
+                body: {
+                  errors: [
+                    {
+                      error: 'RateLimitError',
+                      message: 'Exceeded rate limit for key type live of 3000 requests per 60 seconds'
+                    }
+                  ],
+                  status_code: 429
+                }
+              }
+            })
+            .onSecondCall()
+            .resolves({
+              succeeded: true,
+              response: {
+                statusCode: 200,
+                body: { testObject: { test: 'yes' } }
+              }
+            })
+        })
 
-      it('returns the error response', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+        it('retries the request after the configured pause', async () => {
+          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.body.message).to.equal('Not Found')
-      })
-
-      it('returns the status code', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
-
-        expect(result.response.statusCode).to.equal(404)
+          expect(baseRequestStub.calledTwice).to.be.true()
+          expect(result.succeeded).to.be.true()
+          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.body.testObject.test).to.equal('yes')
+        })
       })
     })
   })
