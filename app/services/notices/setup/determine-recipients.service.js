@@ -107,7 +107,8 @@ function _mergeRecipientsForEmail(matches) {
     email: matches[0].email,
     contact: null,
     contact_hash_id: matches[0].contact_hash_id,
-    message_type: 'Email'
+    message_type: 'Email',
+    ...(matches[0].return_log_ids && { return_log_ids: matches[0].return_log_ids })
   }
 }
 
@@ -131,7 +132,8 @@ function _mergeRecipientsForLetter(matches) {
     email: null,
     contact: matches[0].contact,
     contact_hash_id: matches[0].contact_hash_id,
-    message_type: 'Letter'
+    message_type: 'Letter',
+    ...(matches[0].return_log_ids && { return_log_ids: matches[0].return_log_ids })
   }
 }
 

@@ -67,6 +67,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         recipient: 'primary.user@important.com',
+        returnLogIds: recipients.primaryUser.return_log_ids,
         status: 'pending',
         templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
@@ -82,6 +83,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           returnDueDate: '28 April 2025'
         },
         recipient: 'returns.agent@important.com',
+        returnLogIds: recipients.returnsAgent.return_log_ids,
         status: 'pending',
         templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
       },
@@ -103,6 +105,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
+        returnLogIds: recipients.licenceHolder.return_log_ids,
         status: 'pending',
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       },
@@ -124,6 +127,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
+        returnLogIds: recipients.returnsTo.return_log_ids,
         status: 'pending',
         templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
       },
@@ -145,6 +149,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: '28 April 2025'
         },
+        returnLogIds: recipients.licenceHolderWithMultipleLicences.return_log_ids,
         status: 'pending',
         templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
       }
@@ -179,6 +184,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
               }
@@ -207,6 +213,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'returns.agent@important.com',
+                returnLogIds: recipients.returnsAgent.return_log_ids,
                 status: 'pending',
                 templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
               }
@@ -235,6 +242,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
               }
@@ -271,6 +279,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
               }
@@ -305,6 +314,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
+                returnLogIds: recipients.returnsTo.return_log_ids,
                 status: 'pending',
                 templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
               }
@@ -340,6 +350,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 status: 'pending',
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
               }
             ])
@@ -375,6 +386,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
               }
@@ -403,6 +415,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'returns.agent@important.com',
+                returnLogIds: recipients.returnsAgent.return_log_ids,
                 status: 'pending',
                 templateId: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a'
               }
@@ -431,6 +444,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '28 April 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
               }
@@ -467,6 +481,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
               }
@@ -501,6 +516,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
+                returnLogIds: recipients.returnsTo.return_log_ids,
                 status: 'pending',
                 templateId: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
               }
@@ -535,6 +551,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: '1 January 2025',
                   returnDueDate: '28 April 2025'
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
               }
@@ -576,6 +593,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
               }
@@ -604,6 +622,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'returns.agent@important.com',
+                returnLogIds: recipients.returnsAgent.return_log_ids,
                 status: 'pending',
                 templateId: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94'
               }
@@ -632,6 +651,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
               }
@@ -680,6 +700,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodEndDate: null,
                   periodStartDate: null
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
               }
@@ -714,6 +735,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodEndDate: null,
                   periodStartDate: null
                 },
+                returnLogIds: recipients.returnsTo.return_log_ids,
                 status: 'pending',
                 templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
               }
@@ -748,6 +770,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: null,
                   returnDueDate: '30 January 2025'
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
               }
@@ -799,6 +822,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
               }
@@ -827,6 +851,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'returns.agent@important.com',
+                returnLogIds: recipients.returnsAgent.return_log_ids,
                 status: 'pending',
                 templateId: 'c8076bbd-7d93-4743-81b3-755a5c5f1d50'
               }
@@ -855,6 +880,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   returnDueDate: '29 January 2025'
                 },
                 recipient: 'primary.user@important.com',
+                returnLogIds: recipients.primaryUser.return_log_ids,
                 status: 'pending',
                 templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
               }
@@ -903,6 +929,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodEndDate: null,
                   periodStartDate: null
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
               }
@@ -937,6 +964,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodEndDate: null,
                   periodStartDate: null
                 },
+                returnLogIds: recipients.returnsTo.return_log_ids,
                 status: 'pending',
                 templateId: 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5'
               }
@@ -971,6 +999,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
                   periodStartDate: null,
                   returnDueDate: '30 January 2025'
                 },
+                returnLogIds: recipients.licenceHolder.return_log_ids,
                 status: 'pending',
                 templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
               }
