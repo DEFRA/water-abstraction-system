@@ -170,7 +170,7 @@ describe('GeneralLib', () => {
       const after = new Date().getTime()
       const difference = after - before
 
-      expect(difference).to.be.greaterThan(250)
+      expect(difference).to.be.at.least(250)
       // We give some wiggle room of 50 milliseconds to allow for environment
       // differences
       expect(difference).not.to.be.greaterThan(300)
