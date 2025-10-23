@@ -6,7 +6,7 @@
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 
 /**
@@ -165,7 +165,7 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
+    licences: commonPersonalisation.licenceRef,
     messageRef: _emailMessageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
@@ -211,7 +211,7 @@ function _letter(recipient, eventId, commonPersonalisation, alertType, restricti
     createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
-    licences: transformStringOfLicencesToArray(commonPersonalisation.licenceRef),
+    licences: commonPersonalisation.licenceRef,
     messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: {
@@ -239,7 +239,7 @@ function _letter(recipient, eventId, commonPersonalisation, alertType, restricti
  */
 function _matchingRecipients(recipients, station) {
   return recipients.filter((recipient) => {
-    return recipient.licence_refs.split(',').includes(station.licence.licenceRef)
+    return recipient.licence_refs.includes(station.licence.licenceRef)
   })
 }
 

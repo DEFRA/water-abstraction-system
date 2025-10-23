@@ -52,13 +52,11 @@ describe('Notices - Setup - Notifications Presenter', () => {
   it('correctly transform the recipients into notifications', () => {
     const result = NotificationsPresenter.go(testRecipients, session, eventId)
 
-    const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
     expect(result).to.equal([
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
-        licences: [recipients.primaryUser.licence_refs],
+        licences: recipients.primaryUser.licence_refs,
         messageRef: 'returns_invitation_primary_user_email',
         messageType: 'email',
         personalisation: {
@@ -74,7 +72,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
-        licences: [recipients.returnsAgent.licence_refs],
+        licences: recipients.returnsAgent.licence_refs,
         messageRef: 'returns_invitation_returns_agent_email',
         messageType: 'email',
         personalisation: {
@@ -90,7 +88,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
-        licences: [recipients.licenceHolder.licence_refs],
+        licences: recipients.licenceHolder.licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
@@ -112,7 +110,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
-        licences: [recipients.returnsTo.licence_refs],
+        licences: recipients.returnsTo.licence_refs,
         messageRef: 'returns_invitation_returns_to_letter',
         messageType: 'letter',
         personalisation: {
@@ -134,7 +132,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId,
-        licences: [firstMultiple, secondMultiple],
+        licences: recipients.licenceHolderWithMultipleLicences.licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
@@ -175,7 +173,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -204,7 +202,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsAgent.licence_refs],
+                licences: recipients.returnsAgent.licence_refs,
                 messageRef: 'returns_invitation_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
@@ -233,7 +231,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -264,7 +262,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_invitation_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -299,7 +297,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsTo.licence_refs],
+                licences: recipients.returnsTo.licence_refs,
                 messageRef: 'returns_invitation_returns_to_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -334,7 +332,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_invitation_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -377,7 +375,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_reminder_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -406,7 +404,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsAgent.licence_refs],
+                licences: recipients.returnsAgent.licence_refs,
                 messageRef: 'returns_reminder_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
@@ -435,7 +433,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_reminder_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -466,7 +464,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_reminder_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -501,7 +499,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsTo.licence_refs],
+                licences: recipients.returnsTo.licence_refs,
                 messageRef: 'returns_reminder_returns_to_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -536,7 +534,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_reminder_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -584,7 +582,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -613,7 +611,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsAgent.licence_refs],
+                licences: recipients.returnsAgent.licence_refs,
                 messageRef: 'returns_invitation_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
@@ -642,7 +640,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_invitation_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -685,7 +683,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_invitation_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -720,7 +718,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsTo.licence_refs],
+                licences: recipients.returnsTo.licence_refs,
                 messageRef: 'returns_invitation_returns_to_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -755,7 +753,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_invitation_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -813,7 +811,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_reminder_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -842,7 +840,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsAgent.licence_refs],
+                licences: recipients.returnsAgent.licence_refs,
                 messageRef: 'returns_reminder_returns_agent_email',
                 messageType: 'email',
                 personalisation: {
@@ -871,7 +869,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.primaryUser.licence_refs],
+                licences: recipients.primaryUser.licence_refs,
                 messageRef: 'returns_reminder_primary_user_email',
                 messageType: 'email',
                 personalisation: {
@@ -914,7 +912,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_reminder_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -949,7 +947,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.returnsTo.licence_refs],
+                licences: recipients.returnsTo.licence_refs,
                 messageRef: 'returns_reminder_returns_to_letter',
                 messageType: 'letter',
                 personalisation: {
@@ -984,7 +982,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
               {
                 createdAt: '2025-01-01T00:00:00.000Z',
                 eventId,
-                licences: [recipients.licenceHolder.licence_refs],
+                licences: recipients.licenceHolder.licence_refs,
                 messageRef: 'returns_reminder_licence_holder_letter',
                 messageType: 'letter',
                 personalisation: {
