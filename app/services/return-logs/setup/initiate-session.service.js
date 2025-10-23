@@ -58,17 +58,17 @@ async function _fetchReturnLog(returnLogId) {
     .findById(returnLogId)
     .select(
       'id',
-      'startDate',
-      'endDate',
-      'receivedDate',
-      'returnReference',
       'dueDate',
-      'status',
-      'underQuery',
+      'endDate',
+      'metadata',
+      'receivedDate',
+      'returnId',
+      'returnReference',
       'returnsFrequency',
-      'metadata'
+      'startDate',
+      'status',
+      'underQuery'
     )
-    .where('id', returnLogId)
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
@@ -143,8 +143,9 @@ function _referenceData(returnLog) {
     licence,
     metadata,
     receivedDate,
-    returnsFrequency,
+    returnId,
     returnReference,
+    returnsFrequency,
     returnSubmissions,
     startDate,
     status,
@@ -164,9 +165,10 @@ function _referenceData(returnLog) {
     periodStartMonth: parseInt(metadata.nald.periodStartMonth),
     purposes: _purposes(metadata.purposes),
     receivedDate,
-    returnsFrequency,
-    returnReference,
+    returnId,
     returnLogId,
+    returnReference,
+    returnsFrequency,
     siteDescription: metadata.description,
     startDate,
     status,

@@ -116,6 +116,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         receivedDateOptions: 'custom-date',
         receivedDateYear: '2025',
         reported: 'abstraction-volumes',
+        returnId: returnLog.returnId,
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
         returnsFrequency: 'month',
