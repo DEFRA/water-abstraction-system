@@ -173,13 +173,13 @@ function _query() {
     ),
 
   unique_contact AS (
-   SELECT DISTINCT ON (contact_hash_id)
-     contact_hash_id,
-     contact_type,
-     email,
-     contact
-   FROM all_contacts
-   ORDER BY contact_hash_id
+    SELECT DISTINCT ON (contact_hash_id)
+      contact_hash_id,
+      contact_type,
+      email,
+      contact
+    FROM all_contacts
+    ORDER BY contact_hash_id
   ),
 
   -- Aggregate all licence_refs per contact_hash_id
