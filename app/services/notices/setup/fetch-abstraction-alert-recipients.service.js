@@ -167,21 +167,43 @@ function _query() {
   ),
 
   final_contacts AS (
-    SELECT * FROM additional_contacts
-    UNION ALL
-    SELECT * FROM primary_or_licence_holder
+      SELECT * FROM additional_contacts
+      UNION ALL
+      SELECT * FROM primary_or_licence_holder
+    ),
+
+  best_contact_type AS (
+   SELECT DISTINCT ON (contact_hash_id)
+     contact_hash_id,
+     contact_type,
+     email,
+     contact
+   FROM final_contacts
+   ORDER BY contact_hash_id
+  ),
+
+  -- Aggregate all licence_refs per contact_hash_id
+    aggregated_contact_data AS (
+    SELECT
+    contact_hash_id,
+    string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs
+    FROM final_contacts
+    GROUP BY contact_hash_id
   )
 
   SELECT
-    licence_ref AS licence_refs,
-    contact_type,
-    email,
-    contact,
-    contact_hash_id
+    a.licence_refs,
+    b.contact_type,
+    b.email,
+    b.contact,
+    b.contact_hash_id
   FROM
-    final_contacts
+    aggregated_contact_data a
+      JOIN
+    best_contact_type b
+    USING (contact_hash_id)
   ORDER BY
-    licence_ref;
+    licence_refs;
 `
 }
 
