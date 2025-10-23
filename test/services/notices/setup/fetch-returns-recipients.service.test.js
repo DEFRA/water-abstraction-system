@@ -62,7 +62,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
-            licence_refs: seedData.primaryUser.licenceRef,
+            licence_refs: [seedData.primaryUser.licenceRef],
             return_log_ids: [seedData.primaryUser.returnLog.returnId]
           }
         ])
@@ -88,7 +88,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             },
             {
@@ -96,7 +96,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             }
           ])
@@ -123,7 +123,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
             }
           ])
@@ -168,7 +168,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null,
-            licence_refs: seedData.licenceHolder.licenceRef,
+            licence_refs: [seedData.licenceHolder.licenceRef],
             return_log_ids: [seedData.licenceHolder.returnLog.returnId]
           }
         ])
@@ -209,7 +209,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             },
             {
@@ -232,7 +232,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
               contact_type: 'Returns to',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             }
           ])
@@ -274,7 +274,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
             }
           ])
@@ -321,7 +321,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUser.licenceRef,
+              licence_refs: [seedData.primaryUser.licenceRef],
               return_log_ids: [seedData.primaryUser.returnLog.returnId]
             }
           ])
@@ -341,7 +341,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               },
               {
@@ -349,7 +349,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
                 contact_type: 'Returns agent',
                 email: 'returns.agent@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               }
             ])
@@ -370,7 +370,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
               }
             ])
@@ -409,7 +409,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolder.licenceRef,
+              licence_refs: [seedData.licenceHolder.licenceRef],
               return_log_ids: [seedData.licenceHolder.returnLog.returnId]
             }
           ])
@@ -444,7 +444,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '0cad692217f572faede404363b2625c9',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               },
               {
@@ -467,7 +467,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
                 contact_type: 'Returns to',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               }
             ])
@@ -503,7 +503,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
               }
             ])
@@ -541,7 +541,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
-          licence_refs: seedData.primaryUserMultipleReturnLogs.licenceRef,
+          licence_refs: [seedData.primaryUserMultipleReturnLogs.licenceRef],
           // We need to sort the return ids because the order of the return logs is not guaranteed
           return_log_ids: [
             seedData.primaryUserMultipleReturnLogs.returnLog.returnId,
@@ -611,7 +611,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
-            licence_refs: seedData.primaryUserDueDate.licenceRef,
+            licence_refs: [seedData.primaryUserDueDate.licenceRef],
             return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
           }
         ])

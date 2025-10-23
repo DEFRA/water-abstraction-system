@@ -361,9 +361,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
-          -- this will be added in the next change
-          -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+          JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs,
           JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
         FROM all_contacts
         GROUP BY contact_hash_id
