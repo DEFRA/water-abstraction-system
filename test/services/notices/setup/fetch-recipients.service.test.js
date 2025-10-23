@@ -52,7 +52,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: recipients.primaryUser.licence_refs,
-            message_type: 'Email'
+            message_type: 'Email',
+            return_log_ids: recipients.primaryUser.return_log_ids
           },
           {
             contact: null,
@@ -60,7 +61,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
             licence_refs: recipients.returnsAgent.licence_refs,
-            message_type: 'Email'
+            message_type: 'Email',
+            return_log_ids: recipients.returnsAgent.return_log_ids
           }
         ])
       })
@@ -106,7 +108,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
               contact_type: 'Licence holder',
               email: null,
               licence_refs: recipients.licenceHolder.licence_refs,
-              message_type: 'Letter'
+              message_type: 'Letter',
+              return_log_ids: recipients.licenceHolder.return_log_ids
             }
           ])
         })
@@ -135,7 +138,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
               licence_refs: recipients.primaryUser.licence_refs,
-              message_type: 'Email'
+              message_type: 'Email',
+              return_log_ids: recipients.primaryUser.return_log_ids
             },
             {
               contact: null,
@@ -143,7 +147,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
               licence_refs: recipients.returnsAgent.licence_refs,
-              message_type: 'Email'
+              message_type: 'Email',
+              return_log_ids: recipients.returnsAgent.return_log_ids
             }
           ])
         })
@@ -174,7 +179,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: recipients.primaryUser.licence_refs,
-            message_type: 'Email'
+            message_type: 'Email',
+            return_log_ids: recipients.primaryUser.return_log_ids
           },
           {
             contact: null,
@@ -182,7 +188,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
             licence_refs: recipients.returnsAgent.licence_refs,
-            message_type: 'Email'
+            message_type: 'Email',
+            return_log_ids: recipients.returnsAgent.return_log_ids
           },
           {
             contact: {
@@ -205,7 +212,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
             contact_type: 'Licence holder',
             email: null,
             licence_refs: recipients.licenceHolder.licence_refs,
-            message_type: 'Letter'
+            message_type: 'Letter',
+            return_log_ids: recipients.licenceHolder.return_log_ids
           }
         ])
       })
@@ -279,7 +287,8 @@ describe('Notices - Setup - Fetch recipients service', () => {
           contact_type: 'Licence holder',
           email: null,
           licence_refs: recipients.licenceHolder.licence_refs,
-          message_type: 'Letter'
+          message_type: 'Letter',
+          return_log_ids: recipients.licenceHolder.return_log_ids
         }
       ])
     })

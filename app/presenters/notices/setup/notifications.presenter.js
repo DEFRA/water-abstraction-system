@@ -115,7 +115,8 @@ function _email(recipient, returnsPeriod, journey, eventId, noticeType) {
       ..._returnsPeriods(returnsPeriod, messageType)
     },
     recipient: recipient.email,
-    status: 'pending'
+    status: 'pending',
+    returnLogIds: recipient.return_log_ids
   }
 }
 
@@ -171,7 +172,8 @@ function _letter(recipient, returnsPeriod, journey, eventId, noticeType) {
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     },
-    status: 'pending'
+    status: 'pending',
+    returnLogIds: recipient.return_log_ids
   }
 }
 
