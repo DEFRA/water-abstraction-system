@@ -30,8 +30,8 @@ describe('Notify Request', () => {
   beforeEach(() => {
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    Sinon.replace(notifyConfig, 'timeout', 1234)
-    Sinon.replace(serverConfig, 'requestTimeout', 1000)
+    Sinon.stub(notifyConfig, 'timeout').value(1234)
+    Sinon.stub(serverConfig, 'requestTimeout').value(1000)
   })
 
   afterEach(() => {
