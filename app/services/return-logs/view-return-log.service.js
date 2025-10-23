@@ -11,16 +11,16 @@ const ViewReturnLogPresenter = require('../../presenters/return-logs/view-return
 /**
  * Orchestrates fetching and presenting the data needed for the view return log page
  *
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} returnId - The ID of the return log to view
  * @param {number} version - The version number of the associated return submission to view (0 means 'current')
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view return log template.
  */
-async function go(returnId, version, auth) {
+async function go(auth, returnId, version) {
   const returnLog = await FetchReturnLogService.go(returnId, version)
 
-  const pageData = ViewReturnLogPresenter.go(returnLog, auth)
+  const pageData = ViewReturnLogPresenter.go(auth, returnLog)
 
   return {
     activeNavBar: 'search',

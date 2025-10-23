@@ -40,7 +40,7 @@ describe('View Return Log service', () => {
   })
 
   it('correctly fetches return log and transforms it via the presenter', async () => {
-    const result = await ViewReturnLogService.go('RETURN_ID', 0, { credentials: { scope: ['returns'] } })
+    const result = await ViewReturnLogService.go({ credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
 
     // We only check a couple of items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter
