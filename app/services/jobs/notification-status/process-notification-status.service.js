@@ -5,16 +5,13 @@
  * @module ProcessNotificationStatusService
  */
 
-const { setTimeout } = require('node:timers/promises')
-
 const FetchNotificationsService = require('./fetch-notifications.service.js')
 const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
 const ViewMessageDataRequest = require('../../../requests/notify/view-message-data.request.js')
 const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
 const UpdateEventService = require('./update-event.service.js')
 const UpdateNotificationsService = require('./update-notifications.service.js')
-
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
 
 const notifyConfig = require('../../../../config/notify.config.js')
 
@@ -60,7 +57,7 @@ async function go(eventId = null) {
 
       await UpdateAbstractionAlertsService.go(updatedNotifications)
 
-      await _delay(delay)
+      await pause(delay)
     }
 
     await _updateEventErrorCount(notifications)
@@ -79,10 +76,6 @@ async function _batch(notifications) {
   await UpdateNotificationsService.go(updatedNotifications)
 
   return updatedNotifications
-}
-
-async function _delay(delay) {
-  return setTimeout(delay)
 }
 
 async function _notificationStatus(notification) {

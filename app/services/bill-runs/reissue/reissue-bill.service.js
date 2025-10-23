@@ -9,7 +9,7 @@ const ChargingModuleReissueBillRequest = require('../../../requests/charging-mod
 const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
 const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
 const ExpandedError = require('../../../errors/expanded.error.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
+const { generateUUID, pause } = require('../../../lib/general.lib.js')
 
 /**
  * Handles the reissuing of a single bill
@@ -134,10 +134,7 @@ async function _pauseUntilNotPending(billRunExternalId) {
     // If status is set then we know that we've already sent a request, so we wait for a second to ensure we aren't
     // bombarding the CM with requests
     if (status) {
-      // Create a new promise that resolves after 1000ms and wait until it's resolved before continuing
-      await new Promise((resolve) => {
-        return setTimeout(resolve, 1000)
-      })
+      await pause(1000)
     }
 
     const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)

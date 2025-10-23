@@ -5,14 +5,13 @@
  * @module BatchNotificationsService
  */
 
-const { setTimeout } = require('node:timers/promises')
-
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
 const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
 const SendPaperReturnService = require('./batch/send-paper-return.service.js')
 const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
+const { pause } = require('../../../lib/general.lib.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
 
@@ -80,15 +79,6 @@ function _batchSize(subtype) {
   }
 }
 
-/**
- * This handles delaying sending the next batch by using a Node timeout.
- *
- * @private
- */
-async function _delay(delay) {
-  return setTimeout(delay)
-}
-
 function _determineNotificationToSend(notification, referenceCode) {
   if (notification.messageType === 'email') {
     return SendEmailService.go(notification, referenceCode)
@@ -124,7 +114,7 @@ async function _processBatches(notifications, delay, batchSize, eventId, referen
 
     await _batch(batchNotifications, referenceCode)
 
-    await _delay(delay)
+    await pause(delay)
 
     await ProcessNotificationStatusService.go(eventId)
   }
