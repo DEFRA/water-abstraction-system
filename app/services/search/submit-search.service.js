@@ -38,6 +38,7 @@ async function go(payload, yar) {
   yar.set('searchQuery', validationResult.value.query)
 
   let redirect = await FindSingleSearchMatchService.go(validationResult.value.query)
+  redirect = null // Temporarily removing this feature to deal with exact matches in search results
   if (!redirect) {
     redirect = '/system/search?page=1'
   }

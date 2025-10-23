@@ -15,13 +15,11 @@ const { today } = require('../../lib/general.lib.js')
  * @param {string} query - The user-entered search query, if any
  * @param {string} page - The requested page, when displaying search results
  * @param {string} numberOfPages - The total number of pages available for the search results
- * @param {object[]} licences - The list of licences matching the search criteria
- * @param {object[]} returnLogs - The list of return logs matching the search criteria
- * @param {object[]} monitoringStations - The list of monitoring stations matching the search criteria
+ * @param {object} allSearchMatches - All the search matches found
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, numberOfPages, licences, returnLogs, monitoringStations) {
+function go(query, page, numberOfPages, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
@@ -32,14 +30,24 @@ function go(query, page, numberOfPages, licences, returnLogs, monitoringStations
     }
   }
 
+  const { exactSearchResults, similarSearchResults } = allSearchMatches
   return {
-    licences: _licences(licences),
-    monitoringStations: _monitoringStations(monitoringStations),
-    noResults: licences.length === 0 && returnLogs.length === 0 && monitoringStations.length === 0,
+    exactMatches: {
+      licences: _licences(exactSearchResults.licences.results),
+      monitoringStations: _monitoringStations(exactSearchResults.monitoringStations.results),
+      returnLogs: _returnLogs(exactSearchResults.returnLogs.results)
+    },
+    noPartialResults: similarSearchResults.amountFound === 0,
+    noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
     page,
     pageTitle: _pageTitle(numberOfPages, page),
+    partialMatches: {
+      licences: _licences(similarSearchResults.licences.results),
+      monitoringStations: _monitoringStations(similarSearchResults.monitoringStations.results),
+      returnLogs: _returnLogs(similarSearchResults.returnLogs.results)
+    },
     query,
-    returnLogs: _returnLogs(returnLogs),
+    showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
   }
 }
