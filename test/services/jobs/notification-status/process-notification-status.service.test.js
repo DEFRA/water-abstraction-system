@@ -94,6 +94,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: null,
@@ -161,6 +162,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
@@ -226,6 +228,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: null,
@@ -300,6 +303,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
         expect(refreshedNotification).to.equal(
           {
+            alternateNotificationId: null,
             eventId: event.id,
             id: notification.id,
             licenceMonitoringStationId: null,
@@ -392,6 +396,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       expect(refreshedNotification).to.equal(
         {
+          alternateNotificationId: null,
           eventId: event.id,
           id: notification.id,
           licences: ['11/111'],
