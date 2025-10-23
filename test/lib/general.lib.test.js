@@ -161,6 +161,22 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#pause', () => {
+    it('pauses execution for at least the provided number of milliseconds', async () => {
+      const before = new Date().getTime()
+
+      await GeneralLib.pause(250)
+
+      const after = new Date().getTime()
+      const difference = after - before
+
+      expect(difference).to.be.greaterThan(250)
+      // We give some wiggle room of 50 milliseconds to allow for environment
+      // differences
+      expect(difference).not.to.be.greaterThan(300)
+    })
+  })
+
   describe('#periodsOverlap', () => {
     let referencePeriod
     let checkPeriod
