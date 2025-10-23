@@ -234,7 +234,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           rl.licence_ref,
           rl.status,
           rl.metadata,
-          rl.due_date
+          rl.due_date,
+          rl.return_id
         FROM public.return_logs rl
         WHERE
           rl.status = 'due'
@@ -248,7 +249,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           ('Primary user') AS contact_type,
           le."name" AS email,
           NULL::jsonb AS contact,
-          md5(LOWER(le."name")) AS contact_hash_id
+          md5(LOWER(le."name")) AS contact_hash_id,
+          rl.return_id
         FROM public.licence_document_headers ldh
             INNER JOIN public.licence_entity_roles ler
                 ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
@@ -266,7 +268,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           ('Returns agent') AS contact_type,
           le."name" AS email,
           NULL::jsonb AS contact,
-          md5(LOWER(le."name")) AS contact_hash_id
+          md5(LOWER(le."name")) AS contact_hash_id,
+          rl.return_id
         FROM public.licence_document_headers ldh
             INNER JOIN public.licence_entity_roles ler
                 ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
@@ -293,7 +296,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
             LOWER(
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
-          )) AS contact_hash_id
+          )) AS contact_hash_id,
+          rl.return_id
         FROM public.licence_document_headers ldh
           INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
           INNER JOIN due_return_logs rl
@@ -317,7 +321,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
             LOWER(
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
-          )) AS contact_hash_id
+          )) AS contact_hash_id,
+          rl.return_id
         FROM public.licence_document_headers ldh
           INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
           INNER JOIN due_return_logs rl
@@ -356,9 +361,10 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs
+          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
           -- this will be added in the next change
           -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+          JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
         FROM all_contacts
         GROUP BY contact_hash_id
       )
@@ -368,7 +374,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       b.contact_type,
       b.email,
       b.contact,
-      b.contact_hash_id
+      b.contact_hash_id,
+      a.return_ids as return_log_ids
     FROM
       aggregated_contact_data a
         JOIN
