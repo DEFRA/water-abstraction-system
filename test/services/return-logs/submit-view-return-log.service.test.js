@@ -41,7 +41,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to true', async () => {
-        await SubmitViewReturnLogService.go(mockReturnLog.returnId, payload)
+        await SubmitViewReturnLogService.go(payload, mockReturnLog.returnId)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
@@ -56,7 +56,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to false', async () => {
-        await SubmitViewReturnLogService.go(mockReturnLog.returnId, payload)
+        await SubmitViewReturnLogService.go(payload, mockReturnLog.returnId)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
