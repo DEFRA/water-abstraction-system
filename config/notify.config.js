@@ -20,6 +20,8 @@ const config = {
   // sending 125 emails and then checking the status for all 125 emails in one go.
   batchSize: parseInt(process.env.NOTIFICATIONS_BATCH_SIZE) || 125,
   callbackToken: process.env.GOV_UK_NOTIFY_AUTH_TOKEN,
+  // At the time of adding this the service has a retention of 90 days where as Notify's default is 7
+  daysOfRetention: parseInt(process.env.GOV_UK_NOTIFY_DAYS_OF_RETENTION) || 7,
   // Notify limits you to sending 3,000 messages per minute. This limit is calculated on a rolling basis, per API key
   // type. A delay of 20 milliseconds after each request would result in just under 3,000 requests a minute. We go with
   // a default of 30ms which results in approx. 2,000 requests per minute, assuming we can send them that fast!

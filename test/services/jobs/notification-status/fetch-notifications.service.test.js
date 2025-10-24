@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, after } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,48 +16,70 @@ const NotificationsFixture = require('../../../fixtures/notifications.fixture.js
 const { today } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 
+// Things we need to stub
+const notifyConfig = require('../../../../config/notify.config.js')
+
 // Thing under test
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
+
+const DAYS_OF_RETENTION = 7
 
 describe('Job - Notification Status - Fetch Notifications service', () => {
   let abstractionAlert
   let notPending
   let olderThanRetentionPeriod
   let returnsInvitation
-  let startOfRetentionPeriod
+  let oneDayBeforeRetentionStartDate
 
   before(async () => {
-    startOfRetentionPeriod = today()
-    startOfRetentionPeriod.setDate(startOfRetentionPeriod.getDate() - 7)
+    const retentionStartDate = today()
+
+    retentionStartDate.setDate(retentionStartDate.getDate() - DAYS_OF_RETENTION)
+
+    oneDayBeforeRetentionStartDate = today()
+    oneDayBeforeRetentionStartDate.setDate(oneDayBeforeRetentionStartDate.getDate() - (DAYS_OF_RETENTION + 1))
 
     let notice = NoticesFixture.returnsInvitation()
 
+    // Created today and is pending - should be in results
     returnsInvitation = await NotificationHelper.add({
       ...NotificationsFixture.returnsInvitationEmail(notice),
       createdAt: today(),
       status: 'pending'
     })
 
+    // Created on the retention start date and is pending - should be in the results
     notice = NoticesFixture.alertStop()
     abstractionAlert = await NotificationHelper.add({
       ...NotificationsFixture.abstractionAlertLetter(notice),
-      createdAt: yesterday(),
+      createdAt: retentionStartDate,
       status: 'pending'
     })
 
+    // Created one day before the retention start date and is pending - should NOT be in the results
     notice = NoticesFixture.legacyHandsOffFlow()
     olderThanRetentionPeriod = await NotificationHelper.add({
       ...NotificationsFixture.legacyHandsOfFlow(notice),
-      createdAt: new Date('2023-04-01'),
+      createdAt: oneDayBeforeRetentionStartDate,
       status: 'pending'
     })
 
+    // Created yesterday and is NOT pending - should NOT be in the results
     notice = NoticesFixture.returnsReminder()
     notPending = await NotificationHelper.add({
       ...NotificationsFixture.returnsReminderLetter(notice),
       createdAt: yesterday(),
       status: 'error'
     })
+  })
+
+  beforeEach(() => {
+    // As this can change, we stub it so the tests can assert with confidence
+    Sinon.stub(notifyConfig, 'daysOfRetention').value(DAYS_OF_RETENTION)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   after(async () => {
@@ -71,7 +94,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
 
     for (const result of results) {
       expect(result.status).to.equal('pending')
-      expect(result.createdAt).to.be.at.least(startOfRetentionPeriod)
+      expect(result.createdAt).to.be.at.least(oneDayBeforeRetentionStartDate)
     }
   })
 
