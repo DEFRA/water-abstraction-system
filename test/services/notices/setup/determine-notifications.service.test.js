@@ -68,7 +68,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
         {
           createdAt: testDate.toISOString(),
           eventId: event.id,
-          licences: recipients[0].licence_refs.split(','),
+          licences: recipients[0].licence_refs,
           messageRef: 'returns_invitation_primary_user_email',
           messageType: 'email',
           personalisation: {
@@ -92,7 +92,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
 
       event = {
         id: generateUUID(),
-        licences: [recipientsFixture.primaryUser.licence_refs]
+        licences: recipientsFixture.primaryUser.licence_refs
       }
 
       const licenceMonitoringStations = [
@@ -102,7 +102,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
           status: null,
           licence: {
             id: 'f9a0fdad-9608-4559-a8f1-d680fec25c9a',
-            licenceRef: recipientsFixture.primaryUser.licence_refs
+            licenceRef: recipientsFixture.primaryUser.licence_refs[0]
           },
           measureType: 'flow',
           thresholdUnit: 'Ml/d',
@@ -145,12 +145,14 @@ describe('Notices - Setup - Determine Notifications service', () => {
     it('should return abstraction alerts notifications', async () => {
       const notifications = await DetermineNotificationsService.go(session, recipients, event.id)
 
+      const [licenceRef] = recipientsFixture.primaryUser.licence_refs
+
       expect(notifications).to.equal([
         {
           createdAt: testDate.toISOString(),
           eventId: event.id,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
-          licences: recipientsFixture.primaryUser.licence_refs.split(','),
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -161,7 +163,7 @@ describe('Notices - Setup - Determine Notifications service', () => {
             label: 'FRENCHAY',
             licenceGaugingStationId: '4a87cf86-76ff-4059-9b74-924ab19c1367',
             licenceId: session.licenceMonitoringStations[0].licence.id,
-            licenceRef: recipientsFixture.primaryUser.licence_refs,
+            licenceRef,
             monitoring_station_name: 'FRENCHAY',
             sending_alert_type: 'warning',
             source: '',

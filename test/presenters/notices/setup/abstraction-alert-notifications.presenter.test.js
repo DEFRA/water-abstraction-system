@@ -60,12 +60,16 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
   it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
     const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+    const [primaryUserLicenceRef] = recipients.primaryUser.licence_refs
+    const [licenceHolderLicenceRef] = recipients.licenceHolder.licence_refs
+    const [additionalContactLicenceRef] = recipients.additionalContact.licence_refs
+
     expect(result).to.equal([
       {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.one.id,
-        licences: [recipients.primaryUser.licence_refs],
+        licences: [primaryUserLicenceRef],
         messageRef: 'water_abstraction_alert_reduce_warning_email',
         messageType: 'email',
         personalisation: {
@@ -76,7 +80,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           label: 'Death star',
           licenceGaugingStationId: licenceMonitoringStations.one.id,
           licenceId: licenceMonitoringStations.one.licence.id,
-          licenceRef: recipients.primaryUser.licence_refs,
+          licenceRef: primaryUserLicenceRef,
           monitoring_station_name: 'Death star',
           sending_alert_type: 'warning',
           source: '* Source of supply: Meridian Trench',
@@ -91,7 +95,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.two.id,
-        licences: [recipients.licenceHolder.licence_refs],
+        licences: [licenceHolderLicenceRef],
         messageRef: 'water_abstraction_alert_stop_warning',
         messageType: 'letter',
         personalisation: {
@@ -108,7 +112,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           label: 'Death star',
           licenceGaugingStationId: licenceMonitoringStations.two.id,
           licenceId: licenceMonitoringStations.two.licence.id,
-          licenceRef: recipients.licenceHolder.licence_refs,
+          licenceRef: licenceHolderLicenceRef,
           monitoring_station_name: 'Death star',
           name: 'Mr H J Licence holder',
           sending_alert_type: 'warning',
@@ -123,7 +127,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         createdAt: '2025-01-01T00:00:00.000Z',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.three.id,
-        licences: [recipients.additionalContact.licence_refs],
+        licences: [additionalContactLicenceRef],
         messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
         messageType: 'email',
         personalisation: {
@@ -134,7 +138,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           label: 'Death star',
           licenceGaugingStationId: licenceMonitoringStations.three.id,
           licenceId: licenceMonitoringStations.three.licence.id,
-          licenceRef: recipients.additionalContact.licence_refs,
+          licenceRef: additionalContactLicenceRef,
           monitoring_station_name: 'Death star',
           sending_alert_type: 'warning',
           source: '* Source of supply: Meridian Trench',
@@ -159,12 +163,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
       const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+      const [licenceRef] = recipients.primaryUser.licence_refs
+
       expect(result).to.equal([
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: [recipients.primaryUser.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -175,7 +181,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.one.id,
             licenceId: licenceMonitoringStations.one.licence.id,
-            licenceRef: recipients.primaryUser.licence_refs,
+            licenceRef,
             monitoring_station_name: 'Death star',
             sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
@@ -190,7 +196,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.two.id,
-          licences: [recipients.primaryUser.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -201,7 +207,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.two.id,
             licenceId: licenceMonitoringStations.two.licence.id,
-            licenceRef: recipients.primaryUser.licence_refs,
+            licenceRef,
             monitoring_station_name: 'Death star',
             sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
@@ -226,12 +232,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications for the same recipient', () => {
       const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+      const [licenceRef] = recipients.additionalContact.licence_refs
+
       expect(result).to.equal([
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.three.id,
-          licences: [recipients.additionalContact.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
           messageType: 'email',
           personalisation: {
@@ -242,7 +250,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.three.id,
             licenceId: licenceMonitoringStations.three.licence.id,
-            licenceRef: recipients.additionalContact.licence_refs,
+            licenceRef,
             monitoring_station_name: 'Death star',
             sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
@@ -270,12 +278,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
       const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+      const [licenceRef] = recipients.additionalContact.licence_refs
+
       expect(result).to.equal([
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: [recipients.additionalContact.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -286,7 +296,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.one.id,
             licenceId: licenceMonitoringStations.one.licence.id,
-            licenceRef: recipients.additionalContact.licence_refs,
+            licenceRef,
             monitoring_station_name: 'Death star',
             sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
@@ -314,12 +324,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
       const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+      const [licenceRef] = recipients.primaryUser.licence_refs
+
       expect(result).to.equal([
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: [recipients.primaryUser.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_reduce_warning_email',
           messageType: 'email',
           personalisation: {
@@ -330,7 +342,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.one.id,
             licenceId: licenceMonitoringStations.one.licence.id,
-            licenceRef: recipients.primaryUser.licence_refs,
+            licenceRef,
             monitoring_station_name: 'Death star',
             sending_alert_type: 'warning',
             source: '* Source of supply: Meridian Trench',
@@ -356,12 +368,14 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
     it('correctly transform the recipients (and associated licence monitoring stations) into notifications', () => {
       const result = AbstractionAlertNotificationsPresenter.go(testRecipients, session, eventId)
 
+      const [licenceRef] = recipients.licenceHolder.licence_refs
+
       expect(result).to.equal([
         {
           createdAt: '2025-01-01T00:00:00.000Z',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
-          licences: [recipients.licenceHolder.licence_refs],
+          licences: [licenceRef],
           messageRef: 'water_abstraction_alert_reduce_warning',
           messageType: 'letter',
           personalisation: {
@@ -375,7 +389,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             label: 'Death star',
             licenceGaugingStationId: licenceMonitoringStations.one.id,
             licenceId: licenceMonitoringStations.one.licence.id,
-            licenceRef: recipients.licenceHolder.licence_refs,
+            licenceRef,
             condition_text: '',
             flow_or_level: 'level',
             issuer_email_address: 'luke.skywalker@rebelmail.test',
@@ -409,7 +423,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         label: 'Death star',
         licenceGaugingStationId: licenceMonitoringStations.one.id,
         licenceId: licenceMonitoringStations.one.licence.id,
-        licenceRef: recipients.primaryUser.licence_refs,
+        licenceRef: recipients.primaryUser.licence_refs[0],
         monitoring_station_name: 'Death star',
         sending_alert_type: 'warning',
         source: '* Source of supply: Meridian Trench',
