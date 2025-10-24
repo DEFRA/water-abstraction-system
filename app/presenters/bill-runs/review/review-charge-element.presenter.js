@@ -7,7 +7,6 @@
 
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
 const {
-  determineReturnLink,
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
@@ -68,7 +67,7 @@ function _matchedReturns(reviewReturns) {
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
       returnId,
-      returnLink: determineReturnLink(reviewReturn),
+      returnLink: `/system/return-logs/${returnLog.returnId}`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)

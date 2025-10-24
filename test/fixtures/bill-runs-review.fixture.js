@@ -90,7 +90,8 @@ function reviewChargeElement() {
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
-          periodEndMonth: 9
+          periodEndMonth: 9,
+          returnId: 'e0e3957d-ab75-4a49-bb04-36a332053448'
         }
       }
     ]
