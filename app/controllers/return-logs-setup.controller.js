@@ -55,8 +55,8 @@ async function check(request, h) {
 }
 
 async function confirmed(request, h) {
-  const { id: returnLogId } = request.query
-  const pageData = await ConfirmedService.go(returnLogId)
+  const { returnId } = request.params
+  const pageData = await ConfirmedService.go(returnId)
 
   return h.view('return-logs/setup/confirmed.njk', pageData)
 }
@@ -153,9 +153,9 @@ async function submission(request, h) {
 }
 
 async function submitConfirmed(request, h) {
-  const { id: returnLogId } = request.query
+  const { returnId } = request.params
 
-  const licenceId = await SubmitConfirmedService.go(returnLogId)
+  const licenceId = await SubmitConfirmedService.go(returnId)
 
   return h.redirect(`/system/licences/${licenceId}/returns`)
 }
@@ -179,7 +179,7 @@ async function submitCheck(request, h) {
     return h.view('return-logs/setup/check.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/confirmed?id=${pageData.returnLogId}`)
+  return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnId}`)
 }
 
 async function submitMeterDetails(request, h) {
@@ -387,7 +387,7 @@ async function submitSubmission(request, h) {
   // NOTE: If the user selected 'Record receipt' on the submission page, then we mark the return log as received, delete
   // the session, and redirect to the confirm-received page
   if (pageData.redirect === 'confirm-received') {
-    return h.redirect(`/system/return-logs/setup/confirmed?id=${pageData.returnLogId}`)
+    return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnId}`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
