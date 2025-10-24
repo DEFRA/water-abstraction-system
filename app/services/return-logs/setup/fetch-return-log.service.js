@@ -12,17 +12,16 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 /**
  * Fetches return log data needed for the confirmed view
  *
- * @param {string} returnLogId - The UUID of the return log to be fetched
+ * @param {string} returnId - The UUID of the return log to be fetched
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and licence data
  */
-async function go(returnLogId) {
+async function go(returnId) {
   return await ReturnLogModel.query()
-    .findById(returnLogId)
     .select(
       'licence.id AS licenceId',
       'licence.licenceRef',
-      'returnLogs.id as returnLogId',
+      'returnLogs.returnId',
       'returnLogs.returnReference',
       'returnLogs.status',
       ref('returnLogs.metadata:purposes').as('purposes'),
@@ -30,7 +29,7 @@ async function go(returnLogId) {
       ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
     )
     .innerJoinRelated('licence')
-    .where('returnLogs.id', returnLogId)
+    .where('returnLogs.returnId', returnId)
 }
 
 module.exports = {
