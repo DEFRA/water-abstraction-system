@@ -25,7 +25,7 @@
       <a class="govuk-body" href="/system/licences/{{ licenceId }}/returns">View returns for {{ licenceRef }}</a>
     </div>
   {% else %}
-    <p class="govuk-body"><a href="/system/return-logs?id={{ returnLogId }}" + returnLogId class="govuk-link">View this return</a></p>
+    <p><a href="/system/return-logs/{{ returnId }}" class="govuk-link govuk-!-font-size-19">View this return</a></p>
     <p class="govuk-body">or</p>
 
     <form method="post">
