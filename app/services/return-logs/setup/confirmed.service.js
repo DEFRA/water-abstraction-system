@@ -11,12 +11,12 @@ const FetchReturnLogService = require('../../../services/return-logs/setup/fetch
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
  *
- * @param {string} returnLogId - The UUID of the return log
+ * @param {string} returnId - The UUID of the return log
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(returnLogId) {
-  const returnLog = await FetchReturnLogService.go(returnLogId)
+async function go(returnId) {
+  const [returnLog] = await FetchReturnLogService.go(returnId)
 
   const formattedData = ConfirmedPresenter.go(returnLog)
 

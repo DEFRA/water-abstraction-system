@@ -15,13 +15,13 @@ const FetchReturnLogService = require('../../../../app/services/return-logs/setu
 const ConfirmedService = require('../../../../app/services/return-logs/setup/confirmed.service.js')
 
 describe('Return Logs - Setup - Confirmed service', () => {
-  const returnLogId = 'v1:6:01/117:10032788:2019-04-01:2019-05-12'
+  const returnId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
 
-  beforeEach(async () => {
-    Sinon.stub(FetchReturnLogService, 'go').resolves({
+  beforeEach(() => {
+    Sinon.stub(FetchReturnLogService, 'go').resolves([{
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnLogId,
+      returnId,
       returnReference: '10032788',
       purposes: [
         {
@@ -42,7 +42,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
       ],
       siteDescription: 'Addington Sandpits',
       status: 'received'
-    })
+    }])
   })
 
   afterEach(() => {
@@ -51,18 +51,18 @@ describe('Return Logs - Setup - Confirmed service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmedService.go(returnLogId)
+      const result = await ConfirmedService.go(returnId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
-        returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
         pageTitle: 'Return 10032788 received',
         purposeDetails: {
           label: 'Purpose',
           value: 'Spray Irrigation - Direct'
         },
+        returnId: 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f',
         siteDescription: 'Addington Sandpits',
         status: 'received'
       })
