@@ -203,7 +203,8 @@ function reviewLicence() {
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
-          periodEndMonth: 9
+          periodEndMonth: 9,
+          returnId: 'b22626c5-db4e-450e-9897-b615d605b110'
         },
         reviewChargeElements: [
           {
@@ -244,7 +245,8 @@ function reviewLicence() {
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
-          periodEndMonth: 9
+          periodEndMonth: 9,
+          returnId: '41d6c667-16d6-4a1e-b0e2-9e9cf52d3325'
         },
         reviewChargeElements: []
       }
