@@ -66,8 +66,8 @@ async function _determineFlags(payload) {
   if (payload.chargeVersionId) {
     return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   }
-  if (payload.returnId) {
-    return DetermineReturnLogFlagsService.go(payload.returnId)
+  if (payload.returnLogId) {
+    return DetermineReturnLogFlagsService.go(payload.returnLogId)
   }
   if (payload.workflowId) {
     return DetermineWorkflowFlagsService.go(payload.workflowId)
