@@ -51,7 +51,8 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
           },
           contact_hash_id: '0cad692217f572faede404363b2625c9',
           contact_type: 'Licence holder',
-          licence_refs: [seedData.licenceHolderLetter.licenceRef]
+          licence_refs: [seedData.licenceHolderLetter.licenceRef],
+          message_type: 'Letter'
         }
       ])
     })
@@ -84,7 +85,8 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef]
+            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef],
+            message_type: 'Letter'
           },
           {
             contact: {
@@ -105,7 +107,8 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
             contact_type: 'Returns to',
-            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef]
+            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef],
+            message_type: 'Letter'
           }
         ])
       })
@@ -139,7 +142,8 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef]
+            licence_refs: [seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef],
+            message_type: 'Letter'
           }
         ])
       })

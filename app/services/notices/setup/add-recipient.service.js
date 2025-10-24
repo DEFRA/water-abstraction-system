@@ -35,7 +35,7 @@ async function go(sessionId, yar) {
       postcode: address.postcode
     },
     contact_hash_id: _contactHashId(session),
-    licence_refs: session.licenceRef,
+    licence_refs: [session.licenceRef],
     ..._addDownloadRecipientData(session.licenceRef)
   }
 
@@ -63,7 +63,8 @@ async function go(sessionId, yar) {
 function _addDownloadRecipientData(licenceRef) {
   return {
     contact_type: 'Single use',
-    licence_ref: licenceRef
+    licence_ref: licenceRef,
+    message_type: 'Letter'
   }
 }
 

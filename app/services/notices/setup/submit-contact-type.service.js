@@ -63,7 +63,8 @@ async function go(sessionId, payload, yar) {
 function _addDownloadRecipientData(licenceRef) {
   return {
     contact_type: 'Single use',
-    licence_ref: licenceRef
+    licence_ref: licenceRef,
+    message_type: 'Email'
   }
 }
 
@@ -78,7 +79,7 @@ async function _save(session, payload, yar) {
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
       email,
-      licence_refs: session.licenceRef,
+      licence_refs: [session.licenceRef],
       ..._addDownloadRecipientData(session.licenceRef)
     }
 

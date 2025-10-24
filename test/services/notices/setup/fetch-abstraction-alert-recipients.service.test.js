@@ -38,7 +38,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_hash_id: 'c661b771974504933d79ca64249570d0',
             contact_type: 'Additional contact',
             email: 'Ron.Burgundy@news.com',
-            licence_refs: [seedData.additionalContact.licenceRef]
+            licence_refs: [seedData.additionalContact.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -60,14 +61,16 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_hash_id: '70d3d94dd27d8b65e96392a85147a4cc',
             contact_type: 'Additional contact',
             email: 'Brick.Tamland@news.com',
-            licence_refs: [seedData.multipleAdditionalContact.licenceRef]
+            licence_refs: [seedData.multipleAdditionalContact.licenceRef],
+            message_type: 'Email'
           },
           {
             contact: null,
             contact_hash_id: 'c661b771974504933d79ca64249570d0',
             contact_type: 'Additional contact',
             email: 'Ron.Burgundy@news.com',
-            licence_refs: [seedData.multipleAdditionalContact.licenceRef]
+            licence_refs: [seedData.multipleAdditionalContact.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -89,7 +92,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_hash_id: 'c661b771974504933d79ca64249570d0',
             contact_type: 'Additional contact',
             email: 'Ron.Burgundy@news.com',
-            licence_refs: [seedData.multipleAdditionalContactWithAndWithoutAlerts.licenceRef]
+            licence_refs: [seedData.multipleAdditionalContactWithAndWithoutAlerts.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -109,11 +113,12 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
         expect(result).to.equal([
           {
-            licence_refs: [seedData.primaryUser.licenceRef],
             contact: null,
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
-            email: 'primary.user@important.com'
+            email: 'primary.user@important.com',
+            licence_refs: [seedData.primaryUser.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -130,18 +135,20 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
 
           expect(result).to.equal([
             {
-              licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef],
               contact: null,
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
-              email: 'primary.user@important.com'
+              email: 'primary.user@important.com',
+              licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef],
+              message_type: 'Email'
             },
             {
               contact: null,
               contact_hash_id: 'c661b771974504933d79ca64249570d0',
               contact_type: 'Additional contact',
               email: 'Ron.Burgundy@news.com',
-              licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef]
+              licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef],
+              message_type: 'Email'
             }
           ])
         })
@@ -181,7 +188,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null,
-            licence_refs: [seedData.licenceHolder.licenceRef]
+            licence_refs: [seedData.licenceHolder.licenceRef],
+            message_type: 'Letter'
           }
         ])
       })
@@ -218,14 +226,16 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null,
-            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef]
+            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef],
+            message_type: 'Letter'
           },
           {
             contact: null,
             contact_hash_id: 'c661b771974504933d79ca64249570d0',
             contact_type: 'Additional contact',
             email: 'Ron.Burgundy@news.com',
-            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef]
+            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -256,7 +266,8 @@ describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
           contact_hash_id: 'c661b771974504933d79ca64249570d0',
           contact_type: 'Additional contact',
           email: 'Ron.Burgundy@news.com',
-          licence_refs: combinedLicenceRefs
+          licence_refs: combinedLicenceRefs,
+          message_type: 'Email'
         }
       ])
     })

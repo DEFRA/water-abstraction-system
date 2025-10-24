@@ -10,25 +10,29 @@ const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const AddRecipientService = require('../../../../app/services/notices/setup/add-recipient.service.js')
 
 describe('Notices - Setup - Add Recipient service', () => {
   let contactHashId
+  let licenceRef
   let session
-  let sessionId
   let sessionData
+  let sessionId
   let yarStub
 
   beforeEach(async () => {
     sessionId = generateUUID()
 
+    licenceRef = generateLicenceRef()
+
     sessionData = {
       contactName: 'Fake Person',
-      licenceRef: '12345',
+      licenceRef,
       selectedRecipients: []
     }
   })
@@ -84,7 +88,8 @@ describe('Notices - Setup - Add Recipient service', () => {
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
               licence_ref: sessionData.licenceRef,
-              licence_refs: sessionData.licenceRef
+              licence_refs: [sessionData.licenceRef],
+              message_type: 'Letter'
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])
@@ -105,7 +110,8 @@ describe('Notices - Setup - Add Recipient service', () => {
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
-              licence_refs: '01/123'
+              licence_refs: [licenceRef],
+              message_type: 'Letter'
             }
           ]
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
@@ -134,7 +140,8 @@ describe('Notices - Setup - Add Recipient service', () => {
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
-              licence_refs: '01/123'
+              licence_refs: [licenceRef],
+              message_type: 'Letter'
             },
             {
               contact: {
@@ -148,7 +155,8 @@ describe('Notices - Setup - Add Recipient service', () => {
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
               licence_ref: session.licenceRef,
-              licence_refs: session.licenceRef
+              licence_refs: [session.licenceRef],
+              message_type: 'Letter'
             }
           ])
           expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
@@ -202,7 +210,8 @@ describe('Notices - Setup - Add Recipient service', () => {
               contact_hash_id: contactHashId,
               contact_type: 'Single use',
               licence_ref: sessionData.licenceRef,
-              licence_refs: sessionData.licenceRef
+              licence_refs: [sessionData.licenceRef],
+              message_type: 'Letter'
             }
           ])
           expect(refreshedSession.selectedRecipients).equal([contactHashId])

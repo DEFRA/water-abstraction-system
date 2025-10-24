@@ -39,7 +39,8 @@ function _addAdditionalContact() {
     contact: null,
     contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
     contact_type: 'Additional contact',
-    email: 'additional.contact@important.com'
+    email: 'additional.contact@important.com',
+    message_type: 'Email'
   }
 }
 
@@ -66,7 +67,8 @@ function _addDuplicateLicenceHolder(licenceRef) {
     contact_type: 'Licence holder',
     contact: _contact('4', 'Duplicate Licence holder', 'Licence holder'),
     contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Letter'
   }
 }
 
@@ -76,7 +78,8 @@ function _addDuplicateReturnsTo(licenceRef) {
     contact_type: 'Returns to',
     contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
     contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Letter'
   }
 }
 
@@ -86,7 +89,8 @@ function _addLicenceHolder() {
     contact_type: 'Licence holder',
     contact: _contact('1', 'Licence holder', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Letter'
   }
 }
 
@@ -97,7 +101,8 @@ function _addPrimaryUser() {
     contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
     contact_type: 'Primary user',
     email: 'primary.user@important.com',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Email'
   }
 }
 
@@ -108,7 +113,8 @@ function _addDuplicatePrimaryUser(licenceRef) {
     contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
     contact_type: 'Primary user',
     email: 'primary.user@important.com',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Email'
   }
 }
 
@@ -119,7 +125,8 @@ function _addReturnsAgent() {
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
     contact_type: 'Returns agent',
     email: 'returns.agent@important.com',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Email'
   }
 }
 
@@ -146,7 +153,8 @@ function _addReturnTo() {
     contact_type: 'Returns to',
     contact,
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Letter'
   }
 }
 
@@ -156,7 +164,8 @@ function _addLicenceHolderWithMultipleLicences() {
     contact_type: 'Licence holder',
     contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
-    return_log_ids: [generateUUID()]
+    return_log_ids: [generateUUID()],
+    message_type: 'Letter'
   }
 }
 
