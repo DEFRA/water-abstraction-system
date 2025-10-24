@@ -16,7 +16,7 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
 async function go(returnId, version) {
-  const [returnLog] = await _fetch(returnId, version)
+  const returnLog = await _fetch(returnId, version)
 
   returnLog.returnSubmissions[0].$applyReadings()
 
@@ -38,6 +38,7 @@ async function _fetch(returnId, version) {
           returnSubmissionLinesBuilder.select(['id', 'startDate', 'endDate', 'quantity']).orderBy('endDate', 'asc')
         })
     })
+    .first()
 }
 
 module.exports = {

@@ -52,7 +52,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
     it('returns the return log instance', async () => {
       const result = await FetchReturnLogService.go(returnLog.returnId)
 
-      expect(result).to.equal([
+      expect(result).to.equal(
         {
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
@@ -63,7 +63,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
           status: returnLog.status,
           submissionCount: 0
         }
-      ])
+      )
     })
 
     describe('with multiple return submissions', () => {
@@ -75,7 +75,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
       it('returns a count of the associated return submissions', async () => {
         const result = await FetchReturnLogService.go(returnLog.returnId)
 
-        expect(result[0].submissionCount).to.equal(2)
+        expect(result.submissionCount).to.equal(2)
       })
     })
   })
@@ -84,7 +84,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
     it('returns undefined', async () => {
       const result = await FetchReturnLogService.go(generateUUID())
 
-      expect(result).to.have.length(0)
+      expect(result).to.be.undefined()
     })
   })
 })

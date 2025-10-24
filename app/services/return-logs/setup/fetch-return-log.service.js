@@ -30,6 +30,7 @@ async function go(returnId) {
     )
     .innerJoinRelated('licence')
     .where('returnLogs.returnId', returnId)
+    .first()
 }
 
 module.exports = {

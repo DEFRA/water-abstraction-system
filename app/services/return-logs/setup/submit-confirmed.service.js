@@ -16,10 +16,11 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @returns {Promise<string>} The licenceId to use in the redirect
  */
 async function go(returnId) {
-  const [{ licenceId, returnLogId }] = await ReturnLogModel.query()
+  const { licenceId, returnLogId } = await ReturnLogModel.query()
     .select('licence.id AS licenceId', 'returnLogs.id AS returnLogId')
     .innerJoinRelated('licence')
     .where('returnLogs.returnId', returnId)
+    .first()
 
   await ProcessBillingFlagService.go({ returnLogId })
 

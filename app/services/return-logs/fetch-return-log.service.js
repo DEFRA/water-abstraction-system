@@ -25,7 +25,7 @@ async function go(returnId, version = 0) {
 
   const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
 
-  const [returnLog] = await _fetch(returnId, selectedReturnSubmission)
+  const returnLog = await _fetch(returnId, selectedReturnSubmission)
 
   if (selectedReturnSubmission) {
     returnLog.returnSubmissions[0].$applyReadings()
@@ -61,6 +61,7 @@ async function _fetch(returnId, selectedReturnSubmission) {
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
+    .first()
 
   if (selectedReturnSubmission) {
     query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
