@@ -97,7 +97,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({ returnLogId: 'TEST_RETURN_LOG_ID' })
+          Sinon.stub(SubmitCheckService, 'go').resolves({ returnId: 'TEST_RETURN_ID' })
         })
 
         it('redirects to the confirmed page on success', async () => {
@@ -106,7 +106,7 @@ describe('Return Logs - Setup - Controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed?id=TEST_RETURN_LOG_ID')
+          expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed/TEST_RETURN_ID')
         })
       })
 
@@ -137,12 +137,12 @@ describe('Return Logs - Setup - Controller', () => {
     })
   })
 
-  describe('return-logs/setup/confirmed', () => {
+  describe('return-logs/setup/confirmed/{returnId}', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+          url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88',
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -156,12 +156,12 @@ describe('Return Logs - Setup - Controller', () => {
             activeNavBar: 'search',
             licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
             licenceRef: '01/117',
-            returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
             pageTitle: 'Return 10032788 received',
             purposeDetails: {
               label: 'Purpose',
               value: 'Spray Irrigation - Direct'
             },
+            returnId: '227d174d-500b-4e88-ae95-c70b0676bb88',
             siteDescription: 'Addington Sandpits',
             status: 'received'
           })
@@ -182,7 +182,7 @@ describe('Return Logs - Setup - Controller', () => {
         beforeEach(() => {
           options = {
             method: 'POST',
-            url: `/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12`,
+            url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88',
             auth: {
               strategy: 'session',
               credentials: { scope: ['billing'] }
@@ -194,7 +194,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         it('redirects to the licence returns page', async () => {
           const response = await server.inject(
-            postRequestOptions('/return-logs/setup/confirmed?id=v1:6:01/117:10032788:2019-04-01:2019-05-12')
+            postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88')
           )
 
           expect(response.statusCode).to.equal(302)
@@ -255,12 +255,10 @@ describe('Return Logs - Setup - Controller', () => {
         })
 
         it('redirects to the "abstraction return" page', async () => {
-          const response = await server.inject(
-            _postOptions(path, { returnLogId: 'v1:6:09/999:1003992:2022-04-01:2023-03-31' })
-          )
+          const response = await server.inject(_postOptions(path, { returnId: '4ddbac0e-a176-420a-8176-4ce410327641' }))
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/return-logs?id=v1:6:09/999:1003992:2022-04-01:2023-03-31')
+          expect(response.headers.location).to.equal('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641')
         })
       })
     })

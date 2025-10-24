@@ -22,18 +22,19 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
 /**
  * Formats return log data ready for presenting in the view return log page
  *
- * @param {module:ReturnLogModel} returnLog - The return log and associated submission and licence data
  * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {module:ReturnLogModel} returnLog - The return log and associated submission and licence data
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnLog, auth) {
+function go(auth, returnLog) {
   const {
     endDate,
     id,
     licence,
     purposes,
     receivedDate,
+    returnId,
     returnReference,
     returnsFrequency,
     returnSubmissions,
@@ -55,12 +56,12 @@ function go(returnLog, auth) {
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
     actionButton: _actionButton(latest, auth, id, formattedStatus),
-    backLink: _backLink(id, licence.id, latest),
+    backLink: _backLink(licence.id, latest, returnId),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
-    downloadCSVLink: _downloadCSVLink(selectedReturnSubmission, id),
+    downloadCSVLink: _downloadCSVLink(returnId, selectedReturnSubmission),
     licenceRef: licence.licenceRef,
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
@@ -79,7 +80,7 @@ function go(returnLog, auth) {
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
     underQuery,
-    versions: _versions(selectedReturnSubmission, versions, id),
+    versions: _versions(returnId, selectedReturnSubmission, versions),
     warning: _warning(formattedStatus, latest)
   }
 }
@@ -142,7 +143,7 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
   }
 }
 
-function _backLink(returnId, licenceId, latest) {
+function _backLink(licenceId, latest, returnId) {
   if (latest) {
     return {
       href: `/system/licences/${licenceId}/returns`,
@@ -151,7 +152,7 @@ function _backLink(returnId, licenceId, latest) {
   }
 
   return {
-    href: `/system/return-logs?id=${returnId}`,
+    href: `/system/return-logs/${returnId}`,
     text: 'Go back to the latest version'
   }
 }
@@ -165,14 +166,14 @@ function _displayTable(selectedReturnSubmission) {
   return !selectedReturnSubmission.nilReturn
 }
 
-function _downloadCSVLink(selectedReturnSubmission, returnLogId) {
+function _downloadCSVLink(returnId, selectedReturnSubmission) {
   if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 
   const { version } = selectedReturnSubmission
 
-  return `/system/return-logs/download?id=${returnLogId}&version=${version}`
+  return `/system/return-logs/${returnId}/download?version=${version}`
 }
 
 function _latest(versions, selectedReturnSubmission) {
@@ -249,7 +250,7 @@ function _total(selectedReturnSubmission) {
   return formatNumber(total)
 }
 
-function _versions(selectedReturnSubmission, versions, returnLogId) {
+function _versions(returnId, selectedReturnSubmission, versions) {
   // We are dealing with a due or received return log so there are no submissions, which means no versions to display
   if (!selectedReturnSubmission) {
     return null
@@ -260,7 +261,7 @@ function _versions(selectedReturnSubmission, versions, returnLogId) {
 
     return {
       createdAt: `${formatLongDate(createdAt)}`,
-      link: `/system/return-logs?id=${returnLogId}&version=${number}`,
+      link: `/system/return-logs/${returnId}?version=${number}`,
       notes,
       selected: id === selectedReturnSubmission.id,
       version: number,
