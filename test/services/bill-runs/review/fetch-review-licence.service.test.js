@@ -169,7 +169,8 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
               periodStartDay: 1,
               periodStartMonth: 4,
               periodEndDay: 28,
-              periodEndMonth: 4
+              periodEndMonth: 4,
+              returnId: returnLog.returnId
             },
             reviewChargeElements: [
               {
