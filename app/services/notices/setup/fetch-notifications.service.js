@@ -15,11 +15,22 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  *
  * @param {string} eventId - the unique id used to group all the notifications together
  *
- * @returns {object} - the notifications for the event
+ * @returns {Promise<object>} - the notifications for the event
  */
 async function go(eventId) {
   return NotificationModel.query()
-    .select(['id', 'messageRef', 'messageType', 'pdf', 'personalisation', 'recipient', 'return_log_ids', 'templateId'])
+    .select([
+      'createdAt',
+      'id',
+      'licenceMonitoringStationId',
+      'messageRef',
+      'messageType',
+      'pdf',
+      'personalisation',
+      'recipient',
+      'returnLogIds',
+      'templateId'
+    ])
     .where('eventId', eventId)
 }
 
