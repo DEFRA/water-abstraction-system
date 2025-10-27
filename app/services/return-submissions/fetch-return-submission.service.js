@@ -35,7 +35,7 @@ async function _fetch(returnSubmissionId) {
     })
     .withGraphFetched('returnLog')
     .modifyGraph('returnLog', (returnLogBuilder) => {
-      returnLogBuilder.select(['returnReference', 'returnsFrequency'])
+      returnLogBuilder.select(['returnId', 'returnReference', 'returnsFrequency'])
     })
 }
 
