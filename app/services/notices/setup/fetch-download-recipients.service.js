@@ -7,6 +7,7 @@
 
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
@@ -92,8 +93,19 @@ function _filterByLicence(session) {
 }
 
 function _filterByPeriod(session) {
-  const { dueDate, endDate, quarterly, startDate, summer } = session.determinedReturnsPeriod
-  const removeLicences = session?.removeLicences ?? ''
+  const {
+    determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
+    noticeType,
+    removeLicences = ''
+  } = session
+
+  let dueDateCondition = 'IS NULL'
+
+  if (noticeType === NoticeType.REMINDERS) {
+    dueDateCondition = 'IS NOT NULL'
+  } else if (!featureFlagsConfig.enableNullDueDate) {
+    dueDateCondition = '= ?'
+  }
 
   const bindings = [startDate, endDate, summer, quarterly]
   const whereReturnLogs = `
@@ -101,7 +113,7 @@ function _filterByPeriod(session) {
     AND end_date <= ?
     AND metadata->>'isSummer' = ?
     AND quarterly = ?
-    AND due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+    AND due_date ${dueDateCondition}
   `
 
   if (!featureFlagsConfig.enableNullDueDate) {
