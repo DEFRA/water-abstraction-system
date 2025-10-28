@@ -596,7 +596,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
 
     describe('and the due date is set and there is a "primary user"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         session.determinedReturnsPeriod = {
           dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
           endDate: seedData.primaryUserDueDate.returnLog.endDate,
@@ -623,7 +623,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
 
     describe('and the due date is not set and there is a "primary user"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         session.determinedReturnsPeriod = {
           dueDate: seedData.primaryUser.returnLog.dueDate,
           endDate: seedData.primaryUser.returnLog.endDate,
