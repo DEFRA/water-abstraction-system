@@ -23,7 +23,7 @@ async function go(query, page, matchFullIdentifier = false) {
   const partialIdentifier = `%${fullIdentifier}%`
 
   const select = MonitoringStationModel.query()
-    .select(['id', 'label', 'wiski_id', 'station_reference', 'catchment_name', 'river_name'])
+    .select(['id', 'label', 'wiski_id', 'station_reference', 'catchment_name', 'river_name', 'grid_reference'])
     .orderBy([{ column: 'label', order: 'asc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 

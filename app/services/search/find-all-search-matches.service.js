@@ -133,9 +133,9 @@ function _matchesPartialLicenceRef(query) {
 
   // If it's only a single number then it could potentially be part of a licence reference, but it's not really
   // enough to go on so we won't search all the licences just for one matching digit
-  if (query.match(/^\d$/)) {
-    return false
-  }
+  // if (query.match(/^\d$/)) {
+  //   return false
+  // }
 
   // Otherwise, we have to assume that it could be a licence reference
   return true

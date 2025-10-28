@@ -76,8 +76,13 @@ function _licences(licences) {
 
   return licences.map((licence) => {
     const licenceEnd = licence.$ends()
-    const { Forename: firstName, Initials: initials, Name: lastName, Salutation: salutation } = licence.metadata
+    //const { Forename: firstName, Initials: initials, Name: lastName, Salutation: salutation } = licence.metadata
     const { id, licenceRef } = licence
+
+    const holderContact = licence.metadata?.contacts?.find((contact) => {
+      return contact.role === 'Licence holder'
+    }) ?? {}
+    const { forename: firstName, initials, name: lastName, salutation } = holderContact
 
     // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
     // Name that are populated, where Name provides the surname for a person.

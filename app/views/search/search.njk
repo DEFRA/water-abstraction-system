@@ -57,6 +57,8 @@
     {{ resultCardTerm('WISKI ID:') }}{{ resultCardDetail(monitoringStation.wiskiId) }}
   {% endset %}
   {% set col3 %}
+    {{ resultCardTerm('Grid reference:') }}{{ resultCardDetail(monitoringStation.gridReference) }}
+    <br/>
     {{ resultCardTerm('Catchment:') }}{{ resultCardDetail(monitoringStation.catchmentName) }}
     <br/>
     {{ resultCardTerm('River:') }}{{ resultCardDetail(monitoringStation.riverName) }}
@@ -125,6 +127,12 @@
 
         <hr class="govuk-section-break govuk-section-break--visible">
 
+        {% if exactMatches.licences %}
+          {% for licence in exactMatches.licences %}
+            {{ licenceResultCard(licence) }}
+          {% endfor %}
+        {% endif %}
+
         {% if exactMatches.monitoringStations %}
           {% for monitoringStation in exactMatches.monitoringStations %}
             {{ monitoringStationResultCard(monitoringStation) }}
@@ -134,12 +142,6 @@
         {% if exactMatches.returnLogs %}
           {% for returnLog in exactMatches.returnLogs %}
             {{ returnLogResultCard(returnLog) }}
-          {% endfor %}
-        {% endif %}
-
-        {% if exactMatches.licences %}
-          {% for licence in exactMatches.licences %}
-            {{ licenceResultCard(licence) }}
           {% endfor %}
         {% endif %}
 
@@ -164,6 +166,12 @@
       {% else %}
         <hr class="govuk-section-break govuk-section-break--visible">
 
+        {% if partialMatches.licences %}
+          {% for licence in partialMatches.licences %}
+            {{ licenceResultCard(licence) }}
+          {% endfor %}
+        {% endif %}
+
         {% if partialMatches.monitoringStations %}
           {% for monitoringStation in partialMatches.monitoringStations %}
             {{ monitoringStationResultCard(monitoringStation) }}
@@ -173,12 +181,6 @@
         {% if partialMatches.returnLogs %}
           {% for returnLog in partialMatches.returnLogs %}
             {{ returnLogResultCard(returnLog) }}
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.licences %}
-          {% for licence in partialMatches.licences %}
-            {{ licenceResultCard(licence) }}
           {% endfor %}
         {% endif %}
 
