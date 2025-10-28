@@ -193,12 +193,14 @@ async function _fetchRecipients(session) {
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
-  let dueDateCondition = 'IS NULL'
+  let dueDateCondition
 
   if (noticeType === NoticeType.REMINDERS) {
     dueDateCondition = 'IS NOT NULL'
   } else if (!featureFlagsConfig.enableNullDueDate) {
     dueDateCondition = '= ?'
+  } else {
+    dueDateCondition = 'IS NULL'
   }
 
   const where = `

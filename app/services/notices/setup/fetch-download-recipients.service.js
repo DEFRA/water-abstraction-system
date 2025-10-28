@@ -99,12 +99,14 @@ function _filterByPeriod(session) {
     removeLicences = ''
   } = session
 
-  let dueDateCondition = 'IS NULL'
+  let dueDateCondition
 
   if (noticeType === NoticeType.REMINDERS) {
     dueDateCondition = 'IS NOT NULL'
   } else if (!featureFlagsConfig.enableNullDueDate) {
     dueDateCondition = '= ?'
+  } else {
+    dueDateCondition = 'IS NULL'
   }
 
   const bindings = [startDate, endDate, summer, quarterly]
