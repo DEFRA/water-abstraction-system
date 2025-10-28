@@ -7,6 +7,7 @@
 
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
@@ -186,13 +187,24 @@ async function _fetchRecipient(session) {
 async function _fetchRecipients(session) {
   const {
     determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
+    noticeType,
     removeLicences = ''
   } = session
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
+  let dueDateCondition
+
+  if (noticeType === NoticeType.REMINDERS) {
+    dueDateCondition = 'IS NOT NULL'
+  } else if (!featureFlagsConfig.enableNullDueDate) {
+    dueDateCondition = '= ?'
+  } else {
+    dueDateCondition = 'IS NULL'
+  }
+
   const where = `
-    AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+    AND rl.due_date ${dueDateCondition}
     AND rl.end_date <= ?
     AND rl.start_date >= ?
     AND rl.metadata->>'isSummer' = ?
