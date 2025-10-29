@@ -47,7 +47,6 @@ function _fullDate(day, month, year) {
 }
 
 function _validateDate(payload, startDate, endDate) {
-  console.log(payload)
   const schema = Joi.object({
     periodDateUsedOptions: Joi.string().required().messages({
       'any.required': 'Select what period was used for this volume',
