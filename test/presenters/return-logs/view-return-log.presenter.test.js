@@ -63,6 +63,7 @@ describe('Return Logs - View Return Log presenter', () => {
       meterDetails: null,
       method: 'abstractionVolumes',
       nilReturn: false,
+      notification: null,
       pageTitle: 'Abstraction return',
       pageTitleCaption: `Licence ${returnLog.licenceRef}`,
       purpose: ['Mineral Washing (Mineral Washing alias)'],
@@ -453,6 +454,28 @@ describe('Return Logs - View Return Log presenter', () => {
 
           expect(result.nilReturn).to.equal(false)
         })
+      })
+    })
+  })
+
+  describe('the "notification" property', () => {
+    describe('when the return log is under query', () => {
+      beforeEach(() => {
+        returnLog.underQuery = true
+      })
+
+      it('returns the notification text', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.notification).to.equal({ text: 'This return has been marked under query' })
+      })
+    })
+
+    describe('when the return log is not under query', () => {
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(returnLog, auth)
+
+        expect(result.notification).to.be.null()
       })
     })
   })
@@ -877,7 +900,10 @@ describe('Return Logs - View Return Log presenter', () => {
       it('returns "This return is void and has been replaced. Do not use this data."', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-        expect(result.warning).to.equal('This return is void and has been replaced. Do not use this data.')
+        expect(result.warning).to.equal({
+          text: 'This return is void and has been replaced. Do not use this data.',
+          iconFallbackText: 'Warning'
+        })
       })
     })
 
@@ -912,10 +938,13 @@ describe('Return Logs - View Return Log presenter', () => {
         // selected.
       })
 
-      it('returns false', () => {
+      it('returns "You are viewing a previous version. This is not the latest submission data."', () => {
         const result = ViewReturnLogPresenter.go(returnLog, auth)
 
-        expect(result.warning).to.equal('You are viewing a previous version. This is not the latest submission data.')
+        expect(result.warning).to.equal({
+          text: 'You are viewing a previous version. This is not the latest submission data.',
+          iconFallbackText: 'Warning'
+        })
       })
     })
   })

@@ -3,29 +3,17 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
-{% from "macros/page-heading.njk" import pageHeading %}
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block pageContent %}
-  {% if underQuery %}
-    {{ govukNotificationBanner({ text: 'This return has been marked under query' }) }}
-  {% endif %}
-
-  {% if warning %}
-    {{ govukWarningText({ text: warning, iconFallbackText: "Warning" }) }}
-  {% endif %}
-
-  {{ pageHeading(pageTitle, pageCaption, 'govuk-heading-xl govuk-!-margin-bottom-3') }}
+  {{ pageHeadingHtml }}
 
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
-
       <p>{{ statusTag(status, false) }}</p>
 
       {{ govukSummaryList({
@@ -107,6 +95,7 @@
           {% set queryButtonText = 'Mark as under query' %}
           {% set queryButtonValue = 'mark' %}
         {% endif %}
+
         <form method="post">
           <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
           {{ govukButton({
