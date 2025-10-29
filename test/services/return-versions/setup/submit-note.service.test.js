@@ -161,7 +161,10 @@ describe('Return Versions Setup - Submit Note service', () => {
             activeNavBar: 'search',
             pageTitle: 'Add a note',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/check`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/check`,
+              text: 'Back'
+            },
             licenceRef: '01/ABC',
             note: null
           },
@@ -174,7 +177,13 @@ describe('Return Versions Setup - Submit Note service', () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Enter details'
+            errorList: [
+              {
+                href: '#note',
+                text: 'Enter details'
+              }
+            ],
+            note: { text: 'Enter details' }
           })
         })
       })
@@ -201,7 +210,13 @@ describe('Return Versions Setup - Submit Note service', () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Enter no more than 500 characters'
+            errorList: [
+              {
+                href: '#note',
+                text: 'Enter no more than 500 characters'
+              }
+            ],
+            note: { text: 'Enter no more than 500 characters' }
           })
         })
       })

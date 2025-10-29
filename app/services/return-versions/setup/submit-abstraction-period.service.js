@@ -5,6 +5,8 @@
  * @module SubmitAbstractionPeriodService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AbstractionPeriodPresenter = require('../../../presenters/return-versions/setup/abstraction-period.presenter.js')
 const AbstractionPeriodValidator = require('../../../validators/abstraction-period.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
@@ -74,19 +76,7 @@ function _submittedSessionData(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
-  if (!validation.startResult.error && !validation.endResult.error) {
-    return null
-  }
-
-  const startResult = validation.startResult.error ? validation.startResult.error.details[0].message : null
-  const endResult = validation.endResult.error ? validation.endResult.error.details[0].message : null
-
-  return {
-    text: {
-      startResult,
-      endResult
-    }
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

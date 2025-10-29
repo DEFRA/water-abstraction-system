@@ -14,11 +14,11 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
  * https://www.postgresql.org/docs/current/postgres-fdw.html#POSTGRES-FDW-OPTIONS-REMOTE-EXECUTION. The calling
  * service will handle the batch process.
  *
- * > By using the batch insert we need the upstream service to set the 'createdAt' field.
+ * > By using the batch insert, we need the upstream service to set the 'createdAt' field.
  *
  * @param {object} notifications
  *
- * @returns {object} - the created notifications
+ * @returns {Promise<object>} - the created notifications
  */
 async function go(notifications) {
   return NotificationModel.query().insert(notifications)

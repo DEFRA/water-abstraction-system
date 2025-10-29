@@ -6,13 +6,14 @@
  */
 
 const ContactPresenter = require('./contact.presenter.js')
+const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
-  abstractionAlerts: 'Abstraction alerts',
-  returnForms: 'Return forms',
-  invitations: 'Returns invitations',
-  reminders: 'Returns reminders'
+  [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
+  [NoticeType.PAPER_RETURN]: 'Return forms',
+  [NoticeType.INVITATIONS]: 'Returns invitations',
+  [NoticeType.REMINDERS]: 'Returns reminders'
 }
 
 /**
@@ -29,25 +30,28 @@ function go(recipients, page, pagination, session) {
   const { noticeType, referenceCode } = session
 
   const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+  const canSendNotice = _canSendNotice(formattedRecipients)
 
   return {
-    defaultPageSize,
+    canSendNotice,
     links: _links(session),
     pageTitle: _pageTitle(page, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
-    readyToSend: _readyToSend(recipients, noticeType),
+    readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
     recipients: formattedRecipients,
-    recipientsAmount: recipients.length,
+    tableCaption: _tableCaption(defaultPageSize, recipients.length),
     warning: _warning(formattedRecipients)
   }
 }
 
-function _readyToSend(recipients, noticeType) {
-  if (recipients.length === 0) {
-    return 'No recipients with due returns'
+function _canSendNotice(formattedRecipients) {
+  if (formattedRecipients.length === 0) {
+    return false
   }
 
-  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
+
+  return invalidRecipients.length !== formattedRecipients.length
 }
 
 function _formatRecipients(noticeType, recipients, sessionId) {
@@ -56,10 +60,18 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 
     return {
       contact,
-      licences: recipient.licence_refs.split(','),
+      licences: recipient.licence_refs,
       method: `${recipient.message_type} - ${recipient.contact_type}`,
       previewLink: _previewLink(noticeType, recipient, sessionId, contact)
     }
+  })
+}
+
+function _invalidRecipients(formattedRecipients) {
+  return formattedRecipients.filter((formattedRecipient) => {
+    const { contact } = formattedRecipient
+
+    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
   })
 }
 
@@ -71,14 +83,14 @@ function _links(session) {
     download: `/system/notices/setup/${id}/download`
   }
 
-  if (journey === 'adhoc') {
+  if (journey === NoticeJourney.ADHOC) {
     return {
       ...links,
       manage: `/system/notices/setup/${id}/select-recipients`
     }
   }
 
-  if (journey === 'alerts') {
+  if (journey === NoticeJourney.ALERTS) {
     return links
   }
 
@@ -115,15 +127,27 @@ function _previewLink(noticeType, recipient, sessionId, contact) {
     return null
   }
 
-  if (noticeType === 'returnForms') {
-    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-return-forms`
+  if (noticeType === NoticeType.PAPER_RETURN) {
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-paper-return`
   }
 
   // Returns invitations and reminders can be previewed directly
   const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
 
   // For abstraction alerts we need to go to an intermediate page to select the alert to preview
-  return noticeType === 'abstractionAlerts' ? `${basePreviewLink}/check-alert` : basePreviewLink
+  return noticeType === NoticeType.ABSTRACTION_ALERTS ? `${basePreviewLink}/check-alert` : basePreviewLink
+}
+
+function _readyToSend(formattedRecipients, noticeType, canSendNotice) {
+  if (formattedRecipients.length === 0) {
+    return 'No recipients with due returns.'
+  }
+
+  if (!canSendNotice) {
+    return 'No valid notifications to send.'
+  }
+
+  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
 }
 
 /**
@@ -143,6 +167,14 @@ function _recipients(noticeType, page, recipients, sessionId) {
   const sortedRecipients = _sortRecipients(formattedRecipients)
 
   return _paginateRecipients(sortedRecipients, page)
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} recipients`
+  }
+
+  return `Showing all ${totalNumber} recipients`
 }
 
 /**
@@ -168,11 +200,7 @@ function _sortRecipients(recipients) {
 }
 
 function _warning(formattedRecipients) {
-  const invalidRecipients = formattedRecipients.filter((formattedRecipient) => {
-    const { contact } = formattedRecipient
-
-    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
-  })
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
 
   if (invalidRecipients.length === 0) {
     return null

@@ -20,10 +20,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
   beforeEach(async () => {
     payload = {
-      'abstraction-period-start-day': '1',
-      'abstraction-period-start-month': '2',
-      'abstraction-period-end-day': '3',
-      'abstraction-period-end-month': '4'
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '2',
+      abstractionPeriodEndDay: '3',
+      abstractionPeriodEndMonth: '4'
     }
 
     sessionData = {
@@ -53,10 +53,9 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
   })
 
-  describe('when validation fails', () => {
+  describe('with an invalid payload', () => {
     beforeEach(() => {
-      payload['abstraction-period-start-day'] = 'INVALID_START_DAY'
-      payload['abstraction-period-end-day'] = 'INVALID_END_DAY'
+      payload = {}
     })
 
     it('returns page data for the view', async () => {
@@ -64,12 +63,15 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
       expect(result).to.equal(
         {
-          abstractionPeriodStartDay: 'INVALID_START_DAY',
-          abstractionPeriodStartMonth: '2',
-          abstractionPeriodEndDay: 'INVALID_END_DAY',
-          abstractionPeriodEndMonth: '4',
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null,
+          abstractionPeriodEndDay: null,
+          abstractionPeriodEndMonth: null,
           activeNavBar: 'search',
-          backLink: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
+          backLink: {
+            href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
+            text: 'Back'
+          },
           monitoringStationLabel: 'LABEL',
           pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
         },
@@ -81,10 +83,177 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
       expect(result.error).to.equal({
-        text: {
-          startResult: 'Enter a real start date',
-          endResult: 'Enter a real end date'
+        errorList: [
+          {
+            href: '#abstractionPeriodStart',
+            text: 'Select the start date of the abstraction period'
+          },
+          {
+            href: '#abstractionPeriodEnd',
+            text: 'Select the end date of the abstraction period'
+          }
+        ],
+        abstractionPeriodStart: {
+          text: 'Select the start date of the abstraction period'
+        },
+        abstractionPeriodEnd: {
+          text: 'Select the end date of the abstraction period'
         }
+      })
+    })
+
+    describe('because the user has not submitted anything', () => {
+      it('includes an error for both input elements', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#abstractionPeriodStart',
+              text: 'Select the start date of the abstraction period'
+            },
+            {
+              href: '#abstractionPeriodEnd',
+              text: 'Select the end date of the abstraction period'
+            }
+          ],
+          abstractionPeriodStart: {
+            text: 'Select the start date of the abstraction period'
+          },
+          abstractionPeriodEnd: {
+            text: 'Select the end date of the abstraction period'
+          }
+        })
+      })
+    })
+
+    describe('because the user has not submitted a start abstraction period', () => {
+      beforeEach(() => {
+        payload = {
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null,
+          abstractionPeriodEndDay: '02',
+          abstractionPeriodEndMonth: '7'
+        }
+      })
+
+      it('includes an error for the start date input element', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#abstractionPeriodStart',
+              text: 'Select the start date of the abstraction period'
+            }
+          ],
+          abstractionPeriodStart: {
+            text: 'Select the start date of the abstraction period'
+          }
+        })
+      })
+
+      it('includes what was submitted', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result).to.equal(
+          {
+            abstractionPeriodStartDay: null,
+            abstractionPeriodStartMonth: null,
+            abstractionPeriodEndDay: '02',
+            abstractionPeriodEndMonth: '7'
+          },
+          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
+        )
+      })
+    })
+
+    describe('because the user has not submitted an end abstraction period', () => {
+      beforeEach(() => {
+        payload = {
+          abstractionPeriodStartDay: '08',
+          abstractionPeriodStartMonth: '12',
+          abstractionPeriodEndDay: null,
+          abstractionPeriodEndMonth: null
+        }
+      })
+
+      it('includes an error for the end date input element', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#abstractionPeriodEnd',
+              text: 'Select the end date of the abstraction period'
+            }
+          ],
+          abstractionPeriodEnd: {
+            text: 'Select the end date of the abstraction period'
+          }
+        })
+      })
+
+      it('includes what was submitted', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result).to.equal(
+          {
+            abstractionPeriodStartDay: '08',
+            abstractionPeriodStartMonth: '12',
+            abstractionPeriodEndDay: null,
+            abstractionPeriodEndMonth: null
+          },
+          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
+        )
+      })
+    })
+
+    describe('because the user has submitted invalid values', () => {
+      beforeEach(() => {
+        payload = {
+          abstractionPeriodStartDay: 'abc',
+          abstractionPeriodStartMonth: '123',
+          abstractionPeriodEndDay: 'abc',
+          abstractionPeriodEndMonth: '123'
+        }
+      })
+
+      it('includes an error for both input elements', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#abstractionPeriodStart',
+              text: 'Enter a real start date'
+            },
+            {
+              href: '#abstractionPeriodEnd',
+              text: 'Enter a real end date'
+            }
+          ],
+          abstractionPeriodStart: {
+            text: 'Enter a real start date'
+          },
+          abstractionPeriodEnd: {
+            text: 'Enter a real end date'
+          }
+        })
+      })
+
+      it('includes what was submitted', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+
+        expect(result).to.equal(
+          {
+            abstractionPeriodStartDay: 'abc',
+            abstractionPeriodStartMonth: '123',
+            abstractionPeriodEndDay: 'abc',
+            abstractionPeriodEndMonth: '123'
+          },
+          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
+        )
       })
     })
   })

@@ -54,6 +54,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
       const result = await notification.$query()
 
       expect(result).equal({
+        alternateNotificationId: null,
         createdAt: new Date(notification.createdAt),
         eventId,
         id: notification.id,
@@ -64,9 +65,11 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: 'received',
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnedAt: null,
         returnLogIds: null,
         status: 'sent',
         templateId: null
@@ -103,6 +106,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
       const result = await notification.$query()
 
       expect(result).equal({
+        alternateNotificationId: null,
         createdAt: new Date(notification.createdAt),
         eventId,
         id: notification.id,
@@ -113,9 +117,11 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: 'received',
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnedAt: null,
         returnLogIds: null,
         status: 'sent',
         templateId: null
@@ -128,6 +134,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
       const result = await notification2.$query()
 
       expect(result).to.equal({
+        alternateNotificationId: null,
         createdAt: new Date(notification2.createdAt),
         eventId,
         id: notification2.id,
@@ -138,9 +145,11 @@ describe('Job - Notification Status - Update Notifications service', () => {
         messageType: null,
         notifyId: null,
         notifyStatus: null,
+        pdf: null,
         personalisation: null,
         plaintext: null,
         recipient: null,
+        returnedAt: null,
         returnLogIds: null,
         status: 'sent',
         templateId: null

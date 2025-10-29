@@ -11,9 +11,11 @@ const { expect } = Code
 const ReturnsPeriodValidator = require('../../../../app/validators/notices/setup/returns-periods.validator.js')
 
 describe('Notices - Setup - Returns Period validator', () => {
+  const noticeType = 'invitations'
+
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = ReturnsPeriodValidator.go({ returnsPeriod: 'summer' })
+      const result = ReturnsPeriodValidator.go({ returnsPeriod: 'summer' }, noticeType)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -23,7 +25,7 @@ describe('Notices - Setup - Returns Period validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "returnsPeriod" is given', () => {
       it('fails validation', () => {
-        const result = ReturnsPeriodValidator.go({ returnsPeriod: '' })
+        const result = ReturnsPeriodValidator.go({ returnsPeriod: '' }, noticeType)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -33,7 +35,7 @@ describe('Notices - Setup - Returns Period validator', () => {
 
     describe('because an unknown "returnsPeriod" is given', () => {
       it('fails validation', () => {
-        const result = ReturnsPeriodValidator.go({ returnsPeriod: 'just-because' })
+        const result = ReturnsPeriodValidator.go({ returnsPeriod: 'just-because' }, noticeType)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

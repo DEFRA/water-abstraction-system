@@ -41,6 +41,28 @@ describe('Data controller', () => {
     Sinon.restore()
   })
 
+  describe('/data/dates', () => {
+    let options
+
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/data/dates'
+        }
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('billingPeriods')
+        })
+      })
+    })
+  })
+
   describe('/data/deduplicate', () => {
     const auth = {
       strategy: 'session',

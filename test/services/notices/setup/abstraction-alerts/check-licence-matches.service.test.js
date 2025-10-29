@@ -49,7 +49,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
       const result = await CheckLicenceMatchesService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
         caption: 'Death star',

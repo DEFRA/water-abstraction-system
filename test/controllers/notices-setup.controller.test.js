@@ -20,7 +20,7 @@ const CancelService = require('../../app/services/notices/setup/cancel.service.j
 const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
-const CheckReturnFormsService = require('../../app/services/notices/setup/preview/check-return-forms.service.js')
+const CheckPaperReturnService = require('../../app/services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
@@ -28,12 +28,12 @@ const DownloadRecipientsService = require('../../app/services/notices/setup/down
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
-const PreviewReturnFormsService = require('../../app/services/notices/setup/preview-return-forms.service.js')
+const PaperReturnService = require('../../app/services/notices/setup/paper-return.service.js')
+const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
 const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnFormsService = require('../../app/services/notices/setup/return-forms.service.js')
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
@@ -47,9 +47,9 @@ const SubmitCheckService = require('../../app/services/notices/setup/submit-chec
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
 const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
 const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
+const SubmitPaperReturnService = require('../../app/services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnFormsService = require('../../app/services/notices/setup/submit-return-forms.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 
@@ -198,7 +198,6 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewCancel()
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
           expect(response.payload).to.contain(pageData.referenceCode)
         })
@@ -208,7 +207,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns('/manage')
+          Sinon.stub(SubmitCancelService, 'go').returns('/system/notices')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
         })
 
@@ -216,7 +215,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/manage')
+          expect(response.headers.location).to.equal('/system/notices')
         })
       })
     })
@@ -246,7 +245,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewCheck()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -346,7 +344,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewConfirmation()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -886,21 +883,21 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/{sessionId}/preview/{contactHashId}/check-return-forms', () => {
+  describe('notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/preview/${contactHashId}/check-return-forms`,
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-paper-return`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
           }
         }
 
-        Sinon.stub(CheckReturnFormsService, 'go').resolves({
+        Sinon.stub(CheckPaperReturnService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
@@ -916,7 +913,7 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('/notices/setup/{sessionId}/preview/{contactHashId}/return-forms/{returnId}', () => {
+  describe('/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}', () => {
     describe('GET', () => {
       let buffer
 
@@ -925,7 +922,7 @@ describe('Notices Setup controller', () => {
           method: 'GET',
           url:
             basePath +
-            `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/return-forms/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
+            `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/paper-return/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -934,7 +931,7 @@ describe('Notices Setup controller', () => {
 
         buffer = Buffer.from('mock file')
 
-        Sinon.stub(PreviewReturnFormsService, 'go').resolves(buffer)
+        Sinon.stub(PreviewPaperReturnService, 'go').resolves(buffer)
       })
 
       describe('when a request is valid', () => {
@@ -1106,7 +1103,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewRemoveLicence()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1173,7 +1169,6 @@ describe('Notices Setup controller', () => {
           const pageData = _viewReturnsPeriod()
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1216,12 +1211,12 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('notices/setup/return-forms', () => {
+  describe('notices/setup/paper-return', () => {
     describe('GET', () => {
       beforeEach(async () => {
         getOptions = {
           method: 'GET',
-          url: basePath + `/${session.id}/return-forms`,
+          url: basePath + `/${session.id}/paper-return`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
@@ -1232,7 +1227,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnFormsService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          Sinon.stub(PaperReturnService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
         })
 
         it('returns the page successfully', async () => {
@@ -1249,10 +1244,10 @@ describe('Notices Setup controller', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
             Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnFormsService, 'go').returns({
+            Sinon.stub(SubmitPaperReturnService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1265,10 +1260,10 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnFormsService, 'go').returns({
+            Sinon.stub(SubmitPaperReturnService, 'go').returns({
               pageTile: 'Select the returns for the paper forms'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/return-forms`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
           })
 
           it('redirects the to the next page', async () => {
@@ -1461,8 +1456,8 @@ describe('Notices Setup controller', () => {
 
 function _viewCancel() {
   return {
-    activeNavBar: 'manage',
-    pageTitle: 'You are about to cancel this notification',
+    activeNavBar: 'notices',
+    pageTitle: 'You are about to cancel this notice',
     referenceCode: '123',
     summaryList: {
       text: 'Licence number',
@@ -1474,8 +1469,8 @@ function _viewCancel() {
 function _viewReturnsPeriod() {
   return {
     pageTitle: 'Select the returns periods for the invitations',
-    backLink: '/manage',
-    activeNavBar: 'manage',
+    backLink: '/system/manage',
+    activeNavBar: 'notices',
     returnsPeriod: []
   }
 }
@@ -1484,20 +1479,20 @@ function _viewRemoveLicence() {
   return {
     pageTitle: 'Remove licences',
     hint: 'hint to remove',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewCheck() {
   return {
     pageTitle: 'Check the recipients',
-    activeNavBar: 'manage'
+    activeNavBar: 'notices'
   }
 }
 
 function _viewConfirmation() {
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     forwardLink: '/notifications/report',
     pageTitle: `Returns invitations sent`,
     referenceCode: 'RINV-CPFRQ4'

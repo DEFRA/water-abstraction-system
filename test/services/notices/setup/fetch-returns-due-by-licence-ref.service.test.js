@@ -61,7 +61,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
 
       expect(result).to.equal([
         {
-          dueDate: new Date('2023-04-28'),
+          dueDate: null,
           endDate: new Date('2023-03-31'),
           naldAreaCode: 'SE',
           purpose: 'Potable Water Supply - Direct',

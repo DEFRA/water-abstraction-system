@@ -74,14 +74,9 @@
       {% endif %}
     </div>
 
-    {% if pagination.numberOfPages > 1 %}
-      <p data-test="recipients-count"> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients </p>
-    {% else %}
-      <p data-test="recipients-count"> Showing all {{ recipientsAmount }} recipients </p>
-    {% endif %}
-
     {{ govukTable({
-      captionClasses: "govuk-table__caption--m",
+      caption: tableCaption,
+      captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
       firstCellIsHeader: false,
       head: [
         {
@@ -103,7 +98,9 @@
     {% if pagination.numberOfPages > 1 %}
       {{ govukPagination(pagination.component) }}
     {% endif %}
+  {% endif %}
 
+  {% if canSendNotice %}
     <div class="govuk-button-group">
       <form method="post">
         <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />

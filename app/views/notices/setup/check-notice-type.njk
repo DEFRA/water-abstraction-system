@@ -1,16 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
-{% block content %}
-  {% if notification %}
-    {{ govukNotificationBanner(notification) }}
-  {% endif %}
-
+{% block pageContent %}
   <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
 
   {{ govukSummaryList({
@@ -20,29 +14,29 @@
           text: 'Licence number'
         },
         value: {
-          text: licenceRef
+          html: '<span data-test="licence-number">' + licenceRef + '</span>'
         },
         actions: {
           items: [
             {
-              href: '/system/notices/setup/'+ sessionId + '/licence',
+              href: links.licenceNumber,
               text: 'Change',
               visuallyHiddenText: 'licence number'
             }
           ]
         }
-      },
+      } if licenceRef,
       {
         key: {
           text: 'Returns notice type'
         },
         value: {
-          text: returnNoticeType
+          html: '<span data-test="returns-notice-type">' + returnNoticeType + '</span>'
         },
         actions: {
           items: [
             {
-              href: '/system/notices/setup/'+ sessionId + '/notice-type',
+              href: links.noticeType,
               text: 'Change',
               visuallyHiddenText: 'notice type'
             }
@@ -51,21 +45,38 @@
       },
       {
         key: {
-          text: 'Returns'
+          text: 'Returns period'
         },
         value: {
-          html: newLineArrayItems(selectedDueReturns)
+          html: '<span data-test="returns-period">' + returnsPeriodText + '</span>'
         },
         actions: {
           items: [
             {
-              href: '/system/notices/setup/'+ sessionId + '/return-forms',
+              href: links.returnsPeriod,
               text: 'Change',
-              visuallyHiddenText: 'returns for paper forms'
+              visuallyHiddenText: 'returns period'
             }
           ]
         }
-      } if noticeType === 'returnForms'
+      } if returnsPeriodText,
+      {
+        key: {
+          text: 'Returns'
+        },
+        value: {
+          html: newLineArrayItems(returns)
+        },
+        actions: {
+          items: [
+            {
+              href: links.returns,
+              text: 'Change',
+              visuallyHiddenText: 'returns for paper return'
+            }
+          ]
+        }
+      } if returns
     ]
   }) }}
 

@@ -17,7 +17,6 @@ const {
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } = require('./base-return-logs.presenter.js')
-const { today } = require('../../lib/general.lib.js')
 const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -55,8 +54,8 @@ function go(returnLog, auth) {
 
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
-    actionButton: _actionButton(latest, auth, returnLog, formattedStatus),
-    backLink: _backLink(returnLog.id, licence.id, latest),
+    actionButton: _actionButton(latest, auth, id, formattedStatus),
+    backLink: _backLink(id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
     displayTotal: !!selectedReturnSubmission,
@@ -71,7 +70,7 @@ function go(returnLog, auth) {
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-    showUnderQuery: _showUnderQuery(returnLog),
+    showUnderQuery: _showUnderQuery(formattedStatus),
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
@@ -112,16 +111,14 @@ function _abstractionPeriod(returnLog) {
   return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 }
 
-function _actionButton(latest, auth, returnLog, formattedStatus) {
-  const { endDate, id: returnLogId } = returnLog
-
+function _actionButton(latest, auth, returnLogId, formattedStatus) {
   // You cannot edit a previous version
   if (!latest) {
     return null
   }
 
-  // You cannot edit a void return or a return that hasn't ended
-  if (formattedStatus === 'void' || today() <= endDate) {
+  // You cannot edit a void return log or one that is not due yet
+  if (['not due yet', 'void'].includes(formattedStatus)) {
     return null
   }
 
@@ -196,14 +193,8 @@ function _selectedReturnSubmission(returnSubmissions) {
   return returnSubmissions[0]
 }
 
-function _showUnderQuery(returnLog) {
-  const { endDate, status } = returnLog
-
-  if (status === 'void') {
-    return false
-  }
-
-  if (today() <= endDate) {
+function _showUnderQuery(formattedStatus) {
+  if (['not due yet', 'void'].includes(formattedStatus)) {
     return false
   }
 

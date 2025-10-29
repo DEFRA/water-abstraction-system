@@ -61,17 +61,14 @@ describe('Notices - Setup - Create Notice presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
-      const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
       expect(result).to.equal({
         issuer: 'hello@world.com',
         licences: [
-          recipients.primaryUser.licence_refs,
-          recipients.returnsAgent.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.returnsTo.licence_refs,
-          firstMultiple,
-          secondMultiple
+          ...recipients.primaryUser.licence_refs,
+          ...recipients.returnsAgent.licence_refs,
+          ...recipients.licenceHolder.licence_refs,
+          ...recipients.returnsTo.licence_refs,
+          ...recipients.licenceHolderWithMultipleLicences.licence_refs
         ],
         metadata: {
           name: 'Returns: invitation',
@@ -86,8 +83,10 @@ describe('Notices - Setup - Create Notice presenter', () => {
             startDate: '2025-04-01'
           }
         },
+        overallStatus: 'pending',
         referenceCode: 'RINV-123',
         status: 'completed',
+        statusCounts: { cancelled: 0, error: 0, pending: 5, sent: 0 },
         subtype: 'returnInvitation'
       })
     })
@@ -104,15 +103,12 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
-        const [firstMultiple, secondMultiple] = recipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-
         expect(result.licences).to.equal([
-          recipients.primaryUser.licence_refs,
-          recipients.returnsAgent.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.returnsTo.licence_refs,
-          firstMultiple,
-          secondMultiple
+          ...recipients.primaryUser.licence_refs,
+          ...recipients.returnsAgent.licence_refs,
+          ...recipients.licenceHolder.licence_refs,
+          ...recipients.returnsTo.licence_refs,
+          ...recipients.licenceHolderWithMultipleLicences.licence_refs
         ])
       })
     })
@@ -235,9 +231,9 @@ describe('Notices - Setup - Create Notice presenter', () => {
       expect(result).to.equal({
         issuer: 'hello@world.com',
         licences: [
-          recipients.additionalContact.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.primaryUser.licence_refs
+          ...recipients.additionalContact.licence_refs,
+          ...recipients.licenceHolder.licence_refs,
+          ...recipients.primaryUser.licence_refs
         ],
         metadata: {
           name: 'Water abstraction alert',
@@ -247,8 +243,10 @@ describe('Notices - Setup - Create Notice presenter', () => {
           },
           recipients: 3
         },
+        overallStatus: 'pending',
         referenceCode: 'WAA-123',
         status: 'completed',
+        statusCounts: { cancelled: 0, error: 0, pending: 3, sent: 0 },
         subtype: 'waterAbstractionAlerts'
       })
     })
@@ -258,9 +256,9 @@ describe('Notices - Setup - Create Notice presenter', () => {
         const result = CreateNoticePresenter.go(session, testRecipients, auth)
 
         expect(result.licences).to.equal([
-          recipients.additionalContact.licence_refs,
-          recipients.licenceHolder.licence_refs,
-          recipients.primaryUser.licence_refs
+          ...recipients.additionalContact.licence_refs,
+          ...recipients.licenceHolder.licence_refs,
+          ...recipients.primaryUser.licence_refs
         ])
       })
     })

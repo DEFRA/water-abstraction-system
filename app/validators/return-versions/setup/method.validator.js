@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['use-abstraction-data', 'use-existing-requirements', 'set-up-manually']
+const VALID_VALUES = ['useAbstractionData', 'useExistingRequirements', 'setUpManually']
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/method` page

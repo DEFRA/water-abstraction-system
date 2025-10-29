@@ -94,6 +94,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: null,
@@ -103,9 +104,11 @@ describe('Job - Notifications - Process Notification Status service', () => {
               messageType: 'email',
               notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
+              returnedAt: null,
               returnLogIds: null,
               status: 'sent',
               templateId: null
@@ -159,6 +162,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
@@ -168,6 +172,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               notifyError: null,
               notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: {
                 alertType: 'stop',
                 licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
@@ -175,6 +180,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               },
               plaintext: 'Dear licence contact,\r\n',
               recipient: 'hello@example.com',
+              returnedAt: null,
               returnLogIds: null,
               status: 'sent',
               templateId: null
@@ -222,6 +228,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
           expect(refreshedNotification).to.equal(
             {
+              alternateNotificationId: null,
               eventId: event.id,
               id: notification.id,
               licenceMonitoringStationId: null,
@@ -231,10 +238,12 @@ describe('Job - Notifications - Process Notification Status service', () => {
               messageType: 'email',
               notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
               notifyStatus: 'delivered',
+              pdf: null,
               personalisation: null,
               plaintext: 'Dear Clean Water Limited,\r\n',
               recipient: 'hello@example.com',
               returnLogIds: null,
+              returnedAt: null,
               status: 'sent',
               templateId: null
             },
@@ -294,6 +303,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
         expect(refreshedNotification).to.equal(
           {
+            alternateNotificationId: null,
             eventId: event.id,
             id: notification.id,
             licenceMonitoringStationId: null,
@@ -303,10 +313,12 @@ describe('Job - Notifications - Process Notification Status service', () => {
             messageType: 'email',
             notifyId: '9cf707f1-f4b0-466a-9879-f40953b8fecb8',
             notifyStatus: 'temporary-failure',
+            pdf: null,
             personalisation: null,
             plaintext: 'Dear Clean Water Limited,\r\n',
             recipient: 'hello@example.com',
             returnLogIds: null,
+            returnedAt: null,
             status: 'error',
             templateId: null
           },
@@ -324,6 +336,8 @@ describe('Job - Notifications - Process Notification Status service', () => {
             metadata: { error: 1 },
             referenceCode: 'RINV-LX4P57',
             status: 'completed',
+            statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 },
+            overallStatus: 'error',
             subtype: 'returnInvitation',
             type: 'notification'
           },
@@ -382,6 +396,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       expect(refreshedNotification).to.equal(
         {
+          alternateNotificationId: null,
           eventId: event.id,
           id: notification.id,
           licences: ['11/111'],
@@ -391,10 +406,12 @@ describe('Job - Notifications - Process Notification Status service', () => {
           messageType: 'email',
           notifyId: '10076fd4-da11-43d9-b85a-f4564507d135',
           notifyStatus: 'created',
+          pdf: null,
           personalisation: null,
           plaintext: 'Dear Clean Water Limited,\r\n',
           recipient: 'hello@example.com',
           returnLogIds: null,
+          returnedAt: null,
           status: 'pending',
           templateId: null
         },
@@ -409,9 +426,11 @@ describe('Job - Notifications - Process Notification Status service', () => {
           id: event.id,
           issuer: 'test.user@defra.gov.uk',
           licences: ['11/111'],
-          metadata: {},
+          metadata: { error: 0 },
+          overallStatus: 'pending',
           referenceCode: 'RINV-402AGB',
           status: 'completed',
+          statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },
           subtype: 'returnInvitation',
           type: 'notification'
         },

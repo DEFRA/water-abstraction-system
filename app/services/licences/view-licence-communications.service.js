@@ -24,15 +24,11 @@ async function go(licenceId, auth, page = 1) {
 
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  const communications = await FetchCommunicationsService.go(commonData.licenceRef, selectedPageNumber)
-  const communicationsData = ViewLicenceCommunicationsPresenter.go(
-    communications.communications,
-    commonData.documentId,
-    licenceId
-  )
+  const { notifications, totalNumber } = await FetchCommunicationsService.go(commonData.licenceRef, selectedPageNumber)
+  const pageData = ViewLicenceCommunicationsPresenter.go(notifications, licenceId)
 
   const pagination = PaginatorPresenter.go(
-    communications.pagination.total,
+    totalNumber,
     selectedPageNumber,
     `/system/licences/${licenceId}/communications`
   )
@@ -40,7 +36,7 @@ async function go(licenceId, auth, page = 1) {
   return {
     activeTab: 'communications',
     ...commonData,
-    ...communicationsData,
+    ...pageData,
     pagination
   }
 }

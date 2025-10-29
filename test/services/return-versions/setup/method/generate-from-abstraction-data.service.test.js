@@ -57,10 +57,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'summer',
             siteDescription: 'INTAKE POINT',
             abstractionPeriod: {
-              'abstraction-period-end-day': 31,
-              'abstraction-period-end-month': 10,
-              'abstraction-period-start-day': 1,
-              'abstraction-period-start-month': 4
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 10,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4
             },
             frequencyReported: 'day',
             frequencyCollected: 'day',
@@ -78,10 +78,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'MAIN INTAKE',
             abstractionPeriod: {
-              'abstraction-period-end-day': 31,
-              'abstraction-period-end-month': 12,
-              'abstraction-period-start-day': 1,
-              'abstraction-period-start-month': 5
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 12,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 5
             },
             frequencyReported: 'month',
             frequencyCollected: 'month',
@@ -99,10 +99,10 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {
-              'abstraction-period-end-day': 31,
-              'abstraction-period-end-month': 3,
-              'abstraction-period-start-day': 1,
-              'abstraction-period-start-month': 11
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 11
             },
             frequencyReported: 'week',
             frequencyCollected: 'week',

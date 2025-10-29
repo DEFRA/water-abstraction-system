@@ -8,18 +8,19 @@
 const Joi = require('joi')
 const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
 
-const errorMessage = 'Select the returns periods for the invitations'
-
 /**
  * Validates data submitted for the `/notices/setup/returns-period` page
  *
  * @param {object} payload - The payload from the request to be validated
+ * @param {string} noticeType - The notice type to display in the error message
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+function go(payload, noticeType) {
   const validValues = Object.keys(returnPeriodDates)
+
+  const errorMessage = `Select the returns periods for the ${noticeType}`
 
   const schema = Joi.object({
     returnsPeriod: Joi.string()

@@ -137,7 +137,10 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
         expect(result).to.equal(
           {
             activeNavBar: 'search',
-            backLink: `/system/return-versions/setup/${session.id}/check`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/check`,
+              text: 'Back'
+            },
             pageTitle: 'Select any additional submission options for the return requirements',
             pageTitleCaption: 'Licence 01/ABC',
             licenceRef: '01/ABC',
@@ -155,7 +158,15 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
-            text: 'Select additional submission options for the requirements for returns'
+            errorList: [
+              {
+                href: '#additionalSubmissionOptions',
+                text: 'Select additional submission options for the requirements for returns'
+              }
+            ],
+            additionalSubmissionOptions: {
+              text: 'Select additional submission options for the requirements for returns'
+            }
           })
         })
       })

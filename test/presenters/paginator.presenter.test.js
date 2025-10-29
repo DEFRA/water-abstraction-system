@@ -67,7 +67,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 2,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false }
                 ],
                 next: { href: '/system/bill-runs?page=2' }
@@ -88,7 +88,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 2,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true }
                 ],
                 previous: { href: '/system/bill-runs?page=1' }
@@ -115,7 +115,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false }
                 ],
@@ -137,7 +137,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false }
                 ],
@@ -160,7 +160,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: true }
                 ],
@@ -188,7 +188,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false }
@@ -211,7 +211,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false }
@@ -235,7 +235,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: true }
@@ -264,7 +264,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -288,7 +288,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: true },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -313,7 +313,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -343,7 +343,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -368,7 +368,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: true },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -394,7 +394,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -425,7 +425,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -451,7 +451,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: true },
@@ -478,7 +478,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -510,7 +510,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -536,7 +536,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: true },
@@ -563,7 +563,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
                   { number: 5, visuallyHiddenText: 'Page 5', href: '/system/bill-runs?page=5', current: true },
@@ -590,7 +590,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
                   { number: 5, visuallyHiddenText: 'Page 5', href: '/system/bill-runs?page=5', current: false },
@@ -622,7 +622,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -648,7 +648,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: true },
@@ -675,7 +675,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
                   { number: 5, visuallyHiddenText: 'Page 5', href: '/system/bill-runs?page=5', current: true },
@@ -702,7 +702,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 5, visuallyHiddenText: 'Page 5', href: '/system/bill-runs?page=5', current: false },
                   { number: 6, visuallyHiddenText: 'Page 6', href: '/system/bill-runs?page=6', current: true },
@@ -729,7 +729,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 5, visuallyHiddenText: 'Page 5', href: '/system/bill-runs?page=5', current: false },
                   { number: 6, visuallyHiddenText: 'Page 6', href: '/system/bill-runs?page=6', current: false },
@@ -761,7 +761,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 100,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: true },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: false },
@@ -787,7 +787,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 100,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: false },
                   { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false },
                   { number: 4, visuallyHiddenText: 'Page 4', href: '/system/bill-runs?page=4', current: true },
@@ -814,7 +814,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 100,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 48, visuallyHiddenText: 'Page 48', href: '/system/bill-runs?page=48', current: false },
                   { number: 49, visuallyHiddenText: 'Page 49', href: '/system/bill-runs?page=49', current: true },
@@ -841,7 +841,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 100,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 96, visuallyHiddenText: 'Page 96', href: '/system/bill-runs?page=96', current: false },
                   { number: 97, visuallyHiddenText: 'Page 97', href: '/system/bill-runs?page=97', current: true },
@@ -868,7 +868,7 @@ describe('Paginator Presenter', () => {
               numberOfPages: 100,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
                   { ellipsis: true },
                   { number: 96, visuallyHiddenText: 'Page 96', href: '/system/bill-runs?page=96', current: false },
                   { number: 97, visuallyHiddenText: 'Page 97', href: '/system/bill-runs?page=97', current: false },
@@ -923,7 +923,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 2,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -951,7 +956,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 2,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -985,7 +995,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1019,7 +1034,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1056,7 +1076,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 3,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1096,7 +1121,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1136,7 +1166,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1179,7 +1214,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 4,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1225,7 +1265,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1271,7 +1316,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1320,7 +1370,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 5,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1372,7 +1427,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1424,7 +1484,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1479,7 +1544,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 6,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1537,7 +1607,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1595,7 +1670,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1656,7 +1736,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 7,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1720,7 +1805,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1773,7 +1863,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1829,7 +1924,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   { ellipsis: true },
                   {
                     number: 4,
@@ -1885,7 +1985,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 8,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   { ellipsis: true },
                   {
                     number: 4,
@@ -1944,7 +2049,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: true },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: true
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -1997,7 +2107,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   {
                     number: 2,
                     visuallyHiddenText: 'Page 2',
@@ -2053,7 +2168,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   { ellipsis: true },
                   {
                     number: 4,
@@ -2104,7 +2224,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   { ellipsis: true },
                   {
                     number: 5,
@@ -2160,7 +2285,12 @@ describe('Paginator Presenter', () => {
               numberOfPages: 9,
               component: {
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs', current: false },
+                  {
+                    number: 1,
+                    visuallyHiddenText: 'Page 1',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
+                    current: false
+                  },
                   { ellipsis: true },
                   {
                     number: 5,
@@ -2222,7 +2352,7 @@ describe('Paginator Presenter', () => {
                   {
                     number: 1,
                     visuallyHiddenText: 'Page 1',
-                    href: '/system/bill-runs',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
                     current: true
                   },
                   {
@@ -2280,7 +2410,7 @@ describe('Paginator Presenter', () => {
                   {
                     number: 1,
                     visuallyHiddenText: 'Page 1',
-                    href: '/system/bill-runs',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
                     current: false
                   },
                   {
@@ -2341,7 +2471,7 @@ describe('Paginator Presenter', () => {
                   {
                     number: 1,
                     visuallyHiddenText: 'Page 1',
-                    href: '/system/bill-runs',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
                     current: false
                   },
                   { ellipsis: true },
@@ -2397,7 +2527,7 @@ describe('Paginator Presenter', () => {
                   {
                     number: 1,
                     visuallyHiddenText: 'Page 1',
-                    href: '/system/bill-runs',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
                     current: false
                   },
                   { ellipsis: true },
@@ -2458,7 +2588,7 @@ describe('Paginator Presenter', () => {
                   {
                     number: 1,
                     visuallyHiddenText: 'Page 1',
-                    href: '/system/bill-runs',
+                    href: '/system/bill-runs?page=1&billing-account-id=c17c0a2b-6950-490b-8c3a-4dc9f01da368&licence-id=354fc0bd-0820-4611-a6af-874480bbae3b',
                     current: false
                   },
                   { ellipsis: true },

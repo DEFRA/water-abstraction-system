@@ -1,0 +1,60 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+  {{ pageHeadingHtml }}
+
+  {{ govukInsetText({
+    html: '<span>These addresses will be rejected by Notify. They are either missing both postcode and country or have address lines that start with <code>@ ( ) = [ ] ” \\ / , < ></code>. UK addresses need a postcode. Non UK addresses need a country. Corrections should be made in NALD.</span>'
+  }) }}
+
+  {% if invalidAddresses.length === 0 %}
+    <p>No invalid addresses found.</p>
+  {% else %}
+    {% set tableRows = [] %}
+    {% for invalidAddress in invalidAddresses %}
+      {% set row = [
+        {
+          text: invalidAddress.licenceRef
+        },
+        {
+          text: invalidAddress.licenceEnds
+        },
+        {
+          text: invalidAddress.contactRole
+        },
+        {
+          html: newLineArrayItems(invalidAddress.addressLines)
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{
+      govukTable({
+        caption: tableCaption,
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Licence"
+          },
+          {
+            text: "End Date"
+          },
+          {
+            text: "Role"
+          },
+          {
+            text: "Address"
+          }
+        ],
+        rows: tableRows
+      })
+    }}
+  {% endif %}
+{% endblock %}

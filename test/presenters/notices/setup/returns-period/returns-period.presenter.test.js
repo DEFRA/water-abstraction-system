@@ -8,6 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../../app/presenters/notices/setup/returns-period/returns-period.presenter.js')
 
@@ -16,9 +20,15 @@ describe('Notices - Setup - Returns Period presenter', () => {
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
-  let testDate
   let clock
+  let referenceCode
   let session = {}
+  let testDate
+
+  beforeEach(() => {
+    referenceCode = generateReferenceCode()
+    session = { referenceCode, noticeType: 'invitations', id: generateUUID() }
+  })
 
   afterEach(() => {
     session = {}
@@ -27,7 +37,6 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   describe('the data', () => {
     beforeEach(() => {
-      session = { referenceCode: 'RINV-123', journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
@@ -37,23 +46,56 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
       expect(result).to.equal(
         {
-          backLink: '/manage',
-          pageTitle: 'Select the returns periods for the invitations',
-          referenceCode: 'RINV-123'
+          backLink: {
+            href: `/system/notices/setup/${session.id}/notice-type`,
+            text: 'Back'
+          },
+          pageTitle: 'Select the returns periods for the invitations'
         },
         { skip: ['returnsPeriod'] }
       )
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the check page has been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('correctly returns the back link', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.backLink).to.equal({
+          href: `/system/notices/setup/${session.id}/check-notice-type`,
+          text: 'Back'
+        })
+      })
+    })
+
+    describe('when the check page has not been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = false
+      })
+
+      it('correctly returns the back link', () => {
+        const result = ReturnsPeriodPresenter.go(session)
+
+        expect(result.backLink).to.equal({
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        })
+      })
+    })
+  })
+
   describe('the "pageTitle" property', () => {
     beforeEach(() => {
-      session = { referenceCode: 'RINV-123', journey: 'invitations' }
       testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
 
-    describe('when the journey is "invitations"', () => {
+    describe('when the noticeType is "invitations"', () => {
       it('correctly presents the data', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
@@ -61,9 +103,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('when the journey is "reminders"', () => {
+    describe('when the noticeType is "reminders"', () => {
       beforeEach(() => {
-        session.journey = 'reminders'
+        session.noticeType = 'reminders'
       })
 
       it('correctly presents the data', () => {
@@ -77,7 +119,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
   describe('the "returnsPeriod" property', () => {
     describe('when the "session" has a saved returns period', () => {
       beforeEach(() => {
-        session = { returnsPeriod: 'quarterOne' }
+        session.returnsPeriod = 'quarterOne'
 
         testDate = new Date(`${currentYear}-04-29`)
         clock = Sinon.useFakeTimers(testDate)

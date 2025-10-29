@@ -19,8 +19,6 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  */
 function go(userScopes) {
   return {
-    flowNotices: _flowNotices(userScopes),
-    licenceNotices: _licenceNotices(userScopes),
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage reports and notices',
     returnNotices: _returnNotices(userScopes),
@@ -29,17 +27,16 @@ function go(userScopes) {
   }
 }
 
-function _flowNotices(userScopes) {
-  const links = {
-    restriction: _hasPermission(userScopes, ['hof_notifications']),
-    handsOffFlow: _hasPermission(userScopes, ['hof_notifications']),
-    resume: _hasPermission(userScopes, ['hof_notifications'])
-  }
-
-  return {
-    show: Object.values(links).includes(true),
-    links
-  }
+function _basicReports(userScopes) {
+  return _hasPermission(userScopes, [
+    'ar_approver',
+    'billing',
+    'bulk_return_notifications',
+    'hof_notifications',
+    'manage_accounts',
+    'renewal_notifications',
+    'returns'
+  ])
 }
 
 /**
@@ -56,28 +53,6 @@ function _hasPermission(userScopes, linkScopes) {
   })
 }
 
-// KPIs gets its own function as there are so many scopes that _viewReports breaches the maximum function line length
-// of 20 lines that is defined for this project
-function _kpis(userScopes) {
-  return _hasPermission(userScopes, [
-    'ar_approver',
-    'billing',
-    'bulk_return_notifications',
-    'hof_notifications',
-    'manage_accounts',
-    'renewal_notifications',
-    'returns'
-  ])
-}
-
-function _licenceNotices(userScopes) {
-  const links = {
-    renewal: _hasPermission(userScopes, ['renewal_notifications'])
-  }
-
-  return { show: links.renewal, links }
-}
-
 function _manageUsers(userScopes) {
   const links = {
     createAccount: _hasPermission(userScopes, ['manage_accounts'])
@@ -89,7 +64,7 @@ function _manageUsers(userScopes) {
 function _returnNotices(userScopes) {
   const links = {
     invitations: _hasPermission(userScopes, ['bulk_return_notifications']),
-    paperForms: _hasPermission(userScopes, ['returns']),
+    paperForms: _hasPermission(userScopes, ['returns']) && !featureFlagsConfig.enableAdHocNotifications,
     reminders: _hasPermission(userScopes, ['bulk_return_notifications']),
     adHoc: _hasPermission(userScopes, ['returns']) && featureFlagsConfig.enableAdHocNotifications
   }
@@ -99,15 +74,16 @@ function _returnNotices(userScopes) {
 
 function _viewReports(userScopes) {
   const links = {
+    digitise: _hasPermission(userScopes, ['ar_approver']),
+    invalidAddresses: _basicReports(userScopes),
+    kpis: _basicReports(userScopes),
     notices: _hasPermission(userScopes, [
       'bulk_return_notifications',
       'hof_notifications',
       'renewal_notifications',
       'returns'
     ]),
-    returnsCycles: _hasPermission(userScopes, ['returns']),
-    digitise: _hasPermission(userScopes, ['ar_approver']),
-    kpis: _kpis(userScopes) // split off into its own function to avoid breaching the 20-line function limit
+    returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 
   return { show: Object.values(links).includes(true), links }

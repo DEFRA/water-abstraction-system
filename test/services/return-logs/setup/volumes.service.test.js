@@ -50,7 +50,7 @@ describe('Return Logs Setup - Volumes service', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            quantity: 100
+            quantity: '100'
           }
         ],
         pageTitle: 'Water abstracted April 2023',

@@ -171,6 +171,32 @@ describe('Return Logs Setup - Submit Check service', () => {
         expect(result).to.equal(returnLog.id)
       })
     })
+
+    describe('and it is a nil return', () => {
+      beforeEach(async () => {
+        sessionData.data.journey = 'nil-return'
+        sessionData.data.lines = [
+          {
+            startDate: '2023-01-01T00:00:00.000Z',
+            endDate: '2023-01-31T00:00:00.000Z',
+            quantity: null,
+            reading: null
+          },
+          {
+            startDate: '2023-02-01T00:00:00.000Z',
+            endDate: '2023-02-28T00:00:00.000Z'
+          }
+        ]
+
+        session = await SessionHelper.add(sessionData)
+      })
+
+      it('returns the original returnLogId', async () => {
+        const result = await SubmitCheckService.go(session.id, user)
+
+        expect(result).to.equal({ returnLogId: returnLog.id })
+      })
+    })
   })
 
   describe('when called with invalid data as the lines are blank', () => {

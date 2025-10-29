@@ -19,7 +19,7 @@ function go(session, requirementIndex, licencePurposes) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the purpose for the requirements for returns',
@@ -29,7 +29,7 @@ function go(session, requirementIndex, licencePurposes) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id, requirements } = session
 
   // NOTE: Purpose is the first page in the manual setup journey. So, when a user first comes through, we want to allow

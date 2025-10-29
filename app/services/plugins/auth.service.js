@@ -42,7 +42,7 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  *
  * @param {number} userId - The user id to be authenticated
  *
- * @returns {object} the permission object
+ * @returns {Promise<object>} the permission object
  */
 async function go(userId) {
   const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
@@ -80,6 +80,11 @@ async function go(userId) {
  * @private
  */
 function _permission(scope = []) {
+  const abstractionReformRoles = ['ar_user', 'ar_approver']
+  const abstractionReform = scope.some((role) => {
+    return abstractionReformRoles.includes(role)
+  })
+
   const billRuns = scope.includes('billing')
 
   const manageRoles = [
@@ -95,15 +100,16 @@ function _permission(scope = []) {
     return manageRoles.includes(role)
   })
 
-  const abstractionReformRoles = ['ar_user', 'ar_approver']
-  const abstractionReform = scope.some((role) => {
-    return abstractionReformRoles.includes(role)
+  const noticesRoles = ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
+  const notices = scope.some((role) => {
+    return noticesRoles.includes(role)
   })
 
   return {
     abstractionReform,
     billRuns,
-    manage
+    manage,
+    notices
   }
 }
 

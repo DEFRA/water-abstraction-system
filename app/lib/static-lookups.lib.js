@@ -271,6 +271,28 @@ const naldRegions = {
   YO: 'Yorkshire'
 }
 
+const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
+
+const noticeMappings = {
+  'hof-resume': 'HOF resume',
+  'hof-stop': 'HOF stop',
+  'hof-warning': 'HOF warning',
+  'pdf.return_form': 'Paper return',
+  'pdf.return_reminder': 'Paper reminder',
+  paperReturnForms: 'Paper return',
+  renewal: 'Renewal',
+  returnInvitation: 'Returns invitation',
+  returnReminder: 'Returns reminder',
+  waterAbstractionAlerts: 'alert'
+}
+
+const NoticeType = Object.freeze({
+  ABSTRACTION_ALERTS: 'abstractionAlerts',
+  INVITATIONS: 'invitations',
+  PAPER_RETURN: 'paperReturn',
+  REMINDERS: 'reminders'
+})
+
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 /**
@@ -419,6 +441,9 @@ const thresholdUnits = {
   MILLION_GALLONS_PER_DAY: { value: 'Mgpd', label: 'million gallons per day' }
 }
 
+/*
+ * NOTE: Though not in alphabetical order, flowUnits has to be declared here because it depends on thresholdUnits
+ */
 const flowUnits = [
   thresholdUnits.MEGALITRES_PER_DAY.value,
   thresholdUnits.CUBIC_METRES_PER_SECOND.value,
@@ -453,6 +478,9 @@ module.exports = {
   flowUnits,
   naldAreaCodes,
   naldRegions,
+  NoticeJourney,
+  noticeMappings,
+  NoticeType,
   organisationTypes,
   returnCycleDates,
   returnPeriodDates,

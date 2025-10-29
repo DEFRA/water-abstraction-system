@@ -32,7 +32,7 @@ describe('Cancel Alerts Service', () => {
       const result = await CancelAlertsService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
         caption: 'Death star',
         pageTitle: 'You are about to cancel this alert',

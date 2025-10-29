@@ -54,7 +54,7 @@ describe('Address controller', () => {
           url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: [] }
           }
         }
 
@@ -114,7 +114,7 @@ describe('Address controller', () => {
           url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: [] }
           }
         }
       })
@@ -213,7 +213,7 @@ describe('Address controller', () => {
           url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: [] }
           }
         }
       })
@@ -280,7 +280,7 @@ describe('Address controller', () => {
           url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: [] }
           }
         }
       })

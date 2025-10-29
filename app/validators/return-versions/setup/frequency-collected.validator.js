@@ -20,8 +20,6 @@ const Joi = require('joi')
  * also exist detailing what the issue is.
  */
 function go(payload) {
-  const frequencyCollected = payload.frequencyCollected
-
   const VALID_VALUES = ['day', 'week', 'month']
 
   const errorMessage = 'Select how often readings or volumes are collected'
@@ -37,7 +35,7 @@ function go(payload) {
       })
   })
 
-  return schema.validate({ frequencyCollected }, { abortEarly: false })
+  return schema.validate(payload)
 }
 
 module.exports = {

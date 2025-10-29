@@ -8,7 +8,7 @@
 const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
 const { transformArrayToCSVRow } = require('../../lib/transform-to-csv.lib.js')
 
-const HEADERS = ['start date', 'reading', 'volume']
+const HEADERS = ['end date', 'reading', 'volume']
 
 /**
  * Formats return log data ready for presenting in the csv file
@@ -46,7 +46,7 @@ function _csvData(selectedReturnSubmission) {
   return returnSubmissionLines.map((returnSubmissionLine) => {
     const reading = displayReadings ? returnSubmissionLine.reading : ''
 
-    const row = [returnSubmissionLine.startDate, reading, returnSubmissionLine.quantity]
+    const row = [returnSubmissionLine.endDate, reading, returnSubmissionLine.quantity]
 
     return transformArrayToCSVRow(row)
   })

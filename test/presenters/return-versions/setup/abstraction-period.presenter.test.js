@@ -40,7 +40,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: null,
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Enter the abstraction period for the requirements for returns',
@@ -54,10 +57,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
     describe('when the user has previously submitted an abstraction period', () => {
       beforeEach(() => {
         session.requirements[0].abstractionPeriod = {
-          'abstraction-period-start-day': '07',
-          'abstraction-period-start-month': '12',
-          'abstraction-period-end-day': '22',
-          'abstraction-period-end-month': '07'
+          abstractionPeriodStartDay: '07',
+          abstractionPeriodStartMonth: '12',
+          abstractionPeriodEndDay: '22',
+          abstractionPeriodEndMonth: '07'
         }
       })
 
@@ -65,10 +68,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
         expect(result.abstractionPeriod).to.equal({
-          'abstraction-period-start-day': '07',
-          'abstraction-period-start-month': '12',
-          'abstraction-period-end-day': '22',
-          'abstraction-period-end-month': '07'
+          abstractionPeriodStartDay: '07',
+          abstractionPeriodStartMonth: '12',
+          abstractionPeriodEndDay: '22',
+          abstractionPeriodEndMonth: '07'
         })
       })
     })
@@ -91,7 +94,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        })
       })
     })
 
@@ -99,7 +105,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "points" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0')
+        expect(result.backLink).to.equal({
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
+          text: 'Back'
+        })
       })
     })
   })

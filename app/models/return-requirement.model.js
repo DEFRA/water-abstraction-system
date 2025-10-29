@@ -28,6 +28,14 @@ class ReturnRequirementModel extends BaseModel {
           to: 'points.id'
         }
       },
+      returnLogs: {
+        relation: Model.HasManyRelation,
+        modelClass: 'return-log.model',
+        join: {
+          from: 'returnRequirements.id',
+          to: 'returnLogs.returnRequirementId'
+        }
+      },
       returnRequirementPurposes: {
         relation: Model.HasManyRelation,
         modelClass: 'return-requirement-purpose.model',

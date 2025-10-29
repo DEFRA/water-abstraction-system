@@ -29,20 +29,28 @@ class ReturnLogModel extends BaseModel {
           to: 'licences.licenceRef'
         }
       },
-      returnSubmissions: {
-        relation: Model.HasManyRelation,
-        modelClass: 'return-submission.model',
-        join: {
-          from: 'returnLogs.id',
-          to: 'returnSubmissions.returnLogId'
-        }
-      },
       returnCycle: {
         relation: Model.HasOneRelation,
         modelClass: 'return-cycle.model',
         join: {
           from: 'returnLogs.returnCycleId',
           to: 'returnCycles.id'
+        }
+      },
+      returnRequirement: {
+        relation: Model.HasOneRelation,
+        modelClass: 'return-requirement.model',
+        join: {
+          from: 'returnLogs.returnRequirementId',
+          to: 'returnRequirements.id'
+        }
+      },
+      returnSubmissions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'return-submission.model',
+        join: {
+          from: 'returnLogs.id',
+          to: 'returnSubmissions.returnLogId'
         }
       }
     }

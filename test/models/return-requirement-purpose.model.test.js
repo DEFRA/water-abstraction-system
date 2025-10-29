@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,27 @@ const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
 describe('Return Requirement Purpose model', () => {
+  let testPrimaryPurpose
+  let testPurpose
   let testRecord
+  let testReturnRequirement
+  let testSecondaryPurpose
+
+  before(async () => {
+    testPrimaryPurpose = PrimaryPurposeHelper.select()
+    testPurpose = PurposeHelper.select()
+    testReturnRequirement = await ReturnRequirementHelper.add()
+    testSecondaryPurpose = SecondaryPurposeHelper.select()
+
+    testRecord = await ReturnRequirementPurposeHelper.add({
+      primaryPurposeId: testPrimaryPurpose.id,
+      purposeId: testPurpose.id,
+      returnRequirementId: testReturnRequirement.id,
+      secondaryPurposeId: testSecondaryPurpose.id
+    })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReturnRequirementPurposeHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementPurposeModel.query().findById(testRecord.id)
 
@@ -39,14 +53,6 @@ describe('Return Requirement Purpose model', () => {
 
   describe('Relationships', () => {
     describe('when linking to primary purpose', () => {
-      let testPrimaryPurpose
-
-      beforeEach(async () => {
-        testPrimaryPurpose = PrimaryPurposeHelper.select()
-
-        testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId: testPrimaryPurpose.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('primaryPurpose')
 
@@ -67,16 +73,6 @@ describe('Return Requirement Purpose model', () => {
     })
 
     describe('when linking to purpose', () => {
-      let testPurpose
-
-      beforeEach(async () => {
-        testPurpose = PurposeHelper.select()
-
-        const { id: purposeId } = testPurpose
-
-        testRecord = await ReturnRequirementPurposeHelper.add({ purposeId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('purpose')
 
@@ -95,16 +91,6 @@ describe('Return Requirement Purpose model', () => {
     })
 
     describe('when linking to return requirement', () => {
-      let testReturnRequirement
-
-      beforeEach(async () => {
-        testReturnRequirement = await ReturnRequirementHelper.add()
-
-        const { id: returnRequirementId } = testReturnRequirement
-
-        testRecord = await ReturnRequirementPurposeHelper.add({ returnRequirementId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('returnRequirement')
 
@@ -126,16 +112,6 @@ describe('Return Requirement Purpose model', () => {
   })
 
   describe('when linking to secondary purpose', () => {
-    let testSecondaryPurpose
-
-    beforeEach(async () => {
-      testSecondaryPurpose = SecondaryPurposeHelper.select()
-
-      const { id: secondaryPurposeId } = testSecondaryPurpose
-
-      testRecord = await ReturnRequirementPurposeHelper.add({ secondaryPurposeId })
-    })
-
     it('can successfully run a related query', async () => {
       const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('secondaryPurpose')
 

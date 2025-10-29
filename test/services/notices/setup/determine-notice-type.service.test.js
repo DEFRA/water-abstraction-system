@@ -35,13 +35,13 @@ describe('Notices - Setup - Determine Notice Type service', () => {
       })
     })
 
-    describe('and the "noticeType" is "returnForms"', () => {
+    describe('and the "noticeType" is "paperReturn"', () => {
       it('creates a new session record', () => {
-        const result = DetermineNoticeTypeService.go('returnForms')
+        const result = DetermineNoticeTypeService.go('paperReturn')
 
         expect(result).to.equal({
           name: 'Paper returns',
-          noticeType: 'returnForms',
+          noticeType: 'paperReturn',
           notificationType: 'Paper returns',
           referenceCode: result.referenceCode, // randomly generated
           subType: 'paperReturnForms'
@@ -50,7 +50,7 @@ describe('Notices - Setup - Determine Notice Type service', () => {
 
       describe('the "referenceCode" property', () => {
         it('returns a reference code for "invitations" notifications', () => {
-          const result = DetermineNoticeTypeService.go('returnForms')
+          const result = DetermineNoticeTypeService.go('paperReturn')
 
           expect(result.referenceCode).to.include('PRTF-')
           expect(result.referenceCode.length).to.equal(11)

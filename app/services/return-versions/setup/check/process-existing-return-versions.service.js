@@ -6,6 +6,7 @@
  */
 
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const { sameDate } = require('../../../../lib/dates.lib.js')
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
@@ -211,11 +212,7 @@ function _previousVersions(licenceId) {
  */
 async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    // NOTE: When you use the equality operator JavaScript will check for reference equality. Dates being objects this
-    // will always return false, even though they refer to the exact same time. This means you need to convert them to
-    // a more primitive value like a string or number first. `getTime()` seems to be the winner according to
-    // stack overflow https://stackoverflow.com/a/4587089/6117745
-    return previousVersion.startDate.getTime() === newVersionStartDate.getTime() && previousVersion.endDate === null
+    return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate === null
   })
 
   if (!matchedReturnVersion) {
@@ -253,10 +250,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
  */
 async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return (
-      previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
-      previousVersion.endDate >= newVersionStartDate
-    )
+    return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate >= newVersionStartDate
   })
 
   if (!matchedReturnVersion) {

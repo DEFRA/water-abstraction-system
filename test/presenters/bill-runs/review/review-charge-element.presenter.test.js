@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,6 +26,10 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
     Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with a ReviewChargeElement', () => {

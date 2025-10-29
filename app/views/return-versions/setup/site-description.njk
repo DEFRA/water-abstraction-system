@@ -1,51 +1,23 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#siteDescription"
-        }
-      ]
-    }) }}
-  {%endif%}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukInput({
       label: {
-        html: pageHeading
+        html: pageHeadingHtml
       },
       hint: {
         text: "This is the description that will appear on the return"
       },
       value: siteDescription,
-      id: "site-description",
-      name: "siteDescription",
-      errorMessage: error
+      id: 'siteDescription',
+      name: 'siteDescription',
+      errorMessage: error.siteDescription
     }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

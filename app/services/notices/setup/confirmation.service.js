@@ -21,7 +21,7 @@ async function go(eventId) {
   const formattedData = ConfirmationPresenter.go(event)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...formattedData
   }
 }

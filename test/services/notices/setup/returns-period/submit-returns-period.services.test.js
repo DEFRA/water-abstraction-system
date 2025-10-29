@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const SubmitReturnsPeriodService = require('../../../../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
@@ -17,27 +18,34 @@ const SubmitReturnsPeriodService = require('../../../../../app/services/notices/
 describe('Notices - Setup - Submit Returns Period service', () => {
   let clock
   let payload
+  let referenceCode
   let session
+  let yarStub
 
   before(async () => {
+    referenceCode = generateReferenceCode()
+
     const testDate = new Date('2024-12-01')
 
     clock = Sinon.useFakeTimers(testDate)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   after(() => {
     clock.restore()
   })
+
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234' } })
+        session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
 
         payload = { returnsPeriod: 'quarterFour' }
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload)
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -45,7 +53,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('saves the determined returns period', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload)
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -54,36 +62,70 @@ describe('Notices - Setup - Submit Returns Period service', () => {
           endDate: '2025-03-31T00:00:00.000Z',
           name: 'quarterFour',
           startDate: '2025-01-01T00:00:00.000Z',
-          summer: 'false'
+          summer: 'false',
+          quarterly: true
         })
       })
 
       it('returns the redirect route', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          redirect: `${session.id}/check`
+          redirect: `${session.id}/check-notice-type`
+        })
+      })
+    })
+
+    describe('and the user comes from the check page', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          data: { referenceCode, noticeType: 'invitations', checkPageVisited: true }
+        })
+      })
+
+      it('sets a flash message', async () => {
+        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+
+        // Check we add the flash message
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({
+          text: 'Returns period updated',
+          titleText: 'Updated'
         })
       })
     })
 
     describe('fails validation', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode: 'RINV-1234', journey: 'invitations' } })
+        session = await SessionHelper.add({
+          data: { referenceCode, journey: 'invitations', noticeType: 'invitations' }
+        })
         payload = {}
       })
 
       it('correctly presents the data with the error', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
-          activeNavBar: 'manage',
-          backLink: '/manage',
+          activeNavBar: 'notices',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/notice-type`,
+            text: 'Back'
+          },
           error: {
-            text: 'Select the returns periods for the invitations'
+            errorList: [
+              {
+                href: '#returnsPeriod',
+                text: 'Select the returns periods for the invitations'
+              }
+            ],
+            returnsPeriod: {
+              text: 'Select the returns periods for the invitations'
+            }
           },
           pageTitle: 'Select the returns periods for the invitations',
-          referenceCode: 'RINV-1234',
           returnsPeriod: [
             {
               checked: false,

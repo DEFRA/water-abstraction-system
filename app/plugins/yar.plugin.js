@@ -1,5 +1,7 @@
 'use strict'
 
+const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
+
 /**
  * Plugin to add {@link https://hapi.dev/module/yar/ | yar}, a hapi session manager to the app
  *
@@ -75,7 +77,11 @@ const YarPlugin = {
   plugin: Yar,
   options: {
     cookieOptions: {
-      password: AuthenticationConfig.password
+      password: AuthenticationConfig.password,
+      // After fifteen minutes of inactivity our session will expire. Any filters or other data saved to the session
+      // will disappear. We keep it alive by 'touching' it on every request, which resets the TTL. See the
+      // `SessionPlugin` for more details.
+      ttl: FIFTEEN_MINUTES_IN_MILLISECONDS
     },
     name: 'wrlsSession'
   }

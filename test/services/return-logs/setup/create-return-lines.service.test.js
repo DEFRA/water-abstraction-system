@@ -128,6 +128,39 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
           expect(quantities).to.equal([2340, 11110, 11110])
         })
       })
+
+      describe('and there are meter readings of 0 and null', () => {
+        beforeEach(() => {
+          session.lines = [
+            {
+              startDate: '2024-10-26T00:00:00.000Z',
+              endDate: '2024-11-01T00:00:00.000Z',
+              reading: 0
+            },
+            {
+              startDate: '2024-11-02T00:00:00.000Z',
+              endDate: '2024-11-08T00:00:00.000Z',
+              reading: null
+            },
+            {
+              startDate: '2024-11-09T00:00:00.000Z',
+              endDate: '2024-11-15T00:00:00.000Z',
+              reading: 3456
+            }
+          ]
+          session.startReading = 0
+        })
+
+        it('recalculates quantities from meter readings', async () => {
+          const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
+
+          const quantities = result.map((line) => {
+            return line.quantity
+          })
+
+          expect(quantities).to.equal([0, null, 3456])
+        })
+      })
     })
 
     describe('when called for a nil return', () => {

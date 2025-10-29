@@ -20,7 +20,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
   beforeEach(() => {
     event = {
-      id: '123',
+      id: 'ca6a7546-2365-45a1-9f07-ab9338577e2a',
       subtype: 'returnInvitation',
       referenceCode,
       metadata: {}
@@ -31,7 +31,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     const result = ConfirmationPresenter.go(event)
 
     expect(result).to.equal({
-      forwardLink: '/notifications/report/123',
+      forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
       monitoringStationLink: null,
       pageTitle: `Returns invitations sent`,
       referenceCode
@@ -47,7 +47,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/notifications/report/123',
+        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
         monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
         referenceCode
@@ -64,7 +64,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/notifications/report/123',
+        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
         monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
         referenceCode
@@ -83,7 +83,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/notifications/report/123',
+        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
         monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
         referenceCode
@@ -91,7 +91,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
   })
 
-  describe('and the journey is "returnForms"', () => {
+  describe('and the notice type is "paperReturn"', () => {
     beforeEach(() => {
       event.subtype = 'paperReturnForms'
     })
@@ -100,9 +100,9 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/notifications/report/123',
+        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
         monitoringStationLink: null,
-        pageTitle: 'Paper return forms sent',
+        pageTitle: 'Paper returns sent',
         referenceCode
       })
     })

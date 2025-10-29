@@ -19,7 +19,7 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  * @returns {object} the generated return log data
  */
 function go(returnRequirement, returnCycle) {
-  const { reference, reportingFrequency, returnVersion } = returnRequirement
+  const { id: returnRequirementId, reference, reportingFrequency, returnVersion } = returnRequirement
   const { dueDate, endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
 
   const startDate = _startDate(returnVersion, returnCycleStartDate)
@@ -31,9 +31,11 @@ function go(returnRequirement, returnCycle) {
     id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
     metadata: _metadata(returnRequirement, endDate),
+    quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
     returnsFrequency: reportingFrequency,
     returnReference: reference.toString(),
+    returnRequirementId,
     source: 'WRLS',
     startDate,
     status: 'due'

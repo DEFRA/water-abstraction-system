@@ -30,7 +30,7 @@ describe('Notices - Setup - Cancel service', () => {
       const result = await CancelService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/check`,
         pageTitle: 'You are about to cancel this notice',
         referenceCode: 'RNIV-1234',

@@ -61,7 +61,10 @@ describe('Return Versions - Setup - Method presenter', () => {
       const result = MethodPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
+          text: 'Back'
+        },
         displayCopyExisting: true,
         licenceRef: '01/ABC',
         pageTitle: 'How do you want to set up the requirements for returns?',
@@ -76,7 +79,10 @@ describe('Return Versions - Setup - Method presenter', () => {
     it('returns a link back to the "start-date" page', () => {
       const result = MethodPresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason')
+      expect(result.backLink).to.equal({
+        href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
+        text: 'Back'
+      })
     })
   })
 

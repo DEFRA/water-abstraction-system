@@ -18,8 +18,8 @@ describe('Markdown filter', () => {
   })
 
   describe('when provided with a valid markdown string', () => {
-    it('correctly converts the markdown to HTML', () => {
-      const result = MarkdownFilter.markdown(testMarkdown)
+    it('correctly converts the markdown to HTML', async () => {
+      const result = await MarkdownFilter.markdown(testMarkdown)
 
       expect(result).to.equal(
         '<p>Hello,</p>\n' +

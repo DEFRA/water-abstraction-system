@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, licence, reason } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceRef: licence.licenceRef,
     pageTitle: 'Select the reason for the requirements for returns',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
@@ -25,7 +25,7 @@ function go(session) {
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

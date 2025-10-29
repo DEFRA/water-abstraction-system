@@ -8,6 +8,7 @@
 const { postcodeValidator } = require('postcode-validator')
 
 const { contactName } = require('../../../presenters/crm.presenter.js')
+const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
 const UK_COUNTRIES = ['england', 'northern ireland', 'scotland', 'wales', 'united kingdom']
@@ -31,6 +32,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  * - The address must have at least 3 lines.
  * - The last line needs to be a real UK postcode or the name of a country outside the UK.
  * - An address can have a maximum of 7 lines
+ * - No address line can start with a special character: `@ ( ) = [ ] ” \ / , < >`
  *
  * Within a Notify letter template only these 7 lines are used for the address section. So, we reserve `address_line_1`
  * for the contact's name.
@@ -43,6 +45,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  * - Many UK addresses have the country field populated, but postcode needs to be the last line as per Notify
  * - Many non-UK addresses have the postcode field populated, but country needs to be the last line as per Notify
  * - We have lots of addresses where neither postcode nor country are populated
+ * - We have some addresses with an address line that starts with special characters
  * - There are some addresses where `addressLine1` is a duplicate of the contact name, which results in duplicated lines
  * - Most addresses have one or more empty address fields
  * - Lots of addresses have their address information in the wrong fields, for example, county is in country
@@ -52,8 +55,9 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  *
  * - it is a UK or Crown Dependent address without a postcode
  * - it is an address without a postcode or country (international addresses don't require a postcode)
+ * - any of its lines start with a special character
  *
- * An attempt to send letters using this addresses will be rejected by Notify.
+ * An attempt to send letters using these addresses will be rejected by Notify.
  *
  * We can simply ignore empty address fields, as long as we are left with a valid address.
  *
@@ -254,6 +258,7 @@ function _internationalAddressParts(contact, defaultAddressParts) {
  *
  * - It is a UK or Crown Dependent address without a valid postcode.
  * - It lacks both a valid postcode and a country (international addresses do not require a postcode).
+ * - any of its lines start with a special character: `@ ( ) = [ ] ” \ / , < >`.
  *
  * If the address is invalid, we return the address in full (filtered for nulls) along with a message that indicates
  * it is invalid. We return the address in full so users can see everything we do have for the contact for reference.
@@ -266,13 +271,24 @@ function _invalidAddressParts(contact) {
 
   const noCountry = !country || UK_COUNTRIES.includes(country) || CROWN_DEPENDENCIES.includes(country)
   const noPostcode = !postcode || !postcodeValidator(postcode, 'GB')
+  const hasSpecialChars = _specialCharacters(contact)
 
-  if (!noCountry || !noPostcode) {
+  // If address has either a valid postcode or country _and_ no special characters return an empty array. This tells
+  // `go()` above to continue processing the address for sending to Notify. Else the address is invalid and `go()` will
+  // simply return it.
+  if ((!noCountry || !noPostcode) && !hasSpecialChars) {
     return []
   }
 
+  // We want to tailor the address depending on why its invalid. In this case special characters trumps no country
+  // and postcode
+  let message = 'INVALID ADDRESS - Needs a valid postcode or country outside the UK'
+  if (hasSpecialChars) {
+    message = 'INVALID ADDRESS - A line starts with special character'
+  }
+
   return [
-    'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+    message,
     contact.addressLine1,
     contact.addressLine2,
     contact.addressLine3,
@@ -282,6 +298,24 @@ function _invalidAddressParts(contact) {
     contact.postcode,
     contact.country
   ].filter(Boolean)
+}
+
+function _specialCharacters(contact) {
+  const lines = [
+    contact.addressLine1,
+    contact.addressLine2,
+    contact.addressLine3,
+    contact.addressLine4,
+    contact.town,
+    contact.county,
+    contact.postcode,
+    contact.country
+  ]
+
+  return lines.some((line) => {
+    // If the line is not null, test it for an invalid start character
+    return line ? invalidStartCharacters(line) : false
+  })
 }
 
 /**

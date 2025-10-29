@@ -14,7 +14,8 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitNoticeTypeService = require('../../../../app/services/notices/setup/submit-notice-type.service.js')
 
-describe('Notice Type Service', () => {
+describe('Notices - Setup - Notice Type Service', () => {
+  let auth
   let payload
   let session
   let sessionData
@@ -22,6 +23,10 @@ describe('Notice Type Service', () => {
   let yarStub
 
   beforeEach(async () => {
+    auth = {
+      credentials: { scope: ['bulk_return_notifications'] }
+    }
+
     noticeType = 'invitations'
     payload = { noticeType }
     sessionData = {}
@@ -37,7 +42,7 @@ describe('Notice Type Service', () => {
 
   describe('when called', () => {
     it('saves the notice type session data', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       const refreshedSession = await session.$query()
 
@@ -59,29 +64,52 @@ describe('Notice Type Service', () => {
     })
 
     it('saves the submitted "noticeType"', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.noticeType).to.equal('invitations')
     })
 
-    it('continues the journey', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+    it('returns a redirect to the "/check-notice-type" page', async () => {
+      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({ redirectUrl: 'check-notice-type' })
     })
 
-    describe('and the notice types is "returnForms"', () => {
-      beforeEach(() => {
-        noticeType = 'returnForms'
-        payload = { noticeType }
+    describe('and the notice types is "paperReturn"', () => {
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.checkPageVisited = true
+
+          noticeType = 'paperReturn'
+          payload = { noticeType }
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('continues the journey', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'paper-return' })
+        })
       })
 
-      it('continues the journey', async () => {
-        const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.checkPageVisited = false
 
-        expect(result).to.equal({ redirectUrl: 'return-forms' })
+          noticeType = 'paperReturn'
+          payload = { noticeType }
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('continues the journey', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'paper-return' })
+        })
       })
     })
 
@@ -92,7 +120,7 @@ describe('Notice Type Service', () => {
         })
 
         it('updates the sessions "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           const refreshedSession = await session.$query()
 
@@ -100,7 +128,7 @@ describe('Notice Type Service', () => {
         })
 
         it('sets a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -119,7 +147,7 @@ describe('Notice Type Service', () => {
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           const refreshedSession = await session.$query()
 
@@ -127,9 +155,73 @@ describe('Notice Type Service', () => {
         })
 
         it('does not set a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(yarStub.flash.args[0]).to.be.undefined()
+        })
+      })
+    })
+
+    describe('and the journey is for "standard"', () => {
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'standard'
+          sessionData.checkPageVisited = true
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        })
+      })
+
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'standard'
+          sessionData.checkPageVisited = false
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/returns-period" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'returns-period' })
+        })
+      })
+    })
+
+    describe('and the journey is "adhoc"', () => {
+      describe('and the check page has been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'adhoc'
+          sessionData.checkPageVisited = true
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        })
+      })
+
+      describe('and the check page has not been visited', () => {
+        beforeEach(async () => {
+          sessionData.journey = 'adhoc'
+          sessionData.checkPageVisited = false
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
         })
       })
     })
@@ -141,22 +233,35 @@ describe('Notice Type Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub)
+      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: `/system/notices/setup/${session.id}/licence`,
-        error: { text: 'Select the notice type' },
+        activeNavBar: 'notices',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/licence`,
+          text: 'Back'
+        },
+        error: {
+          errorList: [
+            {
+              href: '#noticeType',
+              text: 'Select the notice type'
+            }
+          ],
+          noticeType: {
+            text: 'Select the notice type'
+          }
+        },
         options: [
           {
             checked: false,
-            text: 'Standard returns invitation',
+            text: 'Returns invitation',
             value: 'invitations'
           },
           {
             checked: false,
-            text: 'Submit using a paper form invitation',
-            value: 'returnForms'
+            text: 'Returns reminder',
+            value: 'reminders'
           }
         ],
         pageTitle: 'Select the notice type'

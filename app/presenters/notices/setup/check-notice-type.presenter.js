@@ -5,11 +5,14 @@
  * @module CheckNoticeTypePresenter
  */
 
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { returnsPeriodText } = require('../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
-  invitations: 'Standard returns invitation',
-  returnForms: 'Submit using a paper form invitation'
+  [NoticeType.INVITATIONS]: 'Returns invitation',
+  [NoticeType.REMINDERS]: 'Returns reminder',
+  [NoticeType.PAPER_RETURN]: 'Paper return'
 }
 
 /**
@@ -20,16 +23,45 @@ const NOTICE_TYPE_TEXT = {
  * @returns {object} - The data formatted for the view template
  */
 function go(session) {
-  const { dueReturns = [], id: sessionId, licenceRef, noticeType, selectedReturns = [] } = session
-
-  return {
+  const {
+    determinedReturnsPeriod = null,
+    dueReturns = [],
+    id: sessionId,
     licenceRef,
     noticeType,
-    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
+    selectedReturns = []
+  } = session
+
+  return {
+    links: _links(sessionId),
     pageTitle: 'Check the notice type',
-    selectedDueReturns: _selectedDueReturns(selectedReturns, dueReturns),
-    sessionId
+    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
+    sessionId,
+    ..._returns(selectedReturns, dueReturns, noticeType),
+    ..._licence(licenceRef),
+    ..._returnsPeriod(determinedReturnsPeriod)
   }
+}
+
+function _licence(licenceRef) {
+  return licenceRef ? { licenceRef } : {}
+}
+
+function _links(sessionId) {
+  return {
+    licenceNumber: `/system/notices/setup/${sessionId}/licence`,
+    returnsPeriod: `/system/notices/setup/${sessionId}/returns-period`,
+    noticeType: `/system/notices/setup/${sessionId}/notice-type`,
+    returns: `/system/notices/setup/${sessionId}/paper-return`
+  }
+}
+
+function _returns(selectedReturns, dueReturns, noticeType) {
+  return noticeType === NoticeType.PAPER_RETURN ? { returns: _selectedDueReturns(selectedReturns, dueReturns) } : {}
+}
+
+function _returnsPeriod(determinedReturnsPeriod) {
+  return determinedReturnsPeriod ? { returnsPeriodText: returnsPeriodText(determinedReturnsPeriod) } : {}
 }
 
 function _selectedDueReturns(selectedReturns, dueReturns) {

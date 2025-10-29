@@ -14,83 +14,44 @@ const databaseConfig = require('../../../config/database.config.js')
 // Test helpers
 const EventModel = require('../../../app/models/event.model.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Thing under test
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 describe('Notices - Fetch Notices service', () => {
-  const notifications = []
-
   let abstractionAlertNotice
   let filters
   let legacyNotice
   let pageNumber
+  let returnedInvitationNotice
   let returnsInvitationNotice
 
   before(async () => {
     returnsInvitationNotice = await EventHelper.add({
+      ...NoticesFixture.returnsInvitation(),
       createdAt: new Date('2025-07-01T15:01:47.023Z'),
-      issuer: 'billing.data@wrls.gov.uk',
-      metadata: {
-        name: 'Returns: invitation',
-        error: 1,
-        options: { excludeLicences: [] },
-        recipients: 1,
-        returnCycle: {
-          dueDate: new Date('2025-07-28'),
-          endDate: new Date('2025-06-30'),
-          isSummer: false,
-          startDate: new Date('2025-04-01')
-        }
-      },
-      referenceCode: NotificationHelper.generateReferenceCode(),
-      status: 'completed',
-      subtype: 'returnInvitation',
-      type: 'notification'
+      issuer: 'billing.data@wrls.gov.uk'
     })
-
-    // NOTE: We demonstrate how the overall status is determined by priority. If an error exists; ERROR. Else if a
-    // pending notification exists; PENDING. Else SENT.
-    await _addNotification(notifications, returnsInvitationNotice.id, 'error')
-    await _addNotification(notifications, returnsInvitationNotice.id, 'pending')
-    await _addNotification(notifications, returnsInvitationNotice.id, 'sent')
 
     legacyNotice = await EventHelper.add({
+      ...NoticesFixture.legacyHandsOffFlow(),
       createdAt: new Date('2024-09-01T18:42:59.659Z'),
-      issuer: 'legacy.alerts@wrls.gov.uk',
-      metadata: {
-        name: 'Hands off flow: resume abstraction',
-        sent: 0,
-        error: 0,
-        pending: 1,
-        recipients: 1,
-        taskConfigId: 4
-      },
-      referenceCode: NotificationHelper.generateReferenceCode('HOF'),
-      status: 'completed',
-      subtype: 'hof-resume',
-      type: 'notification'
+      overallStatus: 'error',
+      statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 }
     })
-
-    await _addNotification(notifications, legacyNotice.id, 'sent')
 
     abstractionAlertNotice = await EventHelper.add({
-      createdAt: new Date('2025-09-17T09:13:26.924Z'),
-      issuer: 'abstraction.alerts@wrls.gov.uk',
-      metadata: {
-        name: 'Water abstraction alert',
-        error: 0,
-        options: { sendingAlertType: 'stop', monitoringStationId: '464639dd-1c70-4107-94f1-575f07c434be' },
-        recipients: 1
-      },
-      referenceCode: NotificationHelper.generateReferenceCode('WAA'),
-      status: 'completed',
-      subtype: 'waterAbstractionAlerts',
-      type: 'notification'
+      ...NoticesFixture.alertStop(),
+      createdAt: new Date('2025-09-17T09:13:26.924Z')
     })
 
-    await _addNotification(notifications, abstractionAlertNotice.id, 'pending')
+    returnedInvitationNotice = await EventHelper.add({
+      ...NoticesFixture.returnsInvitation(),
+      createdAt: new Date('2025-07-01T15:01:47.023Z'),
+      overallStatus: 'returned',
+      statusCounts: { cancelled: 0, error: 0, pending: 0, returned: 1, sent: 0 }
+    })
   })
 
   beforeEach(() => {
@@ -102,13 +63,10 @@ describe('Notices - Fetch Notices service', () => {
   })
 
   after(async () => {
-    for (const notification of notifications) {
-      await notification.$query().delete()
-    }
-
     await abstractionAlertNotice.$query().delete()
     await legacyNotice.$query().delete()
     await returnsInvitationNotice.$query().delete()
+    await returnedInvitationNotice.$query().delete()
   })
 
   describe('when no filter is applied', () => {
@@ -127,15 +85,50 @@ describe('Notices - Fetch Notices service', () => {
       // Assert we get the total number. Normally this would be in the thousands, whereas we will have fetched 25
       expect(result.total).to.exist()
 
-      expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-      expect(result.results).contains(_transformNoticeToResult(legacyNotice, 'sent'))
-      expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+      expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+      expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+      expect(result.results).contains(_transformNoticeToResult(legacyNotice))
+      expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
     })
   })
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
       Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+    })
+
+    describe('and "From Date" has been set', () => {
+      beforeEach(() => {
+        filters.fromDate = new Date('2025-09-10')
+      })
+
+      it('returns the matching notices', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
+      })
+
+      it('excludes those that do not match', async () => {
+        const result = await FetchNoticesService.go(filters, pageNumber)
+
+        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+      })
+
+      describe('and when "From Date" is the same as a notice "Created At"', () => {
+        beforeEach(() => {
+          filters.fromDate = new Date('2025-07-01')
+        })
+
+        it('returns the matching notice', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
+        })
+      })
     })
 
     describe('and "Notice Types" has been set', () => {
@@ -148,14 +141,15 @@ describe('Notices - Fetch Notices service', () => {
           it('returns the matching notices', async () => {
             const result = await FetchNoticesService.go(filters, pageNumber)
 
-            expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+            expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+            expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
           })
 
           it('excludes those that do not match', async () => {
             const result = await FetchNoticesService.go(filters, pageNumber)
 
-            expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
-            expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+            expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+            expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
           })
         })
 
@@ -167,14 +161,15 @@ describe('Notices - Fetch Notices service', () => {
           it('returns the matching notices', async () => {
             const result = await FetchNoticesService.go(filters, pageNumber)
 
-            expect(result.results).contains(_transformNoticeToResult(legacyNotice, 'sent'))
+            expect(result.results).contains(_transformNoticeToResult(legacyNotice))
           })
 
           it('excludes those that do not match', async () => {
             const result = await FetchNoticesService.go(filters, pageNumber)
 
-            expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-            expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+            expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+            expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+            expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
           })
         })
       })
@@ -187,14 +182,15 @@ describe('Notices - Fetch Notices service', () => {
         it('returns the matching notices', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+          expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
         })
 
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-          expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
+          expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+          expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
         })
       })
 
@@ -207,35 +203,16 @@ describe('Notices - Fetch Notices service', () => {
         it('returns the matching notices', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-          expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
         })
 
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
+          expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
         })
-      })
-    })
-
-    describe('and "Sent By" has been set', () => {
-      beforeEach(() => {
-        // NOTE: We use an uppercase "DATA" here to test that the service is using case insensitive LIKE where clause
-        filters.sentBy = 'DATA'
-      })
-
-      it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
-
-        expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-      })
-
-      it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
-
-        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
-        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
       })
     })
 
@@ -248,44 +225,77 @@ describe('Notices - Fetch Notices service', () => {
       it('returns the matching notices', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
+        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
       })
     })
 
-    describe('and "From Date" has been set', () => {
+    describe('and "Sent By" has been set', () => {
       beforeEach(() => {
-        filters.fromDate = new Date('2025-09-10')
+        // NOTE: We use an uppercase "DATA" here to test that the service is using case insensitive LIKE where clause
+        filters.sentBy = 'DATA'
       })
 
       it('returns the matching notices', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+        expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice, 'sent'))
+        expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
       })
+    })
 
-      describe('and when "From Date" is the same as a notice "Created At"', () => {
+    describe('and "Statuses" has been set', () => {
+      describe('with just one status', () => {
         beforeEach(() => {
-          filters.fromDate = new Date('2025-07-01')
+          filters.statuses.push('returned')
         })
 
-        it('returns the matching notice', async () => {
+        it('returns the matching notices', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+          expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+        })
+
+        it('excludes those that do not match', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).not.contains(_transformNoticeToResult(legacyNotice))
+          expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
+        })
+      })
+
+      describe('with multiple statuses', () => {
+        beforeEach(() => {
+          filters.statuses.push('returned', 'error')
+        })
+
+        it('returns the matching notices', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(legacyNotice))
+        })
+
+        it('excludes those that do not match', async () => {
+          const result = await FetchNoticesService.go(filters, pageNumber)
+
+          expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
         })
       })
     })
@@ -298,14 +308,15 @@ describe('Notices - Fetch Notices service', () => {
       it('returns the matching notices', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).contains(_transformNoticeToResult(legacyNotice, 'sent'))
+        expect(result.results).contains(_transformNoticeToResult(legacyNotice))
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService.go(filters, pageNumber)
 
-        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
-        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice, 'pending'))
+        expect(result.results).not.contains(_transformNoticeToResult(returnsInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(returnedInvitationNotice))
+        expect(result.results).not.contains(_transformNoticeToResult(abstractionAlertNotice))
       })
 
       describe('and when "To Date" is the same as a notice "Created At"', () => {
@@ -316,7 +327,9 @@ describe('Notices - Fetch Notices service', () => {
         it('returns the matching notice', async () => {
           const result = await FetchNoticesService.go(filters, pageNumber)
 
-          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice, 'error'))
+          expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+          expect(result.results).contains(_transformNoticeToResult(legacyNotice))
         })
       })
     })
@@ -338,12 +351,6 @@ describe('Notices - Fetch Notices service', () => {
   })
 })
 
-async function _addNotification(notifications, noticeId, status) {
-  const notification = await NotificationHelper.add({ eventId: noticeId, status })
-
-  notifications.push(notification)
-}
-
 function _filters() {
   return {
     fromDate: null,
@@ -351,21 +358,22 @@ function _filters() {
     populated: false,
     reference: null,
     sentBy: null,
+    statuses: [],
     toDate: null
   }
 }
 
-function _transformNoticeToResult(eventInstance, overallStatus) {
+function _transformNoticeToResult(eventInstance) {
   const data = {
     id: eventInstance.id,
     createdAt: eventInstance.createdAt,
     issuer: eventInstance.issuer,
+    overallStatus: eventInstance.overallStatus,
     referenceCode: eventInstance.referenceCode,
     subtype: eventInstance.subtype,
     name: eventInstance.metadata.name,
     alertType: eventInstance.metadata.options?.sendingAlertType || null,
-    recipientCount: eventInstance.metadata.recipients,
-    overallStatus
+    recipientCount: eventInstance.metadata.recipients
   }
 
   return EventModel.fromJson(data)

@@ -1,0 +1,338 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Thing under test
+const SearchPresenter = require('../../../app/presenters/search/search.presenter.js')
+
+describe('Search - Search presenter', () => {
+  let licences
+  let monitoringStations
+  let numberOfPages
+  let page
+  let query
+  let returnLogs
+
+  beforeEach(() => {
+    query = 'searchthis'
+    numberOfPages = 1
+    page = 1
+
+    licences = [
+      {
+        $ends: () => {
+          return null
+        },
+        id: 'licence-1',
+        licenceRef: '01/123',
+        metadata: {
+          Initials: 'F',
+          Name: 'Surname',
+          Salutation: 'Mr'
+        }
+      }
+    ]
+
+    monitoringStations = [
+      {
+        id: 'monitoring-station-1',
+        label: 'Monitoring Station 1',
+        stationReference: 'MS-REF-1',
+        wiskiId: 'WISKI-ID-1',
+        catchmentName: 'Catchment 1',
+        riverName: 'River 1'
+      }
+    ]
+
+    returnLogs = [
+      {
+        endDate: new Date('2000-12-31'),
+        id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+        licenceRef: '01/123',
+        returnReference: '123',
+        regionDisplayName: 'Region',
+        naldRegionId: 1,
+        status: 'completed'
+      }
+    ]
+  })
+
+  it('correctly presents the data', () => {
+    const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+    expect(result).to.equal({
+      licences: [
+        {
+          id: 'licence-1',
+          licenceEndDate: null,
+          licenceEndedText: null,
+          licenceHolderName: 'Mr F Surname',
+          licenceRef: '01/123'
+        }
+      ],
+      monitoringStations: [
+        {
+          id: 'monitoring-station-1',
+          label: 'Monitoring Station 1',
+          stationReference: 'MS-REF-1',
+          wiskiId: 'WISKI-ID-1',
+          catchmentName: 'Catchment 1',
+          riverName: 'River 1'
+        }
+      ],
+      noResults: false,
+      page: 1,
+      pageTitle: 'Search results',
+      query: 'searchthis',
+      returnLogs: [
+        {
+          endDate: '31 December 2000',
+          id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
+          licenceRef: '01/123',
+          returnReference: '123',
+          regionDisplayName: 'Region',
+          statusText: 'complete'
+        }
+      ],
+      showResults: true
+    })
+  })
+
+  describe('the "licences" property', () => {
+    describe('when no matching licences have been found', () => {
+      beforeEach(() => {
+        licences = []
+      })
+
+      it('returns "null"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.licences).to.be.null()
+      })
+    })
+
+    describe('when some matching licences have been found', () => {
+      it('returns an array', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.licences[0]).to.exist()
+        expect(result.licences.length).to.equal(1)
+      })
+    })
+
+    describe('the "licenceEndedText" property', () => {
+      describe('when a licence has an end date in the past', () => {
+        beforeEach(() => {
+          licences[0].$ends = () => {
+            return {
+              date: new Date('2020-12-31'),
+              reason: 'revoked'
+            }
+          }
+        })
+
+        it('returns the `reason` value', () => {
+          const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+          expect(result.licences[0].licenceEndedText).to.equal('revoked')
+        })
+      })
+
+      describe('when a licence has an end date in the future', () => {
+        beforeEach(() => {
+          const tomorrow = new Date()
+          tomorrow.setDate(tomorrow.getDate() + 1)
+
+          licences[0].$ends = () => {
+            return {
+              date: tomorrow,
+              reason: 'expired'
+            }
+          }
+        })
+
+        it('returns an empty value', () => {
+          const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+          expect(result.licences[0].licenceEndedText).to.not.exist()
+        })
+      })
+    })
+  })
+
+  describe('the "monitoringStations" property', () => {
+    describe('when no matching monitoring stations have been found', () => {
+      beforeEach(() => {
+        monitoringStations = []
+      })
+
+      it('returns "null"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.monitoringStations).to.be.null()
+      })
+    })
+
+    describe('when some matching monitoring stations have been found', () => {
+      it('returns an array', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.monitoringStations[0]).to.exist()
+        expect(result.monitoringStations.length).to.equal(1)
+      })
+    })
+  })
+
+  describe('the "noResults" property', () => {
+    describe('when neither licences nor return logs have results', () => {
+      beforeEach(() => {
+        licences = []
+        monitoringStations = []
+        returnLogs = []
+      })
+
+      it('returns "true"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.noResults).to.be.true()
+      })
+    })
+
+    describe('when there were only licence results', () => {
+      beforeEach(() => {
+        monitoringStations = []
+        returnLogs = []
+      })
+
+      it('returns "false"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.noResults).to.be.false()
+      })
+    })
+
+    describe('when there were only return log results', () => {
+      beforeEach(() => {
+        licences = []
+        monitoringStations = []
+      })
+
+      it('returns "false"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.noResults).to.be.false()
+      })
+    })
+
+    describe('when there were only monitoring station results', () => {
+      beforeEach(() => {
+        licences = []
+        returnLogs = []
+      })
+
+      it('returns "false"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.noResults).to.be.false()
+      })
+    })
+
+    describe('when all searches have results', () => {
+      it('returns "false"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.noResults).to.be.false()
+      })
+    })
+  })
+
+  describe('the "pageTitle" property', () => {
+    describe('when the blank search page is shown', () => {
+      beforeEach(() => {
+        licences = undefined
+        monitoringStations = undefined
+        numberOfPages = undefined
+        page = undefined
+        query = undefined
+        returnLogs = undefined
+      })
+
+      it('returns "Search"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.pageTitle).to.equal('Search')
+      })
+    })
+
+    describe('when there are multiple pages of results', () => {
+      beforeEach(() => {
+        numberOfPages = 6
+        page = 2
+      })
+
+      it('returns "Search results" with the page number and total page count', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.pageTitle).to.equal('Search results (page 2 of 6)')
+      })
+    })
+
+    describe('when there is a single page of results', () => {
+      it('returns "Search results"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.pageTitle).to.equal('Search results')
+      })
+    })
+  })
+
+  describe('the "returnLogs" property', () => {
+    describe('when no matching return logs have been found', () => {
+      beforeEach(() => {
+        returnLogs = []
+      })
+
+      it('returns "null"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.returnLogs).to.be.null()
+      })
+    })
+
+    describe('when some matching return logs have been found', () => {
+      it('returns an array', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.returnLogs[0]).to.exist()
+        expect(result.returnLogs.length).to.equal(1)
+      })
+    })
+  })
+
+  describe('the "showResults" property', () => {
+    describe('when no search result page is requested', () => {
+      beforeEach(() => {
+        page = undefined
+      })
+
+      it('returns "false"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.showResults).to.be.false()
+      })
+    })
+
+    describe('when a search result page is requested', () => {
+      it('returns "true"', () => {
+        const result = SearchPresenter.go(query, page, numberOfPages, licences, returnLogs, monitoringStations)
+
+        expect(result.showResults).to.be.true()
+      })
+    })
+  })
+})

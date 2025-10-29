@@ -55,7 +55,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres:12-alpine
+        image: postgres:15-alpine
         # Provide the password for postgres
         env:
           POSTGRES_USER: water_user
@@ -92,7 +92,7 @@ jobs:
           fi
 
       - name: Install Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 

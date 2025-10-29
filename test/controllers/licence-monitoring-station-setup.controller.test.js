@@ -430,16 +430,31 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         beforeEach(() => {
           Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({
             error: {
-              text: {
-                startResult: 'Enter a valid start date',
-                endResult: 'Enter a valid end date'
+              errorList: [
+                {
+                  href: '#abstraction-period-start',
+                  text: 'Enter a real start date'
+                },
+                {
+                  href: '#abstraction-period-end',
+                  text: 'Enter a real end date'
+                }
+              ],
+              'abstraction-period-start': {
+                text: 'Enter a real start date'
+              },
+              'abstraction-period-end': {
+                text: 'Enter a real end date'
               }
             },
             abstractionPeriodStartDay: 'INVALID',
             abstractionPeriodEndDay: 'INVALID',
             abstractionPeriodStartMonth: 'INVALID',
             abstractionPeriodEndMonth: 'INVALID',
-            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+            backLink: {
+              href: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+              text: 'Back'
+            },
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Enter an abstraction period for licence 01/234',
             activeNavBar: 'search'
@@ -451,8 +466,8 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter a valid start date')
-          expect(response.payload).to.contain('Enter a valid end date')
+          expect(response.payload).to.contain('Enter a real start date')
+          expect(response.payload).to.contain('Enter a real end date')
         })
       })
     })

@@ -235,10 +235,10 @@ function _transformForSetup(licence) {
 
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
     const {
-      abstractionPeriodEndDay: endDay,
-      abstractionPeriodEndMonth: endMonth,
-      abstractionPeriodStartDay: startDay,
-      abstractionPeriodStartMonth: startMonth,
+      abstractionPeriodEndDay,
+      abstractionPeriodEndMonth,
+      abstractionPeriodStartDay,
+      abstractionPeriodStartMonth,
       points,
       purpose
     } = licenceVersionPurpose
@@ -246,13 +246,13 @@ function _transformForSetup(licence) {
     return {
       points: _points(points),
       purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
-      returnsCycle: _returnsCycle(startMonth, endMonth),
+      returnsCycle: _returnsCycle(abstractionPeriodStartMonth, abstractionPeriodEndMonth),
       siteDescription: _siteDescription(points),
       abstractionPeriod: {
-        'abstraction-period-end-day': endDay,
-        'abstraction-period-end-month': endMonth,
-        'abstraction-period-start-day': startDay,
-        'abstraction-period-start-month': startMonth
+        abstractionPeriodStartDay,
+        abstractionPeriodStartMonth,
+        abstractionPeriodEndDay,
+        abstractionPeriodEndMonth
       },
       frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
       frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),

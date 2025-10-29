@@ -20,7 +20,7 @@ describe('Return Versions Setup - Start Date validator', () => {
     describe('because the user selected the licence version start date option', () => {
       beforeEach(() => {
         payload = {
-          'start-date-options': 'licenceStartDate'
+          startDateOptions: 'licenceStartDate'
         }
       })
 
@@ -34,10 +34,10 @@ describe('Return Versions Setup - Start Date validator', () => {
     describe('because the user entered a valid other date', () => {
       beforeEach(() => {
         payload = {
-          'start-date-options': 'anotherStartDate',
-          'start-date-day': '26',
-          'start-date-month': '11',
-          'start-date-year': '2023'
+          startDateOptions: 'anotherStartDate',
+          startDateDay: '26',
+          startDateMonth: '11',
+          startDateYear: '2023'
         }
       })
 
@@ -65,14 +65,14 @@ describe('Return Versions Setup - Start Date validator', () => {
 
     describe('because the user selected "Another date"', () => {
       beforeEach(() => {
-        payload = { 'start-date-options': 'anotherStartDate' }
+        payload = { startDateOptions: 'anotherStartDate' }
       })
 
       describe('but then entered no values', () => {
         beforeEach(() => {
-          payload['start-date-day'] = null
-          payload['start-date-month'] = null
-          payload['start-date-year'] = null
+          payload.startDateDay = null
+          payload.startDateMonth = null
+          payload.startDateYear = null
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
@@ -85,9 +85,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe('but only entered some values', () => {
         beforeEach(() => {
-          payload['start-date-day'] = '6'
-          payload['start-date-month'] = '4'
-          payload['start-date-year'] = null
+          payload.startDateDay = '6'
+          payload.startDateMonth = '4'
+          payload.startDateYear = null
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
@@ -100,9 +100,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe('but entered text', () => {
         beforeEach(() => {
-          payload['start-date-day'] = 'TT'
-          payload['start-date-month'] = 'ZZ'
-          payload['start-date-year'] = 'LLLL'
+          payload.startDateDay = 'TT'
+          payload.startDateMonth = 'ZZ'
+          payload.startDateYear = 'LLLL'
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
@@ -115,9 +115,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe('but entered invalid numbers, for example, 13 for the month', () => {
         beforeEach(() => {
-          payload['start-date-day'] = '6'
-          payload['start-date-month'] = '13'
-          payload['start-date-year'] = '2023'
+          payload.startDateDay = '6'
+          payload.startDateMonth = '13'
+          payload.startDateYear = '2023'
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
@@ -130,9 +130,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe('but entered an invalid date, for example, 2023-02-29', () => {
         beforeEach(() => {
-          payload['start-date-day'] = '29'
-          payload['start-date-month'] = '2'
-          payload['start-date-year'] = '2023'
+          payload.startDateDay = '29'
+          payload.startDateMonth = '2'
+          payload.startDateYear = '2023'
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
@@ -145,9 +145,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe("but entered a date before the licence's effective start date", () => {
         beforeEach(() => {
-          payload['start-date-day'] = '31'
-          payload['start-date-month'] = '12'
-          payload['start-date-year'] = '2022'
+          payload.startDateDay = '31'
+          payload.startDateMonth = '12'
+          payload.startDateYear = '2022'
         })
 
         it('fails validation with the message "Start date must be on or after the original licence start date"', () => {
@@ -162,9 +162,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe('but entered a date before the first return cycle start date', () => {
         beforeEach(() => {
-          payload['start-date-day'] = '31'
-          payload['start-date-month'] = '12'
-          payload['start-date-year'] = '1958'
+          payload.startDateDay = '31'
+          payload.startDateMonth = '12'
+          payload.startDateYear = '1958'
         })
 
         it('fails validation with the message "Start date must be on or after 1 April 1959"', () => {
@@ -177,9 +177,9 @@ describe('Return Versions Setup - Start Date validator', () => {
 
       describe("but entered a date after the licence's end date", () => {
         beforeEach(() => {
-          payload['start-date-day'] = '1'
-          payload['start-date-month'] = '1'
-          payload['start-date-year'] = '2024'
+          payload.startDateDay = '1'
+          payload.startDateMonth = '1'
+          payload.startDateYear = '2024'
         })
 
         it('fails validation with the message "Start date must be before the licence end date"', () => {

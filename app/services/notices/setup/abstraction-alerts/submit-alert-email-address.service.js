@@ -33,7 +33,7 @@ async function go(sessionId, payload, auth) {
   const submittedSessionData = _submittedSessionData(session, auth, validationResult, payload)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     error: validationResult,
     ...submittedSessionData
   }

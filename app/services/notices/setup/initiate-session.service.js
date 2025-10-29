@@ -8,6 +8,7 @@
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Initiates the session record used for setting up a new notice
@@ -50,7 +51,7 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
 
   return {
     sessionId: session.id,
-    path: _redirect(journey)
+    path: _redirect(journey, noticeType)
   }
 }
 
@@ -60,8 +61,8 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
  * @private
  */
 function _notice(journey, noticeType) {
-  if (journey === 'alerts') {
-    noticeType = 'abstractionAlerts'
+  if (journey === NoticeJourney.ALERTS) {
+    noticeType = NoticeType.ABSTRACTION_ALERTS
   }
 
   if (noticeType) {
@@ -71,12 +72,17 @@ function _notice(journey, noticeType) {
   return null
 }
 
-function _redirect(journey) {
-  if (journey === 'standard') {
-    return 'returns-period'
+function _redirect(journey, noticeType) {
+  if (journey === NoticeJourney.STANDARD) {
+    // The legacy 'manage' page provides a notice type, this is due to be removed.
+    if (noticeType) {
+      return 'returns-period'
+    }
+
+    return 'notice-type'
   }
 
-  if (journey === 'alerts') {
+  if (journey === NoticeJourney.ALERTS) {
     return 'abstraction-alerts/alert-type'
   }
 

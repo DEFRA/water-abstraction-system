@@ -19,7 +19,10 @@ function go(session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {
-    backLink: `/system/return-versions/setup/${sessionId}/check`,
+    backLink: {
+      href: `/system/return-versions/setup/${sessionId}/check`,
+      text: 'Back'
+    },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'You are about to cancel these requirements for returns',

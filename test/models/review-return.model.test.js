@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,12 +22,30 @@ const ReviewReturnModel = require('../../app/models/review-return.model.js')
 
 describe('Review Return model', () => {
   let testRecord
+  let testReturnLog
+  let testReviewChargeElements
+  let testReviewLicence
+
+  before(async () => {
+    testReturnLog = await ReturnLogHelper.add()
+    testReviewLicence = await ReviewLicenceHelper.add()
+
+    testRecord = await ReviewReturnHelper.add({ returnId: testReturnLog.id, reviewLicenceId: testReviewLicence.id })
+
+    testReviewChargeElements = []
+    for (let i = 0; i < 2; i++) {
+      const testReviewChargeElement = await ReviewChargeElementHelper.add()
+
+      testReviewChargeElements.push(testReviewChargeElement)
+
+      await ReviewChargeElementReturnHelper.add({
+        reviewReturnId: testRecord.id,
+        reviewChargeElementId: testReviewChargeElement.id
+      })
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReviewReturnHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReviewReturnModel.query().findById(testRecord.id)
 
@@ -37,45 +55,7 @@ describe('Review Return model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review licence', () => {
-      let testReviewLicence
-
-      beforeEach(async () => {
-        testReviewLicence = await ReviewLicenceHelper.add()
-
-        const { id: reviewLicenceId } = testReviewLicence
-
-        testRecord = await ReviewReturnHelper.add({ reviewLicenceId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ReviewReturnModel.query().innerJoinRelated('reviewLicence')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the review licence', async () => {
-        const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewLicence')
-
-        expect(result).to.be.instanceOf(ReviewReturnModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicence).to.equal(testReviewLicence)
-      })
-    })
-
     describe('when linking to return log', () => {
-      let testReturnLog
-
-      beforeEach(async () => {
-        testReturnLog = await ReturnLogHelper.add()
-
-        const { id: returnId } = testReturnLog
-
-        testRecord = await ReviewReturnHelper.add({ returnId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('returnLog')
 
@@ -94,25 +74,6 @@ describe('Review Return model', () => {
     })
 
     describe('when linking to review charge elements', () => {
-      let testReviewChargeElements
-
-      beforeEach(async () => {
-        testRecord = await ReviewReturnHelper.add()
-        const { id: reviewReturnId } = testRecord
-
-        testReviewChargeElements = []
-        for (let i = 0; i < 2; i++) {
-          const testReviewChargeElement = await ReviewChargeElementHelper.add()
-
-          testReviewChargeElements.push(testReviewChargeElement)
-
-          await ReviewChargeElementReturnHelper.add({
-            reviewReturnId,
-            reviewChargeElementId: testReviewChargeElement.id
-          })
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('reviewChargeElements')
 
@@ -129,6 +90,24 @@ describe('Review Return model', () => {
         expect(result.reviewChargeElements[0]).to.be.an.instanceOf(ReviewChargeElementModel)
         expect(result.reviewChargeElements).to.include(testReviewChargeElements[0])
         expect(result.reviewChargeElements).to.include(testReviewChargeElements[1])
+      })
+    })
+
+    describe('when linking to review licence', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewReturnModel.query().innerJoinRelated('reviewLicence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review licence', async () => {
+        const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewLicence')
+
+        expect(result).to.be.instanceOf(ReviewReturnModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
+        expect(result.reviewLicence).to.equal(testReviewLicence)
       })
     })
   })

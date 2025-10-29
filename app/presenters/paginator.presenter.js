@@ -189,7 +189,7 @@ function _item(pageNumber, selectedPageNumber, path, queryString) {
   return {
     number: pageNumber,
     visuallyHiddenText: `Page ${pageNumber}`,
-    href: pageNumber === 1 ? path : `${path}?page=${pageNumber}${queryString}`,
+    href: `${path}?page=${pageNumber}${queryString}`,
     current: pageNumber === selectedPageNumber
   }
 }

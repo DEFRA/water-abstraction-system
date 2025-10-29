@@ -16,17 +16,17 @@ class EventModel extends BaseModel {
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
   static get jsonAttributes() {
-    return ['licences']
+    return ['licences', 'metadata', 'statusCounts']
   }
 
   static get relationMappings() {
     return {
-      scheduledNotifications: {
+      notifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'scheduled-notification.model',
+        modelClass: 'notification.model',
         join: {
           from: 'events.id',
-          to: 'scheduledNotifications.eventId'
+          to: 'notifications.eventId'
         }
       }
     }

@@ -29,64 +29,57 @@ describe('Notices - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     describe('and the journey is "standard"', () => {
-      describe('and the notice type is "invitations"', () => {
-        beforeEach(() => {
-          journey = 'standard'
-          noticeType = 'invitations'
-          monitoringStationId = undefined
-        })
+      beforeEach(() => {
+        journey = 'standard'
+        noticeType = null
+        monitoringStationId = undefined
+      })
 
-        it('initiates the session for the return invitations notice setup journey and returns the session ID and redirect path', async () => {
-          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+      it('returns the session Id and redirect path', async () => {
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
-          expect(result).to.equal({
-            sessionId: result.sessionId,
-            path: 'returns-period'
-          })
-
-          const matchingSession = await SessionModel.query().findById(result.sessionId)
-
-          expect(matchingSession.referenceCode).to.startWith('RINV-')
-
-          expect(matchingSession.data).to.equal(
-            {
-              name: 'Returns: invitation',
-              journey: 'standard',
-              subType: 'returnInvitation',
-              noticeType: 'invitations',
-              notificationType: 'Returns invitation'
-            },
-            { skip: ['referenceCode'] }
-          )
+        expect(result).to.equal({
+          sessionId: result.sessionId,
+          path: 'notice-type'
         })
       })
 
-      describe('and the notice type is "reminders"', () => {
+      it('initiates the session for the standard journey ', async () => {
+        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+
+        const matchingSession = await SessionModel.query().findById(result.sessionId)
+
+        expect(matchingSession.data).to.equal({
+          journey: 'standard'
+        })
+      })
+
+      describe('and there is a "noticeType"', () => {
         beforeEach(() => {
-          journey = 'standard'
-          noticeType = 'reminders'
-          monitoringStationId = undefined
+          noticeType = 'invitations'
         })
 
-        it('initiates the session for the return reminders notice setup journey and returns the session ID and redirect path', async () => {
+        it('returns the session Id and redirect path', async () => {
           const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
           expect(result).to.equal({
             sessionId: result.sessionId,
             path: 'returns-period'
           })
+        })
+
+        it('initiates the session for the standard journey for the "noticeType"', async () => {
+          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
 
           const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-          expect(matchingSession.referenceCode).to.startWith('RREM-')
-
           expect(matchingSession.data).to.equal(
             {
-              name: 'Returns: reminder',
               journey: 'standard',
-              subType: 'returnReminder',
-              noticeType: 'reminders',
-              notificationType: 'Returns reminder'
+              name: 'Returns: invitation',
+              noticeType: 'invitations',
+              notificationType: 'Returns invitation',
+              subType: 'returnInvitation'
             },
             { skip: ['referenceCode'] }
           )
@@ -97,7 +90,7 @@ describe('Notices - Setup - Initiate Session service', () => {
     describe('and the journey is "adhoc"', () => {
       beforeEach(() => {
         journey = 'adhoc'
-        noticeType = undefined
+        noticeType = null
         monitoringStationId = undefined
       })
 
@@ -124,7 +117,7 @@ describe('Notices - Setup - Initiate Session service', () => {
         monitoringStationData = AbstractionAlertSessionData.get()
 
         journey = 'alerts'
-        noticeType = undefined
+        noticeType = null
         monitoringStationId = monitoringStationData.monitoringStationId
 
         Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)

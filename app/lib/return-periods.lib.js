@@ -5,6 +5,7 @@
  * @module ReturnPeriodLib
  */
 
+const { compareDates, sameDate } = require('./dates.lib.js')
 const { returnPeriodDates } = require('./static-lookups.lib.js')
 
 /**
@@ -67,32 +68,38 @@ function determineUpcomingReturnsPeriods(date = new Date()) {
     allYear: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.allYear),
       endDate: _endDate(determinationDate, returnPeriodDates.allYear),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.allYear)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.allYear),
+      quarterly: false
     },
     summer: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.summer),
       endDate: _endDate(determinationDate, returnPeriodDates.summer),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.summer)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.summer),
+      quarterly: false
     },
     quarterOne: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterOne),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterOne),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterOne)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterOne),
+      quarterly: true
     },
     quarterTwo: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterTwo),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterTwo),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterTwo)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterTwo),
+      quarterly: true
     },
     quarterThree: {
       startDate: _startDateQuarterThree(determinationDate, returnPeriodDates.quarterThree),
       endDate: _endDateQuarterThree(determinationDate, returnPeriodDates.quarterThree),
-      dueDate: _dueQuarterThree(determinationDate, returnPeriodDates.quarterThree)
+      dueDate: _dueQuarterThree(determinationDate, returnPeriodDates.quarterThree),
+      quarterly: true
     },
     quarterFour: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterFour),
       endDate: _endDate(determinationDate, returnPeriodDates.quarterFour),
-      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterFour)
+      dueDate: _dueDate(determinationDate, returnPeriodDates.quarterFour),
+      quarterly: true
     }
   }
 }
@@ -303,7 +310,7 @@ function _newYearElapsedQuarterThreeDueDate(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
+  if (determinationDate <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
     return year
   } else {
     return nextYear
@@ -359,13 +366,14 @@ function _mapReturnsPeriods(returnPeriods) {
  */
 function _sortByDueDate(toSort) {
   return toSort.sort(function (a, b) {
-    if (a.dueDate.getTime() === b.dueDate.getTime()) {
+    if (sameDate(a.dueDate, b.dueDate)) {
       const aMonthDay = a.startDate.getMonth() * 100 + a.startDate.getDate()
       const bMonthDay = b.startDate.getMonth() * 100 + b.startDate.getDate()
 
       return aMonthDay - bMonthDay
     }
-    return a.dueDate.getTime() - b.dueDate.getTime()
+
+    return compareDates(a.dueDate, b.dueDate)
   })
 }
 

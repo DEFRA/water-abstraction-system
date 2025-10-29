@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,10 +20,21 @@ const ReviewChargeVersionModel = require('../../app/models/review-charge-version
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 
 describe('Review Charge reference model', () => {
+  let testChargeElement
+  let testChargeReference
   let testRecord
+  let testReviewChargeVersion
 
-  beforeEach(async () => {
-    testRecord = await ReviewChargeReferenceHelper.add()
+  before(async () => {
+    testChargeReference = await ChargeReferenceHelper.add()
+    testReviewChargeVersion = await ReviewChargeVersionHelper.add()
+
+    testRecord = await ReviewChargeReferenceHelper.add({
+      chargeReferenceId: testChargeReference.id,
+      reviewChargeVersionId: testReviewChargeVersion.id
+    })
+
+    testChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: testRecord.id })
   })
 
   describe('Basic query', () => {
@@ -36,14 +47,27 @@ describe('Review Charge reference model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge element', () => {
-      let testChargeElement
+    describe('when linking to charge reference', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeReferenceModel.query().innerJoinRelated('chargeReference')
 
-      beforeEach(async () => {
-        testRecord = await ReviewChargeReferenceHelper.add()
-        testChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: testRecord.id })
+        expect(query).to.exist()
       })
 
+      it('can eager load the charge reference', async () => {
+        const result = await ReviewChargeReferenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeReference')
+
+        expect(result).to.be.instanceOf(ReviewChargeReferenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).to.equal(testChargeReference)
+      })
+    })
+
+    describe('when linking to review charge element', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeReferenceModel.query().innerJoinRelated('reviewChargeElements')
 
@@ -66,13 +90,6 @@ describe('Review Charge reference model', () => {
     })
 
     describe('when linking to review charge version', () => {
-      let testReviewChargeVersion
-
-      beforeEach(async () => {
-        testReviewChargeVersion = await ReviewChargeVersionHelper.add()
-        testRecord = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: testReviewChargeVersion.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeReferenceModel.query().innerJoinRelated('reviewChargeVersion')
 
@@ -89,33 +106,6 @@ describe('Review Charge reference model', () => {
 
         expect(result.reviewChargeVersion).to.be.an.instanceOf(ReviewChargeVersionModel)
         expect(result.reviewChargeVersion).to.equal(testReviewChargeVersion)
-      })
-    })
-
-    describe('when linking to charge reference', () => {
-      let testChargeReference
-
-      beforeEach(async () => {
-        testChargeReference = await ChargeReferenceHelper.add()
-        testRecord = await ReviewChargeReferenceHelper.add({ chargeReferenceId: testChargeReference.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ReviewChargeReferenceModel.query().innerJoinRelated('chargeReference')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the charge reference', async () => {
-        const result = await ReviewChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReference')
-
-        expect(result).to.be.instanceOf(ReviewChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReference).to.equal(testChargeReference)
       })
     })
   })

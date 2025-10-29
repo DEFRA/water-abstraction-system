@@ -12,15 +12,25 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
 const IndexNoticesService = require('../../../app/services/notices/index-notices.service.js')
 
 describe('Notices - Index Notices service', () => {
+  let auth
   let fetchResults
   let page
   let yarStub
+
+  beforeEach(() => {
+    auth = {
+      credentials: { scope: ['bulk_return_notifications', 'returns'] }
+    }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -29,47 +39,50 @@ describe('Notices - Index Notices service', () => {
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns({ noticesFilter: _noticeFilters() }) }
+      yarStub = { get: Sinon.stub().returns(null) }
 
-      fetchResults = { results: [NoticesFixture.alertReduce()], total: 1 }
+      const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
+
+      fetchResults = { results, total: 1 }
       Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
     })
 
     it('returns page data for the view', async () => {
-      const result = await IndexNoticesService.go(yarStub, page)
+      const result = await IndexNoticesService.go(yarStub, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         filters: {
           fromDate: null,
           noticeTypes: [],
-          openFilter: true,
+          openFilter: false,
           reference: null,
           sentBy: null,
-          toDate: null,
-          noticesFilter: {
-            noticeTypes: [],
-            reference: null,
-            sentBy: null,
-            sentFromDay: null,
-            sentFromMonth: null,
-            sentFromYear: null,
-            sentToDay: null,
-            sentToMonth: null,
-            sentToYear: null
+          statuses: [],
+          toDate: null
+        },
+        links: {
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create an ad-hoc notice'
+          },
+          notice: {
+            href: '/system/notices/setup/standard',
+            text: 'Create a standard notice'
           }
         },
         notices: [
           {
             createdDate: '25 March 2025',
-            link: `/notifications/report/${fetchResults.results[0].id}`,
+            link: `/system/notices/${fetchResults.results[0].id}`,
             recipients: fetchResults.results[0].recipientCount,
             reference: fetchResults.results[0].referenceCode,
-            sentBy: 'billing.data@wrls.gov.uk',
+            sentBy: 'admin-internal@wrls.gov.uk',
             status: 'sent',
             type: 'Reduce alert'
           }
         ],
+        pageSubHeading: 'View a notice',
         pageTitle: 'Notices',
         tableCaption: 'Showing all 1 notices',
         pagination: { numberOfPages: 1 }
@@ -90,7 +103,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -102,7 +115,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -117,7 +130,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexNoticesService.go(yarStub, page)
+        const result = await IndexNoticesService.go(yarStub, auth, page)
 
         expect(result.filters.openFilter).to.be.true()
       })
@@ -127,14 +140,27 @@ describe('Notices - Index Notices service', () => {
 
 function _noticeFilters() {
   return {
+    fromDate: null,
     noticeTypes: [],
+    openFilter: false,
     reference: null,
     sentBy: null,
-    sentFromDay: null,
-    sentFromMonth: null,
-    sentFromYear: null,
-    sentToDay: null,
-    sentToMonth: null,
-    sentToYear: null
+    statuses: [],
+    toDate: null
   }
 }
+
+// function _noticeFilters() {
+//   return {
+//     noticeTypes: [],
+//     reference: null,
+//     sentBy: null,
+//     sentFromDay: null,
+//     sentFromMonth: null,
+//     sentFromYear: null,
+//     sentToDay: null,
+//     sentToMonth: null,
+//     sentToYear: null,
+//     statuses: []
+//   }
+// }

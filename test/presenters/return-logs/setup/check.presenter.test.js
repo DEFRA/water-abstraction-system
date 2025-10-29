@@ -738,6 +738,36 @@ describe('Return Logs Setup - Check presenter', () => {
             ])
           })
         })
+
+        describe('and the meter reading is zero', () => {
+          beforeEach(() => {
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z',
+                reading: 0
+              }
+            ]
+            session.startReading = 0
+          })
+
+          it('returns the "summaryTableData" rows with the totals shown as zeros', () => {
+            const result = CheckPresenter.go(session)
+
+            expect(result.summaryTableData.rows).to.equal([
+              {
+                link: {
+                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
+                  text: 'Enter monthly readings'
+                },
+                month: 'April 2023',
+                monthlyTotal: '0',
+                unitTotal: '0',
+                reading: 0
+              }
+            ])
+          })
+        })
       })
 
       describe('and the frequency is daily', () => {

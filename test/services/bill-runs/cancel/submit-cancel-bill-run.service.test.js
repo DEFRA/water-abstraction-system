@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { setTimeout } = require('timers/promises')
+const { pause } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
@@ -31,7 +31,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
     cancelBillRunStub = Sinon.stub(CancelBillRunService, 'go')
     deleteDoneFake = Sinon.fake()
     deleteBillRunStub = Sinon.stub(DeleteBillRunService, 'go').callsFake(async () => {
-      await setTimeout(500)
+      await pause(500)
       deleteDoneFake()
     })
 
@@ -67,7 +67,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
         // and allow the delete to complete to confirm that it was running in the background.
         expect(deleteDoneFake.called).to.be.false()
 
-        await setTimeout(500)
+        await pause(500)
 
         expect(deleteDoneFake.called).to.be.true()
       })

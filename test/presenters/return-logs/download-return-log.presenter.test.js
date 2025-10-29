@@ -29,7 +29,7 @@ describe('Return Logs - Download Return Log presenter', () => {
 
         const rows = result.data.split('\n')
 
-        expect(rows[0]).to.equal('start date,reading,volume')
+        expect(rows[0]).to.equal('end date,reading,volume')
 
         // Drop the first header row
         rows.shift()
@@ -37,9 +37,9 @@ describe('Return Logs - Download Return Log presenter', () => {
         rows.pop()
 
         for (let i = 0; i < rows.length - 1; i++) {
-          const { quantity, startDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
+          const { quantity, endDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
 
-          expect(rows[i]).to.equal(`${formatDateObjectToISO(startDate)},,${quantity}`)
+          expect(rows[i]).to.equal(`${formatDateObjectToISO(endDate)},,${quantity}`)
         }
       })
     })
@@ -55,7 +55,7 @@ describe('Return Logs - Download Return Log presenter', () => {
 
         const rows = result.data.split('\n')
 
-        expect(rows[0]).to.equal('start date,reading,volume')
+        expect(rows[0]).to.equal('end date,reading,volume')
 
         // Drop the first header row
         rows.shift()
@@ -63,9 +63,9 @@ describe('Return Logs - Download Return Log presenter', () => {
         rows.pop()
 
         for (let i = 0; i < rows.length - 1; i++) {
-          const { quantity, reading, startDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
+          const { quantity, reading, endDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
 
-          expect(rows[i]).to.equal(`${formatDateObjectToISO(startDate)},${reading},${quantity}`)
+          expect(rows[i]).to.equal(`${formatDateObjectToISO(endDate)},${reading},${quantity}`)
         }
       })
     })

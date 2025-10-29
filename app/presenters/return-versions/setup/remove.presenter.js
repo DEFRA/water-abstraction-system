@@ -21,7 +21,7 @@ function go(session, requirementIndex) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: `/system/return-versions/setup/${sessionId}/check`, text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: 'You are about to remove these requirements for returns',
@@ -30,12 +30,6 @@ function go(session, requirementIndex) {
     sessionId,
     startDate: _startDate(session)
   }
-}
-
-function _backLink(session) {
-  const { id } = session
-
-  return `/system/return-versions/setup/${id}/check`
 }
 
 function _formattedReturnRequirement(requirement) {

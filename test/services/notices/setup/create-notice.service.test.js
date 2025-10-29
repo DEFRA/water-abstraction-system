@@ -80,8 +80,10 @@ describe('Notices - Setup - Create Notice service', () => {
           },
           sent: 2783
         },
+        overallStatus: null,
         referenceCode,
         status: 'started',
+        statusCounts: null,
         subtype: 'returnInvitation',
         type: 'notification',
         updatedAt: createdResult.updatedAt

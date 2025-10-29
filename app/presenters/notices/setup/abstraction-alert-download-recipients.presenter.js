@@ -64,7 +64,7 @@ function go(recipients, session) {
  */
 function _matchingRecipient(recipients, licenceMonitoringStationLicenceRef) {
   return recipients.filter((recipient) => {
-    return recipient.licence_refs.split(',').includes(licenceMonitoringStationLicenceRef)
+    return recipient.licence_refs.includes(licenceMonitoringStationLicenceRef)
   })
 }
 

@@ -39,11 +39,12 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: true, restriction: true, resume: true }, show: true },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
-        viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: true }, show: true },
+        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
+        viewReports: {
+          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: true }, show: true }
       })
     })
@@ -59,14 +60,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: false, notices: false, returnsCycles: false }, show: false },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: false, kpis: false, notices: false, returnsCycles: false },
+          show: false
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -82,11 +84,12 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: true, reminders: true }, show: true },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: true }, show: true }
       })
     })
@@ -102,14 +105,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: true, restriction: true, resume: true }, show: true },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -125,14 +129,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -148,14 +153,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -171,14 +177,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: true, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -194,14 +201,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: true }, show: true },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
           show: false
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: false }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
@@ -217,14 +225,15 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).to.equal({
         pageTitle: 'Manage reports and notices',
-        flowNotices: { links: { handsOffFlow: false, restriction: false, resume: false }, show: false },
-        licenceNotices: { links: { renewal: false }, show: false },
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
-          links: { adHoc: true, invitations: false, paperForms: true, reminders: false },
+          links: { adHoc: true, invitations: false, paperForms: false, reminders: false },
           show: true
         },
-        viewReports: { links: { digitise: false, kpis: true, notices: true, returnsCycles: true }, show: true },
+        viewReports: {
+          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          show: true
+        },
         viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })

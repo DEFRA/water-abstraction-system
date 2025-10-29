@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,12 +17,15 @@ const ReturnSubmissionLineModel = require('../../app/models/return-submission-li
 
 describe('Return Submission Line model', () => {
   let testRecord
+  let testReturnSubmission
+
+  before(async () => {
+    testReturnSubmission = await ReturnSubmissionHelper.add()
+
+    testRecord = await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnSubmission.id })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReturnSubmissionLineHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReturnSubmissionLineModel.query().findById(testRecord.id)
 
@@ -33,13 +36,6 @@ describe('Return Submission Line model', () => {
 
   describe('Relationships', () => {
     describe('when linking to return submission', () => {
-      let testReturnSubmission
-
-      beforeEach(async () => {
-        testReturnSubmission = await ReturnSubmissionHelper.add()
-        testRecord = await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnSubmission.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionLineModel.query().innerJoinRelated('returnSubmission')
 

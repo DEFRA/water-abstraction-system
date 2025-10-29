@@ -1,31 +1,29 @@
 'use strict'
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  * @module BatchNotificationsService
  */
 
-const { setTimeout } = require('node:timers/promises')
-
-const CreateEmailRequest = require('../../../requests/notify/create-email.request.js')
-const CreateLetterRequest = require('../../../requests/notify/create-letter.request.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
-const CreatePrecompiledFileRequest = require('../../../requests/notify/create-precompiled-file.request.js')
-const NotifyUpdatePresenter = require('../../../presenters/notices/setup/notify-update.presenter.js')
 const ProcessNotificationStatusService = require('../../jobs/notification-status/process-notification-status.service.js')
-const UpdateEventService = require('./update-event.service.js')
+const RecordNotifySendResultsService = require('./record-notify-send-results.service.js')
+const SendEmailService = require('./batch/send-email.service.js')
+const SendLetterService = require('./batch/send-letter.service.js')
+const SendPaperReturnService = require('./batch/send-paper-return.service.js')
+const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
+const { pause } = require('../../../lib/general.lib.js')
 
 const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
- * Orchestrates sending notifications to Notify and saving the notification to 'water.scheduled_notifications'
+ * Orchestrates sending notifications to Notify and saving the notification to 'water.notifications'
  *
  * This service needs to perform the following actions on a recipient:
  *
  * - convert the recipients into notifications
  * - send the notifications to Notify
- * - save the notifications to `water.scheduled_notifications`
- * - update the linked event record with the count of notifications that failed to send to Notify
+ * - save the notifications to `water.notifications`
+ * - update the linked event record with data derived from the notification statuses after attempting to send to Notify
  *
  * This needs to be done in batches because Notify has a rate limit (3,000 messages per minute).
  *
@@ -36,30 +34,16 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  * Batching also means we can batch insert the notifications when saving to PostgreSQL.
  *
  * @param {object[]} notifications - The notifications for sending and saving
- * @param {string} eventId - the event UUID to link all the notifications to
+ * @param {string} event - the event (notice) to link all the notifications to
  * @param {string} referenceCode - the unique generated reference code
  *
  */
-async function go(notifications, eventId, referenceCode) {
-  const { batchSize, delay } = NotifyConfig
+async function go(notifications, event, referenceCode) {
+  const { batchSize, delay } = _batchSize(event.subtype)
 
-  let totalErrorCount = 0
+  await _processBatches(notifications, delay, batchSize, event.id, referenceCode)
 
-  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
-  // to add a delay between each batch.
-  for (let i = 0; i < notifications.length; i += batchSize) {
-    const batchNotifications = notifications.slice(i, i + batchSize)
-
-    const errorCount = await _batch(batchNotifications, referenceCode)
-
-    await _delay(delay)
-
-    await ProcessNotificationStatusService.go(eventId)
-
-    totalErrorCount += errorCount
-  }
-
-  await UpdateEventService.go(eventId, totalErrorCount)
+  await UpdateEventService.go([event.id])
 }
 
 async function _batch(notifications, referenceCode) {
@@ -67,48 +51,45 @@ async function _batch(notifications, referenceCode) {
 
   const sentNotifications = await _sendNotifications(notificationsToSend)
 
-  await CreateNotificationsService.go(sentNotifications)
-
-  return _errorCount(sentNotifications)
+  await RecordNotifySendResultsService.go(sentNotifications)
 }
 
 /**
- * This handles delaying sending the next batch by using a Node timeout.
+ * When sending a PDF file (currently we only send paper return's) we need to reduce the batch size to 1.
+ *
+ * This is to ease the burden on resources when generating the PDFs.
+ *
+ * Because we reduce the batch size to 1, we can reduce the delay to 2 seconds this will give us 30 requests per minute.
  *
  * @private
  */
-async function _delay(delay) {
-  return setTimeout(delay)
+function _batchSize(subtype) {
+  if (subtype === 'paperReturnForms') {
+    return {
+      batchSize: 1,
+      // The delay is already handled by GotenbergRequest
+      delay: 0
+    }
+  }
+
+  const { batchSize, delay } = NotifyConfig
+
+  return {
+    batchSize,
+    delay
+  }
 }
 
-/**
- * Notify returns the status code. Anything other the '201' 'CREATED' is considered an error.
- *
- * We have a wrapper around Notify which will capture the error to allow multiple notifications to be sent without
- * failure.
- *
- * Our use of 'allSettled' result in the errors being classed as 'fulfilled'. This results in array of promises that
- * look like this:
- *
- * ```javascript
- * [
- *  {
- *    status: 'fulfilled',
- *    value: {}
- *  }
- * ]
- * ```
- *
- * We need to check the 'status' from notify to calculate if an error has occurred.
- *
- * @private
- */
-function _errorCount(notifications) {
-  const erroredNotifications = notifications.filter((notification) => {
-    return notification.notifyStatus !== 'created'
-  })
+function _determineNotificationToSend(notification, referenceCode) {
+  if (notification.messageType === 'email') {
+    return SendEmailService.go(notification, referenceCode)
+  }
 
-  return erroredNotifications.length
+  if (notification.messageRef === 'pdf.return_form') {
+    return SendPaperReturnService.go(notification, referenceCode)
+  }
+
+  return SendLetterService.go(notification, referenceCode)
 }
 
 /**
@@ -120,56 +101,25 @@ function _notificationsToSend(notifications, referenceCode) {
   const sentNotifications = []
 
   for (const notification of notifications) {
-    if (notification.messageType === 'email') {
-      sentNotifications.push(_sendEmail(notification, referenceCode))
-    } else if (notification.messageRef === 'pdf.return_form') {
-      sentNotifications.push(_sendReturnForm(notification, referenceCode))
-    } else {
-      sentNotifications.push(_sendLetter(notification, referenceCode))
-    }
+    sentNotifications.push(_determineNotificationToSend(notification, referenceCode))
   }
 
   return sentNotifications
 }
 
-async function _sendEmail(notification, referenceCode) {
-  const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
+async function _processBatches(notifications, delay, batchSize, eventId, referenceCode) {
+  // NOTE: We can't use p-map to 'batch' up the sending as we have done in other modules because it does not allow us
+  // to add a delay between each batch.
+  for (let i = 0; i < notifications.length; i += batchSize) {
+    const batchNotifications = notifications.slice(i, i + batchSize)
 
-  return _sentNotification(notification, notifyResult)
-}
+    await _batch(batchNotifications, referenceCode)
 
-async function _sendLetter(notification, referenceCode) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
-    personalisation: notification.personalisation,
-    reference: referenceCode
-  })
+    if (delay) {
+      await pause(delay)
+    }
 
-  return _sentNotification(notification, notifyResult)
-}
-
-async function _sendReturnForm(notification, referenceCode) {
-  const notifyResult = await CreatePrecompiledFileRequest.send(notification.content, referenceCode)
-
-  return _sentNotification(notification, notifyResult)
-}
-/**
- * This removes some properties added just for sending the notifications and then combines the original notification
- * with the result of the` NotifyUpdatePresenter`.
- *
- * The returned combination represents a 'notification' record, which the `CreateNotificationsService` can then insert
- * 'as is'.
- * @private
- */
-function _sentNotification(notification, notifyResult) {
-  delete notification.templateId
-  delete notification.content
-
-  return {
-    ...notification,
-    ...NotifyUpdatePresenter.go(notifyResult)
+    await ProcessNotificationStatusService.go(eventId)
   }
 }
 

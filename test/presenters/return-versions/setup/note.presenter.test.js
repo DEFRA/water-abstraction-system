@@ -37,7 +37,10 @@ describe('Return Versions Setup - Note presenter', () => {
       const result = NotePresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        },
         licenceRef: '01/ABC',
         note: null,
         pageTitle: 'Add a note',
@@ -51,7 +54,10 @@ describe('Return Versions Setup - Note presenter', () => {
     it('returns a link back to the "check" page', () => {
       const result = NotePresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      expect(result.backLink).to.equal({
+        href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        text: 'Back'
+      })
     })
   })
 

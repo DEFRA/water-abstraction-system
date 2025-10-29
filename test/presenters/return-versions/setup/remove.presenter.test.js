@@ -35,10 +35,10 @@ describe('Return Versions Setup - Remove presenter', () => {
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
-            'abstraction-period-end-day': '31',
-            'abstraction-period-end-month': '10',
-            'abstraction-period-start-day': '1',
-            'abstraction-period-start-month': '4'
+            abstractionPeriodEndDay: '31',
+            abstractionPeriodEndMonth: '10',
+            abstractionPeriodStartDay: '1',
+            abstractionPeriodStartMonth: '4'
           },
           frequencyReported: 'month',
           frequencyCollected: 'month',
@@ -55,7 +55,10 @@ describe('Return Versions Setup - Remove presenter', () => {
       const result = RemovePresenter.go(session, requirementIndex)
 
       expect(result).to.equal({
-        backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: {
+          href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+          text: 'Back'
+        },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'You are about to remove these requirements for returns',
@@ -71,7 +74,10 @@ describe('Return Versions Setup - Remove presenter', () => {
     it('returns a link back to the "setup" page', () => {
       const result = RemovePresenter.go(session, requirementIndex)
 
-      expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      expect(result.backLink).to.equal({
+        href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
+        text: 'Back'
+      })
     })
   })
 
@@ -84,10 +90,10 @@ describe('Return Versions Setup - Remove presenter', () => {
           returnsCycle: 'summer',
           siteDescription: 'This is a valid return requirements description',
           abstractionPeriod: {
-            'abstraction-period-end-day': '12',
-            'abstraction-period-end-month': '09',
-            'abstraction-period-start-day': '12',
-            'abstraction-period-start-month': '07'
+            abstractionPeriodEndDay: '12',
+            abstractionPeriodEndMonth: '09',
+            abstractionPeriodStartDay: '12',
+            abstractionPeriodStartMonth: '07'
           },
           frequencyReported: 'month',
           frequencyCollected: 'week',

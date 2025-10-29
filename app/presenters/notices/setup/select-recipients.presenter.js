@@ -6,6 +6,7 @@
  */
 
 const ContactPresenter = require('./contact.presenter.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -32,7 +33,7 @@ function go(session, recipients, selectedRecipients) {
 }
 
 function _setupAddress(sessionId, noticeType) {
-  if (noticeType === 'returnForms') {
+  if (noticeType === NoticeType.PAPER_RETURN) {
     return {
       href: `/system/notices/setup/${sessionId}/recipient-name`,
       text: 'Set up a single use address'

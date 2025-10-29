@@ -5,6 +5,8 @@
  * @module SubmitAgreementsExceptions
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../../validators/return-versions/setup/agreements-exceptions.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
@@ -79,15 +81,7 @@ async function _save(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = AgreementsExceptionsValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

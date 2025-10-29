@@ -37,7 +37,7 @@ describe('Alert Email Address Service', () => {
       const result = await AlertEmailAddressService.go(session.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         alertEmailAddressOptions: {
           otherUserChecked: false,
           otherUserEmailAddressInput: '',

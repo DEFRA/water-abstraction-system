@@ -6,6 +6,7 @@
  */
 
 const { randomInt, randomUUID } = require('node:crypto')
+const { setTimeout } = require('node:timers/promises')
 
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
@@ -160,6 +161,22 @@ function generateUUID() {
 }
 
 /**
+ * Pause execution for a given number of milliseconds
+ *
+ * We know it is considered an anti-pattern for JavaScript, but there are times when we just need to pause execution.
+ *
+ * Typically, this is because of external services, for example, Notify and its rate limit, waiting for the Charging
+ * Module API to generate a bill run, or the legacy apps and their flakiness!
+ *
+ * For these times, we have this helper function.
+ *
+ * @param {number} pauseInMilliseconds - Milliseconds to wait
+ */
+async function pause(pauseInMilliseconds) {
+  await setTimeout(pauseInMilliseconds)
+}
+
+/**
  * Tests if one set of periods (represented by a start and end date) overlaps with another
  *
  * Added as part of two-part tariff and the need to match returns and lines to charge elements. A common complication in
@@ -168,8 +185,8 @@ function generateUUID() {
  * billing period. Then the only way to represent the abstract period in a usable way is as 2 separate periods. Hence
  * this service deals with arrays of periods.
  *
- * > See the comments for `DetermineAbstractionPeriodService` to better understand the complexity of going from
- * > abstract to concrete periods
+ * > See the comments for `AbstractionPeriodLib#determineAbstractionPeriods` to better understand the complexity of
+ * > going from abstract to concrete periods
  *
  * Then there are times we need to test if the periods of one thing overlap with another. In two-part tariff that's the
  * abstraction periods of a charge element with those of a return. If _any_ of the periods overlap then the return is
@@ -384,6 +401,7 @@ module.exports = {
   flashNotification,
   generateRandomInteger,
   generateUUID,
+  pause,
   periodsOverlap,
   splitArrayIntoGroups,
   timestampForPostgres,

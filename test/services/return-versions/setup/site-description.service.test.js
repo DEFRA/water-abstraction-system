@@ -61,7 +61,10 @@ describe('Return Versions Setup - Site Description service', () => {
           activeNavBar: 'search',
           pageTitle: 'Enter a site description for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+            text: 'Back'
+          },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           siteDescription: null

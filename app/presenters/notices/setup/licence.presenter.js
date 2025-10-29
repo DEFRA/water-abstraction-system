@@ -31,7 +31,7 @@ function _backLink(sessionId, checkPageVisited) {
   }
 
   return {
-    href: '/manage',
+    href: '/system/notices',
     text: 'Back'
   }
 }

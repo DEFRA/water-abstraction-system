@@ -1,20 +1,9 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {{ pageHeading(pageTitle, pageTitleCaption) }}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   <p class="govuk-!-margin-bottom-7 govuk-!-margin-top-7 govuk-!-font-weight-bold govuk-!-font-size-27">{{ returnRequirement }}</p>
 

@@ -25,7 +25,10 @@ function go(session) {
   } = session
 
   return {
-    backLink: `/system/return-versions/setup/${sessionId}/check`,
+    backLink: {
+      href: `/system/return-versions/setup/${sessionId}/check`,
+      text: 'Back'
+    },
     licenceId,
     licenceRef,
     multipleUpload,

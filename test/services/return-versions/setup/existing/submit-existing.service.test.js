@@ -130,7 +130,10 @@ describe('Return Versions - Setup - Submit Existing service', () => {
             activeNavBar: 'search',
             pageTitle: 'Use previous requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
-            backLink: `/system/return-versions/setup/${session.id}/method`,
+            backLink: {
+              href: `/system/return-versions/setup/${session.id}/method`,
+              text: 'Back'
+            },
             existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
             licenceRef: '01/ABC'
           },
@@ -142,7 +145,15 @@ describe('Return Versions - Setup - Submit Existing service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitExistingService.go(session.id, payload)
 
-          expect(result.error).to.equal({ text: 'Select a return version' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#existing',
+                text: 'Select a return version'
+              }
+            ],
+            existing: { text: 'Select a return version' }
+          })
         })
       })
     })
@@ -156,10 +167,10 @@ function _transformedReturnRequirement() {
     returnsCycle: 'winter-and-all-year',
     siteDescription: 'FIRST BOREHOLE AT AVALON',
     abstractionPeriod: {
-      'abstraction-period-end-day': 31,
-      'abstraction-period-end-month': 3,
-      'abstraction-period-start-day': 1,
-      'abstraction-period-start-month': 4
+      abstractionPeriodEndDay: '31',
+      abstractionPeriodEndMonth: '3',
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '4'
     },
     frequencyReported: 'week',
     frequencyCollected: 'week',

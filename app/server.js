@@ -11,6 +11,7 @@ const ErrorPagesPlugin = require('./plugins/error-pages.plugin.js')
 const GlobalHapiServerMethodsPlugin = require('./plugins/global-hapi-server-methods.plugin.js')
 const GlobalNotifierPlugin = require('./plugins/global-notifier.plugin.js')
 const HapiPinoPlugin = require('./plugins/hapi-pino.plugin.js')
+const KeepYarAlivePlugin = require('./plugins/keep-yar-alive.plugin.js')
 const NotifyTokenCachePlugin = require('./plugins/notify-token-cache.plugin.js')
 const PayloadCleanerPlugin = require('./plugins/payload-cleaner.plugin.js')
 const RequestNotifierPlugin = require('./plugins/request-notifier.plugin.js')
@@ -44,6 +45,7 @@ const registerPlugins = async (server) => {
   await server.register(PayloadCleanerPlugin)
   await server.register(ViewsPlugin)
   await server.register(GlobalHapiServerMethodsPlugin)
+  await server.register(KeepYarAlivePlugin)
 }
 
 const init = async () => {

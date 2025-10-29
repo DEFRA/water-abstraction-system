@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,10 +20,21 @@ const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
 
 describe('Review Charge Version model', () => {
+  let testChargeReference
+  let testChargeVersion
   let testRecord
+  let testReviewLicence
 
-  beforeEach(async () => {
-    testRecord = await ReviewChargeVersionHelper.add()
+  before(async () => {
+    testChargeVersion = await ChargeVersionHelper.add()
+    testReviewLicence = await ReviewLicenceHelper.add()
+
+    testRecord = await ReviewChargeVersionHelper.add({
+      chargeVersionId: testChargeVersion.id,
+      reviewLicenceId: testReviewLicence.id
+    })
+
+    testChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: testRecord.id })
   })
 
   describe('Basic query', () => {
@@ -36,14 +47,25 @@ describe('Review Charge Version model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge reference', () => {
-      let testChargeReference
+    describe('when linking to charge version', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeVersionModel.query().innerJoinRelated('chargeVersion')
 
-      beforeEach(async () => {
-        testRecord = await ReviewChargeVersionHelper.add()
-        testChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: testRecord.id })
+        expect(query).to.exist()
       })
 
+      it('can eager load the charge version', async () => {
+        const result = await ReviewChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
+
+        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).to.equal(testChargeVersion)
+      })
+    })
+
+    describe('when linking to review charge reference', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeVersionModel.query().innerJoinRelated('reviewChargeReferences')
 
@@ -66,13 +88,6 @@ describe('Review Charge Version model', () => {
     })
 
     describe('when linking to review licence', () => {
-      let testReviewLicence
-
-      beforeEach(async () => {
-        testReviewLicence = await ReviewLicenceHelper.add()
-        testRecord = await ReviewChargeVersionHelper.add({ reviewLicenceId: testReviewLicence.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeVersionModel.query().innerJoinRelated('reviewLicence')
 
@@ -87,31 +102,6 @@ describe('Review Charge Version model', () => {
 
         expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
         expect(result.reviewLicence).to.equal(testReviewLicence)
-      })
-    })
-
-    describe('when linking to review licence', () => {
-      let testChargeVersion
-
-      beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add()
-        testRecord = await ReviewChargeVersionHelper.add({ chargeVersionId: testChargeVersion.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ReviewChargeVersionModel.query().innerJoinRelated('chargeVersion')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the charge version', async () => {
-        const result = await ReviewChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
-
-        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
       })
     })
   })

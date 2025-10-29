@@ -9,7 +9,7 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
-const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 const MESSAGE_REFS = {
   invitations: {
@@ -42,7 +42,7 @@ const MESSAGE_REFS = {
  * Formats recipients into notifications for a returns invitation or reminder
  *
  * This function prepares data for both sending notifications via a notification service (e.g., Notify)
- * and storing notification records in a database (e.g., 'water.scheduled_notifications').
+ * and storing notification records in a database (e.g., 'water.notifications').
  * It aligns with legacy practices by including parts of the Notify payload and response directly
  * within the notification objects.
  *
@@ -108,13 +108,15 @@ function _email(recipient, returnsPeriod, journey, eventId, noticeType) {
 
   return {
     ..._common(templateId, eventId),
-    licences: transformStringOfLicencesToArray(recipient.licence_refs),
+    licences: recipient.licence_refs,
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
       ..._returnsPeriods(returnsPeriod, messageType)
     },
-    recipient: recipient.email
+    recipient: recipient.email,
+    status: 'pending',
+    returnLogIds: recipient.return_log_ids
   }
 }
 
@@ -161,7 +163,7 @@ function _letter(recipient, returnsPeriod, journey, eventId, noticeType) {
 
   return {
     ..._common(templateId, eventId),
-    licences: transformStringOfLicencesToArray(recipient.licence_refs),
+    licences: recipient.licence_refs,
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -169,7 +171,9 @@ function _letter(recipient, returnsPeriod, journey, eventId, noticeType) {
       ..._returnsPeriods(returnsPeriod, messageType),
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
-    }
+    },
+    status: 'pending',
+    returnLogIds: recipient.return_log_ids
   }
 }
 

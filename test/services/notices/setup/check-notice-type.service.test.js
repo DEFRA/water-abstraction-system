@@ -39,13 +39,17 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       const result = await CheckNoticeTypeService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         licenceRef,
-        noticeType: 'invitations',
+        links: {
+          licenceNumber: `/system/notices/setup/${session.id}/licence`,
+          noticeType: `/system/notices/setup/${session.id}/notice-type`,
+          returns: `/system/notices/setup/${session.id}/paper-return`,
+          returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+        },
         notification: undefined,
         pageTitle: 'Check the notice type',
-        returnNoticeType: 'Standard returns invitation',
-        selectedDueReturns: [],
+        returnNoticeType: 'Returns invitation',
         sessionId: session.id
       })
     })

@@ -9,72 +9,57 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
+const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
 
 describe('Licences - Fetch Communications service', () => {
-  const licenceRef = generateLicenceRef()
-
-  let event
+  let licenceRef
+  let notice
   let notification
 
   beforeEach(async () => {
-    event = await EventHelper.add({
-      createdAt: new Date('2024-06-01'),
-      licences: JSON.stringify([licenceRef]),
-      metadata: null,
-      status: 'sent',
-      subtype: 'renewal',
-      type: 'notification'
-    })
+    notice = await EventHelper.add(NoticesFixture.returnsInvitation())
+    notification = await NotificationHelper.add(NotificationsFixture.returnsInvitationEmail(notice))
 
-    notification = await NotificationHelper.add({
-      eventId: event.id,
-      licences: [licenceRef],
-      messageRef: 'returns_invitation_licence_holder_letter',
-      messageType: 'letter',
-      status: 'sent'
-    })
+    licenceRef = notice.licences[0]
   })
 
-  describe('when the licence has communications', () => {
-    it('returns the matching communication', async () => {
+  describe('when the licence has notifications', () => {
+    it('returns the matching notifications', async () => {
       const result = await FetchCommunicationsService.go(licenceRef, 1)
 
-      expect(result.pagination).to.equal({
-        total: 1
+      expect(result).to.equal({
+        notifications: [
+          {
+            createdAt: notification.createdAt,
+            id: notification.id,
+            messageType: notification.messageType,
+            status: notification.status,
+            event: {
+              id: notice.id,
+              issuer: notice.issuer,
+              subtype: notice.subtype,
+              sendingAlertType: null
+            }
+          }
+        ],
+        totalNumber: 1
       })
-
-      expect(result.communications).to.equal([
-        {
-          createdAt: notification.createdAt,
-          event: {
-            issuer: 'test.user@defra.gov.uk',
-            metadata: null,
-            status: 'sent',
-            subtype: 'renewal',
-            type: 'notification'
-          },
-          id: notification.id,
-          messageRef: 'returns_invitation_licence_holder_letter',
-          messageType: 'letter'
-        }
-      ])
     })
   })
 
-  describe.skip('when the licence has no communications', () => {
-    it('returns no communications', async () => {
-      const result = await FetchCommunicationsService.go('01/02', 1)
+  describe('when the licence has no notifications', () => {
+    it('returns no notifications', async () => {
+      const result = await FetchCommunicationsService.go('01/FOO', 1)
 
-      expect(result.pagination).to.equal({
-        total: 0
+      expect(result).to.equal({
+        notifications: [],
+        totalNumber: 0
       })
-
-      expect(result.communications).to.be.empty()
     })
   })
 })

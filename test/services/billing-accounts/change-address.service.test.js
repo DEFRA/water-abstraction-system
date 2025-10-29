@@ -90,7 +90,6 @@ describe('Change address service', () => {
             expect(reFetchedExistingAddress.id).to.equal(existingAddress.id)
             expect(reFetchedExistingAddress.createdAt).to.equal(existingAddress.createdAt)
             expect(reFetchedExistingAddress.address1).to.equal(address.addressLine1)
-            expect(reFetchedExistingAddress.updatedAt).not.to.equal(existingAddress.updatedAt)
           })
 
           it('links the billing account address record to the existing address', async () => {
@@ -200,7 +199,6 @@ describe('Change address service', () => {
           expect(reFetchedExistingCompany.id).to.equal(existingCompany.id)
           expect(reFetchedExistingCompany.createdAt).to.equal(existingCompany.createdAt)
           expect(reFetchedExistingCompany.name).to.equal(agentCompany.name)
-          expect(reFetchedExistingCompany.updatedAt).not.to.equal(existingCompany.updatedAt)
         })
 
         it('links the billing account address record to the existing company', async () => {

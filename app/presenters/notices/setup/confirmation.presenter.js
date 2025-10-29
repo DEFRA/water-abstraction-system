@@ -16,7 +16,7 @@ function go(event) {
   const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
-    forwardLink: `/notifications/report/${eventId}`,
+    forwardLink: `/system/notices/${eventId}`,
     monitoringStationLink: _monitoringStationLink(metadata),
     pageTitle: _pageTitle(subtype),
     referenceCode
@@ -43,7 +43,7 @@ function _pageTitle(subType) {
   }
 
   if (subType === 'paperReturnForms') {
-    return 'Paper return forms sent'
+    return 'Paper returns sent'
   }
 
   const subTypes = {

@@ -54,7 +54,7 @@ describe('Return Logs Setup - Readings presenter', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            reading: 100
+            reading: '100'
           }
         ])
       })
@@ -107,7 +107,7 @@ describe('Return Logs Setup - Readings presenter', () => {
             {
               endDate: '2023-04-30T00:00:00.000Z',
               label: 'April 2023',
-              reading: 100,
+              reading: '100',
               error: 'There is an error on this line'
             }
           ])

@@ -59,7 +59,10 @@ describe('Return Versions Setup - Note service', () => {
           activeNavBar: 'search',
           pageTitle: 'Add a note',
           pageTitleCaption: 'Licence 01/ABC',
-          backLink: `/system/return-versions/setup/${session.id}/check`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/check`,
+            text: 'Back'
+          },
           licenceRef: '01/ABC',
           note: null
         },

@@ -20,11 +20,13 @@ exports.up = function (knex) {
     table.jsonb('metadata')
     table.date('received_date')
     table.string('return_requirement').notNullable()
+    table.uuid('return_requirement_id')
     table.date('due_date')
     table.boolean('under_query').notNullable().defaultTo(false)
     table.string('under_query_comment')
     table.boolean('is_test').notNullable().defaultTo(false)
     table.uuid('return_cycle_id')
+    table.boolean('quarterly').notNullable().defaultTo(false)
 
     // Legacy timestamps
     // NOTE: They are not automatically set

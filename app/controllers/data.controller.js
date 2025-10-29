@@ -5,10 +5,17 @@
  * @module DataController
  */
 
+const DatesService = require('../services/data/dates/dates.service.js')
 const LoadService = require('../services/data/load/load.service.js')
 const SeedService = require('../services/data/seed/seed.service.js')
 const SubmitDeduplicateService = require('../services/data/deduplicate/submit-deduplicate.service.js')
 const TearDownService = require('../services/data/tear-down/tear-down.service.js')
+
+async function dates(_request, h) {
+  const pageData = DatesService.go()
+
+  return h.response(pageData).code(200)
+}
 
 async function deduplicate(_request, h) {
   return h.view('data/deduplicate.njk', {
@@ -46,6 +53,7 @@ async function tearDown(_request, h) {
 }
 
 module.exports = {
+  dates,
   deduplicate,
   load,
   seed,

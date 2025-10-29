@@ -42,7 +42,7 @@ function _alertNoticeTypes(noticeTypes) {
 }
 
 function _applyFilters(query, filters) {
-  const { fromDate, noticeTypes, reference, sentBy, toDate } = filters
+  const { fromDate, noticeTypes, reference, sentBy, statuses, toDate } = filters
 
   if (reference) {
     query.whereILike('events.referenceCode', `%${reference}%`)
@@ -68,6 +68,7 @@ function _applyFilters(query, filters) {
   }
 
   _applyNoticeTypeFilters(query, noticeTypes)
+  _applyStatusFilters(query, statuses)
 }
 
 function _applyNoticeTypeFilters(query, noticeTypes) {
@@ -98,38 +99,33 @@ function _applyNoticeTypeFilters(query, noticeTypes) {
   }
 }
 
+function _applyStatusFilters(query, statuses) {
+  if (statuses.length === 0) {
+    return
+  }
+
+  const clauses = statuses.map((status) => {
+    return `events.status_counts->>'${status}' <> '0'`
+  })
+
+  query.whereRaw(`(${clauses.join(' OR ')})`)
+}
+
 function _fetchQuery() {
   return EventModel.query()
     .select([
       'events.id',
       'events.createdAt',
       'events.issuer',
+      'events.overallStatus',
       'events.referenceCode',
       'events.subtype',
       ref('events.metadata:name').castText().as('name'),
       ref('events.metadata:options.sendingAlertType').castText().as('alertType'),
       ref('events.metadata:recipients').castInt().as('recipientCount')
     ])
-    .select(
-      EventModel.knex().raw(`
-        CASE
-          WHEN COUNT(*) FILTER (WHERE notifications.status = 'error') > 0 THEN 'error'
-          WHEN COUNT(*) FILTER (WHERE notifications.status = 'pending') > 0 THEN 'pending'
-          ELSE 'sent'
-        END AS overall_status
-      `)
-    )
-    .leftJoin('notifications', 'events.id', 'notifications.eventId')
     .where('events.type', 'notification')
     .whereIn('events.status', ['sent', 'completed', 'sending'])
-    .groupBy([
-      'events.id',
-      'events.createdAt',
-      'events.issuer',
-      'events.referenceCode',
-      'events.subtype',
-      'events.metadata'
-    ])
 }
 
 function _standardNoticeTypes(noticeTypes) {

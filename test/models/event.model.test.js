@@ -9,26 +9,26 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../support/helpers/scheduled-notification.helper.js')
-const ScheduledNotificationModel = require('../../app/models/scheduled-notification.model.js')
+const NotificationHelper = require('../support/helpers/notification.helper.js')
+const NotificationModel = require('../../app/models/notification.model.js')
 
 // Thing under test
 const EventModel = require('../../app/models/event.model.js')
 
 describe('Event model', () => {
+  let testNotifications
   let testRecord
-  let testScheduledNotifications
 
   before(async () => {
     testRecord = await EventHelper.add()
 
-    testScheduledNotifications = []
+    testNotifications = []
     for (let i = 0; i < 2; i++) {
-      const scheduledNotification = await ScheduledNotificationHelper.add({
+      const notification = await NotificationHelper.add({
         eventId: testRecord.id
       })
 
-      testScheduledNotifications.push(scheduledNotification)
+      testNotifications.push(notification)
     }
   })
 
@@ -42,23 +42,23 @@ describe('Event model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to scheduled Notifications', () => {
+    describe('when linking to Notifications', () => {
       it('can successfully run a related query', async () => {
-        const query = await EventModel.query().innerJoinRelated('scheduledNotifications')
+        const query = await EventModel.query().innerJoinRelated('notifications')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the scheduled notifications', async () => {
-        const result = await EventModel.query().findById(testRecord.id).withGraphFetched('scheduledNotifications')
+      it('can eager load the notifications', async () => {
+        const result = await EventModel.query().findById(testRecord.id).withGraphFetched('notifications')
 
         expect(result).to.be.instanceOf(EventModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.scheduledNotifications).to.be.an.array()
-        expect(result.scheduledNotifications[0]).to.be.an.instanceOf(ScheduledNotificationModel)
-        expect(result.scheduledNotifications).to.include(testScheduledNotifications[0])
-        expect(result.scheduledNotifications).to.include(testScheduledNotifications[1])
+        expect(result.notifications).to.be.an.array()
+        expect(result.notifications[0]).to.be.an.instanceOf(NotificationModel)
+        expect(result.notifications).to.include(testNotifications[0])
+        expect(result.notifications).to.include(testNotifications[1])
       })
     })
   })

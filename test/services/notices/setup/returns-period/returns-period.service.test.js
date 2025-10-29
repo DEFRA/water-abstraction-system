@@ -10,16 +10,20 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const ReturnsPeriodService = require('../../../../../app/services/notices/setup/returns-period/returns-period.service.js')
 
 describe('Notices - Setup - Returns Period service', () => {
   let clock
+  let referenceCode
   let session
 
   before(async () => {
-    session = await SessionHelper.add({ data: { referenceCode: 'RINV-123', journey: 'invitations' } })
+    referenceCode = generateReferenceCode()
+
+    session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
 
     const testDate = new Date('2024-12-01')
 
@@ -35,10 +39,12 @@ describe('Notices - Setup - Returns Period service', () => {
       const result = await ReturnsPeriodService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
-        backLink: '/manage',
+        activeNavBar: 'notices',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        },
         pageTitle: 'Select the returns periods for the invitations',
-        referenceCode: 'RINV-123',
         returnsPeriod: [
           {
             checked: false,

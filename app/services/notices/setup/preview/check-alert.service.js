@@ -27,7 +27,7 @@ async function go(contactHashId, sessionId) {
   const pageData = CheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
   return {
-    activeNavBar: 'manage',
+    activeNavBar: 'notices',
     ...pageData
   }
 }
@@ -41,7 +41,7 @@ async function _recipientLicenceRefs(contactHashId, session) {
     return recipient.contact_hash_id === contactHashId
   })
 
-  return matchedRecipient.licence_refs.split(',')
+  return matchedRecipient.licence_refs
 }
 
 module.exports = {

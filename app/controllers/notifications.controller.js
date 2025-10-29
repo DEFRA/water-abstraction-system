@@ -5,22 +5,22 @@
  * @module NotificationsController
  */
 
+const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
+const ProcessReturnedLetterService = require('../services/notifications/process-returned-letter.service.js')
 const ViewNotificationService = require('../services/notifications/view-notification.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 
-/**
- * If a letter has been returned to notify this end point will be called
- *
- * @param request - the hapi request object
- * @param h - the hapi response object
- *
- * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
- */
-async function returnedLetter(request, h) {
-  const { notification_id: notificationId, reference } = request.payload
+async function download(request, h) {
+  const { id: notificationId } = request.params
 
-  global.GlobalNotifier.omg('Return letter callback triggered', { notificationId, reference })
+  const fileBuffer = await DownloadNotificationService.go(notificationId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="letter.pdf"')
+}
+
+async function returnedLetter(request, h) {
+  await ProcessReturnedLetterService.go(request.payload)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -35,6 +35,7 @@ async function view(request, h) {
 }
 
 module.exports = {
+  download,
   returnedLetter,
   view
 }

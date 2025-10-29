@@ -64,7 +64,7 @@ describe('Notices Setup - Preview - Check Alert service', () => {
       const result = await CheckAlertService.go(testRecipient.contact_hash_id, session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'notices',
         backLink: `/system/notices/setup/${session.id}/check`,
         caption: 'Notice WAA-XM0WMH',
         pageTitle: 'Check the recipient previews',

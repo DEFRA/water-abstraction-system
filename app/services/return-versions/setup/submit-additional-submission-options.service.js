@@ -5,6 +5,8 @@
  * @module AdditionalSubmissionOptionsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
 const AdditionalSubmissionOptionsValidator = require('../../../validators/return-versions/setup/additional-submission-options.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -98,15 +100,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload, session) {
   const validation = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

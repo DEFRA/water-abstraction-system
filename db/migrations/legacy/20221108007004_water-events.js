@@ -17,10 +17,12 @@ exports.up = function (knex) {
     table.string('comment')
     table.jsonb('metadata')
     table.string('status')
+    table.string('overall_status')
+    table.jsonb('status_counts')
 
     // Legacy timestamps
-    table.timestamp('created', { precision: 0, useTz: false })
-    table.timestamp('modified', { precision: 0, useTz: false })
+    table.timestamp('created', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
+    table.timestamp('modified', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
   })
 }
 

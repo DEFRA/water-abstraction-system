@@ -1,6 +1,7 @@
 'use strict'
 
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
  * Create abstraction alerts recipients test data
@@ -34,7 +35,7 @@ function recipients() {
 // an additional contact will always be associated with a primary user or licence holder by the licence ref
 function _addAdditionalContact() {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
     contact_type: 'Additional contact',
@@ -61,68 +62,75 @@ function duplicateRecipients() {
 
 function _addDuplicateLicenceHolder(licenceRef) {
   return {
-    licence_refs: licenceRef,
+    licence_refs: [licenceRef],
     contact_type: 'Licence holder',
     contact: _contact('4', 'Duplicate Licence holder', 'Licence holder'),
-    contact_hash_id: 'b1b355491c7d42778890c545e08797ea'
+    contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addDuplicateReturnsTo(licenceRef) {
   return {
-    licence_refs: licenceRef,
+    licence_refs: [licenceRef],
     contact_type: 'Returns to',
     contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
-    contact_hash_id: 'b1b355491c7d42778890c545e08797ea'
+    contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addLicenceHolder() {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: [generateLicenceRef()],
     contact_type: 'Licence holder',
     contact: _contact('1', 'Licence holder', 'Licence holder'),
-    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214'
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addPrimaryUser() {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
     contact_type: 'Primary user',
-    email: 'primary.user@important.com'
+    email: 'primary.user@important.com',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addDuplicatePrimaryUser(licenceRef) {
   return {
-    licence_refs: licenceRef,
+    licence_refs: [licenceRef],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
     contact_type: 'Primary user',
-    email: 'primary.user@important.com'
+    email: 'primary.user@important.com',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addReturnsAgent() {
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
     contact_type: 'Returns agent',
-    email: 'returns.agent@important.com'
+    email: 'returns.agent@important.com',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addDuplicateReturnsAgent(licenceRef) {
   return {
-    licence_refs: licenceRef,
+    licence_refs: [licenceRef],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
     contact_type: 'Returns agent',
-    email: 'returns.agent@important.com'
+    email: 'returns.agent@important.com',
+    return_log_ids: [generateUUID()]
   }
 }
 
@@ -134,19 +142,21 @@ function _addReturnTo() {
   contact.postcode = null
 
   return {
-    licence_refs: generateLicenceRef(),
+    licence_refs: [generateLicenceRef()],
     contact_type: 'Returns to',
     contact,
-    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893'
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
+    return_log_ids: [generateUUID()]
   }
 }
 
 function _addLicenceHolderWithMultipleLicences() {
   return {
-    licence_refs: `${generateLicenceRef()},${generateLicenceRef()}`,
+    licence_refs: [generateLicenceRef(), generateLicenceRef()],
     contact_type: 'Licence holder',
     contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
-    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075'
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
+    return_log_ids: [generateUUID()]
   }
 }
 

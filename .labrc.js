@@ -60,6 +60,9 @@ module.exports = {
     // GlobalNotifier is added by us a global in a server plugin. It's how we make logging available anywhere in the app
     // whilst avoiding having to pass it around
     'GlobalNotifier',
+    // GlobalMarked is added by us in views.plugin.js. It was the only solution to still being able to use an ESM-only
+    // package in a synchronous CSM module
+    'GlobalMarked',
     // HapiServerMethods is added by us in a server plugin to allow us to access server methods globally.
     'HapiServerMethods',
     // Caused by eslint-plugin-import-x which is a dependence of Neostandard we rely on to ensure the team adds the .js

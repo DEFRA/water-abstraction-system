@@ -5,6 +5,8 @@
  * @module SubmitSiteDescriptionService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
@@ -74,15 +76,7 @@ function _submittedSessionData(session, requirementIndex, payload) {
 function _validate(payload) {
   const validation = SiteDescriptionValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

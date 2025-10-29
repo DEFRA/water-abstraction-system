@@ -1,7 +1,7 @@
 'use strict'
 
 const { today } = require('../lib/general.lib.js')
-const { returnUnits } = require('../lib/static-lookups.lib.js')
+const { noticeMappings, returnUnits } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
 
@@ -178,6 +178,31 @@ function formatMoney(valueInPence, signed = false) {
 }
 
 /**
+ * Formats the notice type for display
+ *
+ * Used when displaying notices, for example, the view notices, view notice, and view licence communications pages.
+ *
+ * > It is assumed `subtype` and `alertType` have been extracted from an `EventModel` instance.
+ *
+ * If `alertType` is provided, then we are dealing with a water abstraction alert. The notice type is simply
+ * `alertType + alert`, for example, 'Warning alert'.
+ *
+ * Else, we map the notice type from the event's `subtype`.
+ *
+ * @param {string} subtype - The notice subtype.
+ * @param {string} [alertType=null] - The alert type (optional)
+ *
+ * @returns {string} The formatted notice type
+ */
+function formatNoticeType(subtype, alertType = null) {
+  if (alertType) {
+    return `${titleCase(alertType)} alert`
+  }
+
+  return noticeMappings[subtype]
+}
+
+/**
  * Formats a number as a string with commas and decimal places, for example, 1000 as '1,000.000'
  *
  * @param {number} number - The number to format
@@ -265,54 +290,90 @@ function formatQuantity(units, quantity) {
 }
 
 /**
+ * Formats the restriction type
+ *
+ * This can be 'stop', 'reduce' or 'stop_and_reduce'.
+ *
+ * When the restriction type is 'stop_and_reduce', we want to show the user 'Stop and reduce'.
+ *
+ * When it is something else it just needs to be in sentence case
+ *
+ * @param {string} restrictionType
+ *
+ * @returns {string}
+ */
+function formatRestrictionType(restrictionType) {
+  if (restrictionType === 'stop_or_reduce') {
+    return 'Stop or reduce'
+  }
+
+  return sentenceCase(restrictionType)
+}
+
+/**
  * Formats the status for a return log, adjusting for specific conditions.
  *
- * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due', but there are
- * 28 days before the returns due date, it will display 'not due yet'. If the status is 'due' and the due date has
- * passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
+ * - NOT DUE YET - The return log end date is greater than or equal to the current date. Cannot be submitted or
+ * received.
+ * - OPEN - The return log end date is less than the current date, its DB status is 'due', and it either has a due date
+ * more than 28 days in the future, or it is null.
+ * - DUE - The return log end date is less than the current date, its DB status is 'due', and it has a due date less
+ * than or equal to 28 days in the future.
+ * - OVERDUE - The return log end date is less than the current date, its DB status is 'due', and it has a due date
+ * greater than the current date.
+ * - RECEIVED - The return log has a DB status of received.
+ * - COMPLETE - The return log has a DB status of completed.
+ * - VOID - The return log has a DB status of void. Cannot be submitted or received.
  *
  * @param {module:ReturnLogModel} returnLog - The return log containing status and due date information
  *
  * @returns {string} The formatted status for display.
  */
 function formatReturnLogStatus(returnLog) {
-  const { status, dueDate } = returnLog
+  const { dueDate, endDate, status } = returnLog
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
-  // statues
+  // statuses
   if (status === 'completed') {
     return 'complete'
   }
 
-  // For all other statuses except 'due' we can just return the status
+  // For all other statuses (received and void) except 'due' we can just return the status
   if (status !== 'due') {
     return status
   }
 
-  if (!dueDate) {
+  const todaysDate = today()
+
+  // If the return log has not yet ended then it is not yet due for submissions
+  if (todaysDate <= endDate) {
     return 'not due yet'
   }
 
-  // Work out if the return is overdue (status is still 'due' and it is past the due date)
-  const todaysDate = today()
+  // If we are here, the return log has a status of 'due' and is past its end date. If a due date has not been set then
+  // it is simply 'open' for return submissions
+  if (!dueDate) {
+    return 'open'
+  }
 
+  // If we are here, the return log has a due date. If todays date is greater than that, then we are overdue
   if (dueDate < todaysDate) {
     return 'overdue'
   }
 
-  // A return is considered "due" for 28 days, starting 28 days before the due date
-  // Any date before this period should be marked as "not due yet"
-  const notDueUntil = new Date(dueDate)
+  // Calculate the start of the 'due period'. A return is considered "due" when in its 'due period'. This starts 28 days
+  // before its due date (inclusive hence we use 27 in the calculation).
+  const duePeriodStartDate = new Date(dueDate)
 
-  // Calculate the start of the "due" period, which begins 27 days before the due date
-  notDueUntil.setDate(notDueUntil.getDate() - DUE_PERIOD_DAYS)
+  duePeriodStartDate.setDate(duePeriodStartDate.getDate() - DUE_PERIOD_DAYS)
 
-  // If today is before the "due" period starts, the return is "not due yet"
-  if (todaysDate < notDueUntil) {
-    return 'not due yet'
+  if (todaysDate >= duePeriodStartDate) {
+    return 'due'
   }
 
-  return 'due'
+  // If we get here then the return log has a status of 'due', its end date is in the past, and its due date is more
+  // than 28 days in the future. Once dynamic due dates becomes the norm, we are unlikely to get to this point.
+  return 'open'
 }
 
 /**
@@ -524,10 +585,12 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatMoney,
+  formatNoticeType,
   formatNumber,
   formatPounds,
   formatPurposes,
   formatQuantity,
+  formatRestrictionType,
   formatReturnLogStatus,
   formatValidationResult,
   formatValueUnit,

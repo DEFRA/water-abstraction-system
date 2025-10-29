@@ -173,4 +173,50 @@ describe('Notices - Base presenter', () => {
       })
     })
   })
+
+  describe('#returnsPeriodText', () => {
+    let returnsPeriod
+
+    beforeEach(() => {
+      returnsPeriod = {
+        name: 'allYear',
+        summer: 'false',
+        dueDate: '2025-11-28T00:00:00.000Z',
+        endDate: '2025-10-31T00:00:00.000Z',
+        startDate: '2024-11-01T00:00:00.000Z'
+      }
+    })
+
+    describe('when the return period name is "allYear"', () => {
+      it('should return the correct text', () => {
+        const result = BasePresenter.returnsPeriodText(returnsPeriod)
+
+        expect(result).to.equal('Winter and all year annual 1 November 2024 to 31 October 2025')
+      })
+    })
+
+    describe('when the return period name is "summer"', () => {
+      beforeEach(() => {
+        returnsPeriod.name = 'summer'
+      })
+
+      it('should return the correct text', () => {
+        const result = BasePresenter.returnsPeriodText(returnsPeriod)
+
+        expect(result).to.equal('Summer annual 1 November 2024 to 31 October 2025')
+      })
+    })
+
+    describe('when the return period name is "Quarterly"', () => {
+      beforeEach(() => {
+        returnsPeriod.name = 'Quarterly'
+      })
+
+      it('should return the correct text', () => {
+        const result = BasePresenter.returnsPeriodText(returnsPeriod)
+
+        expect(result).to.equal('Quarterly 1 November 2024 to 31 October 2025')
+      })
+    })
+  })
 })

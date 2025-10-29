@@ -21,6 +21,12 @@ const notifyTemplates = {
       returnsAgentEmail: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
       licenceHolderLetter: '4b47cf1c-043c-4a0c-8659-5be06cb2b860',
       returnsToLetter: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
+    },
+    reminders: {
+      primaryUserEmail: '87dceeb3-aa2b-4ff5-aff9-97755a71532b',
+      returnsAgentEmail: 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
+      licenceHolderLetter: '62224316-35c4-4b02-98c2-81332817f3dc',
+      returnsToLetter: 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5'
     }
   },
   alerts: {

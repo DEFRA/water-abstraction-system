@@ -5,9 +5,11 @@
  * @module FetchCommunicationsService
  */
 
+const { ref } = require('objection')
+
 const NotificationModel = require('../../models/notification.model.js')
 
-const DatabaseConfig = require('../../../config/database.config.js')
+const databaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetch the matching licence and return data needed for the view licence communications page
@@ -20,23 +22,26 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
 async function go(licenceRef, page) {
-  const { results, total } = await _fetch(licenceRef, page)
+  const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
-  return { communications: results, pagination: { total } }
+  return { notifications, totalNumber }
 }
 
 async function _fetch(licenceRef, page) {
   return NotificationModel.query()
-    .select(['createdAt', 'id', 'messageType', 'messageRef'])
+    .select(['createdAt', 'id', 'messageType', 'status'])
     .where('licences', '?', licenceRef)
-    .where('status', 'sent')
-    .whereNotNull('eventId')
-    .orderBy('notifications.created_at', 'DESC')
+    .orderBy('createdAt', 'DESC')
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
-      builder.select(['issuer', 'metadata', 'status', 'subtype', 'type'])
+      builder.select([
+        'id',
+        'issuer',
+        'subtype',
+        ref('metadata:options.sendingAlertType').castText().as('sendingAlertType')
+      ])
     })
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(page - 1, databaseConfig.defaultPageSize)
 }
 
 module.exports = {

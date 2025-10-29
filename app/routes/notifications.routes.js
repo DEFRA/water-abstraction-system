@@ -5,6 +5,13 @@ const NotificationsController = require('../controllers/notifications.controller
 const routes = [
   {
     method: 'GET',
+    path: '/notifications/{id}/download',
+    options: {
+      handler: NotificationsController.download
+    }
+  },
+  {
+    method: 'GET',
     path: '/notifications/{id}',
     options: {
       handler: NotificationsController.view

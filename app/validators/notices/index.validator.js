@@ -20,6 +20,8 @@ const NOTICE_TYPES = [
   'warning'
 ]
 
+const STATUSES = ['cancelled', 'error', 'pending', 'returned', 'sent']
+
 const MAX_REFERENCE_LENGTH = 11
 const MAX_SENT_BY_LENGTH = 255
 
@@ -106,6 +108,12 @@ function _validate(payload) {
       .optional()
       .messages({
         'string.max': `Sent by must be ${MAX_SENT_BY_LENGTH} characters or less`
+      }),
+    statuses: Joi.array()
+      .items(Joi.string().valid(...STATUSES))
+      .optional()
+      .messages({
+        'any.only': 'Select a valid status'
       }),
     toDate: Joi.date().format(['YYYY-MM-DD']).max('now').optional().messages({
       'date.base': 'Enter a valid to date',

@@ -20,7 +20,7 @@ function go(session, requirementIndex, points) {
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: _backLink(session, requirementIndex),
+    backLink: { href: _backLinkHref(session, requirementIndex), text: 'Back' },
     licenceId: licence.id,
     licencePoints: _licencePoints(points),
     licenceRef: licence.licenceRef,
@@ -31,7 +31,7 @@ function go(session, requirementIndex, points) {
   }
 }
 
-function _backLink(session, requirementIndex) {
+function _backLinkHref(session, requirementIndex) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

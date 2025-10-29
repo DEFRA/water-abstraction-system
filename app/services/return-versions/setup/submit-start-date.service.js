@@ -5,7 +5,9 @@
  * @module StartDateService
  */
 
-const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+const { isQuarterlyReturnSubmissions, sameDate } = require('../../../lib/dates.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const DetermineRelevantLicenceVersionService = require('./determine-relevant-licence-version.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -89,11 +91,7 @@ function _defaultQuarterlyReturns(session) {
 }
 
 async function _relevantLicenceVersion(session, previousStartDate) {
-  // NOTE: For date comparisons you cannot use !== with just the date values. Using < or > will coerce the values into
-  // numbers for comparison. But equality operators are checking that the two operands are referring to the same Object.
-  // So, where we have matching dates and expect !== to return 'false' we get 'true' instead.
-  // Thanks to https://stackoverflow.com/a/493018/6117745 for explaining the problem and providing the solution
-  if (previousStartDate && previousStartDate.getTime() === session.returnVersionStartDate.getTime()) {
+  if (previousStartDate && sameDate(previousStartDate, session.returnVersionStartDate)) {
     // In this scenario we are handling where a user has come back to the start date page, but not change anything.
     // In this case there is no point fetching the licence version (it'll be the same result).
     return
@@ -131,16 +129,16 @@ async function _save(session, payload) {
   // If the user has returned to this page, we need what start date they entered previously so we can determine if
   // they actually changed it, or came from the check page accidentality and immediately hit 'Continue'
   const previousStartDate = session.returnVersionStartDate ? new Date(session.returnVersionStartDate) : null
-  const selectedOption = payload['start-date-options']
+  const selectedOption = payload.startDateOptions
 
   session.startDateOptions = selectedOption
 
   if (selectedOption === 'anotherStartDate') {
-    session.startDateDay = payload['start-date-day']
-    session.startDateMonth = payload['start-date-month']
-    session.startDateYear = payload['start-date-year']
+    session.startDateDay = payload.startDateDay
+    session.startDateMonth = payload.startDateMonth
+    session.startDateYear = payload.startDateYear
     session.returnVersionStartDate = new Date(
-      `${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`
+      `${payload.startDateYear}-${payload.startDateMonth}-${payload.startDateDay}`
     )
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
@@ -153,10 +151,10 @@ async function _save(session, payload) {
 }
 
 function _submittedSessionData(session, payload) {
-  session.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
-  session.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
-  session.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
-  session.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+  session.startDateDay = payload.startDateDay ? payload.startDateDay : null
+  session.startDateMonth = payload.startDateMonth ? payload.startDateMonth : null
+  session.startDateYear = payload.startDateYear ? payload.startDateYear : null
+  session.startDateOptions = payload.startDateOptions ? payload.startDateOptions : null
 
   return StartDatePresenter.go(session, payload)
 }
@@ -164,17 +162,7 @@ function _submittedSessionData(session, payload) {
 function _validate(payload, licenceStartDate, licenceEndDate) {
   const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message, type } = validation.error.details[0]
-
-  return {
-    message,
-    radioFormElement: type === 'any.required' ? { text: message } : null,
-    dateInputFormElement: type === 'any.required' ? null : { text: message }
-  }
+  return formatValidationResult(validation)
 }
 
 module.exports = {

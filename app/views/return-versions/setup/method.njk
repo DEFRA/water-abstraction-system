@@ -1,66 +1,41 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: "#setup-error"
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  {% set pageHeading %}
-    {{ pageHeading(pageTitle, pageTitleCaption) }}
-  {% endset %}
-
+{% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: "method",
-      errorMessage: error,
+      errorMessage: error.method,
       fieldset: {
         legend: {
-          html: pageHeading
+          html: pageHeadingHtml
         }
       },
       items: [
         {
-          value: "use-abstraction-data",
+          id: 'useAbstractionData',
+          value: "useAbstractionData",
           text: "Start by using abstraction data",
-          checked: "use-abstraction-data" === method
+          checked: "useAbstractionData" === method
         },
         {
-          value: "use-existing-requirements",
+          id: 'useExistingRequirements',
+          value: "useExistingRequirements",
           text: "Copy existing requirements",
-          checked: "use-existing-requirements" === method
+          checked: "useExistingRequirements" === method
         } if displayCopyExisting,
         {
           divider: "or"
         },
         {
-          value: "set-up-manually",
+          id: 'setUpManually',
+          value: "setUpManually",
           text: "Set up manually",
-          checked: "set-up-manually" === method
+          checked: "setUpManually" === method
         }
       ]
     }) }}

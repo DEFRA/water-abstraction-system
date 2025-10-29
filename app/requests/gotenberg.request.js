@@ -6,6 +6,7 @@
  */
 
 const BaseRequest = require('./base.request.js')
+const { pause } = require('../lib/general.lib.js')
 
 const gotenbergConfig = require('../../config/gotenberg.config.js')
 
@@ -32,6 +33,11 @@ async function get(path) {
  */
 async function post(path, formData) {
   const result = await _sendRequest(path, BaseRequest.post, formData)
+
+  // Requests for PDFs are sporadic at best. We are talking weeks between users creating them. So, we haven't wasted
+  // money or energy keeping Gotenberg running in an ECS instance with lots of resource.
+  // Because of this we have found it benefits from a brief pause between requests, which we default to 2 secs.
+  await pause(gotenbergConfig.delay)
 
   return _parseResult(result)
 }

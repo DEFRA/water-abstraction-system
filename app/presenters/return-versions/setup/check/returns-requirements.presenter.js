@@ -34,14 +34,10 @@ function go(requirements, points, journey) {
 }
 
 function _abstractionPeriod(abstractionPeriod) {
-  const {
-    'abstraction-period-start-day': startDay,
-    'abstraction-period-start-month': startMonth,
-    'abstraction-period-end-day': endDay,
-    'abstraction-period-end-month': endMonth
-  } = abstractionPeriod
-  const startDate = formatAbstractionDate(startDay, startMonth)
-  const endDate = formatAbstractionDate(endDay, endMonth)
+  const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
+    abstractionPeriod
+  const startDate = formatAbstractionDate(abstractionPeriodStartDay, abstractionPeriodStartMonth)
+  const endDate = formatAbstractionDate(abstractionPeriodEndDay, abstractionPeriodEndMonth)
 
   return `From ${startDate} to ${endDate}`
 }

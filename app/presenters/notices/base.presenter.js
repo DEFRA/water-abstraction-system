@@ -1,6 +1,7 @@
 'use strict'
 
 const NotifyAddressPresenter = require('./setup/notify-address.presenter.js')
+const { formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats an address object into a fixed array of 7 strings to be used as a CSV.
@@ -60,7 +61,35 @@ function futureDueDate(messageType) {
   return dueDate
 }
 
+/**
+ * A return period is made up of a start and end date.
+ *
+ * When we display the return period, we need to show the users a prefix to indicate the type of return period.
+ *
+ * @param {object} returnsPeriod - the saved returns period
+ *
+ * @returns {string} - the display text for the returns period
+ */
+function returnsPeriodText(returnsPeriod) {
+  const textPrefix = _returnsPeriodTextPrefix(returnsPeriod)
+
+  return `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`
+}
+
+function _returnsPeriodTextPrefix(returnPeriod) {
+  if (returnPeriod.name === 'allYear') {
+    return 'Winter and all year annual'
+  }
+
+  if (returnPeriod.name === 'summer') {
+    return 'Summer annual'
+  }
+
+  return 'Quarterly'
+}
+
 module.exports = {
   addressToCSV,
-  futureDueDate
+  futureDueDate,
+  returnsPeriodText
 }

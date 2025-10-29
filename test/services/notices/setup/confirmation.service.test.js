@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,17 +27,13 @@ describe('Notices - Setup - Confirmation service', () => {
     })
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ConfirmationService.go(event.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
-        forwardLink: `/notifications/report/${event.id}`,
+        activeNavBar: 'notices',
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Returns invitations sent',
         referenceCode
