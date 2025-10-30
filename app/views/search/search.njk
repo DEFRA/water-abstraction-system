@@ -1,8 +1,10 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% from "macros/return-status-tag.njk" import statusTag %}
@@ -29,7 +31,7 @@
 {% macro resultCardTerm(text) %}<dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">{{ text | safe }}</dt>{% endmacro %}
 {% macro resultCardDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ text | safe }}</dd>{% endmacro %}
 {% macro resultCardLargeDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0">{{ text | safe }}</dd>{% endmacro %}
-{% macro resultCardLink(text, href) %}<a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="{{ href }}">{{ text }}<a/>{% endmacro %}
+{% macro resultCardLink(text, href) %}<a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="{{ href }}">{{ text }}</a>{% endmacro %}
 
 {% macro licenceResultCard(licence) %}
   {% set link = resultCardLink(licence.licenceRef, '/system/licences/' + licence.id + '/summary') %}
@@ -52,37 +54,65 @@
     {{ resultCardTerm('Monitoring station:') }}{{ resultCardLargeDetail(link) | safe }}
   {% endset %}
   {% set col2 %}
-    {{ resultCardTerm('Station reference:') }}{{ resultCardDetail(monitoringStation.stationReference) }}
-    <br/>
-    {{ resultCardTerm('WISKI ID:') }}{{ resultCardDetail(monitoringStation.wiskiId) }}
+    {{ resultCardTerm('River:') }}{{ resultCardDetail(monitoringStation.riverName) }}
   {% endset %}
   {% set col3 %}
     {{ resultCardTerm('Grid reference:') }}{{ resultCardDetail(monitoringStation.gridReference) }}
-    <br/>
-    {{ resultCardTerm('Catchment:') }}{{ resultCardDetail(monitoringStation.catchmentName) }}
-    <br/>
-    {{ resultCardTerm('River:') }}{{ resultCardDetail(monitoringStation.riverName) }}
   {% endset %}
   {{ resultCard(col1, col2, col3 )}}
 {% endmacro %}
 
 {% macro returnLogResultCard(returnLog) %}
   {% set link = resultCardLink(returnLog.returnReference, '/system/return-logs?id=' + returnLog.id) %}
+  {% set licenceLink = resultCardLink(returnLog.licenceRef, '/system/licences/' + returnLog.licenceId + '/returns') %}
   {% set endDateContent %}{{ returnLog.endDate }} {{ statusTag(returnLog.statusText, true) if returnLog.statusText }}{% endset %}
-  {% set statusTag %}{{ statusTag(returnLog.statusText, true) if returnLog.statusText }}{% endset %}
   {% set col1 %}
     {{ resultCardTerm('Return reference:') }}{{ resultCardLargeDetail(link) | safe }}
   {% endset %}
   {% set col2 %}
-    {{ resultCardTerm('Licence:') }}{{ resultCardDetail(returnLog.licenceRef) }}
-    <br/>
-    {{ resultCardTerm('Region:') }}{{ resultCardDetail(returnLog.regionDisplayName) }}
+    {{ resultCardTerm('Licence:') }}{{ resultCardDetail(licenceLink) | safe }}
   {% endset %}
   {% set col3 %}
     {{ resultCardTerm('End date:') }}{{ resultCardDetail(endDateContent) | safe }}
   {% endset %}
   {{ resultCard(col1, col2, col3 )}}
 {% endmacro %}
+
+{% set filterContent %}
+  {{ govukRadios({
+    classes: "govuk-radios--small",
+    name: "resultType",
+    fieldset: {
+      legend: {
+        text: "Select the type of result to show",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    items: [
+      {
+        value: "all",
+        text: "All types",
+        checked: not resultType
+      },
+      {
+        value: "licence",
+        text: "Licences",
+        checked: resultType === 'licence'
+      },
+      {
+        value: "monitoring-station",
+        text: "Monitoring stations",
+        checked: resultType === 'monitoring-station'
+      },
+      {
+        value: "return-log",
+        text: "Return logs",
+        checked: resultType === 'return-log'
+      }
+    ]
+  }) }}
+{% endset %}
 
 {% block pageContent %}
 
@@ -110,6 +140,13 @@
             text: "Search", preventDoubleClick: true
           }) }}
         </div>
+
+        {{ govukDetails({
+          classes: "govuk-!-margin-bottom-2",
+          html: filterContent,
+          open: resultType,
+          summaryText: "Filter results"
+        }) }}
       </form>
     </div>
   </div>

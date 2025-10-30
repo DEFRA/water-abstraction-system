@@ -22,18 +22,26 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
  * - Otherwise, if there are no results, displays a 'no results' message
  *
  * @param {string} searchQuery - The value to search for, taken from the session
+ * @param {string} searchResultType - The type of search result to display
  * @param {string} page - The requested page
  *
  * @returns {Promise<object>} The view data for the search page
  */
-async function go(searchQuery, page) {
+async function go(searchQuery, searchResultType, page) {
+  const resultType = searchResultType === 'all' ? null : searchResultType
   const pageNumber = Number(page)
 
-  const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, pageNumber)
+  const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, resultType, pageNumber)
 
   const pagination = PaginatorPresenter.go(allSearchMatches.largestResultCount, pageNumber, `/system/search`)
 
-  const formattedData = SearchPresenter.go(searchQuery, pageNumber, pagination.numberOfPages, allSearchMatches)
+  const formattedData = SearchPresenter.go(
+    searchQuery,
+    resultType,
+    pageNumber,
+    pagination.numberOfPages,
+    allSearchMatches
+  )
 
   return {
     activeNavBar: 'search',
