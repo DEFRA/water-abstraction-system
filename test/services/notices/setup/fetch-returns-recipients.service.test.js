@@ -633,6 +633,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: [seedData.primaryUserDueDate.licenceRef],
+            message_type: 'Email',
             return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
           }
         ])
