@@ -27,8 +27,8 @@ function go(session) {
 
   return {
     backLink: { href: _backLinkHref(session), text: 'Back' },
-    pageTitleCaption: `Return reference ${returnReference}`,
     pageTitle: 'When was the return received?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,
     receivedDateOption: receivedDateOptions ?? null,
